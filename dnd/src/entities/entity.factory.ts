@@ -1,4 +1,6 @@
+import { Chest } from './interactives/chest.entity';
 import { Trap } from './interactives/trap.entity';
+import { Pillar } from './non-interactives/pillar.entity';
 import { Tree } from './non-interactives/tree.entity';
 
 type EntityFactoryMapper = (typeof EntityFactory)['entitiesByType'];
@@ -10,6 +12,8 @@ export class EntityFactory {
   public static entitiesByType = {
     tree: Tree,
     trap: Trap,
+    pillar: Pillar,
+    chest: Chest,
   };
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
