@@ -13,4 +13,8 @@ export class Chest implements Interactive {
   public getRepresentation() {
     return `This is a Chest`;
   }
+
+  public toString() {
+    return 'C';
+  }
 }

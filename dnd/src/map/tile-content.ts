@@ -14,4 +14,12 @@ export class TileContent {
       this.entity = EntityFactory.create(entityType);
     }
   }
+
+  public toString() {
+    if (this.entity) {
+      return this.entity.toString();
+    } else {
+      return this.type === 'free' ? '.' : 'X';
+    }
+  }
 }

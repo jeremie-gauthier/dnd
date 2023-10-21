@@ -1,43 +1,136 @@
-/**
- * - Un mur doit etre dessine entre les cases `blocked` adjacentes aux cases non-`blocked`
- * - 4 distinctions de cases:
- * 		- blocked
- * 		- free
- * 		- interactive (qui est une sorte de `free` car on peut marcher dessus)
- * 		- non-interactive (qui est une sorte de `blocked` car on ne peut pas marcher dessus)
- * - fichier de map se compose de la facon suivante:
- * 		chaque ligne decrit une case, les differentes infos de la cases sont separees par des points-virgules:
- * 			<free|blocked>;<liste des cases connectees separees par des virgules>;<entity type>
- * 		ex:
- * 			free;9,19;chest
- * 			blocked;;
- * 			blocked;;pillar
- * 			free;9,19,21,31;
- */
+import { ParsingError } from './errors/parsing-error';
+import { MapReader } from './map-reader';
+import { Tile } from './tile';
+import { TileContentType } from './tile-content';
 
-import events from 'node:events';
-import fs from 'node:fs';
-import readline from 'node:readline/promises';
+enum MapGrammar {
+  SECTION_SEPARATOR = ';',
+  LINK_SEPARATOR = ',',
+  CONTEXT_SYMBOL = ':',
+}
 
-// class MapParser {
-//   constructor() {
+type LinkedTilesMap = Map<number, string[]>;
 
-// 	}
-// }
+export class MapParser {
+  private width = 0;
+  private height = 0;
 
-export async function parseFile(filePath: string) {
-  const readStream = fs.createReadStream(filePath);
-  const rl = readline.createInterface({
-    input: readStream,
-    crlfDelay: Number.POSITIVE_INFINITY,
-  });
+  constructor(private readonly mapReader: MapReader) {}
 
-  const tiles = Array.from({ length: 121 });
+  public async run(): Promise<[number, number, Tile[]]> {
+    const [tiles, linkedTilesMap] = await this.parseFile();
+    this.parseTilesLinks(tiles, linkedTilesMap);
+    return [this.width, this.height, tiles];
+  }
 
-  rl.on('line', (line) => {
-    console.log(line);
-    tiles;
-  });
+  private async parseFile(): Promise<[Tile[], LinkedTilesMap]> {
+    const tiles: Tile[] = [];
+    const linkedTilesMap = new Map<number, string[]>();
 
-  await events.once(rl, 'close');
+    for await (const [line, lineIndex] of this.mapReader.readLines()) {
+      if (lineIndex === this.mapReader.HEADER_METADATA_LINE) {
+        this.parseMetadataHeader(line);
+      } else {
+        const tile = this.parseTile(line, lineIndex, linkedTilesMap);
+        tiles.push(tile);
+      }
+    }
+
+    return [tiles, linkedTilesMap];
+  }
+
+  private parseMetadataHeader(line: string) {
+    const metadata = line.split(MapGrammar.SECTION_SEPARATOR);
+    if (metadata.length !== 2) {
+      throw new ParsingError(
+        `Metadata header is not of the form "<width>;<height>"`,
+        this.mapReader.HEADER_METADATA_LINE,
+      );
+    }
+
+    const dimensions = metadata.map(Number) as [number, number];
+    const hasSomeNaNDimensions = dimensions.some((element) =>
+      Number.isNaN(element),
+    );
+    if (hasSomeNaNDimensions) {
+      throw new ParsingError(
+        `Metadata header have some NaN dimensions`,
+        this.mapReader.HEADER_METADATA_LINE,
+      );
+    }
+
+    const [width, height] = dimensions;
+    this.width = width;
+    this.height = height;
+  }
+
+  private parseTile(
+    line: string,
+    lineIndex: number,
+    linkedTilesMap: LinkedTilesMap,
+  ): Tile {
+    const [tileContentType, linkedTiles, entityType] = line.split(
+      MapGrammar.SECTION_SEPARATOR,
+    );
+
+    if (!tileContentType) {
+      throw new ParsingError(
+        `The tile content type token is missing`,
+        lineIndex,
+      );
+    }
+    if (!['free', 'blocked'].includes(tileContentType)) {
+      throw new ParsingError(
+        `The tile content type token "${tileContentType}" is not recognized`,
+        lineIndex,
+      );
+    }
+
+    if (linkedTiles) {
+      linkedTilesMap.set(lineIndex, linkedTiles.split(','));
+    }
+
+    const tileContent = {
+      type: tileContentType as TileContentType,
+      entity: entityType ? { type: entityType } : undefined,
+    };
+    const tileIndex = lineIndex - this.mapReader.MAP_DATA_STARTING_LINE;
+    const tileCoord = {
+      x: Math.floor(tileIndex / this.height),
+      y: tileIndex % this.width,
+    };
+    return new Tile(tileContent, tileCoord, `${tileIndex}`);
+  }
+
+  private parseTilesLinks(tiles: Tile[], linkedTilesMap: LinkedTilesMap) {
+    for (let index = 0; index < tiles.length; index++) {
+      const linkedTiles = linkedTilesMap.get(index);
+      if (!linkedTiles) {
+        continue;
+      }
+
+      for (const link of linkedTiles) {
+        const [linkedTileString, linkType] = link.split(
+          MapGrammar.CONTEXT_SYMBOL,
+        );
+        const linkedTileIndex = Number(linkedTileString);
+        if (Number.isNaN(linkedTileIndex)) {
+          throw new ParsingError(
+            `The tile mentioned in the links section is not a number`,
+            index,
+          );
+        }
+
+        const linkedTile = tiles[linkedTileIndex - 1];
+        if (!linkedTile) {
+          throw new ParsingError(
+            `The tile "${linkedTileIndex}" mentioned in the links section does not exists`,
+            index,
+          );
+        }
+
+        tiles[index]?.addUnidirectionalConnexion(linkedTile, linkType);
+      }
+    }
+  }
 }

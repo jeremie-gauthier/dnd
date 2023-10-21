@@ -15,7 +15,7 @@ module.exports = {
     'plugin:unicorn/all',
   ],
   rules: {
-    'id-length': ['error', { exceptionPatterns: ['_'] }],
+    'id-length': ['off', { exceptionPatterns: ['_'] }],
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/no-unused-vars': [
       'error',

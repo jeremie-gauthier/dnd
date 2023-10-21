@@ -15,4 +15,8 @@ export class Trap implements Interactive {
       ? `This is a ${this.isVisible ? 'detected' : 'secret'} active Trap`
       : `This is a detected disarmed Trap`;
   }
+
+  public toString() {
+    return 'T';
+  }
 }

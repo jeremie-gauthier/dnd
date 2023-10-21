@@ -1,20 +1,15 @@
-import { MapChunk } from './map/map-chunk';
-import { parseFile } from './map/map-parser';
+import { Map } from './map/map';
+import { MapParser } from './map/map-parser';
+import { MapReader } from './map/map-reader';
 
-function generateMapChunk1() {
-  const mapChunk = new MapChunk();
-  return mapChunk;
-}
-
-const mapChunk1 = generateMapChunk1();
-console.log(mapChunk1);
-
-parseFile('./resources/maps/chunk1.txt')
-  .then(() => {
-    console.log('END');
+const mapReader = new MapReader('../resources/maps/chunk1.txt');
+const mapParser = new MapParser(mapReader);
+mapParser
+  .run()
+  .then((result) => {
+    const map = new Map(...result);
+    console.log(map.toString());
   })
   .catch((error) => {
     console.error('ERROR', error);
   });
-
-//  parseFile('./resources/maps/chunk1.txt');

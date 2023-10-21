@@ -6,4 +6,8 @@ export class Tree implements NonInteractive {
   public getRepresentation() {
     return 'This is a Tree';
   }
+
+  public toString() {
+    return 'T';
+  }
 }

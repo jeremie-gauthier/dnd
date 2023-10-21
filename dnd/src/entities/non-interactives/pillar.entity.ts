@@ -6,4 +6,8 @@ export class Pillar implements NonInteractive {
   public getRepresentation() {
     return 'This is a Pillar';
   }
+
+  public toString() {
+    return 'P';
+  }
 }

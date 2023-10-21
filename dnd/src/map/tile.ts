@@ -1,3 +1,4 @@
+import { Coord } from '../interfaces/coord.interface';
 import { Link } from './link';
 import { LinkContainer } from './link-container';
 import { TileContent, TileContentType } from './tile-content';
@@ -6,12 +7,17 @@ export class Tile {
   public readonly content: TileContent;
 
   constructor(
-    contentType: TileContentType,
-    entityType?: string,
+    content: {
+      type: TileContentType;
+      entity?: {
+        type: string;
+      };
+    },
+    public readonly coord: Coord,
     public readonly label?: string,
     public readonly linkContainer = new LinkContainer(),
   ) {
-    this.content = new TileContent(contentType, entityType);
+    this.content = new TileContent(content.type, content.entity?.type);
   }
 
   public addUnidirectionalConnexion(tile: Tile, type = Link.Type.None) {
@@ -33,5 +39,9 @@ export class Tile {
 
   get links() {
     return this.linkContainer.links;
+  }
+
+  public toString() {
+    return this.content.toString();
   }
 }
