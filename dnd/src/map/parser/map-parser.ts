@@ -1,8 +1,8 @@
-import { ParsingError } from './errors/parsing-error';
-import { LinkType } from './link';
-import { MapReader } from './map-reader';
-import { Tile } from './tile';
-import { TileContentType } from './tile-content';
+import { ParsingError } from '../errors/parsing-error';
+import { LinkType } from '../link';
+import { Tile } from '../tile';
+import { TileContentType } from '../tile-content';
+import type { MapReader } from './map-reader';
 
 enum MapGrammar {
   SECTION_SEPARATOR = ';',

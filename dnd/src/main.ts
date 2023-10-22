@@ -1,6 +1,6 @@
 import { Map } from './map/map';
-import { MapParser } from './map/map-parser';
-import { MapReader } from './map/map-reader';
+import { MapParser } from './map/parser/map-parser';
+import { MapReader } from './map/parser/map-reader';
 
 const mapReader = new MapReader('../resources/maps/chunk1.txt');
 const mapParser = new MapParser(mapReader);
