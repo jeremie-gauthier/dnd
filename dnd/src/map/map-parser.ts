@@ -1,4 +1,5 @@
 import { ParsingError } from './errors/parsing-error';
+import { LinkType } from './link';
 import { MapReader } from './map-reader';
 import { Tile } from './tile';
 import { TileContentType } from './tile-content';
@@ -86,18 +87,19 @@ export class MapParser {
       );
     }
 
+    const tileIndex = lineIndex - this.mapReader.MAP_DATA_STARTING_LINE;
+
     if (linkedTiles) {
-      linkedTilesMap.set(lineIndex, linkedTiles.split(','));
+      linkedTilesMap.set(tileIndex, linkedTiles.split(','));
     }
 
     const tileContent = {
       type: tileContentType as TileContentType,
       entity: entityType ? { type: entityType } : undefined,
     };
-    const tileIndex = lineIndex - this.mapReader.MAP_DATA_STARTING_LINE;
     const tileCoord = {
-      x: Math.floor(tileIndex / this.height),
-      y: tileIndex % this.width,
+      x: tileIndex % this.width,
+      y: Math.floor(tileIndex / this.height),
     };
     return new Tile(tileContent, tileCoord, `${tileIndex}`);
   }
@@ -129,7 +131,10 @@ export class MapParser {
           );
         }
 
-        tiles[index]?.addUnidirectionalConnexion(linkedTile, linkType);
+        tiles[index]?.addUnidirectionalConnexion(
+          linkedTile,
+          linkType as LinkType | undefined,
+        );
       }
     }
   }

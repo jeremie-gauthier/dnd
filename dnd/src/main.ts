@@ -6,8 +6,8 @@ const mapReader = new MapReader('../resources/maps/chunk1.txt');
 const mapParser = new MapParser(mapReader);
 mapParser
   .run()
-  .then((result) => {
-    const map = new Map(...result);
+  .then(([width, height, tiles]) => {
+    const map = new Map(width, height, tiles);
     console.log(map.toString());
   })
   .catch((error) => {

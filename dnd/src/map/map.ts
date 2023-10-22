@@ -14,7 +14,7 @@ export class Map {
 
   public toString() {
     return this.tiles
-      .map((row) => row.map((tile) => tile.toString()).join(' '))
-      .join('\n');
+      .map((row) => row.map((tile) => tile.toString()).join('  '))
+      .join('\n\n');
   }
 }
