@@ -4,12 +4,12 @@ export type LinkType = (typeof Link)['Type'][keyof (typeof Link)['Type']];
 export type LinkStatus = (typeof Link)['Status'][keyof (typeof Link)['Status']];
 
 export class Link {
-  public static Type = {
+  public static readonly Type = {
     None: 'none',
     Door: 'door',
   } as const;
 
-  public static Status = {
+  public static readonly Status = {
     Open: 'open',
     Closed: 'closed',
   } as const;

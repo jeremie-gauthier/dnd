@@ -2,8 +2,8 @@ import fs from 'node:fs';
 import readline from 'node:readline/promises';
 
 export class MapReader {
-  public HEADER_METADATA_LINE = 1;
-  public MAP_DATA_STARTING_LINE = 2;
+  public readonly HEADER_METADATA_LINE = 1;
+  public readonly MAP_DATA_STARTING_LINE = 2;
 
   private readonly readStream: fs.ReadStream;
 
