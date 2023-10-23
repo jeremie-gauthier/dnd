@@ -1,5 +1,4 @@
-import { equals } from '../../utils/equals';
-import { Link } from '../link';
+import type { Map } from '../map';
 import type { Tile } from '../tile';
 
 type TilePath =
@@ -14,6 +13,7 @@ type TilePath =
     };
 
 export function getAllPathsFromTileWithinRange(
+  map: Map,
   originTile: Tile,
   maxRange: number,
 ) {
@@ -38,20 +38,36 @@ export function getAllPathsFromTileWithinRange(
       continue;
     }
 
+    const tileCoord = tilePath.tile.coord;
+    const neighbourCoords = [
+      { ...tileCoord, x: tileCoord.x - 1 },
+      { ...tileCoord, x: tileCoord.x + 1 },
+      { ...tileCoord, y: tileCoord.y - 1 },
+      { ...tileCoord, y: tileCoord.y + 1 },
+    ];
+
     // browse all linked tiles to create new paths
-    for (const link of tilePath.tile.links) {
+    for (const neighbourCoord of neighbourCoords) {
+      const neighbourTile = map.getTileAtCoord(neighbourCoord);
+
+      // skip invalid tiles
+      if (!neighbourTile) {
+        continue;
+      }
+
       // skip already explored tiles
-      if (explored.includes(link.tile)) {
+      if (explored.includes(neighbourTile)) {
         continue;
       }
 
-      if (link.type === Link.Type.Door && link.status === Link.Status.Closed) {
+      // skip blocked tiles
+      if (neighbourTile.content.type === 'blocked') {
         continue;
       }
 
-      explored.push(link.tile);
+      explored.push(neighbourTile);
       queue.push({
-        tile: link.tile,
+        tile: neighbourTile,
         range: tilePath.range + 1,
         fromTile: tilePath,
       });
@@ -59,49 +75,4 @@ export function getAllPathsFromTileWithinRange(
   }
 
   return paths;
-}
-
-export function findPath(
-  originTile: Tile,
-  destinationTile: Tile,
-  maxRange: number,
-) {
-  const queue: TilePath[] = [];
-  const explored: Tile[] = [];
-
-  queue.push({ tile: originTile, range: 0 });
-  explored.push(originTile);
-
-  while (queue.length > 0) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const tilePath = queue.shift()!;
-
-    if (equals(tilePath.tile.coord, destinationTile.coord)) {
-      return tilePath;
-    }
-
-    // stop enqueueing more tile if max range has been reached
-    if (tilePath.range >= maxRange) {
-      continue;
-    }
-
-    // browse all linked tiles to create new paths
-    for (const link of tilePath.tile.links) {
-      // skip already explored tiles
-      if (explored.includes(link.tile)) {
-        continue;
-      }
-
-      if (link.type === Link.Type.Door && link.status === Link.Status.Closed) {
-        continue;
-      }
-
-      explored.push(link.tile);
-      queue.push({
-        tile: link.tile,
-        range: tilePath.range + 1,
-        fromTile: tilePath,
-      });
-    }
-  }
 }
