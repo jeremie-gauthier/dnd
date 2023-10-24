@@ -1,4 +1,4 @@
-import type { Character } from '../characters/character.interface';
+import type { Character } from '../characters/character.abstract';
 import type { Entity } from '../entity.interface';
 
 export interface Interactive extends Entity {

@@ -1,9 +1,9 @@
-import type { Character } from './character.interface';
+import type { DiceRoll } from '../../dices/dice.interface';
+import { sum } from '../../utils/sum';
+import type { Weapon } from '../../weapons/weapon.interface';
+import { Character } from './character.abstract';
 
-export class Regdar implements Character {
-  public readonly type = 'character';
-  public isBlocking = true;
-
+export class Regdar extends Character {
   public readonly name = 'Regdar';
 
   public readonly level = 1;
@@ -16,34 +16,16 @@ export class Regdar implements Character {
   public armorClass = 2;
   public readonly armorClassNatural = 2;
 
-  get isAlive() {
-    return this.healthPoints > 0;
-  }
+  public attack(weapon: Weapon): [number, DiceRoll[]] {
+    const diceRolls = weapon.rollAttack();
+    const sumDiceRolls = sum(
+      ...diceRolls
+        .filter(({ type }) => type === 'attack')
+        .map(({ value }) => value),
+    );
 
-  public takeDamage(amount: number): void {
-    const damageTaken = amount - this.armorClass;
-    if (damageTaken > 0) {
-      this.handleDamage(damageTaken);
-    }
-  }
+    const passiveBonus = weapon.type === 'melee' ? 1 : 0;
 
-  public takeDirectDamage(amount: number): void {
-    this.handleDamage(amount);
-  }
-
-  private handleDamage(damageTaken: number): void {
-    this.healthPoints -= damageTaken;
-    if (this.healthPoints <= 0) {
-      this.healthPoints = 0;
-      this.isBlocking = false;
-    }
-  }
-
-  public getRepresentation() {
-    return `This is ${this.name} (${this.type})`;
-  }
-
-  public toString() {
-    return 'R';
+    return [sumDiceRolls + passiveBonus, diceRolls];
   }
 }

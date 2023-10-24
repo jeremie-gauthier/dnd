@@ -1,4 +1,4 @@
-import { Character } from '../characters/character.interface';
+import { Character } from '../characters/character.abstract';
 import { Interactive } from './interactive.interface';
 
 export class Door implements Interactive {
