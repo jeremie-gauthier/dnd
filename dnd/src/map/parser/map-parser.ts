@@ -1,10 +1,11 @@
+import { EntityFactory } from '../../entities/entity.factory';
 import { ParsingError } from '../errors/parsing-error';
 import { Tile } from '../tile';
-import { TileContentType } from '../tile-content';
 import type { MapReader } from './map-reader';
 
 enum MapGrammar {
   SECTION_SEPARATOR = ';',
+  ENUMERATION_SYMBOL = ',',
   CONTEXT_SYMBOL = ':',
 }
 
@@ -77,15 +78,15 @@ export class MapParser {
       );
     }
 
-    const tileContent = {
-      type: tileContentType as TileContentType,
-      entity: entityType ? { type: entityType } : undefined,
-    };
     const tileIndex = lineIndex - this.mapReader.MAP_DATA_STARTING_LINE;
     const tileCoord = {
       x: tileIndex % this.width,
       y: Math.floor(tileIndex / this.height),
     };
-    return new Tile(tileContent, tileCoord, JSON.stringify(tileCoord));
+    const entities = entityType
+      ?.split(MapGrammar.ENUMERATION_SYMBOL)
+      .filter((entityType) => entityType !== '')
+      .map((entityType) => EntityFactory.create(entityType));
+    return new Tile(tileCoord, JSON.stringify(tileCoord), entities);
   }
 }

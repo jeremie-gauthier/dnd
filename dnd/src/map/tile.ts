@@ -1,23 +1,18 @@
+import { Entity } from '../entities/entity.interface';
 import { Coord } from '../interfaces/coord.interface';
-import { TileContent, TileContentType } from './tile-content';
 
 export class Tile {
-  public readonly content: TileContent;
-
   constructor(
-    content: {
-      type: TileContentType;
-      entity?: {
-        type: string;
-      };
-    },
     public readonly coord: Coord,
     public readonly label?: string,
-  ) {
-    this.content = new TileContent(content.type, content.entity?.type);
+    public entities: Entity[] = [],
+  ) {}
+
+  public isBlockedByEntity() {
+    return this.entities.some((entity) => entity.isBlocking);
   }
 
   public toString() {
-    return this.content.toString();
+    return this.entities.length === 0 ? '.' : this.entities[0]?.toString();
   }
 }

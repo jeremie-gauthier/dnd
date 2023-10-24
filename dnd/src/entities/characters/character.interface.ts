@@ -1,10 +1,18 @@
 import type { Entity } from '../entity.interface';
 
 export interface Character extends Entity {
-  getName(): string;
-  getHP(): number;
-  setHP(hp: number): void;
-  getMana(): number;
-  setMana(mana: number): void;
+  readonly name: string;
+  readonly level: number;
+  readonly speed: number;
+  readonly initiative: number;
+  healthPoints: number;
+  readonly healthPointsNatural: number;
+  manaPoints: number;
+  readonly manaPointsNatural: number;
+  armorClass: number;
+  readonly armorClassNatural: number;
+
+  get isAlive(): boolean;
   takeDamage(amount: number): void;
+  takeDirectDamage(amount: number): void;
 }

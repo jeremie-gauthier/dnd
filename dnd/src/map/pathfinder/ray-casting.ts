@@ -1,4 +1,4 @@
-import { Coord } from '../../interfaces/coord.interface';
+import type { Coord } from '../../interfaces/coord.interface';
 import type { Map } from '../map';
 import type { Tile } from '../tile';
 
@@ -70,7 +70,7 @@ function makeRay(
 }
 
 function canBeSeenRay(map: Map, originTile: Tile, destinationTile: Tile) {
-  if (destinationTile.content.type === 'blocked') {
+  if (destinationTile.isBlockedByEntity()) {
     return false;
   }
 
@@ -84,7 +84,9 @@ function canBeSeenRay(map: Map, originTile: Tile, destinationTile: Tile) {
   while (ray.hasNext()) {
     const nextCoord = ray.next();
     const tile = map.getTileAtCoord(nextCoord);
-    if (!tile || tile.content.type === 'blocked') {
+    // check that tile is valid and not blocked by an entity
+    //  (exception for the character that request the lineOfSight test)
+    if (!tile || (tile !== originTile && tile.isBlockedByEntity())) {
       return false;
     }
   }
@@ -94,7 +96,7 @@ function canBeSeenRay(map: Map, originTile: Tile, destinationTile: Tile) {
 export function lineOfSight(map: Map, originTile: Tile) {
   const tilesToTest = map.tiles
     .flat()
-    .filter((tile) => tile !== originTile && tile.content.type !== 'blocked');
+    .filter((tile) => tile !== originTile && !tile.isBlockedByEntity());
 
   const tilesInSight: Tile[] = [];
   for (const tile of tilesToTest) {

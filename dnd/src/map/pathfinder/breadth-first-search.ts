@@ -61,7 +61,7 @@ export function getAllPathsFromTileWithinRange(
       }
 
       // skip blocked tiles
-      if (neighbourTile.content.type === 'blocked') {
+      if (neighbourTile.isBlockedByEntity()) {
         continue;
       }
 

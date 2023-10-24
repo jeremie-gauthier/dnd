@@ -3,11 +3,12 @@ import { Interactive } from './interactive.interface';
 
 export class Chest implements Interactive {
   public readonly type = 'chest';
+  public readonly isBlocking = false;
   public isVisible = true;
   public canInteract = true;
 
   public onInteraction(entity: Character) {
-    console.log(entity.getName(), 'opened a chest');
+    console.log(entity.name, 'opened a chest');
   }
 
   public getRepresentation() {

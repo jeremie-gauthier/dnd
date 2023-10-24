@@ -3,11 +3,13 @@ import { Interactive } from './interactive.interface';
 
 export class Trap implements Interactive {
   public readonly type = 'trap';
+  public readonly isBlocking = false;
   public isVisible = false;
   public canInteract = true;
 
   public onInteraction(entity: Character) {
-    entity.setHP(entity.getHP() - 1);
+    console.log(entity.name, 'triggered a trap');
+    entity.takeDirectDamage(1);
   }
 
   public getRepresentation() {

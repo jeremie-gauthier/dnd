@@ -3,11 +3,13 @@ import { Interactive } from './interactive.interface';
 
 export class Door implements Interactive {
   public readonly type = 'door';
+  public isBlocking = true;
   public isVisible = true;
   public canInteract = true;
 
   public onInteraction(entity: Character) {
-    console.log(entity.getName(), 'opened a door');
+    console.log(entity.name, 'opened a door');
+    this.isBlocking = false;
   }
 
   public getRepresentation() {
