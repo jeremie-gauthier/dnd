@@ -1,7 +1,5 @@
-import type { DiceRoll } from '../../dices/dice.interface';
-import { sum } from '../../utils/sum';
 import type { Weapon } from '../../weapons/weapon.interface';
-import { Character } from './character.abstract';
+import { AttackResult, Character } from './character.abstract';
 
 export class Regdar extends Character {
   public readonly name = 'Regdar';
@@ -16,16 +14,15 @@ export class Regdar extends Character {
   public armorClass = 2;
   public readonly armorClassNatural = 2;
 
-  public attack(weapon: Weapon): [number, DiceRoll[]] {
-    const diceRolls = weapon.rollAttack();
-    const sumDiceRolls = sum(
-      ...diceRolls
-        .filter(({ type }) => type === 'attack')
-        .map(({ value }) => value),
-    );
-
-    const passiveBonus = weapon.type === 'melee' ? 1 : 0;
-
-    return [sumDiceRolls + passiveBonus, diceRolls];
+  protected afterAttack(
+    weapon: Weapon,
+    attackResult: AttackResult,
+  ): AttackResult {
+    if (weapon.type === 'melee') {
+      const [damages, ...rest] = attackResult;
+      return [damages + 1, ...rest];
+    } else {
+      return attackResult;
+    }
   }
 }

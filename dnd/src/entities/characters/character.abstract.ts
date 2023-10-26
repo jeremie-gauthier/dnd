@@ -1,4 +1,9 @@
+import type { DiceRoll } from '../../dices/dice.abstract';
+import { sum } from '../../utils/sum';
+import type { Weapon } from '../../weapons/weapon.interface';
 import type { Entity } from '../entity.interface';
+
+export type AttackResult = [number, DiceRoll[]];
 
 export abstract class Character implements Entity {
   public readonly type = 'character';
@@ -36,6 +41,21 @@ export abstract class Character implements Entity {
       this.healthPoints = 0;
       this.isBlocking = false;
     }
+  }
+
+  protected abstract afterAttack(
+    weapon: Weapon,
+    attackResult: AttackResult,
+  ): AttackResult;
+  public attack(weapon: Weapon): [number, DiceRoll[]] {
+    const diceRolls = weapon.rollAttack();
+    const sumDiceRolls = sum(
+      ...diceRolls
+        .filter(({ type }) => type === 'attack')
+        .map(({ value }) => value),
+    );
+
+    return this.afterAttack(weapon, [sumDiceRolls, diceRolls]);
   }
 
   public getRepresentation() {
