@@ -1,9 +1,12 @@
 import type { Dice, DiceRoll } from '../dices/dice.abstract';
+import { AttackType } from '../interfaces/attack-type.enum';
+import { Item } from '../inventory/item.abstract';
 
-export abstract class Weapon {
+export abstract class Weapon implements Item {
+  readonly type: 'weapon' | 'artifact' | 'spell' = 'weapon';
   abstract readonly name: string;
   abstract readonly description: string;
-  abstract readonly type: 'melee' | 'range';
+  abstract readonly attackType: AttackType;
   abstract readonly perks?: 're-roll' | 'super attack';
   abstract readonly dices: Dice[];
   abstract readonly superAttackDices?: Dice[];
