@@ -1,3 +1,4 @@
+import type { Coord } from '../interfaces/coord.interface';
 import { Chest } from './interactives/chest.entity';
 import { Door } from './interactives/door.entity';
 import { Trap } from './interactives/trap.entity';
@@ -23,7 +24,7 @@ export class EntityFactory {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private constructor() {}
 
-  public static create(type: string) {
+  public static create(type: string, coord: Coord) {
     const entity = EntityFactory.entitiesByType[type as EntitiesTypes] as
       | Entities
       | undefined;
@@ -31,6 +32,6 @@ export class EntityFactory {
       throw new Error(`Cannot instantiate entity type "${type}"`);
     }
 
-    return new entity();
+    return new entity(coord);
   }
 }

@@ -1,3 +1,4 @@
+import type { Coord } from '../../interfaces/coord.interface';
 import { Character } from '../characters/character.abstract';
 import { Interactive } from './interactive.interface';
 
@@ -6,6 +7,8 @@ export class Trap implements Interactive {
   public readonly isBlocking = false;
   public isVisible = false;
   public canInteract = true;
+
+  constructor(public readonly coord: Coord) {}
 
   public onInteraction(entity: Character) {
     console.log(entity.name, 'triggered a trap');

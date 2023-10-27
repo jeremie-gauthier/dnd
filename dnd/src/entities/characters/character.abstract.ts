@@ -1,5 +1,6 @@
 import type { DiceRoll } from '../../dices/dice.abstract';
 import type { CharacterClass } from '../../interfaces/character-class.type';
+import type { Coord } from '../../interfaces/coord.interface';
 import { Inventory } from '../../inventory/inventory';
 import { Item } from '../../inventory/item.abstract';
 import { sum } from '../../utils/sum';
@@ -26,6 +27,8 @@ export abstract class Character implements Entity {
   abstract readonly armorClassNatural: number;
 
   abstract readonly inventory: Inventory;
+
+  constructor(public readonly coord: Coord) {}
 
   get isAlive() {
     return this.healthPoints > 0;
