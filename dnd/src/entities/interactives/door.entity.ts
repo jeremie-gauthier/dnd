@@ -10,6 +10,7 @@ export class Door implements Interactive {
   public onInteraction(entity: Character) {
     console.log(entity.name, 'opened a door');
     this.isBlocking = false;
+    // TODO: redistribuer les initiatives
   }
 
   public getRepresentation() {
