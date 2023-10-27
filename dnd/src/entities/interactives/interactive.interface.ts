@@ -1,5 +1,5 @@
-import type { Character } from '../characters/character.abstract';
 import type { Entity } from '../entity.interface';
+import type { Character } from '../playables/characters/character.abstract';
 
 export interface Interactive extends Entity {
   isVisible: boolean;

@@ -1,16 +1,16 @@
-import type { DiceRoll } from '../../dices/dice.abstract';
-import type { CharacterClass } from '../../interfaces/character-class.type';
-import type { Coord } from '../../interfaces/coord.interface';
-import { Inventory } from '../../inventory/inventory';
-import { Item } from '../../inventory/item.abstract';
-import { sum } from '../../utils/sum';
-import type { Weapon } from '../../weapons/weapon.abstract';
+import type { DiceRoll } from '../../../dices/dice.abstract';
+import type { CharacterClass } from '../../../interfaces/character-class.type';
+import type { Coord } from '../../../interfaces/coord.interface';
+import { Inventory } from '../../../inventory/inventory';
+import { Item } from '../../../items/item.abstract';
+import type { Weapon } from '../../../items/weapons/weapon.abstract';
+import { sum } from '../../../utils/sum';
 import { Enemy } from '../enemies/enemy.interface';
-import type { Entity } from '../entity.interface';
+import { PlayableEntity } from '../playable.interface';
 
 export type AttackResult = [number, DiceRoll[]];
 
-export abstract class Character implements Entity {
+export abstract class Character implements PlayableEntity {
   public readonly type = 'character';
   public isBlocking = true;
 

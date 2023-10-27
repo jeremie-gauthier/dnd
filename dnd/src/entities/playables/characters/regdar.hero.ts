@@ -1,7 +1,7 @@
-import { AttackType } from '../../interfaces/attack-type.enum';
-import { CharacterClass } from '../../interfaces/character-class.type';
-import { Inventory } from '../../inventory/inventory';
-import type { Weapon } from '../../weapons/weapon.abstract';
+import { AttackType } from '../../../interfaces/attack-type.enum';
+import { CharacterClass } from '../../../interfaces/character-class.type';
+import { Inventory } from '../../../inventory/inventory';
+import type { Weapon } from '../../../items/weapons/weapon.abstract';
 import { Character, type AttackResult } from './character.abstract';
 
 export class Regdar extends Character {

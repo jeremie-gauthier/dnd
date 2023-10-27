@@ -1,4 +1,4 @@
-import { Character } from '../characters/character.abstract';
+import { Character } from '../playables/characters/character.abstract';
 import { Interactive } from './interactive.interface';
 
 export class Chest implements Interactive {
