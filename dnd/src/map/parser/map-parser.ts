@@ -86,7 +86,7 @@ export class MapParser {
     const entities = entityType
       ?.split(MapGrammar.ENUMERATION_SYMBOL)
       .filter((entityType) => entityType !== '')
-      .map((entityType) => EntityFactory.create(entityType));
+      .map((entityType) => EntityFactory.create(entityType, tileCoord));
     return new Tile(tileCoord, JSON.stringify(tileCoord), entities);
   }
 }
