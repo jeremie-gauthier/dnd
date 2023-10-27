@@ -1,8 +1,8 @@
-import { Dice } from '../dices/dice.abstract';
-import { RedDice } from '../dices/red.dice';
-import { YellowDice } from '../dices/yellow.dice';
-import { AttackType } from '../interfaces/attack-type.enum';
-import type { SpellCaster } from '../interfaces/character-class.type';
+import { Dice } from '../../dices/dice.abstract';
+import { RedDice } from '../../dices/red.dice';
+import { YellowDice } from '../../dices/yellow.dice';
+import { AttackType } from '../../interfaces/attack-type.enum';
+import type { SpellCaster } from '../../interfaces/character-class.type';
 import { Spell } from './spell.abstract';
 
 export class FieryArrows extends Spell {

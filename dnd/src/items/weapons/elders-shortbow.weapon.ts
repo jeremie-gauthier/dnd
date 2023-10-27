@@ -1,6 +1,6 @@
-import { Dice } from '../dices/dice.abstract';
-import { YellowDice } from '../dices/yellow.dice';
-import { AttackType } from '../interfaces/attack-type.enum';
+import { Dice } from '../../dices/dice.abstract';
+import { YellowDice } from '../../dices/yellow.dice';
+import { AttackType } from '../../interfaces/attack-type.enum';
 import { Weapon } from './weapon.abstract';
 
 export class EldersShortbow extends Weapon {

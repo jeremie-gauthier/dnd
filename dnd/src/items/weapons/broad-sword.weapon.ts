@@ -1,6 +1,6 @@
-import { Dice } from '../dices/dice.abstract';
-import { OrangeDice } from '../dices/orange.dice';
-import { AttackType } from '../interfaces/attack-type.enum';
+import { Dice } from '../../dices/dice.abstract';
+import { OrangeDice } from '../../dices/orange.dice';
+import { AttackType } from '../../interfaces/attack-type.enum';
 import { Weapon } from './weapon.abstract';
 
 export class BroadSword extends Weapon {
