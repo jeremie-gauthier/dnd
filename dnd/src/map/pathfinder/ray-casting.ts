@@ -1,3 +1,4 @@
+import { PlayableEntityType } from '../../entities/playables/playable.abstract';
 import type { Coord } from '../../interfaces/coord.interface';
 import type { Map } from '../map';
 import type { Tile } from '../tile';
@@ -69,9 +70,15 @@ function makeRay(
   };
 }
 
-function canBeSeenRay(map: Map, originTile: Tile, destinationTile: Tile) {
-  if (destinationTile.isBlockedByEntity()) {
-    return false;
+function canBeSeenRay(
+  map: Map,
+  originTile: Tile,
+  destinationTile: Tile,
+  allies: PlayableEntityType,
+) {
+  const blockingEntity = destinationTile.getBlockingNonAllyEntity(allies);
+  if (blockingEntity) {
+    return blockingEntity.isPlayable ? true : false;
   }
 
   const ray = makeRay(
@@ -84,23 +91,33 @@ function canBeSeenRay(map: Map, originTile: Tile, destinationTile: Tile) {
   while (ray.hasNext()) {
     const nextCoord = ray.next();
     const tile = map.getTileAtCoord(nextCoord);
-    // check that tile is valid and not blocked by an entity
-    //  (exception for the character that request the lineOfSight test)
-    if (!tile || (tile !== originTile && tile.isBlockedByEntity())) {
+
+    if (!tile) {
       return false;
+    }
+
+    const blockingEntity = destinationTile.getBlockingNonAllyEntity(allies);
+    if (tile !== originTile && blockingEntity) {
+      return blockingEntity.isPlayable ? true : false;
     }
   }
   return true;
 }
 
-export function lineOfSight(map: Map, originTile: Tile) {
+export function lineOfSight(
+  map: Map,
+  originTile: Tile,
+  allies: PlayableEntityType,
+) {
   const tilesToTest = map.tiles
     .flat()
-    .filter((tile) => tile !== originTile && !tile.isBlockedByEntity());
+    .filter(
+      (tile) => tile !== originTile && !tile.isBlockedByNonPlayableEntity(),
+    );
 
   const tilesInSight: Tile[] = [];
   for (const tile of tilesToTest) {
-    if (canBeSeenRay(map, originTile, tile)) {
+    if (canBeSeenRay(map, originTile, tile, allies)) {
       tilesInSight.push(tile);
     }
   }

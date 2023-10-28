@@ -3,6 +3,7 @@ import { NonInteractive } from './non-interactive.interface';
 
 export class Pillar implements NonInteractive {
   public readonly type = 'pillar';
+  public readonly isPlayable = false;
   public readonly isBlocking = true;
 
   constructor(public readonly coord: Coord) {}

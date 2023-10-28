@@ -1,8 +1,9 @@
-import { Weapon } from '../weapons/weapon.abstract';
+import { Item } from '../items/item.abstract';
+import { Spell } from '../items/spells/spell.abstract';
+import { Weapon } from '../items/weapons/weapon.abstract';
 import { InventoryError } from './errors/inventory-error';
 import { ItemNotFoundError } from './errors/item-not-found-error';
 import { NoSpaceLeftError } from './errors/no-space-left-error';
-import type { Item } from './item.abstract';
 
 interface InventoryOptions {
   readonly backpackSlots: number;
@@ -13,15 +14,19 @@ interface InventoryOptions {
   };
 }
 
-interface Bag {
-  items: Item[];
+interface Bag<ItemType = Item> {
+  items: ItemType[];
   readonly slots: number;
 }
 
 export class Inventory {
   public readonly backpack: Bag;
 
-  public readonly equipped: Readonly<Record<Item['type'], Bag>>;
+  public readonly equipped: Readonly<{
+    weapon: Bag<Weapon>;
+    artifact: Bag;
+    spell: Bag<Spell>;
+  }>;
 
   constructor({
     backpackSlots,

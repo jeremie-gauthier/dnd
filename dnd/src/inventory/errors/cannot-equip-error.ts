@@ -1,4 +1,4 @@
-import type { Item } from '../item.abstract';
+import { Item } from '../../items/item.abstract';
 import { InventoryError } from './inventory-error';
 
 export class CannotEquipError extends InventoryError {

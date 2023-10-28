@@ -4,6 +4,7 @@ import { Interactive } from './interactive.interface';
 
 export class Trap implements Interactive {
   public readonly type = 'trap';
+  public readonly isPlayable = false;
   public readonly isBlocking = false;
   public isVisible = false;
   public canInteract = true;

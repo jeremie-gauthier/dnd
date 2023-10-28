@@ -4,6 +4,7 @@ import { Interactive } from './interactive.interface';
 
 export class Chest implements Interactive {
   public readonly type = 'chest';
+  public readonly isPlayable = false;
   public readonly isBlocking = true;
   public isVisible = true;
   public canInteract = true;

@@ -1,0 +1,139 @@
+import { AttackType } from '../../interfaces/attack-type.enum';
+import { Coord } from '../../interfaces/coord.interface';
+import { Inventory } from '../../inventory/inventory';
+import {
+  Weapon,
+  WeaponAttackResult,
+} from '../../items/weapons/weapon.abstract';
+import { Tile } from '../../map/tile';
+import { isNextTo } from '../../utils/coord';
+import { equals } from '../../utils/equals';
+import { Entity } from '../entity.interface';
+import { CannotMeleeAttackError } from './errors/cannot-melee-attack-error';
+import { CannotRangeAttackError } from './errors/cannot-range-attack-error';
+import { NotEquippedError } from './errors/not-equipped-error';
+import { NotInSightError } from './errors/not-in-sight-error';
+
+export enum PlayableEntityType {
+  Character = 'character',
+  Enemy = 'Enemy',
+}
+
+export abstract class PlayableEntity implements Entity {
+  public isBlocking = true;
+  public readonly isPlayable = true;
+
+  abstract readonly type: string;
+
+  abstract readonly name: string;
+  abstract readonly description: string;
+
+  abstract readonly speed: number;
+  abstract healthPoints: number;
+  abstract readonly healthPointsNatural: number;
+  abstract manaPoints: number;
+  abstract readonly manaPointsNatural: number;
+  abstract armorClass: number;
+  abstract readonly armorClassNatural: number;
+  abstract readonly inventory: Inventory;
+
+  constructor(public readonly coord: Coord) {}
+
+  get isAlive() {
+    return this.healthPoints > 0;
+  }
+
+  protected abstract afterDiceRollsHook(
+    attackResult: WeaponAttackResult,
+    weapon: Weapon,
+    target: PlayableEntity,
+  ): WeaponAttackResult;
+
+  // TODO: handle spell casting - with mana cost
+  public attack(
+    weapon: Weapon,
+    target: PlayableEntity,
+    tilesInSight: Tile[],
+  ): WeaponAttackResult {
+    this.assertCanAttackTarget(weapon, target, tilesInSight);
+
+    const diceRolls = weapon.rollAttack();
+
+    // TODO: observable pattern OR event emitter if I can get the return
+    const diceRollsWithModifiers = this.afterDiceRollsHook(
+      diceRolls,
+      weapon,
+      target,
+    );
+
+    const [totalDamages] = diceRollsWithModifiers;
+    console.log(
+      `${this.name} attacked ${target.name} with ${weapon.name} and inflicted ${totalDamages} damages`,
+    );
+
+    // TODO: event emitter ??
+    target.takeDamage(totalDamages);
+
+    return diceRollsWithModifiers;
+  }
+
+  private assertCanAttackTarget(
+    weapon: Weapon,
+    target: PlayableEntity,
+    tilesInSight: Tile[],
+  ) {
+    if (!this.inventory.isWeaponEquipped(weapon)) {
+      throw new NotEquippedError(weapon);
+    }
+
+    if (!tilesInSight.some((tile) => equals(tile.coord, target.coord))) {
+      throw new NotInSightError(target);
+    }
+
+    if (
+      weapon.attackType === AttackType.Melee &&
+      !isNextTo(this.coord, target.coord)
+    ) {
+      throw new CannotMeleeAttackError();
+    }
+
+    if (
+      weapon.attackType === AttackType.Range &&
+      isNextTo(this.coord, target.coord)
+    ) {
+      throw new CannotRangeAttackError();
+    }
+  }
+
+  public takeDamage(amount: number): void {
+    const damageTaken = amount - this.armorClass;
+    console.log(
+      `${this.name} lost ${damageTaken} HP (${this.armorClass} absorbed)`,
+    );
+    if (damageTaken > 0) {
+      this.handleDamage(damageTaken);
+    }
+  }
+
+  public takeDirectDamage(amount: number): void {
+    this.handleDamage(amount);
+  }
+
+  private handleDamage(damageTaken: number): void {
+    this.healthPoints -= damageTaken;
+    console.log(`${this.name} has ${this.healthPoints} HP left`);
+    if (this.healthPoints <= 0) {
+      console.log(`${this.name} is dead`);
+      this.healthPoints = 0;
+      this.isBlocking = false;
+    }
+  }
+
+  public getRepresentation() {
+    return `This is ${this.name} (${this.type})`;
+  }
+
+  public toString() {
+    return this.name[0]?.toUpperCase() ?? '';
+  }
+}

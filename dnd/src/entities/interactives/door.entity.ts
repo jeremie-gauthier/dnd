@@ -4,6 +4,7 @@ import { Interactive } from './interactive.interface';
 
 export class Door implements Interactive {
   public readonly type = 'door';
+  public readonly isPlayable = false;
   public isBlocking = true;
   public isVisible = true;
   public canInteract = true;
