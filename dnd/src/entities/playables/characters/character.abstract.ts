@@ -7,7 +7,6 @@ export abstract class Character extends PlayableEntity {
 
   abstract readonly class: CharacterClass;
   abstract readonly level: number;
-  abstract readonly initiative: number;
 
   public equip(item: Item): void {
     this.inventory.addItemInBag(item, this.inventory.equipped[item.type]);

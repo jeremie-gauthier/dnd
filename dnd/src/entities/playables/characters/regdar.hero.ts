@@ -21,7 +21,6 @@ export class Regdar extends Character {
   public readonly level = 1;
 
   public readonly speed = 4;
-  public readonly initiative = 0;
   public healthPoints = 8;
   public readonly healthPointsNatural = 8;
   public manaPoints = 0;

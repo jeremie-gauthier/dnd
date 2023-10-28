@@ -1,3 +1,4 @@
+import { mapEventEmitter } from '../../events/event-emitter';
 import { AttackType } from '../../interfaces/attack-type.enum';
 import { Coord } from '../../interfaces/coord.interface';
 import { Inventory } from '../../inventory/inventory';
@@ -9,6 +10,8 @@ import { Tile } from '../../map/tile';
 import { isNextTo } from '../../utils/coord';
 import { equals } from '../../utils/equals';
 import { Entity } from '../entity.interface';
+import type { Character } from './characters/character.abstract';
+import type { Enemy } from './enemies/enemy.abstract';
 import { CannotMeleeAttackError } from './errors/cannot-melee-attack-error';
 import { CannotRangeAttackError } from './errors/cannot-range-attack-error';
 import { NotEquippedError } from './errors/not-equipped-error';
@@ -23,11 +26,12 @@ export abstract class PlayableEntity implements Entity {
   public isBlocking = true;
   public readonly isPlayable = true;
 
-  abstract readonly type: string;
+  abstract readonly type: PlayableEntityType;
 
   abstract readonly name: string;
   abstract readonly description: string;
 
+  public initiative = 0;
   abstract readonly speed: number;
   abstract healthPoints: number;
   abstract readonly healthPointsNatural: number;
@@ -108,7 +112,9 @@ export abstract class PlayableEntity implements Entity {
   public takeDamage(amount: number): void {
     const damageTaken = amount - this.armorClass;
     console.log(
-      `${this.name} lost ${damageTaken} HP (${this.armorClass} absorbed)`,
+      `${this.name} lost ${Math.max(damageTaken, 0)} HP (${
+        this.armorClass
+      } absorbed)`,
     );
     if (damageTaken > 0) {
       this.handleDamage(damageTaken);
@@ -124,9 +130,22 @@ export abstract class PlayableEntity implements Entity {
     console.log(`${this.name} has ${this.healthPoints} HP left`);
     if (this.healthPoints <= 0) {
       console.log(`${this.name} is dead`);
+      mapEventEmitter.emit('entity-died', { entityName: this.name });
       this.healthPoints = 0;
       this.isBlocking = false;
     }
+  }
+
+  public initiativeRoll() {
+    this.initiative = Math.round(Math.random() * 100);
+  }
+
+  public isCharacter(): this is Character {
+    return this.type === PlayableEntityType.Character;
+  }
+
+  public isEnemy(): this is Enemy {
+    return this.type === PlayableEntityType.Enemy;
   }
 
   public getRepresentation() {
