@@ -1,4 +1,5 @@
 import { EntityFactory } from '../../entities/entity.factory';
+import { Coord } from '../coord';
 import { ParsingError } from '../errors/parsing-error';
 import { Tile } from '../tile';
 import type { MapReader } from './map-reader';
@@ -79,10 +80,10 @@ export class MapParser {
     }
 
     const tileIndex = lineIndex - this.mapReader.MAP_DATA_STARTING_LINE;
-    const tileCoord = {
+    const tileCoord = Coord.from({
       x: tileIndex % this.width,
       y: Math.floor(tileIndex / this.height),
-    };
+    });
     const entities = entityType
       ?.split(MapGrammar.ENUMERATION_SYMBOL)
       .filter((entityType) => entityType !== '')

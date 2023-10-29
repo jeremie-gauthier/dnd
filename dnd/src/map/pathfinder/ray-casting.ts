@@ -1,5 +1,5 @@
 import { PlayableEntityType } from '../../entities/playables/playable.abstract';
-import type { Coord } from '../../interfaces/coord.interface';
+import { Coord } from '../coord';
 import type { Map } from '../map';
 import type { Tile } from '../tile';
 
@@ -61,7 +61,7 @@ function makeRay(
       yGrid += yStep;
     }
 
-    return toReturn;
+    return Coord.from(toReturn);
   }
 
   return {

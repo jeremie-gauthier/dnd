@@ -1,4 +1,4 @@
-import type { Coord } from '../interfaces/coord.interface';
+import type { Coord } from '../map/coord';
 
 export interface Entity {
   readonly type: string;

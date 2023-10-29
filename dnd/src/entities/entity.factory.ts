@@ -1,4 +1,4 @@
-import type { Coord } from '../interfaces/coord.interface';
+import type { Coord } from '../map/coord';
 import { Chest } from './interactives/chest.entity';
 import { Door } from './interactives/door.entity';
 import { Trap } from './interactives/trap.entity';

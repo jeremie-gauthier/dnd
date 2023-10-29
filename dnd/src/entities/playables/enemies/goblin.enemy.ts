@@ -1,11 +1,11 @@
 import dedent from 'dedent-js';
-import { Coord } from '../../../interfaces/coord.interface';
 import { Inventory } from '../../../inventory/inventory';
 import { GoblinMace } from '../../../items/weapons/goblin-mace.weapon';
 import {
   Weapon,
   WeaponAttackResult,
 } from '../../../items/weapons/weapon.abstract';
+import type { Coord } from '../../../map/coord';
 import { PlayableEntity } from '../playable.abstract';
 import { Enemy } from './enemy.abstract';
 

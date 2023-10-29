@@ -1,5 +1,5 @@
 import { Entity } from '../entities/entity.interface';
-import { Coord } from '../interfaces/coord.interface';
+import { Coord } from './coord';
 
 export class Tile {
   constructor(

@@ -1,5 +1,5 @@
-import { Coord } from '../interfaces/coord.interface';
 import { chunk } from '../utils/chunk';
+import { Coord } from './coord';
 import { Tile } from './tile';
 
 export class Map {

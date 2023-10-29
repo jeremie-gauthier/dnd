@@ -1,4 +1,4 @@
-import type { Coord } from '../../interfaces/coord.interface';
+import type { Coord } from '../../map/coord';
 import { Character } from '../playables/characters/character.abstract';
 import { Interactive } from './interactive.interface';
 

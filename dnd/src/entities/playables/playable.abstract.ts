@@ -1,14 +1,12 @@
 import { mapEventEmitter } from '../../events/event-emitter';
 import { AttackType } from '../../interfaces/attack-type.enum';
-import { Coord } from '../../interfaces/coord.interface';
 import { Inventory } from '../../inventory/inventory';
 import {
   Weapon,
   WeaponAttackResult,
 } from '../../items/weapons/weapon.abstract';
+import type { Coord } from '../../map/coord';
 import { Tile } from '../../map/tile';
-import { isNextTo } from '../../utils/coord';
-import { equals } from '../../utils/equals';
 import { Entity } from '../entity.interface';
 import type { Character } from './characters/character.abstract';
 import type { Enemy } from './enemies/enemy.abstract';
@@ -90,20 +88,20 @@ export abstract class PlayableEntity implements Entity {
       throw new NotEquippedError(weapon);
     }
 
-    if (!tilesInSight.some((tile) => equals(tile.coord, target.coord))) {
+    if (!tilesInSight.some((tile) => tile.coord.equals(target.coord))) {
       throw new NotInSightError(target);
     }
 
     if (
       weapon.attackType === AttackType.Melee &&
-      !isNextTo(this.coord, target.coord)
+      !this.coord.isNextTo(target.coord)
     ) {
       throw new CannotMeleeAttackError();
     }
 
     if (
       weapon.attackType === AttackType.Range &&
-      isNextTo(this.coord, target.coord)
+      this.coord.isNextTo(target.coord)
     ) {
       throw new CannotRangeAttackError();
     }

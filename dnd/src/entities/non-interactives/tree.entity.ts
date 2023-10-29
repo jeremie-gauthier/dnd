@@ -1,4 +1,4 @@
-import type { Coord } from '../../interfaces/coord.interface';
+import type { Coord } from '../../map/coord';
 import { NonInteractive } from './non-interactive.interface';
 
 export class Tree implements NonInteractive {
