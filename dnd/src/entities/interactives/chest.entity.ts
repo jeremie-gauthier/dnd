@@ -1,25 +1,44 @@
-import type { Coord } from '../../map/coord';
+import {
+  EntityEvent,
+  entityEventEmitter,
+} from '../events/event-emitter.entity';
 import { Character } from '../playables/characters/character.abstract';
-import { Interactive } from './interactive.interface';
+import { Interactive } from './interactive.abstract';
 
-export class Chest implements Interactive {
+export class Chest extends Interactive {
+  public readonly name = 'Chest';
   public readonly type = 'chest';
   public readonly isPlayable = false;
   public readonly isBlocking = true;
   public isVisible = true;
-  public canInteract = true;
+  public isInteractive = true;
 
-  constructor(public readonly coord: Coord) {}
+  public onInteraction(character: Character) {
+    this.assertCanInteract(character);
 
-  public onInteraction(entity: Character) {
-    console.log(entity.name, 'opened a chest');
+    console.log(`${character.name} opened a ${this.type}`);
+
+    // draw a loot
+
+    entityEventEmitter.emit(EntityEvent.OnChestOpening, {
+      chest: this,
+      character,
+    });
   }
 
-  public getRepresentation() {
-    return `This is a Chest`;
+  public drawLoot() {
+    throw new Error('Not implemented.');
   }
 
-  public toString() {
-    return 'C';
+  public loot() {
+    throw new Error('Not implemented.');
+  }
+
+  public equip() {
+    throw new Error('Not implemented.');
+  }
+
+  private trapTriggered() {
+    throw new Error('Not implemented.');
   }
 }

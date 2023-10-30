@@ -1,4 +1,4 @@
-import { Entity } from '../entities/entity.interface';
+import { Entity } from '../entities/entity.abstract';
 import { Coord } from './coord';
 
 export class Tile {

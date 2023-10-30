@@ -3,7 +3,7 @@ import { PlayableEntity } from '../../entities/playables/playable.abstract';
 export abstract class Turn {
   public isRunning = false;
   public abstract actionPoints: number;
-  protected abstract readonly playableEntity: PlayableEntity;
+  public abstract readonly playableEntity: PlayableEntity;
 
   public start() {
     console.log(`Turn start: ${this.playableEntity.name}`);

@@ -1,15 +1,13 @@
-import type { Coord } from '../../map/coord';
 import { Character } from '../playables/characters/character.abstract';
-import { Interactive } from './interactive.interface';
+import { Interactive } from './interactive.abstract';
 
-export class Trap implements Interactive {
+export class Trap extends Interactive {
+  public readonly name = 'Trap';
   public readonly type = 'trap';
   public readonly isPlayable = false;
   public readonly isBlocking = false;
   public isVisible = false;
-  public canInteract = true;
-
-  constructor(public readonly coord: Coord) {}
+  public isInteractive = true;
 
   public onInteraction(entity: Character) {
     console.log(entity.name, 'triggered a trap');
@@ -17,7 +15,7 @@ export class Trap implements Interactive {
   }
 
   public getRepresentation() {
-    return this.canInteract
+    return this.isInteractive
       ? `This is a ${this.isVisible ? 'detected' : 'secret'} active Trap`
       : `This is a detected disarmed Trap`;
   }

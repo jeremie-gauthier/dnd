@@ -1,4 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import {
+  EntityEvent,
+  EntityInputByEventName,
+  entityEventEmitter,
+} from '../entities/events/event-emitter.entity';
 import { PlayableEntity } from '../entities/playables/playable.abstract';
 import { Map } from '../map/map';
 import { lineOfSight } from '../map/pathfinder/ray-casting';
@@ -6,10 +11,12 @@ import { GameMaster } from './player/game-master.player';
 import { Player } from './player/player.abstract';
 import { CharacterTurn } from './turn/character.turn';
 import { EnemyTurn } from './turn/enemy.turn';
+import type { Turn } from './turn/turn.abstract';
 
 export class Game {
   private isRunning = false;
   private gameMaster: GameMaster;
+  private currentEntityTurn?: Turn;
 
   constructor(
     private map: Map,
@@ -20,6 +27,11 @@ export class Game {
     )! as GameMaster;
     this.isRunning = true;
     this.rollInitiatives();
+
+    entityEventEmitter.addListener(
+      EntityEvent.OnDoorOpening,
+      this.onDoorOpening.bind(this),
+    );
   }
 
   public start() {
@@ -28,7 +40,7 @@ export class Game {
         if (!entity.isAlive) continue;
 
         if (entity.isCharacter()) {
-          const characterTurn = new CharacterTurn(entity);
+          this.currentEntityTurn = new CharacterTurn(entity);
           const characterTile = this.map.getTileAtCoord(entity.coord);
           if (!characterTile) {
             continue;
@@ -47,16 +59,16 @@ export class Game {
             characterTile,
             entity.type,
           );
-          characterTurn.start();
-          characterTurn.attack(
+          this.currentEntityTurn.start();
+          this.currentEntityTurn.attack(
             entity.inventory.equipped.weapon.items[0]!,
             enemy,
             tilesInSight,
           );
 
-          characterTurn.end();
+          this.currentEntityTurn.end();
         } else if (entity.isEnemy()) {
-          const enemyTurn = new EnemyTurn(entity);
+          this.currentEntityTurn = new EnemyTurn(entity);
           const enemyTile = this.map.getTileAtCoord(entity.coord);
           if (!enemyTile) {
             continue;
@@ -71,19 +83,29 @@ export class Game {
           }
 
           const tilesInSight = lineOfSight(this.map, enemyTile, entity.type);
-          enemyTurn.start();
-          enemyTurn.attack(
+          this.currentEntityTurn.start();
+          this.currentEntityTurn.attack(
             entity.inventory.equipped.weapon.items[0]!,
             character,
             tilesInSight,
           );
-          enemyTurn.end();
+          this.currentEntityTurn.end();
         }
       }
       if (!this.gameMaster.hasEnemyAlive()) {
         return;
       }
     }
+  }
+
+  private onDoorOpening({
+    character,
+  }: EntityInputByEventName[EntityEvent.OnDoorOpening]) {
+    if (this.currentEntityTurn?.playableEntity === character) {
+      this.currentEntityTurn.end();
+    }
+
+    this.rollInitiatives();
   }
 
   private rollInitiatives() {

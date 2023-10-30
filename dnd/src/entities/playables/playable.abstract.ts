@@ -5,9 +5,8 @@ import { Inventory } from '../../inventory/inventory';
 import type { Item } from '../../items/item.abstract';
 import type { Spell } from '../../items/spells/spell.abstract';
 import type { Weapon } from '../../items/weapons/weapon.abstract';
-import type { Coord } from '../../map/coord';
 import { Tile } from '../../map/tile';
-import { Entity } from '../entity.interface';
+import { Entity } from '../entity.abstract';
 import {
   EntityEvent,
   entityEventEmitter,
@@ -27,13 +26,12 @@ export enum PlayableEntityType {
   Enemy = 'Enemy',
 }
 
-export abstract class PlayableEntity implements Entity {
+export abstract class PlayableEntity extends Entity {
   public isBlocking = true;
   public readonly isPlayable = true;
 
   abstract readonly type: PlayableEntityType;
 
-  abstract readonly name: string;
   abstract readonly description: string;
 
   public initiative = 0;
@@ -45,8 +43,6 @@ export abstract class PlayableEntity implements Entity {
   abstract armorClass: number;
   abstract readonly armorClassNatural: number;
   abstract readonly inventory: Inventory;
-
-  constructor(public readonly coord: Coord) {}
 
   get isAlive() {
     return this.healthPoints > 0;
@@ -172,13 +168,5 @@ export abstract class PlayableEntity implements Entity {
 
   public isEnemy(): this is Enemy {
     return this.type === PlayableEntityType.Enemy;
-  }
-
-  public getRepresentation() {
-    return `This is ${this.name} (${this.type})`;
-  }
-
-  public toString() {
-    return this.name[0]?.toUpperCase() ?? '';
   }
 }

@@ -4,7 +4,7 @@ import { Turn } from './turn.abstract';
 export class CharacterTurn extends Turn {
   public actionPoints = 2;
 
-  constructor(protected readonly playableEntity: Character) {
+  constructor(public readonly playableEntity: Character) {
     super();
   }
 

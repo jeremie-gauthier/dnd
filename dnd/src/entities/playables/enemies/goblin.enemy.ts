@@ -1,12 +1,10 @@
 import dedent from 'dedent-js';
+import type { AttackResult } from '../../../interfaces/attack-result.type';
 import { Inventory } from '../../../inventory/inventory';
+import type { Item } from '../../../items/item.abstract';
 import { GoblinMace } from '../../../items/weapons/goblin-mace.weapon';
-import {
-  Weapon,
-  WeaponAttackResult,
-} from '../../../items/weapons/weapon.abstract';
 import type { Coord } from '../../../map/coord';
-import { PlayableEntity } from '../playable.abstract';
+import type { PlayableEntity } from '../playable.abstract';
 import { Enemy } from './enemy.abstract';
 
 export class Goblin extends Enemy {
@@ -41,10 +39,10 @@ export class Goblin extends Enemy {
   });
 
   protected afterDiceRollsHook(
-    attackResult: WeaponAttackResult,
-    _weapon: Weapon,
+    attackResult: AttackResult,
+    _item: Item,
     _target: PlayableEntity,
-  ): WeaponAttackResult {
+  ): AttackResult {
     return attackResult;
   }
 }

@@ -1,3 +1,3 @@
-import type { Entity } from '../entity.interface';
+import { Entity } from '../entity.abstract';
 
-export type NonInteractive = Entity;
+export abstract class NonInteractive extends Entity {}
