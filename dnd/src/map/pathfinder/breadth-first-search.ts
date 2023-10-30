@@ -1,3 +1,4 @@
+import { Coord } from '../coord';
 import type { Map } from '../map';
 import type { Tile } from '../tile';
 
@@ -40,10 +41,10 @@ export function getAllPathsFromTileWithinRange(
 
     const tileCoord = tilePath.tile.coord;
     const neighbourCoords = [
-      { ...tileCoord, x: tileCoord.x - 1 },
-      { ...tileCoord, x: tileCoord.x + 1 },
-      { ...tileCoord, y: tileCoord.y - 1 },
-      { ...tileCoord, y: tileCoord.y + 1 },
+      Coord.from({ ...tileCoord, x: tileCoord.x - 1 }),
+      Coord.from({ ...tileCoord, x: tileCoord.x + 1 }),
+      Coord.from({ ...tileCoord, y: tileCoord.y - 1 }),
+      Coord.from({ ...tileCoord, y: tileCoord.y + 1 }),
     ];
 
     // browse all linked tiles to create new paths
