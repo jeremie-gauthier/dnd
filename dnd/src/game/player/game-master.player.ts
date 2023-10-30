@@ -1,5 +1,9 @@
+import {
+  EntityEvent,
+  EntityInputByEventName,
+  entityEventEmitter,
+} from '../../entities/events/event-emitter.entity';
 import { Enemy } from '../../entities/playables/enemies/enemy.abstract';
-import { mapEventEmitter } from '../../events/event-emitter';
 import { Player } from './player.abstract';
 
 export class GameMaster extends Player {
@@ -9,7 +13,11 @@ export class GameMaster extends Player {
   constructor(entities: Enemy[] = []) {
     super();
     this.entities = entities;
-    mapEventEmitter.addListener('entity-died', this.onEntityDied.bind(this));
+
+    entityEventEmitter.addListener(
+      EntityEvent.OnEntityDeath,
+      this.onEntityDied.bind(this),
+    );
   }
 
   public hasEnemyAlive() {
@@ -20,11 +28,11 @@ export class GameMaster extends Player {
     this.entities.push(entity);
   }
 
-  private onEntityDied(data: any) {
-    console.log('GameMaster: on entity-died');
+  private onEntityDied({
+    deadEntity,
+  }: EntityInputByEventName[EntityEvent.OnEntityDeath]) {
+    console.log(`GameMaster: ${EntityEvent.OnEntityDeath}`, deadEntity);
 
-    this.entities = this.entities.filter(
-      (entity) => entity.name !== data.entityName,
-    );
+    this.entities = this.entities.filter((entity) => entity !== deadEntity);
   }
 }

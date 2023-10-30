@@ -9,6 +9,7 @@
     "eslint-plugin-unicorn": "^48.0.1",
     "prettier": "^3.0.3",
     "ts-node": "^10.9.1",
+    "typed-emitter": "^2.1.0",
     "typescript": "^5.2.2",
     "vitest": "^0.34.6"
   },

@@ -31,6 +31,7 @@ module.exports = {
         checkArguments: false,
       },
     ],
+    'unicorn/prefer-event-target': 'off',
   },
   parserOptions: {
     ecmaVersion: 'latest',

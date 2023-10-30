@@ -1,4 +1,3 @@
-import { mapEventEmitter } from '../../events/event-emitter';
 import { AttackType } from '../../interfaces/attack-type.enum';
 import { Inventory } from '../../inventory/inventory';
 import {
@@ -8,6 +7,10 @@ import {
 import type { Coord } from '../../map/coord';
 import { Tile } from '../../map/tile';
 import { Entity } from '../entity.interface';
+import {
+  EntityEvent,
+  entityEventEmitter,
+} from '../events/event-emitter.entity';
 import type { Character } from './characters/character.abstract';
 import type { Enemy } from './enemies/enemy.abstract';
 import { CannotMeleeAttackError } from './errors/cannot-melee-attack-error';
@@ -61,7 +64,6 @@ export abstract class PlayableEntity implements Entity {
 
     const diceRolls = weapon.rollAttack();
 
-    // TODO: observable pattern OR event emitter if I can get the return
     const diceRollsWithModifiers = this.afterDiceRollsHook(
       diceRolls,
       weapon,
@@ -128,9 +130,10 @@ export abstract class PlayableEntity implements Entity {
     console.log(`${this.name} has ${this.healthPoints} HP left`);
     if (this.healthPoints <= 0) {
       console.log(`${this.name} is dead`);
-      mapEventEmitter.emit('entity-died', { entityName: this.name });
       this.healthPoints = 0;
       this.isBlocking = false;
+
+      entityEventEmitter.emit(EntityEvent.OnEntityDeath, { deadEntity: this });
     }
   }
 
