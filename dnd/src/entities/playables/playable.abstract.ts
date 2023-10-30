@@ -1,9 +1,10 @@
+import type { AttackResult } from '../../interfaces/attack-result.type';
 import { AttackType } from '../../interfaces/attack-type.enum';
+import { SpellCasterCharacter } from '../../interfaces/character-class.type';
 import { Inventory } from '../../inventory/inventory';
-import {
-  Weapon,
-  WeaponAttackResult,
-} from '../../items/weapons/weapon.abstract';
+import type { Item } from '../../items/item.abstract';
+import type { Spell } from '../../items/spells/spell.abstract';
+import type { Weapon } from '../../items/weapons/weapon.abstract';
 import type { Coord } from '../../map/coord';
 import { Tile } from '../../map/tile';
 import { Entity } from '../entity.interface';
@@ -13,8 +14,11 @@ import {
 } from '../events/event-emitter.entity';
 import type { Character } from './characters/character.abstract';
 import type { Enemy } from './enemies/enemy.abstract';
+import { CannotCastSpellError } from './errors/cannot-cast-spell-error';
 import { CannotMeleeAttackError } from './errors/cannot-melee-attack-error';
 import { CannotRangeAttackError } from './errors/cannot-range-attack-error';
+import { NotACharacterError } from './errors/not-a-character-error';
+import { NotEnoughManaError } from './errors/not-enough-mana-error';
 import { NotEquippedError } from './errors/not-equipped-error';
 import { NotInSightError } from './errors/not-in-sight-error';
 
@@ -49,30 +53,34 @@ export abstract class PlayableEntity implements Entity {
   }
 
   protected abstract afterDiceRollsHook(
-    attackResult: WeaponAttackResult,
-    weapon: Weapon,
+    attackResult: AttackResult,
+    item: Item,
     target: PlayableEntity,
-  ): WeaponAttackResult;
+  ): AttackResult;
 
-  // TODO: handle spell casting - with mana cost
   public attack(
-    weapon: Weapon,
+    item: Weapon | Spell,
     target: PlayableEntity,
     tilesInSight: Tile[],
-  ): WeaponAttackResult {
-    this.assertCanAttackTarget(weapon, target, tilesInSight);
+  ): AttackResult {
+    this.assertCanAttackTarget(item, target, tilesInSight);
 
-    const diceRolls = weapon.rollAttack();
+    if (item.isSpell() && this.isCharacter()) {
+      this.assertCharacterCanCastSpell(item);
+      this.manaPoints -= item.getManaCost(this.class);
+    }
+
+    const diceRolls = item.rollAttack();
 
     const diceRollsWithModifiers = this.afterDiceRollsHook(
       diceRolls,
-      weapon,
+      item,
       target,
     );
 
     const [totalDamages] = diceRollsWithModifiers;
     console.log(
-      `${this.name} attacked ${target.name} with ${weapon.name} and inflicted ${totalDamages} damages`,
+      `${this.name} attacked ${target.name} with ${item.name} (${item.type}) and inflicted ${totalDamages} damages`,
     );
 
     // TODO: event emitter ??
@@ -82,12 +90,12 @@ export abstract class PlayableEntity implements Entity {
   }
 
   private assertCanAttackTarget(
-    weapon: Weapon,
+    item: Weapon | Spell,
     target: PlayableEntity,
     tilesInSight: Tile[],
   ) {
-    if (!this.inventory.isWeaponEquipped(weapon)) {
-      throw new NotEquippedError(weapon);
+    if (!this.inventory.isItemEquipped(item)) {
+      throw new NotEquippedError(item);
     }
 
     if (!tilesInSight.some((tile) => tile.coord.equals(target.coord))) {
@@ -95,17 +103,34 @@ export abstract class PlayableEntity implements Entity {
     }
 
     if (
-      weapon.attackType === AttackType.Melee &&
+      item.attackType === AttackType.Melee &&
       !this.coord.isNextTo(target.coord)
     ) {
       throw new CannotMeleeAttackError();
     }
 
     if (
-      weapon.attackType === AttackType.Range &&
+      item.attackType === AttackType.Range &&
       this.coord.isNextTo(target.coord)
     ) {
       throw new CannotRangeAttackError();
+    }
+  }
+
+  private assertCharacterCanCastSpell(
+    item: Spell,
+  ): asserts this is SpellCasterCharacter {
+    if (!this.isCharacter()) {
+      throw new NotACharacterError();
+    }
+
+    if (!this.isSpellCaster()) {
+      throw new CannotCastSpellError(this.class);
+    }
+
+    const manaCost = item.manaCost[this.class];
+    if (this.manaPoints < manaCost) {
+      throw new NotEnoughManaError(this, item);
     }
   }
 

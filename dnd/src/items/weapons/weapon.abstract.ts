@@ -1,12 +1,10 @@
 import type { Dice, DiceRoll } from '../../dices/dice.abstract';
+import type { AttackResult } from '../../interfaces/attack-result.type';
 import { AttackType } from '../../interfaces/attack-type.enum';
 import { sum } from '../../utils/sum';
 import { Item } from '../item.abstract';
 
-type TotalDamages = number;
-export type WeaponAttackResult = [TotalDamages, DiceRoll[]];
-
-export abstract class Weapon implements Item {
+export abstract class Weapon extends Item {
   readonly type: 'weapon' | 'artifact' | 'spell' = 'weapon';
   abstract readonly name: string;
   abstract readonly description: string;
@@ -15,12 +13,12 @@ export abstract class Weapon implements Item {
   abstract readonly dices: Dice[];
   abstract readonly superAttackDices?: Dice[];
 
-  public rollAttack(): WeaponAttackResult {
+  public rollAttack(): AttackResult {
     const diceRolls = this.dices.map((dice) => dice.roll());
     return this.getWeaponAttackResult(diceRolls);
   }
 
-  public rollSuperAttack(): WeaponAttackResult {
+  public rollSuperAttack(): AttackResult {
     if (!this.superAttackDices) {
       throw new Error(`No super attack for this weapon`);
     }
@@ -29,7 +27,7 @@ export abstract class Weapon implements Item {
     return this.getWeaponAttackResult(diceRolls);
   }
 
-  private getWeaponAttackResult(diceRolls: DiceRoll[]): WeaponAttackResult {
+  private getWeaponAttackResult(diceRolls: DiceRoll[]): AttackResult {
     const totalDamages = sum(
       ...diceRolls
         .filter(({ type }) => type === 'attack')

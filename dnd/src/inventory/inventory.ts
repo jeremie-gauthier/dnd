@@ -52,8 +52,16 @@ export class Inventory {
     };
   }
 
-  public isWeaponEquipped(weapon: Weapon) {
-    return this.equipped.weapon.items.includes(weapon);
+  public isItemEquipped(item: Item) {
+    if (item.isWeapon()) {
+      return this.equipped.weapon.items.includes(item);
+    } else if (item.isSpell()) {
+      return this.equipped.spell.items.includes(item);
+    } else if (item.isArtifact()) {
+      return this.equipped.artifact.items.includes(item);
+    } else {
+      return false;
+    }
   }
 
   public hasSpaceLeftInBag(bag: Bag) {

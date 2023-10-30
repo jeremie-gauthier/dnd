@@ -1,11 +1,9 @@
 import dedent from 'dedent-js';
+import { AttackResult } from '../../../interfaces/attack-result.type';
 import { AttackType } from '../../../interfaces/attack-type.enum';
 import { CharacterClass } from '../../../interfaces/character-class.type';
 import { Inventory } from '../../../inventory/inventory';
-import type {
-  Weapon,
-  WeaponAttackResult,
-} from '../../../items/weapons/weapon.abstract';
+import { Item } from '../../../items/item.abstract';
 import { PlayableEntity } from '../playable.abstract';
 import { Character } from './character.abstract';
 
@@ -37,11 +35,11 @@ export class Regdar extends Character {
   });
 
   protected afterDiceRollsHook(
-    attackResult: WeaponAttackResult,
-    weapon: Weapon,
+    attackResult: AttackResult,
+    item: Item,
     _target: PlayableEntity,
-  ): WeaponAttackResult {
-    if (weapon.attackType === AttackType.Melee) {
+  ): AttackResult {
+    if (item.isWeapon() && item.attackType === AttackType.Melee) {
       const [damages, ...rest] = attackResult;
       return [damages + 1, ...rest];
     } else {
