@@ -7,13 +7,7 @@ function almostEqual(a: number, b: number) {
   return Math.abs(a - b) < 0.000_001;
 }
 
-function makeRay(
-  map: Map,
-  xStart: number,
-  yStart: number,
-  xEnd: number,
-  yEnd: number,
-) {
+function makeRay(xStart: number, yStart: number, xEnd: number, yEnd: number) {
   // constant throughout raycast
   const xDirection = xEnd - xStart;
   const yDirection = yEnd - yStart;
@@ -82,7 +76,6 @@ function canBeSeenRay(
   }
 
   const ray = makeRay(
-    map,
     originTile.coord.x + 0.5,
     originTile.coord.y + 0.5,
     destinationTile.coord.x + 0.5,
