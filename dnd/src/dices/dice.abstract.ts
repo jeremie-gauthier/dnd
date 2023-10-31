@@ -7,10 +7,12 @@ export interface DiceRoll {
   readonly maxValue: Dice['maxValue'];
 }
 
+export type D6 = [number, number, number, number, number, number];
+
 export abstract class Dice {
   abstract readonly type: 'attack' | 'special';
   abstract readonly label: string;
-  abstract readonly values: [number, number, number, number, number, number];
+  abstract readonly values: D6;
   abstract readonly maxValue: number;
 
   public roll(): DiceRoll {
