@@ -5,6 +5,7 @@ import { Inventory } from '../../inventory/inventory';
 import type { Item } from '../../items/item.abstract';
 import type { Spell } from '../../items/spells/spell.abstract';
 import type { Weapon } from '../../items/weapons/weapon.abstract';
+import type { Coord } from '../../map/coord';
 import { Tile } from '../../map/tile';
 import { Entity } from '../entity.abstract';
 import {
@@ -43,6 +44,10 @@ export abstract class PlayableEntity extends Entity {
   abstract armorClass: number;
   abstract readonly armorClassNatural: number;
   abstract readonly inventory: Inventory;
+
+  constructor(public coord: Coord) {
+    super();
+  }
 
   get isAlive() {
     return this.healthPoints > 0;

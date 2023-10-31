@@ -1,4 +1,4 @@
-import { Character } from '../playables/characters/character.abstract';
+import { Character } from '../../playables/characters/character.abstract';
 import { Interactive } from './interactive.abstract';
 
 export class Trap extends Interactive {

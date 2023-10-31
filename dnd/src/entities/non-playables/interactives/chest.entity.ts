@@ -1,8 +1,8 @@
 import {
   EntityEvent,
   entityEventEmitter,
-} from '../events/event-emitter.entity';
-import { Character } from '../playables/characters/character.abstract';
+} from '../../events/event-emitter.entity';
+import { Character } from '../../playables/characters/character.abstract';
 import { Interactive } from './interactive.abstract';
 
 export class Chest extends Interactive {

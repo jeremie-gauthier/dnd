@@ -1,4 +1,4 @@
-import { Character } from '../../playables/characters/character.abstract';
+import { Character } from '../../../playables/characters/character.abstract';
 import { Interactive } from '../interactive.abstract';
 import { InteractiveEntityError } from './interactive-entity-error';
 

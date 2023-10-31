@@ -1,10 +1,10 @@
 import type { Coord } from '../map/coord';
-import { Chest } from './interactives/chest.entity';
-import { Door } from './interactives/door.entity';
-import { Trap } from './interactives/trap.entity';
-import { Pillar } from './non-interactives/pillar.entity';
-import { Tree } from './non-interactives/tree.entity';
-import { Wall } from './non-interactives/wall.entity';
+import { Chest } from './non-playables/interactives/chest.entity';
+import { Door } from './non-playables/interactives/door.entity';
+import { Trap } from './non-playables/interactives/trap.entity';
+import { Pillar } from './non-playables/non-interactives/pillar.entity';
+import { Tree } from './non-playables/non-interactives/tree.entity';
+import { Wall } from './non-playables/non-interactives/wall.entity';
 
 type EntityFactoryMapper = (typeof EntityFactory)['entitiesByType'];
 type EntitiesTypes = keyof EntityFactoryMapper;

@@ -1,8 +1,8 @@
-import { Entity } from '../entity.abstract';
-import type { Character } from '../playables/characters/character.abstract';
+import type { Character } from '../../playables/characters/character.abstract';
+import { NonPlayable } from '../non-playable.abstract';
 import { CannotInteractError } from './errors/cannot-interact-error';
 
-export abstract class Interactive extends Entity {
+export abstract class Interactive extends NonPlayable {
   public abstract isVisible: boolean;
   public abstract isInteractive: boolean;
 
