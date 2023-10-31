@@ -96,18 +96,7 @@ export class Inventory {
       return;
     }
 
-    // if backpackItem is not in your backpack
-    if (backpackItem && !this.hasItemInBag(backpackItem, this.backpack)) {
-      throw new ItemNotFoundError(backpackItem);
-    }
-
-    // if equippedItem is not equipped
-    if (
-      equippedItem &&
-      !this.hasItemInBag(equippedItem, this.equipped[equippedItem.type])
-    ) {
-      throw new ItemNotFoundError(equippedItem);
-    }
+    this.assertCanMoveItem({ backpackItem, equippedItem });
 
     // if it's a swap of 2 items
     if (backpackItem && equippedItem) {
@@ -126,6 +115,27 @@ export class Inventory {
         : [this.equipped[item.type], this.backpack];
       this.removeItemFromBag(item, bagToPickFrom);
       this.addItemInBag(item, bagToAddTo);
+    }
+  }
+
+  private assertCanMoveItem({
+    backpackItem,
+    equippedItem,
+  }: {
+    backpackItem?: Item;
+    equippedItem?: Item;
+  }) {
+    // if backpackItem is not in your backpack
+    if (backpackItem && !this.hasItemInBag(backpackItem, this.backpack)) {
+      throw new ItemNotFoundError(backpackItem);
+    }
+
+    // if equippedItem is not equipped
+    if (
+      equippedItem &&
+      !this.hasItemInBag(equippedItem, this.equipped[equippedItem.type])
+    ) {
+      throw new ItemNotFoundError(equippedItem);
     }
   }
 
