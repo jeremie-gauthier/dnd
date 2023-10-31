@@ -6,19 +6,25 @@ import type { Item } from '../../items/item.abstract';
 import type { Spell } from '../../items/spells/spell.abstract';
 import type { Weapon } from '../../items/weapons/weapon.abstract';
 import type { Coord } from '../../map/coord';
+import type { TilePath } from '../../map/pathfinder/breadth-first-search';
 import { Tile } from '../../map/tile';
+import { unfoldTilePath } from '../../utils/unfold-tile-path';
 import { Entity } from '../entity.abstract';
 import {
   EntityEvent,
   entityEventEmitter,
 } from '../events/event-emitter.entity';
+import { Trap } from '../non-playables/interactives/trap.entity';
 import type { Character } from './characters/character.abstract';
 import type { Enemy } from './enemies/enemy.abstract';
 import { CannotCastSpellError } from './errors/cannot-cast-spell-error';
 import { CannotMeleeAttackError } from './errors/cannot-melee-attack-error';
+import { CannotMoveToTileError } from './errors/cannot-move-to-tile-error';
 import { CannotRangeAttackError } from './errors/cannot-range-attack-error';
+import { InvalidPathError } from './errors/invalid-path-error';
 import { NotACharacterError } from './errors/not-a-character-error';
 import { NotEnoughManaError } from './errors/not-enough-mana-error';
+import { NotEnoughSpeedError } from './errors/not-enough-speed-error';
 import { NotEquippedError } from './errors/not-equipped-error';
 import { NotInSightError } from './errors/not-in-sight-error';
 
@@ -58,6 +64,58 @@ export abstract class PlayableEntity extends Entity {
     item: Item,
     target: PlayableEntity,
   ): AttackResult;
+
+  public move(tilePath: TilePath) {
+    const unfoldedTilePath = unfoldTilePath(tilePath);
+    this.assertCanMoveThroughTiles(unfoldedTilePath);
+
+    for (const tile of unfoldedTilePath) {
+      if (tile.coord.equals(this.coord)) {
+        continue;
+      }
+
+      this.coord = tile.coord;
+      entityEventEmitter.emit(EntityEvent.OnEntityMove, { entity: this, tile });
+
+      const activeTrapOnTile = tile.entities.find(
+        (entity) =>
+          entity.isNonPlayable() &&
+          entity.isInteractive() &&
+          entity.isTrap() &&
+          entity.canInteract,
+      ) as Trap | undefined;
+      if (activeTrapOnTile) {
+        entityEventEmitter.emit(EntityEvent.OnTrapTriggered, {
+          entity: this,
+          tile,
+          trap: activeTrapOnTile,
+        });
+        return;
+      }
+    }
+  }
+
+  private assertCanMoveThroughTiles(tiles: Tile[]) {
+    if (tiles.length > this.speed) {
+      throw new NotEnoughSpeedError();
+    }
+
+    const allTilesAdjacent = tiles.every((tile, tileIndex, tiles) =>
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      tileIndex > 0 ? tile.coord.isNextTo(tiles[tileIndex - 1]!.coord) : true,
+    );
+    if (!allTilesAdjacent) {
+      throw new InvalidPathError();
+    }
+
+    const allies = this.type;
+    const allTilesAccessible = tiles.every(
+      (tile) => tile.getBlockingNonAllyEntity(allies) === undefined,
+    );
+    if (!allTilesAccessible) {
+      throw new CannotMoveToTileError();
+    }
+  }
 
   public attack(
     item: Weapon | Spell,

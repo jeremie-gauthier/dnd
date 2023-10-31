@@ -7,11 +7,10 @@ import { Interactive } from './interactive.abstract';
 
 export class Chest extends Interactive {
   public readonly name = 'Chest';
-  public readonly type = 'chest';
   public readonly isPlayable = false;
   public readonly isBlocking = true;
   public isVisible = true;
-  public isInteractive = true;
+  public canInteract = true;
 
   public onInteraction(character: Character) {
     this.assertCanInteract(character);

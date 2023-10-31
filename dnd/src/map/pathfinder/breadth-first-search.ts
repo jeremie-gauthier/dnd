@@ -2,16 +2,18 @@ import { Coord } from '../coord';
 import type { Map } from '../map';
 import type { Tile } from '../tile';
 
-type TilePath =
-  | {
-      tile: Tile;
-      range: 0;
-    }
-  | {
-      tile: Tile;
-      range: number;
-      fromTile: TilePath;
-    };
+export interface OriginTilePath {
+  tile: Tile;
+  range: 0;
+}
+
+export interface ChildTilePath {
+  tile: Tile;
+  range: number;
+  fromTile: TilePath;
+}
+
+export type TilePath = OriginTilePath | ChildTilePath;
 
 export function getAllPathsFromTileWithinRange(
   map: Map,
