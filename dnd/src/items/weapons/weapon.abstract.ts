@@ -37,6 +37,7 @@ export abstract class Weapon extends Item {
   }
 
   public rerollDice(dice: Dice): DiceRoll {
+    // TODO: if have 're-roll' perk
     return dice.roll();
   }
 }
