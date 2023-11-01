@@ -1,10 +1,14 @@
-import { defineConfig } from "vitest/config";
+import { defaultExclude, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    include: ["**/*.spec.ts"],
+    include: ['**/*.spec.ts'],
     coverage: {
-      provider: "v8",
+      provider: 'v8',
+      exclude: [
+        ...defaultExclude,
+        '**/*.{fixture,enum,interface,type,error}.ts',
+      ],
     },
   },
 });
