@@ -1,8 +1,10 @@
+import { randomUUID } from 'node:crypto';
 import { Artifact } from './artifacts/artifact.abstract';
 import type { Spell } from './spells/spell.abstract';
 import type { Weapon } from './weapons/weapon.abstract';
 
 export abstract class Item {
+  public readonly id = randomUUID();
   abstract readonly name: string;
   abstract readonly type: 'weapon' | 'artifact' | 'spell';
 
