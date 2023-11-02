@@ -2,7 +2,7 @@ import { PlayableEntity } from '../../entities/playables/playable.abstract';
 
 export abstract class Turn {
   public isRunning = false;
-  public abstract actionPoints: number;
+  public actionPoints = 2;
   public abstract readonly playableEntity: PlayableEntity;
 
   public start() {
@@ -15,8 +15,9 @@ export abstract class Turn {
     this.isRunning = false;
   }
 
-  public move() {
-    throw new Error('Not implemented.');
+  public move(...parameters: Parameters<Turn['_move']>) {
+    console.log(`${this.playableEntity.name} moves`);
+    this.takeAction(this._move.bind(this), ...parameters);
   }
 
   public attack(...parameters: Parameters<Turn['_attack']>) {
@@ -39,6 +40,10 @@ export abstract class Turn {
       this.actionPoints += 1;
       console.error(error);
     }
+  }
+
+  private _move(...parameters: Parameters<PlayableEntity['move']>) {
+    this.playableEntity.move(...parameters);
   }
 
   private _attack(...parameters: Parameters<PlayableEntity['attack']>) {
