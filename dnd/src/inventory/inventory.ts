@@ -1,3 +1,4 @@
+import { Artifact } from '../items/artifacts/artifact.abstract';
 import { Item } from '../items/item.abstract';
 import { Spell } from '../items/spells/spell.abstract';
 import { Weapon } from '../items/weapons/weapon.abstract';
@@ -5,7 +6,7 @@ import { InventoryError } from './errors/inventory-error';
 import { ItemNotFoundError } from './errors/item-not-found-error';
 import { NoSpaceLeftError } from './errors/no-space-left-error';
 
-interface InventoryOptions {
+export interface InventoryOptions {
   readonly backpackSlots: number;
   readonly equipped: {
     readonly artifactSlots: number;
@@ -14,17 +15,17 @@ interface InventoryOptions {
   };
 }
 
-interface Bag<ItemType = Item> {
+interface Bag<ItemType extends Item> {
   items: ItemType[];
   readonly slots: number;
 }
 
 export class Inventory {
-  public readonly backpack: Bag;
+  public readonly backpack: Bag<Item>;
 
   public readonly equipped: Readonly<{
     weapon: Bag<Weapon>;
-    artifact: Bag;
+    artifact: Bag<Artifact>;
     spell: Bag<Spell>;
   }>;
 
@@ -54,21 +55,24 @@ export class Inventory {
 
   public isItemEquipped(item: Item) {
     if (item.isWeapon()) {
-      return this.equipped.weapon.items.includes(item);
+      return this.hasItemInBag(item, this.equipped.weapon);
     } else if (item.isSpell()) {
-      return this.equipped.spell.items.includes(item);
+      return this.hasItemInBag(item, this.equipped.spell);
     } else if (item.isArtifact()) {
-      return this.equipped.artifact.items.includes(item);
+      return this.hasItemInBag(item, this.equipped.artifact);
     } else {
       return false;
     }
   }
 
-  public hasSpaceLeftInBag(bag: Bag) {
+  private hasSpaceLeftInBag(bag: Bag<Item>) {
     return bag.items.length < bag.slots;
   }
 
-  public addItemInBag(item: Item, bag: Bag) {
+  public addItemInBag<ItemToAdd extends Item>(
+    item: ItemToAdd,
+    bag: Bag<ItemToAdd>,
+  ) {
     if (!this.hasSpaceLeftInBag(bag)) {
       throw new NoSpaceLeftError();
     }
@@ -76,11 +80,17 @@ export class Inventory {
     bag.items.push(item);
   }
 
-  public removeItemFromBag(itemToRemove: Item, bag: Bag) {
+  public removeItemFromBag<ItemToRemove extends Item>(
+    itemToRemove: ItemToRemove,
+    bag: Bag<ItemToRemove>,
+  ) {
     bag.items = bag.items.filter((item) => item !== itemToRemove);
   }
 
-  public hasItemInBag(item: Item, bag: Bag) {
+  private hasItemInBag<ItemToFind extends Item>(
+    item: ItemToFind,
+    bag: Bag<ItemToFind>,
+  ) {
     return bag.items.includes(item);
   }
 

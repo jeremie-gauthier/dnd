@@ -14,3 +14,11 @@ export class MockArtifactItem extends Item {
   name = 'mock-artifact-item';
   type: 'weapon' | 'artifact' | 'spell' = 'artifact';
 }
+
+export class MockUnknownItem extends Item {
+  name = 'mock-unknown-item';
+  type: 'weapon' | 'artifact' | 'spell' = 'unknown' as
+    | 'weapon'
+    | 'artifact'
+    | 'spell';
+}
