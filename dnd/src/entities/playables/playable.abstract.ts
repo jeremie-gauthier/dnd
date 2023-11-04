@@ -124,7 +124,7 @@ export abstract class PlayableEntity extends Entity {
   ): AttackResult {
     this.assertCanAttackTarget(item, target, tilesInSight);
 
-    if (item.isSpell() && this.isCharacter()) {
+    if (item.isSpell()) {
       this.assertCharacterCanCastSpell(item);
       this.manaPoints -= item.getManaCost(this.class);
     }
