@@ -97,4 +97,20 @@ describe('map: Coord', () => {
       expect(resultOppositeSide).toBe(expected);
     });
   });
+
+  describe('method: getNeighbourCoords', () => {
+    it('should returns a tuple of 4 adjacent coords', () => {
+      const coord = Coord.from({ x: 1, y: 1 });
+
+      const result = coord.getNeighbourCoords();
+      const expected = [
+        Coord.from({ x: 0, y: 1 }),
+        Coord.from({ x: 2, y: 1 }),
+        Coord.from({ x: 1, y: 0 }),
+        Coord.from({ x: 1, y: 2 }),
+      ];
+
+      expect(result).toStrictEqual(expected);
+    });
+  });
 });
