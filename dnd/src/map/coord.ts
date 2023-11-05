@@ -18,4 +18,13 @@ export class Coord {
     const diff = diffX + diffY;
     return diff === 1;
   }
+
+  public getNeighbourCoords(): [Coord, Coord, Coord, Coord] {
+    return [
+      Coord.from({ x: this.x - 1, y: this.y }),
+      Coord.from({ x: this.x + 1, y: this.y }),
+      Coord.from({ x: this.x, y: this.y - 1 }),
+      Coord.from({ x: this.x, y: this.y + 1 }),
+    ];
+  }
 }
