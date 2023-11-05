@@ -1,6 +1,4 @@
 import type { AttackResult } from '../../interfaces/attack-result.type';
-import { AttackType } from '../../interfaces/attack-type.enum';
-import { SpellCasterCharacter } from '../../interfaces/character-class.type';
 import { Inventory } from '../../inventory/inventory';
 import type { Item } from '../../items/item.abstract';
 import type { Spell } from '../../items/spells/spell.abstract';
@@ -14,16 +12,11 @@ import {
   EntityEvent,
   entityEventEmitter,
 } from '../events/event-emitter.entity';
+import { assertCanAttackTarget } from './assertions/can-attack.assert';
+import { assertCharacterCanCastSpell } from './assertions/can-cast-spell.assert';
 import { assertCanMoveThroughTiles } from './assertions/can-move.assert';
 import type { Character } from './characters/character.abstract';
 import type { Enemy } from './enemies/enemy.abstract';
-import { CannotCastSpellError } from './errors/cannot-cast-spell-error';
-import { CannotMeleeAttackError } from './errors/cannot-melee-attack-error';
-import { CannotRangeAttackError } from './errors/cannot-range-attack-error';
-import { NotACharacterError } from './errors/not-a-character-error';
-import { NotEnoughManaError } from './errors/not-enough-mana-error';
-import { NotEquippedError } from './errors/not-equipped-error';
-import { NotInSightError } from './errors/not-in-sight-error';
 
 export enum PlayableEntityType {
   Character = 'character',
@@ -91,10 +84,10 @@ export abstract class PlayableEntity extends Entity {
     target: PlayableEntity,
     tilesInSight: Tile[],
   ): AttackResult {
-    this.assertCanAttackTarget(item, target, tilesInSight);
+    assertCanAttackTarget(this, target, item, tilesInSight);
 
     if (item.isSpell()) {
-      this.assertCharacterCanCastSpell(item);
+      assertCharacterCanCastSpell(this, item);
       this.manaPoints -= item.getManaCost(this.class);
     }
 
@@ -115,51 +108,6 @@ export abstract class PlayableEntity extends Entity {
     target.takeDamage(totalDamages);
 
     return diceRollsWithModifiers;
-  }
-
-  private assertCanAttackTarget(
-    item: Weapon | Spell,
-    target: PlayableEntity,
-    tilesInSight: Tile[],
-  ) {
-    if (!this.inventory.isItemEquipped(item)) {
-      throw new NotEquippedError(item);
-    }
-
-    if (!tilesInSight.some((tile) => tile.coord.equals(target.coord))) {
-      throw new NotInSightError(target);
-    }
-
-    if (
-      item.attackType === AttackType.Melee &&
-      !this.coord.isNextTo(target.coord)
-    ) {
-      throw new CannotMeleeAttackError();
-    }
-
-    if (
-      item.attackType === AttackType.Range &&
-      this.coord.isNextTo(target.coord)
-    ) {
-      throw new CannotRangeAttackError();
-    }
-  }
-
-  private assertCharacterCanCastSpell(
-    item: Spell,
-  ): asserts this is SpellCasterCharacter {
-    if (!this.isCharacter()) {
-      throw new NotACharacterError();
-    }
-
-    if (!this.isSpellCaster()) {
-      throw new CannotCastSpellError(this.class);
-    }
-
-    const manaCost = item.manaCost[this.class];
-    if (this.manaPoints < manaCost) {
-      throw new NotEnoughManaError(this, item);
-    }
   }
 
   public takeDamage(amount: number): void {
