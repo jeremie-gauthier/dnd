@@ -1,37 +1,47 @@
-import { Link } from './link';
-import { LinkContainer } from './link-container';
-import { TileContent, TileContentType } from './tile-content';
+import type { Entity } from '../entities/entity.abstract';
+import type { Trap } from '../entities/non-playables/interactives/trap.entity';
+import type { Coord } from './coord';
 
 export class Tile {
-  public readonly content: TileContent;
-
   constructor(
-    contentType: TileContentType,
-    entityType?: string,
+    public readonly coord: Coord,
     public readonly label?: string,
-    public readonly linkContainer = new LinkContainer(),
-  ) {
-    this.content = new TileContent(contentType, entityType);
+    public entities: Entity[] = [],
+  ) {}
+
+  public getActiveTrap() {
+    return this.entities.find(
+      (entity) =>
+        entity.isNonPlayable() &&
+        entity.isInteractive() &&
+        entity.isTrap() &&
+        entity.canInteract,
+    ) as Trap | undefined;
   }
 
-  public addUnidirectionalConnexion(tile: Tile, type = Link.Type.None) {
-    if (!this.linkContainer.isLinkedTo(tile)) {
-      this.linkContainer.add(tile, type);
-    }
+  public isBlockedByEntity() {
+    return this.entities.some((entity) => entity.isBlocking);
   }
 
-  public addBidirectionalConnexion(tile: Tile, type = Link.Type.None) {
-    if (!this.linkContainer.isLinkedTo(tile)) {
-      this.addUnidirectionalConnexion(tile, type);
-      tile.addUnidirectionalConnexion(this, type);
-    }
+  public isBlockedByNonPlayableEntity() {
+    return this.entities.some((entity) => !entity.isPlayable);
   }
 
-  public removeConnexion(tile: Tile) {
-    this.linkContainer.remove(tile);
+  public isBlockedByAllyEntity(ally: string) {
+    return this.entities.some((entity) => entity.type === ally);
   }
 
-  get links() {
-    return this.linkContainer.links;
+  public isBlockedByNonAllyEntity(ally: string) {
+    return !this.isBlockedByAllyEntity(ally);
+  }
+
+  public getBlockingNonAllyEntity(ally: string) {
+    return this.entities.find(
+      (entity) => entity.isBlocking && entity.type !== ally,
+    );
+  }
+
+  public toString() {
+    return this.entities.length === 0 ? '.' : this.entities[0]?.toString();
   }
 }
