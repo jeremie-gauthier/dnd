@@ -77,13 +77,7 @@ export abstract class PlayableEntity extends Entity {
       this.coord = tile.coord;
       entityEventEmitter.emit(EntityEvent.OnEntityMove, { entity: this, tile });
 
-      const activeTrapOnTile = tile.entities.find(
-        (entity) =>
-          entity.isNonPlayable() &&
-          entity.isInteractive() &&
-          entity.isTrap() &&
-          entity.canInteract,
-      ) as Trap | undefined;
+      const activeTrapOnTile = tile.getActiveTrap();
       if (activeTrapOnTile) {
         entityEventEmitter.emit(EntityEvent.OnTrapTriggered, {
           entity: this,

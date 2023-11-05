@@ -1,5 +1,6 @@
-import { Entity } from '../entities/entity.abstract';
-import { Coord } from './coord';
+import type { Entity } from '../entities/entity.abstract';
+import type { Trap } from '../entities/non-playables/interactives/trap.entity';
+import type { Coord } from './coord';
 
 export class Tile {
   constructor(
@@ -7,6 +8,16 @@ export class Tile {
     public readonly label?: string,
     public entities: Entity[] = [],
   ) {}
+
+  public getActiveTrap() {
+    return this.entities.find(
+      (entity) =>
+        entity.isNonPlayable() &&
+        entity.isInteractive() &&
+        entity.isTrap() &&
+        entity.canInteract,
+    ) as Trap | undefined;
+  }
 
   public isBlockedByEntity() {
     return this.entities.some((entity) => entity.isBlocking);
