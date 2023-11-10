@@ -14,7 +14,7 @@ import { Map } from './map/map';
 import { MapParser } from './map/parser/map-parser';
 import { MapReader } from './map/parser/map-reader';
 
-const mapReader = new MapReader('../resources/maps/chunk1_v2.txt');
+const mapReader = new MapReader(__dirname + '/../resources/maps/chunk1_v2.txt');
 const mapParser = new MapParser(mapReader);
 mapParser
   .run()
