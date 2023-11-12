@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import envConfig, { validationSchema } from './config/env.config';
+import { WsEventsModule } from './ws-events/ws-events.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import envConfig, { validationSchema } from './config/env.config';
       validationSchema,
       cache: true,
     }),
+    WsEventsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
