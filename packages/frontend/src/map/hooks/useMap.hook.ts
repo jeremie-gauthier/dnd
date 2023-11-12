@@ -3,7 +3,7 @@ export type Map = {
   height: number;
   entities: Array<{
     coord: { x: number; y: number };
-    type: "tree" | "wall";
+    type: 'tree' | 'wall';
     isBlocking: boolean;
   }>;
 };
@@ -14,22 +14,22 @@ const MOCK_MAP: Map = {
   entities: [
     {
       coord: { x: 1, y: 1 },
-      type: "tree",
+      type: 'tree',
       isBlocking: true,
     },
     {
       coord: { x: 5, y: 5 },
-      type: "wall",
+      type: 'wall',
       isBlocking: true,
     },
     {
       coord: { x: 5, y: 6 },
-      type: "wall",
+      type: 'wall',
       isBlocking: true,
     },
     {
       coord: { x: 6, y: 5 },
-      type: "wall",
+      type: 'wall',
       isBlocking: true,
     },
   ],

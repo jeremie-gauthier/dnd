@@ -1,0 +1,22 @@
+{
+  "name": "@dnd/shared",
+  "private": true,
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "prepublish": "npm run build",
+    "publish": "sh ../../scripts/publish-shared.sh"
+  },
+  "devDependencies": {
+    "@dnd/prettier-config": "^0.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.10.0",
+    "@typescript-eslint/parser": "^6.10.0",
+    "eslint": "^8.53.0",
+    "eslint-plugin-unicorn": "^49.0.0",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
+  }
+}

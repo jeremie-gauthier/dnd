@@ -24,9 +24,7 @@ describe('WsEventsGateway', () => {
         .pipe(reduce((acc, item) => [...acc, item], []))
         .subscribe((results) => {
           expect(results.length).toBe(3);
-          results.forEach((result, index) =>
-            expect(result.data).toBe(index + 1),
-          );
+          results.forEach((result, index) => expect(result.data).toBe(index + 1));
           done();
         });
     });

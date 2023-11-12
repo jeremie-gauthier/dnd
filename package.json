@@ -1,0 +1,13 @@
+{
+  "name": "dnd",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "start:dev:server": "npm run start:dev --workspace=@dnd/backend"
+  }
+}

@@ -5,9 +5,11 @@
   "scripts": {
     "start": "ts-node src/main.ts",
     "test:watch": "vitest",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "format": "prettier --write \"src/**/*.ts\""
   },
   "devDependencies": {
+    "@dnd/prettier-config": "^0.0.0",
     "@typescript-eslint/eslint-plugin": "^6.8.0",
     "@typescript-eslint/parser": "^6.8.0",
     "@vitest/coverage-v8": "^0.34.6",
