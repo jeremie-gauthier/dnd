@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import envConfig, { validationSchema } from './config/env.config';
 import { WsEventsModule } from './ws-events/ws-events.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { WsEventsModule } from './ws-events/ws-events.module';
       cache: true,
     }),
     WsEventsModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
