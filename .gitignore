@@ -37,3 +37,6 @@ coverage/
 # Env
 .env*
 !.env.example
+
+# Docker volumes
+db_data/
