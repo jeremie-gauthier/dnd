@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import envConfig, { validationSchema } from './config/env.config';
 import { WsEventsModule } from './ws-events/ws-events.module';
 import { DatabaseModule } from './database/database.module';
+import { CampaignModule } from './campaign/campaign.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { DatabaseModule } from './database/database.module';
     }),
     WsEventsModule,
     DatabaseModule,
+    CampaignModule,
   ],
   controllers: [AppController],
   providers: [AppService],
