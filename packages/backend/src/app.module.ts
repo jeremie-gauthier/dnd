@@ -8,6 +8,7 @@ import { CampaignModule } from './campaign/campaign.module';
 import envConfig, { validate } from './config/env.config';
 import { DatabaseModule } from './database/database.module';
 import { WsEventsModule } from './ws-events/ws-events.module';
+import { ItemModule } from './item/item.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { WsEventsModule } from './ws-events/ws-events.module';
     WsEventsModule,
     DatabaseModule,
     CampaignModule,
+    ItemModule,
   ],
   controllers: [AppController],
   providers: [

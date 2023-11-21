@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import { CampaignModel } from './campaign/model/campaign.model';
 import { DatabaseService } from './database/database.service';
 import { DatabaseModel } from './database/model.abstract';
+import { ItemModel } from './item/model/item.model';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
@@ -13,7 +14,7 @@ async function bootstrap() {
   const databaseService = app.get(DatabaseService);
   await databaseService.init();
 
-  const dbModels: DatabaseModel[] = [app.get(CampaignModel)];
+  const dbModels: DatabaseModel[] = [app.get(CampaignModel), app.get(ItemModel)];
   await Promise.all(dbModels.map((dbModel) => dbModel.registerTable()));
 
   const PORT = configService.getOrThrow<string>('PORT');
