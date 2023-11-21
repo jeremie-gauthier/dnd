@@ -21,10 +21,11 @@
   },
   "dependencies": {
     "@dnd/shared": "^1.0.0",
-    "@nestjs/common": "^10.0.0",
+    "@nestjs/common": "^10.2.10",
     "@nestjs/config": "^3.1.1",
-    "@nestjs/core": "^10.0.0",
+    "@nestjs/core": "^10.2.10",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/platform-fastify": "^10.2.10",
     "@nestjs/platform-socket.io": "^10.2.8",
     "@nestjs/websockets": "^10.2.8",
     "class-transformer": "^0.5.1",
