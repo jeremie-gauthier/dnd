@@ -2,16 +2,16 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import envConfig, { validationSchema } from './config/env.config';
-import { WsEventsModule } from './ws-events/ws-events.module';
-import { DatabaseModule } from './database/database.module';
 import { CampaignModule } from './campaign/campaign.module';
+import envConfig, { validate } from './config/env.config';
+import { DatabaseModule } from './database/database.module';
+import { WsEventsModule } from './ws-events/ws-events.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [envConfig],
-      validationSchema,
+      validate,
       cache: true,
     }),
     WsEventsModule,

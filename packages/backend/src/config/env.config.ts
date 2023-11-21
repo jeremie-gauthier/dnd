@@ -1,11 +1,16 @@
-import Joi from 'joi';
+import z from 'zod';
 
 export default () => ({
   NODE_ENV: process.env.NODE_ENV,
   PORT: process.env.PORT,
 });
 
-export const validationSchema = Joi.object({
-  NODE_ENV: Joi.string().valid('development', 'production').default('development'),
-  PORT: Joi.number().default(3000),
+const validationSchema = z.object({
+  NODE_ENV: z.enum(['development', 'production']).default('development'),
+  PORT: z.coerce.number().default(3000),
 });
+
+export const validate = (config: Record<string, unknown>) => {
+  const parsedSchema = validationSchema.parse(config);
+  return parsedSchema;
+};

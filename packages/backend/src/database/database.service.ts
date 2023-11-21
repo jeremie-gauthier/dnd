@@ -5,7 +5,6 @@ import { Connection, RQuery, r } from 'rethinkdb-ts';
 export class DatabaseService {
   private readonly connection: Connection;
   private static DATABASE_NAME = 'dnd';
-  private static DATABASE_TABLES = ['user', 'campaign'] as const;
 
   constructor(@Inject('DatabaseProvider') connection: Connection) {
     this.connection = connection;
@@ -28,16 +27,5 @@ export class DatabaseService {
     }
 
     this.connection.use(DatabaseService.DATABASE_NAME);
-
-    await Promise.all(
-      DatabaseService.DATABASE_TABLES.map(async (dbTable) => {
-        try {
-          await r.tableCreate(dbTable).run(this.connection);
-          console.log(dbTable, 'created');
-        } catch (error) {
-          console.log(dbTable, 'already exists');
-        }
-      }),
-    );
   }
 }
