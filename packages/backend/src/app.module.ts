@@ -9,6 +9,7 @@ import envConfig, { validate } from './config/env.config';
 import { DatabaseModule } from './database/database.module';
 import { WsEventsModule } from './ws-events/ws-events.module';
 import { ItemModule } from './item/item.module';
+import { EntityModule } from './entity/entity.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ItemModule } from './item/item.module';
     DatabaseModule,
     CampaignModule,
     ItemModule,
+    EntityModule,
   ],
   controllers: [AppController],
   providers: [
