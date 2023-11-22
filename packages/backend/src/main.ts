@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import { CampaignModel } from './campaign/model/campaign.model';
 import { DatabaseService } from './database/database.service';
 import { DatabaseModel } from './database/model.abstract';
+import { EntityModel } from './entity/model/entity.model';
 import { ItemModel } from './item/model/item.model';
 
 async function bootstrap() {
@@ -14,7 +15,11 @@ async function bootstrap() {
   const databaseService = app.get(DatabaseService);
   await databaseService.init();
 
-  const dbModels: DatabaseModel[] = [app.get(CampaignModel), app.get(ItemModel)];
+  const dbModels: DatabaseModel[] = [
+    app.get(CampaignModel),
+    app.get(ItemModel),
+    app.get(EntityModel),
+  ];
   await Promise.all(dbModels.map((dbModel) => dbModel.registerTable()));
 
   const PORT = configService.getOrThrow<string>('PORT');
