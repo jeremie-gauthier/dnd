@@ -5,6 +5,7 @@ import { CreateCharacterEntityInputDTO } from '../dto/create-character-entity.in
 import { CreateEnemyEntityInputDTO } from '../dto/create-enemy-entity.input.dto';
 import { CreateInteractiveEntityInputDTO } from '../dto/create-interactive-entity.input.dto';
 import { CreateNonInteractiveEntityInputDTO } from '../dto/create-non-interactive-entity.input.dto';
+import { Entity } from '../types/entity.type';
 
 type CreateEntityInputDto =
   | CreateEnemyEntityInputDTO
@@ -13,11 +14,9 @@ type CreateEntityInputDto =
   | CreateInteractiveEntityInputDTO;
 
 @Injectable()
-export class EntityModel extends DatabaseModel {
-  public readonly TABLE_NAME = 'entity';
-
+export class EntityModel extends DatabaseModel<Entity> {
   constructor(dbService: DatabaseService) {
-    super(dbService);
+    super(dbService, 'entity');
   }
 
   public async create<EntityDto extends CreateEntityInputDto>(entity: EntityDto) {

@@ -16,7 +16,7 @@ async function bootstrap() {
   const databaseService = app.get(DatabaseService);
   await databaseService.init();
 
-  const dbModels: DatabaseModel[] = [
+  const dbModels: DatabaseModel<unknown>[] = [
     app.get(CampaignModel),
     app.get(ItemModel),
     app.get(EntityModel),

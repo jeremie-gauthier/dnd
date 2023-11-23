@@ -4,13 +4,12 @@ import { DatabaseModel } from 'src/database/model.abstract';
 import { CreateArtifactInputDTO } from '../dto/create-artifact.input.dto';
 import { CreateSpellInputDTO } from '../dto/create-spell.input.dto';
 import { CreateWeaponInputDTO } from '../dto/create-weapon.input.dto';
+import { Item } from '../types/item.type';
 
 @Injectable()
-export class ItemModel extends DatabaseModel {
-  public readonly TABLE_NAME = 'item';
-
+export class ItemModel extends DatabaseModel<Item> {
   constructor(dbService: DatabaseService) {
-    super(dbService);
+    super(dbService, 'item');
   }
 
   public async create(item: CreateWeaponInputDTO | CreateSpellInputDTO | CreateArtifactInputDTO) {

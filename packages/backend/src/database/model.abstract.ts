@@ -1,20 +1,22 @@
+import { RTable } from 'rethinkdb-ts';
 import { DatabaseService } from './database.service';
 
-export abstract class DatabaseModel {
-  constructor(protected readonly dbService: DatabaseService) {}
+export abstract class DatabaseModel<Model> {
+  protected readonly table: RTable<Model>;
 
-  public abstract readonly TABLE_NAME: string;
-
-  protected get table() {
-    return this.dbService.db.table(this.TABLE_NAME);
+  constructor(
+    protected readonly dbService: DatabaseService,
+    protected readonly tableName: string,
+  ) {
+    this.table = dbService.db.table(tableName);
   }
 
   public async registerTable() {
     try {
-      await this.dbService.exec(this.dbService.db.tableCreate(this.TABLE_NAME));
-      console.log(this.TABLE_NAME, 'created');
+      await this.dbService.exec(this.dbService.db.tableCreate(this.tableName));
+      console.log(this.tableName, 'created');
     } catch (error) {
-      console.log(this.TABLE_NAME, 'already exists');
+      console.log(this.tableName, 'already exists');
     }
   }
 }

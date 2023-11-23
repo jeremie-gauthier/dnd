@@ -2,13 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { DatabaseModel } from 'src/database/model.abstract';
 import { CreateCampaignInputDTO } from '../dto/create-campaign.input.dto';
+import { Campaign } from '../types/campaign.type';
 
 @Injectable()
-export class CampaignModel extends DatabaseModel {
-  public readonly TABLE_NAME = 'campaign';
-
+export class CampaignModel extends DatabaseModel<Campaign> {
   constructor(dbService: DatabaseService) {
-    super(dbService);
+    super(dbService, 'campaign');
   }
 
   public async create(campaign: CreateCampaignInputDTO) {

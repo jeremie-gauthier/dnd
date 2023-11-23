@@ -10,4 +10,9 @@ export class CampaignService {
     const dbResult = await this.campaignModel.create(campaign);
     return dbResult;
   }
+
+  public async getAll() {
+    const campaigns = await this.campaignModel.getAll();
+    return campaigns;
+  }
 }

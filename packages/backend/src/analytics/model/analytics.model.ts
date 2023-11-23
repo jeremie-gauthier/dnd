@@ -3,11 +3,9 @@ import { DatabaseService } from 'src/database/database.service';
 import { DatabaseModel } from 'src/database/model.abstract';
 
 @Injectable()
-export class AnalyticsModel extends DatabaseModel {
-  public readonly TABLE_NAME = 'analytics';
-
+export class AnalyticsModel extends DatabaseModel<any> {
   constructor(dbService: DatabaseService) {
-    super(dbService);
+    super(dbService, 'analytics');
   }
 
   public async create(data: unknown) {
