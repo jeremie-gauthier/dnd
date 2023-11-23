@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
+import { AnalyticsModel } from './analytics/model/analytics.model';
 import { AppModule } from './app.module';
 import { CampaignModel } from './campaign/model/campaign.model';
 import { DatabaseService } from './database/database.service';
@@ -19,6 +20,7 @@ async function bootstrap() {
     app.get(CampaignModel),
     app.get(ItemModel),
     app.get(EntityModel),
+    app.get(AnalyticsModel),
   ];
   await Promise.all(dbModels.map((dbModel) => dbModel.registerTable()));
 

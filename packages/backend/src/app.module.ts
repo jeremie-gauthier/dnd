@@ -11,6 +11,7 @@ import { DatabaseModule } from './database/database.module';
 import { EntityModule } from './entity/entity.module';
 import { ItemModule } from './item/item.module';
 import { WsEventsModule } from './ws-events/ws-events.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { WsEventsModule } from './ws-events/ws-events.module';
     CampaignModule,
     ItemModule,
     EntityModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [
