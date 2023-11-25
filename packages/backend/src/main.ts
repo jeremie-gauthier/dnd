@@ -3,11 +3,13 @@ import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { AnalyticsModel } from './analytics/model/analytics.model';
 import { AppModule } from './app.module';
-import { CampaignModel } from './campaign/model/campaign.model';
+import { CampaignTemplateModel } from './campaign/model/campaign-template.model';
 import { DatabaseService } from './database/database.service';
 import { DatabaseModel } from './database/model.abstract';
-import { EntityModel } from './entity/model/entity.model';
-import { ItemModel } from './item/model/item.model';
+import { EntityTemplateModel } from './entity/model/entity-template.model';
+import { GameModel } from './game/model/game.model';
+import { ItemTemplateModel } from './item/model/item-template.model';
+import { MapTemplateModel } from './map/model/map-template.model';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
@@ -17,10 +19,12 @@ async function bootstrap() {
   await databaseService.init();
 
   const dbModels: DatabaseModel<unknown>[] = [
-    app.get(CampaignModel),
-    app.get(ItemModel),
-    app.get(EntityModel),
+    app.get(CampaignTemplateModel),
+    app.get(ItemTemplateModel),
+    app.get(EntityTemplateModel),
     app.get(AnalyticsModel),
+    app.get(GameModel),
+    app.get(MapTemplateModel),
   ];
   await Promise.all(dbModels.map((dbModel) => dbModel.registerTable()));
 

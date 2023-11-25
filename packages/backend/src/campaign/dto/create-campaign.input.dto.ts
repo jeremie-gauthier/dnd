@@ -1,18 +1,4 @@
 import { createZodDto } from 'nestjs-zod';
-import z from 'zod';
+import { campaignSchema } from '../schema/campaign.schema';
 
-const stageSchema = z
-  .object({
-    intro: z.string(),
-    outro: z.string(),
-  })
-  .strict();
-
-const createCampaignInputSchema = z
-  .object({
-    title: z.string(),
-    stages: z.array(stageSchema),
-  })
-  .strict();
-
-export class CreateCampaignInputDTO extends createZodDto(createCampaignInputSchema) {}
+export class CreateCampaignInputDTO extends createZodDto(campaignSchema.strict()) {}

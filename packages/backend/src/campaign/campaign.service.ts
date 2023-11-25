@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCampaignInputDTO } from './dto/create-campaign.input.dto';
-import { CampaignModel } from './model/campaign.model';
+import { CampaignTemplateModel } from './model/campaign-template.model';
 
 @Injectable()
 export class CampaignService {
-  constructor(private readonly campaignModel: CampaignModel) {}
+  constructor(private readonly campaignTemplateModel: CampaignTemplateModel) {}
 
   public async create(campaign: CreateCampaignInputDTO) {
-    const dbResult = await this.campaignModel.create(campaign);
+    const dbResult = await this.campaignTemplateModel.create(campaign);
     return dbResult;
   }
 
   public async getAll() {
-    const campaigns = await this.campaignModel.getAll();
+    const campaigns = await this.campaignTemplateModel.getAll();
     return campaigns;
   }
 }

@@ -5,9 +5,9 @@ import { CreateCampaignInputDTO } from '../dto/create-campaign.input.dto';
 import { Campaign } from '../types/campaign.type';
 
 @Injectable()
-export class CampaignModel extends DatabaseModel<Campaign> {
+export class CampaignTemplateModel extends DatabaseModel<Campaign> {
   constructor(dbService: DatabaseService) {
-    super(dbService, 'campaign');
+    super(dbService, 'campaign_template');
   }
 
   public async create(campaign: CreateCampaignInputDTO) {

@@ -7,9 +7,9 @@ import { CreateWeaponInputDTO } from '../dto/create-weapon.input.dto';
 import { Item } from '../types/item.type';
 
 @Injectable()
-export class ItemModel extends DatabaseModel<Item> {
+export class ItemTemplateModel extends DatabaseModel<Item> {
   constructor(dbService: DatabaseService) {
-    super(dbService, 'item');
+    super(dbService, 'item_template');
   }
 
   public async create(item: CreateWeaponInputDTO | CreateSpellInputDTO | CreateArtifactInputDTO) {

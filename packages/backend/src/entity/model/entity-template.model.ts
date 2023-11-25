@@ -14,9 +14,9 @@ type CreateEntityInputDto =
   | CreateInteractiveEntityInputDTO;
 
 @Injectable()
-export class EntityModel extends DatabaseModel<Entity> {
+export class EntityTemplateModel extends DatabaseModel<Entity> {
   constructor(dbService: DatabaseService) {
-    super(dbService, 'entity');
+    super(dbService, 'entity_template');
   }
 
   public async create<EntityDto extends CreateEntityInputDto>(entity: EntityDto) {
