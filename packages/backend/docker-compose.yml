@@ -10,3 +10,8 @@ services:
       - 28015:28015
     volumes:
       - ./db_data:/data
+
+  # redis:
+  #   image: redis:latest
+  #   ports:
+  #     - '6379:6379'

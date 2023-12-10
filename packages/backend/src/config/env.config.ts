@@ -8,6 +8,8 @@ export default () => ({
 const validationSchema = z.object({
   NODE_ENV: z.enum(['development', 'production']).default('development'),
   PORT: z.coerce.number().default(3000),
+  AUTH0_AUDIENCE: z.string(),
+  AUTH0_ISSUER: z.string(),
 });
 
 export const validate = (config: Record<string, unknown>) => {
