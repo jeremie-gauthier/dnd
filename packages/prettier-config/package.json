@@ -1,0 +1,25 @@
+{
+  "name": "@dnd/prettier-config",
+  "version": "0.0.0",
+  "description": "Prettier config for dnd",
+  "author": "jergauth <jeremiegthr@gmail.com>",
+  "homepage": "https://github.com/jeremie-gauthier/dnd#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib/index.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeremie-gauthier/dnd.git"
+  },
+  "scripts": {
+    "publish": "sh ../../scripts/publish-prettier.sh"
+  },
+  "bugs": {
+    "url": "https://github.com/jeremie-gauthier/dnd/issues"
+  }
+}
