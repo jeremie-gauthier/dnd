@@ -8,26 +8,17 @@ import { GameModel } from './models/game/game.model';
 import { ItemTemplateModel } from './models/item-template/item-template.model';
 import { MapTemplateModel } from './models/map-template/map-template.model';
 
+const DB_MODELS = [
+  AnalyticsModel,
+  CampaignTemplateModel,
+  EntityTemplateModel,
+  GameModel,
+  ItemTemplateModel,
+  MapTemplateModel,
+];
+
 @Module({
-  providers: [
-    DatabaseProvider,
-    DatabaseService,
-    AnalyticsModel,
-    CampaignTemplateModel,
-    EntityTemplateModel,
-    GameModel,
-    ItemTemplateModel,
-    MapTemplateModel,
-  ],
-  exports: [
-    DatabaseProvider,
-    DatabaseService,
-    AnalyticsModel,
-    CampaignTemplateModel,
-    EntityTemplateModel,
-    GameModel,
-    ItemTemplateModel,
-    MapTemplateModel,
-  ],
+  providers: [DatabaseProvider, DatabaseService, ...DB_MODELS],
+  exports: [DatabaseProvider, DatabaseService, ...DB_MODELS],
 })
 export class DatabaseModule {}

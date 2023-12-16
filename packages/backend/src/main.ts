@@ -15,8 +15,6 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   const databaseService = app.get(DatabaseService);
-  await databaseService.init();
-
   const dbModels: DatabaseModel<unknown>[] = [
     app.get(CampaignTemplateModel),
     app.get(ItemTemplateModel),
@@ -25,7 +23,7 @@ async function bootstrap() {
     app.get(GameModel),
     app.get(MapTemplateModel),
   ];
-  await Promise.all(dbModels.map((dbModel) => dbModel.registerTable()));
+  await databaseService.init(dbModels);
 
   app.enableCors();
 
