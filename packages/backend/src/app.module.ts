@@ -15,7 +15,6 @@ import { GameModule } from './game/game.module';
 import { ItemModule } from './item/item.module';
 import { LobbyModule } from './lobby/lobby.module';
 import { MapModule } from './map/map.module';
-import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -35,7 +34,6 @@ import { UserModule } from './user/user.module';
     LobbyModule,
     GameModule,
     MapModule,
-    UserModule,
   ],
   controllers: [AppController],
   providers: [

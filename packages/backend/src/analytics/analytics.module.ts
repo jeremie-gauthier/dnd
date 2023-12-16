@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from 'src/database/database.module';
+import { AnalyticsModel } from 'src/database/models/analytics/analytics.model';
 import { AnalyticsService } from './analytics.service';
-import { AnalyticsModel } from './model/analytics.model';
 
 @Module({
   imports: [DatabaseModule],
