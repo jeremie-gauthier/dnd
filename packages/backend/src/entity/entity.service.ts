@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { EntityTemplateModel } from './model/entity-template.model';
+import { EntityTemplateModel } from 'src/database/models/entity-template/entity-template.model';
 
 @Injectable()
 export class EntityService {

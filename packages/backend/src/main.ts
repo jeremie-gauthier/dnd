@@ -1,15 +1,14 @@
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { AnalyticsModel } from './analytics/model/analytics.model';
 import { AppModule } from './app.module';
-import { CampaignTemplateModel } from './campaign/model/campaign-template.model';
 import { DatabaseService } from './database/database.service';
-import { DatabaseModel } from './database/model.abstract';
-import { EntityTemplateModel } from './entity/model/entity-template.model';
-import { GameModel } from './game/model/game.model';
-import { ItemTemplateModel } from './item/model/item-template.model';
-import { MapTemplateModel } from './map/model/map-template.model';
-import { UserModel } from './user/model/user.model';
+import { AnalyticsModel } from './database/models/analytics/analytics.model';
+import { CampaignTemplateModel } from './database/models/campaign-template/campaign-template.model';
+import { EntityTemplateModel } from './database/models/entity-template/entity-template.model';
+import { GameModel } from './database/models/game/game.model';
+import { ItemTemplateModel } from './database/models/item-template/item-template.model';
+import { MapTemplateModel } from './database/models/map-template/map-template.model';
+import { DatabaseModel } from './database/models/model.abstract';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,7 +24,6 @@ async function bootstrap() {
     app.get(AnalyticsModel),
     app.get(GameModel),
     app.get(MapTemplateModel),
-    app.get(UserModel),
   ];
   await Promise.all(dbModels.map((dbModel) => dbModel.registerTable()));
 

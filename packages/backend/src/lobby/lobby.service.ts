@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { GameEvent } from 'src/game/types/events';
+import { GameEvent } from 'src/game/events/types/events';
 
 @Injectable()
 export class LobbyService {

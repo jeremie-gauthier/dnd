@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
-import { AnalyticsEvent } from './types/events';
+import { AnalyticsEvent } from './events/types/events';
 
 @Injectable()
 export class AnalyticsService {

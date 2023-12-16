@@ -11,6 +11,7 @@ export class CampaignController {
   @Post()
   @ZodSerializerDto(CreateCampaignOutputDTO)
   public async create(@Body() campaign: CreateCampaignInputDTO) {
-    return await this.campaignService.create(campaign);
+    console.log(campaign);
+    return '';
   }
 }
