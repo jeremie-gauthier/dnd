@@ -7,6 +7,7 @@ import { EntityTemplateModel } from './models/entity-template/entity-template.mo
 import { GameModel } from './models/game/game.model';
 import { ItemTemplateModel } from './models/item-template/item-template.model';
 import { MapTemplateModel } from './models/map-template/map-template.model';
+import { UserModel } from './models/user/user.model';
 
 const DB_MODELS = [
   AnalyticsModel,
@@ -15,6 +16,7 @@ const DB_MODELS = [
   GameModel,
   ItemTemplateModel,
   MapTemplateModel,
+  UserModel,
 ];
 
 @Module({

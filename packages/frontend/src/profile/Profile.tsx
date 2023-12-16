@@ -2,7 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useState } from 'react';
 
 const Profile = () => {
-  const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const [userMetadata, setUserMetadata] = useState(null);
 
   useEffect(() => {
@@ -15,11 +15,20 @@ const Profile = () => {
 
         const userDetailsByIdUrl = `https://${domain}/api/v2/users/${userSub}`;
 
-        const metadataResponse = await fetch(userDetailsByIdUrl, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const [metadataResponse, res] = await Promise.all([
+          fetch(userDetailsByIdUrl, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }),
+          fetch('http://localhost:3000/auth/connection', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }),
+        ]);
+        console.log(res);
 
         const { user_metadata } = await metadataResponse.json();
         // console.log('user_metadata', user_metadata);
@@ -42,24 +51,20 @@ const Profile = () => {
 
   // console.log('user', user);
 
-  return isAuthenticated ? (
-    user ? (
-      <div>
-        <img src={user.picture} alt={user.name} />
-        <h2>{user.name}</h2>
-        <p>{user.email}</p>
-        <h3>User Metadata</h3>
-        {userMetadata ? (
-          <pre>{JSON.stringify(userMetadata, null, 2)}</pre>
-        ) : (
-          'No user metadata defined'
-        )}
-      </div>
-    ) : (
-      <div>Authenticated but user is not defined</div>
-    )
+  return user ? (
+    <div>
+      <img src={user.picture} alt={user.name} />
+      <h2>{user.name}</h2>
+      <p>{user.email}</p>
+      <h3>User Metadata</h3>
+      {userMetadata ? (
+        <pre>{JSON.stringify(userMetadata, null, 2)}</pre>
+      ) : (
+        'No user metadata defined'
+      )}
+    </div>
   ) : (
-    <div>Not authenticated</div>
+    <div>Authenticated but user is not defined</div>
   );
 };
 

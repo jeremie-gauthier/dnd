@@ -1,4 +1,4 @@
-import { RTable } from 'rethinkdb-ts';
+import { RQuery, RTable } from 'rethinkdb-ts';
 import { DatabaseService } from '../database.service';
 
 export abstract class DatabaseModel<Model> {
@@ -9,6 +9,10 @@ export abstract class DatabaseModel<Model> {
     protected readonly tableName: string,
   ) {
     this.table = dbService.db.table(tableName);
+  }
+
+  public async exec<T>(query: RQuery<T>) {
+    return await this.dbService.exec(query);
   }
 
   public async registerTable() {

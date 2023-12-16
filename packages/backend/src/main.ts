@@ -9,6 +9,7 @@ import { GameModel } from './database/models/game/game.model';
 import { ItemTemplateModel } from './database/models/item-template/item-template.model';
 import { MapTemplateModel } from './database/models/map-template/map-template.model';
 import { DatabaseModel } from './database/models/model.abstract';
+import { UserModel } from './database/models/user/user.model';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,6 +23,7 @@ async function bootstrap() {
     app.get(AnalyticsModel),
     app.get(GameModel),
     app.get(MapTemplateModel),
+    app.get(UserModel),
   ];
   await databaseService.init(dbModels);
 

@@ -7,6 +7,7 @@ import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import { CampaignModule } from './campaign/campaign.module';
 import envConfig, { validate } from './config/env.config';
 import { DatabaseModule } from './database/database.module';
@@ -15,6 +16,7 @@ import { GameModule } from './game/game.module';
 import { ItemModule } from './item/item.module';
 import { LobbyModule } from './lobby/lobby.module';
 import { MapModule } from './map/map.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -26,6 +28,7 @@ import { MapModule } from './map/map.module';
     EventEmitterModule.forRoot({
       wildcard: true,
     }),
+    AuthModule,
     DatabaseModule,
     CampaignModule,
     ItemModule,
@@ -34,6 +37,7 @@ import { MapModule } from './map/map.module';
     LobbyModule,
     GameModule,
     MapModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [
@@ -59,7 +63,7 @@ export class AppModule {
       )
       .exclude({
         path: '/',
-        method: RequestMethod.ALL,
+        method: RequestMethod.GET,
       })
       .forRoutes({
         path: '*',
