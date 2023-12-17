@@ -1,24 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { CampaignTemplateModel } from 'src/database/models/campaign-template/campaign-template.model';
-import { EntityTemplateModel } from 'src/database/models/entity-template/entity-template.model';
-import { UserModel } from 'src/database/models/user/user.model';
-import { User } from 'src/database/models/user/user.type';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Campaign } from 'src/database/entities/campaign.entity';
+import { User } from 'src/database/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class NewUserRegisteredRepository {
   constructor(
-    private readonly userModel: UserModel,
-    private readonly campaignTemplateModel: CampaignTemplateModel,
-    private readonly entityTemplateModel: EntityTemplateModel,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    @InjectRepository(Campaign)
+    private readonly campaignRepository: Repository<Campaign>,
   ) {}
 
   public async createNewUser(userId: User['id']): Promise<void> {
     const [campaignTemplates = [], characterTemplates = []] = await Promise.all([
-      this.campaignTemplateModel.exec(this.campaignTemplateModel.table),
-      this.entityTemplateModel.exec(this.entityTemplateModel.table.filter({ type: 'character' })),
+      // this.campaignTemplateModel.exec(this.campaignTemplateModel.table),
+      this.campaignRepository.find(),
+      // this.entityTemplateModel.exec(this.entityTemplateModel.table.filter({ type: 'character' })),
     ]);
 
-    console.log(campaignTemplates, characterTemplates);
+    console.log(userId, campaignTemplates, characterTemplates);
 
     // await this.userModel.exec(
     //   this.userModel.table.insert({

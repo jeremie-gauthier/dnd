@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from 'src/database/database.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from 'src/database/entities/user.entity';
 import { AuthController } from './private/auth.controller';
 import { UserConnectionRepository } from './private/user-connection/user-connection.repository';
 import { UserConnectionUseCase } from './private/user-connection/user-connection.uc';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [TypeOrmModule.forFeature([User])],
   controllers: [AuthController],
   providers: [UserConnectionUseCase, UserConnectionRepository],
 })

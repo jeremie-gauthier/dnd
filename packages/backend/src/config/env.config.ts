@@ -10,6 +10,7 @@ const validationSchema = z.object({
   PORT: z.coerce.number().default(3000),
   AUTH0_AUDIENCE: z.string(),
   AUTH0_ISSUER: z.string(),
+  DATABASE_URL: z.string(),
 });
 
 export const validate = (config: Record<string, unknown>) => {
