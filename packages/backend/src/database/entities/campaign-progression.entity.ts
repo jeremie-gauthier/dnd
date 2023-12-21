@@ -13,8 +13,8 @@ import { User } from './user.entity';
 
 export enum CampaignProgressionStatus {
   AVAILABLE = 'AVAILABLE',
-  COMING_SOON = 'COMING_SOON',
   LOCKED = 'LOCKED',
+  STARTED = 'STARTED',
 }
 
 @Entity()

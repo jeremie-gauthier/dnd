@@ -4,7 +4,6 @@ import { CampaignStage } from './campaign-stage.entity';
 
 export enum CampaignStageProgressionStatus {
   AVAILABLE = 'AVAILABLE',
-  COMING_SOON = 'COMING_SOON',
   LOCKED = 'LOCKED',
   STARTED = 'STARTED',
 }
