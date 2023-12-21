@@ -1,7 +1,7 @@
 import { EventPayload } from 'src/event-emitter/event-payload.class';
-import { UserEvent } from '../events.type';
+import { AuthEvent } from './auth-events.enum';
 
-export class NewUserRegisteredPayload extends EventPayload<UserEvent.NewUserRegistered> {
+export class NewUserRegisteredPayload extends EventPayload<AuthEvent.NewUserRegistered> {
   public readonly userId: string;
 
   constructor({ userId }: Omit<NewUserRegisteredPayload, 'name'>) {

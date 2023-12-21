@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { AuthEvent } from 'src/auth/events/emitters/auth-events.enum';
+import { NewUserRegisteredPayload } from 'src/auth/events/emitters/new-user-registered.payload';
 import { UseCase } from 'src/types/use-case.interface';
-import { UserEvent } from 'src/user/events/events.type';
-import { NewUserRegisteredPayload } from 'src/user/events/new-user-registered/new-user-registered.payload';
 import { UserConnectionRepository } from './user-connection.repository';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class UserConnectionUseCase implements UseCase {
     const shouldSetupUserEnvironment = await this.repository.shouldSetupUserEnvironment(userId);
     if (shouldSetupUserEnvironment) {
       this.eventEmitter.emitAsync(
-        UserEvent.NewUserRegistered,
+        AuthEvent.NewUserRegistered,
         new NewUserRegisteredPayload({ userId }),
       );
     }
