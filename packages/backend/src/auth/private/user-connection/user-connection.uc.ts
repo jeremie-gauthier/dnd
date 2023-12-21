@@ -15,7 +15,7 @@ export class UserConnectionUseCase implements UseCase {
   public async execute({ userId }: { userId: string }): Promise<void> {
     const shouldSetupUserEnvironment = await this.repository.shouldSetupUserEnvironment(userId);
     if (shouldSetupUserEnvironment) {
-      this.eventEmitter.emitAsync(
+      await this.eventEmitter.emitAsync(
         AuthEvent.NewUserRegistered,
         new NewUserRegisteredPayload({ userId }),
       );

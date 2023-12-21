@@ -16,7 +16,7 @@ export class NewUserRegisteredRepository {
     private readonly campaignRepository: Repository<Campaign>,
   ) {}
 
-  public async createNewUser(userId: User['id']): Promise<void> {
+  public async createNewUser(userId: User['id']): Promise<User> {
     const campaignTemplates = await this.campaignRepository.find({
       select: {
         id: true,
@@ -42,9 +42,7 @@ export class NewUserRegisteredRepository {
       })),
     });
 
-    await this.userRepository.insert(user);
-
-    // TODO: new user created event
+    return await this.userRepository.save(user);
   }
 
   private getInitialCampaignStageStatus(
