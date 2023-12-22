@@ -8,7 +8,6 @@ export class AuthPrivateController {
 
   @Post('connection')
   public async connection(@JWTUser() user: UserFromJWT) {
-    console.log(user.id);
     await this.userConnectionUseCase.execute({ userId: user.id });
     return 'Ok';
   }

@@ -55,7 +55,9 @@ export class NewUserCreatedRepository {
     return this.campaignProgressionRepository.create({
       campaign,
       status: this.getCampaignProgressionStatus(campaign.status),
-      stageProgressions: campaign.stages.map(this.createCampaignStageProgression),
+      stageProgressions: campaign.stages.map((campaignStage) =>
+        this.createCampaignStageProgression(campaignStage),
+      ),
     });
   }
 
