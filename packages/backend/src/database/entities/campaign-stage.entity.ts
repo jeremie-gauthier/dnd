@@ -22,7 +22,7 @@ export class CampaignStage {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
-  @ManyToOne(() => Campaign, (campaign) => campaign.stages, { cascade: true })
+  @ManyToOne(() => Campaign, (campaign) => campaign.stages, { onDelete: 'CASCADE' })
   readonly campaign: Relation<Campaign>;
 
   @Column()
@@ -31,7 +31,7 @@ export class CampaignStage {
   @OneToMany(
     () => CampaignStageProgression,
     (campaignStageProgression) => campaignStageProgression.stage,
-    { onDelete: 'CASCADE' },
+    { cascade: true },
   )
   readonly progressions: Relation<CampaignStageProgression[]>;
 

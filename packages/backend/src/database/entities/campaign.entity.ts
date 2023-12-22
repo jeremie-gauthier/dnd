@@ -12,7 +12,7 @@ export class Campaign {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
-  @OneToMany(() => CampaignStage, (stage) => stage.campaign, { onDelete: 'CASCADE' })
+  @OneToMany(() => CampaignStage, (stage) => stage.campaign, { cascade: true })
   readonly stages: Relation<CampaignStage[]>;
 
   @Column({ unique: true })

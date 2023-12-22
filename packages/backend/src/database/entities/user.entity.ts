@@ -15,7 +15,7 @@ export class User {
   status: UserStatus;
 
   @OneToMany(() => CampaignProgression, (campaignProgression) => campaignProgression.user, {
-    onDelete: 'CASCADE',
+    cascade: true,
   })
   campaignProgressions: Relation<CampaignProgression[]>;
 }
