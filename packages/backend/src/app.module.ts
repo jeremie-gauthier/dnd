@@ -1,32 +1,40 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { auth } from 'express-oauth2-jwt-bearer';
 import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import { CampaignModule } from './campaign/campaign.module';
 import envConfig, { validate } from './config/env.config';
-import { DatabaseModule } from './database/database.module';
+import typeorm from './config/typeorm';
 import { EntityModule } from './entity/entity.module';
 import { GameModule } from './game/game.module';
 import { ItemModule } from './item/item.module';
 import { LobbyModule } from './lobby/lobby.module';
 import { MapModule } from './map/map.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [envConfig],
+      load: [envConfig, typeorm],
       validate,
       cache: true,
     }),
     EventEmitterModule.forRoot({
       wildcard: true,
     }),
-    DatabaseModule,
+    TypeOrmModule.forRootAsync({
+      extraProviders: [ConfigService],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => configService.getOrThrow('typeorm'),
+    }),
+    AuthModule,
     CampaignModule,
     ItemModule,
     EntityModule,
@@ -34,6 +42,7 @@ import { MapModule } from './map/map.module';
     LobbyModule,
     GameModule,
     MapModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [
@@ -59,7 +68,7 @@ export class AppModule {
       )
       .exclude({
         path: '/',
-        method: RequestMethod.ALL,
+        method: RequestMethod.GET,
       })
       .forRoutes({
         path: '*',
