@@ -5,10 +5,6 @@ export class UpdateCampaignProgressionStatuses1703197584661 implements Migration
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TYPE "public"."user_status_enum" AS ENUM('CREATED', 'INITIALIZED')`,
-    );
-    await queryRunner.query(`ALTER TABLE "user" ADD "status" "public"."user_status_enum" NOT NULL`);
-    await queryRunner.query(
       `ALTER TYPE "public"."campaign_stage_progression_status_enum" RENAME TO "campaign_stage_progression_status_enum_old"`,
     );
     await queryRunner.query(
@@ -51,7 +47,5 @@ export class UpdateCampaignProgressionStatuses1703197584661 implements Migration
     await queryRunner.query(
       `ALTER TYPE "public"."campaign_stage_progression_status_enum_old" RENAME TO "campaign_stage_progression_status_enum"`,
     );
-    await queryRunner.query(`ALTER TABLE "user" DROP COLUMN "status"`);
-    await queryRunner.query(`DROP TYPE "public"."user_status_enum"`);
   }
 }
