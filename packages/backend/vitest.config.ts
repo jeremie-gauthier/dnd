@@ -5,6 +5,10 @@ export default defineConfig({
   test: {
     globals: true,
     root: './',
+    coverage: {
+      provider: 'v8',
+      include: ['**/*.uc.ts', '**/*.listener.ts', '**/*.service.ts'],
+    },
   },
   plugins: [
     swc.vite({
