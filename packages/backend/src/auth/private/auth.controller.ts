@@ -3,7 +3,7 @@ import { JWTUser, UserFromJWT } from '../jwt-user.decorator';
 import { UserConnectionUseCase } from './user-connection/user-connection.uc';
 
 @Controller('auth')
-export class AuthController {
+export class AuthPrivateController {
   constructor(private readonly userConnectionUseCase: UserConnectionUseCase) {}
 
   @Post('connection')
