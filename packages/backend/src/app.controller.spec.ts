@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -14,9 +15,9 @@ describe('AppController', () => {
     appController = app.get<AppController>(AppController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+  describe('health-check', () => {
+    it('should return "Server is up and running!"', () => {
+      expect(appController.healthCheck()).toBe('Server is up and running!');
     });
   });
 });
