@@ -40,6 +40,7 @@ describe('UserConnectionUseCase', () => {
 
     await userConnectionUseCase.execute({ userId });
 
+    expect(eventEmitter).toHaveBeenCalledOnce();
     expect(eventEmitter).toHaveBeenCalledWith(
       AuthEvent.NewUserRegistered,
       new NewUserRegisteredPayload({ userId }),

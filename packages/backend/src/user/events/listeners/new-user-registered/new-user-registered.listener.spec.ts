@@ -11,14 +11,18 @@ import { NewUserRegisteredRepository } from './new-user-registered.repository';
 
 describe('NewUserRegisteredListener', () => {
   let newUserRegisteredListener: NewUserRegisteredListener;
-  let newUserRegisteredRepository: NewUserRegisteredRepository;
   let eventEmitter2: EventEmitter2;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       providers: [
         NewUserRegisteredListener,
-        NewUserRegisteredRepository,
+        {
+          provide: NewUserRegisteredRepository,
+          useValue: {
+            createNewUser: (id: User['id']) => Promise.resolve({ id }),
+          },
+        },
         EventEmitter2,
         {
           provide: getRepositoryToken(User),
@@ -28,22 +32,18 @@ describe('NewUserRegisteredListener', () => {
     }).compile();
 
     newUserRegisteredListener = app.get<NewUserRegisteredListener>(NewUserRegisteredListener);
-    newUserRegisteredRepository = app.get<NewUserRegisteredRepository>(NewUserRegisteredRepository);
     eventEmitter2 = app.get<EventEmitter2>(EventEmitter2);
   });
 
   it('should create a new user', async () => {
     const userId = 'new_user_id';
 
-    vi.spyOn(newUserRegisteredRepository, 'createNewUser').mockImplementation((id) =>
-      Promise.resolve({ id } as User),
-    );
-
     const eventEmitter = vi.spyOn(eventEmitter2, 'emitAsync');
 
     const eventPayload = new NewUserRegisteredPayload({ userId });
     await newUserRegisteredListener.handler(eventPayload);
 
+    expect(eventEmitter).toHaveBeenCalledOnce();
     expect(eventEmitter).toBeCalledWith(
       UserEvent.NewUserCreated,
       new NewUserCreatedPayload({ userId }),
