@@ -17,11 +17,13 @@ export class CampaignStageProgression {
   @ManyToOne(
     () => CampaignProgression,
     (campaignProgression) => campaignProgression.stageProgressions,
-    { cascade: true },
+    { onDelete: 'CASCADE' },
   )
   readonly campaignProgression: Relation<CampaignProgression>;
 
-  @ManyToOne(() => CampaignStage, (campaignStage) => campaignStage.progressions, { cascade: true })
+  @ManyToOne(() => CampaignStage, (campaignStage) => campaignStage.progressions, {
+    onDelete: 'CASCADE',
+  })
   readonly stage: Relation<CampaignStage>;
 
   @Column({ type: 'enum', enum: CampaignStageProgressionStatus })

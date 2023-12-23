@@ -10,7 +10,7 @@ export class UserConnectionRepository {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  public async shouldSetupUserEnvironment(userId: string): Promise<boolean> {
+  public async shouldSetupUserEnvironment(userId: User['id']): Promise<boolean> {
     const user = await this.userRepository.findOne({
       where: {
         id: userId,

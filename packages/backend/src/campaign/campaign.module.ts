@@ -4,14 +4,13 @@ import { CampaignProgression } from 'src/database/entities/campaign-progression.
 import { CampaignStageProgression } from 'src/database/entities/campaign-stage-progression.entity';
 import { Campaign } from 'src/database/entities/campaign.entity';
 import { User } from 'src/database/entities/user.entity';
-import { CampaignController } from './campaign.controller';
-import { CampaignService } from './campaign.service';
+import { NewUserCreatedListener } from './events/listeners/new-user-created/new-user-created.listener';
+import { NewUserCreatedRepository } from './events/listeners/new-user-created/new-user-created.repository';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Campaign, CampaignProgression, CampaignStageProgression]),
   ],
-  providers: [CampaignService],
-  controllers: [CampaignController],
+  providers: [NewUserCreatedListener, NewUserCreatedRepository],
 })
 export class CampaignModule {}

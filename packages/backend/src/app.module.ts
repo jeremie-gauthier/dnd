@@ -12,11 +12,8 @@ import { AuthModule } from './auth/auth.module';
 import { CampaignModule } from './campaign/campaign.module';
 import envConfig, { validate } from './config/env.config';
 import typeorm from './config/typeorm';
-import { EntityModule } from './entity/entity.module';
 import { GameModule } from './game/game.module';
-import { ItemModule } from './item/item.module';
 import { LobbyModule } from './lobby/lobby.module';
-import { MapModule } from './map/map.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -36,12 +33,9 @@ import { UserModule } from './user/user.module';
     }),
     AuthModule,
     CampaignModule,
-    ItemModule,
-    EntityModule,
     AnalyticsModule,
     LobbyModule,
     GameModule,
-    MapModule,
     UserModule,
   ],
   controllers: [AppController],
