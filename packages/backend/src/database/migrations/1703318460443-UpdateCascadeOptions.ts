@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class UpdateCascadeOptions1703273956089 implements MigrationInterface {
-  name = 'UpdateCascadeOptions1703273956089';
+export class UpdateCascadeOptions1703318460443 implements MigrationInterface {
+  name = 'UpdateCascadeOptions1703318460443';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -17,6 +17,9 @@ export class UpdateCascadeOptions1703273956089 implements MigrationInterface {
       `ALTER TABLE "campaign_progression" DROP CONSTRAINT "FK_a3c62f2b154fcb0b995e2fb1d6b"`,
     );
     await queryRunner.query(
+      `ALTER TABLE "campaign_progression" DROP CONSTRAINT "FK_2adf8839eecb2dce66537044d3a"`,
+    );
+    await queryRunner.query(
       `ALTER TABLE "campaign_stage" ADD CONSTRAINT "FK_69100b7ad48f0f8043d01ff6ca7" FOREIGN KEY ("campaignId") REFERENCES "campaign"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
@@ -28,9 +31,15 @@ export class UpdateCascadeOptions1703273956089 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "campaign_progression" ADD CONSTRAINT "FK_a3c62f2b154fcb0b995e2fb1d6b" FOREIGN KEY ("campaignId") REFERENCES "campaign"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
     );
+    await queryRunner.query(
+      `ALTER TABLE "campaign_progression" ADD CONSTRAINT "FK_2adf8839eecb2dce66537044d3a" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE "campaign_progression" DROP CONSTRAINT "FK_2adf8839eecb2dce66537044d3a"`,
+    );
     await queryRunner.query(
       `ALTER TABLE "campaign_progression" DROP CONSTRAINT "FK_a3c62f2b154fcb0b995e2fb1d6b"`,
     );
@@ -42,6 +51,9 @@ export class UpdateCascadeOptions1703273956089 implements MigrationInterface {
     );
     await queryRunner.query(
       `ALTER TABLE "campaign_stage" DROP CONSTRAINT "FK_69100b7ad48f0f8043d01ff6ca7"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "campaign_progression" ADD CONSTRAINT "FK_2adf8839eecb2dce66537044d3a" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
     await queryRunner.query(
       `ALTER TABLE "campaign_progression" ADD CONSTRAINT "FK_a3c62f2b154fcb0b995e2fb1d6b" FOREIGN KEY ("campaignId") REFERENCES "campaign"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
