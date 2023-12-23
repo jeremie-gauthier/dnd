@@ -24,10 +24,7 @@ describe('NewUserRegisteredListener', () => {
           },
         },
         EventEmitter2,
-        {
-          provide: getRepositoryToken(User),
-          useValue: {},
-        },
+        { provide: getRepositoryToken(User), useValue: {} },
       ],
     }).compile();
 

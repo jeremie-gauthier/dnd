@@ -21,7 +21,7 @@ const Profile = () => {
               Authorization: `Bearer ${accessToken}`,
             },
           }),
-          fetch('http://localhost:3000/auth/connection', {
+          fetch('http://localhost:3000/auth/private/connection', {
             method: 'POST',
             headers: {
               Authorization: `Bearer ${accessToken}`,
