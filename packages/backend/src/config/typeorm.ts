@@ -13,7 +13,7 @@ const config: DataSourceOptions = {
   url: process.env.DATABASE_URL,
   type: 'postgres',
   entities: [User, Campaign, CampaignStage, CampaignProgression, CampaignStageProgression],
-  migrations: ['dist/database/migrations/*.js'],
+  migrations: ['dist/src/database/migrations/*.js'],
   migrationsRun: true,
 };
 
