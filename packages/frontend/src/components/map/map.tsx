@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
-import { Canvas } from "../canvas/canvas";
-import { Map } from "./hooks/useMap.hook";
+import { useEffect, useRef } from 'react';
+import { Canvas } from '../canvas/canvas';
+import { Map } from './hooks/useMap.hook';
 
 type Props = {
   map: Map;
@@ -16,9 +16,7 @@ export const GameView = ({ map }: Props) => {
     height: CANVAS_HEIGHT / map.height,
   };
 
-  const handleCanvasClick = (
-    evt: React.MouseEvent<HTMLCanvasElement, MouseEvent>
-  ) => {
+  const handleCanvasClick = (evt: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
     console.log(evt);
   };
 
@@ -26,7 +24,7 @@ export const GameView = ({ map }: Props) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const context = canvas.getContext("2d");
+    const context = canvas.getContext('2d');
     if (!context) return;
 
     // Array.from({ length: map.width * map.height }).map
