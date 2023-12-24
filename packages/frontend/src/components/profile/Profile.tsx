@@ -1,49 +1,16 @@
-import { useAuth0 } from '@auth0/auth0-react';
-import { useEffect, useState } from 'react';
 import { AuthUser } from '../../contexts/auth.context';
+import { fetchIdentityFn } from '../../hooks/api/identity';
+import { useAuthenticatedSuspenseQuery } from '../../hooks/api/useAuthenticatedSuspenseQuery';
 
 type Props = {
   user: AuthUser;
+  userMetadata: Record<string, string> | null;
 };
 
-const Profile = ({ user }: Props) => {
-  const { getAccessTokenSilently } = useAuth0();
-  const [userMetadata, setUserMetadata] = useState(null);
+const Profile = ({ user, userMetadata }: Props) => {
+  const { data } = useAuthenticatedSuspenseQuery(['identity'], fetchIdentityFn);
 
-  console.log('PAGE PROFIL');
-
-  useEffect(() => {
-    const getUserMetadata = async (userSub: string) => {
-      const domain = import.meta.env.VITE_AUTH0_DOMAIN;
-
-      try {
-        const accessToken = await getAccessTokenSilently();
-        console.log(accessToken);
-
-        const userDetailsByIdUrl = `https://${domain}/api/v2/users/${userSub}`;
-
-        const metadataResponse = await fetch(userDetailsByIdUrl, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        const { user_metadata } = await metadataResponse.json();
-        // console.log('user_metadata', user_metadata);
-        // console.log('discordProfile', discordProfile);
-
-        setUserMetadata(user_metadata);
-      } catch (e) {
-        if (e instanceof Error) {
-          console.log(e.message);
-        }
-      }
-    };
-
-    getUserMetadata(user.id);
-  }, [getAccessTokenSilently, user.id]);
-
-  // console.log('user', user);
+  console.log('PAGE PROFIL', data);
 
   return (
     <div>
