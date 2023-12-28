@@ -1,6 +1,5 @@
 import { ErrorComponent, Router, RouterProvider } from '@tanstack/react-router';
 import { queryClient } from '../config/fetcher';
-import { auth } from '../contexts/auth.context';
 import { routeTree } from './routeTree.gen';
 
 const router = new Router({
@@ -8,7 +7,6 @@ const router = new Router({
   defaultPendingComponent: () => <div className={`p-2 text-2xl`}>Route is loading</div>,
   defaultErrorComponent: ({ error }) => <ErrorComponent error={error} />,
   context: {
-    auth: undefined!, // We'll inject this when we render
     queryClient,
   },
   defaultPreload: 'intent',
@@ -18,13 +16,5 @@ const router = new Router({
 });
 
 export function AppRouter() {
-  return (
-    <RouterProvider
-      router={router}
-      defaultPreload="intent"
-      context={{
-        auth,
-      }}
-    />
-  );
+  return <RouterProvider router={router} defaultPreload="intent" context={{}} />;
 }

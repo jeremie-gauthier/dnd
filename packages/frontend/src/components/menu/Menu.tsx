@@ -1,8 +1,6 @@
-import { AuthUser } from '../../contexts/auth.context';
 import { GetCampaignsResponse } from '../../hooks/api/campaign/get-campaigns';
 
 type Props = {
-  user: AuthUser;
   campaigns: GetCampaignsResponse;
 };
 

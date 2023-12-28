@@ -1,28 +1,28 @@
 import { Route as rootRoute } from "./routes/__root"
+import { Route as ProfileRoute } from "./routes/profile"
+import { Route as MenuRoute } from "./routes/menu"
 import { Route as LoginRoute } from "./routes/login"
-import { Route as AuthRoute } from "./routes/_auth"
-import { Route as AuthProfileRoute } from "./routes/_auth.profile"
-import { Route as AuthMenuRoute } from "./routes/_auth.menu"
+import { Route as WsRoute } from "./routes/_ws"
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    "/_auth": {
+    "/_ws": {
       parentRoute: typeof rootRoute
     }
     "/login": {
       parentRoute: typeof rootRoute
     }
-    "/_auth/menu": {
-      parentRoute: typeof AuthRoute
+    "/menu": {
+      parentRoute: typeof rootRoute
     }
-    "/_auth/profile": {
-      parentRoute: typeof AuthRoute
+    "/profile": {
+      parentRoute: typeof rootRoute
     }
   }
 }
 
-Object.assign(AuthRoute.options, {
-  id: "/auth",
+Object.assign(WsRoute.options, {
+  id: "/ws",
   getParentRoute: () => rootRoute,
 })
 
@@ -31,17 +31,19 @@ Object.assign(LoginRoute.options, {
   getParentRoute: () => rootRoute,
 })
 
-Object.assign(AuthMenuRoute.options, {
+Object.assign(MenuRoute.options, {
   path: "/menu",
-  getParentRoute: () => AuthRoute,
+  getParentRoute: () => rootRoute,
 })
 
-Object.assign(AuthProfileRoute.options, {
+Object.assign(ProfileRoute.options, {
   path: "/profile",
-  getParentRoute: () => AuthRoute,
+  getParentRoute: () => rootRoute,
 })
 
 export const routeTree = rootRoute.addChildren([
-  AuthRoute.addChildren([AuthMenuRoute, AuthProfileRoute]),
+  WsRoute,
   LoginRoute,
+  MenuRoute,
+  ProfileRoute,
 ])
