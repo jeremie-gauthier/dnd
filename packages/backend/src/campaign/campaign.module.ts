@@ -1,16 +1,22 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CampaignProgression } from 'src/database/entities/campaign-progression.entity';
-import { CampaignStageProgression } from 'src/database/entities/campaign-stage-progression.entity';
 import { Campaign } from 'src/database/entities/campaign.entity';
 import { User } from 'src/database/entities/user.entity';
-import { NewUserCreatedListener } from './events/listeners/new-user-created/new-user-created.listener';
-import { NewUserCreatedRepository } from './events/listeners/new-user-created/new-user-created.repository';
+import { CampaignPrivateController } from './private/campaign-private.controller';
+import { GetCampaignsRepository } from './private/get-campaigns/get-campaigns.repository';
+import { GetCampaignsUseCase } from './private/get-campaigns/get-campaigns.uc';
+import { NewCampaignStartedRepository } from './private/new-campaign-started/new-campaign-started.repository';
+import { NewCampaignStartedUseCase } from './private/new-campaign-started/new-campaign-started.uc';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([User, Campaign, CampaignProgression, CampaignStageProgression]),
+  imports: [TypeOrmModule.forFeature([User, Campaign, CampaignProgression])],
+  controllers: [CampaignPrivateController],
+  providers: [
+    NewCampaignStartedUseCase,
+    NewCampaignStartedRepository,
+    GetCampaignsUseCase,
+    GetCampaignsRepository,
   ],
-  providers: [NewUserCreatedListener, NewUserCreatedRepository],
 })
 export class CampaignModule {}

@@ -1,8 +1,10 @@
 import { Auth0Provider } from '@auth0/auth0-react';
+import { QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
+import { queryClient } from './config/fetcher';
 import './index.css';
+import { AppRouter } from './router/AppRouter';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -13,13 +15,14 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       cacheLocation="localstorage"
       authorizationParams={{
         redirect_uri: window.location.origin,
-        // audience: 'https://dev-bzwd13qtp70ke1ou.eu.auth0.com/api/v2/',
         audience: 'http://localhost:3000/',
         scope: 'profile email read:current_user offline_access',
-        // prompt: 'login'
       }}
     >
-      <App />
+      <div>Hello world!</div>
+      <QueryClientProvider client={queryClient}>
+        <AppRouter />
+      </QueryClientProvider>
     </Auth0Provider>
   </React.StrictMode>,
 );

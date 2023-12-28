@@ -6,6 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   Relation,
+  RelationId,
 } from 'typeorm';
 import { CampaignStageProgression } from './campaign-stage-progression.entity';
 import { Campaign } from './campaign.entity';
@@ -25,6 +26,9 @@ export class CampaignProgression {
 
   @ManyToOne(() => Campaign, (campaign) => campaign.stages, { onDelete: 'CASCADE' })
   readonly campaign: Relation<Campaign>;
+
+  @RelationId((campaignProgression: CampaignProgression) => campaignProgression.campaign)
+  readonly campaignId: Relation<Campaign['id']>;
 
   @ManyToOne(() => User, (user) => user.campaignProgressions, { onDelete: 'CASCADE' })
   readonly user: Relation<User>;

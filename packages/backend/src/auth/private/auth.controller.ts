@@ -1,8 +1,8 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { JWTUser, UserFromJWT } from '../jwt-user.decorator';
 import { UserConnectionUseCase } from './user-connection/user-connection.uc';
 
-@Controller('auth')
+@Controller('auth/private')
 export class AuthPrivateController {
   constructor(private readonly userConnectionUseCase: UserConnectionUseCase) {}
 
@@ -10,5 +10,11 @@ export class AuthPrivateController {
   public async connection(@JWTUser() user: UserFromJWT) {
     await this.userConnectionUseCase.execute({ userId: user.id });
     return 'Ok';
+  }
+
+  @Get()
+  public async identity(@JWTUser() user: UserFromJWT) {
+    console.log(user);
+    return user;
   }
 }

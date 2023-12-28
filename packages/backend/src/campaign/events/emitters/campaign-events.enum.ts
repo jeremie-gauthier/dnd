@@ -1,3 +1,3 @@
 export enum CampaignEvent {
-  UserCampaignsInitialized = 'campaign.user.initialized',
+  NewCampaignStarted = 'campaign.user.started',
 }
