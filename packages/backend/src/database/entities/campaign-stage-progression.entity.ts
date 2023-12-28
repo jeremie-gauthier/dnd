@@ -1,4 +1,12 @@
-import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Relation,
+  RelationId,
+} from 'typeorm';
 import { CampaignProgression } from './campaign-progression.entity';
 import { CampaignStage } from './campaign-stage.entity';
 
@@ -25,6 +33,11 @@ export class CampaignStageProgression {
     onDelete: 'CASCADE',
   })
   readonly stage: Relation<CampaignStage>;
+
+  @RelationId(
+    (campaignStageProgression: CampaignStageProgression) => campaignStageProgression.stage,
+  )
+  readonly stageId: Relation<CampaignStage['id']>;
 
   @Column({ type: 'enum', enum: CampaignStageProgressionStatus })
   status: CampaignStageProgressionStatus;

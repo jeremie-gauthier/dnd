@@ -4,12 +4,19 @@ import { CampaignProgression } from 'src/database/entities/campaign-progression.
 import { Campaign } from 'src/database/entities/campaign.entity';
 import { User } from 'src/database/entities/user.entity';
 import { CampaignPrivateController } from './private/campaign-private.controller';
+import { GetCampaignsRepository } from './private/get-campaigns/get-campaigns.repository';
+import { GetCampaignsUseCase } from './private/get-campaigns/get-campaigns.uc';
 import { NewCampaignStartedRepository } from './private/new-campaign-started/new-campaign-started.repository';
 import { NewCampaignStartedUseCase } from './private/new-campaign-started/new-campaign-started.uc';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Campaign, CampaignProgression])],
   controllers: [CampaignPrivateController],
-  providers: [NewCampaignStartedUseCase, NewCampaignStartedRepository],
+  providers: [
+    NewCampaignStartedUseCase,
+    NewCampaignStartedRepository,
+    GetCampaignsUseCase,
+    GetCampaignsRepository,
+  ],
 })
 export class CampaignModule {}

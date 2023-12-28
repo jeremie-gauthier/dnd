@@ -1,4 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { CampaignProgression } from './campaign-progression.entity';
 import { CampaignStage } from './campaign-stage.entity';
 
 export enum CampaignStatus {
@@ -11,6 +12,11 @@ export enum CampaignStatus {
 export class Campaign {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
+
+  @OneToMany(() => CampaignProgression, (campaignProgression) => campaignProgression.campaign, {
+    cascade: true,
+  })
+  readonly progressions: Relation<CampaignProgression[]>;
 
   @OneToMany(() => CampaignStage, (stage) => stage.campaign, { cascade: true })
   readonly stages: Relation<CampaignStage[]>;

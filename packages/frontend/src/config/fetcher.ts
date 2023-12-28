@@ -1,12 +1,15 @@
+import { Auth0ContextInterface, User } from '@auth0/auth0-react';
 import { QueryClient } from '@tanstack/react-query';
 
 export const queryClient = new QueryClient();
 
-export const fetcher = async (
+export const fetcherWithAuth = async <Data>(
   url: string,
-  token: string,
+  tokenGetter: Auth0ContextInterface<User>['getAccessTokenSilently'],
   params?: Omit<RequestInit, 'headers' | 'method'>,
-) => {
+): Promise<Data> => {
+  const token = await tokenGetter();
+
   const response = await fetch(url, {
     method: 'GET',
     headers: {

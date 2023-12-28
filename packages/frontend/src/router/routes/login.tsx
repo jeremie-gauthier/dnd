@@ -23,7 +23,11 @@ function LoginComponent() {
 
   React.useLayoutEffect(() => {
     if (isAuthenticated && user) {
-      routeContext.auth.login({ id: user.sub!, name: user.nickname!, picture: user.picture! });
+      routeContext?.auth.login({
+        id: user.sub!,
+        name: user.nickname!,
+        picture: user.picture!,
+      });
       router.invalidate();
 
       if (search.redirect) {

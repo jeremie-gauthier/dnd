@@ -2,6 +2,7 @@ import { Route as rootRoute } from "./routes/__root"
 import { Route as LoginRoute } from "./routes/login"
 import { Route as AuthRoute } from "./routes/_auth"
 import { Route as AuthProfileRoute } from "./routes/_auth.profile"
+import { Route as AuthMenuRoute } from "./routes/_auth.menu"
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
@@ -10,6 +11,9 @@ declare module "@tanstack/react-router" {
     }
     "/login": {
       parentRoute: typeof rootRoute
+    }
+    "/_auth/menu": {
+      parentRoute: typeof AuthRoute
     }
     "/_auth/profile": {
       parentRoute: typeof AuthRoute
@@ -27,12 +31,17 @@ Object.assign(LoginRoute.options, {
   getParentRoute: () => rootRoute,
 })
 
+Object.assign(AuthMenuRoute.options, {
+  path: "/menu",
+  getParentRoute: () => AuthRoute,
+})
+
 Object.assign(AuthProfileRoute.options, {
   path: "/profile",
   getParentRoute: () => AuthRoute,
 })
 
 export const routeTree = rootRoute.addChildren([
-  AuthRoute.addChildren([AuthProfileRoute]),
+  AuthRoute.addChildren([AuthMenuRoute, AuthProfileRoute]),
   LoginRoute,
 ])

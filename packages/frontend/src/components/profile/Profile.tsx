@@ -1,6 +1,4 @@
 import { AuthUser } from '../../contexts/auth.context';
-import { fetchIdentityFn } from '../../hooks/api/identity';
-import { useAuthenticatedSuspenseQuery } from '../../hooks/api/useAuthenticatedSuspenseQuery';
 
 type Props = {
   user: AuthUser;
@@ -8,10 +6,6 @@ type Props = {
 };
 
 const Profile = ({ user, userMetadata }: Props) => {
-  const { data } = useAuthenticatedSuspenseQuery(['identity'], fetchIdentityFn);
-
-  console.log('PAGE PROFIL', data);
-
   return (
     <div>
       <img src={user.picture} alt={user.name} />
