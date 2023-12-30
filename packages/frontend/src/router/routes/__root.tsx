@@ -2,6 +2,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Outlet, rootRouteWithContext, useRouterState } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
+import { Socket } from 'socket.io-client';
 
 function RouterLoader() {
   const isLoading = useRouterState({ select: (s) => s.status === 'pending' });
@@ -15,6 +16,7 @@ function RouterLoader() {
 
 export const Route = rootRouteWithContext<{
   queryClient: QueryClient;
+  socket: Socket;
 }>()({
   component: RootComponent,
 });

@@ -8,6 +8,7 @@ const router = new Router({
   defaultErrorComponent: ({ error }) => <ErrorComponent error={error} />,
   context: {
     queryClient,
+    socket: undefined!,
   },
   defaultPreload: 'intent',
   // Since we're using React Query, we don't want loader calls to ever be stale

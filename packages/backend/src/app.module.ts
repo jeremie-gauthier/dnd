@@ -1,14 +1,14 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { auth } from 'express-oauth2-jwt-bearer';
 import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { AuthzModule } from './authz/authz.module';
 import { CampaignModule } from './campaign/campaign.module';
 import envConfig, { validate } from './config/env.config';
 import typeorm from './config/typeorm';
@@ -37,6 +37,7 @@ import { UserModule } from './user/user.module';
     LobbyModule,
     GameModule,
     UserModule,
+    AuthzModule,
   ],
   controllers: [AppController],
   providers: [
@@ -51,22 +52,4 @@ import { UserModule } from './user/user.module';
     AppService,
   ],
 })
-export class AppModule {
-  public configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(
-        auth({
-          audience: process.env.AUTH0_AUDIENCE,
-          issuerBaseURL: process.env.AUTH0_ISSUER,
-        }),
-      )
-      .exclude({
-        path: '/',
-        method: RequestMethod.GET,
-      })
-      .forRoutes({
-        path: '*',
-        method: RequestMethod.ALL,
-      });
-  }
-}
+export class AppModule {}

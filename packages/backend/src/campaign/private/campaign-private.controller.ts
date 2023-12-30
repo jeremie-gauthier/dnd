@@ -1,6 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Request } from 'express';
 import { ZodSerializerDto } from 'nestjs-zod';
-import { JWTUser, UserFromJWT } from 'src/auth/jwt-user.decorator';
+import { JWTUser } from 'src/authz/jwt-user.decorator';
 import { GetCampaignsUseCase } from './get-campaigns/get-campaigns.uc';
 import {
   NewCampaignStartedInputDto,
@@ -19,7 +20,7 @@ export class CampaignPrivateController {
   @HttpCode(HttpStatus.CREATED)
   @ZodSerializerDto(NewCampaignStartedOutputDto)
   public async newCampaignStarted(
-    @JWTUser() user: UserFromJWT,
+    @JWTUser() user: Request['user'],
     @Body() newCampaignStartedDto: NewCampaignStartedInputDto,
   ) {
     return await this.newCampaignStartedUseCase.execute({
@@ -29,7 +30,7 @@ export class CampaignPrivateController {
   }
 
   @Get('get-campaigns')
-  public async getCampaigns(@JWTUser() user: UserFromJWT) {
+  public async getCampaigns(@JWTUser() user: Request['user']) {
     return await this.getCampaignsUseCase.execute({ userId: user.id });
   }
 }
