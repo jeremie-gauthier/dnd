@@ -1,3 +1,4 @@
+import type { ClientToServerEvents, ServerToClientEvents } from '@dnd/shared';
 import { QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Outlet, rootRouteWithContext, useRouterState } from '@tanstack/react-router';
@@ -16,7 +17,7 @@ function RouterLoader() {
 
 export const Route = rootRouteWithContext<{
   queryClient: QueryClient;
-  socket: Socket;
+  socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 }>()({
   component: RootComponent,
 });
