@@ -1,6 +1,7 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { ZodSerializerDto } from 'nestjs-zod';
+import { JWTAuthGuard } from 'src/authz/jwt-auth.guard';
 import { JWTUser } from 'src/authz/jwt-user.decorator';
 import { GetCampaignsUseCase } from './get-campaigns/get-campaigns.uc';
 import {
@@ -9,6 +10,7 @@ import {
 } from './new-campaign-started/new-campaign-started.dto';
 import { NewCampaignStartedUseCase } from './new-campaign-started/new-campaign-started.uc';
 
+@UseGuards(JWTAuthGuard)
 @Controller('campaign/private')
 export class CampaignPrivateController {
   constructor(
