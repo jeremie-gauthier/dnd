@@ -1,8 +1,8 @@
 import { withAuthenticationRequired } from '@auth0/auth0-react';
-import { FileRoute } from '@tanstack/react-router';
+import { FileRoute, Outlet } from '@tanstack/react-router';
 import { io } from 'socket.io-client';
 
-export const Route = new FileRoute('/ws').createRoute({
+export const Route = new FileRoute('/_ws').createRoute({
   beforeLoad: () => {
     const auth0StoreFromStorage = localStorage.getItem(
       import.meta.env.VITE_AUTH0_LOCALSTORAGE_TOKEN_KEY,
@@ -31,7 +31,10 @@ export const Route = new FileRoute('/ws').createRoute({
 export function WsRouteComponent() {
   const { socket } = Route.useRouteContext();
 
-  socket.emit('client.lobby.request_new_game', { msg: 'Hello world' });
-
-  return <div>Websocket page</div>;
+  return (
+    <div>
+      <div>socket id: {socket.id}</div>
+      <Outlet />
+    </div>
+  );
 }

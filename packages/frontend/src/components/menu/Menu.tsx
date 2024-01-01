@@ -1,36 +1,15 @@
-import { GetCampaignsResponse } from '../../hooks/api/campaign/get-campaigns';
+import { Link } from '@tanstack/react-router';
 
-type Props = {
-  campaigns: GetCampaignsResponse;
-};
-
-export const Menu = ({ campaigns }: Props) => {
-  const handleClickOnCampaign = (campaign: { id: string }) => {
-    console.log(campaign);
-    // TODO: create a lobby ?
-  };
-
-  const handleClickOnMultiplayer = () => {
-    console.log('multiplayer');
-    // TODO: redirect to lobbies page
-  };
-
+export const Menu = () => {
   return (
     <div>
-      <h1>Campagnes</h1>
-      {campaigns.map((campaign) => (
-        <button key={campaign.id} onClick={() => handleClickOnCampaign(campaign)}>
-          <span>
-            {campaign.currentStage.order}/{campaign.nbStages}
-          </span>
-          <span>{campaign.title}</span>
-          <span>{campaign.currentStage.title}</span>
-        </button>
-      ))}
+      <h2>Menu</h2>
 
-      <button onClick={() => handleClickOnMultiplayer()}>
-        <span>Multiplayer</span>
-      </button>
+      <Link to="/menu/solo">Solo player</Link>
+
+      <br />
+
+      <Link to="/menu-multiplayer">Multiplayer</Link>
     </div>
   );
 };

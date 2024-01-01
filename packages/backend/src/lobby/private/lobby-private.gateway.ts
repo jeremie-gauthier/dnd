@@ -21,7 +21,7 @@ const WS_STORE: Record<string, string> = {};
     origin: 'http://localhost:5173',
   },
 })
-export class LobbyEventsGateway implements OnGatewayConnection {
+export class LobbyPrivateGateway implements OnGatewayConnection {
   constructor(private readonly jwtService: JwtService) {}
 
   public async handleConnection(client: Socket) {

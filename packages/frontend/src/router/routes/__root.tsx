@@ -25,11 +25,9 @@ function RootComponent() {
   return (
     <>
       <div className={`min-h-screen flex flex-col`}>
-        <div className={`flex items-center border-b gap-2`}>
-          <h1 className={`text-3xl p-2`}>DnD</h1>
-          <div className={`text-3xl`}>
-            <RouterLoader />
-          </div>
+        <h1 className={`text-3xl p-2`}>DnD</h1>
+        <div className={`text-3xl`}>
+          <RouterLoader />
         </div>
 
         <div className={`flex-1 flex`}>

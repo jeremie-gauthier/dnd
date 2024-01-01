@@ -1,3 +1,3 @@
-export enum ServerLobbyEvent {
-  GameReady = 'server.lobby.game_is_ready',
-}
+export const ServerLobbyEvent = {
+  GameReady: 'server.lobby.game_is_ready',
+} as const;

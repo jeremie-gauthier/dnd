@@ -13,12 +13,15 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@dnd/shared": "file:../shared",
+    "@tanstack/react-form": "^0.12.0",
     "@tanstack/react-query": "^5.14.6",
     "@tanstack/react-router": "^1.0.0",
     "@tanstack/router-cli": "^1.0.0",
+    "@tanstack/zod-form-adapter": "^0.12.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "socket.io-client": "^4.7.2"
+    "socket.io-client": "^4.7.2",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@dnd/prettier-config": "^0.0.0",
