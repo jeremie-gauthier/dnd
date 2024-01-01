@@ -1,10 +1,11 @@
-import { GetLobbyResponse, MOCK_HEROES } from '../../hooks/api/lobby/get-lobby';
+import { GetLobbyResponse } from '../../hooks/api/lobby/get-lobby';
 
 type Props = {
   lobby: GetLobbyResponse;
 };
 
 export const Lobby = ({ lobby }: Props) => {
+  console.log(lobby);
   const handleClickOnLeaveLobby = () => {
     console.log('leaving this lobby');
     // TODO: disconnect socket from this lobby group
@@ -15,11 +16,11 @@ export const Lobby = ({ lobby }: Props) => {
     // TODO: emit the "ready" signal
   };
 
-  const heroes = MOCK_HEROES;
-  const handleClickOnHero = (heroId: string) => {
-    console.log(`hero ${heroId} selected or deselected`);
-    // TODO: emit the "choose hero" signal
-  };
+  // const heroes = MOCK_HEROES;
+  // const handleClickOnHero = (heroId: string) => {
+  //   console.log(`hero ${heroId} selected or deselected`);
+  //   // TODO: emit the "choose hero" signal
+  // };
 
   return (
     <div>
