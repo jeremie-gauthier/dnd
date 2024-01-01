@@ -13,6 +13,14 @@
     "start:dev": "npm run start:dev:db && npm run start:dev:server",
     "reinstall": "rm -rf packages/backend/node_modules packages/backend/dist packages/frontend/node_modules packages/shared/node_modules packages/shared/dist && npm i",
     "publish:prettier": "npm run publish -w @dnd/prettier-config",
-    "publish:shared": "npm run publish -w @dnd/shared"
+    "publish:shared": "npm run publish -w @dnd/shared",
+    "new-uc": "node ./scripts/new-uc"
+  },
+  "devDependencies": {
+    "@inquirer/prompts": "^3.3.0",
+    "dedent": "^1.5.1",
+    "inquirer-directory": "^2.2.0",
+    "lodash.camelcase": "^4.3.0",
+    "lodash.kebabcase": "^4.1.1"
   }
 }
