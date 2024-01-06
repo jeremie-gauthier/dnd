@@ -7,5 +7,26 @@ const createLobbyInputSchema = z.object({
 });
 export class CreateLobbyInputDto extends createZodDto(createLobbyInputSchema) {}
 
-const createLobbyOutputSchema = z.object({});
+const heroSchema = z.object({
+  id: z.string(),
+  pickedBy: z.string().optional(),
+});
+
+const createLobbyOutputSchema = z.object({
+  id: z.string(),
+  host: z.object({
+    userId: z.string(),
+  }),
+  config: z.object({
+    nbPlayers: z.number(),
+    stageId: z.string(),
+  }),
+  players: z.array(
+    z.object({
+      userId: z.string(),
+      heroesSelected: z.array(z.string()),
+    }),
+  ),
+  heroesAvailable: z.array(heroSchema),
+});
 export class CreateLobbyOutputDto extends createZodDto(createLobbyOutputSchema) {}

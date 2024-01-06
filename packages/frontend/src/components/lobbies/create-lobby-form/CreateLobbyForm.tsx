@@ -1,4 +1,5 @@
 import { ClientLobbyEvent } from '@dnd/shared';
+import { useNavigate } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { z } from 'zod';
 import { GetCampaignsResponse } from '../../../hooks/api/campaign/get-campaigns';
@@ -11,23 +12,30 @@ type Props = {
 };
 
 export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
+  const navigate = useNavigate();
   const form = useCreateLobbyForm({
     nbPlayers: 2,
     stageId: campaigns[0]?.currentStage.id ?? '',
   });
+
+  const handleLobbyCreation: React.FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const lobby = await socket.emitWithAck(ClientLobbyEvent.RequestNewGame, form.state.values);
+
+    return navigate({
+      to: `/lobby/$lobbyId`,
+      params: { lobbyId: lobby.id },
+    });
+  };
 
   return (
     <div>
       <h2>Host a game</h2>
 
       <form.Provider>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            socket.emit(ClientLobbyEvent.RequestNewGame, form.state.values);
-          }}
-        >
+        <form onSubmit={handleLobbyCreation}>
           <div>
             <form.Field
               name="nbPlayers"
@@ -35,7 +43,7 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
               validators={{
                 onChange: z
                   .number()
-                  .min(1, 'Your lobby must at least accept 2 players')
+                  .min(2, 'Your lobby must at least accept 2 players')
                   .max(5, 'Your lobby must at most accept 5 players'),
               }}
               children={(field) => (

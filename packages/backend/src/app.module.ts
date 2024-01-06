@@ -35,6 +35,7 @@ import { UserModule } from './user/user.module';
       useFactory: async (configService: ConfigService) => configService.getOrThrow('typeorm'),
     }),
     CacheModule.registerAsync<RedisClientOptions>({
+      isGlobal: true,
       extraProviders: [ConfigService],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => configService.getOrThrow('redis'),

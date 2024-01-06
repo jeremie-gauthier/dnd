@@ -13,7 +13,8 @@ import { Server } from 'socket.io';
 import { JWTAuthGuard } from 'src/authz/jwt-auth.guard';
 import { WsExceptionFilter } from 'src/errors/ws-exception-filter';
 import { ServerSocket } from 'src/types/socket.type';
-import { CreateLobbyInputDto } from './create-lobby/create-lobby.dto';
+import { CreateLobbyInputDto, CreateLobbyOutputDto } from './create-lobby/create-lobby.dto';
+import { CreateLobbyUseCase } from './create-lobby/create-lobby.uc';
 import { HandleWsConnectionUseCase } from './handle-ws-connection/handle-ws-connection.uc';
 
 @UseGuards(JWTAuthGuard)
@@ -25,20 +26,26 @@ import { HandleWsConnectionUseCase } from './handle-ws-connection/handle-ws-conn
   },
 })
 export class LobbyPrivateGateway implements OnGatewayConnection {
-  constructor(private readonly handleWsConnectionUseCase: HandleWsConnectionUseCase) {}
+  constructor(
+    private readonly handleWsConnectionUseCase: HandleWsConnectionUseCase,
+    private readonly createLobbyUseCase: CreateLobbyUseCase,
+  ) {}
+
+  @WebSocketServer()
+  private server: Server;
 
   public async handleConnection(client: ServerSocket) {
     await this.handleWsConnectionUseCase.execute(client);
   }
 
-  @WebSocketServer()
-  private server: Server;
+  // TODO: implem handleDisconnect
 
   @SubscribeMessage(ClientLobbyEvent.RequestNewGame)
   public async requestGameCreation(
-    @MessageBody() data: CreateLobbyInputDto,
+    @MessageBody() createLobbyInputDto: CreateLobbyInputDto,
     @ConnectedSocket() client: ServerSocket,
-  ): Promise<void> {
-    console.log(ClientLobbyEvent.RequestNewGame, data, client.data);
+  ): Promise<CreateLobbyOutputDto> {
+    const lobby = await this.createLobbyUseCase.execute(client.data.userId, createLobbyInputDto);
+    return CreateLobbyOutputDto.schema.parse(lobby);
   }
 }
