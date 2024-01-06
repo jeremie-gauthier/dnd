@@ -11,6 +11,8 @@ const validationSchema = z.object({
   AUTH0_AUDIENCE: z.string(),
   AUTH0_ISSUER: z.string(),
   DATABASE_URL: z.string(),
+  REDIS_HOST: z.string().default('localhost'),
+  REDIS_PORT: z.coerce.number().default(6379),
 });
 
 export const validate = (config: Record<string, unknown>) => {

@@ -1,6 +1,7 @@
 import { ClientLobbyEvent } from '@dnd/shared';
-import { UseGuards } from '@nestjs/common';
+import { UseFilters, UseGuards, UsePipes } from '@nestjs/common';
 import {
+  ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   SubscribeMessage,
@@ -8,14 +9,17 @@ import {
   WebSocketServer,
   WsException,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
+import { ZodValidationPipe } from 'nestjs-zod';
+import { Server } from 'socket.io';
 import { JWTAuthGuard } from 'src/authz/jwt-auth.guard';
 import { JwtService } from 'src/authz/jwt.service';
-
-// TODO: replace by a Redis instance
-const WS_STORE: Record<string, string> = {};
+import { WsExceptionFilter } from 'src/errors/ws-exception-filter';
+import { ServerSocket } from 'src/types/socket.type';
+import { CreateLobbyInputDto } from './create-lobby/create-lobby.dto';
 
 @UseGuards(JWTAuthGuard)
+@UsePipes(ZodValidationPipe)
+@UseFilters(WsExceptionFilter)
 @WebSocketGateway({
   cors: {
     origin: 'http://localhost:5173',
@@ -24,11 +28,8 @@ const WS_STORE: Record<string, string> = {};
 export class LobbyPrivateGateway implements OnGatewayConnection {
   constructor(private readonly jwtService: JwtService) {}
 
-  public async handleConnection(client: Socket) {
-    // - get token
+  public async handleConnection(client: ServerSocket) {
     const token: string | undefined = client.handshake.auth.token;
-
-    // - verify token
     if (token === undefined || token === null) {
       client.disconnect(true);
       throw new WsException('No token found during handshake');
@@ -40,13 +41,10 @@ export class LobbyPrivateGateway implements OnGatewayConnection {
         throw new WsException('No userId (sub) found in token');
       }
 
-      // - if valid:
-      // - - save in memory the socketId with the userId (Or the whole object if I want more data)
-      WS_STORE[decodedToken.sub] = client.id;
-      WS_STORE[client.id] = decodedToken.sub;
+      client.data = {
+        userId: decodedToken.sub,
+      };
     } catch (error) {
-      // - on any error:
-      // - - immediatly disconnect the client socket
       client.disconnect(true);
       if (error instanceof Error) {
         throw new WsException(error.message);
@@ -62,7 +60,10 @@ export class LobbyPrivateGateway implements OnGatewayConnection {
   private server: Server;
 
   @SubscribeMessage(ClientLobbyEvent.RequestNewGame)
-  public async requestGameCreation(@MessageBody() data: any, ...args: any[]): Promise<void> {
-    console.log(ClientLobbyEvent.RequestNewGame, data, args);
+  public async requestGameCreation(
+    @MessageBody() data: CreateLobbyInputDto,
+    @ConnectedSocket() client: ServerSocket,
+  ): Promise<void> {
+    console.log(ClientLobbyEvent.RequestNewGame, data, client.data);
   }
 }

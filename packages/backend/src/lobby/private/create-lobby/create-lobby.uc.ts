@@ -7,6 +7,7 @@ export class CreateLobbyUseCase implements UseCase {
   constructor(private readonly repository: CreateLobbyRepository) {}
 
   public async execute(): Promise<void> {
+    // const
     throw new Error('Not implemented');
   }
 }

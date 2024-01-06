@@ -1,7 +1,7 @@
 import { withAuthenticationRequired } from '@auth0/auth0-react';
-import type { ClientToServerEvents, ServerToClientEvents } from '@dnd/shared';
 import { FileRoute, Outlet } from '@tanstack/react-router';
-import { Socket, io } from 'socket.io-client';
+import { io } from 'socket.io-client';
+import { ClientSocket } from '../../types/socket.type';
 
 export const Route = new FileRoute('/_ws').createRoute({
   beforeLoad: () => {
@@ -14,7 +14,7 @@ export const Route = new FileRoute('/_ws').createRoute({
 
     const auth0Store = JSON.parse(auth0StoreFromStorage);
 
-    const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('ws://localhost:3000', {
+    const socket: ClientSocket = io('ws://localhost:3000', {
       auth(cb) {
         cb({
           token: auth0Store.body.access_token,

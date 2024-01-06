@@ -10,9 +10,6 @@ export const useCreateLobbyForm = (
   const form = useForm({
     defaultValues,
     validatorAdapter: zodValidator,
-    onSubmit: async (...args: any[]) => {
-      console.log(args);
-    },
   });
 
   return form;

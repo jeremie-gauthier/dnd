@@ -1,13 +1,16 @@
+import { ClientLobbyEvent } from '@dnd/shared';
 import { zodValidator } from '@tanstack/zod-form-adapter';
 import { z } from 'zod';
 import { GetCampaignsResponse } from '../../../hooks/api/campaign/get-campaigns';
+import { ClientSocket } from '../../../types/socket.type';
 import { useCreateLobbyForm } from './useCreateLobbyForm';
 
 type Props = {
   campaigns: GetCampaignsResponse;
+  socket: ClientSocket;
 };
 
-export const CreateLobbyForm = ({ campaigns }: Props) => {
+export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
   const form = useCreateLobbyForm({
     nbPlayers: 2,
     stageId: campaigns[0]?.currentStage.id ?? '',
@@ -22,7 +25,7 @@ export const CreateLobbyForm = ({ campaigns }: Props) => {
           onSubmit={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            void form.handleSubmit();
+            socket.emit(ClientLobbyEvent.RequestNewGame, form.state.values);
           }}
         >
           <div>
@@ -32,7 +35,7 @@ export const CreateLobbyForm = ({ campaigns }: Props) => {
               validators={{
                 onChange: z
                   .number()
-                  .min(2, 'Your lobby must at least accept 2 players')
+                  .min(1, 'Your lobby must at least accept 2 players')
                   .max(5, 'Your lobby must at most accept 5 players'),
               }}
               children={(field) => (

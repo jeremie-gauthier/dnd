@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start:dev": "concurrently \"tsr watch\" \"vite\"",
-    "build": "tsc && vite build",
+    "start:dev": "concurrently \"tsr watch\" \"vite --force\"",
+    "build": "tsc && vite build --debug",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "format": "prettier --write \"src/**/*.ts\""

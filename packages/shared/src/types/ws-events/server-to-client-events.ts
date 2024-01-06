@@ -3,6 +3,7 @@ import { ServerLobbyEvent } from './lobby-events/lobby-events.server';
 
 interface EventsAndPayloads {
   [ServerLobbyEvent.GameReady]: undefined;
+  [ServerLobbyEvent.Error]: { name: string; message: string };
   [ServerGameEvent.GameStart]: undefined;
 }
 

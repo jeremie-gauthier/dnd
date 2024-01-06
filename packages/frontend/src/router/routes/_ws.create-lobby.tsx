@@ -8,7 +8,8 @@ export const Route = new FileRoute('/_ws/create-lobby').createRoute({
 });
 
 export function CreateLobbyRouteComponent() {
+  const { socket } = Route.useRouteContext();
   const { data: campaigns = [] } = useGetCampaigns();
 
-  return <CreateLobbyForm campaigns={campaigns} />;
+  return <CreateLobbyForm campaigns={campaigns} socket={socket} />;
 }
