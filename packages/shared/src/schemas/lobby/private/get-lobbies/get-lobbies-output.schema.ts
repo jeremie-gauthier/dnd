@@ -7,7 +7,7 @@ export const getLobbiesOutputSchema = z.array(
       userId: z.string(),
     }),
     config: z.object({
-      nbPlayers: z.number(),
+      nbPlayersMax: z.number(),
       campaign: z.object({
         id: z.string(),
         title: z.string(),

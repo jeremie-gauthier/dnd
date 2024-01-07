@@ -11,7 +11,7 @@ export const createLobbyOutputSchema = z.object({
     userId: z.string(),
   }),
   config: z.object({
-    nbPlayers: z.number(),
+    nbPlayersMax: z.number(),
     stageId: z.string(),
   }),
   players: z.array(

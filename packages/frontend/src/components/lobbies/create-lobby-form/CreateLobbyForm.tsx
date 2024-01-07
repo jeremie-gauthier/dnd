@@ -14,7 +14,7 @@ type Props = {
 export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
   const navigate = useNavigate();
   const form = useCreateLobbyForm({
-    nbPlayers: 2,
+    nbPlayersMax: 2,
     stageId: campaigns[0]?.currentStage.id ?? '',
   });
 
@@ -38,7 +38,7 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
         <form onSubmit={handleLobbyCreation}>
           <div>
             <form.Field
-              name="nbPlayers"
+              name="nbPlayersMax"
               validatorAdapter={zodValidator}
               validators={{
                 onChange: z

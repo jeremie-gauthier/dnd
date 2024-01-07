@@ -5,7 +5,7 @@ import { EventsMapper } from './utils.type';
 
 interface ClientToServerEventsAndPayloads extends Record<string, (...parameters: any[]) => any> {
   [ClientLobbyEvent.RequestNewGame]: (payload: {
-    nbPlayers: number;
+    nbPlayersMax: number;
     stageId: string;
   }) => LobbyEntity;
   [ClientGameEvent.PlayerIsReady]: () => void;

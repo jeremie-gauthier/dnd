@@ -1,11 +1,9 @@
-import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ZodSerializerInterceptor, ZodValidationPipe } from 'nestjs-zod';
-import { RedisClientOptions } from 'redis';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -18,6 +16,7 @@ import typeorm from './config/typeorm';
 import { GameModule } from './game/game.module';
 import { LobbyModule } from './lobby/lobby.module';
 import { UserModule } from './user/user.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -34,12 +33,7 @@ import { UserModule } from './user/user.module';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => configService.getOrThrow('typeorm'),
     }),
-    CacheModule.registerAsync<RedisClientOptions>({
-      isGlobal: true,
-      extraProviders: [ConfigService],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => configService.getOrThrow('redis'),
-    }),
+
     AuthModule,
     CampaignModule,
     AnalyticsModule,
@@ -47,6 +41,7 @@ import { UserModule } from './user/user.module';
     GameModule,
     UserModule,
     AuthzModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [

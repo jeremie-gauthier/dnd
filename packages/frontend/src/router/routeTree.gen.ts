@@ -4,6 +4,7 @@ import { Route as MenuRoute } from "./routes/menu"
 import { Route as LoginRoute } from "./routes/login"
 import { Route as WsRoute } from "./routes/_ws"
 import { Route as WsMenuMultiplayerRoute } from "./routes/_ws.menu-multiplayer"
+import { Route as WsLobbiesRoute } from "./routes/_ws.lobbies"
 import { Route as WsCreateLobbyRoute } from "./routes/_ws.create-lobby"
 import { Route as WsLobbyLobbyIdRoute } from "./routes/_ws.lobby.$lobbyId"
 
@@ -22,6 +23,9 @@ declare module "@tanstack/react-router" {
       parentRoute: typeof rootRoute
     }
     "/_ws/create-lobby": {
+      parentRoute: typeof WsRoute
+    }
+    "/_ws/lobbies": {
       parentRoute: typeof WsRoute
     }
     "/_ws/menu-multiplayer": {
@@ -58,6 +62,11 @@ Object.assign(WsCreateLobbyRoute.options, {
   getParentRoute: () => WsRoute,
 })
 
+Object.assign(WsLobbiesRoute.options, {
+  path: "/lobbies",
+  getParentRoute: () => WsRoute,
+})
+
 Object.assign(WsMenuMultiplayerRoute.options, {
   path: "/menu-multiplayer",
   getParentRoute: () => WsRoute,
@@ -71,6 +80,7 @@ Object.assign(WsLobbyLobbyIdRoute.options, {
 export const routeTree = rootRoute.addChildren([
   WsRoute.addChildren([
     WsCreateLobbyRoute,
+    WsLobbiesRoute,
     WsMenuMultiplayerRoute,
     WsLobbyLobbyIdRoute,
   ]),

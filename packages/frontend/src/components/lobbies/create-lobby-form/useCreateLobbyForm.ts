@@ -3,7 +3,7 @@ import { zodValidator } from '@tanstack/zod-form-adapter';
 
 export const useCreateLobbyForm = (
   defaultValues = {
-    nbPlayers: 2,
+    nbPlayersMax: 2,
     stageId: '',
   },
 ) => {

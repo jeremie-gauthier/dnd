@@ -1,13 +1,7 @@
 import { registerAs } from '@nestjs/config';
-import { redisStore } from 'cache-manager-redis-store';
-import { config as dotenvConfig } from 'dotenv';
+import { RedisClientOptions } from 'redis';
 
-dotenvConfig({ path: '.env' });
-
-const config = {
-  store: redisStore,
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
-};
+// TODO: create a username and a pwd before going live
+const config: RedisClientOptions = {};
 
 export default registerAs('redis', () => config);
