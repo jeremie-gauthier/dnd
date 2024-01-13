@@ -16,8 +16,8 @@
     "reinstall": "npm run remove:node_modules && npm run remove:builds && npm i",
     "publish:packages": "npm run publish:prettier && npm run publish:shared",
     "publish:prettier": "npm run publish -w @dnd/prettier-config",
-    "publish:shared": "npm run publish -w @dnd/shared",
-    "new-uc": "node ./scripts/new-uc"
+    "publish:shared": "npm run --silent publish -w @dnd/shared",
+    "new-uc": "node ./scripts/new-uc && npm run publish:shared"
   },
   "devDependencies": {
     "@inquirer/prompts": "^3.3.0",

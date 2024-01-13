@@ -7,7 +7,6 @@
   "type": "commonjs",
   "scripts": {
     "build": "tsc",
-    "bundle": "swc ./src -d ./dist",
     "format": "prettier --write \"src/**/*.ts\"",
     "prepublish": "npm run build",
     "publish": "sh ../../scripts/publish-shared.sh"
