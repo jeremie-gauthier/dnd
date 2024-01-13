@@ -1,3 +1,3 @@
 export enum LobbyEvent {
-  UserJoinedLobby = 'lobby.user.joined',
+  UserJoinedLobby = 'lobby.update.user_joined',
 }

@@ -1,23 +1,20 @@
-import { LobbyEntity } from '@dnd/shared';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CampaignStage } from 'src/database/entities/campaign-stage.entity';
 import { Campaign } from 'src/database/entities/campaign.entity';
-import { REDIS_LOBBIES_KEY } from 'src/lobby/constants';
-import { RedisService } from 'src/redis/redis.service';
+import { LobbiesRepository } from 'src/redis/repositories/lobbies.repository';
 import { In, Repository } from 'typeorm';
 
 @Injectable()
 export class GetLobbiesRepository {
   constructor(
-    private readonly redis: RedisService,
+    private readonly lobbiesRepository: LobbiesRepository,
     @InjectRepository(Campaign)
     private readonly campaignRepository: Repository<Campaign>,
   ) {}
 
   public async getLobbies() {
-    const lobbies = (await this.redis.client.json.get(REDIS_LOBBIES_KEY)) as LobbyEntity[];
-    return lobbies;
+    return await this.lobbiesRepository.getMany();
   }
 
   public async getCampaigns(stageIds: CampaignStage['id'][]): Promise<Campaign[]> {

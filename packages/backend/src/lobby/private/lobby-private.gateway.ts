@@ -16,6 +16,8 @@ import { ServerSocket } from 'src/types/socket.type';
 import { CreateLobbyInputDto, CreateLobbyOutputDto } from './create-lobby/create-lobby.dto';
 import { CreateLobbyUseCase } from './create-lobby/create-lobby.uc';
 import { HandleWsConnectionUseCase } from './handle-ws-connection/handle-ws-connection.uc';
+import { JoinLobbyInputDto, JoinLobbyOutputDto } from './join-lobby/join-lobby.dto';
+import { JoinLobbyUseCase } from './join-lobby/join-lobby.uc';
 
 @UseGuards(JWTAuthGuard)
 @UsePipes(ZodValidationPipe)
@@ -29,6 +31,7 @@ export class LobbyPrivateGateway implements OnGatewayConnection {
   constructor(
     private readonly handleWsConnectionUseCase: HandleWsConnectionUseCase,
     private readonly createLobbyUseCase: CreateLobbyUseCase,
+    private readonly joinLobbyUseCase: JoinLobbyUseCase,
   ) {}
 
   @WebSocketServer()
@@ -47,5 +50,17 @@ export class LobbyPrivateGateway implements OnGatewayConnection {
   ): Promise<CreateLobbyOutputDto> {
     const lobby = await this.createLobbyUseCase.execute(client.data.userId, createLobbyInputDto);
     return CreateLobbyOutputDto.schema.parse(lobby);
+  }
+
+  @SubscribeMessage(ClientLobbyEvent.RequestJoinLobby)
+  public async joinLobby(
+    @MessageBody() joinLobbyDto: JoinLobbyInputDto,
+    @ConnectedSocket() client: ServerSocket,
+  ) {
+    const lobbyId = await this.joinLobbyUseCase.execute({
+      userId: client.data.userId,
+      ...joinLobbyDto,
+    });
+    return JoinLobbyOutputDto.schema.parse({ lobbyId });
   }
 }

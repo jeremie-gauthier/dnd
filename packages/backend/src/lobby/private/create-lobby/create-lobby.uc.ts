@@ -35,10 +35,7 @@ export class CreateLobbyUseCase implements UseCase {
       heroesAvailable: [],
     });
 
-    // TODO: in the same time, emit "new-lobby" to all connected sockets
-    // ? tweak UserJoinedLobby event to also add the user in the players array ?
-    // ? or split in two events: UserJoinLobby (the intent) and UserJoinedLobby (action done) ?
-    await this.eventEmitter.emitAsync(
+    this.eventEmitter.emitAsync(
       LobbyEvent.UserJoinedLobby,
       new UserJoinedLobbyPayload({
         userId,
