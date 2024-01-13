@@ -1,5 +1,6 @@
 import { ErrorComponent, Router, RouterProvider } from '@tanstack/react-router';
 import { queryClient } from '../config/fetcher';
+import { socket } from '../config/socket';
 import { routeTree } from './routeTree.gen';
 
 const router = new Router({
@@ -8,14 +9,13 @@ const router = new Router({
   defaultErrorComponent: ({ error }) => <ErrorComponent error={error} />,
   context: {
     queryClient,
-    socket: undefined!,
+    socket,
   },
-  defaultPreload: 'intent',
   // Since we're using React Query, we don't want loader calls to ever be stale
   // This will ensure that the loader is always called when the route is preloaded or visited
   defaultPreloadStaleTime: 0,
 });
 
 export function AppRouter() {
-  return <RouterProvider router={router} defaultPreload="intent" context={{}} />;
+  return <RouterProvider router={router} context={{}} />;
 }

@@ -13,11 +13,11 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@dnd/shared": "file:../shared",
-    "@tanstack/react-form": "^0.12.0",
-    "@tanstack/react-query": "^5.14.6",
-    "@tanstack/react-router": "^1.0.0",
-    "@tanstack/router-cli": "^1.0.0",
-    "@tanstack/zod-form-adapter": "^0.12.0",
+    "@tanstack/react-form": "^0.13.3",
+    "@tanstack/react-query": "^5.17.10",
+    "@tanstack/react-router": "^1.4.2",
+    "@tanstack/router-cli": "^1.4.2",
+    "@tanstack/zod-form-adapter": "^0.13.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "socket.io-client": "^4.7.2",
@@ -37,6 +37,6 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "typescript": "^5.3.3",
-    "vite": "^5.0.10"
+    "vite": "^5.0.11"
   }
 }

@@ -1,30 +1,26 @@
 import { withAuthenticationRequired } from '@auth0/auth0-react';
 import { FileRoute, Outlet } from '@tanstack/react-router';
-import { io } from 'socket.io-client';
-import { ClientSocket } from '../../types/socket.type';
 
 export const Route = new FileRoute('/_ws').createRoute({
-  beforeLoad: () => {
-    const auth0StoreFromStorage = localStorage.getItem(
-      import.meta.env.VITE_AUTH0_LOCALSTORAGE_TOKEN_KEY,
-    );
-    if (!auth0StoreFromStorage) {
-      throw new Error('No auth token found');
-    }
-
-    const auth0Store = JSON.parse(auth0StoreFromStorage);
-
-    const socket: ClientSocket = io('ws://localhost:3000', {
-      auth(cb) {
-        cb({
-          token: auth0Store.body.access_token,
+  beforeLoad: ({ context }) => {
+    return new Promise((resolve, reject) => {
+      if (context.socket.connected) {
+        resolve({});
+      } else {
+        context.socket.on('connect', () => {
+          resolve({});
         });
-      },
-    });
 
-    return {
-      socket,
-    };
+        context.socket.on('connect_error', (err) => {
+          // TODO: l'erreur thrown dans l'option auth(cb) n'est pas recu ici
+          // ? comment handle l'erreur pour redirect to login page
+          console.error('connect_error', err);
+          reject(err);
+        });
+
+        context.socket.connect();
+      }
+    });
   },
   component: withAuthenticationRequired(WsRouteComponent),
 });
