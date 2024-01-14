@@ -12,6 +12,8 @@ export const socket = io('ws://localhost:3000', {
 
     const auth0Store = JSON.parse(auth0StoreFromStorage);
 
+    // TODO: quand le token expire, il n'est plus present dans le body
+    // ! et donc le handshake coté serveur fail et l'app rentre dans un etat d'erreur bizarre
     cb({
       token: auth0Store.body.access_token,
     });

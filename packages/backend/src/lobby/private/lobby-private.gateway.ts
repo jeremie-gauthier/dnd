@@ -48,7 +48,11 @@ export class LobbyPrivateGateway implements OnGatewayConnection {
     @MessageBody() createLobbyInputDto: CreateLobbyInputDto,
     @ConnectedSocket() client: ServerSocket,
   ): Promise<CreateLobbyOutputDto> {
-    const lobby = await this.createLobbyUseCase.execute(client.data.userId, createLobbyInputDto);
+    const lobby = await this.createLobbyUseCase.execute({
+      client,
+      userId: client.data.userId,
+      createLobbyInputDto,
+    });
     return CreateLobbyOutputDto.schema.parse(lobby);
   }
 
@@ -58,6 +62,7 @@ export class LobbyPrivateGateway implements OnGatewayConnection {
     @ConnectedSocket() client: ServerSocket,
   ) {
     const lobbyId = await this.joinLobbyUseCase.execute({
+      client,
       userId: client.data.userId,
       ...joinLobbyDto,
     });

@@ -10,6 +10,9 @@ export class TrackUserAccrossLobbiesListener {
 
   @OnEvent(LobbyEvent.UserJoinedLobby)
   public async handler(payload: UserJoinedLobbyPayload) {
-    await this.repository.saveUserLobby(payload);
+    await Promise.all([
+      this.repository.saveUserLobby(payload),
+      payload.client.join(payload.lobbyId),
+    ]);
   }
 }

@@ -10,6 +10,7 @@ export class HandleWsConnectionUseCase implements UseCase {
 
   public async execute(client: ServerSocket): Promise<void> {
     const token: string | undefined = client.handshake.auth.token;
+    console.log(client.handshake);
     if (token === undefined || token === null) {
       client.disconnect(true);
       throw new WsException('No token found during handshake');

@@ -4,6 +4,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { User } from 'src/database/entities/user.entity';
 import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
 import { UserJoinedLobbyPayload } from 'src/lobby/events/emitters/user-joined-lobby.payload';
+import { ServerSocket } from 'src/types/socket.type';
 import { UseCase } from 'src/types/use-case.interface';
 import { JoinLobbyInputDto } from './join-lobby.dto';
 import { JoinLobbyRepository } from './join-lobby.repository';
@@ -16,9 +17,10 @@ export class JoinLobbyUseCase implements UseCase {
   ) {}
 
   public async execute({
+    client,
     userId,
     lobbyId,
-  }: { userId: User['id'] } & JoinLobbyInputDto): Promise<LobbyEntity['id']> {
+  }: { client: ServerSocket; userId: User['id'] } & JoinLobbyInputDto): Promise<LobbyEntity['id']> {
     const lobby = await this.repository.getLobbyById(lobbyId);
     this.assertsCanEnterLobby(userId, lobby);
 
@@ -33,6 +35,7 @@ export class JoinLobbyUseCase implements UseCase {
     this.eventEmitter.emitAsync(
       LobbyEvent.UserJoinedLobby,
       new UserJoinedLobbyPayload({
+        client,
         userId,
         lobbyId,
       }),
