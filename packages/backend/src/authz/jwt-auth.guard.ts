@@ -52,8 +52,10 @@ export class JWTAuthGuard implements CanActivate {
     }
 
     const payload = JWTAuthGuard.getPayloadToBindUserByType[type](context);
-    const user = { id: sub };
-    payload.user = user;
+    if (payload) {
+      const user = { id: sub };
+      payload.user = user;
+    }
 
     return true;
   }
