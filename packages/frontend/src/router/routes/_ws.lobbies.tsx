@@ -43,9 +43,17 @@ export function LobbiesRouteComponent() {
     };
     socket.on(ServerLobbyEvent.LobbiesChangesDetected, handleLobbiesChanges);
 
+    const handleLobbyDeleted = ({ lobbyId }: { lobbyId: string }) => {
+      queryClient.setQueryData(GET_LOBBIES_QUERY_KEY, (oldLobbies: GetLobbiesResponse) =>
+        oldLobbies.filter((oldLobby) => oldLobby.id !== lobbyId),
+      );
+    };
+    socket.on(ServerLobbyEvent.LobbiesDeleted, handleLobbyDeleted);
+
     return () => {
       socket.removeListener(ServerLobbyEvent.Error, errorHandler);
       socket.removeListener(ServerLobbyEvent.LobbiesChangesDetected, handleLobbiesChanges);
+      socket.removeListener(ServerLobbyEvent.LobbiesDeleted, handleLobbyDeleted);
     };
   }, [socket, queryClient]);
 

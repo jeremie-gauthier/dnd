@@ -5,6 +5,8 @@ import { Campaign } from 'src/database/entities/campaign.entity';
 import { RedisModule } from 'src/redis/redis.module';
 import { LobbiesChangesListener } from './events/listeners/lobbies-changes/lobbies-changes.listener';
 import { LobbiesChangesRepository } from './events/listeners/lobbies-changes/lobbies-changes.repository';
+import { LobbyCleanerListener } from './events/listeners/lobby-cleaner/lobby-cleaner.listener';
+import { LobbyCleanerRepository } from './events/listeners/lobby-cleaner/lobby-cleaner.repository';
 import { CreateLobbyRepository } from './private/create-lobby/create-lobby.repository';
 import { CreateLobbyUseCase } from './private/create-lobby/create-lobby.uc';
 import { GetLobbiesRepository } from './private/get-lobbies/get-lobbies.repository';
@@ -35,6 +37,8 @@ import { LobbyPrivateGateway } from './private/lobby-private.gateway';
     ListenLobbiesChangesUseCase,
     LobbiesChangesListener,
     LobbiesChangesRepository,
+    LobbyCleanerListener,
+    LobbyCleanerRepository,
   ],
 })
 export class LobbyModule {}
