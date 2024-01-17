@@ -17,11 +17,11 @@ export class CreateLobbyUseCase implements UseCase {
   ) {}
 
   public async execute({
-    client,
+    ctx,
     userId,
     createLobbyInputDto,
   }: {
-    client: ServerSocket;
+    ctx: MessageContext;
     userId: User['id'];
     createLobbyInputDto: CreateLobbyInputDto;
   }): Promise<LobbyEntity> {
@@ -44,7 +44,7 @@ export class CreateLobbyUseCase implements UseCase {
     this.eventEmitter.emitAsync(
       LobbyEvent.UserJoinedLobby,
       new UserJoinedLobbyPayload({
-        client,
+        ctx,
         userId,
         lobbyId: lobby.id,
       }),

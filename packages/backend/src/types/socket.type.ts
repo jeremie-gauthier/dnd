@@ -1,5 +1,12 @@
 import { ClientToServerEvents, ServerToClientEvents } from '@dnd/shared';
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
+
+export type WsServer = Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  never,
+  { userId: string }
+>;
 
 export type ServerSocket = Socket<
   ClientToServerEvents,
@@ -7,3 +14,8 @@ export type ServerSocket = Socket<
   never,
   { userId: string }
 >;
+
+export type MessageContext = {
+  server: WsServer;
+  client: ServerSocket;
+};

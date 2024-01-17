@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
+import { LOBBIES_ROOM } from 'src/lobby/constants';
 import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
 import { UserJoinedLobbyPayload } from 'src/lobby/events/emitters/user-joined-lobby.payload';
 import { TrackUserAccrossLobbiesRepository } from './track-user-accross-lobbies.repository';
@@ -12,7 +13,8 @@ export class TrackUserAccrossLobbiesListener {
   public async handler(payload: UserJoinedLobbyPayload) {
     await Promise.all([
       this.repository.saveUserLobby(payload),
-      payload.client.join(payload.lobbyId),
+      payload.ctx.client.join(payload.lobbyId),
+      payload.ctx.client.leave(LOBBIES_ROOM),
     ]);
   }
 }

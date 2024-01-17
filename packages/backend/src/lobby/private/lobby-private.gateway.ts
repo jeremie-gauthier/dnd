@@ -9,10 +9,9 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { ZodValidationPipe } from 'nestjs-zod';
-import { Server } from 'socket.io';
 import { JWTAuthGuard } from 'src/authz/jwt-auth.guard';
 import { WsExceptionFilter } from 'src/errors/ws-exception-filter';
-import { ServerSocket } from 'src/types/socket.type';
+import { ServerSocket, WsServer } from 'src/types/socket.type';
 import { CreateLobbyInputDto, CreateLobbyOutputDto } from './create-lobby/create-lobby.dto';
 import { CreateLobbyUseCase } from './create-lobby/create-lobby.uc';
 import { HandleWsConnectionUseCase } from './handle-ws-connection/handle-ws-connection.uc';
@@ -37,7 +36,7 @@ export class LobbyPrivateGateway implements OnGatewayConnection {
   ) {}
 
   @WebSocketServer()
-  private server: Server;
+  private readonly server: WsServer;
 
   public async handleConnection(client: ServerSocket) {
     await this.handleWsConnectionUseCase.execute(client);
@@ -45,13 +44,20 @@ export class LobbyPrivateGateway implements OnGatewayConnection {
 
   // TODO: implem handleDisconnect
 
+  private getMessageContext(client: ServerSocket) {
+    return {
+      server: this.server,
+      client,
+    };
+  }
+
   @SubscribeMessage(ClientLobbyEvent.RequestCreateLobby)
   public async requestLobbyCreation(
     @MessageBody() createLobbyInputDto: CreateLobbyInputDto,
     @ConnectedSocket() client: ServerSocket,
   ): Promise<CreateLobbyOutputDto> {
     const lobby = await this.createLobbyUseCase.execute({
-      client,
+      ctx: this.getMessageContext(client),
       userId: client.data.userId,
       createLobbyInputDto,
     });
@@ -64,7 +70,7 @@ export class LobbyPrivateGateway implements OnGatewayConnection {
     @ConnectedSocket() client: ServerSocket,
   ) {
     const lobbyId = await this.joinLobbyUseCase.execute({
-      client,
+      ctx: this.getMessageContext(client),
       userId: client.data.userId,
       ...joinLobbyDto,
     });
