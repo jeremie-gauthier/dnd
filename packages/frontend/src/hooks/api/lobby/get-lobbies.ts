@@ -6,11 +6,13 @@ import { fetcherWithAuth } from '../../../config/fetcher';
 
 export type GetLobbiesResponse = z.infer<typeof getLobbiesOutputSchema>;
 
+export const GET_LOBBIES_QUERY_KEY = ['lobbies'];
+
 export const useGetLobbies = () => {
   const { getAccessTokenSilently } = useAuth0();
 
   return useQuery({
-    queryKey: ['lobbies'],
+    queryKey: GET_LOBBIES_QUERY_KEY,
     queryFn: () =>
       fetcherWithAuth<GetLobbiesResponse>(
         `http://localhost:3000/lobby/private/get-lobbies`,
