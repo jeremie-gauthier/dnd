@@ -9,6 +9,7 @@ interface ClientToServerEventsAndPayloads extends Record<string, (...parameters:
     stageId: string;
   }) => LobbyEntity;
   [ClientLobbyEvent.RequestJoinLobby]: (payload: { lobbyId: string }) => { lobbyId: string };
+  [ClientLobbyEvent.ListenLobbiesChanges]: () => void;
   [ClientGameEvent.PlayerIsReady]: () => void;
 }
 
