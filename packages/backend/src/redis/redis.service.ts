@@ -17,7 +17,7 @@ export class RedisService implements OnModuleInit, OnApplicationShutdown {
 
     const env = this.configService.get('NODE_ENV');
     if (env === 'development') {
-      // await this.client.flushAll();
+      await this.client.flushAll();
     }
   }
 

@@ -10,6 +10,17 @@ type LobbyPlayer = {
   heroesSelected: Hero['id'][];
 };
 
+type LobbyCampaign = {
+  id: string;
+  title: string;
+  nbStages: number;
+  stage: {
+    id: string;
+    title: string;
+    order: number;
+  };
+};
+
 export type LobbyEntity = {
   id: string;
   host: {
@@ -17,7 +28,7 @@ export type LobbyEntity = {
   };
   config: {
     nbPlayersMax: number;
-    stageId: string;
+    campaign: LobbyCampaign;
   };
   players: LobbyPlayer[];
   heroesAvailable: Hero[];

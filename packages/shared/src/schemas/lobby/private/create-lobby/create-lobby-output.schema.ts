@@ -12,7 +12,16 @@ export const createLobbyOutputSchema = z.object({
   }),
   config: z.object({
     nbPlayersMax: z.number(),
-    stageId: z.string(),
+    campaign: z.object({
+      id: z.string(),
+      title: z.string(),
+      nbStages: z.number(),
+      stage: z.object({
+        id: z.string(),
+        title: z.string(),
+        order: z.number(),
+      }),
+    }),
   }),
   players: z.array(
     z.object({

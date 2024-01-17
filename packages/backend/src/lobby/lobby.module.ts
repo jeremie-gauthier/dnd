@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthzModule } from 'src/authz/authz.module';
 import { Campaign } from 'src/database/entities/campaign.entity';
 import { RedisModule } from 'src/redis/redis.module';
+import { LobbiesChangesListener } from './events/listeners/lobbies-changes/lobbies-changes.listener';
+import { LobbiesChangesRepository } from './events/listeners/lobbies-changes/lobbies-changes.repository';
 import { CreateLobbyRepository } from './private/create-lobby/create-lobby.repository';
 import { CreateLobbyUseCase } from './private/create-lobby/create-lobby.uc';
 import { GetLobbiesRepository } from './private/get-lobbies/get-lobbies.repository';
@@ -27,6 +29,8 @@ import { LobbyPrivateGateway } from './private/lobby-private.gateway';
     JoinLobbyUseCase,
     JoinLobbyRepository,
     ListenLobbiesChangesUseCase,
+    LobbiesChangesListener,
+    LobbiesChangesRepository,
   ],
 })
 export class LobbyModule {}
