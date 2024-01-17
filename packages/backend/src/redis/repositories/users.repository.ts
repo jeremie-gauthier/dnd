@@ -24,4 +24,12 @@ export class UsersRepository {
   }): Promise<void> {
     await this.client.hSet(UsersRepository.KEY, userId, lobbyId);
   }
+
+  public async del(userId: User['id']): Promise<void> {
+    await this.client.hDel(UsersRepository.KEY, userId);
+  }
+
+  public async get(userId: User['id']): Promise<LobbyEntity['id'] | undefined> {
+    return await this.client.hGet(UsersRepository.KEY, userId);
+  }
 }

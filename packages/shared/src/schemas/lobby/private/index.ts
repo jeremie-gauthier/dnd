@@ -6,3 +6,5 @@ export * from './join-lobby/join-lobby-input.schema';
 export * from './join-lobby/join-lobby-output.schema';
 export * from './listen-lobbies-changes/listen-lobbies-changes-input.schema';
 export * from './listen-lobbies-changes/listen-lobbies-changes-output.schema';
+export * from './handle-ws-disconnection/handle-ws-disconnection-input.schema';
+export * from './handle-ws-disconnection/handle-ws-disconnection-output.schema';

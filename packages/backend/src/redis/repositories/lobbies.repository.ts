@@ -41,6 +41,14 @@ export class LobbiesRepository implements OnApplicationBootstrap {
     return newLobby;
   }
 
+  public async update(updatedLobby: LobbyEntity): Promise<void> {
+    await this.client.json.set(LobbiesRepository.KEY, updatedLobby.id, updatedLobby);
+  }
+
+  public async del(lobbyId: LobbyEntity['id']): Promise<void> {
+    await this.client.json.del(LobbiesRepository.KEY, lobbyId);
+  }
+
   private getRandomLobbyId(): string {
     const randomId = randomUUID();
     return randomId;

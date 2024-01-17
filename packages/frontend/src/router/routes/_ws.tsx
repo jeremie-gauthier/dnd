@@ -22,6 +22,10 @@ export const Route = new FileRoute('/_ws').createRoute({
       }
     });
   },
+  onLeave: ({ context }) => {
+    const { socket } = context;
+    socket.disconnect();
+  },
   component: withAuthenticationRequired(WsRouteComponent),
 });
 

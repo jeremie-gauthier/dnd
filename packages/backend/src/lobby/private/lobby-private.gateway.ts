@@ -4,6 +4,7 @@ import {
   ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
+  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -15,6 +16,7 @@ import { ServerSocket, WsServer } from 'src/types/socket.type';
 import { CreateLobbyInputDto, CreateLobbyOutputDto } from './create-lobby/create-lobby.dto';
 import { CreateLobbyUseCase } from './create-lobby/create-lobby.uc';
 import { HandleWsConnectionUseCase } from './handle-ws-connection/handle-ws-connection.uc';
+import { HandleWsDisconnectionUseCase } from './handle-ws-disconnection/handle-ws-disconnection.uc';
 import { JoinLobbyInputDto, JoinLobbyOutputDto } from './join-lobby/join-lobby.dto';
 import { JoinLobbyUseCase } from './join-lobby/join-lobby.uc';
 import { ListenLobbiesChangesUseCase } from './listen-lobbies-changes/listen-lobbies-changes.uc';
@@ -27,9 +29,10 @@ import { ListenLobbiesChangesUseCase } from './listen-lobbies-changes/listen-lob
     origin: 'http://localhost:5173',
   },
 })
-export class LobbyPrivateGateway implements OnGatewayConnection {
+export class LobbyPrivateGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly handleWsConnectionUseCase: HandleWsConnectionUseCase,
+    private readonly handleWsDisconnectionUseCase: HandleWsDisconnectionUseCase,
     private readonly createLobbyUseCase: CreateLobbyUseCase,
     private readonly joinLobbyUseCase: JoinLobbyUseCase,
     private readonly listenLobbiesChangesUseCase: ListenLobbiesChangesUseCase,
@@ -42,7 +45,9 @@ export class LobbyPrivateGateway implements OnGatewayConnection {
     await this.handleWsConnectionUseCase.execute(client);
   }
 
-  // TODO: implem handleDisconnect
+  public async handleDisconnect(client: ServerSocket) {
+    await this.handleWsDisconnectionUseCase.execute(client);
+  }
 
   private getMessageContext(client: ServerSocket) {
     return {
@@ -82,4 +87,6 @@ export class LobbyPrivateGateway implements OnGatewayConnection {
     await this.listenLobbiesChangesUseCase.execute(client);
     return { message: 'You are now listening on lobbies changes' };
   }
+
+  // TODO: leave room
 }
