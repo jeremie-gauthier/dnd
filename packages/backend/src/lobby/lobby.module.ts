@@ -10,6 +10,7 @@ import { GetLobbiesUseCase } from './private/get-lobbies/get-lobbies.uc';
 import { HandleWsConnectionUseCase } from './private/handle-ws-connection/handle-ws-connection.uc';
 import { JoinLobbyRepository } from './private/join-lobby/join-lobby.repository';
 import { JoinLobbyUseCase } from './private/join-lobby/join-lobby.uc';
+import { ListenLobbiesChangesUseCase } from './private/listen-lobbies-changes/listen-lobbies-changes.uc';
 import { LobbyPrivateController } from './private/lobby-private.controller';
 import { LobbyPrivateGateway } from './private/lobby-private.gateway';
 
@@ -25,6 +26,7 @@ import { LobbyPrivateGateway } from './private/lobby-private.gateway';
     GetLobbiesRepository,
     JoinLobbyUseCase,
     JoinLobbyRepository,
+    ListenLobbiesChangesUseCase,
   ],
 })
 export class LobbyModule {}

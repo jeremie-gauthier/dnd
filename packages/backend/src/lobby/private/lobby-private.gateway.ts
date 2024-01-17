@@ -18,6 +18,7 @@ import { CreateLobbyUseCase } from './create-lobby/create-lobby.uc';
 import { HandleWsConnectionUseCase } from './handle-ws-connection/handle-ws-connection.uc';
 import { JoinLobbyInputDto, JoinLobbyOutputDto } from './join-lobby/join-lobby.dto';
 import { JoinLobbyUseCase } from './join-lobby/join-lobby.uc';
+import { ListenLobbiesChangesUseCase } from './listen-lobbies-changes/listen-lobbies-changes.uc';
 
 @UseGuards(JWTAuthGuard)
 @UsePipes(ZodValidationPipe)
@@ -32,6 +33,7 @@ export class LobbyPrivateGateway implements OnGatewayConnection {
     private readonly handleWsConnectionUseCase: HandleWsConnectionUseCase,
     private readonly createLobbyUseCase: CreateLobbyUseCase,
     private readonly joinLobbyUseCase: JoinLobbyUseCase,
+    private readonly listenLobbiesChangesUseCase: ListenLobbiesChangesUseCase,
   ) {}
 
   @WebSocketServer()
@@ -67,5 +69,11 @@ export class LobbyPrivateGateway implements OnGatewayConnection {
       ...joinLobbyDto,
     });
     return JoinLobbyOutputDto.schema.parse({ lobbyId });
+  }
+
+  @SubscribeMessage(ClientLobbyEvent.ListenLobbiesChanges)
+  public async listenLobbiesChanges(@ConnectedSocket() client: ServerSocket) {
+    await this.listenLobbiesChangesUseCase.execute(client);
+    return { message: 'You are now listening on lobbies changes' };
   }
 }
