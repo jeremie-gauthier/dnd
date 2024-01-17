@@ -46,7 +46,7 @@ export class LobbyPrivateGateway implements OnGatewayConnection, OnGatewayDiscon
   }
 
   public async handleDisconnect(client: ServerSocket) {
-    await this.handleWsDisconnectionUseCase.execute(client);
+    await this.handleWsDisconnectionUseCase.execute(this.getMessageContext(client));
   }
 
   private getMessageContext(client: ServerSocket) {

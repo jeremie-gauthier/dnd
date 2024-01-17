@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ServerSocket } from 'src/types/socket.type';
+import { MessageContext, ServerSocket } from 'src/types/socket.type';
 import { UseCase } from 'src/types/use-case.interface';
 import { HandleWsDisconnectionRepository } from './handle-ws-disconnection.repository';
 
@@ -7,8 +7,18 @@ import { HandleWsDisconnectionRepository } from './handle-ws-disconnection.repos
 export class HandleWsDisconnectionUseCase implements UseCase {
   constructor(private readonly repository: HandleWsDisconnectionRepository) {}
 
-  public async execute(client: ServerSocket): Promise<void> {
-    await Promise.all([this.leaveRooms(client), this.repository.forgetUser(client.data.userId)]);
+  public async execute(ctx: MessageContext): Promise<void> {
+    const { userId } = ctx.client.data;
+    const lobbyId = await this.repository.getCachedUserLobbyId(userId);
+    if (!lobbyId) {
+      return;
+    }
+
+    await Promise.all([
+      this.leaveRooms(ctx.client),
+      this.repository.forgetUser(userId),
+      this.repository.removePlayerFromLobby({ ctx, userId, lobbyId }),
+    ]);
   }
 
   private async leaveRooms(client: ServerSocket) {

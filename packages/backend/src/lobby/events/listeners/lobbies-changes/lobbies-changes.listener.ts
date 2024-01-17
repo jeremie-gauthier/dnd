@@ -11,6 +11,8 @@ export class LobbiesChangesListener {
   constructor(private readonly repository: LobbiesChangesRepository) {}
 
   @OnEvent(LobbyEvent.UserJoinedLobby)
+  @OnEvent(LobbyEvent.UserForceLeftLobby)
+  @OnEvent(LobbyEvent.UserLeftLobby)
   public async handler({ ctx, lobbyId }: UserJoinedLobbyPayload) {
     const lobby = await this.repository.getLobbyById(lobbyId);
     if (!lobby) {

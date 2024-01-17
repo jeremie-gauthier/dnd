@@ -1,46 +1,55 @@
 import { LobbyEntity } from '@dnd/shared';
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { User } from 'src/database/entities/user.entity';
+import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
+import { UserForceLeftLobbyPayload } from 'src/lobby/events/emitters/user-force-left-lobby.payload';
 import { LobbiesRepository } from 'src/redis/repositories/lobbies.repository';
 import { UsersRepository } from 'src/redis/repositories/users.repository';
+import { MessageContext } from 'src/types/socket.type';
 
 @Injectable()
 export class HandleWsDisconnectionRepository {
   constructor(
+    private readonly eventEmitter: EventEmitter2,
     private readonly usersRepository: UsersRepository,
     private readonly lobbiesRepository: LobbiesRepository,
   ) {}
 
-  public async forgetUser(userId: User['id']): Promise<void> {
-    const userLobbyId = await this.usersRepository.get(userId);
-    if (!userLobbyId) {
-      return;
-    }
-
-    await Promise.all([
-      this.usersRepository.del(userId),
-      this.removePlayerFromLobby(userId, userLobbyId),
-    ]);
+  public async getCachedUserLobbyId(userId: User['id']): Promise<LobbyEntity['id'] | undefined> {
+    return await this.usersRepository.get(userId);
   }
 
-  private async removePlayerFromLobby(
-    userId: User['id'],
-    lobbyId: LobbyEntity['id'],
-  ): Promise<void> {
+  public async forgetUser(userId: User['id']): Promise<void> {
+    await this.usersRepository.del(userId);
+  }
+
+  public async removePlayerFromLobby({
+    ctx,
+    userId,
+    lobbyId,
+  }: {
+    ctx: MessageContext;
+    userId: User['id'];
+    lobbyId: LobbyEntity['id'];
+  }): Promise<void> {
     const lobby = await this.lobbiesRepository.getOne(lobbyId);
     if (!lobby) {
       return;
     }
 
-    const players = lobby.players.filter((player) => player.userId !== userId);
+    await this.lobbiesRepository.update({
+      ...lobby,
+      players: lobby.players.filter((player) => player.userId !== userId),
+    });
 
-    if (players.length === 0) {
-      await this.lobbiesRepository.del(lobbyId);
-    } else {
-      await this.lobbiesRepository.update({
-        ...lobby,
-        players,
-      });
-    }
+    this.eventEmitter.emit(
+      LobbyEvent.UserForceLeftLobby,
+      new UserForceLeftLobbyPayload({
+        ctx,
+        userId,
+        lobbyId,
+      }),
+    );
   }
 }
