@@ -22,7 +22,7 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
     e.preventDefault();
     e.stopPropagation();
 
-    const lobby = await socket.emitWithAck(ClientLobbyEvent.RequestNewGame, form.state.values);
+    const lobby = await socket.emitWithAck(ClientLobbyEvent.RequestCreateLobby, form.state.values);
 
     return navigate({
       to: `/lobby/$lobbyId`,

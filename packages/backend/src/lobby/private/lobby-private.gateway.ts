@@ -43,8 +43,8 @@ export class LobbyPrivateGateway implements OnGatewayConnection {
 
   // TODO: implem handleDisconnect
 
-  @SubscribeMessage(ClientLobbyEvent.RequestNewGame)
-  public async requestGameCreation(
+  @SubscribeMessage(ClientLobbyEvent.RequestCreateLobby)
+  public async requestLobbyCreation(
     @MessageBody() createLobbyInputDto: CreateLobbyInputDto,
     @ConnectedSocket() client: ServerSocket,
   ): Promise<CreateLobbyOutputDto> {

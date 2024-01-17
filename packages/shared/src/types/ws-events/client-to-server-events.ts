@@ -4,7 +4,7 @@ import { ClientLobbyEvent } from './lobby-events/lobby-events.client';
 import { EventsMapper } from './utils.type';
 
 interface ClientToServerEventsAndPayloads extends Record<string, (...parameters: any[]) => any> {
-  [ClientLobbyEvent.RequestNewGame]: (payload: {
+  [ClientLobbyEvent.RequestCreateLobby]: (payload: {
     nbPlayersMax: number;
     stageId: string;
   }) => LobbyEntity;
