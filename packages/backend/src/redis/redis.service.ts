@@ -1,9 +1,9 @@
-import { Injectable, OnApplicationBootstrap, OnApplicationShutdown } from '@nestjs/common';
+import { Injectable, OnApplicationShutdown, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createClient } from 'redis';
 
 @Injectable()
-export class RedisService implements OnApplicationBootstrap, OnApplicationShutdown {
+export class RedisService implements OnModuleInit, OnApplicationShutdown {
   public readonly client;
   public static readonly JSON_ROOT = '$';
 
@@ -12,7 +12,7 @@ export class RedisService implements OnApplicationBootstrap, OnApplicationShutdo
     this.client = createClient(redisOptions);
   }
 
-  public async onApplicationBootstrap() {
+  public async onModuleInit() {
     await this.client.connect();
 
     const env = this.configService.get('NODE_ENV');
