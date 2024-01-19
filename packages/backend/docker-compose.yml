@@ -25,10 +25,15 @@ services:
     ports:
       - 8080:8080
 
-  # redis:
-  #   image: redis:latest
-  #   ports:
-  #     - '6379:6379'
+  redis:
+    image: redis/redis-stack:latest
+    ports:
+      - '6379:6379'
+
+  redis-insight:
+    image: redislabs/redisinsight
+    ports:
+      - '8001:8001'
 
 volumes:
   db_data:

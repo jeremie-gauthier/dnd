@@ -2,7 +2,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Outlet, rootRouteWithContext, useRouterState } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
-import { Auth } from '../../contexts/auth.context';
+import { ClientSocket } from '../../types/socket.type';
 
 function RouterLoader() {
   const isLoading = useRouterState({ select: (s) => s.status === 'pending' });
@@ -15,8 +15,8 @@ function RouterLoader() {
 }
 
 export const Route = rootRouteWithContext<{
-  auth: Auth;
   queryClient: QueryClient;
+  socket: ClientSocket;
 }>()({
   component: RootComponent,
 });
@@ -25,11 +25,9 @@ function RootComponent() {
   return (
     <>
       <div className={`min-h-screen flex flex-col`}>
-        <div className={`flex items-center border-b gap-2`}>
-          <h1 className={`text-3xl p-2`}>DnD</h1>
-          <div className={`text-3xl`}>
-            <RouterLoader />
-          </div>
+        <h1 className={`text-3xl p-2`}>DnD</h1>
+        <div className={`text-3xl`}>
+          <RouterLoader />
         </div>
 
         <div className={`flex-1 flex`}>

@@ -1,3 +1,3 @@
-export enum ServerGameEvent {
-  GameStart = 'server.game.start',
-}
+export const ServerGameEvent = {
+  GameStart: 'server.game.start',
+} as const;

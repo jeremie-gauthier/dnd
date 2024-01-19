@@ -11,10 +11,10 @@ const CANVAS_HEIGHT = 1000;
 
 export const GameView = ({ map }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const tileDimension = {
-    width: CANVAS_WIDTH / map.width,
-    height: CANVAS_HEIGHT / map.height,
-  };
+  // const tileDimension = {
+  //   width: CANVAS_WIDTH / map.width,
+  //   height: CANVAS_HEIGHT / map.height,
+  // };
 
   const handleCanvasClick = (evt: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
     console.log(evt);
@@ -28,7 +28,7 @@ export const GameView = ({ map }: Props) => {
     if (!context) return;
 
     // Array.from({ length: map.width * map.height }).map
-    const tiles = [];
+    // const tiles = [];
     for (let x = 0; x < map.width; x++) {
       for (let y = 0; y < map.height; y++) {
         // create tile

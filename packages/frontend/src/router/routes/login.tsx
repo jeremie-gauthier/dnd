@@ -17,17 +17,11 @@ export const Route = new FileRoute('/login')
 
 function LoginComponent() {
   const router = useRouter();
-  const routeContext = Route.useRouteContext();
   const search = Route.useSearch();
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated, user, logout } = useAuth0();
 
   React.useLayoutEffect(() => {
-    if (isAuthenticated && user) {
-      routeContext?.auth.login({
-        id: user.sub!,
-        name: user.nickname!,
-        picture: user.picture!,
-      });
+    if (isAuthenticated) {
       router.invalidate();
 
       if (search.redirect) {
@@ -45,7 +39,7 @@ function LoginComponent() {
 
       <LogoutButton
         afterLogout={() => {
-          routeContext.auth.logout();
+          logout();
           router.invalidate();
         }}
       />

@@ -1,3 +1,5 @@
-export enum ClientLobbyEvent {
-  RequestNewGame = 'client.lobby.request_new_game',
-}
+export const ClientLobbyEvent = {
+  RequestCreateLobby: 'client.lobby.request_create_lobby',
+  RequestJoinLobby: 'client.lobby.request_join_lobby',
+  ListenLobbiesChanges: 'client.lobbies.listen_changes',
+} as const;

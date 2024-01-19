@@ -1,47 +1,96 @@
-import { Route as rootRoute } from "./routes/__root"
-import { Route as LoginRoute } from "./routes/login"
-import { Route as AuthRoute } from "./routes/_auth"
-import { Route as AuthProfileRoute } from "./routes/_auth.profile"
-import { Route as AuthMenuRoute } from "./routes/_auth.menu"
+import { Route as rootRoute } from './routes/__root'
+import { Route as ProfileImport } from './routes/profile'
+import { Route as MenuImport } from './routes/menu'
+import { Route as LoginImport } from './routes/login'
+import { Route as WsImport } from './routes/_ws'
+import { Route as WsMenuMultiplayerImport } from './routes/_ws.menu-multiplayer'
+import { Route as WsLobbiesImport } from './routes/_ws.lobbies'
+import { Route as WsCreateLobbyImport } from './routes/_ws.create-lobby'
+import { Route as WsLobbyLobbyIdImport } from './routes/_ws.lobby.$lobbyId'
 
-declare module "@tanstack/react-router" {
+const ProfileRoute = ProfileImport.update({
+  path: '/profile',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MenuRoute = MenuImport.update({
+  path: '/menu',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LoginRoute = LoginImport.update({
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const WsRoute = WsImport.update({
+  id: '/_ws',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const WsMenuMultiplayerRoute = WsMenuMultiplayerImport.update({
+  path: '/menu-multiplayer',
+  getParentRoute: () => WsRoute,
+} as any)
+
+const WsLobbiesRoute = WsLobbiesImport.update({
+  path: '/lobbies',
+  getParentRoute: () => WsRoute,
+} as any)
+
+const WsCreateLobbyRoute = WsCreateLobbyImport.update({
+  path: '/create-lobby',
+  getParentRoute: () => WsRoute,
+} as any)
+
+const WsLobbyLobbyIdRoute = WsLobbyLobbyIdImport.update({
+  path: '/lobby/$lobbyId',
+  getParentRoute: () => WsRoute,
+} as any)
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/_auth": {
+    '/_ws': {
+      preLoaderRoute: typeof WsImport
       parentRoute: typeof rootRoute
     }
-    "/login": {
+    '/login': {
+      preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    "/_auth/menu": {
-      parentRoute: typeof AuthRoute
+    '/menu': {
+      preLoaderRoute: typeof MenuImport
+      parentRoute: typeof rootRoute
     }
-    "/_auth/profile": {
-      parentRoute: typeof AuthRoute
+    '/profile': {
+      preLoaderRoute: typeof ProfileImport
+      parentRoute: typeof rootRoute
+    }
+    '/_ws/create-lobby': {
+      preLoaderRoute: typeof WsCreateLobbyImport
+      parentRoute: typeof WsImport
+    }
+    '/_ws/lobbies': {
+      preLoaderRoute: typeof WsLobbiesImport
+      parentRoute: typeof WsImport
+    }
+    '/_ws/menu-multiplayer': {
+      preLoaderRoute: typeof WsMenuMultiplayerImport
+      parentRoute: typeof WsImport
+    }
+    '/_ws/lobby/$lobbyId': {
+      preLoaderRoute: typeof WsLobbyLobbyIdImport
+      parentRoute: typeof WsImport
     }
   }
 }
-
-Object.assign(AuthRoute.options, {
-  id: "/auth",
-  getParentRoute: () => rootRoute,
-})
-
-Object.assign(LoginRoute.options, {
-  path: "/login",
-  getParentRoute: () => rootRoute,
-})
-
-Object.assign(AuthMenuRoute.options, {
-  path: "/menu",
-  getParentRoute: () => AuthRoute,
-})
-
-Object.assign(AuthProfileRoute.options, {
-  path: "/profile",
-  getParentRoute: () => AuthRoute,
-})
-
 export const routeTree = rootRoute.addChildren([
-  AuthRoute.addChildren([AuthMenuRoute, AuthProfileRoute]),
+  WsRoute.addChildren([
+    WsCreateLobbyRoute,
+    WsLobbiesRoute,
+    WsMenuMultiplayerRoute,
+    WsLobbyLobbyIdRoute,
+  ]),
   LoginRoute,
+  MenuRoute,
+  ProfileRoute,
 ])

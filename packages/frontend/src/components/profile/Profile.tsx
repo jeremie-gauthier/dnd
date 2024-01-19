@@ -1,7 +1,7 @@
-import { AuthUser } from '../../contexts/auth.context';
+import { User } from '@auth0/auth0-react';
 
 type Props = {
-  user: AuthUser;
+  user: User;
   userMetadata: Record<string, string> | null;
 };
 

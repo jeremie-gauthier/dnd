@@ -11,8 +11,21 @@
     "start:dev:db": "docker-compose -f ./packages/backend/docker-compose.yml up -d --build",
     "start:dev:server": "npm run start:dev --workspace=@dnd/backend",
     "start:dev": "npm run start:dev:db && npm run start:dev:server",
-    "reinstall": "rm -rf packages/backend/node_modules packages/backend/dist packages/frontend/node_modules packages/shared/node_modules packages/shared/dist && npm i",
+    "remove:node_modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' \\;",
+    "remove:builds": "find . -name 'dist' -type d -prune -exec rm -rf '{}' \\;",
+    "reinstall": "npm run remove:node_modules && npm run remove:builds && npm i",
+    "publish:packages": "npm run publish:prettier && npm run publish:shared",
     "publish:prettier": "npm run publish -w @dnd/prettier-config",
-    "publish:shared": "npm run publish -w @dnd/shared"
+    "publish:shared": "npm run --silent publish -w @dnd/shared",
+    "new-uc": "node ./scripts/new-uc && npm run publish:shared",
+    "new-listener": "node ./scripts/new-listener",
+    "new-emitter": "node ./scripts/new-emitter"
+  },
+  "devDependencies": {
+    "@inquirer/prompts": "^3.3.0",
+    "dedent": "^1.5.1",
+    "inquirer-directory": "^2.2.0",
+    "lodash.camelcase": "^4.3.0",
+    "lodash.kebabcase": "^4.1.1"
   }
 }
