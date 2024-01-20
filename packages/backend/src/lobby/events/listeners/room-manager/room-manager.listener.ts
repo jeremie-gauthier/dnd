@@ -1,14 +1,8 @@
-import { LobbyEntity } from '@dnd/shared';
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { LOBBIES_ROOM } from 'src/lobby/constants';
-import { MessageContext } from 'src/types/socket.type';
 import { LobbyEvent } from '../../emitters/lobby-events.enum';
-
-type EventNames =
-  | LobbyEvent.UserJoinedLobby
-  | LobbyEvent.UserLeftLobby
-  | LobbyEvent.UserForceLeftLobby;
+import type { RoomManagerEventNames, RoomManagerEventPayloads } from './room-manager.type';
 
 @Injectable()
 export class RoomManagerListener {
@@ -17,16 +11,8 @@ export class RoomManagerListener {
   @OnEvent(LobbyEvent.UserJoinedLobby)
   @OnEvent(LobbyEvent.UserLeftLobby)
   @OnEvent(LobbyEvent.UserForceLeftLobby)
-  public async handler({
-    name,
-    ctx,
-    lobbyId,
-  }: {
-    name: EventNames;
-    ctx: MessageContext;
-    lobbyId: LobbyEntity['id'];
-  }) {
-    if (this.hasJoinedALobby(name)) {
+  public async handler({ name, ctx, lobbyId }: RoomManagerEventPayloads) {
+    if (this.isAJoinLobbyEvent(name)) {
       await ctx.client.leave(LOBBIES_ROOM);
       await ctx.client.join(lobbyId);
     } else {
@@ -34,7 +20,7 @@ export class RoomManagerListener {
     }
   }
 
-  private hasJoinedALobby(name: EventNames): boolean {
+  private isAJoinLobbyEvent(name: RoomManagerEventNames): boolean {
     return name === LobbyEvent.UserJoinedLobby;
   }
 }
