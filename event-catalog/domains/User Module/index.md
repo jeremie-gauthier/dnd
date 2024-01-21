@@ -7,6 +7,4 @@ repository:
   url: https://github.com/jeremie-gauthier/dnd/tree/main/packages/backend/src/user
 ---
 
-Module that handles interactions user actions.
-
 <NodeGraph />

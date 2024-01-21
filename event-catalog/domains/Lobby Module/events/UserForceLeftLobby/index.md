@@ -4,10 +4,12 @@ version: 0.0.1
 summary: |
   Represents when a user was forced to left a lobby.
 producers:
-  - Lobby Module
+  - Handle WS Disconnection UC
 consumers:
-  - Lobby Module
-  - User Module
+  - Track User Accross Lobbies Listener
+  - Room Manager Listener
+  - Lobbies Changes Listener
+  - Lobby Cleaner Listener
 ---
 
 ### Details

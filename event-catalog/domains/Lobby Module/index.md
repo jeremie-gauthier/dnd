@@ -7,6 +7,4 @@ repository:
   url: https://github.com/jeremie-gauthier/dnd/tree/main/packages/backend/src/lobby
 ---
 
-Module that handles interactions between users and the lobbies.
-
 <NodeGraph />
