@@ -1,0 +1,13 @@
+---
+name: UserJoinedLobby
+version: 0.0.1
+summary: |
+  Represents when a user has join a lobby.
+producers:
+  - Lobby Module
+consumers:
+  - Lobby Module
+  - User Module
+---
+
+<NodeGraph title="Consumer / Producer Diagram" />
