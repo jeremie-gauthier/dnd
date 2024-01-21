@@ -19,6 +19,8 @@ import { HandleWsConnectionUseCase } from './handle-ws-connection/handle-ws-conn
 import { HandleWsDisconnectionUseCase } from './handle-ws-disconnection/handle-ws-disconnection.uc';
 import { JoinLobbyInputDto, JoinLobbyOutputDto } from './join-lobby/join-lobby.dto';
 import { JoinLobbyUseCase } from './join-lobby/join-lobby.uc';
+import { LeaveLobbyOutputDto } from './leave-lobby/leave-lobby.dto';
+import { LeaveLobbyUseCase } from './leave-lobby/leave-lobby.uc';
 import { ListenLobbiesChangesUseCase } from './listen-lobbies-changes/listen-lobbies-changes.uc';
 
 @UseGuards(JWTAuthGuard)
@@ -35,6 +37,7 @@ export class LobbyPrivateGateway implements OnGatewayConnection, OnGatewayDiscon
     private readonly handleWsDisconnectionUseCase: HandleWsDisconnectionUseCase,
     private readonly createLobbyUseCase: CreateLobbyUseCase,
     private readonly joinLobbyUseCase: JoinLobbyUseCase,
+    private readonly leaveLobbyUseCase: LeaveLobbyUseCase,
     private readonly listenLobbiesChangesUseCase: ListenLobbiesChangesUseCase,
   ) {}
 
@@ -88,5 +91,12 @@ export class LobbyPrivateGateway implements OnGatewayConnection, OnGatewayDiscon
     return { message: 'You are now listening on lobbies changes' };
   }
 
-  // TODO: leave room
+  @SubscribeMessage(ClientLobbyEvent.RequestLeaveLobby)
+  public async leaveLobby(@ConnectedSocket() client: ServerSocket) {
+    await this.leaveLobbyUseCase.execute({
+      ctx: this.getMessageContext(client),
+      userId: client.data.userId,
+    });
+    return LeaveLobbyOutputDto.schema.parse({ message: 'Ok' });
+  }
 }

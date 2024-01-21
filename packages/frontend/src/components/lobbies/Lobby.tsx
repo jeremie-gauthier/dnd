@@ -1,14 +1,25 @@
+import { ClientLobbyEvent } from '@dnd/shared';
+import { useNavigate } from '@tanstack/react-router';
 import { GetLobbyResponse } from '../../hooks/api/lobby/get-lobby';
+import { ClientSocket } from '../../types/socket.type';
 
 type Props = {
   lobby: GetLobbyResponse;
+  socket: ClientSocket;
 };
 
-export const Lobby = ({ lobby }: Props) => {
+export const Lobby = ({ lobby, socket }: Props) => {
+  const navigate = useNavigate();
+
   console.log(lobby);
-  const handleClickOnLeaveLobby = () => {
+
+  const handleClickOnLeaveLobby = async () => {
     console.log('leaving this lobby');
-    // TODO: disconnect socket from this lobby group
+
+    await socket.emitWithAck(ClientLobbyEvent.RequestLeaveLobby);
+    return navigate({
+      to: `/lobbies`,
+    });
   };
 
   const handleClickOnReady = () => {

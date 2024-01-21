@@ -8,6 +8,7 @@ export const Route = new FileRoute('/_ws/lobby/$lobbyId').createRoute({
 });
 
 export function MenuRouteComponent() {
+  const { socket } = Route.useRouteContext();
   const { lobbyId } = Route.useParams();
   const { data: lobby, isLoading: isLobbyLoading } = useGetLobby(lobbyId);
 
@@ -19,5 +20,5 @@ export function MenuRouteComponent() {
     return <div>Lobby data is loading</div>;
   }
 
-  return <Lobby lobby={lobby} />;
+  return <Lobby lobby={lobby} socket={socket} />;
 }

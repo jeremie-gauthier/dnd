@@ -17,6 +17,8 @@ import { HandleWsDisconnectionRepository } from './private/handle-ws-disconnecti
 import { HandleWsDisconnectionUseCase } from './private/handle-ws-disconnection/handle-ws-disconnection.uc';
 import { JoinLobbyRepository } from './private/join-lobby/join-lobby.repository';
 import { JoinLobbyUseCase } from './private/join-lobby/join-lobby.uc';
+import { LeaveLobbyRepository } from './private/leave-lobby/leave-lobby.repository';
+import { LeaveLobbyUseCase } from './private/leave-lobby/leave-lobby.uc';
 import { ListenLobbiesChangesUseCase } from './private/listen-lobbies-changes/listen-lobbies-changes.uc';
 import { LobbyPrivateController } from './private/lobby-private.controller';
 import { LobbyPrivateGateway } from './private/lobby-private.gateway';
@@ -41,6 +43,8 @@ import { LobbyPrivateGateway } from './private/lobby-private.gateway';
     LobbyCleanerListener,
     LobbyCleanerRepository,
     RoomManagerListener,
+    LeaveLobbyUseCase,
+    LeaveLobbyRepository,
   ],
 })
 export class LobbyModule {}
