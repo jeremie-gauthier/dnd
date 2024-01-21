@@ -3,10 +3,15 @@ inquirer.registerPrompt("directory", require("inquirer-directory"));
 const input = require("@inquirer/input").default;
 const fs = require("node:fs/promises");
 const kebabCase = require("lodash.kebabcase");
-const { renderEventPayload, renderEventEnum } = require("./snippets");
+const {
+  renderEventPayload,
+  renderEventEnum,
+  renderEventDocumentation,
+} = require("./snippets");
 const { getVarNames } = require("./utils");
 
-const EVENT_LISTENER_BASE_PATH = `./packages/backend/src`;
+const EVENT_EMITTER_BASE_PATH = `./packages/backend/src`;
+const DOCUMENTATION_BASE_PATH = `./event-catalog/events`;
 
 const promptEventPayloadName = async () => {
   const rawEventPayloadName = await input({
@@ -22,7 +27,7 @@ const promptEventPayloadModule = async () => {
       type: "directory",
       name: "from",
       message: "Select the module in which to place this Event Payload:",
-      basePath: EVENT_LISTENER_BASE_PATH,
+      basePath: EVENT_EMITTER_BASE_PATH,
     },
   ]);
 
@@ -54,12 +59,15 @@ const main = async () => {
 
   const vars = getVarNames(eventPayloadModule, eventPayloadName);
 
-  const eventEmitterDir = `${EVENT_LISTENER_BASE_PATH}/${eventPayloadModule}`;
+  const eventEmitterDir = `${EVENT_EMITTER_BASE_PATH}/${eventPayloadModule}`;
+  const documentationDir = `${DOCUMENTATION_BASE_PATH}/${vars.enumKey}`;
 
   const eventEnumFile = `${eventEmitterDir}/${vars.module}-events.enum.ts`;
-  const eventEnumFileContent = await fs.readFile(eventEnumFile, {
-    encoding: "utf-8",
-  });
+
+  const [eventEnumFileContent] = await Promise.all([
+    fs.readFile(eventEnumFile, { encoding: "utf-8" }),
+    fs.mkdir(documentationDir, { recursive: true }),
+  ]);
 
   const eventPayloadFiles = [
     {
@@ -70,6 +78,11 @@ const main = async () => {
     {
       filename: eventEnumFile,
       content: renderEventEnum(eventEnumFileContent, vars),
+      options: { flag: "w" },
+    },
+    {
+      filename: `${documentationDir}/index.md`,
+      content: renderEventDocumentation(vars),
       options: { flag: "w" },
     },
   ];
