@@ -13,4 +13,7 @@ async function bootstrap() {
   const PORT = configService.getOrThrow<string>('PORT');
   await app.listen(PORT, '0.0.0.0');
 }
-bootstrap();
+
+bootstrap().catch((err) => {
+  console.error('Error at bootstrap:', err);
+});

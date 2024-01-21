@@ -12,7 +12,6 @@ export const LobbiesMenu = ({ socket, lobbies }: Props) => {
   const navigate = useNavigate();
 
   const handleClickOnJoinLobby = async (lobbyId: GetLobbiesResponse[number]['id']) => {
-    // TODO: ping API to join the game
     // TODO: API will check player availability in regard of this lobby level
 
     // With ack ??

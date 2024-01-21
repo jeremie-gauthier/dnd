@@ -5,18 +5,14 @@ import { LobbiesRepository } from 'src/redis/repositories/lobbies.repository';
 import { UsersRepository } from 'src/redis/repositories/users.repository';
 
 @Injectable()
-export class HandleWsDisconnectionRepository {
+export class LeaveLobbyRepository {
   constructor(
-    private readonly usersRepository: UsersRepository,
     private readonly lobbiesRepository: LobbiesRepository,
+    private readonly usersRepository: UsersRepository,
   ) {}
 
-  public async getCachedUserLobbyId(userId: User['id']): Promise<LobbyEntity['id'] | undefined> {
+  public async getUserLobby(userId: User['id']) {
     return await this.usersRepository.get(userId);
-  }
-
-  public async forgetUser(userId: User['id']): Promise<void> {
-    await this.usersRepository.del(userId);
   }
 
   public async removePlayerFromLobby({
