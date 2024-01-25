@@ -6,7 +6,7 @@ summary: |
 producers:
   - User Connection UC
 consumers:
-  - New User Registered UC
+  - New User Registered Listener
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />

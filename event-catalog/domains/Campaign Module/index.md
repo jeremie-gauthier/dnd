@@ -7,4 +7,4 @@ repository:
   url: https://github.com/jeremie-gauthier/dnd/tree/main/packages/backend/src/campaign
 ---
 
-<NodeGraph />
+<NodeGraph title="Domain Graph" />
