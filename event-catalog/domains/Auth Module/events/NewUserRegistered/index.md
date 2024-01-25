@@ -4,9 +4,9 @@ version: 0.0.1
 summary: |
   Represents when a user has created an account.
 producers:
-  - Auth Module
+  - User Connection UC
 consumers:
-  - User Module
+  - New User Registered Listener
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />

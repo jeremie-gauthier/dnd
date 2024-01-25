@@ -20,13 +20,15 @@ module.exports = {
   },
   headerLinks: [
     { label: "Events", href: "/events" },
-    { label: "Modules", href: "/services" },
+    { label: "Use Cases", href: "/services" },
+    { label: "Modules", href: "/domains" },
     { label: "Visualiser", href: "/visualiser" },
     { label: "3D Node Graph", href: "/overview" },
   ],
   footerLinks: [
     { label: "Events", href: "/events" },
-    { label: "Modules", href: "/services" },
+    { label: "Use Cases", href: "/services" },
+    { label: "Modules", href: "/domains" },
     { label: "Visualiser", href: "/visualiser" },
     { label: "3D Node Graph", href: "/overview" },
     { label: "GitHub", href: "https://github.com/jeremie-gauthier/dnd" },

@@ -4,10 +4,12 @@ version: 0.0.1
 summary: |
   Represents when a user has join a lobby.
 producers:
-  - Lobby Module
+  - Create Lobby UC
+  - Join Lobby UC
 consumers:
-  - Lobby Module
-  - User Module
+  - Track User Accross Lobbies Listener
+  - Room Manager Listener
+  - Lobbies Changes Listener
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />
