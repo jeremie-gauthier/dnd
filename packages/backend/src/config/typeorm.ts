@@ -1,6 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { config as dotenvConfig } from 'dotenv';
 import { DataSource, DataSourceOptions } from 'typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { CampaignProgression } from '../database/entities/campaign-progression.entity';
 import { CampaignStageProgression } from '../database/entities/campaign-stage-progression.entity';
 import { CampaignStage } from '../database/entities/campaign-stage.entity';
@@ -25,6 +26,7 @@ const config: DataSourceOptions = {
   ],
   migrations: ['dist/src/database/migrations/*.js'],
   migrationsRun: true,
+  namingStrategy: new SnakeNamingStrategy(),
 };
 
 export default registerAs('typeorm', () => config);
