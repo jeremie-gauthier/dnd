@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  CampaignProgression,
-  CampaignProgressionStatus,
-} from 'src/database/entities/campaign-progression.entity';
-import { CampaignStageProgressionStatus } from 'src/database/entities/campaign-stage-progression.entity';
-import { CampaignStageStatus } from 'src/database/entities/campaign-stage.entity';
-import { Campaign, CampaignStatus } from 'src/database/entities/campaign.entity';
+import { CampaignProgression } from 'src/database/entities/campaign-progression.entity';
+import { Campaign } from 'src/database/entities/campaign.entity';
 import { User } from 'src/database/entities/user.entity';
+import { CampaignProgressionStatus } from 'src/database/enums/campaign-progression-status.enum';
+import { CampaignStageProgressionStatus } from 'src/database/enums/campaign-stage-progression-status.enum';
+import { CampaignStageStatus } from 'src/database/enums/campaign-stage-status.enum';
+import { CampaignStatus } from 'src/database/enums/campaign-status.enum';
 import { Repository } from 'typeorm';
 
 @Injectable()

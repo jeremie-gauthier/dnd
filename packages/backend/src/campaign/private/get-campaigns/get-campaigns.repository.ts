@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CampaignProgression } from 'src/database/entities/campaign-progression.entity';
-import { Campaign, CampaignStatus } from 'src/database/entities/campaign.entity';
+import { Campaign } from 'src/database/entities/campaign.entity';
 import { User } from 'src/database/entities/user.entity';
+import { CampaignStatus } from 'src/database/enums/campaign-status.enum';
 import { Repository } from 'typeorm';
 
 @Injectable()

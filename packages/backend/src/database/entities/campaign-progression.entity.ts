@@ -8,15 +8,13 @@ import {
   Relation,
   RelationId,
 } from 'typeorm';
+import {
+  CampaignProgressionStatusType,
+  CampaignProgressionStatusValues,
+} from '../enums/campaign-progression-status.enum';
 import { CampaignStageProgression } from './campaign-stage-progression.entity';
 import { Campaign } from './campaign.entity';
 import { User } from './user.entity';
-
-export enum CampaignProgressionStatus {
-  AVAILABLE = 'AVAILABLE',
-  LOCKED = 'LOCKED',
-  STARTED = 'STARTED',
-}
 
 @Entity()
 @Index(['campaign', 'user'], { unique: true })
@@ -40,6 +38,6 @@ export class CampaignProgression {
   )
   readonly stageProgressions: Relation<CampaignStageProgression[]>;
 
-  @Column({ type: 'enum', enum: CampaignProgressionStatus })
-  status: CampaignProgressionStatus;
+  @Column({ type: 'enum', enum: CampaignProgressionStatusValues })
+  status: CampaignProgressionStatusType;
 }

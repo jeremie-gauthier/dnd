@@ -1,18 +1,14 @@
 import { Column, Entity, OneToMany, PrimaryColumn, Relation } from 'typeorm';
+import { UserStatusType, UserStatusValues } from '../enums/user-status.enum';
 import { CampaignProgression } from './campaign-progression.entity';
-
-export enum UserStatus {
-  CREATED = 'CREATED',
-  INITIALIZED = 'INITIALIZED',
-}
 
 @Entity()
 export class User {
   @PrimaryColumn()
   readonly id: string;
 
-  @Column({ type: 'enum', enum: UserStatus })
-  status: UserStatus;
+  @Column({ type: 'enum', enum: UserStatusValues })
+  status: UserStatusType;
 
   @OneToMany(() => CampaignProgression, (campaignProgression) => campaignProgression.user, {
     cascade: true,
