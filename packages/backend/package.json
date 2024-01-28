@@ -18,6 +18,7 @@
     "test:cov": "vitest run --coverage",
     "typeorm": "ts-node --project ./tsconfig.json ./../../node_modules/typeorm/cli.js",
     "migration:run": "npm run typeorm -- -d ./src/config/typeorm.ts migration:run",
+    "migration:revert": "npm run typeorm -- -d ./src/config/typeorm.ts migration:revert",
     "migration:generate": "npm run typeorm -- -d ./src/config/typeorm.ts migration:generate ./src/database/migrations/$npm_config_name"
   },
   "dependencies": {
