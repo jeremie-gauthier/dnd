@@ -14,6 +14,7 @@ import {
 } from '../enums/campaign-progression-status.enum';
 import { CampaignStageProgression } from './campaign-stage-progression.entity';
 import { Campaign } from './campaign.entity';
+import { Hero } from './hero.entity';
 import { User } from './user.entity';
 
 @Entity()
@@ -37,6 +38,9 @@ export class CampaignProgression {
     { cascade: true },
   )
   readonly stageProgressions: Relation<CampaignStageProgression[]>;
+
+  @OneToMany(() => Hero, (hero) => hero.campaignProgression, { cascade: true })
+  readonly heroes: Relation<Hero[]>;
 
   @Column({ type: 'enum', enum: CampaignProgressionStatusValues })
   status: CampaignProgressionStatusType;

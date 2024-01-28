@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Relation } from 'typ
 import { CampaignStatusType, CampaignStatusValues } from '../enums/campaign-status.enum';
 import { CampaignProgression } from './campaign-progression.entity';
 import { CampaignStage } from './campaign-stage.entity';
+import { HeroTemplate } from './hero-template.entity';
 
 @Entity()
 export class Campaign {
@@ -21,4 +22,7 @@ export class Campaign {
 
   @Column({ type: 'enum', enum: CampaignStatusValues })
   readonly status: CampaignStatusType;
+
+  @OneToMany(() => HeroTemplate, (heroTemplate) => heroTemplate.campaign, { cascade: true })
+  readonly availableHeroes: Relation<HeroTemplate[]>;
 }
