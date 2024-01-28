@@ -3,11 +3,7 @@ inquirer.registerPrompt("directory", require("inquirer-directory"));
 const input = require("@inquirer/input").default;
 const fs = require("node:fs/promises");
 const kebabCase = require("lodash.kebabcase");
-const {
-  renderEventPayload,
-  renderEventEnum,
-  renderEventDocumentation,
-} = require("./snippets");
+const { renderEventPayload, renderEventEnum } = require("./snippets");
 const { getVarNames } = require("./utils");
 
 const EVENT_EMITTER_BASE_PATH = `./packages/backend/src`;
@@ -60,14 +56,11 @@ const main = async () => {
   const vars = getVarNames(eventPayloadModule, eventPayloadName);
 
   const eventEmitterDir = `${EVENT_EMITTER_BASE_PATH}/${eventPayloadModule}`;
-  const documentationDir = `${DOCUMENTATION_BASE_PATH}/${vars.enumKey}`;
 
   const eventEnumFile = `${eventEmitterDir}/${vars.module}-events.enum.ts`;
-
-  const [eventEnumFileContent] = await Promise.all([
-    fs.readFile(eventEnumFile, { encoding: "utf-8" }),
-    fs.mkdir(documentationDir, { recursive: true }),
-  ]);
+  const eventEnumFileContent = await fs.readFile(eventEnumFile, {
+    encoding: "utf-8",
+  });
 
   const eventPayloadFiles = [
     {
@@ -78,11 +71,6 @@ const main = async () => {
     {
       filename: eventEnumFile,
       content: renderEventEnum(eventEnumFileContent, vars),
-      options: { flag: "w" },
-    },
-    {
-      filename: `${documentationDir}/index.md`,
-      content: renderEventDocumentation(vars),
       options: { flag: "w" },
     },
   ];
