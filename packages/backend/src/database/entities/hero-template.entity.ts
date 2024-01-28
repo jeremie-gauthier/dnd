@@ -1,4 +1,4 @@
-import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import { Column, Entity, Index, ManyToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { HeroClassType, HeroClassValues } from '../enums/hero-class.enum';
 import { Campaign } from './campaign.entity';
 import { PlayableEntity } from './playable-entity';
@@ -9,8 +9,8 @@ export class HeroTemplate extends PlayableEntity {
   @PrimaryGeneratedColumn('uuid')
   readonly id: string;
 
-  @ManyToOne(() => Campaign, (campaign) => campaign.availableHeroes, { onDelete: 'CASCADE' })
-  readonly campaign: Relation<Campaign>;
+  @ManyToMany(() => Campaign, (campaign) => campaign.playableHeroes, { onDelete: 'CASCADE' })
+  readonly playableInCampaigns: Relation<Campaign[]>;
 
   @Column()
   readonly name: string;

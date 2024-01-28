@@ -10,6 +10,7 @@ export class Hero extends PlayableEntity {
 
   @ManyToOne(() => CampaignProgression, (campaignProgression) => campaignProgression.heroes, {
     onDelete: 'CASCADE',
+    nullable: false,
   })
   readonly campaignProgression: Relation<CampaignProgression>;
 
