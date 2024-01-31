@@ -29,17 +29,17 @@ services:
     image: redis/redis-stack:latest
     restart: always
     ports:
-      - '6379:6379'
+      - 6379:6379
 
   redis-insight:
     image: redislabs/redisinsight
     ports:
-      - '8001:8001'
+      - 8001:8001
 
   event-catalog:
     build: ../../event-catalog
     ports:
-      - '3001:3000'
+      - 3001:3000
 
 volumes:
   db_data:
