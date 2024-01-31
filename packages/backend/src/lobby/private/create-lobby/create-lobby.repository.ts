@@ -36,6 +36,7 @@ export class CreateLobbyRepository {
       },
       relations: {
         stages: true,
+        playableHeroes: true,
       },
     });
 
