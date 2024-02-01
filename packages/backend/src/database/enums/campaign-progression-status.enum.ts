@@ -1,5 +1,6 @@
 export const CampaignProgressionStatus = {
   AVAILABLE: 'AVAILABLE',
+  COMPLETED: 'COMPLETED',
   LOCKED: 'LOCKED',
   STARTED: 'STARTED',
 } as const;
