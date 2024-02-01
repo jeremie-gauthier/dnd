@@ -29,7 +29,25 @@ VALUES
 		'Félicitations ! Vous avez vaincu les bandits gobelins...',
 		'00T0001',
 		'AVAILABLE'
+	),
+	(
+		(
+			SELECT
+				id
+			FROM
+				campaign
+			WHERE
+				title = 'Campagne 1'
+		),
+		2,
+		'Les bandits gobelins, le retour',
+		'Introduction du 2e stage',
+		'Conclusion du 2e stage',
+		'00T1001',
+		'AVAILABLE'
 	);
+
+;
 
 INSERT INTO
 	campaign_playable_heroes_hero_template (campaign_id, hero_template_id)
