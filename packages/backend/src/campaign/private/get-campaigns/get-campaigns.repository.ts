@@ -1,46 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CampaignProgression } from 'src/database/entities/campaign-progression.entity';
-import { Campaign } from 'src/database/entities/campaign.entity';
 import { User } from 'src/database/entities/user.entity';
-import { CampaignStatus } from 'src/database/enums/campaign-status.enum';
+import { CampaignProgressionStatus } from 'src/database/enums/campaign-progression-status.enum';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class GetCampaignsRepository {
   constructor(
-    @InjectRepository(Campaign)
-    private readonly campaignRepository: Repository<Campaign>,
     @InjectRepository(CampaignProgression)
     private readonly campaignProgressionRepository: Repository<CampaignProgression>,
   ) {}
 
-  public getAvailableCampaigns(): Promise<Campaign[]> {
-    return this.campaignRepository.find({
-      relations: {
-        stages: true,
-      },
-      where: {
-        status: CampaignStatus.AVAILABLE,
-      },
-      order: {
-        stages: {
-          order: 'ASC',
-        },
-      },
-    });
-  }
-
-  public getStartedCampaigns(userId: User['id']): Promise<CampaignProgression[]> {
+  public getUserCampaignsProgressions(userId: User['id']): Promise<CampaignProgression[]> {
     return this.campaignProgressionRepository.find({
       where: {
         user: {
           id: userId,
         },
+        status: CampaignProgressionStatus.AVAILABLE,
       },
       relations: {
+        campaign: true,
         stageProgressions: {
           stage: true,
+        },
+      },
+      order: {
+        stageProgressions: {
+          stage: {
+            order: 'ASC',
+          },
         },
       },
     });
