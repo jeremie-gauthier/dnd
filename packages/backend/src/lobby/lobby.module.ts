@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthzModule } from 'src/authz/authz.module';
+import { CampaignStage } from 'src/database/entities/campaign-stage.entity';
 import { Campaign } from 'src/database/entities/campaign.entity';
 import { RedisModule } from 'src/redis/redis.module';
 import { LobbiesChangesListener } from './events/listeners/lobbies-changes/lobbies-changes.listener';
@@ -12,6 +13,8 @@ import { CreateLobbyRepository } from './private/create-lobby/create-lobby.repos
 import { CreateLobbyUseCase } from './private/create-lobby/create-lobby.uc';
 import { GetLobbiesRepository } from './private/get-lobbies/get-lobbies.repository';
 import { GetLobbiesUseCase } from './private/get-lobbies/get-lobbies.uc';
+import { GetLobbyRepository } from './private/get-lobby/get-lobby.repository';
+import { GetLobbyUseCase } from './private/get-lobby/get-lobby.uc';
 import { HandleWsConnectionUseCase } from './private/handle-ws-connection/handle-ws-connection.uc';
 import { HandleWsDisconnectionRepository } from './private/handle-ws-disconnection/handle-ws-disconnection.repository';
 import { HandleWsDisconnectionUseCase } from './private/handle-ws-disconnection/handle-ws-disconnection.uc';
@@ -24,7 +27,7 @@ import { LobbyPrivateController } from './private/lobby-private.controller';
 import { LobbyPrivateGateway } from './private/lobby-private.gateway';
 
 @Module({
-  imports: [AuthzModule, TypeOrmModule.forFeature([Campaign]), RedisModule],
+  imports: [AuthzModule, TypeOrmModule.forFeature([Campaign, CampaignStage]), RedisModule],
   controllers: [LobbyPrivateController],
   providers: [
     LobbyPrivateGateway,
@@ -35,6 +38,8 @@ import { LobbyPrivateGateway } from './private/lobby-private.gateway';
     CreateLobbyRepository,
     GetLobbiesUseCase,
     GetLobbiesRepository,
+    GetLobbyUseCase,
+    GetLobbyRepository,
     JoinLobbyUseCase,
     JoinLobbyRepository,
     ListenLobbiesChangesUseCase,

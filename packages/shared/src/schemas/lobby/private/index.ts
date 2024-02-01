@@ -10,3 +10,5 @@ export * from './handle-ws-disconnection/handle-ws-disconnection-input.schema';
 export * from './handle-ws-disconnection/handle-ws-disconnection-output.schema';
 export * from './leave-lobby/leave-lobby-input.schema';
 export * from './leave-lobby/leave-lobby-output.schema';
+export * from './get-lobby/get-lobby-input.schema';
+export * from './get-lobby/get-lobby-output.schema';
