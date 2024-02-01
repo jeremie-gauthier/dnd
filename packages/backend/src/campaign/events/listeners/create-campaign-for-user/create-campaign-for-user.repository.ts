@@ -7,7 +7,7 @@ import { HeroTemplate } from 'src/database/entities/hero-template.entity';
 import type { Hero } from 'src/database/entities/hero.entity';
 import { User } from 'src/database/entities/user.entity';
 import { CampaignProgressionStatus } from 'src/database/enums/campaign-progression-status.enum';
-import { CampaignStageStatus } from 'src/database/enums/campaign-stage-status.enum';
+import { CampaignStageProgressionStatus } from 'src/database/enums/campaign-stage-progression-status.enum';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -28,9 +28,9 @@ export class CreateCampaignForUserRepository {
     userId: User['id'];
     campaignId: Campaign['id'];
   }): Promise<CampaignProgression> {
-    const [heroesTemplate, campaignFirstStage] = await Promise.all([
+    const [heroesTemplate, campaignStages] = await Promise.all([
       this.getAvailableHeroesForCampaign(campaignId),
-      this.getFirstCampaignStage(campaignId),
+      this.getCampaignStages(campaignId),
     ]);
 
     const heroes = this.getHeroesFromTemplate(heroesTemplate);
@@ -44,14 +44,12 @@ export class CreateCampaignForUserRepository {
       },
       heroes,
       status: CampaignProgressionStatus.AVAILABLE,
-      stageProgressions: [
-        {
-          stage: {
-            id: campaignFirstStage.id,
-          },
-          status: CampaignStageStatus.AVAILABLE,
-        },
-      ],
+      stageProgressions: campaignStages.map((campaignStage) => ({
+        stage: { id: campaignStage.id },
+        status: this.isFirstStage(campaignStage)
+          ? CampaignStageProgressionStatus.AVAILABLE
+          : CampaignStageProgressionStatus.LOCKED,
+      })),
     });
   }
 
@@ -65,14 +63,17 @@ export class CreateCampaignForUserRepository {
     });
   }
 
-  private getFirstCampaignStage(campaignId: Campaign['id']): Promise<CampaignStage> {
-    return this.campaignStageRepository.findOneOrFail({
+  private getCampaignStages(campaignId: Campaign['id']): Promise<CampaignStage[]> {
+    return this.campaignStageRepository.find({
+      select: {
+        id: true,
+        status: true,
+        order: true,
+      },
       where: {
         campaign: {
           id: campaignId,
         },
-        order: 1,
-        status: CampaignStageStatus.AVAILABLE,
       },
     });
   }
@@ -88,5 +89,9 @@ export class CreateCampaignForUserRepository {
       class: heroTemplate.class,
       level: heroTemplate.level,
     }));
+  }
+
+  private isFirstStage(campaignStage: CampaignStage): boolean {
+    return campaignStage.order === 1;
   }
 }

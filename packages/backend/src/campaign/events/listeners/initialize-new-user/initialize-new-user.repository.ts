@@ -12,7 +12,9 @@ export class InitializeNewUserRepository {
 
   public async getAvailableCampaignsForNewUsers(): Promise<Campaign[]> {
     return this.campaignRepository.find({
-      where: [{ title: 'Tutoriel' }, { title: 'Campagne 1' }],
+      select: {
+        id: true,
+      },
     });
   }
 }
