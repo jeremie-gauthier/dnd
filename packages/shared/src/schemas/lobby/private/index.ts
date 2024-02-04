@@ -12,3 +12,7 @@ export * from './leave-lobby/leave-lobby-input.schema';
 export * from './leave-lobby/leave-lobby-output.schema';
 export * from './get-lobby/get-lobby-input.schema';
 export * from './get-lobby/get-lobby-output.schema';
+export * from './pick-hero/pick-hero-input.schema';
+export * from './pick-hero/pick-hero-output.schema';
+export * from './discard-hero/discard-hero-input.schema';
+export * from './discard-hero/discard-hero-output.schema';
