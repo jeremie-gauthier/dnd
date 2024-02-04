@@ -6,6 +6,9 @@ import { ServerLobbyEvent } from './lobby-events/lobby-events.server';
 import { EventsMapper } from './utils.type';
 
 interface ServerToClientEventsAndPayloads extends Record<string, (...parameters: any[]) => any> {
+  [ServerLobbyEvent.LobbyChangesDetected]: (payload: {
+    lobby: z.infer<typeof getLobbiesOutputSchema>[number];
+  }) => void;
   [ServerLobbyEvent.LobbiesChangesDetected]: (payload: {
     lobby: z.infer<typeof getLobbiesOutputSchema>[number];
   }) => void;

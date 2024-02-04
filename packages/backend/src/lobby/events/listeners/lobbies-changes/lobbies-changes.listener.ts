@@ -25,5 +25,12 @@ export class LobbiesChangesListener {
         nbPlayers: lobby.players.length,
       },
     });
+
+    ctx.server.to(lobbyId).emit(ServerLobbyEvent.LobbyChangesDetected, {
+      lobby: {
+        ...lobby,
+        nbPlayers: lobby.players.length,
+      },
+    });
   }
 }
