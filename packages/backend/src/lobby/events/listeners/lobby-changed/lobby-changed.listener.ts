@@ -1,15 +1,15 @@
 import { LobbyEntity, ServerLobbyEvent } from '@dnd/shared';
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { LOBBIES_ROOM } from 'src/lobby/constants';
 import { MessageContext } from 'src/types/socket.type';
 import { LobbyEvent } from '../../emitters/lobby-events.enum';
-import { LobbiesChangesRepository } from './lobbies-changes.repository';
+import { LobbyChangedRepository } from './lobby-changed.repository';
 
 @Injectable()
-export class LobbiesChangesListener {
-  constructor(private readonly repository: LobbiesChangesRepository) {}
+export class LobbyChangedListener {
+  constructor(private readonly repository: LobbyChangedRepository) {}
 
+  @OnEvent(LobbyEvent.LobbyChanged)
   @OnEvent(LobbyEvent.UserJoinedLobby)
   @OnEvent(LobbyEvent.UserForceLeftLobby)
   @OnEvent(LobbyEvent.UserLeftLobby)
@@ -19,7 +19,7 @@ export class LobbiesChangesListener {
       return;
     }
 
-    ctx.server.to(LOBBIES_ROOM).emit(ServerLobbyEvent.LobbiesChangesDetected, {
+    ctx.server.to(lobbyId).emit(ServerLobbyEvent.LobbyChangesDetected, {
       lobby: {
         ...lobby,
         nbPlayers: lobby.players.length,
