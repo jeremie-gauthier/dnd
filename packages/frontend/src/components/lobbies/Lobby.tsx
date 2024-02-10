@@ -21,8 +21,7 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
   };
 
   const handleClickOnReady = () => {
-    console.log('player is ready');
-    // TODO: emit the "ready" signal
+    socket.emit(ClientLobbyEvent.RequestToggleReadyState, { lobbyId: lobby.id });
   };
 
   const handlePickHero = (heroId: string) => {
@@ -32,6 +31,9 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
   const handleDiscardHero = (heroId: string) => {
     socket.emit(ClientLobbyEvent.RequestDiscardHero, { lobbyId: lobby.id, heroId });
   };
+
+  const currentUserIsReady =
+    lobby.players.find((player) => player.userId === user.sub)?.isReady ?? false;
 
   return (
     <div>
@@ -50,7 +52,9 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
           {lobby.players.map((player) => {
             return (
               <li key={player.userId}>
-                <p>Player {player.userId}</p>
+                <p>
+                  Player {player.userId} ({player.isReady ? 'Ready' : 'Not ready'})
+                </p>
                 <ul>
                   <p>Heroes selected:</p>
                   {player.heroesSelected.map((heroSelected) => {
@@ -90,7 +94,9 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
       <br />
 
       <button onClick={handleClickOnLeaveLobby}>Leave this lobby</button>
-      <button onClick={handleClickOnReady}>I'm ready!</button>
+      <button onClick={handleClickOnReady}>
+        {currentUserIsReady ? "I'm not ready" : "I'm ready!"}
+      </button>
     </div>
   );
 };
