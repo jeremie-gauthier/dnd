@@ -36,6 +36,7 @@ export const getLobbyOutputSchema = z.object({
     z.object({
       userId: z.string(),
       heroesSelected: z.array(z.string()),
+      isReady: z.boolean(),
     }),
   ),
   heroesAvailable: z.array(heroSchema),

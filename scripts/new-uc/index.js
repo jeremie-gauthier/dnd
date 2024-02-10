@@ -10,6 +10,7 @@ const {
   renderUseCaseOutputSchema,
   renderUseSchemaBarrelFile,
   renderUseCaseRepository,
+  renderUseCaseSpec,
 } = require("./snippets");
 const { getVarNames } = require("./utils");
 
@@ -77,6 +78,11 @@ const main = async () => {
     {
       filename: `${useCaseDir}/${useCaseName}.repository.ts`,
       content: renderUseCaseRepository(vars),
+      options: { flag: "w" },
+    },
+    {
+      filename: `${useCaseDir}/${useCaseName}.spec.ts`,
+      content: renderUseCaseSpec(vars),
       options: { flag: "w" },
     },
   ];

@@ -28,6 +28,7 @@ export class JoinLobbyUseCase implements UseCase {
       player: {
         userId,
         heroesSelected: [],
+        isReady: false,
       },
       lobbyId,
     });

@@ -26,6 +26,8 @@ import { LeaveLobbyUseCase } from './leave-lobby/leave-lobby.uc';
 import { ListenLobbiesChangesUseCase } from './listen-lobbies-changes/listen-lobbies-changes.uc';
 import { PickHeroInputDto } from './pick-hero/pick-hero.dto';
 import { PickHeroUseCase } from './pick-hero/pick-hero.uc';
+import { TogglePlayerReadyStateInputDto } from './toggle-player-ready-state/toggle-player-ready-state.dto';
+import { TogglePlayerReadyStateUseCase } from './toggle-player-ready-state/toggle-player-ready-state.uc';
 
 @UseGuards(JWTAuthGuard)
 @UsePipes(ZodValidationPipe)
@@ -45,6 +47,7 @@ export class LobbyPrivateGateway implements OnGatewayConnection, OnGatewayDiscon
     private readonly listenLobbiesChangesUseCase: ListenLobbiesChangesUseCase,
     private readonly pickHeroUseCase: PickHeroUseCase,
     private readonly discardHeroUseCase: DiscardHeroUseCase,
+    private readonly togglePlayerReadyStateUseCase: TogglePlayerReadyStateUseCase,
   ) {}
 
   @WebSocketServer()
@@ -127,6 +130,18 @@ export class LobbyPrivateGateway implements OnGatewayConnection, OnGatewayDiscon
       ctx: this.getMessageContext(client),
       userId: client.data.userId,
       ...discardHeroDto,
+    });
+  }
+
+  @SubscribeMessage(ClientLobbyEvent.RequestToggleReadyState)
+  public async toggleReadyState(
+    @MessageBody() toggleReadyStateDto: TogglePlayerReadyStateInputDto,
+    @ConnectedSocket() client: ServerSocket,
+  ) {
+    await this.togglePlayerReadyStateUseCase.execute({
+      ctx: this.getMessageContext(client),
+      userId: client.data.userId,
+      ...toggleReadyStateDto,
     });
   }
 }

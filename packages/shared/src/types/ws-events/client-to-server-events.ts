@@ -12,6 +12,7 @@ interface ClientToServerEventsAndPayloads extends Record<string, (...parameters:
   [ClientLobbyEvent.RequestLeaveLobby]: () => { lobbyId: string };
   [ClientLobbyEvent.RequestPickHero]: (payload: { lobbyId: string; heroId: string }) => void;
   [ClientLobbyEvent.RequestDiscardHero]: (payload: { lobbyId: string; heroId: string }) => void;
+  [ClientLobbyEvent.RequestToggleReadyState]: (payload: { lobbyId: string }) => void;
   [ClientLobbyEvent.ListenLobbiesChanges]: () => void;
   [ClientGameEvent.PlayerIsReady]: () => void;
 }

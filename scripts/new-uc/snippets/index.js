@@ -5,6 +5,7 @@ const {
   renderUseCaseOutputSchema,
 } = require("./use-case-output-schema.snippet");
 const { renderUseCaseRepository } = require("./use-case-repository.snippet");
+const { renderUseCaseSpec } = require("./use-case-spec.snippet");
 const { renderUseSchemaBarrelFile } = require("./use-case-schema-barrel-files");
 
 module.exports = {
@@ -14,4 +15,5 @@ module.exports = {
   renderUseCaseOutputSchema,
   renderUseSchemaBarrelFile,
   renderUseCaseDto,
+  renderUseCaseSpec,
 };

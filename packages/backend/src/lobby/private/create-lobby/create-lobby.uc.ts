@@ -46,6 +46,7 @@ export class CreateLobbyUseCase implements UseCase {
         {
           userId,
           heroesSelected: [],
+          isReady: false,
         },
       ],
       heroesAvailable: campaign.playableHeroes.map(({ id }) => ({ id, pickedBy: undefined })),
