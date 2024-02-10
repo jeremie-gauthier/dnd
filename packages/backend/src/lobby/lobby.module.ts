@@ -31,6 +31,8 @@ import { LobbyPrivateController } from './private/lobby-private.controller';
 import { LobbyPrivateGateway } from './private/lobby-private.gateway';
 import { PickHeroRepository } from './private/pick-hero/pick-hero.repository';
 import { PickHeroUseCase } from './private/pick-hero/pick-hero.uc';
+import { TogglePlayerReadyStateRepository } from './private/toggle-player-ready-state/toggle-player-ready-state.repository';
+import { TogglePlayerReadyStateUseCase } from './private/toggle-player-ready-state/toggle-player-ready-state.uc';
 
 @Module({
   imports: [AuthzModule, TypeOrmModule.forFeature([Campaign, CampaignStage]), RedisModule],
@@ -62,6 +64,8 @@ import { PickHeroUseCase } from './private/pick-hero/pick-hero.uc';
     PickHeroRepository,
     DiscardHeroUseCase,
     DiscardHeroRepository,
+    TogglePlayerReadyStateUseCase,
+    TogglePlayerReadyStateRepository,
   ],
 })
 export class LobbyModule {}
