@@ -8,6 +8,7 @@ type Hero = {
 type LobbyPlayer = {
   userId: string;
   heroesSelected: Hero['id'][];
+  isReady: boolean;
 };
 
 type LobbyCampaign = {
