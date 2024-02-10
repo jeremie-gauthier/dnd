@@ -8,7 +8,7 @@ const renderUseCaseSpec = ({
   return dedent`
 		import { EventEmitter2 } from '@nestjs/event-emitter';
 		import { Test } from '@nestjs/testing';
-		import { MockInstance, afterEach, beforeEach, describe, vi } from 'vitest';
+		import { MockInstance, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 		import { ${repositoryName} } from './${useCaseName}.repository';
 		import { ${useCaseClassName} } from './${useCaseName}.uc';
 		
