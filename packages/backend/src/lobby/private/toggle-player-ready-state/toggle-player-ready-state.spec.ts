@@ -21,7 +21,6 @@ describe('TogglePlayerReadyStateUseCase', () => {
     ctx: {} as MessageContext,
     userId: 'mock-user-id',
     lobbyId: 'mock-lobby-id',
-    heroId: 'mock-hero-id',
   };
 
   beforeEach(async () => {
