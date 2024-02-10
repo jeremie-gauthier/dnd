@@ -29,7 +29,6 @@ describe('PickHeroUseCase', () => {
     const module = await Test.createTestingModule({
       providers: [
         PickHeroUseCase,
-        PickHeroRepository,
         EventEmitter2,
         {
           provide: ConfigService,

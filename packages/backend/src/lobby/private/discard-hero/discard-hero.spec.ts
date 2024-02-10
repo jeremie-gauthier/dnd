@@ -29,7 +29,6 @@ describe('DiscardHeroUseCase', () => {
     const module = await Test.createTestingModule({
       providers: [
         DiscardHeroUseCase,
-        DiscardHeroRepository,
         EventEmitter2,
         {
           provide: ConfigService,
