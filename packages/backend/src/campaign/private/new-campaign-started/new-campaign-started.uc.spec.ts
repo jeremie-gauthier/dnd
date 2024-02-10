@@ -5,7 +5,8 @@ import { CampaignEvent } from 'src/campaign/events/emitters/campaign-events.enum
 import { NewCampaignStartedPayload } from 'src/campaign/events/emitters/new-campaign-started.payload';
 import { CampaignProgression } from 'src/database/entities/campaign-progression.entity';
 import { Campaign } from 'src/database/entities/campaign.entity';
-import { User, UserStatus } from 'src/database/entities/user.entity';
+import { User } from 'src/database/entities/user.entity';
+import { UserStatus } from 'src/database/enums/user-status.enum';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { NewCampaignStartedRepository } from './new-campaign-started.repository';
 import { NewCampaignStartedUseCase } from './new-campaign-started.uc';
