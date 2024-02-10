@@ -118,7 +118,7 @@ export class LobbyPrivateGateway implements OnGatewayConnection, OnGatewayDiscon
     });
   }
 
-  @SubscribeMessage(ClientLobbyEvent.RequestPickHero)
+  @SubscribeMessage(ClientLobbyEvent.RequestDiscardHero)
   public async discardHero(
     @MessageBody() discardHeroDto: DiscardHeroInputDto,
     @ConnectedSocket() client: ServerSocket,
