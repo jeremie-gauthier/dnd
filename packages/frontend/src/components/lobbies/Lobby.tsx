@@ -1,21 +1,19 @@
+import { User } from '@auth0/auth0-react';
 import { ClientLobbyEvent } from '@dnd/shared';
 import { useNavigate } from '@tanstack/react-router';
 import { GetLobbyResponse } from '../../hooks/api/lobby/get-lobby';
 import { ClientSocket } from '../../types/socket.type';
 
 type Props = {
+  user: User;
   lobby: GetLobbyResponse;
   socket: ClientSocket;
 };
 
-export const Lobby = ({ lobby, socket }: Props) => {
+export const Lobby = ({ user, lobby, socket }: Props) => {
   const navigate = useNavigate();
 
-  console.log(lobby);
-
   const handleClickOnLeaveLobby = async () => {
-    console.log('leaving this lobby');
-
     await socket.emitWithAck(ClientLobbyEvent.RequestLeaveLobby);
     return navigate({
       to: `/lobbies`,
@@ -27,37 +25,69 @@ export const Lobby = ({ lobby, socket }: Props) => {
     // TODO: emit the "ready" signal
   };
 
-  // const heroes = MOCK_HEROES;
-  // const handleClickOnHero = (heroId: string) => {
-  //   console.log(`hero ${heroId} selected or deselected`);
-  //   // TODO: emit the "choose hero" signal
-  // };
+  const handlePickHero = (heroId: string) => {
+    socket.emit(ClientLobbyEvent.RequestPickHero, { lobbyId: lobby.id, heroId });
+  };
+
+  const handleDiscardHero = (heroId: string) => {
+    socket.emit(ClientLobbyEvent.RequestDiscardHero, { lobbyId: lobby.id, heroId });
+  };
 
   return (
     <div>
       <h1>Lobby</h1>
-      {/* <h2>
-        {stage.campaign.title} (
+      <h2>
+        {lobby.config.campaign.title} (
         <span>
-          {stage.order}/{stage.campaign.nbStages}
+          {lobby.config.campaign.stage.order}/{lobby.config.campaign.nbStages}
         </span>
         )
       </h2>
-      <h2>{stage.title}</h2>
 
       <div>
         <h2>Players:</h2>
-        <p>Player 1 (status)</p>
+        <ul>
+          {lobby.players.map((player) => {
+            return (
+              <li key={player.userId}>
+                <p>Player {player.userId}</p>
+                <ul>
+                  <p>Heroes selected:</p>
+                  {player.heroesSelected.map((heroSelected) => {
+                    const hero = lobby.heroesAvailable.find(({ id }) => id === heroSelected);
+                    if (!hero) return null;
+
+                    return (
+                      <li key={`${player.userId}-${heroSelected}`}>
+                        {hero.name} ({hero.class})
+                      </li>
+                    );
+                  })}
+                </ul>
+              </li>
+            );
+          })}
+        </ul>
       </div>
 
       <div>
-        <h2>Choose your hero(es):</h2>
-        {heroes.map((hero) => (
-          <button key={hero.id} onClick={() => handleClickOnHero(hero.id)}>
-            {hero.name}
-          </button>
+        <h2>Choose your heroes:</h2>
+        {lobby.heroesAvailable.map((hero) => (
+          <div key={hero.id}>
+            <h3>
+              {hero.name} ({hero.class.toLowerCase()})
+            </h3>
+            {hero.pickedBy === undefined ? (
+              <button onClick={() => handlePickHero(hero.id)}>Pick</button>
+            ) : null}
+            {hero.pickedBy === user.sub ? (
+              <button onClick={() => handleDiscardHero(hero.id)}>Discard</button>
+            ) : null}
+          </div>
         ))}
-      </div> */}
+      </div>
+
+      <br />
 
       <button onClick={handleClickOnLeaveLobby}>Leave this lobby</button>
       <button onClick={handleClickOnReady}>I'm ready!</button>
