@@ -1,12 +1,16 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Relation,
+} from 'typeorm';
+import { CampaignStatusType, CampaignStatusValues } from '../enums/campaign-status.enum';
 import { CampaignProgression } from './campaign-progression.entity';
 import { CampaignStage } from './campaign-stage.entity';
-
-export enum CampaignStatus {
-  AVAILABLE = 'AVAILABLE',
-  COMING_SOON = 'COMING_SOON',
-  DISABLED = 'DISABLED',
-}
+import { HeroTemplate } from './hero-template.entity';
 
 @Entity()
 export class Campaign {
@@ -24,6 +28,12 @@ export class Campaign {
   @Column({ unique: true })
   readonly title: string;
 
-  @Column({ type: 'enum', enum: CampaignStatus })
-  readonly status: CampaignStatus;
+  @Column({ type: 'enum', enum: CampaignStatusValues })
+  readonly status: CampaignStatusType;
+
+  @ManyToMany(() => HeroTemplate, (heroTemplate) => heroTemplate.playableInCampaigns, {
+    cascade: true,
+  })
+  @JoinTable()
+  readonly playableHeroes: Relation<HeroTemplate[]>;
 }

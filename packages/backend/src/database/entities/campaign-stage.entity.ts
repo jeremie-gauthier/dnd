@@ -7,14 +7,12 @@ import {
   PrimaryGeneratedColumn,
   Relation,
 } from 'typeorm';
+import {
+  CampaignStageStatusType,
+  CampaignStageStatusValues,
+} from '../enums/campaign-stage-status.enum';
 import { CampaignStageProgression } from './campaign-stage-progression.entity';
 import { Campaign } from './campaign.entity';
-
-export enum CampaignStageStatus {
-  AVAILABLE = 'AVAILABLE',
-  COMING_SOON = 'COMING_SOON',
-  DISABLED = 'DISABLED',
-}
 
 @Entity()
 @Index(['campaign', 'order'], { unique: true })
@@ -47,6 +45,6 @@ export class CampaignStage {
   @Column()
   readonly mapCompiled: string;
 
-  @Column({ type: 'enum', enum: CampaignStageStatus })
-  status: CampaignStageStatus;
+  @Column({ type: 'enum', enum: CampaignStageStatusValues })
+  status: CampaignStageStatusType;
 }

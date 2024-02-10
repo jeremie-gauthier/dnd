@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CampaignProgression } from 'src/database/entities/campaign-progression.entity';
-import { Campaign } from 'src/database/entities/campaign.entity';
 import { User } from 'src/database/entities/user.entity';
+import { CampaignStageProgressionStatus } from 'src/database/enums/campaign-stage-progression-status.enum';
 import { UseCase } from 'src/types/use-case.interface';
 import { NewCampaignStartedOutputDto } from './get-campaigns.dto';
 import { GetCampaignsRepository } from './get-campaigns.repository';
@@ -11,46 +11,29 @@ export class GetCampaignsUseCase implements UseCase {
   constructor(private readonly repository: GetCampaignsRepository) {}
 
   public async execute({ userId }: { userId: User['id'] }): Promise<NewCampaignStartedOutputDto> {
-    const [campaignProgressions, campaigns] = await Promise.all([
-      this.repository.getStartedCampaigns(userId),
-      this.repository.getAvailableCampaigns(),
-    ]);
-
-    return this.getUserCampaignsProgressions({ campaigns, campaignProgressions });
+    const userCampaignsProgressions = await this.repository.getUserCampaignsProgressions(userId);
+    return this.getUserCampaignsProgressions(userCampaignsProgressions);
   }
 
-  private getUserCampaignsProgressions({
-    campaignProgressions,
-    campaigns,
-  }: {
-    campaignProgressions: CampaignProgression[];
-    campaigns: Campaign[];
-  }): NewCampaignStartedOutputDto {
-    return campaigns.map((campaign) => {
-      const campaignProgression = campaignProgressions.find(
-        ({ campaignId }) => campaignId === campaign.id,
-      );
-
-      return this.getUserCampaignProgression({ campaign, campaignProgression });
+  private getUserCampaignsProgressions(
+    campaignProgressions: CampaignProgression[],
+  ): NewCampaignStartedOutputDto {
+    return campaignProgressions.map((campaignProgression) => {
+      return this.getUserCampaignProgression(campaignProgression);
     });
   }
 
-  private getUserCampaignProgression({
-    campaign,
-    campaignProgression,
-  }: {
-    campaign: Campaign;
-    campaignProgression?: CampaignProgression;
-  }): NewCampaignStartedOutputDto[number] {
-    const FIRST_STAGE = campaign.stages.at(0)!;
-    const mostAdvancedStage = campaignProgression?.stageProgressions
-      .sort((a, b) => b.stage.order - a.stage.order)
-      .at(0)?.stage;
+  private getUserCampaignProgression(
+    campaignProgression: CampaignProgression,
+  ): NewCampaignStartedOutputDto[number] {
+    const mostAdvancedStage = campaignProgression.stageProgressions.find(
+      (stageProgression) => stageProgression.status === CampaignStageProgressionStatus.AVAILABLE,
+    )!.stage;
 
     return {
-      ...campaign,
-      currentStage: mostAdvancedStage ?? FIRST_STAGE,
-      nbStages: campaign.stages.length,
+      ...campaignProgression.campaign,
+      currentStage: mostAdvancedStage,
+      nbStages: campaignProgression.stageProgressions.length,
     };
   }
 }

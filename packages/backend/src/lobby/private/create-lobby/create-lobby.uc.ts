@@ -1,4 +1,3 @@
-import { LobbyEntity } from '@dnd/shared';
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CampaignStage } from 'src/database/entities/campaign-stage.entity';
@@ -7,7 +6,7 @@ import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
 import { UserJoinedLobbyPayload } from 'src/lobby/events/emitters/user-joined-lobby.payload';
 import { MessageContext } from 'src/types/socket.type';
 import { UseCase } from 'src/types/use-case.interface';
-import { CreateLobbyInputDto } from './create-lobby.dto';
+import { CreateLobbyInputDto, CreateLobbyOutputDto } from './create-lobby.dto';
 import { CreateLobbyRepository } from './create-lobby.repository';
 
 @Injectable()
@@ -25,9 +24,7 @@ export class CreateLobbyUseCase implements UseCase {
     ctx: MessageContext;
     userId: User['id'];
     createLobbyInputDto: CreateLobbyInputDto;
-  }): Promise<LobbyEntity> {
-    // TODO: fetch all available heroes for this campaign (via stageId) and put their ID in newLobby.heroesAvailable
-
+  }): Promise<CreateLobbyOutputDto> {
     const campaign = await this.repository.getCampaignByStageId(stageId);
 
     const selectedStage = this.getStageById(campaign.stages, stageId);
@@ -51,7 +48,7 @@ export class CreateLobbyUseCase implements UseCase {
           heroesSelected: [],
         },
       ],
-      heroesAvailable: [],
+      heroesAvailable: campaign.playableHeroes.map(({ id }) => ({ id, pickedBy: undefined })),
     });
 
     this.eventEmitter.emitAsync(
@@ -63,7 +60,10 @@ export class CreateLobbyUseCase implements UseCase {
       }),
     );
 
-    return lobby;
+    return {
+      ...lobby,
+      heroesAvailable: campaign.playableHeroes,
+    };
   }
 
   private getStageById(stages: CampaignStage[], stageId: CampaignStage['id']): CampaignStage {

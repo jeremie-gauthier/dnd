@@ -1,12 +1,16 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-		"source.fixAll.eslint": "explicit"
-	},
+    "source.fixAll.eslint": "explicit"
+  },
   "editor.tabSize": 2,
   "prettier.useTabs": false,
   "editor.insertSpaces": false,
   "css.validate": false, // Disable css built-in lint
   "scss.validate": false, // Disable scss lint (optional if using scss)
-  "stylelint.enable": true // Enable sytlelint
+  "stylelint.enable": true, // Enable sytlelint
+  "[sql]": {
+    "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
+  },
+  "sql-formatter.uppercase": true
 }

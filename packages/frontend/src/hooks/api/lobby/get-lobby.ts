@@ -1,34 +1,22 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { getLobbyOutputSchema } from '@dnd/shared';
 import { useQuery } from '@tanstack/react-query';
+import { z } from 'zod';
 import { fetcherWithAuth } from '../../../config/fetcher';
 
-export type GetLobbyResponse = {
-  id: string;
-  order: number;
-  title: string;
-  status: 'AVAILABLE' | 'COMING_SOON' | 'DISABLED';
-  campaign: {
-    id: string;
-    title: string;
-    status: 'AVAILABLE' | 'COMING_SOON' | 'DISABLED';
-    nbStages: number;
-  };
-};
+export type GetLobbyResponse = z.infer<typeof getLobbyOutputSchema>;
 
-export const useGetLobby = (stageId: string) => {
+export const GET_LOBBY_QUERY_KEY = (lobbyId: string) => ['lobby', lobbyId];
+
+export const useGetLobby = (lobbyId: string) => {
   const { getAccessTokenSilently } = useAuth0();
 
   return useQuery({
-    queryKey: ['campaigns'],
+    queryKey: GET_LOBBY_QUERY_KEY(lobbyId),
     queryFn: () =>
       fetcherWithAuth<GetLobbyResponse>(
-        `http://localhost:3000/campaign/private/get-campaign-stage/${stageId}`,
+        `http://localhost:3000/lobby/private/get-lobby/${lobbyId}`,
         getAccessTokenSilently,
       ),
   });
 };
-
-export const MOCK_HEROES = [
-  { id: '1', name: 'Redgar' },
-  { id: '2', name: 'Josuan' },
-];

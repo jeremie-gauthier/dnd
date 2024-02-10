@@ -15,6 +15,8 @@ import { WsExceptionFilter } from 'src/errors/ws-exception-filter';
 import { ServerSocket, WsServer } from 'src/types/socket.type';
 import { CreateLobbyInputDto, CreateLobbyOutputDto } from './create-lobby/create-lobby.dto';
 import { CreateLobbyUseCase } from './create-lobby/create-lobby.uc';
+import { DiscardHeroInputDto } from './discard-hero/discard-hero.dto';
+import { DiscardHeroUseCase } from './discard-hero/discard-hero.uc';
 import { HandleWsConnectionUseCase } from './handle-ws-connection/handle-ws-connection.uc';
 import { HandleWsDisconnectionUseCase } from './handle-ws-disconnection/handle-ws-disconnection.uc';
 import { JoinLobbyInputDto, JoinLobbyOutputDto } from './join-lobby/join-lobby.dto';
@@ -22,6 +24,8 @@ import { JoinLobbyUseCase } from './join-lobby/join-lobby.uc';
 import { LeaveLobbyOutputDto } from './leave-lobby/leave-lobby.dto';
 import { LeaveLobbyUseCase } from './leave-lobby/leave-lobby.uc';
 import { ListenLobbiesChangesUseCase } from './listen-lobbies-changes/listen-lobbies-changes.uc';
+import { PickHeroInputDto } from './pick-hero/pick-hero.dto';
+import { PickHeroUseCase } from './pick-hero/pick-hero.uc';
 
 @UseGuards(JWTAuthGuard)
 @UsePipes(ZodValidationPipe)
@@ -39,6 +43,8 @@ export class LobbyPrivateGateway implements OnGatewayConnection, OnGatewayDiscon
     private readonly joinLobbyUseCase: JoinLobbyUseCase,
     private readonly leaveLobbyUseCase: LeaveLobbyUseCase,
     private readonly listenLobbiesChangesUseCase: ListenLobbiesChangesUseCase,
+    private readonly pickHeroUseCase: PickHeroUseCase,
+    private readonly discardHeroUseCase: DiscardHeroUseCase,
   ) {}
 
   @WebSocketServer()
@@ -98,5 +104,29 @@ export class LobbyPrivateGateway implements OnGatewayConnection, OnGatewayDiscon
       userId: client.data.userId,
     });
     return LeaveLobbyOutputDto.schema.parse({ message: 'Ok' });
+  }
+
+  @SubscribeMessage(ClientLobbyEvent.RequestPickHero)
+  public async pickHero(
+    @MessageBody() pickHeroDto: PickHeroInputDto,
+    @ConnectedSocket() client: ServerSocket,
+  ) {
+    await this.pickHeroUseCase.execute({
+      ctx: this.getMessageContext(client),
+      userId: client.data.userId,
+      ...pickHeroDto,
+    });
+  }
+
+  @SubscribeMessage(ClientLobbyEvent.RequestDiscardHero)
+  public async discardHero(
+    @MessageBody() discardHeroDto: DiscardHeroInputDto,
+    @ConnectedSocket() client: ServerSocket,
+  ) {
+    await this.discardHeroUseCase.execute({
+      ctx: this.getMessageContext(client),
+      userId: client.data.userId,
+      ...discardHeroDto,
+    });
   }
 }

@@ -5,6 +5,8 @@ summary: |
   Represents when a new user entity was created in the database.
 producers:
   - New User Registered Listener
+consumers:
+  - Initialize New User Listener
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />
