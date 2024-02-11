@@ -1,9 +1,10 @@
-import { LobbyEntityStatus, type GameEntity, type LobbyEntity } from '@dnd/shared';
+import { LobbyEntity, LobbyEntityStatus } from '@dnd/shared';
 import { ForbiddenException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test } from '@nestjs/testing';
 import { LobbyChangedPayload } from 'src/lobby/events/emitters/lobby-changed.payload';
 import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
+import { LobbyGameStartedPayload } from 'src/lobby/events/emitters/lobby-game-started.payload';
 import type { MessageContext } from 'src/types/socket.type';
 import { MockInstance, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { StartGameRepository } from './start-game.repository';
@@ -14,7 +15,6 @@ describe('StartGameUseCase', () => {
   let repository: StartGameRepository;
   let eventEmitter2: EventEmitter2;
 
-  let createGameMock: MockInstance<[game: GameEntity], Promise<GameEntity>>;
   let updateLobbyMock: MockInstance<[lobby: LobbyEntity], Promise<void>>;
   let eventEmitterMock: MockInstance<[event: any, ...values: any[]], Promise<any[]>>;
 
@@ -45,7 +45,6 @@ describe('StartGameUseCase', () => {
     eventEmitter2 = module.get<EventEmitter2>(EventEmitter2);
 
     updateLobbyMock = vi.spyOn(repository, 'updateLobby');
-    createGameMock = vi.spyOn(repository, 'createGame');
     eventEmitterMock = vi.spyOn(eventEmitter2, 'emitAsync');
   });
 
@@ -64,6 +63,14 @@ describe('StartGameUseCase', () => {
       const getLobbyByIdMock = vi.spyOn(repository, 'getLobbyById').mockResolvedValue({
         id: 'mock-lobby-id',
         status: LobbyEntityStatus.OPENED,
+        config: {
+          campaign: {
+            id: 'mock-campaign-id',
+            stage: {
+              id: 'mock-stage-id',
+            },
+          },
+        },
         players: [
           { userId: 'mock-user-id', heroesSelected: ['warrior'], isReady: true },
           { userId: 'mock-user-id-2', heroesSelected: ['cleric'], isReady: true },
@@ -83,6 +90,14 @@ describe('StartGameUseCase', () => {
       expect(updateLobbyMock).toHaveBeenCalledWith({
         id: 'mock-lobby-id',
         status: LobbyEntityStatus.GAME_STARTED,
+        config: {
+          campaign: {
+            id: 'mock-campaign-id',
+            stage: {
+              id: 'mock-stage-id',
+            },
+          },
+        },
         players: [
           { userId: 'mock-user-id', heroesSelected: ['warrior'], isReady: true },
           { userId: 'mock-user-id-2', heroesSelected: ['cleric'], isReady: true },
@@ -95,35 +110,20 @@ describe('StartGameUseCase', () => {
         ],
       });
 
-      expect(createGameMock).toHaveBeenCalledOnce();
-      expect(createGameMock).toHaveBeenCalledWith({
-        id: 'mock-lobby-id',
-        map: {
-          width: expect.any(Number),
-          height: expect.any(Number),
-          tiles: [
-            {
-              coord: { x: expect.any(Number), y: expect.any(Number) },
-              entities: [],
-            },
-          ],
-        },
-        playableEntities: [
-          expect.objectContaining({ id: 'warrior', playedByUserId: 'mock-user-id' }),
-          expect.objectContaining({ id: 'cleric', playedByUserId: 'mock-user-id-2' }),
-          expect.objectContaining({ id: 'thief', playedByUserId: 'mock-user-id-3' }),
-        ],
-        timeline: [],
-      });
-
       expect(eventEmitterMock).toHaveBeenCalledTimes(2);
       expect(eventEmitterMock).toHaveBeenCalledWith(
         LobbyEvent.LobbyChanged,
         new LobbyChangedPayload({ ctx: mockParams.ctx, lobbyId: mockParams.lobbyId }),
       );
       expect(eventEmitterMock).toHaveBeenCalledWith(
-        LobbyEvent.GameStarted,
-        expect.objectContaining({}),
+        LobbyEvent.LobbyGameStarted,
+        new LobbyGameStartedPayload({
+          ctx: mockParams.ctx,
+          lobbyId: mockParams.lobbyId,
+          userId: mockParams.userId,
+          campaignId: 'mock-campaign-id',
+          stageId: 'mock-stage-id',
+        }),
       );
     });
   });

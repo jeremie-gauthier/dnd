@@ -6,4 +6,5 @@ export const ClientLobbyEvent = {
   RequestPickHero: 'client.lobby.pick_hero',
   RequestDiscardHero: 'client.lobby.discard_hero',
   RequestToggleReadyState: 'client.lobby.toggle_ready_state',
+  RequestStartLobby: 'client.lobby.request_start_lobby',
 } as const;

@@ -31,6 +31,8 @@ import { LobbyPrivateController } from './private/lobby-private.controller';
 import { LobbyPrivateGateway } from './private/lobby-private.gateway';
 import { PickHeroRepository } from './private/pick-hero/pick-hero.repository';
 import { PickHeroUseCase } from './private/pick-hero/pick-hero.uc';
+import { StartGameRepository } from './private/start-game/start-game.repository';
+import { StartGameUseCase } from './private/start-game/start-game.uc';
 import { TogglePlayerReadyStateRepository } from './private/toggle-player-ready-state/toggle-player-ready-state.repository';
 import { TogglePlayerReadyStateUseCase } from './private/toggle-player-ready-state/toggle-player-ready-state.uc';
 
@@ -66,6 +68,8 @@ import { TogglePlayerReadyStateUseCase } from './private/toggle-player-ready-sta
     DiscardHeroRepository,
     TogglePlayerReadyStateUseCase,
     TogglePlayerReadyStateRepository,
+    StartGameUseCase,
+    StartGameRepository,
   ],
 })
 export class LobbyModule {}
