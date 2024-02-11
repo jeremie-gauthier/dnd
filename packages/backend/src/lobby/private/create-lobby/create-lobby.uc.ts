@@ -1,3 +1,4 @@
+import { LobbyEntityStatus } from '@dnd/shared';
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CampaignStage } from 'src/database/entities/campaign-stage.entity';
@@ -30,6 +31,7 @@ export class CreateLobbyUseCase implements UseCase {
     const selectedStage = this.getStageById(campaign.stages, stageId);
 
     const lobby = await this.repository.createLobby({
+      status: LobbyEntityStatus.OPENED,
       host: {
         userId,
       },
