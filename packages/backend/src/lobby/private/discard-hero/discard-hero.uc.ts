@@ -27,6 +27,7 @@ export class DiscardHeroUseCase implements UseCase {
     userId: User['id'];
   }): Promise<void> {
     // TODO: the lobby fetched might lack of a lock
+    // TODO: peut-on discard un hero si on s'est declare "ready" ?
     const lobby = await this.repository.getLobbyById(lobbyId);
     if (!lobby) {
       throw new NotFoundException('Lobby not found');

@@ -25,6 +25,11 @@ export class StartGameUseCase implements UseCase {
     ctx: MessageContext;
     userId: User['id'];
   }): Promise<void> {
+    // TODO: envoyer un msg vers le lobby pour notifier le chargement du jeu à tous les joueurs
+    // => ils ne doivent plus pouvoir faire d'action pendant le chargement du lobby.
+    // TODO: un etat intermediaire representant le chargement du lobby ?
+    //  ? Puis etat "game_started" déclaré au dernier moment, apres le module game
+
     const lobby = await this.repository.getLobbyById(lobbyId);
     if (!lobby) {
       throw new NotFoundException('Lobby not found');
