@@ -1,14 +1,49 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 
-import { Tile } from './tile.interface';
+export type TilePlayableEntity = {
+  type: 'playable-entity';
+  id: string;
+};
 
-type Map = {
+export type TileNonPlayableInteractiveEntity = {
+  type: 'non-playable-interactive-entity';
+  kind: 'door' | 'trap';
+  isVisible: boolean;
+  isBlocking: boolean;
+  canInteract: boolean;
+};
+
+export type TileNonPlayableNonInteractiveEntity = {
+  type: 'non-playable-non-interactive-entity';
+  kind: 'wall' | 'pillar' | 'tree' | 'off-map';
+  isVisible: true;
+  isBlocking: true;
+  canInteract: false;
+};
+
+export type TileEntity =
+  | TilePlayableEntity
+  | TileNonPlayableInteractiveEntity
+  | TileNonPlayableNonInteractiveEntity;
+
+export type Coord = {
+  x: number;
+  y: number;
+};
+
+export type Tile = {
+  coord: Coord;
+  entities: TileEntity[];
+  isStartingTile?: true;
+};
+
+export type Map = {
   width: number;
   height: number;
   tiles: Tile[];
 };
 
-type PlayableEntity = {
+export type PlayableEntity = {
   id: string;
   playedByUserId: string;
 };
