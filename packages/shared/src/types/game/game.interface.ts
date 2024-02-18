@@ -1,19 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 
-type PlayableEntity = {
-  id: string;
-  playedByUserId: string;
-};
-
-type Coord = {
-  x: number;
-  y: number;
-};
-
-type Tile = {
-  coord: Coord;
-  entities: PlayableEntity['id'][];
-};
+import { Tile } from './tile.interface';
 
 type Map = {
   width: number;
@@ -21,9 +8,14 @@ type Map = {
   tiles: Tile[];
 };
 
+type PlayableEntity = {
+  id: string;
+  playedByUserId: string;
+};
+
 export type GameEntity = {
   id: string;
   map: Map;
-  playableEntities: PlayableEntity[];
+  playableEntities: Record<PlayableEntity['id'], PlayableEntity>;
   timeline: PlayableEntity['id'][];
 };
