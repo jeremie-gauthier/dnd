@@ -27,8 +27,8 @@ export type TileEntity =
   | TileNonPlayableNonInteractiveEntity;
 
 export type Coord = {
-  x: number;
-  y: number;
+  row: number;
+  column: number;
 };
 
 export type Tile = {

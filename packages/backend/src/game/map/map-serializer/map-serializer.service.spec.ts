@@ -29,11 +29,11 @@ describe('MapSerializerService', () => {
 						0,0;wall
 					`;
           const expected: GameEntity['map'] = {
-            width: 1,
-            height: 2,
+            height: 1,
+            width: 2,
             tiles: [
               {
-                coord: { x: 0, y: 0 },
+                coord: { row: 0, column: 0 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -45,7 +45,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 0, y: 1 },
+                coord: { row: 0, column: 1 },
                 entities: [],
                 isStartingTile: true,
               },
@@ -64,11 +64,11 @@ describe('MapSerializerService', () => {
 						0,0;tree
 					`;
           const expected: GameEntity['map'] = {
-            width: 1,
-            height: 2,
+            height: 1,
+            width: 2,
             tiles: [
               {
-                coord: { x: 0, y: 0 },
+                coord: { row: 0, column: 0 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -80,7 +80,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 0, y: 1 },
+                coord: { row: 0, column: 1 },
                 entities: [],
                 isStartingTile: true,
               },
@@ -99,11 +99,11 @@ describe('MapSerializerService', () => {
 						0,0;pillar
 					`;
           const expected: GameEntity['map'] = {
-            width: 1,
-            height: 2,
+            height: 1,
+            width: 2,
             tiles: [
               {
-                coord: { x: 0, y: 0 },
+                coord: { row: 0, column: 0 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -115,7 +115,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 0, y: 1 },
+                coord: { row: 0, column: 1 },
                 entities: [],
                 isStartingTile: true,
               },
@@ -133,15 +133,15 @@ describe('MapSerializerService', () => {
 						0,1
 					`;
           const expected: GameEntity['map'] = {
-            width: 1,
-            height: 2,
+            height: 1,
+            width: 2,
             tiles: [
               {
-                coord: { x: 0, y: 0 },
+                coord: { row: 0, column: 0 },
                 entities: [],
               },
               {
-                coord: { x: 0, y: 1 },
+                coord: { row: 0, column: 1 },
                 entities: [],
                 isStartingTile: true,
               },
@@ -160,11 +160,11 @@ describe('MapSerializerService', () => {
 						0,0;door
 					`;
           const expected: GameEntity['map'] = {
-            width: 1,
-            height: 2,
+            height: 1,
+            width: 2,
             tiles: [
               {
-                coord: { x: 0, y: 0 },
+                coord: { row: 0, column: 0 },
                 entities: [
                   {
                     type: 'non-playable-interactive-entity',
@@ -176,7 +176,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 0, y: 1 },
+                coord: { row: 0, column: 1 },
                 entities: [],
                 isStartingTile: true,
               },
@@ -188,18 +188,18 @@ describe('MapSerializerService', () => {
           expect(result).toStrictEqual(expected);
         });
 
-        it.skip('should parse a trap', () => {
+        it('should parse a trap', () => {
           const compiledMap = `
 						1;2
 						0,1
 						0,0;trap
 					`;
           const expected: GameEntity['map'] = {
-            width: 1,
-            height: 2,
+            height: 1,
+            width: 2,
             tiles: [
               {
-                coord: { x: 0, y: 0 },
+                coord: { row: 0, column: 0 },
                 entities: [
                   {
                     type: 'non-playable-interactive-entity',
@@ -211,7 +211,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 0, y: 1 },
+                coord: { row: 0, column: 1 },
                 entities: [],
                 isStartingTile: true,
               },
@@ -231,11 +231,11 @@ describe('MapSerializerService', () => {
 						0,0;playable,${playableEntityId}
 					`;
           const expected: GameEntity['map'] = {
-            width: 1,
-            height: 2,
+            height: 1,
+            width: 2,
             tiles: [
               {
-                coord: { x: 0, y: 0 },
+                coord: { row: 0, column: 0 },
                 entities: [
                   {
                     type: 'playable-entity',
@@ -244,7 +244,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 0, y: 1 },
+                coord: { row: 0, column: 1 },
                 entities: [],
                 isStartingTile: true,
               },
@@ -264,11 +264,11 @@ describe('MapSerializerService', () => {
 						0,0;playable,${playableEntityId}
 					`;
           const expected: GameEntity['map'] = {
-            width: 1,
-            height: 2,
+            height: 1,
+            width: 2,
             tiles: [
               {
-                coord: { x: 0, y: 0 },
+                coord: { row: 0, column: 0 },
                 entities: [
                   {
                     type: 'playable-entity',
@@ -278,7 +278,7 @@ describe('MapSerializerService', () => {
                 isStartingTile: true,
               },
               {
-                coord: { x: 0, y: 1 },
+                coord: { row: 0, column: 1 },
                 entities: [],
               },
             ],
@@ -289,23 +289,24 @@ describe('MapSerializerService', () => {
         });
       });
 
-      describe('2x3 map', () => {
+      describe('3x2 map', () => {
         it('should parse pillar in the top right corner of the map', () => {
           const compiledMap = `
-						2;3
+						3;2
 						0,0
 						0,1;pillar
 					`;
           const expected: GameEntity['map'] = {
-            width: 2,
             height: 3,
+            width: 2,
             tiles: [
               {
-                coord: { x: 0, y: 0 },
+                coord: { row: 0, column: 0 },
                 entities: [],
+                isStartingTile: true,
               },
               {
-                coord: { x: 1, y: 0 },
+                coord: { row: 0, column: 1 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -317,19 +318,19 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 0, y: 1 },
+                coord: { row: 1, column: 0 },
                 entities: [],
               },
               {
-                coord: { x: 1, y: 1 },
+                coord: { row: 1, column: 1 },
                 entities: [],
               },
               {
-                coord: { x: 0, y: 2 },
+                coord: { row: 2, column: 0 },
                 entities: [],
               },
               {
-                coord: { x: 1, y: 2 },
+                coord: { row: 2, column: 1 },
                 entities: [],
               },
             ],
@@ -342,19 +343,19 @@ describe('MapSerializerService', () => {
 
         it('should parse a wall on the top and bot lines', () => {
           const compiledMap = `
-						2;3
+						3;2
 						1,1
 						0,0;wall
 						0,1;wall
-						0,2;wall
-						1,2;wall
+						2,0;wall
+						2,1;wall
 					`;
           const expected: GameEntity['map'] = {
-            width: 2,
             height: 3,
+            width: 2,
             tiles: [
               {
-                coord: { x: 0, y: 0 },
+                coord: { row: 0, column: 0 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -366,7 +367,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 1, y: 0 },
+                coord: { row: 0, column: 1 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -378,17 +379,16 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 0, y: 1 },
-
+                coord: { row: 1, column: 0 },
                 entities: [],
               },
               {
-                coord: { x: 1, y: 1 },
-
+                coord: { row: 1, column: 1 },
                 entities: [],
+                isStartingTile: true,
               },
               {
-                coord: { x: 0, y: 2 },
+                coord: { row: 2, column: 0 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -399,8 +399,9 @@ describe('MapSerializerService', () => {
                   },
                 ],
               },
+
               {
-                coord: { x: 1, y: 2 },
+                coord: { row: 2, column: 1 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -421,36 +422,36 @@ describe('MapSerializerService', () => {
 
         it('should parse an empty map', () => {
           const compiledMap = `
-						2;3
+						3;2
 						0,0
 					`;
           const expected: GameEntity['map'] = {
-            width: 2,
             height: 3,
+            width: 2,
             tiles: [
               {
-                coord: { x: 0, y: 0 },
+                coord: { row: 0, column: 0 },
                 entities: [],
                 isStartingTile: true,
               },
               {
-                coord: { x: 1, y: 0 },
+                coord: { row: 0, column: 1 },
                 entities: [],
               },
               {
-                coord: { x: 0, y: 1 },
+                coord: { row: 1, column: 0 },
                 entities: [],
               },
               {
-                coord: { x: 1, y: 1 },
+                coord: { row: 1, column: 1 },
                 entities: [],
               },
               {
-                coord: { x: 0, y: 2 },
+                coord: { row: 2, column: 0 },
                 entities: [],
               },
               {
-                coord: { x: 1, y: 2 },
+                coord: { row: 2, column: 1 },
                 entities: [],
               },
             ],
@@ -463,23 +464,23 @@ describe('MapSerializerService', () => {
 
         it('should parse a door vertically surrounded by walls in the middle of the map', () => {
           const compiledMap = `
-						2;3
+						3;2
 						0,0
-						1,0;wall
+						0,1;wall
 						1,1;door
-						1,2;wall
+						2,1;wall
 					`;
           const expected: GameEntity['map'] = {
-            width: 2,
             height: 3,
+            width: 2,
             tiles: [
               {
-                coord: { x: 0, y: 0 },
+                coord: { row: 0, column: 0 },
                 entities: [],
                 isStartingTile: true,
               },
               {
-                coord: { x: 1, y: 0 },
+                coord: { row: 0, column: 1 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -491,11 +492,11 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 0, y: 1 },
+                coord: { row: 1, column: 0 },
                 entities: [],
               },
               {
-                coord: { x: 1, y: 1 },
+                coord: { row: 1, column: 1 },
                 entities: [
                   {
                     type: 'non-playable-interactive-entity',
@@ -507,12 +508,11 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 0, y: 2 },
-
+                coord: { row: 2, column: 0 },
                 entities: [],
               },
               {
-                coord: { x: 1, y: 2 },
+                coord: { row: 2, column: 1 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -543,104 +543,104 @@ describe('MapSerializerService', () => {
             width: 5,
             tiles: [
               {
-                coord: { x: 0, y: 0 },
+                coord: { row: 0, column: 0 },
                 entities: [],
                 isStartingTile: true,
               },
               {
-                coord: { x: 1, y: 0 },
+                coord: { row: 0, column: 1 },
                 entities: [],
               },
               {
-                coord: { x: 2, y: 0 },
+                coord: { row: 0, column: 2 },
                 entities: [],
               },
               {
-                coord: { x: 3, y: 0 },
+                coord: { row: 0, column: 3 },
                 entities: [],
               },
               {
-                coord: { x: 4, y: 0 },
+                coord: { row: 0, column: 4 },
                 entities: [],
               },
               {
-                coord: { x: 0, y: 1 },
+                coord: { row: 1, column: 0 },
                 entities: [],
               },
               {
-                coord: { x: 1, y: 1 },
+                coord: { row: 1, column: 1 },
                 entities: [],
               },
               {
-                coord: { x: 2, y: 1 },
+                coord: { row: 1, column: 2 },
                 entities: [],
               },
               {
-                coord: { x: 3, y: 1 },
+                coord: { row: 1, column: 3 },
                 entities: [],
               },
               {
-                coord: { x: 4, y: 1 },
+                coord: { row: 1, column: 4 },
                 entities: [],
               },
               {
-                coord: { x: 0, y: 2 },
+                coord: { row: 2, column: 0 },
                 entities: [],
               },
               {
-                coord: { x: 1, y: 2 },
+                coord: { row: 2, column: 1 },
                 entities: [],
               },
               {
-                coord: { x: 2, y: 2 },
+                coord: { row: 2, column: 2 },
                 entities: [],
               },
               {
-                coord: { x: 3, y: 2 },
+                coord: { row: 2, column: 3 },
                 entities: [],
               },
               {
-                coord: { x: 4, y: 2 },
+                coord: { row: 2, column: 4 },
                 entities: [],
               },
               {
-                coord: { x: 0, y: 3 },
+                coord: { row: 3, column: 0 },
                 entities: [],
               },
               {
-                coord: { x: 1, y: 3 },
+                coord: { row: 3, column: 1 },
                 entities: [],
               },
               {
-                coord: { x: 2, y: 3 },
+                coord: { row: 3, column: 2 },
                 entities: [],
               },
               {
-                coord: { x: 3, y: 3 },
+                coord: { row: 3, column: 3 },
                 entities: [],
               },
               {
-                coord: { x: 4, y: 3 },
+                coord: { row: 3, column: 4 },
                 entities: [],
               },
               {
-                coord: { x: 0, y: 4 },
+                coord: { row: 4, column: 0 },
                 entities: [],
               },
               {
-                coord: { x: 1, y: 4 },
+                coord: { row: 4, column: 1 },
                 entities: [],
               },
               {
-                coord: { x: 2, y: 4 },
+                coord: { row: 4, column: 2 },
                 entities: [],
               },
               {
-                coord: { x: 3, y: 4 },
+                coord: { row: 4, column: 3 },
                 entities: [],
               },
               {
-                coord: { x: 4, y: 4 },
+                coord: { row: 4, column: 4 },
                 entities: [],
               },
             ],
@@ -655,44 +655,44 @@ describe('MapSerializerService', () => {
           const compiledMap = `
 						5;5
 						0,0
-						0,1;wall
+						1,0;wall
 						1,1;wall
-						2,1;door
-						3,1;wall
-						4,1;wall
-						0,3;wall
+						1,2;door
 						1,3;wall
-						2,3;wall
+						1,4;wall
+						3,0;wall
+						3,1;wall
+						3,2;wall
 						3,3;wall
-						4,3;wall
+						3,4;wall
 					`;
           const expected: GameEntity['map'] = {
             height: 5,
             width: 5,
             tiles: [
               {
-                coord: { x: 0, y: 0 },
+                coord: { row: 0, column: 0 },
                 entities: [],
                 isStartingTile: true,
               },
               {
-                coord: { x: 1, y: 0 },
+                coord: { row: 0, column: 1 },
                 entities: [],
               },
               {
-                coord: { x: 2, y: 0 },
+                coord: { row: 0, column: 2 },
                 entities: [],
               },
               {
-                coord: { x: 3, y: 0 },
+                coord: { row: 0, column: 3 },
                 entities: [],
               },
               {
-                coord: { x: 4, y: 0 },
+                coord: { row: 0, column: 4 },
                 entities: [],
               },
               {
-                coord: { x: 0, y: 1 },
+                coord: { row: 1, column: 0 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -704,7 +704,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 1, y: 1 },
+                coord: { row: 1, column: 1 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -716,7 +716,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 2, y: 1 },
+                coord: { row: 1, column: 2 },
                 entities: [
                   {
                     type: 'non-playable-interactive-entity',
@@ -728,7 +728,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 3, y: 1 },
+                coord: { row: 1, column: 3 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -740,7 +740,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 4, y: 1 },
+                coord: { row: 1, column: 4 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -752,32 +752,27 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 0, y: 2 },
-
+                coord: { row: 2, column: 0 },
                 entities: [],
               },
               {
-                coord: { x: 1, y: 2 },
-
+                coord: { row: 2, column: 1 },
                 entities: [],
               },
               {
-                coord: { x: 2, y: 2 },
-
+                coord: { row: 2, column: 2 },
                 entities: [],
               },
               {
-                coord: { x: 3, y: 2 },
-
+                coord: { row: 2, column: 3 },
                 entities: [],
               },
               {
-                coord: { x: 4, y: 2 },
-
+                coord: { row: 2, column: 4 },
                 entities: [],
               },
               {
-                coord: { x: 0, y: 3 },
+                coord: { row: 3, column: 0 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -789,7 +784,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 1, y: 3 },
+                coord: { row: 3, column: 1 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -801,7 +796,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 2, y: 3 },
+                coord: { row: 3, column: 2 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -813,7 +808,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 3, y: 3 },
+                coord: { row: 3, column: 3 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -825,7 +820,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 4, y: 3 },
+                coord: { row: 3, column: 4 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -837,7 +832,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 0, y: 4 },
+                coord: { row: 4, column: 0 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -849,7 +844,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 1, y: 4 },
+                coord: { row: 4, column: 1 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -861,7 +856,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 2, y: 4 },
+                coord: { row: 4, column: 2 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -873,7 +868,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 3, y: 4 },
+                coord: { row: 4, column: 3 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
@@ -885,7 +880,7 @@ describe('MapSerializerService', () => {
                 ],
               },
               {
-                coord: { x: 4, y: 4 },
+                coord: { row: 4, column: 4 },
                 entities: [
                   {
                     type: 'non-playable-non-interactive-entity',
