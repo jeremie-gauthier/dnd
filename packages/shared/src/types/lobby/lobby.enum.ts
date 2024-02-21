@@ -1,5 +1,6 @@
 export const LobbyEntityStatus = {
   OPENED: 'OPENED',
+  GAME_INITIALIZING: 'GAME_INITIALIZING',
   GAME_STARTED: 'GAME_STARTED',
 } as const;
 

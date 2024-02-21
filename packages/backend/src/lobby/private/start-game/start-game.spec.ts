@@ -4,7 +4,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test } from '@nestjs/testing';
 import { LobbyChangedPayload } from 'src/lobby/events/emitters/lobby-changed.payload';
 import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
-import { LobbyGameStartedPayload } from 'src/lobby/events/emitters/lobby-game-started.payload';
+import { LobbyGameInitializingPayload } from 'src/lobby/events/emitters/lobby-game-started.payload';
 import type { MessageContext } from 'src/types/socket.type';
 import { MockInstance, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { StartGameRepository } from './start-game.repository';
@@ -89,7 +89,7 @@ describe('StartGameUseCase', () => {
       expect(updateLobbyMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledWith({
         id: 'mock-lobby-id',
-        status: LobbyEntityStatus.GAME_STARTED,
+        status: LobbyEntityStatus.GAME_INITIALIZING,
         config: {
           campaign: {
             id: 'mock-campaign-id',
@@ -116,8 +116,8 @@ describe('StartGameUseCase', () => {
         new LobbyChangedPayload({ ctx: mockParams.ctx, lobbyId: mockParams.lobbyId }),
       );
       expect(eventEmitterMock).toHaveBeenCalledWith(
-        LobbyEvent.LobbyGameStarted,
-        new LobbyGameStartedPayload({
+        LobbyEvent.LobbyGameInitializing,
+        new LobbyGameInitializingPayload({
           ctx: mockParams.ctx,
           lobbyId: mockParams.lobbyId,
           userId: mockParams.userId,

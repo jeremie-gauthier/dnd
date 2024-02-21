@@ -1,8 +1,8 @@
 ---
-name: LobbyGameStarted
+name: LobbyGameInitializing
 version: 0.0.1
 summary: |
-  Represents when a lobby game has started.
+  Represents when a lobby game is initializing.
 producers:
   - Start Game UC
 ---

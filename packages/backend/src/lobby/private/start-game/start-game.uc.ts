@@ -4,7 +4,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import type { User } from 'src/database/entities/user.entity';
 import { LobbyChangedPayload } from 'src/lobby/events/emitters/lobby-changed.payload';
 import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
-import { LobbyGameStartedPayload } from 'src/lobby/events/emitters/lobby-game-started.payload';
+import { LobbyGameInitializingPayload } from 'src/lobby/events/emitters/lobby-game-started.payload';
 import type { MessageContext } from 'src/types/socket.type';
 import { UseCase } from 'src/types/use-case.interface';
 import { StartGameInputDto } from './start-game.dto';
@@ -35,13 +35,13 @@ export class StartGameUseCase implements UseCase {
       throw new NotFoundException('Lobby not found');
     }
 
-    this.setLobbyAsReadyForGame(lobby);
+    this.setLobbyAsReadyForGameInitializing(lobby);
     await this.repository.updateLobby(lobby);
 
     this.eventEmitter.emitAsync(LobbyEvent.LobbyChanged, new LobbyChangedPayload({ ctx, lobbyId }));
     this.eventEmitter.emitAsync(
-      LobbyEvent.LobbyGameStarted,
-      new LobbyGameStartedPayload({
+      LobbyEvent.LobbyGameInitializing,
+      new LobbyGameInitializingPayload({
         ctx,
         userId,
         lobbyId,
@@ -51,7 +51,7 @@ export class StartGameUseCase implements UseCase {
     );
   }
 
-  private setLobbyAsReadyForGame(lobby: LobbyEntity) {
+  private setLobbyAsReadyForGameInitializing(lobby: LobbyEntity) {
     const { players, heroesAvailable } = lobby;
     if (players.some((player) => !player.isReady)) {
       throw new ForbiddenException('Some players are not ready');
@@ -61,6 +61,6 @@ export class StartGameUseCase implements UseCase {
       throw new ForbiddenException('Some hero are not picked');
     }
 
-    lobby.status = LobbyEntityStatus.GAME_STARTED;
+    lobby.status = LobbyEntityStatus.GAME_INITIALIZING;
   }
 }
