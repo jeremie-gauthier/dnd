@@ -1,5 +1,5 @@
 import { LobbyEntity } from '@dnd/shared';
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { User } from 'src/database/entities/user.entity';
 import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
@@ -50,15 +50,19 @@ export class JoinLobbyUseCase implements UseCase {
     lobby: LobbyEntity | null,
   ): asserts lobby is LobbyEntity {
     if (!lobby) {
-      throw new Error('Lobby not found');
+      throw new NotFoundException('Lobby not found');
+    }
+
+    if (lobby.status !== 'OPENED') {
+      throw new ForbiddenException('Lobby is not opened');
     }
 
     if (lobby.players.length >= lobby.config.nbPlayersMax) {
-      throw new Error('No space left in this lobby');
+      throw new ForbiddenException('No space left in this lobby');
     }
 
     if (lobby.players.some((player) => player.userId === userId)) {
-      throw new Error('You are already in this lobby');
+      throw new ForbiddenException('You are already in this lobby');
     }
   }
 }

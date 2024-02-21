@@ -71,6 +71,9 @@ describe('StartGameUseCase', () => {
             },
           },
         },
+        host: {
+          userId: 'mock-user-id',
+        },
         players: [
           { userId: 'mock-user-id', heroesSelected: ['warrior'], isReady: true },
           { userId: 'mock-user-id-2', heroesSelected: ['cleric'], isReady: true },
@@ -97,6 +100,9 @@ describe('StartGameUseCase', () => {
               id: 'mock-stage-id',
             },
           },
+        },
+        host: {
+          userId: 'mock-user-id',
         },
         players: [
           { userId: 'mock-user-id', heroesSelected: ['warrior'], isReady: true },

@@ -49,6 +49,10 @@ export class PickHeroUseCase implements UseCase {
     userId: User['id'];
     heroId: Hero['id'];
   }) {
+    if (lobby.status !== 'OPENED') {
+      throw new ForbiddenException('Lobby is not opened');
+    }
+
     const heroIdx = lobby.heroesAvailable.findIndex(({ id }) => id === heroId);
     if (heroIdx < 0) {
       throw new NotFoundException('Hero not found');

@@ -26,14 +26,11 @@ export class StartGameUseCase implements UseCase {
     userId: User['id'];
   }): Promise<void> {
     // TODO: envoyer un msg vers le lobby pour notifier le chargement du jeu à tous les joueurs
-    // => ils ne doivent plus pouvoir faire d'action pendant le chargement du lobby.
     // TODO: un etat intermediaire representant le chargement du lobby ?
     //  ? Puis etat "game_started" déclaré au dernier moment, apres le module game
 
     const lobby = await this.repository.getLobbyById(lobbyId);
-    if (!lobby) {
-      throw new NotFoundException('Lobby not found');
-    }
+    this.assertCanStartGame(userId, lobby);
 
     this.setLobbyAsReadyForGameInitializing(lobby);
     await this.repository.updateLobby(lobby);
@@ -49,6 +46,23 @@ export class StartGameUseCase implements UseCase {
         stageId: lobby.config.campaign.stage.id,
       }),
     );
+  }
+
+  private assertCanStartGame(
+    userId: User['id'],
+    lobby: LobbyEntity | null,
+  ): asserts lobby is LobbyEntity {
+    if (!lobby) {
+      throw new NotFoundException('Lobby not found');
+    }
+
+    if (lobby.status !== 'OPENED') {
+      throw new ForbiddenException('Lobby is not opened');
+    }
+
+    if (lobby.host.userId !== userId) {
+      throw new ForbiddenException('You are not the host of this lobby');
+    }
   }
 
   private setLobbyAsReadyForGameInitializing(lobby: LobbyEntity) {
