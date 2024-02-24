@@ -56,6 +56,8 @@ describe('StartGameUseCase', () => {
     expect(useCase).toBeDefined();
     expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
+    expect(updateLobbyMock).toBeDefined();
+    expect(eventEmitterMock).toBeDefined();
   });
 
   describe('Happy path', async () => {
