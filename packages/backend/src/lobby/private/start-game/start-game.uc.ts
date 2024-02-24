@@ -25,10 +25,6 @@ export class StartGameUseCase implements UseCase {
     ctx: MessageContext;
     userId: User['id'];
   }): Promise<void> {
-    // TODO: envoyer un msg vers le lobby pour notifier le chargement du jeu à tous les joueurs
-    // TODO: un etat intermediaire representant le chargement du lobby ?
-    //  ? Puis etat "game_started" déclaré au dernier moment, apres le module game
-
     const lobby = await this.repository.getLobbyById(lobbyId);
     this.assertCanStartGame(userId, lobby);
 
@@ -38,13 +34,7 @@ export class StartGameUseCase implements UseCase {
     this.eventEmitter.emitAsync(LobbyEvent.LobbyChanged, new LobbyChangedPayload({ ctx, lobbyId }));
     this.eventEmitter.emitAsync(
       LobbyEvent.HostRequestedGameStart,
-      new HostRequestedGameStartPayload({
-        ctx,
-        userId,
-        lobbyId,
-        campaignId: lobby.config.campaign.id,
-        stageId: lobby.config.campaign.stage.id,
-      }),
+      new HostRequestedGameStartPayload({ ctx, userId, lobby }),
     );
   }
 

@@ -127,10 +127,32 @@ describe('StartGameUseCase', () => {
         LobbyEvent.HostRequestedGameStart,
         new HostRequestedGameStartPayload({
           ctx: mockParams.ctx,
-          lobbyId: mockParams.lobbyId,
           userId: mockParams.userId,
-          campaignId: 'mock-campaign-id',
-          stageId: 'mock-stage-id',
+          lobby: {
+            id: 'mock-lobby-id',
+            status: LobbyEntityStatus.GAME_INITIALIZING,
+            config: {
+              campaign: {
+                id: 'mock-campaign-id',
+                stage: {
+                  id: 'mock-stage-id',
+                },
+              },
+            },
+            host: {
+              userId: 'mock-user-id',
+            },
+            players: [
+              { userId: 'mock-user-id', heroesSelected: ['warrior'], isReady: true },
+              { userId: 'mock-user-id-2', heroesSelected: ['cleric'], isReady: true },
+              { userId: 'mock-user-id-3', heroesSelected: ['thief'], isReady: true },
+            ],
+            heroesAvailable: [
+              { id: 'warrior', pickedBy: 'mock-user-id' },
+              { id: 'cleric', pickedBy: 'mock-user-id-2' },
+              { id: 'thief', pickedBy: 'mock-user-id-3' },
+            ],
+          } as LobbyEntity,
         }),
       );
     });
