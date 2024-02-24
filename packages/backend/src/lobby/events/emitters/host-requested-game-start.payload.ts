@@ -6,10 +6,10 @@ import { EventPayload } from 'src/event-emitter/event-payload.class';
 import type { MessageContext } from 'src/types/socket.type';
 import { LobbyEvent } from './lobby-events.enum';
 
-export class LobbyGameInitializingPayload
-  implements EventPayload<LobbyEvent.LobbyGameInitializing>
+export class HostRequestedGameStartPayload
+  implements EventPayload<LobbyEvent.HostRequestedGameStart>
 {
-  public readonly name = LobbyEvent.LobbyGameInitializing;
+  public readonly name = LobbyEvent.HostRequestedGameStart;
   public readonly ctx: MessageContext;
   public readonly lobbyId: LobbyEntity['id'];
   public readonly userId: User['id'];
@@ -22,7 +22,7 @@ export class LobbyGameInitializingPayload
     userId,
     stageId,
     campaignId,
-  }: Omit<LobbyGameInitializingPayload, 'name'>) {
+  }: Omit<HostRequestedGameStartPayload, 'name'>) {
     this.ctx = ctx;
     this.lobbyId = lobbyId;
     this.userId = userId;

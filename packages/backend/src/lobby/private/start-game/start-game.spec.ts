@@ -2,9 +2,9 @@ import { LobbyEntity, LobbyEntityStatus } from '@dnd/shared';
 import { ForbiddenException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test } from '@nestjs/testing';
+import { HostRequestedGameStartPayload } from 'src/lobby/events/emitters/host-requested-game-start.payload';
 import { LobbyChangedPayload } from 'src/lobby/events/emitters/lobby-changed.payload';
 import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
-import { LobbyGameInitializingPayload } from 'src/lobby/events/emitters/lobby-game-started.payload';
 import type { MessageContext } from 'src/types/socket.type';
 import { MockInstance, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { StartGameRepository } from './start-game.repository';
@@ -122,8 +122,8 @@ describe('StartGameUseCase', () => {
         new LobbyChangedPayload({ ctx: mockParams.ctx, lobbyId: mockParams.lobbyId }),
       );
       expect(eventEmitterMock).toHaveBeenCalledWith(
-        LobbyEvent.LobbyGameInitializing,
-        new LobbyGameInitializingPayload({
+        LobbyEvent.HostRequestedGameStart,
+        new HostRequestedGameStartPayload({
           ctx: mockParams.ctx,
           lobbyId: mockParams.lobbyId,
           userId: mockParams.userId,
