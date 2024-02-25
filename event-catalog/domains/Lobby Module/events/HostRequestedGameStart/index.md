@@ -5,6 +5,8 @@ summary: |
   Represents when a lobby game is initializing.
 producers:
   - Start Game UC
+consumers:
+  - Game Initialization Listener
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />

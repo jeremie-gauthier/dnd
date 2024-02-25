@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 
+import { HeroClassType } from '../../database/enums/hero-class.enum';
+
 export type TilePlayableEntity = {
   type: 'playable-entity';
   id: string;
@@ -45,7 +47,32 @@ export type Map = {
 
 export type PlayableEntity = {
   id: string;
+  type: 'hero' | 'enemy';
+
   playedByUserId: string;
+
+  name: string;
+  class: HeroClassType;
+  level: number;
+
+  initiative: number;
+  coord: Coord;
+  isBlocking: boolean;
+
+  baseHealthPoints: number;
+  healthPoints: number;
+
+  baseManaPoints: number;
+  manaPoints: number;
+
+  baseArmorClass: number;
+  armorClass: number;
+
+  baseMovementPoints: number;
+  movementPoints: number;
+
+  baseActionPoints: number;
+  actionPoints: number;
 };
 
 export type GameEntity = {
