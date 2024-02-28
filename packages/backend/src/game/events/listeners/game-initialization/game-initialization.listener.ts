@@ -19,7 +19,7 @@ export class GameInitializationListener {
   ) {}
 
   @OnEvent(LobbyEvent.HostRequestedGameStart)
-  public async handler(payload: HostRequestedGameStartPayload) {
+  public async handler(payload: HostRequestedGameStartPayload): Promise<void> {
     // 1. emit business evt "game_initialization"
     //    -> that will send ws evt "game initialization" under the hood
     this.eventEmitter.emitAsync(
