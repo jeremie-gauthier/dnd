@@ -2,9 +2,9 @@ import { LobbyEntity, LobbyEntityStatus } from '@dnd/shared';
 import { ForbiddenException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test } from '@nestjs/testing';
+import { HostRequestedGameStartPayload } from 'src/lobby/events/emitters/host-requested-game-start.payload';
 import { LobbyChangedPayload } from 'src/lobby/events/emitters/lobby-changed.payload';
 import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
-import { LobbyGameStartedPayload } from 'src/lobby/events/emitters/lobby-game-started.payload';
 import type { MessageContext } from 'src/types/socket.type';
 import { MockInstance, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { StartGameRepository } from './start-game.repository';
@@ -56,6 +56,8 @@ describe('StartGameUseCase', () => {
     expect(useCase).toBeDefined();
     expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
+    expect(updateLobbyMock).toBeDefined();
+    expect(eventEmitterMock).toBeDefined();
   });
 
   describe('Happy path', async () => {
@@ -70,6 +72,9 @@ describe('StartGameUseCase', () => {
               id: 'mock-stage-id',
             },
           },
+        },
+        host: {
+          userId: 'mock-user-id',
         },
         players: [
           { userId: 'mock-user-id', heroesSelected: ['warrior'], isReady: true },
@@ -89,7 +94,7 @@ describe('StartGameUseCase', () => {
       expect(updateLobbyMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledWith({
         id: 'mock-lobby-id',
-        status: LobbyEntityStatus.GAME_STARTED,
+        status: LobbyEntityStatus.GAME_INITIALIZING,
         config: {
           campaign: {
             id: 'mock-campaign-id',
@@ -97,6 +102,9 @@ describe('StartGameUseCase', () => {
               id: 'mock-stage-id',
             },
           },
+        },
+        host: {
+          userId: 'mock-user-id',
         },
         players: [
           { userId: 'mock-user-id', heroesSelected: ['warrior'], isReady: true },
@@ -116,13 +124,35 @@ describe('StartGameUseCase', () => {
         new LobbyChangedPayload({ ctx: mockParams.ctx, lobbyId: mockParams.lobbyId }),
       );
       expect(eventEmitterMock).toHaveBeenCalledWith(
-        LobbyEvent.LobbyGameStarted,
-        new LobbyGameStartedPayload({
+        LobbyEvent.HostRequestedGameStart,
+        new HostRequestedGameStartPayload({
           ctx: mockParams.ctx,
-          lobbyId: mockParams.lobbyId,
           userId: mockParams.userId,
-          campaignId: 'mock-campaign-id',
-          stageId: 'mock-stage-id',
+          lobby: {
+            id: 'mock-lobby-id',
+            status: LobbyEntityStatus.GAME_INITIALIZING,
+            config: {
+              campaign: {
+                id: 'mock-campaign-id',
+                stage: {
+                  id: 'mock-stage-id',
+                },
+              },
+            },
+            host: {
+              userId: 'mock-user-id',
+            },
+            players: [
+              { userId: 'mock-user-id', heroesSelected: ['warrior'], isReady: true },
+              { userId: 'mock-user-id-2', heroesSelected: ['cleric'], isReady: true },
+              { userId: 'mock-user-id-3', heroesSelected: ['thief'], isReady: true },
+            ],
+            heroesAvailable: [
+              { id: 'warrior', pickedBy: 'mock-user-id' },
+              { id: 'cleric', pickedBy: 'mock-user-id-2' },
+              { id: 'thief', pickedBy: 'mock-user-id-3' },
+            ],
+          } as LobbyEntity,
         }),
       );
     });

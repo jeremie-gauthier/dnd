@@ -1,5 +1,5 @@
+import { HeroClassType, HeroClassValues } from '@dnd/shared';
 import { Column, Entity, Index, ManyToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
-import { HeroClassType, HeroClassValues } from '../enums/hero-class.enum';
 import { Campaign } from './campaign.entity';
 import { PlayableEntity } from './playable-entity';
 

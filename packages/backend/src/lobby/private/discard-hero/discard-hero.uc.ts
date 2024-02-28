@@ -49,6 +49,10 @@ export class DiscardHeroUseCase implements UseCase {
     userId: User['id'];
     heroId: Hero['id'];
   }) {
+    if (lobby.status !== 'OPENED') {
+      throw new ForbiddenException('Lobby is not opened');
+    }
+
     const playerIdx = lobby.players.findIndex((player) => player.userId === userId);
     if (playerIdx < 0) {
       throw new ForbiddenException('You must be in the lobby to discard this hero');

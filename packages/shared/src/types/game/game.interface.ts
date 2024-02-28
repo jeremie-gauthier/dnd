@@ -1,29 +1,83 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 
-type PlayableEntity = {
+import { HeroClassType } from '../../database/enums/hero-class.enum';
+
+export type TilePlayableEntity = {
+  type: 'playable-entity';
   id: string;
-  playedByUserId: string;
 };
 
-type Coord = {
-  x: number;
-  y: number;
+export type TileNonPlayableInteractiveEntity = {
+  type: 'non-playable-interactive-entity';
+  kind: 'door' | 'trap';
+  isVisible: boolean;
+  isBlocking: boolean;
+  canInteract: boolean;
 };
 
-type Tile = {
+export type TileNonPlayableNonInteractiveEntity = {
+  type: 'non-playable-non-interactive-entity';
+  kind: 'wall' | 'pillar' | 'tree' | 'off-map';
+  isVisible: true;
+  isBlocking: true;
+  canInteract: false;
+};
+
+export type TileEntity =
+  | TilePlayableEntity
+  | TileNonPlayableInteractiveEntity
+  | TileNonPlayableNonInteractiveEntity;
+
+export type Coord = {
+  row: number;
+  column: number;
+};
+
+export type Tile = {
   coord: Coord;
-  entities: PlayableEntity['id'][];
+  entities: TileEntity[];
+  isStartingTile?: true;
 };
 
-type Map = {
+export type Map = {
   width: number;
   height: number;
   tiles: Tile[];
 };
 
+export type PlayableEntity = {
+  id: string;
+  type: 'hero' | 'enemy';
+
+  playedByUserId: string;
+
+  name: string;
+  class: HeroClassType;
+  level: number;
+
+  initiative: number;
+  coord: Coord;
+  isBlocking: boolean;
+
+  baseHealthPoints: number;
+  healthPoints: number;
+
+  baseManaPoints: number;
+  manaPoints: number;
+
+  baseArmorClass: number;
+  armorClass: number;
+
+  baseMovementPoints: number;
+  movementPoints: number;
+
+  baseActionPoints: number;
+  actionPoints: number;
+};
+
 export type GameEntity = {
   id: string;
   map: Map;
-  playableEntities: PlayableEntity[];
+  playableEntities: Record<PlayableEntity['id'], PlayableEntity>;
   timeline: PlayableEntity['id'][];
 };

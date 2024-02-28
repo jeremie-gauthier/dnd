@@ -1,4 +1,4 @@
-import type { LobbyEntity } from '@dnd/shared';
+import { LobbyEntityStatus, type LobbyEntity } from '@dnd/shared';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -70,6 +70,7 @@ describe('PickHeroUseCase', () => {
         id: 'mock-lobby-id',
         players: [{ userId: 'mock-user-id', heroesSelected: [] }],
         heroesAvailable: [{ id: 'warrior' }, { id: 'cleric' }, { id: 'thief' }],
+        status: LobbyEntityStatus.OPENED,
       } as unknown as LobbyEntity);
 
       await useCase.execute({ ...mockParams, heroId: 'warrior' });
@@ -84,6 +85,7 @@ describe('PickHeroUseCase', () => {
           { id: 'cleric' },
           { id: 'thief' },
         ],
+        status: LobbyEntityStatus.OPENED,
       });
       expect(eventEmitterMock).toHaveBeenCalledOnce();
       expect(eventEmitterMock).toHaveBeenCalledWith(
@@ -105,6 +107,7 @@ describe('PickHeroUseCase', () => {
           { id: 'cleric' },
           { id: 'thief', pickedBy: 'mock-another-user-id-1' },
         ],
+        status: LobbyEntityStatus.OPENED,
       } as unknown as LobbyEntity);
 
       await useCase.execute({ ...mockParams, heroId: 'cleric' });
@@ -123,6 +126,7 @@ describe('PickHeroUseCase', () => {
           { id: 'cleric', pickedBy: 'mock-user-id' },
           { id: 'thief', pickedBy: 'mock-another-user-id-1' },
         ],
+        status: LobbyEntityStatus.OPENED,
       });
       expect(eventEmitterMock).toHaveBeenCalledOnce();
       expect(eventEmitterMock).toHaveBeenCalledWith(
@@ -143,11 +147,25 @@ describe('PickHeroUseCase', () => {
       expect(eventEmitterMock).not.toHaveBeenCalled();
     });
 
+    it('should throw a ForbiddenException when the lobby is no longer opened', async () => {
+      const getLobbyByIdMock = vi.spyOn(repository, 'getLobbyById').mockResolvedValue({
+        id: 'mock-lobby-id',
+        status: LobbyEntityStatus.GAME_INITIALIZING,
+      } as unknown as LobbyEntity);
+
+      await expect(useCase.execute(mockParams)).rejects.toThrowError(ForbiddenException);
+
+      expect(getLobbyByIdMock).toHaveBeenCalledOnce();
+      expect(updateLobbyMock).not.toHaveBeenCalled();
+      expect(eventEmitterMock).not.toHaveBeenCalled();
+    });
+
     it('should throw a NotFoundException when the hero does not exists', async () => {
       const getLobbyByIdMock = vi.spyOn(repository, 'getLobbyById').mockResolvedValue({
         id: 'mock-lobby-id',
         players: [{ userId: 'mock-user-id', heroesSelected: [] }],
         heroesAvailable: [{ id: 'warrior' }, { id: 'cleric' }, { id: 'thief' }],
+        status: LobbyEntityStatus.OPENED,
       } as unknown as LobbyEntity);
 
       await expect(useCase.execute({ ...mockParams, heroId: 'superman' })).rejects.toThrowError(
@@ -167,6 +185,7 @@ describe('PickHeroUseCase', () => {
           { userId: 'mock-another-user-id', heroesSelected: ['warrior'] },
         ],
         heroesAvailable: [{ id: 'warrior', pickedBy: 'mock-another-user-id' }],
+        status: LobbyEntityStatus.OPENED,
       } as unknown as LobbyEntity);
 
       await expect(useCase.execute({ ...mockParams, heroId: 'warrior' })).rejects.toThrowError(
@@ -183,6 +202,7 @@ describe('PickHeroUseCase', () => {
         id: 'mock-lobby-id',
         players: [{ userId: 'mock-another-user-id', heroesSelected: [] }],
         heroesAvailable: [{ id: 'warrior' }],
+        status: LobbyEntityStatus.OPENED,
       } as unknown as LobbyEntity);
 
       await expect(useCase.execute({ ...mockParams, heroId: 'warrior' })).rejects.toThrowError(
