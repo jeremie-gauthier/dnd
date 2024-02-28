@@ -12,7 +12,7 @@ import { Server } from 'socket.io';
     origin: '*',
   },
 })
-export class GameEventsGateway {
+export class GameStartingPrivateGateway {
   @WebSocketServer()
   server: Server;
 
