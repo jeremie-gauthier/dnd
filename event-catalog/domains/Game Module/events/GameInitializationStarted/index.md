@@ -5,6 +5,8 @@ summary: |
   Represents when a game is initializing.
 producers:
   - Game Initialization Listener
+consumers:
+  - Game Initialization Started Listener
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />
