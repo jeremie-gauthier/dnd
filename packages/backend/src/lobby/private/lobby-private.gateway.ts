@@ -26,6 +26,8 @@ import { LeaveLobbyUseCase } from './leave-lobby/leave-lobby.uc';
 import { ListenLobbiesChangesUseCase } from './listen-lobbies-changes/listen-lobbies-changes.uc';
 import { PickHeroInputDto } from './pick-hero/pick-hero.dto';
 import { PickHeroUseCase } from './pick-hero/pick-hero.uc';
+import { StartGameInputDto } from './start-game/start-game.dto';
+import { StartGameUseCase } from './start-game/start-game.uc';
 import { TogglePlayerReadyStateInputDto } from './toggle-player-ready-state/toggle-player-ready-state.dto';
 import { TogglePlayerReadyStateUseCase } from './toggle-player-ready-state/toggle-player-ready-state.uc';
 
@@ -48,6 +50,7 @@ export class LobbyPrivateGateway implements OnGatewayConnection, OnGatewayDiscon
     private readonly pickHeroUseCase: PickHeroUseCase,
     private readonly discardHeroUseCase: DiscardHeroUseCase,
     private readonly togglePlayerReadyStateUseCase: TogglePlayerReadyStateUseCase,
+    private readonly startGameUseCase: StartGameUseCase,
   ) {}
 
   @WebSocketServer()
@@ -142,6 +145,18 @@ export class LobbyPrivateGateway implements OnGatewayConnection, OnGatewayDiscon
       ctx: this.getMessageContext(client),
       userId: client.data.userId,
       ...toggleReadyStateDto,
+    });
+  }
+
+  @SubscribeMessage(ClientLobbyEvent.RequestStartLobby)
+  public async startLobby(
+    @MessageBody() startGameDto: StartGameInputDto,
+    @ConnectedSocket() client: ServerSocket,
+  ) {
+    await this.startGameUseCase.execute({
+      ctx: this.getMessageContext(client),
+      userId: client.data.userId,
+      ...startGameDto,
     });
   }
 }

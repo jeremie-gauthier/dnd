@@ -9,6 +9,7 @@ consumers:
   - Track User Accross Lobbies Listener
   - Room Manager Listener
   - Lobbies Changes Listener
+  - Lobby Changed Listener
   - Lobby Cleaner Listener
 ---
 

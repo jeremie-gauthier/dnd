@@ -25,15 +25,23 @@ export class TogglePlayerReadyStateUseCase implements UseCase {
     userId: User['id'];
   }): Promise<void> {
     const lobby = await this.repository.getLobbyById(lobbyId);
-    if (!lobby) {
-      throw new NotFoundException('Lobby not found');
-    }
+    this.assertCanToggleReadyState(lobby);
 
     this.toggleUserReadyState({ lobby, userId });
 
     await this.repository.updateLobby(lobby);
 
     this.eventEmitter.emitAsync(LobbyEvent.LobbyChanged, new LobbyChangedPayload({ ctx, lobbyId }));
+  }
+
+  private assertCanToggleReadyState(lobby: LobbyEntity | null): asserts lobby is LobbyEntity {
+    if (!lobby) {
+      throw new NotFoundException('Lobby not found');
+    }
+
+    if (lobby.status !== 'OPENED') {
+      throw new ForbiddenException('Lobby is not opened');
+    }
   }
 
   private toggleUserReadyState({ lobby, userId }: { lobby: LobbyEntity; userId: User['id'] }) {

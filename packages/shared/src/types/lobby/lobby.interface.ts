@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 
+import { LobbyEntityStatusType } from './lobby.enum';
+
 type Hero = {
   id: string;
   pickedBy?: string;
@@ -24,6 +26,7 @@ type LobbyCampaign = {
 
 export type LobbyEntity = {
   id: string;
+  status: LobbyEntityStatusType;
   host: {
     userId: string;
   };

@@ -1,4 +1,4 @@
-import type { LobbyEntity } from '@dnd/shared';
+import { LobbyEntityStatus, type LobbyEntity } from '@dnd/shared';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test } from '@nestjs/testing';
@@ -21,7 +21,6 @@ describe('TogglePlayerReadyStateUseCase', () => {
     ctx: {} as MessageContext,
     userId: 'mock-user-id',
     lobbyId: 'mock-lobby-id',
-    heroId: 'mock-hero-id',
   };
 
   beforeEach(async () => {
@@ -62,6 +61,7 @@ describe('TogglePlayerReadyStateUseCase', () => {
       const getLobbyByIdMock = vi.spyOn(repository, 'getLobbyById').mockResolvedValue({
         id: 'mock-lobby-id',
         players: [{ userId: 'mock-user-id', isReady: false }],
+        status: LobbyEntityStatus.OPENED,
       } as unknown as LobbyEntity);
 
       await useCase.execute(mockParams);
@@ -71,6 +71,7 @@ describe('TogglePlayerReadyStateUseCase', () => {
       expect(updateLobbyMock).toHaveBeenCalledWith({
         id: 'mock-lobby-id',
         players: [{ userId: 'mock-user-id', isReady: true }],
+        status: LobbyEntityStatus.OPENED,
       });
       expect(eventEmitterMock).toHaveBeenCalledOnce();
       expect(eventEmitterMock).toHaveBeenCalledWith(
@@ -83,6 +84,7 @@ describe('TogglePlayerReadyStateUseCase', () => {
       const getLobbyByIdMock = vi.spyOn(repository, 'getLobbyById').mockResolvedValue({
         id: 'mock-lobby-id',
         players: [{ userId: 'mock-user-id', isReady: true }],
+        status: LobbyEntityStatus.OPENED,
       } as unknown as LobbyEntity);
 
       await useCase.execute(mockParams);
@@ -92,6 +94,7 @@ describe('TogglePlayerReadyStateUseCase', () => {
       expect(updateLobbyMock).toHaveBeenCalledWith({
         id: 'mock-lobby-id',
         players: [{ userId: 'mock-user-id', isReady: false }],
+        status: LobbyEntityStatus.OPENED,
       });
       expect(eventEmitterMock).toHaveBeenCalledOnce();
       expect(eventEmitterMock).toHaveBeenCalledWith(
@@ -108,6 +111,7 @@ describe('TogglePlayerReadyStateUseCase', () => {
           { userId: 'mock-another-user-id-that-is-ready', isReady: true },
           { userId: 'mock-another-user-id-that-is-not-ready', isReady: false },
         ],
+        status: LobbyEntityStatus.OPENED,
       } as unknown as LobbyEntity);
 
       await useCase.execute(mockParams);
@@ -121,6 +125,7 @@ describe('TogglePlayerReadyStateUseCase', () => {
           { userId: 'mock-another-user-id-that-is-ready', isReady: true },
           { userId: 'mock-another-user-id-that-is-not-ready', isReady: false },
         ],
+        status: LobbyEntityStatus.OPENED,
       });
       expect(eventEmitterMock).toHaveBeenCalledOnce();
       expect(eventEmitterMock).toHaveBeenCalledWith(
@@ -137,6 +142,7 @@ describe('TogglePlayerReadyStateUseCase', () => {
           { userId: 'mock-another-user-id-that-is-ready', isReady: true },
           { userId: 'mock-another-user-id-that-is-not-ready', isReady: false },
         ],
+        status: LobbyEntityStatus.OPENED,
       } as unknown as LobbyEntity);
 
       await useCase.execute(mockParams);
@@ -150,6 +156,7 @@ describe('TogglePlayerReadyStateUseCase', () => {
           { userId: 'mock-another-user-id-that-is-ready', isReady: true },
           { userId: 'mock-another-user-id-that-is-not-ready', isReady: false },
         ],
+        status: LobbyEntityStatus.OPENED,
       });
       expect(eventEmitterMock).toHaveBeenCalledOnce();
       expect(eventEmitterMock).toHaveBeenCalledWith(
@@ -170,10 +177,25 @@ describe('TogglePlayerReadyStateUseCase', () => {
       expect(eventEmitterMock).not.toHaveBeenCalled();
     });
 
+    it('should throw a ForbiddenException when the lobby is no longer opened', async () => {
+      const getLobbyByIdMock = vi.spyOn(repository, 'getLobbyById').mockResolvedValue({
+        id: 'mock-lobby-id',
+        players: [{ userId: 'mock-another-user-id', isReady: false }],
+        status: LobbyEntityStatus.GAME_INITIALIZING,
+      } as unknown as LobbyEntity);
+
+      await expect(useCase.execute(mockParams)).rejects.toThrowError(ForbiddenException);
+
+      expect(getLobbyByIdMock).toHaveBeenCalledOnce();
+      expect(updateLobbyMock).not.toHaveBeenCalled();
+      expect(eventEmitterMock).not.toHaveBeenCalled();
+    });
+
     it('should throw a ForbiddenException when the user is not in the lobby', async () => {
       const getLobbyByIdMock = vi.spyOn(repository, 'getLobbyById').mockResolvedValue({
         id: 'mock-lobby-id',
         players: [{ userId: 'mock-another-user-id', isReady: false }],
+        status: LobbyEntityStatus.OPENED,
       } as unknown as LobbyEntity);
 
       await expect(useCase.execute(mockParams)).rejects.toThrowError(ForbiddenException);

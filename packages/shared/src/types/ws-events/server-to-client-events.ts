@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { getLobbiesOutputSchema } from '../../schemas';
+import { GameEntity } from '../game';
 import { LobbyEntity } from '../lobby';
 import { ServerGameEvent } from './game-events/game-events.server';
 import { ServerLobbyEvent } from './lobby-events/lobby-events.server';
@@ -11,8 +12,9 @@ interface ServerToClientEventsAndPayloads extends Record<string, (...parameters:
     lobby: z.infer<typeof getLobbiesOutputSchema>[number];
   }) => void;
   [ServerLobbyEvent.LobbiesDeleted]: (payload: { lobbyId: LobbyEntity['id'] }) => void;
-  [ServerLobbyEvent.GameReady]: () => void;
   [ServerLobbyEvent.Error]: (payload: { name: string; message: string }) => void;
+  [ServerLobbyEvent.GameInitializationStarted]: () => void;
+  [ServerLobbyEvent.GameInitializationDone]: (payload: { game: GameEntity }) => void;
   [ServerGameEvent.GameStart]: () => void;
 }
 
