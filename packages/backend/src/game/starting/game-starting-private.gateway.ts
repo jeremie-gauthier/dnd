@@ -1,11 +1,14 @@
-import { ClientGameEvent, ServerGameEvent } from '@dnd/shared';
+import { ClientGameEvent } from '@dnd/shared';
 import {
+  ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { ServerSocket, WsServer } from 'src/types/socket.type';
+import { ChangePositionInputDto } from './private/change-position/change-position.dto';
+import { ChangePositionUseCase } from './private/change-position/change-position.uc';
 
 @WebSocketGateway({
   cors: {
@@ -13,12 +16,27 @@ import { Server } from 'socket.io';
   },
 })
 export class GameStartingPrivateGateway {
-  @WebSocketServer()
-  server: Server;
+  constructor(private readonly changePositionUseCase: ChangePositionUseCase) {}
 
-  @SubscribeMessage(ClientGameEvent.PlayerIsReady)
-  async identity(@MessageBody() data: number): Promise<number> {
-    console.log('identity', data, ServerGameEvent.GameStart);
-    return data;
+  @WebSocketServer()
+  private readonly server: WsServer;
+
+  private getMessageContext(client: ServerSocket) {
+    return {
+      server: this.server,
+      client,
+    };
+  }
+
+  @SubscribeMessage(ClientGameEvent.ChangeStartingPosition)
+  public async changePosition(
+    @MessageBody() changePositionInputDto: ChangePositionInputDto,
+    @ConnectedSocket() client: ServerSocket,
+  ): Promise<void> {
+    await this.changePositionUseCase.execute({
+      ctx: this.getMessageContext(client),
+      userId: client.data.userId,
+      changePositionInputDto,
+    });
   }
 }
