@@ -16,6 +16,7 @@ interface ServerToClientEventsAndPayloads extends Record<string, (...parameters:
   [ServerLobbyEvent.GameInitializationStarted]: () => void;
   [ServerLobbyEvent.GameInitializationDone]: (payload: { game: GameEntity }) => void;
   [ServerGameEvent.GameStart]: () => void;
+  [ServerGameEvent.GameChangesDetected]: (payload: { game: GameEntity }) => void;
 }
 
 export type ServerToClientEvents = EventsMapper<ServerToClientEventsAndPayloads>;
