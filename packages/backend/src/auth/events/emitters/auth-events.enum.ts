@@ -1,3 +1,3 @@
 export enum AuthEvent {
-  NewUserRegistered = 'auth.user.register',
+  NewUserRegistered = "auth.user.register",
 }

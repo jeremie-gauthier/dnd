@@ -1,7 +1,7 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, PrimaryGeneratedColumn } from "typeorm";
 
 export class PlayableEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   @Column()

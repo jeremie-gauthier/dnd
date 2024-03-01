@@ -1,14 +1,14 @@
-import { LobbyEntityStatus } from '@dnd/shared';
-import { Injectable } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { CampaignStage } from 'src/database/entities/campaign-stage.entity';
-import { User } from 'src/database/entities/user.entity';
-import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
-import { UserJoinedLobbyPayload } from 'src/lobby/events/emitters/user-joined-lobby.payload';
-import { MessageContext } from 'src/types/socket.type';
-import { UseCase } from 'src/types/use-case.interface';
-import { CreateLobbyInputDto, CreateLobbyOutputDto } from './create-lobby.dto';
-import { CreateLobbyRepository } from './create-lobby.repository';
+import { LobbyEntityStatus } from "@dnd/shared";
+import { Injectable } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { CampaignStage } from "src/database/entities/campaign-stage.entity";
+import { User } from "src/database/entities/user.entity";
+import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
+import { UserJoinedLobbyPayload } from "src/lobby/events/emitters/user-joined-lobby.payload";
+import { MessageContext } from "src/types/socket.type";
+import { UseCase } from "src/types/use-case.interface";
+import { CreateLobbyInputDto, CreateLobbyOutputDto } from "./create-lobby.dto";
+import { CreateLobbyRepository } from "./create-lobby.repository";
 
 @Injectable()
 export class CreateLobbyUseCase implements UseCase {
@@ -23,7 +23,7 @@ export class CreateLobbyUseCase implements UseCase {
     createLobbyInputDto: { nbPlayersMax, stageId },
   }: {
     ctx: MessageContext;
-    userId: User['id'];
+    userId: User["id"];
     createLobbyInputDto: CreateLobbyInputDto;
   }): Promise<CreateLobbyOutputDto> {
     const campaign = await this.repository.getCampaignByStageId(stageId);
@@ -51,7 +51,10 @@ export class CreateLobbyUseCase implements UseCase {
           isReady: false,
         },
       ],
-      heroesAvailable: campaign.playableHeroes.map(({ id }) => ({ id, pickedBy: undefined })),
+      heroesAvailable: campaign.playableHeroes.map(({ id }) => ({
+        id,
+        pickedBy: undefined,
+      })),
     });
 
     this.eventEmitter.emitAsync(
@@ -69,7 +72,10 @@ export class CreateLobbyUseCase implements UseCase {
     };
   }
 
-  private getStageById(stages: CampaignStage[], stageId: CampaignStage['id']): CampaignStage {
+  private getStageById(
+    stages: CampaignStage[],
+    stageId: CampaignStage["id"],
+  ): CampaignStage {
     return stages.find(({ id }) => id === stageId)!;
   }
 }

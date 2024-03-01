@@ -1,5 +1,5 @@
-import { GameEntity } from '@dnd/shared';
-import { Injectable } from '@nestjs/common';
+import { GameEntity } from "@dnd/shared";
+import { Injectable } from "@nestjs/common";
 import {
   addStartingPositions,
   addTileEntities,
@@ -10,18 +10,16 @@ import {
   parseStartingPositions,
   parseTileEntities,
   sanitize,
-} from './deserialize.helper';
+} from "./deserialize.helper";
 
 @Injectable()
 export class MapSerializerService {
-  constructor() {}
-
-  public serialize(map: GameEntity['map']): string {
+  public serialize(map: GameEntity["map"]): string {
     void map;
-    throw new Error('Not implemented');
+    throw new Error("Not implemented");
   }
 
-  public deserialize(mapCompiled: string): GameEntity['map'] {
+  public deserialize(mapCompiled: string): GameEntity["map"] {
     const mapCompiledSanitized = sanitize(mapCompiled);
     const [metadataCompiled, startingPositionsCompiled, ...entitiesCompiled] =
       parseFile(mapCompiledSanitized);

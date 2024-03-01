@@ -4,9 +4,9 @@ import {
   ExecutionContext,
   Injectable,
   UnauthorizedException,
-} from '@nestjs/common';
-import { Request } from 'express';
-import { JwtService } from './jwt.service';
+} from "@nestjs/common";
+import { Request } from "express";
+import { JwtService } from "./jwt.service";
 
 @Injectable()
 export class JWTAuthGuard implements CanActivate {
@@ -43,12 +43,12 @@ export class JWTAuthGuard implements CanActivate {
     const token = JWTAuthGuard.getTokenByContextType[type](request);
 
     if (!token) {
-      throw new UnauthorizedException('No token found');
+      throw new UnauthorizedException("No token found");
     }
 
     const { sub } = await this.jwtService.verify(token);
     if (!sub) {
-      throw new UnauthorizedException('No userId (sub) found in token');
+      throw new UnauthorizedException("No userId (sub) found in token");
     }
 
     const payload = JWTAuthGuard.getPayloadToBindUserByType[type](context);
@@ -61,8 +61,8 @@ export class JWTAuthGuard implements CanActivate {
   }
 
   private static extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+    const [type, token] = request.headers.authorization?.split(" ") ?? [];
+    return type === "Bearer" ? token : undefined;
   }
 
   private static extractTokenFromHandshake(client: any): string | undefined {

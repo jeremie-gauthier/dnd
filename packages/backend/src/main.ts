@@ -1,6 +1,6 @@
-import { ConfigService } from '@nestjs/config';
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { ConfigService } from "@nestjs/config";
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,10 +10,10 @@ async function bootstrap() {
 
   app.enableCors();
 
-  const PORT = configService.getOrThrow<string>('PORT');
-  await app.listen(PORT, '0.0.0.0');
+  const PORT = configService.getOrThrow<string>("PORT");
+  await app.listen(PORT, "0.0.0.0");
 }
 
 bootstrap().catch((err) => {
-  console.error('Error at bootstrap:', err);
+  console.error("Error at bootstrap:", err);
 });

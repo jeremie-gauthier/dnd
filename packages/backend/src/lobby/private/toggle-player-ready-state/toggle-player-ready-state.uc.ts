@@ -1,13 +1,17 @@
-import { LobbyEntity } from '@dnd/shared';
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { User } from 'src/database/entities/user.entity';
-import { LobbyChangedPayload } from 'src/lobby/events/emitters/lobby-changed.payload';
-import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
-import { MessageContext } from 'src/types/socket.type';
-import { UseCase } from 'src/types/use-case.interface';
-import { TogglePlayerReadyStateInputDto } from './toggle-player-ready-state.dto';
-import { TogglePlayerReadyStateRepository } from './toggle-player-ready-state.repository';
+import { LobbyEntity } from "@dnd/shared";
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { User } from "src/database/entities/user.entity";
+import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.payload";
+import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
+import { MessageContext } from "src/types/socket.type";
+import { UseCase } from "src/types/use-case.interface";
+import { TogglePlayerReadyStateInputDto } from "./toggle-player-ready-state.dto";
+import { TogglePlayerReadyStateRepository } from "./toggle-player-ready-state.repository";
 
 @Injectable()
 export class TogglePlayerReadyStateUseCase implements UseCase {
@@ -22,7 +26,7 @@ export class TogglePlayerReadyStateUseCase implements UseCase {
     lobbyId,
   }: TogglePlayerReadyStateInputDto & {
     ctx: MessageContext;
-    userId: User['id'];
+    userId: User["id"];
   }): Promise<void> {
     const lobby = await this.repository.getLobbyById(lobbyId);
     this.assertCanToggleReadyState(lobby);
@@ -31,23 +35,35 @@ export class TogglePlayerReadyStateUseCase implements UseCase {
 
     await this.repository.updateLobby(lobby);
 
-    this.eventEmitter.emitAsync(LobbyEvent.LobbyChanged, new LobbyChangedPayload({ ctx, lobbyId }));
+    this.eventEmitter.emitAsync(
+      LobbyEvent.LobbyChanged,
+      new LobbyChangedPayload({ ctx, lobbyId }),
+    );
   }
 
-  private assertCanToggleReadyState(lobby: LobbyEntity | null): asserts lobby is LobbyEntity {
+  private assertCanToggleReadyState(
+    lobby: LobbyEntity | null,
+  ): asserts lobby is LobbyEntity {
     if (!lobby) {
-      throw new NotFoundException('Lobby not found');
+      throw new NotFoundException("Lobby not found");
     }
 
-    if (lobby.status !== 'OPENED') {
-      throw new ForbiddenException('Lobby is not opened');
+    if (lobby.status !== "OPENED") {
+      throw new ForbiddenException("Lobby is not opened");
     }
   }
 
-  private toggleUserReadyState({ lobby, userId }: { lobby: LobbyEntity; userId: User['id'] }) {
-    const playerIdx = lobby.players.findIndex((player) => player.userId === userId);
+  private toggleUserReadyState({
+    lobby,
+    userId,
+  }: { lobby: LobbyEntity; userId: User["id"] }) {
+    const playerIdx = lobby.players.findIndex(
+      (player) => player.userId === userId,
+    );
     if (playerIdx < 0) {
-      throw new ForbiddenException('You must be in the lobby to set your ready state');
+      throw new ForbiddenException(
+        "You must be in the lobby to set your ready state",
+      );
     }
 
     const player = lobby.players[playerIdx]!;

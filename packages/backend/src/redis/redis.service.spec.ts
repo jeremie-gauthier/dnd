@@ -1,9 +1,9 @@
-import { ConfigService } from '@nestjs/config';
-import { Test, TestingModule } from '@nestjs/testing';
-import { beforeEach, describe, expect, it } from 'vitest';
-import { RedisService } from './redis.service';
+import { ConfigService } from "@nestjs/config";
+import { Test, TestingModule } from "@nestjs/testing";
+import { beforeEach, describe, expect, it } from "vitest";
+import { RedisService } from "./redis.service";
 
-describe('RedisService', () => {
+describe("RedisService", () => {
   let service: RedisService;
 
   beforeEach(async () => {
@@ -22,7 +22,7 @@ describe('RedisService', () => {
     service = module.get<RedisService>(RedisService);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(service).toBeDefined();
   });
 });

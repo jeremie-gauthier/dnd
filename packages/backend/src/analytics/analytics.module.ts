@@ -1,5 +1,5 @@
-import { Module } from '@nestjs/common';
-import { AnalyticsService } from './analytics.service';
+import { Module } from "@nestjs/common";
+import { AnalyticsService } from "./analytics.service";
 
 @Module({
   imports: [],

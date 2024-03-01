@@ -1,10 +1,10 @@
-import { GameEntity } from '@dnd/shared';
-import { InternalServerErrorException } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
-import { beforeEach, describe, expect, it } from 'vitest';
-import { MapSerializerService } from './map-serializer.service';
+import { GameEntity } from "@dnd/shared";
+import { InternalServerErrorException } from "@nestjs/common";
+import { Test, TestingModule } from "@nestjs/testing";
+import { beforeEach, describe, expect, it } from "vitest";
+import { MapSerializerService } from "./map-serializer.service";
 
-describe('MapSerializerService', () => {
+describe("MapSerializerService", () => {
   let service: MapSerializerService;
 
   beforeEach(async () => {
@@ -15,20 +15,20 @@ describe('MapSerializerService', () => {
     service = module.get<MapSerializerService>(MapSerializerService);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(service).toBeDefined();
   });
 
-  describe('deserialize', () => {
-    describe('Happy path', () => {
-      describe('1x2 map', () => {
-        it('should parse a wall', () => {
+  describe("deserialize", () => {
+    describe("Happy path", () => {
+      describe("1x2 map", () => {
+        it("should parse a wall", () => {
           const compiledMap = `
 						1;2
 						0,1
 						0,0;wall
 					`;
-          const expected: GameEntity['map'] = {
+          const expected: GameEntity["map"] = {
             height: 1,
             width: 2,
             tiles: [
@@ -36,8 +36,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 0, column: 0 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'wall',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "wall",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -57,13 +57,13 @@ describe('MapSerializerService', () => {
           expect(result).toStrictEqual(expected);
         });
 
-        it('should parse a tree', () => {
+        it("should parse a tree", () => {
           const compiledMap = `
 						1;2
 						0,1
 						0,0;tree
 					`;
-          const expected: GameEntity['map'] = {
+          const expected: GameEntity["map"] = {
             height: 1,
             width: 2,
             tiles: [
@@ -71,8 +71,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 0, column: 0 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'tree',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "tree",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -92,13 +92,13 @@ describe('MapSerializerService', () => {
           expect(result).toStrictEqual(expected);
         });
 
-        it('should parse a pillar', () => {
+        it("should parse a pillar", () => {
           const compiledMap = `
 						1;2
 						0,1
 						0,0;pillar
 					`;
-          const expected: GameEntity['map'] = {
+          const expected: GameEntity["map"] = {
             height: 1,
             width: 2,
             tiles: [
@@ -106,8 +106,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 0, column: 0 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'pillar',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "pillar",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -127,12 +127,12 @@ describe('MapSerializerService', () => {
           expect(result).toStrictEqual(expected);
         });
 
-        it('should parse an empty tile', () => {
+        it("should parse an empty tile", () => {
           const compiledMap = `
 						1;2
 						0,1
 					`;
-          const expected: GameEntity['map'] = {
+          const expected: GameEntity["map"] = {
             height: 1,
             width: 2,
             tiles: [
@@ -153,13 +153,13 @@ describe('MapSerializerService', () => {
           expect(result).toStrictEqual(expected);
         });
 
-        it('should parse a door', () => {
+        it("should parse a door", () => {
           const compiledMap = `
 						1;2
 						0,1
 						0,0;door
 					`;
-          const expected: GameEntity['map'] = {
+          const expected: GameEntity["map"] = {
             height: 1,
             width: 2,
             tiles: [
@@ -167,8 +167,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 0, column: 0 },
                 entities: [
                   {
-                    type: 'non-playable-interactive-entity',
-                    kind: 'door',
+                    type: "non-playable-interactive-entity",
+                    kind: "door",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: true,
@@ -188,13 +188,13 @@ describe('MapSerializerService', () => {
           expect(result).toStrictEqual(expected);
         });
 
-        it('should parse a trap', () => {
+        it("should parse a trap", () => {
           const compiledMap = `
 						1;2
 						0,1
 						0,0;trap
 					`;
-          const expected: GameEntity['map'] = {
+          const expected: GameEntity["map"] = {
             height: 1,
             width: 2,
             tiles: [
@@ -202,8 +202,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 0, column: 0 },
                 entities: [
                   {
-                    type: 'non-playable-interactive-entity',
-                    kind: 'trap',
+                    type: "non-playable-interactive-entity",
+                    kind: "trap",
                     isVisible: false,
                     isBlocking: false,
                     canInteract: true,
@@ -223,14 +223,14 @@ describe('MapSerializerService', () => {
           expect(result).toStrictEqual(expected);
         });
 
-        it('should parse a playable entity', () => {
-          const playableEntityId = 'f9c7b04f-78c7-4e09-9114-5f6cdfaf18cf';
+        it("should parse a playable entity", () => {
+          const playableEntityId = "f9c7b04f-78c7-4e09-9114-5f6cdfaf18cf";
           const compiledMap = `
 						1;2
 						0,1
 						0,0;playable,${playableEntityId}
 					`;
-          const expected: GameEntity['map'] = {
+          const expected: GameEntity["map"] = {
             height: 1,
             width: 2,
             tiles: [
@@ -238,7 +238,7 @@ describe('MapSerializerService', () => {
                 coord: { row: 0, column: 0 },
                 entities: [
                   {
-                    type: 'playable-entity',
+                    type: "playable-entity",
                     id: playableEntityId,
                   },
                 ],
@@ -256,14 +256,14 @@ describe('MapSerializerService', () => {
           expect(result).toStrictEqual(expected);
         });
 
-        it('should parse a playable entity that is on a starting tile', () => {
-          const playableEntityId = 'f9c7b04f-78c7-4e09-9114-5f6cdfaf18cf';
+        it("should parse a playable entity that is on a starting tile", () => {
+          const playableEntityId = "f9c7b04f-78c7-4e09-9114-5f6cdfaf18cf";
           const compiledMap = `
 						1;2
 						0,0
 						0,0;playable,${playableEntityId}
 					`;
-          const expected: GameEntity['map'] = {
+          const expected: GameEntity["map"] = {
             height: 1,
             width: 2,
             tiles: [
@@ -271,7 +271,7 @@ describe('MapSerializerService', () => {
                 coord: { row: 0, column: 0 },
                 entities: [
                   {
-                    type: 'playable-entity',
+                    type: "playable-entity",
                     id: playableEntityId,
                   },
                 ],
@@ -289,14 +289,14 @@ describe('MapSerializerService', () => {
         });
       });
 
-      describe('3x2 map', () => {
-        it('should parse pillar in the top right corner of the map', () => {
+      describe("3x2 map", () => {
+        it("should parse pillar in the top right corner of the map", () => {
           const compiledMap = `
 						3;2
 						0,0
 						0,1;pillar
 					`;
-          const expected: GameEntity['map'] = {
+          const expected: GameEntity["map"] = {
             height: 3,
             width: 2,
             tiles: [
@@ -309,8 +309,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 0, column: 1 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'pillar',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "pillar",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -341,7 +341,7 @@ describe('MapSerializerService', () => {
           expect(result).toStrictEqual(expected);
         });
 
-        it('should parse a wall on the top and bot lines', () => {
+        it("should parse a wall on the top and bot lines", () => {
           const compiledMap = `
 						3;2
 						1,1
@@ -350,7 +350,7 @@ describe('MapSerializerService', () => {
 						2,0;wall
 						2,1;wall
 					`;
-          const expected: GameEntity['map'] = {
+          const expected: GameEntity["map"] = {
             height: 3,
             width: 2,
             tiles: [
@@ -358,8 +358,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 0, column: 0 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'wall',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "wall",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -370,8 +370,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 0, column: 1 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'wall',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "wall",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -391,8 +391,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 2, column: 0 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'wall',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "wall",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -404,8 +404,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 2, column: 1 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'wall',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "wall",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -420,12 +420,12 @@ describe('MapSerializerService', () => {
           expect(result).toStrictEqual(expected);
         });
 
-        it('should parse an empty map', () => {
+        it("should parse an empty map", () => {
           const compiledMap = `
 						3;2
 						0,0
 					`;
-          const expected: GameEntity['map'] = {
+          const expected: GameEntity["map"] = {
             height: 3,
             width: 2,
             tiles: [
@@ -462,7 +462,7 @@ describe('MapSerializerService', () => {
           expect(result).toStrictEqual(expected);
         });
 
-        it('should parse a door vertically surrounded by walls in the middle of the map', () => {
+        it("should parse a door vertically surrounded by walls in the middle of the map", () => {
           const compiledMap = `
 						3;2
 						0,0
@@ -470,7 +470,7 @@ describe('MapSerializerService', () => {
 						1,1;door
 						2,1;wall
 					`;
-          const expected: GameEntity['map'] = {
+          const expected: GameEntity["map"] = {
             height: 3,
             width: 2,
             tiles: [
@@ -483,8 +483,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 0, column: 1 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'wall',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "wall",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -499,8 +499,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 1, column: 1 },
                 entities: [
                   {
-                    type: 'non-playable-interactive-entity',
-                    kind: 'door',
+                    type: "non-playable-interactive-entity",
+                    kind: "door",
                     canInteract: true,
                     isBlocking: true,
                     isVisible: true,
@@ -515,8 +515,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 2, column: 1 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'wall',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "wall",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -532,13 +532,13 @@ describe('MapSerializerService', () => {
         });
       });
 
-      describe('5x5 map', () => {
-        it('should parse an empty map', () => {
+      describe("5x5 map", () => {
+        it("should parse an empty map", () => {
           const compiledMap = `
 						5;5
 						0,0
 					`;
-          const expected: GameEntity['map'] = {
+          const expected: GameEntity["map"] = {
             height: 5,
             width: 5,
             tiles: [
@@ -651,7 +651,7 @@ describe('MapSerializerService', () => {
           expect(result).toStrictEqual(expected);
         });
 
-        it('should parse a map with an off-map section', () => {
+        it("should parse a map with an off-map section", () => {
           const compiledMap = `
 						5;5
 						0,0
@@ -666,7 +666,7 @@ describe('MapSerializerService', () => {
 						3,3;wall
 						3,4;wall
 					`;
-          const expected: GameEntity['map'] = {
+          const expected: GameEntity["map"] = {
             height: 5,
             width: 5,
             tiles: [
@@ -695,8 +695,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 1, column: 0 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'wall',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "wall",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -707,8 +707,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 1, column: 1 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'wall',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "wall",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -719,11 +719,11 @@ describe('MapSerializerService', () => {
                 coord: { row: 1, column: 2 },
                 entities: [
                   {
-                    type: 'non-playable-interactive-entity',
+                    type: "non-playable-interactive-entity",
                     canInteract: true,
                     isBlocking: true,
                     isVisible: true,
-                    kind: 'door',
+                    kind: "door",
                   },
                 ],
               },
@@ -731,8 +731,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 1, column: 3 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'wall',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "wall",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -743,8 +743,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 1, column: 4 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'wall',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "wall",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -775,8 +775,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 3, column: 0 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'wall',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "wall",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -787,8 +787,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 3, column: 1 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'wall',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "wall",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -799,8 +799,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 3, column: 2 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'wall',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "wall",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -811,8 +811,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 3, column: 3 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'wall',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "wall",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -823,8 +823,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 3, column: 4 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'wall',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "wall",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -835,8 +835,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 4, column: 0 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'off-map',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "off-map",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -847,8 +847,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 4, column: 1 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'off-map',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "off-map",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -859,8 +859,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 4, column: 2 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'off-map',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "off-map",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -871,8 +871,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 4, column: 3 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'off-map',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "off-map",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -883,8 +883,8 @@ describe('MapSerializerService', () => {
                 coord: { row: 4, column: 4 },
                 entities: [
                   {
-                    type: 'non-playable-non-interactive-entity',
-                    kind: 'off-map',
+                    type: "non-playable-non-interactive-entity",
+                    kind: "off-map",
                     isVisible: true,
                     isBlocking: true,
                     canInteract: false,
@@ -901,43 +901,61 @@ describe('MapSerializerService', () => {
       });
     });
 
-    describe('Negative path', () => {
-      it('should throw an InternalServerErrorException if the map has no starting-tile', () => {
-        const compiledMap = '1;1';
+    describe("Negative path", () => {
+      it("should throw an InternalServerErrorException if the map has no starting-tile", () => {
+        const compiledMap = "1;1";
 
-        expect(() => service.deserialize(compiledMap)).toThrowError(InternalServerErrorException);
+        expect(() => service.deserialize(compiledMap)).toThrowError(
+          InternalServerErrorException,
+        );
       });
 
-      it('should throw an InternalServerErrorException if the map contains unrecognized entities', () => {
+      it("should throw an InternalServerErrorException if the map contains unrecognized entities", () => {
         const compiledMap = `
 					1;2
 					0,0
 					0,1;banana
 				`;
 
-        expect(() => service.deserialize(compiledMap)).toThrowError(InternalServerErrorException);
-      });
-
-      it('should throw an InternalServerErrorException if the map contains invalid metadata', () => {
-        expect(() => service.deserialize('-1;2')).toThrowError(InternalServerErrorException);
-        expect(() => service.deserialize('0;2')).toThrowError(InternalServerErrorException);
-        expect(() => service.deserialize('2;0')).toThrowError(InternalServerErrorException);
-        expect(() => service.deserialize('1;-2')).toThrowError(InternalServerErrorException);
-        expect(() => service.deserialize('banana;2')).toThrowError(InternalServerErrorException);
-        expect(() => service.deserialize('1;banana')).toThrowError(InternalServerErrorException);
-        expect(() => service.deserialize('apple;banana')).toThrowError(
+        expect(() => service.deserialize(compiledMap)).toThrowError(
           InternalServerErrorException,
         );
       });
 
-      it('should throw an InternalServerErrorException if the map declare an entity out of range', () => {
+      it("should throw an InternalServerErrorException if the map contains invalid metadata", () => {
+        expect(() => service.deserialize("-1;2")).toThrowError(
+          InternalServerErrorException,
+        );
+        expect(() => service.deserialize("0;2")).toThrowError(
+          InternalServerErrorException,
+        );
+        expect(() => service.deserialize("2;0")).toThrowError(
+          InternalServerErrorException,
+        );
+        expect(() => service.deserialize("1;-2")).toThrowError(
+          InternalServerErrorException,
+        );
+        expect(() => service.deserialize("banana;2")).toThrowError(
+          InternalServerErrorException,
+        );
+        expect(() => service.deserialize("1;banana")).toThrowError(
+          InternalServerErrorException,
+        );
+        expect(() => service.deserialize("apple;banana")).toThrowError(
+          InternalServerErrorException,
+        );
+      });
+
+      it("should throw an InternalServerErrorException if the map declare an entity out of range", () => {
         const compiledMap = `
 					1;2
 					0,0
 					0,42;door
 				`;
 
-        expect(() => service.deserialize(compiledMap)).toThrowError(InternalServerErrorException);
+        expect(() => service.deserialize(compiledMap)).toThrowError(
+          InternalServerErrorException,
+        );
       });
     });
   });

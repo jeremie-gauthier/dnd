@@ -1,9 +1,9 @@
-import { LobbyEntity, ServerLobbyEvent } from '@dnd/shared';
-import { Injectable } from '@nestjs/common';
-import { OnEvent } from '@nestjs/event-emitter';
-import { MessageContext } from 'src/types/socket.type';
-import { LobbyEvent } from '../../emitters/lobby-events.enum';
-import { LobbyChangedRepository } from './lobby-changed.repository';
+import { LobbyEntity, ServerLobbyEvent } from "@dnd/shared";
+import { Injectable } from "@nestjs/common";
+import { OnEvent } from "@nestjs/event-emitter";
+import { MessageContext } from "src/types/socket.type";
+import { LobbyEvent } from "../../emitters/lobby-events.enum";
+import { LobbyChangedRepository } from "./lobby-changed.repository";
 
 @Injectable()
 export class LobbyChangedListener {
@@ -13,7 +13,10 @@ export class LobbyChangedListener {
   @OnEvent(LobbyEvent.UserJoinedLobby)
   @OnEvent(LobbyEvent.UserForceLeftLobby)
   @OnEvent(LobbyEvent.UserLeftLobby)
-  public async handler({ ctx, lobbyId }: { ctx: MessageContext; lobbyId: LobbyEntity['id'] }) {
+  public async handler({
+    ctx,
+    lobbyId,
+  }: { ctx: MessageContext; lobbyId: LobbyEntity["id"] }) {
     const lobby = await this.repository.getLobbyById(lobbyId);
     if (!lobby) {
       return;

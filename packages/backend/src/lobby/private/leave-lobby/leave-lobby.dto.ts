@@ -1,5 +1,5 @@
-import { leaveLobbyInputSchema, leaveLobbyOutputSchema } from '@dnd/shared';
-import { createZodDto } from 'nestjs-zod';
+import { leaveLobbyInputSchema, leaveLobbyOutputSchema } from "@dnd/shared";
+import { createZodDto } from "nestjs-zod";
 
 export class LeaveLobbyInputDto extends createZodDto(leaveLobbyInputSchema) {}
 

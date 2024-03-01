@@ -1,4 +1,6 @@
-import { getCampaignsOutputSchema } from '@dnd/shared';
-import { createZodDto } from 'nestjs-zod';
+import { getCampaignsOutputSchema } from "@dnd/shared";
+import { createZodDto } from "nestjs-zod";
 
-export class NewCampaignStartedOutputDto extends createZodDto(getCampaignsOutputSchema) {}
+export class NewCampaignStartedOutputDto extends createZodDto(
+  getCampaignsOutputSchema,
+) {}

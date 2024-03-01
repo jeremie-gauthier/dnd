@@ -1,7 +1,9 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class AddUserAndCampaignTables1702824243264 implements MigrationInterface {
-  name = 'AddUserAndCampaignTables1702824243264';
+export class AddUserAndCampaignTables1702824243264
+  implements MigrationInterface
+{
+  name = "AddUserAndCampaignTables1702824243264";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -73,14 +75,24 @@ export class AddUserAndCampaignTables1702824243264 implements MigrationInterface
     await queryRunner.query(
       `ALTER TABLE "campaign_stage" DROP CONSTRAINT "FK_69100b7ad48f0f8043d01ff6ca7"`,
     );
-    await queryRunner.query(`DROP INDEX "public"."IDX_be83eb8ab3a845247491e83b2b"`);
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_be83eb8ab3a845247491e83b2b"`,
+    );
     await queryRunner.query(`DROP TABLE "campaign_progression"`);
-    await queryRunner.query(`DROP TYPE "public"."campaign_progression_status_enum"`);
+    await queryRunner.query(
+      `DROP TYPE "public"."campaign_progression_status_enum"`,
+    );
     await queryRunner.query(`DROP TABLE "user"`);
-    await queryRunner.query(`DROP INDEX "public"."IDX_d33d94f928158e3b922eaf1aec"`);
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_d33d94f928158e3b922eaf1aec"`,
+    );
     await queryRunner.query(`DROP TABLE "campaign_stage_progression"`);
-    await queryRunner.query(`DROP TYPE "public"."campaign_stage_progression_status_enum"`);
-    await queryRunner.query(`DROP INDEX "public"."IDX_80fd6ff4d4147fd4baebec29e9"`);
+    await queryRunner.query(
+      `DROP TYPE "public"."campaign_stage_progression_status_enum"`,
+    );
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_80fd6ff4d4147fd4baebec29e9"`,
+    );
     await queryRunner.query(`DROP TABLE "campaign_stage"`);
     await queryRunner.query(`DROP TYPE "public"."campaign_stage_status_enum"`);
     await queryRunner.query(`DROP TABLE "campaign"`);

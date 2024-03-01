@@ -1,5 +1,5 @@
-import { ClientLobbyEvent } from '@dnd/shared';
-import { UseFilters, UseGuards, UsePipes } from '@nestjs/common';
+import { ClientLobbyEvent } from "@dnd/shared";
+import { UseFilters, UseGuards, UsePipes } from "@nestjs/common";
 import {
   ConnectedSocket,
   MessageBody,
@@ -8,38 +8,46 @@ import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-} from '@nestjs/websockets';
-import { ZodValidationPipe } from 'nestjs-zod';
-import { JWTAuthGuard } from 'src/authz/jwt-auth.guard';
-import { WsExceptionFilter } from 'src/errors/ws-exception-filter';
-import { ServerSocket, WsServer } from 'src/types/socket.type';
-import { CreateLobbyInputDto, CreateLobbyOutputDto } from './create-lobby/create-lobby.dto';
-import { CreateLobbyUseCase } from './create-lobby/create-lobby.uc';
-import { DiscardHeroInputDto } from './discard-hero/discard-hero.dto';
-import { DiscardHeroUseCase } from './discard-hero/discard-hero.uc';
-import { HandleWsConnectionUseCase } from './handle-ws-connection/handle-ws-connection.uc';
-import { HandleWsDisconnectionUseCase } from './handle-ws-disconnection/handle-ws-disconnection.uc';
-import { JoinLobbyInputDto, JoinLobbyOutputDto } from './join-lobby/join-lobby.dto';
-import { JoinLobbyUseCase } from './join-lobby/join-lobby.uc';
-import { LeaveLobbyOutputDto } from './leave-lobby/leave-lobby.dto';
-import { LeaveLobbyUseCase } from './leave-lobby/leave-lobby.uc';
-import { ListenLobbiesChangesUseCase } from './listen-lobbies-changes/listen-lobbies-changes.uc';
-import { PickHeroInputDto } from './pick-hero/pick-hero.dto';
-import { PickHeroUseCase } from './pick-hero/pick-hero.uc';
-import { StartGameInputDto } from './start-game/start-game.dto';
-import { StartGameUseCase } from './start-game/start-game.uc';
-import { TogglePlayerReadyStateInputDto } from './toggle-player-ready-state/toggle-player-ready-state.dto';
-import { TogglePlayerReadyStateUseCase } from './toggle-player-ready-state/toggle-player-ready-state.uc';
+} from "@nestjs/websockets";
+import { ZodValidationPipe } from "nestjs-zod";
+import { JWTAuthGuard } from "src/authz/jwt-auth.guard";
+import { WsExceptionFilter } from "src/errors/ws-exception-filter";
+import { ServerSocket, WsServer } from "src/types/socket.type";
+import {
+  CreateLobbyInputDto,
+  CreateLobbyOutputDto,
+} from "./create-lobby/create-lobby.dto";
+import { CreateLobbyUseCase } from "./create-lobby/create-lobby.uc";
+import { DiscardHeroInputDto } from "./discard-hero/discard-hero.dto";
+import { DiscardHeroUseCase } from "./discard-hero/discard-hero.uc";
+import { HandleWsConnectionUseCase } from "./handle-ws-connection/handle-ws-connection.uc";
+import { HandleWsDisconnectionUseCase } from "./handle-ws-disconnection/handle-ws-disconnection.uc";
+import {
+  JoinLobbyInputDto,
+  JoinLobbyOutputDto,
+} from "./join-lobby/join-lobby.dto";
+import { JoinLobbyUseCase } from "./join-lobby/join-lobby.uc";
+import { LeaveLobbyOutputDto } from "./leave-lobby/leave-lobby.dto";
+import { LeaveLobbyUseCase } from "./leave-lobby/leave-lobby.uc";
+import { ListenLobbiesChangesUseCase } from "./listen-lobbies-changes/listen-lobbies-changes.uc";
+import { PickHeroInputDto } from "./pick-hero/pick-hero.dto";
+import { PickHeroUseCase } from "./pick-hero/pick-hero.uc";
+import { StartGameInputDto } from "./start-game/start-game.dto";
+import { StartGameUseCase } from "./start-game/start-game.uc";
+import { TogglePlayerReadyStateInputDto } from "./toggle-player-ready-state/toggle-player-ready-state.dto";
+import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggle-player-ready-state.uc";
 
 @UseGuards(JWTAuthGuard)
 @UsePipes(ZodValidationPipe)
 @UseFilters(WsExceptionFilter)
 @WebSocketGateway({
   cors: {
-    origin: 'http://localhost:5173',
+    origin: "http://localhost:5173",
   },
 })
-export class LobbyPrivateGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class LobbyPrivateGateway
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   constructor(
     private readonly handleWsConnectionUseCase: HandleWsConnectionUseCase,
     private readonly handleWsDisconnectionUseCase: HandleWsDisconnectionUseCase,
@@ -61,7 +69,9 @@ export class LobbyPrivateGateway implements OnGatewayConnection, OnGatewayDiscon
   }
 
   public async handleDisconnect(client: ServerSocket) {
-    await this.handleWsDisconnectionUseCase.execute(this.getMessageContext(client));
+    await this.handleWsDisconnectionUseCase.execute(
+      this.getMessageContext(client),
+    );
   }
 
   private getMessageContext(client: ServerSocket) {
@@ -100,7 +110,7 @@ export class LobbyPrivateGateway implements OnGatewayConnection, OnGatewayDiscon
   @SubscribeMessage(ClientLobbyEvent.ListenLobbiesChanges)
   public async listenLobbiesChanges(@ConnectedSocket() client: ServerSocket) {
     await this.listenLobbiesChangesUseCase.execute(client);
-    return { message: 'You are now listening on lobbies changes' };
+    return { message: "You are now listening on lobbies changes" };
   }
 
   @SubscribeMessage(ClientLobbyEvent.RequestLeaveLobby)
@@ -109,7 +119,7 @@ export class LobbyPrivateGateway implements OnGatewayConnection, OnGatewayDiscon
       ctx: this.getMessageContext(client),
       userId: client.data.userId,
     });
-    return LeaveLobbyOutputDto.schema.parse({ message: 'Ok' });
+    return LeaveLobbyOutputDto.schema.parse({ message: "Ok" });
   }
 
   @SubscribeMessage(ClientLobbyEvent.RequestPickHero)

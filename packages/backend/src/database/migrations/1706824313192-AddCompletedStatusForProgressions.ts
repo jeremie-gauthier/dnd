@@ -1,7 +1,9 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class AddCompletedStatusForProgressions1706824313192 implements MigrationInterface {
-  name = 'AddCompletedStatusForProgressions1706824313192';
+export class AddCompletedStatusForProgressions1706824313192
+  implements MigrationInterface
+{
+  name = "AddCompletedStatusForProgressions1706824313192";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -13,7 +15,9 @@ export class AddCompletedStatusForProgressions1706824313192 implements Migration
     await queryRunner.query(
       `ALTER TABLE "campaign_stage_progression" ALTER COLUMN "status" TYPE "public"."campaign_stage_progression_status_enum" USING "status"::"text"::"public"."campaign_stage_progression_status_enum"`,
     );
-    await queryRunner.query(`DROP TYPE "public"."campaign_stage_progression_status_enum_old"`);
+    await queryRunner.query(
+      `DROP TYPE "public"."campaign_stage_progression_status_enum_old"`,
+    );
     await queryRunner.query(
       `ALTER TYPE "public"."campaign_progression_status_enum" RENAME TO "campaign_progression_status_enum_old"`,
     );
@@ -23,7 +27,9 @@ export class AddCompletedStatusForProgressions1706824313192 implements Migration
     await queryRunner.query(
       `ALTER TABLE "campaign_progression" ALTER COLUMN "status" TYPE "public"."campaign_progression_status_enum" USING "status"::"text"::"public"."campaign_progression_status_enum"`,
     );
-    await queryRunner.query(`DROP TYPE "public"."campaign_progression_status_enum_old"`);
+    await queryRunner.query(
+      `DROP TYPE "public"."campaign_progression_status_enum_old"`,
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
@@ -33,7 +39,9 @@ export class AddCompletedStatusForProgressions1706824313192 implements Migration
     await queryRunner.query(
       `ALTER TABLE "campaign_progression" ALTER COLUMN "status" TYPE "public"."campaign_progression_status_enum_old" USING "status"::"text"::"public"."campaign_progression_status_enum_old"`,
     );
-    await queryRunner.query(`DROP TYPE "public"."campaign_progression_status_enum"`);
+    await queryRunner.query(
+      `DROP TYPE "public"."campaign_progression_status_enum"`,
+    );
     await queryRunner.query(
       `ALTER TYPE "public"."campaign_progression_status_enum_old" RENAME TO "campaign_progression_status_enum"`,
     );
@@ -43,7 +51,9 @@ export class AddCompletedStatusForProgressions1706824313192 implements Migration
     await queryRunner.query(
       `ALTER TABLE "campaign_stage_progression" ALTER COLUMN "status" TYPE "public"."campaign_stage_progression_status_enum_old" USING "status"::"text"::"public"."campaign_stage_progression_status_enum_old"`,
     );
-    await queryRunner.query(`DROP TYPE "public"."campaign_stage_progression_status_enum"`);
+    await queryRunner.query(
+      `DROP TYPE "public"."campaign_stage_progression_status_enum"`,
+    );
     await queryRunner.query(
       `ALTER TYPE "public"."campaign_stage_progression_status_enum_old" RENAME TO "campaign_stage_progression_status_enum"`,
     );

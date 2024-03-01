@@ -1,10 +1,10 @@
-import { LobbyEntity } from '@dnd/shared';
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { CampaignStage } from 'src/database/entities/campaign-stage.entity';
-import { Campaign } from 'src/database/entities/campaign.entity';
-import { LobbiesRepository } from 'src/redis/repositories/lobbies.repository';
-import { Repository } from 'typeorm';
+import { LobbyEntity } from "@dnd/shared";
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { CampaignStage } from "src/database/entities/campaign-stage.entity";
+import { Campaign } from "src/database/entities/campaign.entity";
+import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class CreateLobbyRepository {
@@ -14,11 +14,15 @@ export class CreateLobbyRepository {
     private readonly campaignRepository: Repository<Campaign>,
   ) {}
 
-  public async createLobby(lobby: Omit<LobbyEntity, 'id'>): Promise<LobbyEntity> {
+  public async createLobby(
+    lobby: Omit<LobbyEntity, "id">,
+  ): Promise<LobbyEntity> {
     return await this.lobbiesRepository.set(lobby);
   }
 
-  public async getCampaignByStageId(stageId: CampaignStage['id']): Promise<Campaign> {
+  public async getCampaignByStageId(
+    stageId: CampaignStage["id"],
+  ): Promise<Campaign> {
     const campaigns = await this.campaignRepository.findOneOrFail({
       select: {
         id: true,

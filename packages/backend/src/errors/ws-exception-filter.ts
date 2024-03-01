@@ -1,7 +1,7 @@
-import { ServerLobbyEvent } from '@dnd/shared';
-import { ArgumentsHost, Catch, HttpException } from '@nestjs/common';
-import { WsException } from '@nestjs/websockets';
-import { Socket } from 'socket.io';
+import { ServerLobbyEvent } from "@dnd/shared";
+import { ArgumentsHost, Catch, HttpException } from "@nestjs/common";
+import { WsException } from "@nestjs/websockets";
+import { Socket } from "socket.io";
 
 @Catch(WsException, HttpException)
 export class WsExceptionFilter {

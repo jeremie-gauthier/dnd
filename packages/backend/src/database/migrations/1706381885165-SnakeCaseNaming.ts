@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class SnakeCaseNaming1706381885165 implements MigrationInterface {
-  name = 'SnakeCaseNaming1706381885165';
+  name = "SnakeCaseNaming1706381885165";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -19,53 +19,107 @@ export class SnakeCaseNaming1706381885165 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "campaign_progression" DROP CONSTRAINT "FK_2adf8839eecb2dce66537044d3a"`,
     );
-    await queryRunner.query(`DROP INDEX "public"."IDX_80fd6ff4d4147fd4baebec29e9"`);
-    await queryRunner.query(`DROP INDEX "public"."IDX_d33d94f928158e3b922eaf1aec"`);
-    await queryRunner.query(`DROP INDEX "public"."IDX_be83eb8ab3a845247491e83b2b"`);
-    await queryRunner.query(`ALTER TABLE "campaign_stage" DROP COLUMN "mapCompiled"`);
-    await queryRunner.query(`ALTER TABLE "campaign_stage" DROP COLUMN "campaignId"`);
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_80fd6ff4d4147fd4baebec29e9"`,
+    );
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_d33d94f928158e3b922eaf1aec"`,
+    );
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_be83eb8ab3a845247491e83b2b"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "campaign_stage" DROP COLUMN "mapCompiled"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "campaign_stage" DROP COLUMN "campaignId"`,
+    );
     await queryRunner.query(
       `ALTER TABLE "campaign_stage_progression" DROP COLUMN "campaignProgressionId"`,
     );
-    await queryRunner.query(`ALTER TABLE "campaign_stage_progression" DROP COLUMN "stageId"`);
-    await queryRunner.query(`ALTER TABLE "campaign_progression" DROP COLUMN "campaignId"`);
-    await queryRunner.query(`ALTER TABLE "campaign_progression" DROP COLUMN "userId"`);
-    await queryRunner.query(`ALTER TABLE "hero_template" DROP COLUMN "baseHealthPoints"`);
-    await queryRunner.query(`ALTER TABLE "hero_template" DROP COLUMN "baseManaPoints"`);
-    await queryRunner.query(`ALTER TABLE "hero_template" DROP COLUMN "baseArmorClass"`);
-    await queryRunner.query(`ALTER TABLE "hero_template" DROP COLUMN "baseMovementPoints"`);
-    await queryRunner.query(`ALTER TABLE "hero_template" DROP COLUMN "baseActionPoints"`);
-    await queryRunner.query(`ALTER TABLE "hero" DROP COLUMN "baseHealthPoints"`);
+    await queryRunner.query(
+      `ALTER TABLE "campaign_stage_progression" DROP COLUMN "stageId"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "campaign_progression" DROP COLUMN "campaignId"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "campaign_progression" DROP COLUMN "userId"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero_template" DROP COLUMN "baseHealthPoints"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero_template" DROP COLUMN "baseManaPoints"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero_template" DROP COLUMN "baseArmorClass"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero_template" DROP COLUMN "baseMovementPoints"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero_template" DROP COLUMN "baseActionPoints"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero" DROP COLUMN "baseHealthPoints"`,
+    );
     await queryRunner.query(`ALTER TABLE "hero" DROP COLUMN "baseManaPoints"`);
     await queryRunner.query(`ALTER TABLE "hero" DROP COLUMN "baseArmorClass"`);
-    await queryRunner.query(`ALTER TABLE "hero" DROP COLUMN "baseMovementPoints"`);
-    await queryRunner.query(`ALTER TABLE "hero" DROP COLUMN "baseActionPoints"`);
+    await queryRunner.query(
+      `ALTER TABLE "hero" DROP COLUMN "baseMovementPoints"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero" DROP COLUMN "baseActionPoints"`,
+    );
     await queryRunner.query(
       `ALTER TABLE "campaign_stage" ADD "map_compiled" character varying NOT NULL`,
     );
-    await queryRunner.query(`ALTER TABLE "campaign_stage" ADD "campaign_id" uuid`);
+    await queryRunner.query(
+      `ALTER TABLE "campaign_stage" ADD "campaign_id" uuid`,
+    );
     await queryRunner.query(
       `ALTER TABLE "campaign_stage_progression" ADD "campaign_progression_id" uuid`,
     );
-    await queryRunner.query(`ALTER TABLE "campaign_stage_progression" ADD "stage_id" uuid`);
-    await queryRunner.query(`ALTER TABLE "campaign_progression" ADD "campaign_id" uuid`);
-    await queryRunner.query(`ALTER TABLE "campaign_progression" ADD "user_id" character varying`);
+    await queryRunner.query(
+      `ALTER TABLE "campaign_stage_progression" ADD "stage_id" uuid`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "campaign_progression" ADD "campaign_id" uuid`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "campaign_progression" ADD "user_id" character varying`,
+    );
     await queryRunner.query(
       `ALTER TABLE "hero_template" ADD "base_health_points" integer NOT NULL`,
     );
-    await queryRunner.query(`ALTER TABLE "hero_template" ADD "base_mana_points" integer NOT NULL`);
-    await queryRunner.query(`ALTER TABLE "hero_template" ADD "base_armor_class" integer NOT NULL`);
+    await queryRunner.query(
+      `ALTER TABLE "hero_template" ADD "base_mana_points" integer NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero_template" ADD "base_armor_class" integer NOT NULL`,
+    );
     await queryRunner.query(
       `ALTER TABLE "hero_template" ADD "base_movement_points" integer NOT NULL`,
     );
     await queryRunner.query(
       `ALTER TABLE "hero_template" ADD "base_action_points" integer NOT NULL`,
     );
-    await queryRunner.query(`ALTER TABLE "hero" ADD "base_health_points" integer NOT NULL`);
-    await queryRunner.query(`ALTER TABLE "hero" ADD "base_mana_points" integer NOT NULL`);
-    await queryRunner.query(`ALTER TABLE "hero" ADD "base_armor_class" integer NOT NULL`);
-    await queryRunner.query(`ALTER TABLE "hero" ADD "base_movement_points" integer NOT NULL`);
-    await queryRunner.query(`ALTER TABLE "hero" ADD "base_action_points" integer NOT NULL`);
+    await queryRunner.query(
+      `ALTER TABLE "hero" ADD "base_health_points" integer NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero" ADD "base_mana_points" integer NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero" ADD "base_armor_class" integer NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero" ADD "base_movement_points" integer NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero" ADD "base_action_points" integer NOT NULL`,
+    );
     await queryRunner.query(
       `CREATE UNIQUE INDEX "IDX_090cbf92709adca8d9564daf84" ON "campaign_stage" ("campaign_id", "order") `,
     );
@@ -108,46 +162,108 @@ export class SnakeCaseNaming1706381885165 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "campaign_stage" DROP CONSTRAINT "FK_f75ced37a3d6831637a18e340a6"`,
     );
-    await queryRunner.query(`DROP INDEX "public"."IDX_997e97791ec3aa7af5fb205907"`);
-    await queryRunner.query(`DROP INDEX "public"."IDX_da5afe8d6e472dd654037e30c0"`);
-    await queryRunner.query(`DROP INDEX "public"."IDX_090cbf92709adca8d9564daf84"`);
-    await queryRunner.query(`ALTER TABLE "hero" DROP COLUMN "base_action_points"`);
-    await queryRunner.query(`ALTER TABLE "hero" DROP COLUMN "base_movement_points"`);
-    await queryRunner.query(`ALTER TABLE "hero" DROP COLUMN "base_armor_class"`);
-    await queryRunner.query(`ALTER TABLE "hero" DROP COLUMN "base_mana_points"`);
-    await queryRunner.query(`ALTER TABLE "hero" DROP COLUMN "base_health_points"`);
-    await queryRunner.query(`ALTER TABLE "hero_template" DROP COLUMN "base_action_points"`);
-    await queryRunner.query(`ALTER TABLE "hero_template" DROP COLUMN "base_movement_points"`);
-    await queryRunner.query(`ALTER TABLE "hero_template" DROP COLUMN "base_armor_class"`);
-    await queryRunner.query(`ALTER TABLE "hero_template" DROP COLUMN "base_mana_points"`);
-    await queryRunner.query(`ALTER TABLE "hero_template" DROP COLUMN "base_health_points"`);
-    await queryRunner.query(`ALTER TABLE "campaign_progression" DROP COLUMN "user_id"`);
-    await queryRunner.query(`ALTER TABLE "campaign_progression" DROP COLUMN "campaign_id"`);
-    await queryRunner.query(`ALTER TABLE "campaign_stage_progression" DROP COLUMN "stage_id"`);
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_997e97791ec3aa7af5fb205907"`,
+    );
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_da5afe8d6e472dd654037e30c0"`,
+    );
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_090cbf92709adca8d9564daf84"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero" DROP COLUMN "base_action_points"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero" DROP COLUMN "base_movement_points"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero" DROP COLUMN "base_armor_class"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero" DROP COLUMN "base_mana_points"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero" DROP COLUMN "base_health_points"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero_template" DROP COLUMN "base_action_points"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero_template" DROP COLUMN "base_movement_points"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero_template" DROP COLUMN "base_armor_class"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero_template" DROP COLUMN "base_mana_points"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero_template" DROP COLUMN "base_health_points"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "campaign_progression" DROP COLUMN "user_id"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "campaign_progression" DROP COLUMN "campaign_id"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "campaign_stage_progression" DROP COLUMN "stage_id"`,
+    );
     await queryRunner.query(
       `ALTER TABLE "campaign_stage_progression" DROP COLUMN "campaign_progression_id"`,
     );
-    await queryRunner.query(`ALTER TABLE "campaign_stage" DROP COLUMN "campaign_id"`);
-    await queryRunner.query(`ALTER TABLE "campaign_stage" DROP COLUMN "map_compiled"`);
-    await queryRunner.query(`ALTER TABLE "hero" ADD "baseActionPoints" integer NOT NULL`);
-    await queryRunner.query(`ALTER TABLE "hero" ADD "baseMovementPoints" integer NOT NULL`);
-    await queryRunner.query(`ALTER TABLE "hero" ADD "baseArmorClass" integer NOT NULL`);
-    await queryRunner.query(`ALTER TABLE "hero" ADD "baseManaPoints" integer NOT NULL`);
-    await queryRunner.query(`ALTER TABLE "hero" ADD "baseHealthPoints" integer NOT NULL`);
-    await queryRunner.query(`ALTER TABLE "hero_template" ADD "baseActionPoints" integer NOT NULL`);
+    await queryRunner.query(
+      `ALTER TABLE "campaign_stage" DROP COLUMN "campaign_id"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "campaign_stage" DROP COLUMN "map_compiled"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero" ADD "baseActionPoints" integer NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero" ADD "baseMovementPoints" integer NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero" ADD "baseArmorClass" integer NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero" ADD "baseManaPoints" integer NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero" ADD "baseHealthPoints" integer NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero_template" ADD "baseActionPoints" integer NOT NULL`,
+    );
     await queryRunner.query(
       `ALTER TABLE "hero_template" ADD "baseMovementPoints" integer NOT NULL`,
     );
-    await queryRunner.query(`ALTER TABLE "hero_template" ADD "baseArmorClass" integer NOT NULL`);
-    await queryRunner.query(`ALTER TABLE "hero_template" ADD "baseManaPoints" integer NOT NULL`);
-    await queryRunner.query(`ALTER TABLE "hero_template" ADD "baseHealthPoints" integer NOT NULL`);
-    await queryRunner.query(`ALTER TABLE "campaign_progression" ADD "userId" character varying`);
-    await queryRunner.query(`ALTER TABLE "campaign_progression" ADD "campaignId" uuid`);
-    await queryRunner.query(`ALTER TABLE "campaign_stage_progression" ADD "stageId" uuid`);
+    await queryRunner.query(
+      `ALTER TABLE "hero_template" ADD "baseArmorClass" integer NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero_template" ADD "baseManaPoints" integer NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "hero_template" ADD "baseHealthPoints" integer NOT NULL`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "campaign_progression" ADD "userId" character varying`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "campaign_progression" ADD "campaignId" uuid`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "campaign_stage_progression" ADD "stageId" uuid`,
+    );
     await queryRunner.query(
       `ALTER TABLE "campaign_stage_progression" ADD "campaignProgressionId" uuid`,
     );
-    await queryRunner.query(`ALTER TABLE "campaign_stage" ADD "campaignId" uuid`);
+    await queryRunner.query(
+      `ALTER TABLE "campaign_stage" ADD "campaignId" uuid`,
+    );
     await queryRunner.query(
       `ALTER TABLE "campaign_stage" ADD "mapCompiled" character varying NOT NULL`,
     );

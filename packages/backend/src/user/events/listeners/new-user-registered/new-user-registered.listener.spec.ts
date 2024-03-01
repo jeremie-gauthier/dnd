@@ -1,15 +1,15 @@
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { NewUserRegisteredPayload } from 'src/auth/events/emitters/new-user-registered.payload';
-import { User } from 'src/database/entities/user.entity';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { NewUserCreatedPayload } from '../../emitters/new-user-created.payload';
-import { UserEvent } from '../../emitters/user-events.enum';
-import { NewUserRegisteredListener } from './new-user-registered.listener';
-import { NewUserRegisteredRepository } from './new-user-registered.repository';
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { Test, TestingModule } from "@nestjs/testing";
+import { getRepositoryToken } from "@nestjs/typeorm";
+import { NewUserRegisteredPayload } from "src/auth/events/emitters/new-user-registered.payload";
+import { User } from "src/database/entities/user.entity";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { NewUserCreatedPayload } from "../../emitters/new-user-created.payload";
+import { UserEvent } from "../../emitters/user-events.enum";
+import { NewUserRegisteredListener } from "./new-user-registered.listener";
+import { NewUserRegisteredRepository } from "./new-user-registered.repository";
 
-describe('NewUserRegisteredListener', () => {
+describe("NewUserRegisteredListener", () => {
   let newUserRegisteredListener: NewUserRegisteredListener;
   let eventEmitter2: EventEmitter2;
 
@@ -20,7 +20,7 @@ describe('NewUserRegisteredListener', () => {
         {
           provide: NewUserRegisteredRepository,
           useValue: {
-            createNewUser: (id: User['id']) => Promise.resolve({ id }),
+            createNewUser: (id: User["id"]) => Promise.resolve({ id }),
           },
         },
         EventEmitter2,
@@ -28,14 +28,16 @@ describe('NewUserRegisteredListener', () => {
       ],
     }).compile();
 
-    newUserRegisteredListener = app.get<NewUserRegisteredListener>(NewUserRegisteredListener);
+    newUserRegisteredListener = app.get<NewUserRegisteredListener>(
+      NewUserRegisteredListener,
+    );
     eventEmitter2 = app.get<EventEmitter2>(EventEmitter2);
   });
 
-  it('should create a new user', async () => {
-    const userId = 'new_user_id';
+  it("should create a new user", async () => {
+    const userId = "new_user_id";
 
-    const eventEmitter = vi.spyOn(eventEmitter2, 'emitAsync');
+    const eventEmitter = vi.spyOn(eventEmitter2, "emitAsync");
 
     const eventPayload = new NewUserRegisteredPayload({ userId });
     await newUserRegisteredListener.handler(eventPayload);

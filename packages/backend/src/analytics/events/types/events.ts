@@ -1,3 +1,3 @@
 export enum AnalyticsEvent {
-  OnAnyEvent = '**',
+  OnAnyEvent = "**",
 }

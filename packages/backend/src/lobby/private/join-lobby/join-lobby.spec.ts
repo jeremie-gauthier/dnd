@@ -1,10 +1,10 @@
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Test } from '@nestjs/testing';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { JoinLobbyRepository } from './join-lobby.repository';
-import { JoinLobbyUseCase } from './join-lobby.uc';
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { Test } from "@nestjs/testing";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { JoinLobbyRepository } from "./join-lobby.repository";
+import { JoinLobbyUseCase } from "./join-lobby.uc";
 
-describe('StartGameUseCase', () => {
+describe("StartGameUseCase", () => {
   let useCase: JoinLobbyUseCase;
   let repository: JoinLobbyRepository;
   let eventEmitter2: EventEmitter2;
@@ -33,7 +33,7 @@ describe('StartGameUseCase', () => {
     vi.clearAllMocks();
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(useCase).toBeDefined();
     expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();

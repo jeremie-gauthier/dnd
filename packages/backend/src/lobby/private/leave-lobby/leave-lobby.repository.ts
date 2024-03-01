@@ -1,8 +1,8 @@
-import { LobbyEntity } from '@dnd/shared';
-import { Injectable } from '@nestjs/common';
-import { User } from 'src/database/entities/user.entity';
-import { LobbiesRepository } from 'src/redis/repositories/lobbies.repository';
-import { UsersRepository } from 'src/redis/repositories/users.repository';
+import { LobbyEntity } from "@dnd/shared";
+import { Injectable } from "@nestjs/common";
+import { User } from "src/database/entities/user.entity";
+import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
+import { UsersRepository } from "src/redis/repositories/users.repository";
 
 @Injectable()
 export class LeaveLobbyRepository {
@@ -11,7 +11,7 @@ export class LeaveLobbyRepository {
     private readonly usersRepository: UsersRepository,
   ) {}
 
-  public async getUserLobby(userId: User['id']) {
+  public async getUserLobby(userId: User["id"]) {
     return await this.usersRepository.get(userId);
   }
 
@@ -19,8 +19,8 @@ export class LeaveLobbyRepository {
     userId,
     lobbyId,
   }: {
-    userId: User['id'];
-    lobbyId: LobbyEntity['id'];
+    userId: User["id"];
+    lobbyId: LobbyEntity["id"];
   }): Promise<void> {
     const lobby = await this.lobbiesRepository.getOne(lobbyId);
     if (!lobby) {

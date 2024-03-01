@@ -1,9 +1,9 @@
-import { ServerGameEvent } from '@dnd/shared';
-import { Injectable } from '@nestjs/common';
-import { OnEvent } from '@nestjs/event-emitter';
-import { GameChangedPayload } from '../../emitters/game-changed.payload';
-import { GameEvent } from '../../emitters/game-events.enum';
-import { GameChangedRepository } from './game-changed.repository';
+import { ServerGameEvent } from "@dnd/shared";
+import { Injectable } from "@nestjs/common";
+import { OnEvent } from "@nestjs/event-emitter";
+import { GameChangedPayload } from "../../emitters/game-changed.payload";
+import { GameEvent } from "../../emitters/game-events.enum";
+import { GameChangedRepository } from "./game-changed.repository";
 
 @Injectable()
 export class GameChangedListener {

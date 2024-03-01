@@ -1,11 +1,11 @@
-import { GameEntity } from '@dnd/shared';
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { CampaignStageProgression } from 'src/database/entities/campaign-stage-progression.entity';
-import { CampaignStage } from 'src/database/entities/campaign-stage.entity';
-import { User } from 'src/database/entities/user.entity';
-import { GamesRepository } from 'src/redis/repositories/games.repository';
-import { Repository } from 'typeorm';
+import { GameEntity } from "@dnd/shared";
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
+import { CampaignStage } from "src/database/entities/campaign-stage.entity";
+import { User } from "src/database/entities/user.entity";
+import { GamesRepository } from "src/redis/repositories/games.repository";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class GameInitializationRepository {
@@ -19,8 +19,8 @@ export class GameInitializationRepository {
     campaignStageId,
     userId,
   }: {
-    campaignStageId: CampaignStage['id'];
-    userId: User['id'];
+    campaignStageId: CampaignStage["id"];
+    userId: User["id"];
   }): Promise<CampaignStageProgression> {
     return await this.campaignStageProgressionRepository.findOneOrFail({
       where: {

@@ -7,29 +7,39 @@ import {
   PrimaryGeneratedColumn,
   Relation,
   RelationId,
-} from 'typeorm';
+} from "typeorm";
 import {
   CampaignProgressionStatusType,
   CampaignProgressionStatusValues,
-} from '../enums/campaign-progression-status.enum';
-import { CampaignStageProgression } from './campaign-stage-progression.entity';
-import { Campaign } from './campaign.entity';
-import { Hero } from './hero.entity';
-import { User } from './user.entity';
+} from "../enums/campaign-progression-status.enum";
+import { CampaignStageProgression } from "./campaign-stage-progression.entity";
+import { Campaign } from "./campaign.entity";
+import { Hero } from "./hero.entity";
+import { User } from "./user.entity";
 
 @Entity()
-@Index(['campaign', 'user'], { unique: true })
+@Index(["campaign", "user"], { unique: true })
 export class CampaignProgression {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
-  @ManyToOne(() => Campaign, (campaign) => campaign.stages, { onDelete: 'CASCADE' })
+  @ManyToOne(
+    () => Campaign,
+    (campaign) => campaign.stages,
+    { onDelete: "CASCADE" },
+  )
   readonly campaign: Relation<Campaign>;
 
-  @RelationId((campaignProgression: CampaignProgression) => campaignProgression.campaign)
-  readonly campaignId: Relation<Campaign['id']>;
+  @RelationId(
+    (campaignProgression: CampaignProgression) => campaignProgression.campaign,
+  )
+  readonly campaignId: Relation<Campaign["id"]>;
 
-  @ManyToOne(() => User, (user) => user.campaignProgressions, { onDelete: 'CASCADE' })
+  @ManyToOne(
+    () => User,
+    (user) => user.campaignProgressions,
+    { onDelete: "CASCADE" },
+  )
   readonly user: Relation<User>;
 
   @OneToMany(
@@ -39,9 +49,13 @@ export class CampaignProgression {
   )
   readonly stageProgressions: Relation<CampaignStageProgression[]>;
 
-  @OneToMany(() => Hero, (hero) => hero.campaignProgression, { cascade: true })
+  @OneToMany(
+    () => Hero,
+    (hero) => hero.campaignProgression,
+    { cascade: true },
+  )
   readonly heroes: Relation<Hero[]>;
 
-  @Column({ type: 'enum', enum: CampaignProgressionStatusValues })
+  @Column({ type: "enum", enum: CampaignProgressionStatusValues })
   status: CampaignProgressionStatusType;
 }

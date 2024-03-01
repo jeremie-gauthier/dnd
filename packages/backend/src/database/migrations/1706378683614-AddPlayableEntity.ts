@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class AddPlayableEntity1706378683614 implements MigrationInterface {
-  name = 'AddPlayableEntity1706378683614';
+  name = "AddPlayableEntity1706378683614";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -24,7 +24,9 @@ export class AddPlayableEntity1706378683614 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`DROP TABLE "hero"`);
     await queryRunner.query(`DROP TYPE "public"."hero_class_enum"`);
-    await queryRunner.query(`DROP INDEX "public"."IDX_c0cdd01a4b917867ad0dfcd2bc"`);
+    await queryRunner.query(
+      `DROP INDEX "public"."IDX_c0cdd01a4b917867ad0dfcd2bc"`,
+    );
     await queryRunner.query(`DROP TABLE "hero_template"`);
     await queryRunner.query(`DROP TYPE "public"."hero_template_class_enum"`);
   }

@@ -6,21 +6,25 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   Relation,
-} from 'typeorm';
+} from "typeorm";
 import {
   CampaignStageStatusType,
   CampaignStageStatusValues,
-} from '../enums/campaign-stage-status.enum';
-import { CampaignStageProgression } from './campaign-stage-progression.entity';
-import { Campaign } from './campaign.entity';
+} from "../enums/campaign-stage-status.enum";
+import { CampaignStageProgression } from "./campaign-stage-progression.entity";
+import { Campaign } from "./campaign.entity";
 
 @Entity()
-@Index(['campaign', 'order'], { unique: true })
+@Index(["campaign", "order"], { unique: true })
 export class CampaignStage {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
-  @ManyToOne(() => Campaign, (campaign) => campaign.stages, { onDelete: 'CASCADE' })
+  @ManyToOne(
+    () => Campaign,
+    (campaign) => campaign.stages,
+    { onDelete: "CASCADE" },
+  )
   readonly campaign: Relation<Campaign>;
 
   @Column()
@@ -45,6 +49,6 @@ export class CampaignStage {
   @Column()
   readonly mapCompiled: string;
 
-  @Column({ type: 'enum', enum: CampaignStageStatusValues })
+  @Column({ type: "enum", enum: CampaignStageStatusValues })
   status: CampaignStageStatusType;
 }

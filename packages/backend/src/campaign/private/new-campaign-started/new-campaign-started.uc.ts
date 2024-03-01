@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { CampaignEvent } from 'src/campaign/events/emitters/campaign-events.enum';
-import { NewCampaignStartedPayload } from 'src/campaign/events/emitters/new-campaign-started.payload';
-import { CampaignProgression } from 'src/database/entities/campaign-progression.entity';
-import { Campaign } from 'src/database/entities/campaign.entity';
-import { User } from 'src/database/entities/user.entity';
-import { UseCase } from 'src/types/use-case.interface';
-import { NewCampaignStartedRepository } from './new-campaign-started.repository';
+import { Injectable } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { CampaignEvent } from "src/campaign/events/emitters/campaign-events.enum";
+import { NewCampaignStartedPayload } from "src/campaign/events/emitters/new-campaign-started.payload";
+import { CampaignProgression } from "src/database/entities/campaign-progression.entity";
+import { Campaign } from "src/database/entities/campaign.entity";
+import { User } from "src/database/entities/user.entity";
+import { UseCase } from "src/types/use-case.interface";
+import { NewCampaignStartedRepository } from "./new-campaign-started.repository";
 
 @Injectable()
 export class NewCampaignStartedUseCase implements UseCase {
@@ -19,10 +19,13 @@ export class NewCampaignStartedUseCase implements UseCase {
     userId,
     campaignId,
   }: {
-    userId: User['id'];
-    campaignId: Campaign['id'];
+    userId: User["id"];
+    campaignId: Campaign["id"];
   }): Promise<CampaignProgression> {
-    const campaignProgression = await this.startCampaignForUser(userId, campaignId);
+    const campaignProgression = await this.startCampaignForUser(
+      userId,
+      campaignId,
+    );
 
     this.eventEmitter.emitAsync(
       CampaignEvent.NewCampaignStarted,
@@ -37,15 +40,14 @@ export class NewCampaignStartedUseCase implements UseCase {
   }
 
   private async startCampaignForUser(
-    userId: User['id'],
-    campaignId: Campaign['id'],
+    userId: User["id"],
+    campaignId: Campaign["id"],
   ): Promise<CampaignProgression> {
-    const campaign = await this.repository.getCampaignWithFirstStageById(campaignId);
+    const campaign =
+      await this.repository.getCampaignWithFirstStageById(campaignId);
 
-    const campaignProgression = await this.repository.createCampaignProgressionForUser(
-      userId,
-      campaign,
-    );
+    const campaignProgression =
+      await this.repository.createCampaignProgressionForUser(userId, campaign);
 
     return campaignProgression;
   }

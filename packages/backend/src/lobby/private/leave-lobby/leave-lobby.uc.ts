@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { User } from 'src/database/entities/user.entity';
-import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
-import { UserLeftLobbyPayload } from 'src/lobby/events/emitters/user-left-lobby.payload';
-import { MessageContext } from 'src/types/socket.type';
-import { UseCase } from 'src/types/use-case.interface';
-import { LeaveLobbyRepository } from './leave-lobby.repository';
+import { Injectable } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { User } from "src/database/entities/user.entity";
+import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
+import { UserLeftLobbyPayload } from "src/lobby/events/emitters/user-left-lobby.payload";
+import { MessageContext } from "src/types/socket.type";
+import { UseCase } from "src/types/use-case.interface";
+import { LeaveLobbyRepository } from "./leave-lobby.repository";
 
 @Injectable()
 export class LeaveLobbyUseCase implements UseCase {
@@ -19,7 +19,7 @@ export class LeaveLobbyUseCase implements UseCase {
     userId,
   }: {
     ctx: MessageContext;
-    userId: User['id'];
+    userId: User["id"];
   }): Promise<void> {
     const lobbyId = await this.repository.getUserLobby(userId);
     if (!lobbyId) {

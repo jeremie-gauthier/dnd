@@ -1,5 +1,5 @@
-import { joinLobbyInputSchema, joinLobbyOutputSchema } from '@dnd/shared';
-import { createZodDto } from 'nestjs-zod';
+import { joinLobbyInputSchema, joinLobbyOutputSchema } from "@dnd/shared";
+import { createZodDto } from "nestjs-zod";
 
 export class JoinLobbyInputDto extends createZodDto(joinLobbyInputSchema) {}
 

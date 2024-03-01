@@ -1,12 +1,14 @@
-import type { LobbyEntity } from '@dnd/shared';
-import { Injectable } from '@nestjs/common';
-import { LobbiesRepository } from 'src/redis/repositories/lobbies.repository';
+import type { LobbyEntity } from "@dnd/shared";
+import { Injectable } from "@nestjs/common";
+import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
 
 @Injectable()
 export class LobbyChangedRepository {
   constructor(private readonly lobbiesRepository: LobbiesRepository) {}
 
-  public async getLobbyById(lobbyId: LobbyEntity['id']): Promise<LobbyEntity | null> {
+  public async getLobbyById(
+    lobbyId: LobbyEntity["id"],
+  ): Promise<LobbyEntity | null> {
     return await this.lobbiesRepository.getOne(lobbyId);
   }
 }

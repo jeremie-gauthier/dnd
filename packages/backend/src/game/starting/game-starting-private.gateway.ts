@@ -1,18 +1,18 @@
-import { ClientGameEvent } from '@dnd/shared';
+import { ClientGameEvent } from "@dnd/shared";
 import {
   ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-} from '@nestjs/websockets';
-import { ServerSocket, WsServer } from 'src/types/socket.type';
-import { ChangePositionInputDto } from './private/change-position/change-position.dto';
-import { ChangePositionUseCase } from './private/change-position/change-position.uc';
+} from "@nestjs/websockets";
+import { ServerSocket, WsServer } from "src/types/socket.type";
+import { ChangePositionInputDto } from "./private/change-position/change-position.dto";
+import { ChangePositionUseCase } from "./private/change-position/change-position.uc";
 
 @WebSocketGateway({
   cors: {
-    origin: '*',
+    origin: "*",
   },
 })
 export class GameStartingPrivateGateway {

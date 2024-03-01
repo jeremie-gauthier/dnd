@@ -1,9 +1,9 @@
-import { ConfigService } from '@nestjs/config';
-import { Test, TestingModule } from '@nestjs/testing';
-import { beforeEach, describe, expect, it } from 'vitest';
-import { JwtService } from './jwt.service';
+import { ConfigService } from "@nestjs/config";
+import { Test, TestingModule } from "@nestjs/testing";
+import { beforeEach, describe, expect, it } from "vitest";
+import { JwtService } from "./jwt.service";
 
-describe('JwtService', () => {
+describe("JwtService", () => {
   let service: JwtService;
 
   beforeEach(async () => {
@@ -22,7 +22,7 @@ describe('JwtService', () => {
     service = module.get<JwtService>(JwtService);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(service).toBeDefined();
   });
 });

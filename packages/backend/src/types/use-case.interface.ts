@@ -1,3 +1,3 @@
 export interface UseCase {
-  execute(...args: any[]): Promise<any>;
+  execute(...args: unknown[]): Promise<unknown>;
 }

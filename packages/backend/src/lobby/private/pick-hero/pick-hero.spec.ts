@@ -1,28 +1,39 @@
-import { LobbyEntityStatus, type LobbyEntity } from '@dnd/shared';
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Test } from '@nestjs/testing';
-import { LobbyChangedPayload } from 'src/lobby/events/emitters/lobby-changed.payload';
-import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
-import type { MessageContext } from 'src/types/socket.type';
-import { MockInstance, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { PickHeroRepository } from './pick-hero.repository';
-import { PickHeroUseCase } from './pick-hero.uc';
+import { LobbyEntityStatus, type LobbyEntity } from "@dnd/shared";
+import { ForbiddenException, NotFoundException } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { Test } from "@nestjs/testing";
+import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.payload";
+import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
+import type { MessageContext } from "src/types/socket.type";
+import {
+  MockInstance,
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
+import { PickHeroRepository } from "./pick-hero.repository";
+import { PickHeroUseCase } from "./pick-hero.uc";
 
-describe('PickHeroUseCase', () => {
+describe("PickHeroUseCase", () => {
   let useCase: PickHeroUseCase;
   let repository: PickHeroRepository;
   let eventEmitter2: EventEmitter2;
 
   let updateLobbyMock: MockInstance<[lobby: LobbyEntity], Promise<void>>;
-  let eventEmitterMock: MockInstance<[event: any, ...values: any[]], Promise<any[]>>;
+  let eventEmitterMock: MockInstance<
+    [event: any, ...values: any[]],
+    Promise<any[]>
+  >;
 
   const mockParams = {
     ctx: {} as MessageContext,
-    userId: 'mock-user-id',
-    lobbyId: 'mock-lobby-id',
-    heroId: 'mock-hero-id',
+    userId: "mock-user-id",
+    lobbyId: "mock-lobby-id",
+    heroId: "mock-hero-id",
   };
 
   beforeEach(async () => {
@@ -50,125 +61,117 @@ describe('PickHeroUseCase', () => {
     repository = module.get<PickHeroRepository>(PickHeroRepository);
     eventEmitter2 = module.get<EventEmitter2>(EventEmitter2);
 
-    updateLobbyMock = vi.spyOn(repository, 'updateLobby');
-    eventEmitterMock = vi.spyOn(eventEmitter2, 'emitAsync');
+    updateLobbyMock = vi.spyOn(repository, "updateLobby");
+    eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
   });
 
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(useCase).toBeDefined();
     expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
   });
 
-  describe('Happy path', () => {
-    it('should assign the selected hero to the user that is alone in the lobby', async () => {
-      const getLobbyByIdMock = vi.spyOn(repository, 'getLobbyById').mockResolvedValue({
-        id: 'mock-lobby-id',
-        players: [{ userId: 'mock-user-id', heroesSelected: [] }],
-        heroesAvailable: [{ id: 'warrior' }, { id: 'cleric' }, { id: 'thief' }],
-        status: LobbyEntityStatus.OPENED,
-      } as unknown as LobbyEntity);
+  describe("Happy path", () => {
+    it("should assign the selected hero to the user that is alone in the lobby", async () => {
+      const getLobbyByIdMock = vi
+        .spyOn(repository, "getLobbyById")
+        .mockResolvedValue({
+          id: "mock-lobby-id",
+          players: [{ userId: "mock-user-id", heroesSelected: [] }],
+          heroesAvailable: [
+            { id: "warrior" },
+            { id: "cleric" },
+            { id: "thief" },
+          ],
+          status: LobbyEntityStatus.OPENED,
+        } as unknown as LobbyEntity);
 
-      await useCase.execute({ ...mockParams, heroId: 'warrior' });
+      await useCase.execute({ ...mockParams, heroId: "warrior" });
 
       expect(getLobbyByIdMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledWith({
-        id: 'mock-lobby-id',
-        players: [{ userId: 'mock-user-id', heroesSelected: ['warrior'] }],
+        id: "mock-lobby-id",
+        players: [{ userId: "mock-user-id", heroesSelected: ["warrior"] }],
         heroesAvailable: [
-          { id: 'warrior', pickedBy: 'mock-user-id' },
-          { id: 'cleric' },
-          { id: 'thief' },
+          { id: "warrior", pickedBy: "mock-user-id" },
+          { id: "cleric" },
+          { id: "thief" },
         ],
         status: LobbyEntityStatus.OPENED,
       });
       expect(eventEmitterMock).toHaveBeenCalledOnce();
       expect(eventEmitterMock).toHaveBeenCalledWith(
         LobbyEvent.LobbyChanged,
-        new LobbyChangedPayload({ ctx: mockParams.ctx, lobbyId: mockParams.lobbyId }),
+        new LobbyChangedPayload({
+          ctx: mockParams.ctx,
+          lobbyId: mockParams.lobbyId,
+        }),
       );
     });
 
-    it('should assign the selected hero to the user that is in the lobby with other users', async () => {
-      const getLobbyByIdMock = vi.spyOn(repository, 'getLobbyById').mockResolvedValue({
-        id: 'mock-lobby-id',
-        players: [
-          { userId: 'mock-user-id', heroesSelected: [] },
-          { userId: 'mock-another-user-id-1', heroesSelected: ['warrior', 'thief'] },
-          { userId: 'mock-another-user-id-2', heroesSelected: [] },
-        ],
-        heroesAvailable: [
-          { id: 'warrior', pickedBy: 'mock-another-user-id-1' },
-          { id: 'cleric' },
-          { id: 'thief', pickedBy: 'mock-another-user-id-1' },
-        ],
-        status: LobbyEntityStatus.OPENED,
-      } as unknown as LobbyEntity);
+    it("should assign the selected hero to the user that is in the lobby with other users", async () => {
+      const getLobbyByIdMock = vi
+        .spyOn(repository, "getLobbyById")
+        .mockResolvedValue({
+          id: "mock-lobby-id",
+          players: [
+            { userId: "mock-user-id", heroesSelected: [] },
+            {
+              userId: "mock-another-user-id-1",
+              heroesSelected: ["warrior", "thief"],
+            },
+            { userId: "mock-another-user-id-2", heroesSelected: [] },
+          ],
+          heroesAvailable: [
+            { id: "warrior", pickedBy: "mock-another-user-id-1" },
+            { id: "cleric" },
+            { id: "thief", pickedBy: "mock-another-user-id-1" },
+          ],
+          status: LobbyEntityStatus.OPENED,
+        } as unknown as LobbyEntity);
 
-      await useCase.execute({ ...mockParams, heroId: 'cleric' });
+      await useCase.execute({ ...mockParams, heroId: "cleric" });
 
       expect(getLobbyByIdMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledWith({
-        id: 'mock-lobby-id',
+        id: "mock-lobby-id",
         players: [
-          { userId: 'mock-user-id', heroesSelected: ['cleric'] },
-          { userId: 'mock-another-user-id-1', heroesSelected: ['warrior', 'thief'] },
-          { userId: 'mock-another-user-id-2', heroesSelected: [] },
+          { userId: "mock-user-id", heroesSelected: ["cleric"] },
+          {
+            userId: "mock-another-user-id-1",
+            heroesSelected: ["warrior", "thief"],
+          },
+          { userId: "mock-another-user-id-2", heroesSelected: [] },
         ],
         heroesAvailable: [
-          { id: 'warrior', pickedBy: 'mock-another-user-id-1' },
-          { id: 'cleric', pickedBy: 'mock-user-id' },
-          { id: 'thief', pickedBy: 'mock-another-user-id-1' },
+          { id: "warrior", pickedBy: "mock-another-user-id-1" },
+          { id: "cleric", pickedBy: "mock-user-id" },
+          { id: "thief", pickedBy: "mock-another-user-id-1" },
         ],
         status: LobbyEntityStatus.OPENED,
       });
       expect(eventEmitterMock).toHaveBeenCalledOnce();
       expect(eventEmitterMock).toHaveBeenCalledWith(
         LobbyEvent.LobbyChanged,
-        new LobbyChangedPayload({ ctx: mockParams.ctx, lobbyId: mockParams.lobbyId }),
+        new LobbyChangedPayload({
+          ctx: mockParams.ctx,
+          lobbyId: mockParams.lobbyId,
+        }),
       );
     });
   });
 
-  describe('Negative path', () => {
-    it('should throw a NotFoundException when the lobby does not exists', async () => {
-      const getLobbyByIdMock = vi.spyOn(repository, 'getLobbyById');
+  describe("Negative path", () => {
+    it("should throw a NotFoundException when the lobby does not exists", async () => {
+      const getLobbyByIdMock = vi.spyOn(repository, "getLobbyById");
 
-      await expect(useCase.execute(mockParams)).rejects.toThrowError(NotFoundException);
-
-      expect(getLobbyByIdMock).toHaveBeenCalledOnce();
-      expect(updateLobbyMock).not.toHaveBeenCalled();
-      expect(eventEmitterMock).not.toHaveBeenCalled();
-    });
-
-    it('should throw a ForbiddenException when the lobby is no longer opened', async () => {
-      const getLobbyByIdMock = vi.spyOn(repository, 'getLobbyById').mockResolvedValue({
-        id: 'mock-lobby-id',
-        status: LobbyEntityStatus.GAME_INITIALIZING,
-      } as unknown as LobbyEntity);
-
-      await expect(useCase.execute(mockParams)).rejects.toThrowError(ForbiddenException);
-
-      expect(getLobbyByIdMock).toHaveBeenCalledOnce();
-      expect(updateLobbyMock).not.toHaveBeenCalled();
-      expect(eventEmitterMock).not.toHaveBeenCalled();
-    });
-
-    it('should throw a NotFoundException when the hero does not exists', async () => {
-      const getLobbyByIdMock = vi.spyOn(repository, 'getLobbyById').mockResolvedValue({
-        id: 'mock-lobby-id',
-        players: [{ userId: 'mock-user-id', heroesSelected: [] }],
-        heroesAvailable: [{ id: 'warrior' }, { id: 'cleric' }, { id: 'thief' }],
-        status: LobbyEntityStatus.OPENED,
-      } as unknown as LobbyEntity);
-
-      await expect(useCase.execute({ ...mockParams, heroId: 'superman' })).rejects.toThrowError(
+      await expect(useCase.execute(mockParams)).rejects.toThrowError(
         NotFoundException,
       );
 
@@ -177,18 +180,15 @@ describe('PickHeroUseCase', () => {
       expect(eventEmitterMock).not.toHaveBeenCalled();
     });
 
-    it('should throw a ForbiddenException when the hero has already been picked by another user', async () => {
-      const getLobbyByIdMock = vi.spyOn(repository, 'getLobbyById').mockResolvedValue({
-        id: 'mock-lobby-id',
-        players: [
-          { userId: 'mock-user-id', heroesSelected: [] },
-          { userId: 'mock-another-user-id', heroesSelected: ['warrior'] },
-        ],
-        heroesAvailable: [{ id: 'warrior', pickedBy: 'mock-another-user-id' }],
-        status: LobbyEntityStatus.OPENED,
-      } as unknown as LobbyEntity);
+    it("should throw a ForbiddenException when the lobby is no longer opened", async () => {
+      const getLobbyByIdMock = vi
+        .spyOn(repository, "getLobbyById")
+        .mockResolvedValue({
+          id: "mock-lobby-id",
+          status: LobbyEntityStatus.GAME_INITIALIZING,
+        } as unknown as LobbyEntity);
 
-      await expect(useCase.execute({ ...mockParams, heroId: 'warrior' })).rejects.toThrowError(
+      await expect(useCase.execute(mockParams)).rejects.toThrowError(
         ForbiddenException,
       );
 
@@ -197,17 +197,66 @@ describe('PickHeroUseCase', () => {
       expect(eventEmitterMock).not.toHaveBeenCalled();
     });
 
-    it('should throw a ForbiddenException when the user is not in the lobby', async () => {
-      const getLobbyByIdMock = vi.spyOn(repository, 'getLobbyById').mockResolvedValue({
-        id: 'mock-lobby-id',
-        players: [{ userId: 'mock-another-user-id', heroesSelected: [] }],
-        heroesAvailable: [{ id: 'warrior' }],
-        status: LobbyEntityStatus.OPENED,
-      } as unknown as LobbyEntity);
+    it("should throw a NotFoundException when the hero does not exists", async () => {
+      const getLobbyByIdMock = vi
+        .spyOn(repository, "getLobbyById")
+        .mockResolvedValue({
+          id: "mock-lobby-id",
+          players: [{ userId: "mock-user-id", heroesSelected: [] }],
+          heroesAvailable: [
+            { id: "warrior" },
+            { id: "cleric" },
+            { id: "thief" },
+          ],
+          status: LobbyEntityStatus.OPENED,
+        } as unknown as LobbyEntity);
 
-      await expect(useCase.execute({ ...mockParams, heroId: 'warrior' })).rejects.toThrowError(
-        ForbiddenException,
-      );
+      await expect(
+        useCase.execute({ ...mockParams, heroId: "superman" }),
+      ).rejects.toThrowError(NotFoundException);
+
+      expect(getLobbyByIdMock).toHaveBeenCalledOnce();
+      expect(updateLobbyMock).not.toHaveBeenCalled();
+      expect(eventEmitterMock).not.toHaveBeenCalled();
+    });
+
+    it("should throw a ForbiddenException when the hero has already been picked by another user", async () => {
+      const getLobbyByIdMock = vi
+        .spyOn(repository, "getLobbyById")
+        .mockResolvedValue({
+          id: "mock-lobby-id",
+          players: [
+            { userId: "mock-user-id", heroesSelected: [] },
+            { userId: "mock-another-user-id", heroesSelected: ["warrior"] },
+          ],
+          heroesAvailable: [
+            { id: "warrior", pickedBy: "mock-another-user-id" },
+          ],
+          status: LobbyEntityStatus.OPENED,
+        } as unknown as LobbyEntity);
+
+      await expect(
+        useCase.execute({ ...mockParams, heroId: "warrior" }),
+      ).rejects.toThrowError(ForbiddenException);
+
+      expect(getLobbyByIdMock).toHaveBeenCalledOnce();
+      expect(updateLobbyMock).not.toHaveBeenCalled();
+      expect(eventEmitterMock).not.toHaveBeenCalled();
+    });
+
+    it("should throw a ForbiddenException when the user is not in the lobby", async () => {
+      const getLobbyByIdMock = vi
+        .spyOn(repository, "getLobbyById")
+        .mockResolvedValue({
+          id: "mock-lobby-id",
+          players: [{ userId: "mock-another-user-id", heroesSelected: [] }],
+          heroesAvailable: [{ id: "warrior" }],
+          status: LobbyEntityStatus.OPENED,
+        } as unknown as LobbyEntity);
+
+      await expect(
+        useCase.execute({ ...mockParams, heroId: "warrior" }),
+      ).rejects.toThrowError(ForbiddenException);
 
       expect(getLobbyByIdMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).not.toHaveBeenCalled();

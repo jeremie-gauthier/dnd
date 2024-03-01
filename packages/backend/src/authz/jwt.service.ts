@@ -1,15 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import jwt from 'jsonwebtoken';
-import jwksClient from 'jwks-rsa';
-import { AuthToken } from './auth-token.interface';
+import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import jwt from "jsonwebtoken";
+import jwksClient from "jwks-rsa";
+import { AuthToken } from "./auth-token.interface";
 
 @Injectable()
 export class JwtService {
   private readonly client: jwksClient.JwksClient;
 
   constructor(readonly configService: ConfigService) {
-    const auth0Issuer = configService.getOrThrow('AUTH0_ISSUER');
+    const auth0Issuer = configService.getOrThrow("AUTH0_ISSUER");
 
     this.client = jwksClient({
       jwksUri: `${auth0Issuer}.well-known/jwks.json`,
@@ -20,7 +20,7 @@ export class JwtService {
   }
 
   public verify(token: string): Promise<AuthToken> {
-    return new Promise(async (resolve, reject) =>
+    return new Promise((resolve, reject) =>
       jwt.verify(
         token,
         this.getKey.bind(this),
@@ -35,7 +35,10 @@ export class JwtService {
     );
   }
 
-  private getKey(header: jwt.JwtHeader, callback: (err: Error | null, key?: string) => void) {
+  private getKey(
+    header: jwt.JwtHeader,
+    callback: (err: Error | null, key?: string) => void,
+  ) {
     return this.client.getSigningKey(header.kid, (err, key) => {
       callback(err, key?.getPublicKey());
     });

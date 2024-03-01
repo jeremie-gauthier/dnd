@@ -1,14 +1,14 @@
-import { GameEntity, LobbyEntity } from '@dnd/shared';
-import { Injectable } from '@nestjs/common';
-import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
-import { CampaignStageProgression } from 'src/database/entities/campaign-stage-progression.entity';
-import { MapSerializerService } from 'src/game/map/map-serializer/map-serializer.service';
-import { HostRequestedGameStartPayload } from 'src/lobby/events/emitters/host-requested-game-start.payload';
-import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
-import { GameEvent } from '../../emitters/game-events.enum';
-import { GameInitializationDonePayload } from '../../emitters/game-initialization-done.payload';
-import { GameInitializationStartedPayload } from '../../emitters/game-initialization-started.payload';
-import { GameInitializationRepository } from './game-initialization.repository';
+import { GameEntity, LobbyEntity } from "@dnd/shared";
+import { Injectable } from "@nestjs/common";
+import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
+import { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
+import { MapSerializerService } from "src/game/map/map-serializer/map-serializer.service";
+import { HostRequestedGameStartPayload } from "src/lobby/events/emitters/host-requested-game-start.payload";
+import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
+import { GameEvent } from "../../emitters/game-events.enum";
+import { GameInitializationDonePayload } from "../../emitters/game-initialization-done.payload";
+import { GameInitializationStartedPayload } from "../../emitters/game-initialization-started.payload";
+import { GameInitializationRepository } from "./game-initialization.repository";
 
 @Injectable()
 export class GameInitializationListener {
@@ -41,13 +41,19 @@ export class GameInitializationListener {
   }
 
   private async createGame(lobby: LobbyEntity): Promise<GameEntity> {
-    const campaignStageProgression = await this.repository.getUserCampaignStageProgression({
-      campaignStageId: lobby.config.campaign.stage.id,
-      userId: lobby.host.userId,
-    });
+    const campaignStageProgression =
+      await this.repository.getUserCampaignStageProgression({
+        campaignStageId: lobby.config.campaign.stage.id,
+        userId: lobby.host.userId,
+      });
 
-    const map = this.mapSerializer.deserialize(campaignStageProgression.stage.mapCompiled);
-    const playableEntities = this.getPlayableEntitiesMap({ lobby, campaignStageProgression });
+    const map = this.mapSerializer.deserialize(
+      campaignStageProgression.stage.mapCompiled,
+    );
+    const playableEntities = this.getPlayableEntitiesMap({
+      lobby,
+      campaignStageProgression,
+    });
 
     const game = await this.repository.saveGame({
       id: lobby.id,
@@ -65,7 +71,7 @@ export class GameInitializationListener {
   }: {
     lobby: LobbyEntity;
     campaignStageProgression: CampaignStageProgression;
-  }): GameEntity['playableEntities'] {
+  }): GameEntity["playableEntities"] {
     const heroPlayersMap = Object.fromEntries(
       lobby.heroesAvailable.map((hero) => [hero.id, hero.pickedBy!]),
     );
@@ -76,7 +82,7 @@ export class GameInitializationListener {
         hero.id,
         {
           id: hero.id,
-          type: 'hero',
+          type: "hero",
           playedByUserId: heroPlayersMap[hero.id]!,
           name: hero.name,
           class: hero.class,

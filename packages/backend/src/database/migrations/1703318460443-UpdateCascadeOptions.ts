@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class UpdateCascadeOptions1703318460443 implements MigrationInterface {
-  name = 'UpdateCascadeOptions1703318460443';
+  name = "UpdateCascadeOptions1703318460443";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(

@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { CampaignProgression } from 'src/database/entities/campaign-progression.entity';
-import { User } from 'src/database/entities/user.entity';
-import { CampaignProgressionStatus } from 'src/database/enums/campaign-progression-status.enum';
-import { Repository } from 'typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { CampaignProgression } from "src/database/entities/campaign-progression.entity";
+import { User } from "src/database/entities/user.entity";
+import { CampaignProgressionStatus } from "src/database/enums/campaign-progression-status.enum";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class GetCampaignsRepository {
@@ -12,7 +12,9 @@ export class GetCampaignsRepository {
     private readonly campaignProgressionRepository: Repository<CampaignProgression>,
   ) {}
 
-  public getUserCampaignsProgressions(userId: User['id']): Promise<CampaignProgression[]> {
+  public getUserCampaignsProgressions(
+    userId: User["id"],
+  ): Promise<CampaignProgression[]> {
     return this.campaignProgressionRepository.find({
       where: {
         user: {
@@ -29,7 +31,7 @@ export class GetCampaignsRepository {
       order: {
         stageProgressions: {
           stage: {
-            order: 'ASC',
+            order: "ASC",
           },
         },
       },

@@ -1,10 +1,10 @@
-import { LobbyEntity } from '@dnd/shared';
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { CampaignStage } from 'src/database/entities/campaign-stage.entity';
-import { Campaign } from 'src/database/entities/campaign.entity';
-import { LobbiesRepository } from 'src/redis/repositories/lobbies.repository';
-import { Repository } from 'typeorm';
+import { LobbyEntity } from "@dnd/shared";
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { CampaignStage } from "src/database/entities/campaign-stage.entity";
+import { Campaign } from "src/database/entities/campaign.entity";
+import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class GetLobbyRepository {
@@ -14,11 +14,11 @@ export class GetLobbyRepository {
     private readonly lobbiesRepository: LobbiesRepository,
   ) {}
 
-  public getLobbyById(lobbyId: LobbyEntity['id']) {
+  public getLobbyById(lobbyId: LobbyEntity["id"]) {
     return this.lobbiesRepository.getOne(lobbyId);
   }
 
-  public getCampaignStageById(campaignStageId: Campaign['id']) {
+  public getCampaignStageById(campaignStageId: Campaign["id"]) {
     return this.campaignStageRepository.findOneOrFail({
       where: {
         id: campaignStageId,

@@ -1,1 +1,1 @@
-export const LOBBIES_ROOM = 'lobbies_room';
+export const LOBBIES_ROOM = "lobbies_room";

@@ -1,25 +1,25 @@
-import { GameEntity, HeroClass, LobbyEntity } from '@dnd/shared';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Test } from '@nestjs/testing';
-import { CampaignStageProgression } from 'src/database/entities/campaign-stage-progression.entity';
-import { CampaignStage } from 'src/database/entities/campaign-stage.entity';
-import { User } from 'src/database/entities/user.entity';
-import { MapSerializerService } from 'src/game/map/map-serializer/map-serializer.service';
-import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
-import { MessageContext } from 'src/types/socket.type';
-import { Mock, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { GameEvent } from '../../emitters/game-events.enum';
-import { GameInitializationDonePayload } from '../../emitters/game-initialization-done.payload';
-import { GameInitializationStartedPayload } from '../../emitters/game-initialization-started.payload';
-import { GameInitializationListener } from './game-initialization.listener';
-import { GameInitializationRepository } from './game-initialization.repository';
+import { GameEntity, HeroClass, LobbyEntity } from "@dnd/shared";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { Test } from "@nestjs/testing";
+import { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
+import { CampaignStage } from "src/database/entities/campaign-stage.entity";
+import { User } from "src/database/entities/user.entity";
+import { MapSerializerService } from "src/game/map/map-serializer/map-serializer.service";
+import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
+import { MessageContext } from "src/types/socket.type";
+import { Mock, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { GameEvent } from "../../emitters/game-events.enum";
+import { GameInitializationDonePayload } from "../../emitters/game-initialization-done.payload";
+import { GameInitializationStartedPayload } from "../../emitters/game-initialization-started.payload";
+import { GameInitializationListener } from "./game-initialization.listener";
+import { GameInitializationRepository } from "./game-initialization.repository";
 
 type RepositoryMock = {
   getUserCampaignStageProgression: Mock<
     [
       {
-        campaignStageId: CampaignStage['id'];
-        userId: User['id'];
+        campaignStageId: CampaignStage["id"];
+        userId: User["id"];
       },
     ],
     Promise<CampaignStageProgression>
@@ -31,7 +31,7 @@ type MapSerializerMock = {
   deserialize: Mock<any, any>;
 };
 
-describe('GameInitializationListener', () => {
+describe("GameInitializationListener", () => {
   let listener: GameInitializationListener;
   let repository: RepositoryMock;
   let eventEmitter2: EventEmitter2;
@@ -41,7 +41,7 @@ describe('GameInitializationListener', () => {
     name: LobbyEvent.HostRequestedGameStart as const,
     ctx: {} as MessageContext,
     lobby: {} as LobbyEntity,
-    userId: 'mock-user-id',
+    userId: "mock-user-id",
   };
 
   beforeEach(async () => {
@@ -59,7 +59,7 @@ describe('GameInitializationListener', () => {
         {
           provide: MapSerializerService,
           useValue: {
-            deserialize: vi.fn().mockReturnValue({ id: 'dummy-map' }),
+            deserialize: vi.fn().mockReturnValue({ id: "dummy-map" }),
           },
         },
       ],
@@ -74,7 +74,7 @@ describe('GameInitializationListener', () => {
       name: LobbyEvent.HostRequestedGameStart as const,
       ctx: {} as MessageContext,
       lobby: {} as LobbyEntity,
-      userId: 'mock-user-id',
+      userId: "mock-user-id",
     };
   });
 
@@ -82,7 +82,7 @@ describe('GameInitializationListener', () => {
     vi.clearAllMocks();
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(listener).toBeDefined();
     expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
@@ -90,11 +90,11 @@ describe('GameInitializationListener', () => {
     expect(mockParams).toBeDefined();
   });
 
-  describe('Happy path', () => {
-    it('should create a new GameEntity from a LobbyEntity', async () => {
-      const eventEmitterMock = vi.spyOn(eventEmitter2, 'emitAsync');
+  describe("Happy path", () => {
+    it("should create a new GameEntity from a LobbyEntity", async () => {
+      const eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
       const fakeHeroStats = {
-        type: 'hero',
+        type: "hero",
         level: 1,
         initiative: NaN,
         coord: {
@@ -120,32 +120,32 @@ describe('GameInitializationListener', () => {
       };
       repository.getUserCampaignStageProgression.mockResolvedValueOnce({
         stage: {
-          mapCompiled: '',
+          mapCompiled: "",
         },
         campaignProgression: {
           heroes: [
             {
               ...fakeHeroStats,
-              id: 'Regdar-id',
-              name: 'Regdar',
+              id: "Regdar-id",
+              name: "Regdar",
               class: HeroClass.WARRIOR,
             },
             {
               ...fakeHeroStats,
-              id: 'Jozan-id',
-              name: 'Jozan',
+              id: "Jozan-id",
+              name: "Jozan",
               class: HeroClass.CLERIC,
             },
             {
               ...fakeHeroStats,
-              id: 'Mialye-id',
-              name: 'Mialye',
+              id: "Mialye-id",
+              name: "Mialye",
               class: HeroClass.SORCERER,
             },
             {
               ...fakeHeroStats,
-              id: 'Lidda-id',
-              name: 'Lidda',
+              id: "Lidda-id",
+              name: "Lidda",
               class: HeroClass.THIEF,
             },
           ],
@@ -163,7 +163,7 @@ describe('GameInitializationListener', () => {
         ],
       });
       repository.saveGame.mockResolvedValueOnce({
-        id: 'mock-lobby-id',
+        id: "mock-lobby-id",
         map: {
           width: 1,
           height: 1,
@@ -176,37 +176,37 @@ describe('GameInitializationListener', () => {
           ],
         },
         playableEntities: {
-          'Regdar-id': {
+          "Regdar-id": {
             ...fakeHeroStats,
-            id: 'Regdar-id',
-            name: 'Regdar',
-            playedByUserId: 'player-1',
+            id: "Regdar-id",
+            name: "Regdar",
+            playedByUserId: "player-1",
             class: HeroClass.WARRIOR,
-            type: 'hero',
+            type: "hero",
           },
-          'Jozan-id': {
+          "Jozan-id": {
             ...fakeHeroStats,
-            id: 'Jozan-id',
-            name: 'Jozan',
-            playedByUserId: 'player-1',
+            id: "Jozan-id",
+            name: "Jozan",
+            playedByUserId: "player-1",
             class: HeroClass.CLERIC,
-            type: 'hero',
+            type: "hero",
           },
-          'Mialye-id': {
+          "Mialye-id": {
             ...fakeHeroStats,
-            id: 'Mialye-id',
-            name: 'Mialye',
-            playedByUserId: 'player-1',
+            id: "Mialye-id",
+            name: "Mialye",
+            playedByUserId: "player-1",
             class: HeroClass.SORCERER,
-            type: 'hero',
+            type: "hero",
           },
-          'Lidda-id': {
+          "Lidda-id": {
             ...fakeHeroStats,
-            id: 'Lidda-id',
-            name: 'Lidda',
-            playedByUserId: 'player-2',
+            id: "Lidda-id",
+            name: "Lidda",
+            playedByUserId: "player-2",
             class: HeroClass.THIEF,
-            type: 'hero',
+            type: "hero",
           },
         },
         timeline: [],
@@ -215,47 +215,47 @@ describe('GameInitializationListener', () => {
       await listener.handler({
         ...mockParams,
         lobby: {
-          id: 'mock-lobby-id',
-          status: 'GAME_INITIALIZING',
+          id: "mock-lobby-id",
+          status: "GAME_INITIALIZING",
           host: {
             userId: mockParams.userId,
           },
           config: {
             nbPlayersMax: 3,
             campaign: {
-              id: 'mock-campaign',
+              id: "mock-campaign",
               stage: {
-                id: 'mock-campaign-stage',
+                id: "mock-campaign-stage",
               },
             },
           },
           heroesAvailable: [
             {
               ...fakeHeroStats,
-              id: 'Regdar-id',
-              name: 'Regdar',
-              playedByUserId: 'player-1',
+              id: "Regdar-id",
+              name: "Regdar",
+              playedByUserId: "player-1",
               class: HeroClass.WARRIOR,
             },
             {
               ...fakeHeroStats,
-              id: 'Jozan-id',
-              name: 'Jozan',
-              playedByUserId: 'player-1',
+              id: "Jozan-id",
+              name: "Jozan",
+              playedByUserId: "player-1",
               class: HeroClass.CLERIC,
             },
             {
               ...fakeHeroStats,
-              id: 'Mialye-id',
-              name: 'Mialye',
-              playedByUserId: 'player-1',
+              id: "Mialye-id",
+              name: "Mialye",
+              playedByUserId: "player-1",
               class: HeroClass.SORCERER,
             },
             {
               ...fakeHeroStats,
-              id: 'Lidda-id',
-              name: 'Lidda',
-              playedByUserId: 'player-2',
+              id: "Lidda-id",
+              name: "Lidda",
+              playedByUserId: "player-2",
               class: HeroClass.THIEF,
             },
           ],
@@ -267,16 +267,16 @@ describe('GameInitializationListener', () => {
         GameEvent.GameInitializationStarted,
         new GameInitializationStartedPayload({
           ctx: {} as MessageContext,
-          lobbyId: 'mock-lobby-id',
+          lobbyId: "mock-lobby-id",
         }),
       );
       expect(eventEmitterMock).toHaveBeenCalledWith(
         GameEvent.GameInitializationDone,
         new GameInitializationDonePayload({
           ctx: {} as MessageContext,
-          lobbyId: 'mock-lobby-id',
+          lobbyId: "mock-lobby-id",
           game: {
-            id: 'mock-lobby-id',
+            id: "mock-lobby-id",
             map: {
               width: 1,
               height: 1,
@@ -289,37 +289,37 @@ describe('GameInitializationListener', () => {
               ],
             },
             playableEntities: {
-              'Regdar-id': {
+              "Regdar-id": {
                 ...fakeHeroStats,
-                id: 'Regdar-id',
-                name: 'Regdar',
-                playedByUserId: 'player-1',
+                id: "Regdar-id",
+                name: "Regdar",
+                playedByUserId: "player-1",
                 class: HeroClass.WARRIOR,
-                type: 'hero',
+                type: "hero",
               },
-              'Jozan-id': {
+              "Jozan-id": {
                 ...fakeHeroStats,
-                id: 'Jozan-id',
-                name: 'Jozan',
-                playedByUserId: 'player-1',
+                id: "Jozan-id",
+                name: "Jozan",
+                playedByUserId: "player-1",
                 class: HeroClass.CLERIC,
-                type: 'hero',
+                type: "hero",
               },
-              'Mialye-id': {
+              "Mialye-id": {
                 ...fakeHeroStats,
-                id: 'Mialye-id',
-                name: 'Mialye',
-                playedByUserId: 'player-1',
+                id: "Mialye-id",
+                name: "Mialye",
+                playedByUserId: "player-1",
                 class: HeroClass.SORCERER,
-                type: 'hero',
+                type: "hero",
               },
-              'Lidda-id': {
+              "Lidda-id": {
                 ...fakeHeroStats,
-                id: 'Lidda-id',
-                name: 'Lidda',
-                playedByUserId: 'player-2',
+                id: "Lidda-id",
+                name: "Lidda",
+                playedByUserId: "player-2",
                 class: HeroClass.THIEF,
-                type: 'hero',
+                type: "hero",
               },
             },
             timeline: [],

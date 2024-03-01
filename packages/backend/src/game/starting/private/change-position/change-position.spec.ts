@@ -1,10 +1,10 @@
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Test } from '@nestjs/testing';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { ChangePositionRepository } from './change-position.repository';
-import { ChangePositionUseCase } from './change-position.uc';
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { Test } from "@nestjs/testing";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { ChangePositionRepository } from "./change-position.repository";
+import { ChangePositionUseCase } from "./change-position.uc";
 
-describe('ChangePositionUseCase', () => {
+describe("ChangePositionUseCase", () => {
   let useCase: ChangePositionUseCase;
   let repository: ChangePositionRepository;
   let eventEmitter2: EventEmitter2;
@@ -30,13 +30,13 @@ describe('ChangePositionUseCase', () => {
     vi.clearAllMocks();
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(useCase).toBeDefined();
     expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
   });
 
-  describe('Happy path', () => {});
+  describe("Happy path", () => {});
 
-  describe('Negative path', () => {});
+  describe("Negative path", () => {});
 });

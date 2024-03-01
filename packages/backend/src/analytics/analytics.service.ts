@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
-import { EventPayload } from 'src/event-emitter/event-payload.class';
-import { AnalyticsEvent } from './events/types/events';
+import { Injectable } from "@nestjs/common";
+import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
+import { EventPayload } from "src/event-emitter/event-payload.class";
+import { AnalyticsEvent } from "./events/types/events";
 
 @Injectable()
 export class AnalyticsService {
@@ -9,6 +9,6 @@ export class AnalyticsService {
 
   @OnEvent(AnalyticsEvent.OnAnyEvent, { async: true })
   public handleInteraction(data: EventPayload<any>) {
-    console.log('spying event', data.name);
+    console.log("spying event", data.name);
   }
 }

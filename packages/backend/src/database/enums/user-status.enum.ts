@@ -1,6 +1,6 @@
 export const UserStatus = {
-  CREATED: 'CREATED',
-  INITIALIZED: 'INITIALIZED',
+  CREATED: "CREATED",
+  INITIALIZED: "INITIALIZED",
 } as const;
 
 export const UserStatusValues = Object.values(UserStatus);

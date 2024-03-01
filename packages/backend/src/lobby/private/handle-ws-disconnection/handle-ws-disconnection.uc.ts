@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { LobbyEvent } from 'src/lobby/events/emitters/lobby-events.enum';
-import { UserForceLeftLobbyPayload } from 'src/lobby/events/emitters/user-force-left-lobby.payload';
-import { MessageContext, ServerSocket } from 'src/types/socket.type';
-import { UseCase } from 'src/types/use-case.interface';
-import { HandleWsDisconnectionRepository } from './handle-ws-disconnection.repository';
+import { Injectable } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
+import { UserForceLeftLobbyPayload } from "src/lobby/events/emitters/user-force-left-lobby.payload";
+import { MessageContext, ServerSocket } from "src/types/socket.type";
+import { UseCase } from "src/types/use-case.interface";
+import { HandleWsDisconnectionRepository } from "./handle-ws-disconnection.repository";
 
 @Injectable()
 export class HandleWsDisconnectionUseCase implements UseCase {
@@ -38,6 +38,8 @@ export class HandleWsDisconnectionUseCase implements UseCase {
   }
 
   private async leaveRooms(client: ServerSocket) {
-    return await Promise.all(Array.from(client.rooms).map((room) => client.leave(room)));
+    return await Promise.all(
+      Array.from(client.rooms).map((room) => client.leave(room)),
+    );
   }
 }

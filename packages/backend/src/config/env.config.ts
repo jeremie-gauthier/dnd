@@ -1,4 +1,4 @@
-import z from 'zod';
+import z from "zod";
 
 export default () => ({
   NODE_ENV: process.env.NODE_ENV,
@@ -6,12 +6,12 @@ export default () => ({
 });
 
 const validationSchema = z.object({
-  NODE_ENV: z.enum(['development', 'production']).default('development'),
+  NODE_ENV: z.enum(["development", "production"]).default("development"),
   PORT: z.coerce.number().default(3000),
   AUTH0_AUDIENCE: z.string(),
   AUTH0_ISSUER: z.string(),
   DATABASE_URL: z.string(),
-  REDIS_HOST: z.string().default('localhost'),
+  REDIS_HOST: z.string().default("localhost"),
   REDIS_PORT: z.coerce.number().default(6379),
 });
 
