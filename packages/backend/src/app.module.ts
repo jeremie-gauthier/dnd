@@ -15,8 +15,8 @@ import redis from "./config/redis";
 import typeorm from "./config/typeorm";
 import { GameModule } from "./game/game.module";
 import { LobbyModule } from "./lobby/lobby.module";
-import { UserModule } from "./user/user.module";
 import { RedisModule } from "./redis/redis.module";
+import { UserModule } from "./user/user.module";
 
 @Module({
   imports: [
