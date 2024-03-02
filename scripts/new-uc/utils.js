@@ -14,8 +14,10 @@ function getVarNames(useCaseName) {
     repositoryName: `${pascalCaseName}Repository`,
     inputSchemaName: `${camelCaseName}InputSchema`,
     inputDtoName: `${pascalCaseName}InputDto`,
+    inputTypeName: `${pascalCaseName}Input`,
     outputSchemaName: `${camelCaseName}OutputSchema`,
     outputDtoName: `${pascalCaseName}OutputDto`,
+    outputTypeName: `${pascalCaseName}Output`,
   };
 }
 
