@@ -21,7 +21,7 @@
     "new-emitter": "node ./scripts/new-emitter"
   },
   "devDependencies": {
-    "@inquirer/prompts": "^3.3.0",
+    "@inquirer/prompts": "^4.1.0",
     "dedent": "^1.5.1",
     "inquirer-directory": "^2.2.0",
     "lodash.camelcase": "^4.3.0",
