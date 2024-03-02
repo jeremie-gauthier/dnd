@@ -22,3 +22,5 @@ export const getLobbiesOutputSchema = z.array(
     nbPlayers: z.number(),
   }),
 );
+
+export type GetLobbiesOutput = z.infer<typeof getLobbiesOutputSchema>;

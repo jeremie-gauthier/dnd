@@ -5,3 +5,7 @@ export const newCampaignStartedInputSchema = z
     campaignId: z.string().readonly(),
   })
   .strict();
+
+export type NewCampaignStartedInput = z.infer<
+  typeof newCampaignStartedInputSchema
+>;

@@ -4,3 +4,5 @@ export const discardHeroInputSchema = z.object({
   lobbyId: z.string().uuid(),
   heroId: z.string().uuid(),
 });
+
+export type DiscardHeroInput = z.infer<typeof discardHeroInputSchema>;
