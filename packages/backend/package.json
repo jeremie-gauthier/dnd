@@ -13,6 +13,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "biome lint src/",
+    "lint:fix": "biome lint src/ --apply",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
