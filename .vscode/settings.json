@@ -4,7 +4,7 @@
     "source.fixAll.eslint": "explicit"
   },
   "editor.tabSize": 2,
-  "editor.insertSpaces": false,
+  "editor.insertSpaces": true,
   "css.validate": false,
   "scss.validate": false,
   "stylelint.enable": true,
