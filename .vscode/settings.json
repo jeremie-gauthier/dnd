@@ -6,9 +6,9 @@
   "editor.tabSize": 2,
   "prettier.useTabs": false,
   "editor.insertSpaces": false,
-  "css.validate": false, // Disable css built-in lint
-  "scss.validate": false, // Disable scss lint (optional if using scss)
-  "stylelint.enable": true, // Enable sytlelint
+  "css.validate": false,
+  "scss.validate": false,
+  "stylelint.enable": true,
   "[sql]": {
     "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
   },
