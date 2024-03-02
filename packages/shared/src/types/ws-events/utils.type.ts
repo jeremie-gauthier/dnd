@@ -6,8 +6,8 @@ type HasPayload<
 type HasResponse<
   Dict extends Record<string, (...arguments_: any[]) => any>,
   Event extends keyof Dict,
-// biome-ignore lint/suspicious/noConfusingVoidType: <explanation>
->  = ReturnType<Dict[Event]> extends void ? false : true;
+  // biome-ignore lint/suspicious/noConfusingVoidType: <explanation>
+> = ReturnType<Dict[Event]> extends void ? false : true;
 
 type EventWithPayload<
   Dict extends Record<string, (...arguments_: any[]) => any>,

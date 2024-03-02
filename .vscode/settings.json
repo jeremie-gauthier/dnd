@@ -1,16 +1,31 @@
 {
   "editor.defaultFormatter": "biomejs.biome",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit",
+    "quickfix.biome": "always"
   },
   "editor.tabSize": 2,
-  "prettier.useTabs": false,
-  "editor.insertSpaces": false,
+  "editor.insertSpaces": true,
   "css.validate": false,
   "scss.validate": false,
   "stylelint.enable": true,
   "[sql]": {
     "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
   },
   "sql-formatter.uppercase": true
 }
