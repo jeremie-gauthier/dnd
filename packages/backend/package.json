@@ -48,7 +48,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
-    "@dnd/prettier-config": "^0.0.0",
     "@nestjs/cli": "^10.3.2",
     "@nestjs/schematics": "^10.1.1",
     "@nestjs/testing": "^10.3.2",

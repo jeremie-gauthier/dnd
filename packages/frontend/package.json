@@ -27,7 +27,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
-    "@dnd/prettier-config": "^0.0.0",
     "@tanstack/react-query-devtools": "^5.24.1",
     "@tanstack/router-devtools": "^1.18.1",
     "@types/react": "^18.2.61",

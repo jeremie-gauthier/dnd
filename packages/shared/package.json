@@ -7,15 +7,14 @@
   "type": "commonjs",
   "scripts": {
     "build": "tsc",
-		"format": "biome format src/ --write",
-		"lint": "biome lint src/",
+    "format": "biome format src/ --write",
+    "lint": "biome lint src/",
     "lint:fix": "biome lint src/ --apply",
     "prepublish": "npm run build",
     "publish": "sh ../../scripts/publish-shared.sh"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
-    "@dnd/prettier-config": "^0.0.0",
     "typescript": "^5.3.3"
   },
   "dependencies": {
