@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/consistent-type-definitions */
-
-import { LobbyEntityStatusType } from './lobby.enum';
+import { LobbyEntityStatusType } from "./lobby.enum";
 
 type Hero = {
   id: string;
@@ -9,7 +7,7 @@ type Hero = {
 
 type LobbyPlayer = {
   userId: string;
-  heroesSelected: Hero['id'][];
+  heroesSelected: Hero["id"][];
   isReady: boolean;
 };
 

@@ -1,10 +1,10 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 const heroSchema = z.object({
   id: z.string(),
   pickedBy: z.string().optional(),
   name: z.string(),
-  class: z.enum(['WARRIOR', 'CLERIC', 'SORCERER', 'THIEF']),
+  class: z.enum(["WARRIOR", "CLERIC", "SORCERER", "THIEF"]),
   baseHealthPoints: z.number(),
   baseManaPoints: z.number(),
   baseArmorClass: z.number(),

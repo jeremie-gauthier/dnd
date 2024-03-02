@@ -1,2 +1,2 @@
-export * from './lobby.enum';
-export * from './lobby.interface';
+export * from "./lobby.enum";
+export * from "./lobby.interface";

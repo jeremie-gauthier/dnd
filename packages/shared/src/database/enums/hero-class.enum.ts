@@ -1,8 +1,8 @@
 export const HeroClass = {
-  WARRIOR: 'WARRIOR',
-  CLERIC: 'CLERIC',
-  SORCERER: 'SORCERER',
-  THIEF: 'THIEF',
+  WARRIOR: "WARRIOR",
+  CLERIC: "CLERIC",
+  SORCERER: "SORCERER",
+  THIEF: "THIEF",
 } as const;
 
 export const HeroClassValues = Object.values(HeroClass);

@@ -3,7 +3,6 @@ import { Injectable } from "@nestjs/common";
 import { User } from "src/database/entities/user.entity";
 import { RedisService } from "../redis.service";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type UsersKey = Record<User["id"], LobbyEntity["id"]>;
 
 @Injectable()

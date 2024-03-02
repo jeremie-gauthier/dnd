@@ -7,17 +7,15 @@
   "type": "commonjs",
   "scripts": {
     "build": "tsc",
-    "format": "prettier --write \"src/**/*.ts\"",
+		"format": "biome format src/ --write",
+		"lint": "biome lint src/",
+    "lint:fix": "biome lint src/ --apply",
     "prepublish": "npm run build",
     "publish": "sh ../../scripts/publish-shared.sh"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.5.3",
     "@dnd/prettier-config": "^0.0.0",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
-    "eslint": "^8.56.0",
-    "eslint-plugin-unicorn": "^50.0.1",
-    "prettier": "^3.2.5",
     "typescript": "^5.3.3"
   },
   "dependencies": {

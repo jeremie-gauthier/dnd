@@ -1,1 +1,1 @@
-export * from './hero-class.enum';
+export * from "./hero-class.enum";

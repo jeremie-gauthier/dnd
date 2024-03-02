@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const pickHeroInputSchema = z.object({
   lobbyId: z.string().uuid(),

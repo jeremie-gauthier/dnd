@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/consistent-type-definitions */
-
-import { HeroClassType } from '../../database/enums/hero-class.enum';
+import { HeroClassType } from "../../database/enums/hero-class.enum";
 
 export type PlayableEntity = {
   id: string;
-  type: 'hero' | 'enemy';
+  type: "hero" | "enemy";
 
   playedByUserId: string;
 
@@ -33,21 +31,21 @@ export type PlayableEntity = {
 };
 
 export type TilePlayableEntity = {
-  type: 'playable-entity';
-  id: PlayableEntity['id'];
+  type: "playable-entity";
+  id: PlayableEntity["id"];
 };
 
 export type TileNonPlayableInteractiveEntity = {
-  type: 'non-playable-interactive-entity';
-  kind: 'door' | 'trap';
+  type: "non-playable-interactive-entity";
+  kind: "door" | "trap";
   isVisible: boolean;
   isBlocking: boolean;
   canInteract: boolean;
 };
 
 export type TileNonPlayableNonInteractiveEntity = {
-  type: 'non-playable-non-interactive-entity';
-  kind: 'wall' | 'pillar' | 'tree' | 'off-map';
+  type: "non-playable-non-interactive-entity";
+  kind: "wall" | "pillar" | "tree" | "off-map";
   isVisible: true;
   isBlocking: true;
   canInteract: false;
@@ -78,6 +76,6 @@ export type Map = {
 export type GameEntity = {
   id: string;
   map: Map;
-  playableEntities: Record<PlayableEntity['id'], PlayableEntity>;
-  timeline: PlayableEntity['id'][];
+  playableEntities: Record<PlayableEntity["id"], PlayableEntity>;
+  timeline: PlayableEntity["id"][];
 };
