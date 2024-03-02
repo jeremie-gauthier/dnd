@@ -1,40 +1,60 @@
-export type Map = {
-  width: number;
-  height: number;
-  entities: Array<{
-    coord: { x: number; y: number };
-    type: 'tree' | 'wall';
-    isBlocking: boolean;
-  }>;
-};
+import { GameEntity } from "@dnd/shared";
 
-const MOCK_MAP: Map = {
+const MOCK_MAP: GameEntity["map"] = {
   width: 11,
   height: 11,
-  entities: [
+  tiles: [
     {
-      coord: { x: 1, y: 1 },
-      type: 'tree',
-      isBlocking: true,
+      coord: { row: 1, column: 1 },
+      entities: [
+        {
+          type: "non-playable-non-interactive-entity",
+          kind: "tree",
+          isBlocking: true,
+          canInteract: false,
+          isVisible: true,
+        },
+      ],
     },
     {
-      coord: { x: 5, y: 5 },
-      type: 'wall',
-      isBlocking: true,
+      coord: { row: 5, column: 5 },
+      entities: [
+        {
+          type: "non-playable-non-interactive-entity",
+          kind: "wall",
+          isBlocking: true,
+          canInteract: false,
+          isVisible: true,
+        },
+      ],
     },
     {
-      coord: { x: 5, y: 6 },
-      type: 'wall',
-      isBlocking: true,
+      coord: { row: 5, column: 6 },
+      entities: [
+        {
+          type: "non-playable-non-interactive-entity",
+          kind: "wall",
+          isBlocking: true,
+          canInteract: false,
+          isVisible: true,
+        },
+      ],
     },
     {
-      coord: { x: 6, y: 5 },
-      type: 'wall',
-      isBlocking: true,
+      coord: { row: 6, column: 5 },
+      entities: [
+        {
+          type: "non-playable-non-interactive-entity",
+          kind: "wall",
+          isBlocking: true,
+          canInteract: false,
+          isVisible: true,
+        },
+      ],
     },
   ],
 };
 
-export const useMap = async (): Promise<Map> => {
+export const useMap = async (): Promise<GameEntity["map"]> => {
   return Promise.resolve(MOCK_MAP);
 };

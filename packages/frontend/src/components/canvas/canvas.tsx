@@ -18,5 +18,5 @@ export const Canvas = forwardRef<HTMLCanvasElement, Props>(
         onClick={onClick}
       />
     );
-  }
+  },
 );

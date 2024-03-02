@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
-import { Canvas } from '../canvas/canvas';
-import { Map } from './hooks/useMap.hook';
+import { GameEntity } from "@dnd/shared";
+import { useEffect, useRef } from "react";
+import { Canvas } from "../canvas/canvas";
 
 type Props = {
-  map: Map;
+  map: GameEntity["map"];
 };
 
 const CANVAS_WIDTH = 1000;
@@ -16,7 +16,9 @@ export const GameView = ({ map }: Props) => {
   //   height: CANVAS_HEIGHT / map.height,
   // };
 
-  const handleCanvasClick = (evt: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
+  const handleCanvasClick = (
+    evt: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
+  ) => {
     console.log(evt);
   };
 
@@ -24,7 +26,7 @@ export const GameView = ({ map }: Props) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext("2d");
     if (!context) return;
 
     // Array.from({ length: map.width * map.height }).map

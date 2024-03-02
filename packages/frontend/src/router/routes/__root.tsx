@@ -1,11 +1,15 @@
-import { QueryClient } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Outlet, rootRouteWithContext, useRouterState } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/router-devtools';
-import { ClientSocket } from '../../types/socket.type';
+import { QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import {
+  Outlet,
+  rootRouteWithContext,
+  useRouterState,
+} from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { ClientSocket } from "../../types/socket.type";
 
 function RouterLoader() {
-  const isLoading = useRouterState({ select: (s) => s.status === 'pending' });
+  const isLoading = useRouterState({ select: (s) => s.status === "pending" });
 
   if (isLoading) {
     return <div>Route is loading</div>;
@@ -24,13 +28,13 @@ export const Route = rootRouteWithContext<{
 function RootComponent() {
   return (
     <>
-      <div className={`min-h-screen flex flex-col`}>
-        <h1 className={`text-3xl p-2`}>DnD</h1>
-        <div className={`text-3xl`}>
+      <div className={"min-h-screen flex flex-col"}>
+        <h1 className={"text-3xl p-2"}>DnD</h1>
+        <div className={"text-3xl"}>
           <RouterLoader />
         </div>
 
-        <div className={`flex-1 flex`}>
+        <div className={"flex-1 flex"}>
           <Outlet />
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth0 } from "@auth0/auth0-react";
 
 type Props = {
   afterLogout: () => void;
@@ -16,7 +16,11 @@ const LogoutButton = ({ afterLogout }: Props) => {
     afterLogout();
   };
 
-  return <button onClick={handleLogout}>Log Out</button>;
+  return (
+    <button type="submit" onClick={handleLogout}>
+      Log Out
+    </button>
+  );
 };
 
 export default LogoutButton;

@@ -7,38 +7,35 @@
     "start:dev": "concurrently \"tsr watch\" \"VITE_ENV=localhost vite --force\"",
     "start:dev:network": "concurrently \"tsr watch\" \"VITE_ENV=local_network vite --force --host\"",
     "build": "tsc && vite build --debug",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "biome lint src/",
+    "lint:fix": "biome lint src/ --apply",
     "preview": "vite preview",
-    "format": "prettier --write \"src/**/*.ts\""
+    "format": "biome format src/ --write"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@dnd/shared": "file:../shared",
-    "@tanstack/react-form": "^0.13.5",
-    "@tanstack/react-query": "^5.20.1",
-    "@tanstack/react-router": "^1.16.0",
-    "@tanstack/router-cli": "^1.16.1",
-    "@tanstack/zod-form-adapter": "^0.13.5",
+    "@tanstack/react-form": "^0.13.6",
+    "@tanstack/react-query": "^5.24.1",
+    "@tanstack/react-router": "^1.18.1",
+    "@tanstack/router-cli": "^1.18.1",
+    "@tanstack/zod-form-adapter": "^0.13.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "socket.io-client": "^4.7.4",
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.5.3",
     "@dnd/prettier-config": "^0.0.0",
-    "@tanstack/react-query-devtools": "^5.20.1",
-    "@tanstack/router-devtools": "^1.16.0",
-    "@types/react": "^18.2.55",
+    "@tanstack/react-query-devtools": "^5.24.1",
+    "@tanstack/router-devtools": "^1.18.1",
+    "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
     "@vitejs/plugin-basic-ssl": "^1.1.0",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "concurrently": "^8.2.2",
-    "eslint": "^8.56.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.5",
     "typescript": "^5.3.3",
-    "vite": "^5.1.1"
+    "vite": "^5.1.4"
   }
 }

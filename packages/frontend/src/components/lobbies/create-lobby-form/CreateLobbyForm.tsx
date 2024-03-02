@@ -1,10 +1,10 @@
-import { ClientLobbyEvent } from '@dnd/shared';
-import { useNavigate } from '@tanstack/react-router';
-import { zodValidator } from '@tanstack/zod-form-adapter';
-import { z } from 'zod';
-import { GetCampaignsResponse } from '../../../hooks/api/campaign/get-campaigns';
-import { ClientSocket } from '../../../types/socket.type';
-import { useCreateLobbyForm } from './useCreateLobbyForm';
+import { ClientLobbyEvent } from "@dnd/shared";
+import { useNavigate } from "@tanstack/react-router";
+import { zodValidator } from "@tanstack/zod-form-adapter";
+import { z } from "zod";
+import { GetCampaignsResponse } from "../../../hooks/api/campaign/get-campaigns";
+import { ClientSocket } from "../../../types/socket.type";
+import { useCreateLobbyForm } from "./useCreateLobbyForm";
 
 type Props = {
   campaigns: GetCampaignsResponse;
@@ -15,17 +15,22 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
   const navigate = useNavigate();
   const form = useCreateLobbyForm({
     nbPlayersMax: 2,
-    stageId: campaigns[0]?.currentStage.id ?? '',
+    stageId: campaigns[0]?.currentStage.id ?? "",
   });
 
-  const handleLobbyCreation: React.FormEventHandler<HTMLFormElement> = async (e) => {
+  const handleLobbyCreation: React.FormEventHandler<HTMLFormElement> = async (
+    e,
+  ) => {
     e.preventDefault();
     e.stopPropagation();
 
-    const lobby = await socket.emitWithAck(ClientLobbyEvent.RequestCreateLobby, form.state.values);
+    const lobby = await socket.emitWithAck(
+      ClientLobbyEvent.RequestCreateLobby,
+      form.state.values,
+    );
 
     return navigate({
-      to: `/lobby/$lobbyId`,
+      to: "/lobby/$lobbyId",
       params: { lobbyId: lobby.id },
     });
   };
@@ -43,8 +48,8 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
               validators={{
                 onChange: z
                   .number()
-                  .min(2, 'Your lobby must at least accept 2 players')
-                  .max(5, 'Your lobby must at most accept 5 players'),
+                  .min(2, "Your lobby must at least accept 2 players")
+                  .max(5, "Your lobby must at most accept 5 players"),
               }}
               children={(field) => (
                 <>
@@ -56,7 +61,7 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
                   />
 
                   {field.state.meta.errors ? (
-                    <em role="alert">{field.state.meta.errors.join(', ')}</em>
+                    <em>{field.state.meta.errors.join(", ")}</em>
                   ) : null}
                 </>
               )}
@@ -92,7 +97,7 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
             selector={(state) => [state.canSubmit, state.isSubmitting]}
             children={([canSubmit, isSubmitting]) => (
               <button type="submit" disabled={!canSubmit}>
-                {isSubmitting ? 'Your Lobby is being created' : 'Create Lobby'}
+                {isSubmitting ? "Your Lobby is being created" : "Create Lobby"}
               </button>
             )}
           />

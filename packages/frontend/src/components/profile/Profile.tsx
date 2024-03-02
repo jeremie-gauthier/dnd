@@ -1,4 +1,4 @@
-import { User } from '@auth0/auth0-react';
+import { User } from "@auth0/auth0-react";
 
 type Props = {
   user: User;
@@ -15,7 +15,7 @@ const Profile = ({ user, userMetadata }: Props) => {
       {userMetadata ? (
         <pre>{JSON.stringify(userMetadata, null, 2)}</pre>
       ) : (
-        'No user metadata defined'
+        "No user metadata defined"
       )}
     </div>
   );

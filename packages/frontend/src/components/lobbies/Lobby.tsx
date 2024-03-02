@@ -1,8 +1,8 @@
-import { User } from '@auth0/auth0-react';
-import { ClientLobbyEvent } from '@dnd/shared';
-import { useNavigate } from '@tanstack/react-router';
-import { GetLobbyResponse } from '../../hooks/api/lobby/get-lobby';
-import { ClientSocket } from '../../types/socket.type';
+import { User } from "@auth0/auth0-react";
+import { ClientLobbyEvent } from "@dnd/shared";
+import { useNavigate } from "@tanstack/react-router";
+import { GetLobbyResponse } from "../../hooks/api/lobby/get-lobby";
+import { ClientSocket } from "../../types/socket.type";
 
 type Props = {
   user: User;
@@ -16,24 +16,33 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
   const handleClickOnLeaveLobby = async () => {
     await socket.emitWithAck(ClientLobbyEvent.RequestLeaveLobby);
     return navigate({
-      to: `/lobbies`,
+      to: "/lobbies",
     });
   };
 
   const handleClickOnReady = () => {
-    socket.emit(ClientLobbyEvent.RequestToggleReadyState, { lobbyId: lobby.id });
+    socket.emit(ClientLobbyEvent.RequestToggleReadyState, {
+      lobbyId: lobby.id,
+    });
   };
 
   const handlePickHero = (heroId: string) => {
-    socket.emit(ClientLobbyEvent.RequestPickHero, { lobbyId: lobby.id, heroId });
+    socket.emit(ClientLobbyEvent.RequestPickHero, {
+      lobbyId: lobby.id,
+      heroId,
+    });
   };
 
   const handleDiscardHero = (heroId: string) => {
-    socket.emit(ClientLobbyEvent.RequestDiscardHero, { lobbyId: lobby.id, heroId });
+    socket.emit(ClientLobbyEvent.RequestDiscardHero, {
+      lobbyId: lobby.id,
+      heroId,
+    });
   };
 
   const currentUserIsReady =
-    lobby.players.find((player) => player.userId === user.sub)?.isReady ?? false;
+    lobby.players.find((player) => player.userId === user.sub)?.isReady ??
+    false;
 
   return (
     <div>
@@ -53,12 +62,15 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
             return (
               <li key={player.userId}>
                 <p>
-                  Player {player.userId} ({player.isReady ? 'Ready' : 'Not ready'})
+                  Player {player.userId} (
+                  {player.isReady ? "Ready" : "Not ready"})
                 </p>
                 <ul>
                   <p>Heroes selected:</p>
                   {player.heroesSelected.map((heroSelected) => {
-                    const hero = lobby.heroesAvailable.find(({ id }) => id === heroSelected);
+                    const hero = lobby.heroesAvailable.find(
+                      ({ id }) => id === heroSelected,
+                    );
                     if (!hero) return null;
 
                     return (
@@ -82,10 +94,14 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
               {hero.name} ({hero.class.toLowerCase()})
             </h3>
             {hero.pickedBy === undefined ? (
-              <button onClick={() => handlePickHero(hero.id)}>Pick</button>
+              <button type="button" onClick={() => handlePickHero(hero.id)}>
+                Pick
+              </button>
             ) : null}
             {hero.pickedBy === user.sub ? (
-              <button onClick={() => handleDiscardHero(hero.id)}>Discard</button>
+              <button type="button" onClick={() => handleDiscardHero(hero.id)}>
+                Discard
+              </button>
             ) : null}
           </div>
         ))}
@@ -93,8 +109,10 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
 
       <br />
 
-      <button onClick={handleClickOnLeaveLobby}>Leave this lobby</button>
-      <button onClick={handleClickOnReady}>
+      <button type="button" onClick={handleClickOnLeaveLobby}>
+        Leave this lobby
+      </button>
+      <button type="button" onClick={handleClickOnReady}>
         {currentUserIsReady ? "I'm not ready" : "I'm ready!"}
       </button>
     </div>

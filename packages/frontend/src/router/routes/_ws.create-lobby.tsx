@@ -1,11 +1,11 @@
-import { withAuthenticationRequired } from '@auth0/auth0-react';
-import { ServerLobbyEvent } from '@dnd/shared';
-import { FileRoute } from '@tanstack/react-router';
-import { useEffect } from 'react';
-import { CreateLobbyForm } from '../../components/lobbies/create-lobby-form/CreateLobbyForm';
-import { useGetCampaigns } from '../../hooks/api/campaign/get-campaigns';
+import { withAuthenticationRequired } from "@auth0/auth0-react";
+import { ServerLobbyEvent } from "@dnd/shared";
+import { FileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { CreateLobbyForm } from "../../components/lobbies/create-lobby-form/CreateLobbyForm";
+import { useGetCampaigns } from "../../hooks/api/campaign/get-campaigns";
 
-export const Route = new FileRoute('/_ws/create-lobby').createRoute({
+export const Route = new FileRoute("/_ws/create-lobby").createRoute({
   component: withAuthenticationRequired(CreateLobbyRouteComponent),
 });
 
@@ -15,7 +15,8 @@ export function CreateLobbyRouteComponent() {
 
   useEffect(() => {
     // TODO: send a toast message instead
-    const errorHandler = (payload: { name: string; message: string }) => console.log(payload);
+    const errorHandler = (payload: { name: string; message: string }) =>
+      console.log(payload);
 
     socket.on(ServerLobbyEvent.Error, errorHandler);
 

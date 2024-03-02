@@ -1,5 +1,5 @@
-import { useAuth0 } from '@auth0/auth0-react';
-import { UseQueryOptions, useSuspenseQuery } from '@tanstack/react-query';
+import { useAuth0 } from "@auth0/auth0-react";
+import { UseQueryOptions, useSuspenseQuery } from "@tanstack/react-query";
 
 export const useAuthenticatedSuspenseQuery = <
   TQueryKey extends [string, Record<string, unknown>?],
@@ -9,7 +9,10 @@ export const useAuthenticatedSuspenseQuery = <
 >(
   queryKey: TQueryKey,
   fetcher: (token: string, params?: TQueryKey[1]) => Promise<TQueryFnData>,
-  options?: Omit<UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>, 'queryKey' | 'queryFn'>,
+  options?: Omit<
+    UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
+    "queryKey" | "queryFn"
+  >,
 ) => {
   const { getAccessTokenSilently } = useAuth0();
 

@@ -1,12 +1,12 @@
-import { useAuth0 } from '@auth0/auth0-react';
-import { getLobbiesOutputSchema } from '@dnd/shared';
-import { useQuery } from '@tanstack/react-query';
-import { z } from 'zod';
-import { fetcherWithAuth } from '../../../config/fetcher';
+import { useAuth0 } from "@auth0/auth0-react";
+import { getLobbiesOutputSchema } from "@dnd/shared";
+import { useQuery } from "@tanstack/react-query";
+import { z } from "zod";
+import { fetcherWithAuth } from "../../../config/fetcher";
 
 export type GetLobbiesResponse = z.infer<typeof getLobbiesOutputSchema>;
 
-export const GET_LOBBIES_QUERY_KEY = ['lobbies'];
+export const GET_LOBBIES_QUERY_KEY = ["lobbies"];
 
 export const useGetLobbies = () => {
   const { getAccessTokenSilently } = useAuth0();
@@ -15,7 +15,7 @@ export const useGetLobbies = () => {
     queryKey: GET_LOBBIES_QUERY_KEY,
     queryFn: () =>
       fetcherWithAuth<GetLobbiesResponse>(
-        `http://localhost:3000/lobby/private/get-lobbies`,
+        "http://localhost:3000/lobby/private/get-lobbies",
         getAccessTokenSilently,
       ),
   });
