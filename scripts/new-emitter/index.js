@@ -6,8 +6,7 @@ const kebabCase = require("lodash.kebabcase");
 const { renderEventPayload, renderEventEnum } = require("./snippets");
 const { getVarNames } = require("./utils");
 
-const EVENT_EMITTER_BASE_PATH = `./packages/backend/src`;
-const DOCUMENTATION_BASE_PATH = `./event-catalog/events`;
+const EVENT_EMITTER_BASE_PATH = "./packages/backend/src";
 
 const promptEventPayloadName = async () => {
   const rawEventPayloadName = await input({
@@ -43,7 +42,7 @@ const logOutputFiles = (files) => {
   }
 
   const logs = Object.entries(filesOrdered).map(([dir, filenames]) =>
-    [`📂 ${dir}`, ...filenames.map((filename) => `📝 ${filename}`)].join("\n")
+    [`📂 ${dir}`, ...filenames.map((filename) => `📝 ${filename}`)].join("\n"),
   );
 
   console.log(logs.join("\n"));
@@ -78,8 +77,8 @@ const main = async () => {
   const filesToGenerate = [...eventPayloadFiles];
   await Promise.all(
     filesToGenerate.map(({ filename, content, options }) =>
-      fs.writeFile(filename, content, options)
-    )
+      fs.writeFile(filename, content, options),
+    ),
   );
 
   logOutputFiles(filesToGenerate);
@@ -87,7 +86,7 @@ const main = async () => {
 
 main()
   .then(() => {
-    console.log(`✅ New Event Payload created`);
+    console.log("✅ New Event Payload created");
   })
   .catch((e) => {
     console.error(e);

@@ -8,6 +8,9 @@
     ]
   },
   "scripts": {
+		"format": "biome format scripts/ --write",
+    "lint": "biome lint scripts/",
+    "lint:fix": "biome lint scripts/ --apply",
     "start:dev:db": "docker-compose -f ./packages/backend/docker-compose.yml up -d --build",
     "start:dev:server": "npm run start:dev --workspace=@dnd/backend",
     "start:dev": "npm run start:dev:db && npm run start:dev:server",
@@ -21,6 +24,7 @@
     "new-emitter": "node ./scripts/new-emitter"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.5.3",
     "@inquirer/prompts": "^4.1.0",
     "dedent": "^1.5.1",
     "inquirer-directory": "^2.2.0",

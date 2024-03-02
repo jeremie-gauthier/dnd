@@ -9,7 +9,7 @@ const {
 } = require("./snippets");
 const { getVarNames } = require("./utils");
 
-const EVENT_LISTENER_BASE_PATH = `./packages/backend/src`;
+const EVENT_LISTENER_BASE_PATH = "./packages/backend/src";
 
 const promptEventListenerName = async () => {
   const rawEventListenerName = await input({
@@ -45,7 +45,7 @@ const logOutputFiles = (files) => {
   }
 
   const logs = Object.entries(filesOrdered).map(([dir, filenames]) =>
-    [`📂 ${dir}`, ...filenames.map((filename) => `📝 ${filename}`)].join("\n")
+    [`📂 ${dir}`, ...filenames.map((filename) => `📝 ${filename}`)].join("\n"),
   );
 
   console.log(logs.join("\n"));
@@ -73,14 +73,14 @@ const main = async () => {
 
   const foldersToGenerate = [eventListenerDir];
   await Promise.all(
-    foldersToGenerate.map((dir) => fs.mkdir(dir, { recursive: true }))
+    foldersToGenerate.map((dir) => fs.mkdir(dir, { recursive: true })),
   );
 
   const filesToGenerate = [...eventListenerFiles];
   await Promise.all(
     filesToGenerate.map(({ filename, content, options }) =>
-      fs.writeFile(filename, content, options)
-    )
+      fs.writeFile(filename, content, options),
+    ),
   );
 
   logOutputFiles(filesToGenerate);
@@ -88,7 +88,7 @@ const main = async () => {
 
 main()
   .then(() => {
-    console.log(`✅ New Event Listener created`);
+    console.log("✅ New Event Listener created");
   })
   .catch((e) => {
     console.error(e);

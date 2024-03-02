@@ -14,8 +14,8 @@ const {
 } = require("./snippets");
 const { getVarNames } = require("./utils");
 
-const UC_BASE_PATH = `./packages/backend/src`;
-const SHARED_SCHEMAS_BASE_PATH = `./packages/shared/src/schemas`;
+const UC_BASE_PATH = "./packages/backend/src";
+const SHARED_SCHEMAS_BASE_PATH = "./packages/shared/src/schemas";
 
 const promptUseCaseName = async () => {
   const rawUseCaseName = await input({
@@ -51,7 +51,7 @@ const logOutputFiles = (files) => {
   }
 
   const logs = Object.entries(filesOrdered).map(([dir, filenames]) =>
-    [`📂 ${dir}`, ...filenames.map((filename) => `📝 ${filename}`)].join("\n")
+    [`📂 ${dir}`, ...filenames.map((filename) => `📝 ${filename}`)].join("\n"),
   );
 
   console.log(logs.join("\n"));
@@ -109,14 +109,14 @@ const main = async () => {
 
   const foldersToGenerate = [useCaseDir, sharedSchemasDir];
   await Promise.all(
-    foldersToGenerate.map((dir) => fs.mkdir(dir, { recursive: true }))
+    foldersToGenerate.map((dir) => fs.mkdir(dir, { recursive: true })),
   );
 
   const filesToGenerate = [...useCaseFiles, ...sharedSchemasFiles];
   await Promise.all(
     filesToGenerate.map(({ filename, content, options }) =>
-      fs.writeFile(filename, content, options)
-    )
+      fs.writeFile(filename, content, options),
+    ),
   );
 
   logOutputFiles(filesToGenerate);
@@ -124,7 +124,7 @@ const main = async () => {
 
 main()
   .then(() => {
-    console.log(`✅ New Use Case created`);
+    console.log("✅ New Use Case created");
   })
   .catch((e) => {
     console.error(e);
