@@ -1,4 +1,4 @@
-import { Coord, GameEntity } from "@dnd/shared";
+import { ChangePositionInput, Coord, GameEntity } from "@dnd/shared";
 import {
   BadRequestException,
   ForbiddenException,
@@ -13,7 +13,6 @@ import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import { translateCoordToIndex } from "src/game/map/utils/translate-coord-to-index.util";
 import { MessageContext } from "src/types/socket.type";
 import { UseCase } from "src/types/use-case.interface";
-import { ChangePositionInputDto } from "./change-position.dto";
 import { ChangePositionRepository } from "./change-position.repository";
 
 @Injectable()
@@ -30,7 +29,7 @@ export class ChangePositionUseCase implements UseCase {
   }: {
     ctx: MessageContext;
     userId: User["id"];
-    changePositionInputDto: ChangePositionInputDto;
+    changePositionInputDto: ChangePositionInput;
   }): Promise<void> {
     const game = await this.repository.getGameById(gameId);
 

@@ -41,3 +41,5 @@ export const getLobbyOutputSchema = z.object({
   ),
   heroesAvailable: z.array(heroSchema),
 });
+
+export type GetLobbyOutput = z.infer<typeof getLobbyOutputSchema>;

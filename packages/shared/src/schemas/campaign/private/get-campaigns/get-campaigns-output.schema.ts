@@ -16,3 +16,5 @@ export const getCampaignsOutputSchema = z.array(
     nbStages: z.number().positive(),
   }),
 );
+
+export type GetCampaignsOutput = z.infer<typeof getCampaignsOutputSchema>;

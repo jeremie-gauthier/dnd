@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { AuthEvent } from "src/auth/events/emitters/auth-events.enum";
 import { NewUserRegisteredPayload } from "src/auth/events/emitters/new-user-registered.payload";
+import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/types/use-case.interface";
 import { UserConnectionRepository } from "./user-connection.repository";
 
@@ -12,7 +13,7 @@ export class UserConnectionUseCase implements UseCase {
     private readonly repository: UserConnectionRepository,
   ) {}
 
-  public async execute({ userId }: { userId: string }): Promise<void> {
+  public async execute({ userId }: { userId: User["id"] }): Promise<void> {
     const shouldSetupUserEnvironment =
       await this.repository.shouldSetupUserEnvironment(userId);
     if (shouldSetupUserEnvironment) {

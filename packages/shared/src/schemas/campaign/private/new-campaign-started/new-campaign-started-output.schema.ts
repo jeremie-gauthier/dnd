@@ -7,3 +7,7 @@ export const newCampaignStartedOutputSchema = z
   .transform(({ id }) => ({
     campaignProgressionId: id,
   }));
+
+export type NewCampaignStartedOutput = z.infer<
+  typeof newCampaignStartedOutputSchema
+>;

@@ -8,3 +8,5 @@ export const changePositionInputSchema = z.object({
     column: z.number().min(0),
   }),
 });
+
+export type ChangePositionInput = z.infer<typeof changePositionInputSchema>;
