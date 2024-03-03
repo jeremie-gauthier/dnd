@@ -55,6 +55,6 @@ const MOCK_MAP: GameEntity["map"] = {
   ],
 };
 
-export const useMap = async (): Promise<GameEntity["map"]> => {
-  return Promise.resolve(MOCK_MAP);
+export const useMap = (): GameEntity["map"] => {
+  return MOCK_MAP;
 };
