@@ -7,8 +7,10 @@ type Props = {
   game: GameEntity;
 };
 
-const HEIGHT = 1080;
-const WIDTH = 1920;
+// TODO: compute height / width dynamically from game.map ?
+// 11 tiles * 18 (size of assets) * 4
+const HEIGHT = 11 * 72;
+const WIDTH = 11 * 72;
 
 export const Game = ({ game }: Props) => {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -21,12 +23,6 @@ export const Game = ({ game }: Props) => {
   return (
     <div className="flex items-center w-full">
       <p>Game ID: {game.id}</p>
-      <button
-        type="button"
-        onClick={() => gameEngine?.setTileSize(gameEngine.tileSize + 10)}
-      >
-        +10 size
-      </button>
       <Canvas ref={ref} height={HEIGHT} width={WIDTH} />
     </div>
   );
