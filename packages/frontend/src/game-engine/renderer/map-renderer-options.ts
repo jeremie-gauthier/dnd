@@ -17,7 +17,9 @@ export const useMapRendererOptions = () => {
     if (newSize <= 0) {
       throw new Error("Tile size must be greater than zero");
     }
-    setTileSize(newSize);
+    // It's important to have int here to create nice continuity between tiles
+    // on float numbers, lines of pixels appears between the tiles
+    setTileSize(Math.floor(newSize));
   };
 
   return {
