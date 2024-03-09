@@ -10,8 +10,11 @@ export const Canvas = forwardRef<HTMLCanvasElement, Props>(
     return (
       <canvas
         ref={ref}
-        height={height * 2}
-        width={width * 2}
+        height={height}
+        width={width}
+        // can be multiplied for better resolution
+        // height={height * 2}
+        // width={width * 2}
         style={{ height, width }}
         {...rest}
       />
