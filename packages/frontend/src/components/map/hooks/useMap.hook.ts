@@ -32,16 +32,16 @@ const MOCK_MAP: GameEntity["map"] = {
       coord: { row: 5, column: 6 },
       entities: [
         {
-          type: "non-playable-non-interactive-entity",
-          kind: "wall",
+          type: "non-playable-interactive-entity",
+          kind: "door",
           isBlocking: true,
-          canInteract: false,
+          canInteract: true,
           isVisible: true,
         },
       ],
     },
     {
-      coord: { row: 6, column: 5 },
+      coord: { row: 5, column: 7 },
       entities: [
         {
           type: "non-playable-non-interactive-entity",
