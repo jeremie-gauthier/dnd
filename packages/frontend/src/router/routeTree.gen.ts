@@ -11,10 +11,10 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as GameImport } from './routes/game'
 import { Route as ProfileImport } from './routes/profile'
 import { Route as MenuImport } from './routes/menu'
 import { Route as LoginImport } from './routes/login'
+import { Route as GameImport } from './routes/game'
 import { Route as WsImport } from './routes/_ws'
 import { Route as WsMenuMultiplayerImport } from './routes/_ws.menu-multiplayer'
 import { Route as WsLobbiesImport } from './routes/_ws.lobbies'
@@ -22,11 +22,6 @@ import { Route as WsCreateLobbyImport } from './routes/_ws.create-lobby'
 import { Route as WsLobbyLobbyIdImport } from './routes/_ws.lobby.$lobbyId'
 
 // Create/Update Routes
-
-const GameRoute = GameImport.update({
-  path: '/game',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const ProfileRoute = ProfileImport.update({
   path: '/profile',
@@ -40,6 +35,11 @@ const MenuRoute = MenuImport.update({
 
 const LoginRoute = LoginImport.update({
   path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GameRoute = GameImport.update({
+  path: '/game',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -76,6 +76,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WsImport
       parentRoute: typeof rootRoute
     }
+    '/game': {
+      preLoaderRoute: typeof GameImport
+      parentRoute: typeof rootRoute
+    }
     '/login': {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
@@ -104,10 +108,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WsLobbyLobbyIdImport
       parentRoute: typeof WsImport
     }
-    '/game': {
-      preLoaderRoute: typeof GameImport
-      parentRoute: typeof rootRoute
-    }
   }
 }
 
@@ -120,10 +120,10 @@ export const routeTree = rootRoute.addChildren([
     WsMenuMultiplayerRoute,
     WsLobbyLobbyIdRoute,
   ]),
+  GameRoute,
   LoginRoute,
   MenuRoute,
   ProfileRoute,
-  GameRoute,
 ])
 
 /* prettier-ignore-end */
