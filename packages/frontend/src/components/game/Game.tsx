@@ -1,7 +1,7 @@
 import { GameEntity } from "@dnd/shared";
 import { useRef } from "react";
+import { useGameEngine } from "../../game-engine";
 import { Canvas } from "../canvas/canvas";
-import { useGameEngine } from "./hooks/useGameEngine.hook";
 
 type Props = {
   game: GameEntity;
