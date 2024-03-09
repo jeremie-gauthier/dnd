@@ -1,5 +1,7 @@
 import { GameEntity } from "@dnd/shared";
 import { RefObject } from "react";
+import { useAssetsLoader } from "./assets-loader/assets-loader";
+import { assetCollection } from "./assets-loader/assets.config";
 import { drawBackground } from "./draw/draw-background";
 import { drawTilesBackground } from "./draw/draw-tiles-background";
 import { useMapRendererOptions } from "./map-renderer-options";
@@ -8,13 +10,14 @@ import { useSelectEntityRenderer } from "./select-entity-renderer";
 export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const canvas = canvasRef.current;
   const context = canvas?.getContext("2d");
+  const assets = useAssetsLoader(assetCollection);
 
   const options = useMapRendererOptions();
 
   const selectEntityRenderer = useSelectEntityRenderer(canvasRef);
 
   const render = (map: GameEntity["map"]) => {
-    if (!canvas || !context) return;
+    if (!canvas || !context || !assets) return;
 
     drawBackground({
       context,
@@ -38,6 +41,7 @@ export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
             entityColumn: tile.coord.column,
             entityRow: tile.coord.row,
             options: { tileSize: options.tileSize },
+            assets,
           });
         }
       }
