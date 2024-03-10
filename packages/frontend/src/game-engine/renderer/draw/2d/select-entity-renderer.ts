@@ -1,13 +1,13 @@
 import { TileEntity } from "@dnd/shared";
 import { RefObject } from "react";
-import { drawDoor } from "./draw/entities/draw-door";
-import { drawOffMap } from "./draw/entities/draw-off-map";
-import { drawPillar } from "./draw/entities/draw-pillar";
-import { drawPlayableEntity } from "./draw/entities/draw-playable-entity";
-import { drawTrap } from "./draw/entities/draw-trap";
-import { drawTree } from "./draw/entities/draw-tree";
-import { drawWall } from "./draw/entities/draw-wall";
-import { EntityDrawerParams } from "./draw/entities/entity-drawer-params.interface";
+import { drawDoor } from "./entities/draw-door";
+import { drawOffMap } from "./entities/draw-off-map";
+import { drawPillar } from "./entities/draw-pillar";
+import { drawPlayableEntity } from "./entities/draw-playable-entity";
+import { drawTrap } from "./entities/draw-trap";
+import { drawTree } from "./entities/draw-tree";
+import { drawWall } from "./entities/draw-wall";
+import { EntityDrawerParams } from "./entities/entity-drawer-params.interface";
 
 export const useSelectEntityRenderer = (
   canvasRef: RefObject<HTMLCanvasElement>,

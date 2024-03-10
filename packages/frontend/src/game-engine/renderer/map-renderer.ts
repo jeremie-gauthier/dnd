@@ -2,10 +2,10 @@ import { GameEntity } from "@dnd/shared";
 import { RefObject } from "react";
 import { useAssetsLoader } from "./assets-loader/assets-loader";
 import { assetCollection } from "./assets-loader/assets.config";
+import { drawTilesBackground } from "./draw/2d/draw-tiles-background";
+import { useSelectEntityRenderer } from "./draw/2d/select-entity-renderer";
 import { drawBackground } from "./draw/draw-background";
-import { drawTilesBackground } from "./draw/draw-tiles-background";
 import { useMapRendererOptions } from "./map-renderer-options";
-import { useSelectEntityRenderer } from "./select-entity-renderer";
 
 export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const canvas = canvasRef.current;

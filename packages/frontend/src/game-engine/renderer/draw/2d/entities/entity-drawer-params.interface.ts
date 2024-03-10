@@ -1,6 +1,6 @@
 import { TileEntity } from "@dnd/shared";
-import { AssetsLoaded } from "../../assets-loader/assets-loader";
-import { assetCollection } from "../../assets-loader/assets.config";
+import { AssetsLoaded } from "../../../assets-loader/assets-loader";
+import { assetCollection } from "../../../assets-loader/assets.config";
 
 export type AssetWithCoordMap = {
   asset: HTMLImageElement;
