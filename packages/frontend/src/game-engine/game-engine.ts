@@ -28,7 +28,12 @@ export const useGameEngine = (
 
   const { addClickEvent, clearMouseEvents } = useMouseInputs(canvasRef);
 
-  mapRenderer.render(options.gameData.map);
+  useEffect(() => {
+    if (!mapRenderer.render) return;
+    console.log(options.gameData.map);
+
+    mapRenderer.render(options.gameData.map);
+  }, [options.gameData.map, mapRenderer.render]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: run only when the canvasRef change
   useEffect(() => {

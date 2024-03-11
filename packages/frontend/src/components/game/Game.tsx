@@ -9,11 +9,12 @@ type Props = {
 
 // TODO: compute height / width dynamically from game.map ?
 // 11 tiles * 18 (size of assets) * 4
-const HEIGHT = 11 * 72;
-const WIDTH = 11 * 72;
+const HEIGHT = 11 * 64;
+const WIDTH = 11 * 64;
 
 export const Game = ({ game }: Props) => {
   const ref = useRef<HTMLCanvasElement>(null);
+
   const gameEngine = useGameEngine(ref, {
     gameData: game,
     height: HEIGHT,
