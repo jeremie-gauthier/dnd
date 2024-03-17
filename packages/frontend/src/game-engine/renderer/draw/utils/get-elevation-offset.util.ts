@@ -1,6 +1,4 @@
-type NonNegativeNumber<T extends number> = `${T}` extends `-${string}`
-  ? never
-  : number;
+import { NonNegativeNumber } from "@dnd/shared";
 
 type Options = {
   assetHeight: number;
