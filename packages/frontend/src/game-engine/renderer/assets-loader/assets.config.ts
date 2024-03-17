@@ -1,4 +1,5 @@
 import warrior_icon from "../../../assets/classes/warrior_icon.png";
+import move_layer from "../../../assets/layers/move_layer.png";
 import goblin_icon from "../../../assets/monsters/goblin_icon.png";
 import door_close from "../../../assets/tiles/doors/door_close.png";
 import door_open from "../../../assets/tiles/doors/door_open.png";
@@ -18,6 +19,7 @@ export const assetCollection = {
   pillar,
   warrior_icon,
   goblin_icon,
+  move_layer,
   ref_blue,
   ref_red,
 } as const;
