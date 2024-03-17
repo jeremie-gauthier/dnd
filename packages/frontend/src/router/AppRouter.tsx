@@ -1,9 +1,13 @@
-import { ErrorComponent, Router, RouterProvider } from "@tanstack/react-router";
+import {
+  ErrorComponent,
+  RouterProvider,
+  createRouter,
+} from "@tanstack/react-router";
 import { queryClient } from "../config/fetcher";
 import { socket } from "../config/socket";
 import { routeTree } from "./routeTree.gen";
 
-const router = new Router({
+const router = createRouter({
   routeTree,
   defaultPendingComponent: () => (
     <div className={"p-2 text-2xl"}>Route is loading</div>

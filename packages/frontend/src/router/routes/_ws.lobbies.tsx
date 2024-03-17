@@ -1,15 +1,19 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
-import { ClientLobbyEvent, type LobbyEntity, ServerLobbyEvent } from "@dnd/shared";
-import { FileRoute } from "@tanstack/react-router";
+import {
+  ClientLobbyEvent,
+  ServerLobbyEvent,
+  type LobbyEntity,
+} from "@dnd/shared";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { LobbiesMenu } from "../../components/lobbies/lobbies-menu/LobbiesMenu";
 import {
   GET_LOBBIES_QUERY_KEY,
-  type GetLobbiesResponse,
   useGetLobbies,
+  type GetLobbiesResponse,
 } from "../../hooks/api/lobby/get-lobbies";
 
-export const Route = new FileRoute("/_ws/lobbies").createRoute({
+export const Route = createFileRoute("/_ws/lobbies")({
   beforeLoad: async ({ context }) => {
     const { socket } = context;
     await socket.emitWithAck(ClientLobbyEvent.ListenLobbiesChanges);
