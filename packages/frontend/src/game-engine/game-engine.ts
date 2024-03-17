@@ -1,5 +1,5 @@
 import type { GameEntity } from "@dnd/shared";
-import { type RefObject, useEffect } from "react";
+import { useEffect, type RefObject } from "react";
 import { useMouseInputs } from ".";
 import { useMapRenderer } from "./renderer";
 
@@ -7,15 +7,15 @@ export const useGameEngine = (
   canvasRef: RefObject<HTMLCanvasElement>,
   gameEntity: GameEntity,
 ) => {
-  const mapRenderer = useMapRenderer(canvasRef);
+  const { render, assetSize } = useMapRenderer(canvasRef);
 
   const { addClickEvent, clearMouseEvents } = useMouseInputs(canvasRef);
 
   useEffect(() => {
-    if (!mapRenderer.render) return;
+    if (!render) return;
 
-    mapRenderer.render(gameEntity.map);
-  }, [gameEntity.map, mapRenderer.render]);
+    render(gameEntity.map);
+  }, [gameEntity.map, render]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: run only when the canvasRef change
   useEffect(() => {
@@ -27,6 +27,6 @@ export const useGameEngine = (
   }, [canvasRef.current]);
 
   return {
-    assetSize: 64,
+    assetSize,
   };
 };
