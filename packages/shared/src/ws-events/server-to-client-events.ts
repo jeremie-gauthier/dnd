@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { getLobbiesOutputSchema } from "../../schemas";
-import { GameEntity } from "../game";
-import { LobbyEntity } from "../lobby";
+import { GameEntity } from "../database/game";
+import { LobbyEntity } from "../database/lobby";
+import { getLobbiesOutputSchema } from "../schemas";
 import { ServerGameEvent } from "./game-events/game-events.server";
 import { ServerLobbyEvent } from "./lobby-events/lobby-events.server";
 import { EventsMapper } from "./utils.type";

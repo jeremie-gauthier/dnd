@@ -1,4 +1,4 @@
-import { LobbyEntity } from "../lobby/lobby.interface";
+import { LobbyEntity } from "../database/lobby/lobby.interface";
 import { ClientGameEvent } from "./game-events/game-events.client";
 import { ClientLobbyEvent } from "./lobby-events/lobby-events.client";
 import { EventsMapper } from "./utils.type";

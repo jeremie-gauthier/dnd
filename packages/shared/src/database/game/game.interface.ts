@@ -1,4 +1,4 @@
-import { HeroClassType } from "../../database/enums/hero-class.enum";
+import { HeroClassType } from "../enums/hero-class.enum";
 import { EnemyKind } from "./enemy-kind.type";
 
 type BasePlayableEntity = {
