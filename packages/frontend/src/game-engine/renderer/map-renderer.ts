@@ -3,11 +3,11 @@ import { RefObject } from "react";
 import { useAssetsLoader } from "./assets-loader/assets-loader";
 import { assetCollectionIsometric } from "./assets-loader/assets.config";
 import { drawBackground } from "./draw/draw-background";
-import { drawDoor } from "./draw/isometric/entities/draw-door";
-import { drawFloor } from "./draw/isometric/entities/draw-floor";
-import { drawPillar } from "./draw/isometric/entities/draw-pillar";
-import { drawPlayableEntityIcon } from "./draw/isometric/entities/draw-playable-entity-icon";
-import { drawWall } from "./draw/isometric/entities/draw-wall";
+import { drawDoor } from "./draw/entities/draw-door";
+import { drawFloor } from "./draw/entities/draw-floor";
+import { drawPillar } from "./draw/entities/draw-pillar";
+import { drawPlayableEntityIcon } from "./draw/entities/draw-playable-entity-icon";
+import { drawWall } from "./draw/entities/draw-wall";
 
 export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const canvas = canvasRef.current;

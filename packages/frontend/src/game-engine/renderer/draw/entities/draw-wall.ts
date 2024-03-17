@@ -1,4 +1,4 @@
-import { translate2DToIsometricCoord } from "../../../../utils/coords-conversion.util";
+import { translate2DToIsometricCoord } from "../../../utils/coords-conversion.util";
 import { EntityDrawerParams } from "./entity-drawer-params.interface";
 
 export function drawWall({

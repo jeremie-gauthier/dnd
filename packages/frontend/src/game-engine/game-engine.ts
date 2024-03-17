@@ -13,7 +13,6 @@ export const useGameEngine = (
 
   useEffect(() => {
     if (!mapRenderer.render) return;
-    console.log(gameEntity.map);
 
     mapRenderer.render(gameEntity.map);
   }, [gameEntity.map, mapRenderer.render]);
