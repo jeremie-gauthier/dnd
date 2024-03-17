@@ -6,6 +6,7 @@ import door_close from "../../../assets/custom/tiles/doors/door_close.png";
 import door_open from "../../../assets/custom/tiles/doors/door_open.png";
 import floor_dark from "../../../assets/custom/tiles/floors/floor_dark.png";
 import floor_light from "../../../assets/custom/tiles/floors/floor_light.png";
+import pillar from "../../../assets/custom/tiles/pillar/pillar.png";
 import ref_blue from "../../../assets/custom/tiles/references/blue.png";
 import ref_red from "../../../assets/custom/tiles/references/red.png";
 import wall from "../../../assets/custom/tiles/wall/wall.png";
@@ -22,6 +23,7 @@ export const assetCollectionIsometric = {
   wall,
   door_open,
   door_close,
+  pillar,
   ref_blue,
   ref_red,
 } as const;
