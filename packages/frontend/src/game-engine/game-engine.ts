@@ -5,11 +5,7 @@ import { useMapRenderer } from "./renderer";
 
 export const useGameEngine = (
   canvasRef: RefObject<HTMLCanvasElement>,
-  options: {
-    gameData: GameEntity;
-    height: number;
-    width: number;
-  },
+  gameEntity: GameEntity,
 ) => {
   const mapRenderer = useMapRenderer(canvasRef);
 
@@ -17,10 +13,10 @@ export const useGameEngine = (
 
   useEffect(() => {
     if (!mapRenderer.render) return;
-    console.log(options.gameData.map);
+    console.log(gameEntity.map);
 
-    mapRenderer.render(options.gameData.map);
-  }, [options.gameData.map, mapRenderer.render]);
+    mapRenderer.render(gameEntity.map);
+  }, [gameEntity.map, mapRenderer.render]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: run only when the canvasRef change
   useEffect(() => {
@@ -31,5 +27,7 @@ export const useGameEngine = (
     return clearMouseEvents;
   }, [canvasRef.current]);
 
-  return {};
+  return {
+    assetSize: 64,
+  };
 };
