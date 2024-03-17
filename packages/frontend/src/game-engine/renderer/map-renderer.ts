@@ -8,14 +8,11 @@ import { drawFloor } from "./draw/isometric/entities/draw-floor";
 import { drawPillar } from "./draw/isometric/entities/draw-pillar";
 import { drawPlayableEntityIcon } from "./draw/isometric/entities/draw-playable-entity-icon";
 import { drawWall } from "./draw/isometric/entities/draw-wall";
-import { useMapRendererOptions } from "./map-renderer-options";
 
 export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const canvas = canvasRef.current;
   const context = canvas?.getContext("2d");
   const assets = useAssetsLoader(assetCollectionIsometric);
-
-  const options = useMapRendererOptions();
 
   // const selectEntityRenderer = useSelectEntityRenderer(canvasRef);
 
@@ -45,7 +42,6 @@ export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
           entityRow: row,
           entityColumn: column,
           assets,
-          options,
         });
       }
     }
@@ -57,7 +53,6 @@ export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
           entityRow: row,
           entityColumn: 3,
           assets,
-          options,
           entity: {
             type: "non-playable-interactive-entity",
             kind: "door",
@@ -72,7 +67,6 @@ export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
           entityRow: row,
           entityColumn: 3,
           assets,
-          options,
         });
       }
     }
@@ -82,7 +76,6 @@ export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
       entityRow: 6,
       entityColumn: 6,
       assets,
-      options,
     });
 
     drawPlayableEntityIcon({
@@ -90,7 +83,6 @@ export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
       entityRow: 9,
       entityColumn: 9,
       assets,
-      options,
       entity: {
         type: "playable-entity",
         id: "fake-hero-id",
@@ -106,7 +98,6 @@ export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
       entityRow: 8,
       entityColumn: 9,
       assets,
-      options,
       entity: {
         type: "playable-entity",
         id: "fake-goblin-id",
@@ -140,6 +131,5 @@ export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
 
   return {
     render: canRender ? render : null,
-    options,
   };
 };

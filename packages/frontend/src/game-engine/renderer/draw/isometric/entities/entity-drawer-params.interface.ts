@@ -23,8 +23,5 @@ export type EntityDrawerParams = {
   entityRow: number;
   entityColumn: number;
   playableEntity?: GameEntity["playableEntities"][number];
-  options: {
-    tileSize: number;
-  };
   assets: AssetsLoaded<typeof assetCollectionIsometric>;
 };
