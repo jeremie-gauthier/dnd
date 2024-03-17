@@ -1,7 +1,7 @@
 import type { GameEntity, PlayableEntity } from "@dnd/shared";
 import type { RefObject } from "react";
 import { useAssetsLoader } from "./assets-loader/assets-loader";
-import { assetCollectionIsometric } from "./assets-loader/assets.config";
+import { assetCollection } from "./assets-loader/assets.config";
 import { drawBackground } from "./draw/draw-background";
 import { drawDoor } from "./draw/entities/draw-door";
 import { drawFloor } from "./draw/entities/draw-floor";
@@ -13,7 +13,7 @@ import { centerIsometricDrawing } from "./draw/utils/center-isometric-drawing.ut
 export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const canvas = canvasRef.current;
   const context = canvas?.getContext("2d");
-  const { assets, assetSize } = useAssetsLoader(assetCollectionIsometric);
+  const { assets, assetSize } = useAssetsLoader(assetCollection);
 
   const render = (map: GameEntity["map"]) => {
     if (!canvas || !context || !assets) return;
