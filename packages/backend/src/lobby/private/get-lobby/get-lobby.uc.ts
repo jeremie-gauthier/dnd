@@ -1,9 +1,9 @@
-import { LobbyEntity } from "@dnd/shared";
+import type { LobbyEntity } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { HeroTemplate } from "src/database/entities/hero-template.entity";
-import { UseCase } from "src/types/use-case.interface";
-import { GetLobbyOutputDto } from "./get-lobby.dto";
-import { GetLobbyRepository } from "./get-lobby.repository";
+import type { HeroTemplate } from "src/database/entities/hero-template.entity";
+import type { UseCase } from "src/types/use-case.interface";
+import type { GetLobbyOutputDto } from "./get-lobby.dto";
+import type { GetLobbyRepository } from "./get-lobby.repository";
 
 @Injectable()
 export class GetLobbyUseCase implements UseCase {

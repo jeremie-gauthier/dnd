@@ -1,11 +1,11 @@
-import { HeroClassType, HeroClassValues } from "@dnd/shared";
+import { type HeroClassType, HeroClassValues } from "@dnd/shared";
 import {
   Column,
   Entity,
   Index,
   ManyToMany,
   PrimaryGeneratedColumn,
-  Relation,
+  type Relation,
 } from "typeorm";
 import { Campaign } from "./campaign.entity";
 import { PlayableEntity } from "./playable-entity";

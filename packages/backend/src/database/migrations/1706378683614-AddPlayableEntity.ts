@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import type { MigrationInterface, QueryRunner } from "typeorm";
 
 export class AddPlayableEntity1706378683614 implements MigrationInterface {
   name = "AddPlayableEntity1706378683614";

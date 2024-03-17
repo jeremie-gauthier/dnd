@@ -1,4 +1,4 @@
-import { User, useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import { type User, useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { FileRoute } from "@tanstack/react-router";
 import Profile from "../../components/profile/Profile";
 import { useIdentity } from "../../hooks/api/auth/identity";

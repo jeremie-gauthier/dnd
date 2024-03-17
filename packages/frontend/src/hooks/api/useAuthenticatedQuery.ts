@@ -1,5 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { UseQueryOptions, useQuery } from "@tanstack/react-query";
+import { type UseQueryOptions, useQuery } from "@tanstack/react-query";
 
 export const useAuthenticatedQuery = <
   TQueryKey extends [string, Record<string, unknown>?],

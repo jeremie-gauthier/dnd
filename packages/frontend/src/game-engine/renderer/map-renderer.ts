@@ -1,5 +1,5 @@
-import { GameEntity, PlayableEntity } from "@dnd/shared";
-import { RefObject } from "react";
+import type { GameEntity, PlayableEntity } from "@dnd/shared";
+import type { RefObject } from "react";
 import { useAssetsLoader } from "./assets-loader/assets-loader";
 import { assetCollectionIsometric } from "./assets-loader/assets.config";
 import { drawBackground } from "./draw/draw-background";

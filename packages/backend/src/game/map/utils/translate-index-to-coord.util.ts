@@ -1,4 +1,4 @@
-import { Coord } from "@dnd/shared";
+import type { Coord } from "@dnd/shared";
 
 type Input = {
   index: number;

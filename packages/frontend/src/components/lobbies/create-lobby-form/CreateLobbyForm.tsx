@@ -2,8 +2,8 @@ import { ClientLobbyEvent } from "@dnd/shared";
 import { useNavigate } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { z } from "zod";
-import { GetCampaignsResponse } from "../../../hooks/api/campaign/get-campaigns";
-import { ClientSocket } from "../../../types/socket.type";
+import type { GetCampaignsResponse } from "../../../hooks/api/campaign/get-campaigns";
+import type { ClientSocket } from "../../../types/socket.type";
 import { useCreateLobbyForm } from "./useCreateLobbyForm";
 
 type Props = {

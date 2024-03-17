@@ -1,6 +1,6 @@
-import { Campaign } from "src/database/entities/campaign.entity";
-import { User } from "src/database/entities/user.entity";
-import { EventPayload } from "src/event-emitter/event-payload.class";
+import type { Campaign } from "src/database/entities/campaign.entity";
+import type { User } from "src/database/entities/user.entity";
+import type { EventPayload } from "src/event-emitter/event-payload.class";
 import { CampaignEvent } from "./campaign-events.enum";
 
 export class UnlockCampaignForUserPayload

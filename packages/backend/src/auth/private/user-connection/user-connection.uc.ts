@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { EventEmitter2 } from "@nestjs/event-emitter";
+import type { EventEmitter2 } from "@nestjs/event-emitter";
 import { AuthEvent } from "src/auth/events/emitters/auth-events.enum";
 import { NewUserRegisteredPayload } from "src/auth/events/emitters/new-user-registered.payload";
-import { User } from "src/database/entities/user.entity";
-import { UseCase } from "src/types/use-case.interface";
-import { UserConnectionRepository } from "./user-connection.repository";
+import type { User } from "src/database/entities/user.entity";
+import type { UseCase } from "src/types/use-case.interface";
+import type { UserConnectionRepository } from "./user-connection.repository";
 
 @Injectable()
 export class UserConnectionUseCase implements UseCase {

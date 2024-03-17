@@ -1,4 +1,4 @@
-import { GameEntity } from "@dnd/shared";
+import type { GameEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import {
   addStartingPositions,

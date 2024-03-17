@@ -1,4 +1,4 @@
-import { JwtPayload } from "jsonwebtoken";
+import type { JwtPayload } from "jsonwebtoken";
 
 export interface AuthToken extends JwtPayload {
   azp: string;

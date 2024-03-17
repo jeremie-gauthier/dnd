@@ -1,9 +1,9 @@
 import {
   Injectable,
-  OnApplicationShutdown,
-  OnModuleInit,
+  type OnApplicationShutdown,
+  type OnModuleInit,
 } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import type { ConfigService } from "@nestjs/config";
 import { createClient } from "redis";
 
 @Injectable()

@@ -1,4 +1,4 @@
-import { RefObject } from "react";
+import type { RefObject } from "react";
 import { handleClick } from "./mouse-events/on-click";
 
 export const useMouseInputs = (canvasRef: RefObject<HTMLCanvasElement>) => {

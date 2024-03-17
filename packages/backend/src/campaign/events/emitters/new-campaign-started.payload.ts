@@ -1,7 +1,7 @@
-import { CampaignProgression } from "src/database/entities/campaign-progression.entity";
-import { Campaign } from "src/database/entities/campaign.entity";
-import { User } from "src/database/entities/user.entity";
-import { EventPayload } from "src/event-emitter/event-payload.class";
+import type { CampaignProgression } from "src/database/entities/campaign-progression.entity";
+import type { Campaign } from "src/database/entities/campaign.entity";
+import type { User } from "src/database/entities/user.entity";
+import type { EventPayload } from "src/event-emitter/event-payload.class";
 import { CampaignEvent } from "./campaign-events.enum";
 
 export class NewCampaignStartedPayload

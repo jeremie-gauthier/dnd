@@ -6,7 +6,7 @@ import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.pay
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import type { MessageContext } from "src/types/socket.type";
 import {
-  MockInstance,
+  type MockInstance,
   afterEach,
   beforeEach,
   describe,

@@ -2,13 +2,13 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CampaignProgression } from "src/database/entities/campaign-progression.entity";
 import { CampaignStage } from "src/database/entities/campaign-stage.entity";
-import { Campaign } from "src/database/entities/campaign.entity";
+import type { Campaign } from "src/database/entities/campaign.entity";
 import { HeroTemplate } from "src/database/entities/hero-template.entity";
 import type { Hero } from "src/database/entities/hero.entity";
-import { User } from "src/database/entities/user.entity";
+import type { User } from "src/database/entities/user.entity";
 import { CampaignProgressionStatus } from "src/database/enums/campaign-progression-status.enum";
 import { CampaignStageProgressionStatus } from "src/database/enums/campaign-stage-progression-status.enum";
-import { Repository } from "typeorm";
+import type { Repository } from "typeorm";
 
 @Injectable()
 export class CreateCampaignForUserRepository {

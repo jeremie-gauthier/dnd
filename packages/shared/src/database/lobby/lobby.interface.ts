@@ -1,4 +1,4 @@
-import { LobbyEntityStatusType } from "./lobby.enum";
+import type { LobbyEntityStatusType } from "./lobby.enum";
 
 type Hero = {
   id: string;

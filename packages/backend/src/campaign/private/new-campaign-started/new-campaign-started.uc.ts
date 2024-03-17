@@ -1,12 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import { EventEmitter2 } from "@nestjs/event-emitter";
+import type { EventEmitter2 } from "@nestjs/event-emitter";
 import { CampaignEvent } from "src/campaign/events/emitters/campaign-events.enum";
 import { NewCampaignStartedPayload } from "src/campaign/events/emitters/new-campaign-started.payload";
-import { CampaignProgression } from "src/database/entities/campaign-progression.entity";
-import { Campaign } from "src/database/entities/campaign.entity";
-import { User } from "src/database/entities/user.entity";
-import { UseCase } from "src/types/use-case.interface";
-import { NewCampaignStartedRepository } from "./new-campaign-started.repository";
+import type { CampaignProgression } from "src/database/entities/campaign-progression.entity";
+import type { Campaign } from "src/database/entities/campaign.entity";
+import type { User } from "src/database/entities/user.entity";
+import type { UseCase } from "src/types/use-case.interface";
+import type { NewCampaignStartedRepository } from "./new-campaign-started.repository";
 
 @Injectable()
 export class NewCampaignStartedUseCase implements UseCase {

@@ -4,15 +4,15 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { EventEmitter2 } from "@nestjs/event-emitter";
-import { Hero } from "src/database/entities/hero.entity";
+import type { EventEmitter2 } from "@nestjs/event-emitter";
+import type { Hero } from "src/database/entities/hero.entity";
 import type { User } from "src/database/entities/user.entity";
 import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.payload";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import type { MessageContext } from "src/types/socket.type";
-import { UseCase } from "src/types/use-case.interface";
-import { PickHeroInputDto } from "./pick-hero.dto";
-import { PickHeroRepository } from "./pick-hero.repository";
+import type { UseCase } from "src/types/use-case.interface";
+import type { PickHeroInputDto } from "./pick-hero.dto";
+import type { PickHeroRepository } from "./pick-hero.repository";
 
 @Injectable()
 export class PickHeroUseCase implements UseCase {

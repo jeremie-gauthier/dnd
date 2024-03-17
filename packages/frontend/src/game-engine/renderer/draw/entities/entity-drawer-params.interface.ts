@@ -1,6 +1,6 @@
-import { GameEntity, TileEntity } from "@dnd/shared";
-import { AssetsLoaded } from "../../assets-loader/assets-loader";
-import { assetCollectionIsometric } from "../../assets-loader/assets.config";
+import type { GameEntity, TileEntity } from "@dnd/shared";
+import type { AssetsLoaded } from "../../assets-loader/assets-loader";
+import type { assetCollectionIsometric } from "../../assets-loader/assets.config";
 
 export type AssetWithCoordMap = {
   asset: HTMLImageElement;

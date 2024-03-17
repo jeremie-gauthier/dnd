@@ -1,5 +1,5 @@
-import { LobbyEntity } from "@dnd/shared";
-import { Injectable, OnApplicationBootstrap } from "@nestjs/common";
+import type { LobbyEntity } from "@dnd/shared";
+import { Injectable, type OnApplicationBootstrap } from "@nestjs/common";
 import { randomUUID } from "node:crypto";
 import { RedisService } from "../redis.service";
 

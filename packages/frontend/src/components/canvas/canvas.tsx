@@ -1,4 +1,4 @@
-import { CanvasHTMLAttributes, forwardRef } from "react";
+import { type CanvasHTMLAttributes, forwardRef } from "react";
 
 type Props = CanvasHTMLAttributes<HTMLCanvasElement> & {
   height: number;

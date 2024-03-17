@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import type { MigrationInterface, QueryRunner } from "typeorm";
 
 export class SnakeCaseNaming1706381885165 implements MigrationInterface {
   name = "SnakeCaseNaming1706381885165";

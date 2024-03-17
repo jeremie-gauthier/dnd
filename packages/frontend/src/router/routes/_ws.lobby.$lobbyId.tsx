@@ -1,11 +1,11 @@
-import { User, useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-import { LobbyEntity, ServerLobbyEvent } from "@dnd/shared";
+import { type User, useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import { type LobbyEntity, ServerLobbyEvent } from "@dnd/shared";
 import { FileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Lobby } from "../../components/lobbies/Lobby";
 import {
   GET_LOBBY_QUERY_KEY,
-  GetLobbyResponse,
+  type GetLobbyResponse,
   useGetLobby,
 } from "../../hooks/api/lobby/get-lobby";
 

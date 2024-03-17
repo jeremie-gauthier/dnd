@@ -1,17 +1,17 @@
-import { LobbyEntity } from "@dnd/shared";
+import type { LobbyEntity } from "@dnd/shared";
 import {
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { EventEmitter2 } from "@nestjs/event-emitter";
-import { User } from "src/database/entities/user.entity";
+import type { EventEmitter2 } from "@nestjs/event-emitter";
+import type { User } from "src/database/entities/user.entity";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import { UserJoinedLobbyPayload } from "src/lobby/events/emitters/user-joined-lobby.payload";
-import { MessageContext } from "src/types/socket.type";
-import { UseCase } from "src/types/use-case.interface";
-import { JoinLobbyInputDto } from "./join-lobby.dto";
-import { JoinLobbyRepository } from "./join-lobby.repository";
+import type { MessageContext } from "src/types/socket.type";
+import type { UseCase } from "src/types/use-case.interface";
+import type { JoinLobbyInputDto } from "./join-lobby.dto";
+import type { JoinLobbyRepository } from "./join-lobby.repository";
 
 @Injectable()
 export class JoinLobbyUseCase implements UseCase {

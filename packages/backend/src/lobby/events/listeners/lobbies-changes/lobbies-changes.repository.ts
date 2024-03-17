@@ -1,6 +1,6 @@
-import { LobbyEntity } from "@dnd/shared";
+import type { LobbyEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
+import type { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
 
 @Injectable()
 export class LobbiesChangesRepository {

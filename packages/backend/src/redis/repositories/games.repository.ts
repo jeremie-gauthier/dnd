@@ -1,5 +1,5 @@
 import type { GameEntity } from "@dnd/shared";
-import { Injectable, OnApplicationBootstrap } from "@nestjs/common";
+import { Injectable, type OnApplicationBootstrap } from "@nestjs/common";
 import { RedisService } from "../redis.service";
 
 type GamesKey = Record<GameEntity["id"], GameEntity>;

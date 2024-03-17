@@ -1,4 +1,4 @@
-import { GameEntity } from "@dnd/shared";
+import type { GameEntity } from "@dnd/shared";
 
 const MOCK_MAP: GameEntity["map"] = {
   width: 11,

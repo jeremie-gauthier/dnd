@@ -1,5 +1,5 @@
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { Test, TestingModule } from "@nestjs/testing";
+import { Test, type TestingModule } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { CampaignEvent } from "src/campaign/events/emitters/campaign-events.enum";
 import { NewCampaignStartedPayload } from "src/campaign/events/emitters/new-campaign-started.payload";

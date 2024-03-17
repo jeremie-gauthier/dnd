@@ -1,4 +1,4 @@
-import { QueryClient } from "@tanstack/react-query";
+import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   Outlet,
@@ -6,7 +6,7 @@ import {
   useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import { ClientSocket } from "../../types/socket.type";
+import type { ClientSocket } from "../../types/socket.type";
 
 function RouterLoader() {
   const isLoading = useRouterState({ select: (s) => s.status === "pending" });

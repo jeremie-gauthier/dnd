@@ -5,10 +5,10 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  Relation,
+  type Relation,
 } from "typeorm";
 import {
-  CampaignStageStatusType,
+  type CampaignStageStatusType,
   CampaignStageStatusValues,
 } from "../enums/campaign-stage-status.enum";
 import { CampaignStageProgression } from "./campaign-stage-progression.entity";

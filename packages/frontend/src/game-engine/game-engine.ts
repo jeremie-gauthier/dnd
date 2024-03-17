@@ -1,5 +1,5 @@
-import { GameEntity } from "@dnd/shared";
-import { RefObject, useEffect } from "react";
+import type { GameEntity } from "@dnd/shared";
+import { type RefObject, useEffect } from "react";
 import { useMouseInputs } from ".";
 import { useMapRenderer } from "./renderer";
 

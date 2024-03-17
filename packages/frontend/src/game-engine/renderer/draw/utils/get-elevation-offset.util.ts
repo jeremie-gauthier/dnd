@@ -1,4 +1,4 @@
-import { NonNegativeNumber } from "@dnd/shared";
+import type { NonNegativeNumber } from "@dnd/shared";
 
 type Options = {
   assetHeight: number;

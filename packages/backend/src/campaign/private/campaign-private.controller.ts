@@ -7,16 +7,16 @@ import {
   Post,
   UseGuards,
 } from "@nestjs/common";
-import { Request } from "express";
+import type { Request } from "express";
 import { ZodSerializerDto } from "nestjs-zod";
 import { JWTAuthGuard } from "src/authz/jwt-auth.guard";
 import { JWTUser } from "src/authz/jwt-user.decorator";
-import { GetCampaignsUseCase } from "./get-campaigns/get-campaigns.uc";
+import type { GetCampaignsUseCase } from "./get-campaigns/get-campaigns.uc";
 import {
-  NewCampaignStartedInputDto,
+  type NewCampaignStartedInputDto,
   NewCampaignStartedOutputDto,
 } from "./new-campaign-started/new-campaign-started.dto";
-import { NewCampaignStartedUseCase } from "./new-campaign-started/new-campaign-started.uc";
+import type { NewCampaignStartedUseCase } from "./new-campaign-started/new-campaign-started.uc";
 
 @UseGuards(JWTAuthGuard)
 @Controller("campaign/private")

@@ -1,13 +1,13 @@
-import { GameEntity, HeroClass, LobbyEntity } from "@dnd/shared";
+import { type GameEntity, HeroClass, type LobbyEntity } from "@dnd/shared";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
-import { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
-import { CampaignStage } from "src/database/entities/campaign-stage.entity";
-import { User } from "src/database/entities/user.entity";
+import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
+import type { CampaignStage } from "src/database/entities/campaign-stage.entity";
+import type { User } from "src/database/entities/user.entity";
 import { MapSerializerService } from "src/game/map/map-serializer/map-serializer.service";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
-import { MessageContext } from "src/types/socket.type";
-import { Mock, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { MessageContext } from "src/types/socket.type";
+import { type Mock, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GameEvent } from "../../emitters/game-events.enum";
 import { GameInitializationDonePayload } from "../../emitters/game-initialization-done.payload";
 import { GameInitializationStartedPayload } from "../../emitters/game-initialization-started.payload";
@@ -96,10 +96,10 @@ describe("GameInitializationListener", () => {
       const fakeHeroStats = {
         type: "hero",
         level: 1,
-        initiative: NaN,
+        initiative: Number.NaN,
         coord: {
-          row: NaN,
-          column: NaN,
+          row: Number.NaN,
+          column: Number.NaN,
         },
         isBlocking: true,
 
