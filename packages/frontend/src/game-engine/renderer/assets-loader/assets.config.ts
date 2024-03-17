@@ -2,6 +2,8 @@ import floor_1 from "../../../assets/v1.1 dungeon crawler 16X16 pixel pack/tiles
 import door_closed from "../../../assets/v1.1 dungeon crawler 16X16 pixel pack/tiles/wall/door_closed.png";
 import wall_1 from "../../../assets/v1.1 dungeon crawler 16X16 pixel pack/tiles/wall/wall_1.png";
 
+import warrior_icon from "../../../assets/custom/classes/warrior_icon.png";
+import goblin_icon from "../../../assets/custom/monsters/goblin_icon.png";
 import door_close from "../../../assets/custom/tiles/doors/door_close.png";
 import door_open from "../../../assets/custom/tiles/doors/door_open.png";
 import floor_dark from "../../../assets/custom/tiles/floors/floor_dark.png";
@@ -24,6 +26,8 @@ export const assetCollectionIsometric = {
   door_open,
   door_close,
   pillar,
+  warrior_icon,
+  goblin_icon,
   ref_blue,
   ref_red,
 } as const;

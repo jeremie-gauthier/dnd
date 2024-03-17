@@ -1,10 +1,12 @@
-import { GameEntity } from "@dnd/shared";
+import { GameEntity, PlayableEntity } from "@dnd/shared";
 import { RefObject } from "react";
 import { useAssetsLoader } from "./assets-loader/assets-loader";
 import { assetCollectionIsometric } from "./assets-loader/assets.config";
 import { drawBackground } from "./draw/draw-background";
 import { drawDoor } from "./draw/isometric/entities/draw-door";
 import { drawFloor } from "./draw/isometric/entities/draw-floor";
+import { drawPillar } from "./draw/isometric/entities/draw-pillar";
+import { drawPlayableEntityIcon } from "./draw/isometric/entities/draw-playable-entity-icon";
 import { drawWall } from "./draw/isometric/entities/draw-wall";
 import { useMapRendererOptions } from "./map-renderer-options";
 
@@ -74,6 +76,46 @@ export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
         });
       }
     }
+
+    drawPillar({
+      context,
+      entityRow: 6,
+      entityColumn: 6,
+      assets,
+      options,
+    });
+
+    drawPlayableEntityIcon({
+      context,
+      entityRow: 9,
+      entityColumn: 9,
+      assets,
+      options,
+      entity: {
+        type: "playable-entity",
+        id: "fake-hero-id",
+      },
+      playableEntity: {
+        type: "hero",
+        class: "WARRIOR",
+      } as PlayableEntity,
+    });
+
+    drawPlayableEntityIcon({
+      context,
+      entityRow: 8,
+      entityColumn: 9,
+      assets,
+      options,
+      entity: {
+        type: "playable-entity",
+        id: "fake-goblin-id",
+      },
+      playableEntity: {
+        type: "enemy",
+        kind: "goblin",
+      } as PlayableEntity,
+    });
 
     // for (const tile of map.tiles) {
     //   for (const entity of tile.entities) {

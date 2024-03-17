@@ -1,4 +1,4 @@
-import { TileEntity } from "@dnd/shared";
+import { GameEntity, TileEntity } from "@dnd/shared";
 import { AssetsLoaded } from "../../../assets-loader/assets-loader";
 import { assetCollectionIsometric } from "../../../assets-loader/assets.config";
 
@@ -22,6 +22,7 @@ export type EntityDrawerParams = {
   entity: TileEntity;
   entityRow: number;
   entityColumn: number;
+  playableEntity?: GameEntity["playableEntities"][number];
   options: {
     tileSize: number;
   };
