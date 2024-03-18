@@ -1,31 +1,26 @@
 import type { PlayableEnemyEntity, PlayableHeroEntity } from "@dnd/shared";
-import { translate2DToIsometricCoord } from "../../../utils/coords-conversion.util";
 import type { EntityDrawerParams } from "./entity-drawer-params.interface";
 
 export function drawPlayableEntityIcon({
   context,
-  entity,
-  entityColumn,
-  entityRow,
-  playableEntity,
-  assets,
+  config,
+  subject,
 }: EntityDrawerParams) {
-  if (entity.type !== "playable-entity" || playableEntity === undefined) return;
-
-  const isometricCoord = translate2DToIsometricCoord({
-    row: entityRow,
-    column: entityColumn,
-  });
+  if (
+    subject.entity.type !== "playable-entity" ||
+    subject.playableEntity === undefined
+  )
+    return;
 
   const playableEntityAsset = getPlayableEntityAsset({
-    playableEntity,
-    assets,
+    playableEntity: subject.playableEntity,
+    assets: config.assets,
   });
 
   context.drawImage(
     playableEntityAsset,
-    isometricCoord.column,
-    isometricCoord.row,
+    subject.coordIsometric.column,
+    subject.coordIsometric.row,
   );
 }
 
@@ -33,7 +28,8 @@ function getPlayableEntityAsset({
   playableEntity,
   assets,
 }: Required<
-  Pick<EntityDrawerParams, "playableEntity" | "assets">
+  Pick<EntityDrawerParams["subject"], "playableEntity"> &
+    Pick<EntityDrawerParams["config"], "assets">
 >): HTMLImageElement {
   switch (playableEntity.type) {
     case "enemy":
@@ -48,7 +44,7 @@ function getHeroAsset({
   assets,
 }: {
   heroEntity: PlayableHeroEntity;
-  assets: EntityDrawerParams["assets"];
+  assets: EntityDrawerParams["config"]["assets"];
 }): HTMLImageElement {
   switch (heroEntity.class) {
     // TODO: add all supported classes
@@ -62,7 +58,7 @@ function getEnemyAsset({
   assets,
 }: {
   enemyEntity: PlayableEnemyEntity;
-  assets: EntityDrawerParams["assets"];
+  assets: EntityDrawerParams["config"]["assets"];
 }): HTMLImageElement {
   switch (enemyEntity.kind) {
     case "goblin":

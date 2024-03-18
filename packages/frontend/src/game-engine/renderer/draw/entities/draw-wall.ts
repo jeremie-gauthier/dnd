@@ -1,22 +1,10 @@
-import { translate2DToIsometricCoord } from "../../../utils/coords-conversion.util";
 import type { EntityDrawerParams } from "./entity-drawer-params.interface";
 
-export function drawWall({
-  context,
-  entityColumn,
-  entityRow,
-  assets,
-}: Omit<EntityDrawerParams, "entity">) {
-  const isometricCoord = translate2DToIsometricCoord({
-    row: entityRow,
-    column: entityColumn,
-  });
-
-  const assetHeight = 64;
+export function drawWall({ context, config, subject }: EntityDrawerParams) {
   context.drawImage(
-    assets.wall,
-    isometricCoord.column,
+    config.assets.wall,
+    subject.coordIsometric.column,
     // TODO: faire une fonction getElevationOffset au lieu de ce calcul
-    isometricCoord.row - assetHeight / 2,
+    subject.coordIsometric.row - config.assetSize / 2,
   );
 }

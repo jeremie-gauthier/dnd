@@ -14,8 +14,8 @@ export const useGameEngine = (
   useEffect(() => {
     if (!render) return;
 
-    render(gameEntity.map);
-  }, [gameEntity.map, render]);
+    render(gameEntity.map, gameEntity.playableEntities);
+  }, [gameEntity.map, gameEntity.playableEntities, render]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: run only when the canvasRef change
   useEffect(() => {

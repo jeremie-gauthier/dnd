@@ -1,19 +1,14 @@
-import { translate2DToIsometricCoord } from "../../../utils/coords-conversion.util";
 import type { EntityDrawerParams } from "./entity-drawer-params.interface";
 
-export function drawFloor({
-  context,
-  entityColumn,
-  entityRow,
-  assets,
-}: Omit<EntityDrawerParams, "entity">) {
-  const isEvenTile = (entityColumn + entityRow) % 2 === 0;
-  const floorAsset = isEvenTile ? assets.floor_light : assets.floor_dark;
+export function drawFloor({ context, config, subject }: EntityDrawerParams) {
+  const isEvenTile = (subject.coord2D.column + subject.coord2D.row) % 2 === 0;
+  const floorAsset = isEvenTile
+    ? config.assets.floor_light
+    : config.assets.floor_dark;
 
-  const isometricCoord = translate2DToIsometricCoord({
-    row: entityRow,
-    column: entityColumn,
-  });
-
-  context.drawImage(floorAsset, isometricCoord.column, isometricCoord.row);
+  context.drawImage(
+    floorAsset,
+    subject.coordIsometric.column,
+    subject.coordIsometric.row,
+  );
 }
