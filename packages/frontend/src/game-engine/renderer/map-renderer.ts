@@ -49,8 +49,8 @@ export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
         },
       });
 
-      // TODO: tile.entities.toSorted (trap,door,chest THEN playables)
-      for (const entity of tile.entities) {
+      const tileEntitiesSorted = getTileEntitiesSorted(tile.entities);
+      for (const entity of tileEntitiesSorted) {
         drawEntity({
           context,
           config,
@@ -80,5 +80,17 @@ const shouldSkipTileRendering = ({ tile }: { tile: Tile }): boolean => {
     (entity) =>
       entity.type === "non-playable-non-interactive-entity" &&
       entity.kind === "off-map",
+  );
+};
+
+const orderingMap: Readonly<Record<TileEntity["type"], number>> = {
+  "non-playable-non-interactive-entity": 1,
+  "non-playable-interactive-entity": 2,
+  "playable-entity": 3,
+};
+
+const getTileEntitiesSorted = (entities: TileEntity[]) => {
+  return [...entities].sort(
+    (a, b) => orderingMap[a.type] - orderingMap[b.type],
   );
 };
