@@ -37,7 +37,15 @@ export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
       }
 
       const coord2D = tile.coord;
-      const coordIsometric = translate2DToIsometricCoord(tile.coord);
+      const coordIsometric = translate2DToIsometricCoord(tile.coord, {
+        assetSize,
+        // Beware of the offset, it may shift everything being computed here.
+        // We really want to have the tiles next to the borders of the canvas.
+        map: {
+          height: map.height * assetSize,
+          width: map.width * assetSize,
+        },
+      });
 
       drawFloor({
         context,

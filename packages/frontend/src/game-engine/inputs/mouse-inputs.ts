@@ -1,17 +1,24 @@
 import type { RefObject } from "react";
+import type { CanvasConfig } from "../utils/coords-conversion.util";
 import { handleClick } from "./mouse-events/on-click";
 
-export const useMouseInputs = (canvasRef: RefObject<HTMLCanvasElement>) => {
+export const useMouseInputs = (
+  canvasRef: RefObject<HTMLCanvasElement>,
+  canvasConfig: CanvasConfig,
+) => {
   const canvas = canvasRef.current;
 
-  const addClickEvent = () => {
+  const clickHandler = (ev: MouseEvent) => {
     if (!canvas) return;
-    canvas.addEventListener("click", (ev) => handleClick(ev, canvas));
+    handleClick({ ev, canvas, canvasConfig });
+  };
+
+  const addClickEvent = () => {
+    canvas?.addEventListener("click", clickHandler);
   };
 
   const clearMouseEvents = () => {
-    if (!canvas) return;
-    canvas.removeEventListener("click", (ev) => handleClick(ev, canvas));
+    canvas?.removeEventListener("click", clickHandler);
   };
 
   return {

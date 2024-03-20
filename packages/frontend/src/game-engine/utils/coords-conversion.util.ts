@@ -1,13 +1,21 @@
 import type { Coord } from "@dnd/shared";
 
-const w = 64;
-const h = 64;
-const ratioHW = 0.5;
-const CANVAS_WIDTH = 11 * 64;
+export type CanvasConfig = {
+  assetSize: number;
+  map: {
+    height: number;
+    width: number;
+  };
+};
 
-export const translate2DToIsometricCoord = ({ row, column }: Coord): Coord => {
-  const translatedColumn = column * ratioHW * 1 * w + row * ratioHW * -1 * w;
-  const translatedRow = column * ratioHW * 0.5 * h + row * ratioHW * 0.5 * h;
+export const translate2DToIsometricCoord = (
+  { row, column }: Coord,
+  config: CanvasConfig,
+): Coord => {
+  const translatedColumn =
+    column * 0.5 * config.assetSize + row * -0.5 * config.assetSize;
+  const translatedRow =
+    column * 0.25 * config.assetSize + row * 0.25 * config.assetSize;
 
   return {
     row: translatedRow,
@@ -15,19 +23,22 @@ export const translate2DToIsometricCoord = ({ row, column }: Coord): Coord => {
   };
 };
 
-export const translateIsometricTo2DCoord = (coord: Coord): Coord => {
+export const translateIsometricTo2DCoord = (
+  coord: Coord,
+  config: CanvasConfig,
+): Coord => {
   const translatedCoord = {
     row: coord.row,
     // on deduit l'offset en x
-    column: coord.column - CANVAS_WIDTH / 2,
+    column: coord.column - config.map.width / 2,
   };
 
   const { row, column } = translatedCoord;
 
-  const a = 0.5 * w;
-  const b = -0.5 * w;
-  const c = 0.25 * h;
-  const d = 0.25 * h;
+  const a = 0.5 * config.assetSize;
+  const b = -0.5 * config.assetSize;
+  const c = 0.25 * config.assetSize;
+  const d = 0.25 * config.assetSize;
 
   const determinant = 1 / (a * d - b * c);
   const invertedMatrix = {
