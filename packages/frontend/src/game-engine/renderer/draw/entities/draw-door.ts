@@ -1,5 +1,6 @@
 import type { Coord } from "@dnd/shared";
 import { flipVertically } from "../utils/flip-vertically.util";
+import { getElevationOffset } from "../utils/get-elevation-offset.util";
 import type { EntityDrawerParams } from "./entity-drawer-params.interface";
 
 export function drawDoor({ context, config, subject }: EntityDrawerParams) {
@@ -22,8 +23,13 @@ export function drawDoor({ context, config, subject }: EntityDrawerParams) {
   context.drawImage(
     doorAsset,
     subject.coordIsometric.column * flipOffset,
-    // TODO: faire une fonction getElevationOffset au lieu de ce calcul
-    subject.coordIsometric.row - config.assetSize / 2,
+    subject.coordIsometric.row -
+      getElevationOffset({
+        options: {
+          assetHeight: config.assetSize,
+        },
+        elevationLevel: 0.5,
+      }),
   );
 
   if (shouldFlip) {
