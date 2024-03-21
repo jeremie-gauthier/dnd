@@ -2,10 +2,12 @@ import type { GameEntity } from "@dnd/shared";
 import { useEffect, type RefObject } from "react";
 import { useMouseInputs } from ".";
 import { useMapRenderer } from "./renderer";
+import type { Strategy } from "./renderer/render-strategies";
 
 export const useGameEngine = (
   canvasRef: RefObject<HTMLCanvasElement>,
   gameEntity: GameEntity,
+  gamePhase: Strategy,
 ) => {
   const { render, assetSize } = useMapRenderer(canvasRef);
 
@@ -20,8 +22,8 @@ export const useGameEngine = (
   useEffect(() => {
     if (!render) return;
 
-    render(gameEntity.map, gameEntity.playableEntities);
-  }, [gameEntity.map, gameEntity.playableEntities, render]);
+    render(gameEntity.map, gameEntity.playableEntities, gamePhase);
+  }, [gameEntity.map, gameEntity.playableEntities, gamePhase, render]);
 
   useEffect(() => {
     if (!canvasRef.current) return;

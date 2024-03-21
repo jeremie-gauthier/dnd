@@ -4,9 +4,9 @@ import { translate2DToIsometricCoord } from "../utils/coords-conversion.util";
 import { useAssetsLoader } from "./assets-loader/assets-loader";
 import { assetCollection } from "./assets-loader/assets.config";
 import { drawBackground } from "./draw/draw-background";
-import { drawEntity } from "./draw/draw-entity";
 import { drawFloor } from "./draw/entities/draw-floor";
 import { centerIsometricDrawing } from "./draw/utils/center-isometric-drawing.util";
+import { getRenderer, type Strategy } from "./render-strategies";
 
 export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const canvas = canvasRef.current;
@@ -16,6 +16,7 @@ export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const render = (
     map: GameEntity["map"],
     playableEntities: GameEntity["playableEntities"],
+    gamePhase: Strategy,
   ) => {
     if (!canvas || !context || !assets) return;
 
@@ -57,19 +58,16 @@ export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
         },
       });
 
-      const tileEntitiesSorted = getTileEntitiesSorted(tile.entities);
-      for (const entity of tileEntitiesSorted) {
-        drawEntity({
-          context,
-          config,
-          subject: {
-            coord2D,
-            coordIsometric,
-            entity,
-          },
-          playableEntities,
-        });
-      }
+      const renderer = getRenderer(gamePhase);
+      renderer({
+        map,
+        playableEntities,
+        tile,
+        context,
+        config,
+        coord2D,
+        coordIsometric,
+      });
     }
 
     context.restore();
@@ -88,17 +86,5 @@ const shouldSkipTileRendering = ({ tile }: { tile: Tile }): boolean => {
     (entity) =>
       entity.type === "non-playable-non-interactive-entity" &&
       entity.kind === "off-map",
-  );
-};
-
-const orderingMap: Readonly<Record<TileEntity["type"], number>> = {
-  "non-playable-non-interactive-entity": 1,
-  "non-playable-interactive-entity": 2,
-  "playable-entity": 3,
-};
-
-const getTileEntitiesSorted = (entities: TileEntity[]) => {
-  return [...entities].sort(
-    (a, b) => orderingMap[a.type] - orderingMap[b.type],
   );
 };

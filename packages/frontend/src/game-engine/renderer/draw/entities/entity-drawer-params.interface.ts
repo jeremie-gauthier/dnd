@@ -1,14 +1,7 @@
 import type { Coord, GameEntity, TileEntity } from "@dnd/shared";
-import type { AssetsLoaded } from "../../assets-loader/assets-loader";
-import type { assetCollection } from "../../assets-loader/assets.config";
+import type { DrawerParams } from "../drawer-params.interface";
 
-export type EntityDrawerParams = {
-  context: CanvasRenderingContext2D;
-  config: {
-    assets: AssetsLoaded<typeof assetCollection>;
-    assetSize: number;
-    map: GameEntity["map"];
-  };
+export type EntityDrawerParams = DrawerParams & {
   subject: {
     coord2D: Coord;
     coordIsometric: Coord;
