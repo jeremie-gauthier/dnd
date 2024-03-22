@@ -1,15 +1,19 @@
-import { User, useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-import { LobbyEntity, ServerLobbyEvent } from "@dnd/shared";
-import { FileRoute } from "@tanstack/react-router";
+import {
+  useAuth0,
+  withAuthenticationRequired,
+  type User,
+} from "@auth0/auth0-react";
+import { ServerLobbyEvent, type LobbyEntity } from "@dnd/shared";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Lobby } from "../../components/lobbies/Lobby";
 import {
   GET_LOBBY_QUERY_KEY,
-  GetLobbyResponse,
   useGetLobby,
+  type GetLobbyResponse,
 } from "../../hooks/api/lobby/get-lobby";
 
-export const Route = new FileRoute("/_ws/lobby/$lobbyId").createRoute({
+export const Route = createFileRoute("/_ws/lobby/$lobbyId")({
   component: withAuthenticationRequired(MenuRouteComponent),
 });
 

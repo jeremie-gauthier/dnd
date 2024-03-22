@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { LOBBIES_ROOM } from "src/lobby/constants";
-import { ServerSocket } from "src/types/socket.type";
-import { UseCase } from "src/types/use-case.interface";
+import type { ServerSocket } from "src/types/socket.type";
+import type { UseCase } from "src/types/use-case.interface";
 
 @Injectable()
 export class ListenLobbiesChangesUseCase implements UseCase {

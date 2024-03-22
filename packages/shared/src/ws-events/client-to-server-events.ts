@@ -1,7 +1,7 @@
-import { LobbyEntity } from "../lobby/lobby.interface";
+import type { LobbyEntity } from "../database/lobby/lobby.interface";
 import { ClientGameEvent } from "./game-events/game-events.client";
 import { ClientLobbyEvent } from "./lobby-events/lobby-events.client";
-import { EventsMapper } from "./utils.type";
+import type { EventsMapper } from "./utils.type";
 
 interface ClientToServerEventsAndPayloads
   extends Record<string, (...parameters: any[]) => any> {

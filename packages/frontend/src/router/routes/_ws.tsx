@@ -1,7 +1,7 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
-import { FileRoute, Outlet } from "@tanstack/react-router";
+import { Outlet, createFileRoute } from "@tanstack/react-router";
 
-export const Route = new FileRoute("/_ws").createRoute({
+export const Route = createFileRoute("/_ws")({
   beforeLoad: ({ context }) => {
     return new Promise((resolve, reject) => {
       if (context.socket.connected) {

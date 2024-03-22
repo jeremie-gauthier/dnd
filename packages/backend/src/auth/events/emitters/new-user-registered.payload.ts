@@ -1,4 +1,4 @@
-import { EventPayload } from "src/event-emitter/event-payload.class";
+import type { EventPayload } from "src/event-emitter/event-payload.class";
 import { AuthEvent } from "./auth-events.enum";
 
 export class NewUserRegisteredPayload

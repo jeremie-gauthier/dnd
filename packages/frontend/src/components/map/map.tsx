@@ -1,4 +1,4 @@
-import { GameEntity } from "@dnd/shared";
+import type { GameEntity } from "@dnd/shared";
 import { useEffect, useRef } from "react";
 import { Canvas } from "../canvas/canvas";
 

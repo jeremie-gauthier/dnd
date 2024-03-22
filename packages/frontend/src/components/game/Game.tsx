@@ -1,0 +1,30 @@
+import type { GameEntity } from "@dnd/shared";
+import { useRef } from "react";
+import { useGameEngine } from "../../game-engine";
+import type { Strategy } from "../../game-engine/renderer/render-strategies";
+import { Canvas } from "../canvas/canvas";
+import { useCanvasSize } from "./useCanvasSize";
+
+type Props = {
+  game: GameEntity;
+};
+
+export const Game = ({ game }: Props) => {
+  const ref = useRef<HTMLCanvasElement>(null);
+
+  const gamePhase: Strategy = "preparation";
+  const { assetSize } = useGameEngine(ref, game, gamePhase);
+
+  const { width, height } = useCanvasSize({
+    mapWidth: game.map.width,
+    mapHeight: game.map.height,
+    assetSize,
+  });
+
+  return (
+    <div className="flex items-center w-full">
+      <p>Game ID: {game.id}</p>
+      <Canvas ref={ref} height={height} width={width} />
+    </div>
+  );
+};

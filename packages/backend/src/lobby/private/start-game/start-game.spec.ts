@@ -1,4 +1,4 @@
-import { LobbyEntity, LobbyEntityStatus } from "@dnd/shared";
+import { type LobbyEntity, LobbyEntityStatus } from "@dnd/shared";
 import { ForbiddenException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
@@ -7,7 +7,7 @@ import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.pay
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import type { MessageContext } from "src/types/socket.type";
 import {
-  MockInstance,
+  type MockInstance,
   afterEach,
   beforeEach,
   describe,

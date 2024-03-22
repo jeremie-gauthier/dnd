@@ -1,4 +1,4 @@
-import { Auth0ContextInterface, User } from "@auth0/auth0-react";
+import type { Auth0ContextInterface, User } from "@auth0/auth0-react";
 import { QueryClient } from "@tanstack/react-query";
 
 export const queryClient = new QueryClient();

@@ -1,3 +1,1 @@
-export * from "./game";
-export * from "./lobby";
-export * from "./ws-events";
+export * from "./non-negative-number.type";

@@ -1,7 +1,7 @@
-import { LobbyEntity } from "@dnd/shared";
-import { User } from "src/database/entities/user.entity";
-import { EventPayload } from "src/event-emitter/event-payload.class";
-import { MessageContext } from "src/types/socket.type";
+import type { LobbyEntity } from "@dnd/shared";
+import type { User } from "src/database/entities/user.entity";
+import type { EventPayload } from "src/event-emitter/event-payload.class";
+import type { MessageContext } from "src/types/socket.type";
 import { LobbyEvent } from "./lobby-events.enum";
 
 export class UserForceLeftLobbyPayload

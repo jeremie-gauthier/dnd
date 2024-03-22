@@ -1,5 +1,5 @@
-import { ClientToServerEvents, ServerToClientEvents } from "@dnd/shared";
-import { Server, Socket } from "socket.io";
+import type { ClientToServerEvents, ServerToClientEvents } from "@dnd/shared";
+import type { Server, Socket } from "socket.io";
 
 export type WsServer = Server<
   ClientToServerEvents,

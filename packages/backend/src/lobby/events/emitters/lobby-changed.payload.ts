@@ -1,5 +1,5 @@
 import type { LobbyEntity } from "@dnd/shared";
-import { EventPayload } from "src/event-emitter/event-payload.class";
+import type { EventPayload } from "src/event-emitter/event-payload.class";
 import type { MessageContext } from "src/types/socket.type";
 import { LobbyEvent } from "./lobby-events.enum";
 

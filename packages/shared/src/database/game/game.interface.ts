@@ -1,14 +1,12 @@
-import { HeroClassType } from "../../database/enums/hero-class.enum";
+import type { HeroClassType } from "../enums/hero-class.enum";
+import type { EnemyKind } from "./enemy-kind.type";
 
-export type PlayableEntity = {
+type BasePlayableEntity = {
   id: string;
-  type: "hero" | "enemy";
 
   playedByUserId: string;
 
   name: string;
-  class: HeroClassType;
-  level: number;
 
   initiative: number;
   coord: Coord;
@@ -29,6 +27,19 @@ export type PlayableEntity = {
   baseActionPoints: number;
   actionPoints: number;
 };
+
+export type PlayableEnemyEntity = BasePlayableEntity & {
+  type: "enemy";
+  kind: EnemyKind;
+};
+
+export type PlayableHeroEntity = BasePlayableEntity & {
+  type: "hero";
+  class: HeroClassType;
+  level: number;
+};
+
+export type PlayableEntity = PlayableEnemyEntity | PlayableHeroEntity;
 
 export type TilePlayableEntity = {
   type: "playable-entity";

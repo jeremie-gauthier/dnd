@@ -2,8 +2,8 @@ import { LobbyEntityStatus, ServerLobbyEvent } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
-import { GameInitializationDonePayload } from "src/game/events/emitters/game-initialization-done.payload";
-import { GameInitializationDoneRepository } from "./game-initialization-done.repository";
+import type { GameInitializationDonePayload } from "src/game/events/emitters/game-initialization-done.payload";
+import type { GameInitializationDoneRepository } from "./game-initialization-done.repository";
 
 @Injectable()
 export class GameInitializationDoneListener {

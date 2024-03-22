@@ -1,19 +1,19 @@
-import { ChangePositionInput, Coord, GameEntity } from "@dnd/shared";
+import type { ChangePositionInput, Coord, GameEntity } from "@dnd/shared";
 import {
   BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { EventEmitter2 } from "@nestjs/event-emitter";
-import { Hero } from "src/database/entities/hero.entity";
-import { User } from "src/database/entities/user.entity";
+import type { EventEmitter2 } from "@nestjs/event-emitter";
+import type { Hero } from "src/database/entities/hero.entity";
+import type { User } from "src/database/entities/user.entity";
 import { GameChangedPayload } from "src/game/events/emitters/game-changed.payload";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import { translateCoordToIndex } from "src/game/map/utils/translate-coord-to-index.util";
-import { MessageContext } from "src/types/socket.type";
-import { UseCase } from "src/types/use-case.interface";
-import { ChangePositionRepository } from "./change-position.repository";
+import type { MessageContext } from "src/types/socket.type";
+import type { UseCase } from "src/types/use-case.interface";
+import type { ChangePositionRepository } from "./change-position.repository";
 
 @Injectable()
 export class ChangePositionUseCase implements UseCase {

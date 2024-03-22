@@ -1,5 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { UseQueryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { type UseQueryOptions, useSuspenseQuery } from "@tanstack/react-query";
 
 export const useAuthenticatedSuspenseQuery = <
   TQueryKey extends [string, Record<string, unknown>?],

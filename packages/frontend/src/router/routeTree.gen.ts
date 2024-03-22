@@ -10,94 +10,104 @@
 
 // Import Routes
 
-import { Route as rootRoute } from "./routes/__root";
-import { Route as ProfileImport } from "./routes/profile";
-import { Route as MenuImport } from "./routes/menu";
-import { Route as LoginImport } from "./routes/login";
-import { Route as WsImport } from "./routes/_ws";
-import { Route as WsMenuMultiplayerImport } from "./routes/_ws.menu-multiplayer";
-import { Route as WsLobbiesImport } from "./routes/_ws.lobbies";
-import { Route as WsCreateLobbyImport } from "./routes/_ws.create-lobby";
-import { Route as WsLobbyLobbyIdImport } from "./routes/_ws.lobby.$lobbyId";
+import { Route as rootRoute } from './routes/__root'
+import { Route as ProfileImport } from './routes/profile'
+import { Route as MenuImport } from './routes/menu'
+import { Route as LoginImport } from './routes/login'
+import { Route as GameImport } from './routes/game'
+import { Route as WsImport } from './routes/_ws'
+import { Route as WsMenuMultiplayerImport } from './routes/_ws.menu-multiplayer'
+import { Route as WsLobbiesImport } from './routes/_ws.lobbies'
+import { Route as WsCreateLobbyImport } from './routes/_ws.create-lobby'
+import { Route as WsLobbyLobbyIdImport } from './routes/_ws.lobby.$lobbyId'
 
 // Create/Update Routes
 
 const ProfileRoute = ProfileImport.update({
-  path: "/profile",
+  path: '/profile',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const MenuRoute = MenuImport.update({
-  path: "/menu",
+  path: '/menu',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const LoginRoute = LoginImport.update({
-  path: "/login",
+  path: '/login',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
+
+const GameRoute = GameImport.update({
+  path: '/game',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const WsRoute = WsImport.update({
-  id: "/_ws",
+  id: '/_ws',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const WsMenuMultiplayerRoute = WsMenuMultiplayerImport.update({
-  path: "/menu-multiplayer",
+  path: '/menu-multiplayer',
   getParentRoute: () => WsRoute,
-} as any);
+} as any)
 
 const WsLobbiesRoute = WsLobbiesImport.update({
-  path: "/lobbies",
+  path: '/lobbies',
   getParentRoute: () => WsRoute,
-} as any);
+} as any)
 
 const WsCreateLobbyRoute = WsCreateLobbyImport.update({
-  path: "/create-lobby",
+  path: '/create-lobby',
   getParentRoute: () => WsRoute,
-} as any);
+} as any)
 
 const WsLobbyLobbyIdRoute = WsLobbyLobbyIdImport.update({
-  path: "/lobby/$lobbyId",
+  path: '/lobby/$lobbyId',
   getParentRoute: () => WsRoute,
-} as any);
+} as any)
 
 // Populate the FileRoutesByPath interface
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/_ws": {
-      preLoaderRoute: typeof WsImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/login": {
-      preLoaderRoute: typeof LoginImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/menu": {
-      preLoaderRoute: typeof MenuImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/profile": {
-      preLoaderRoute: typeof ProfileImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/_ws/create-lobby": {
-      preLoaderRoute: typeof WsCreateLobbyImport;
-      parentRoute: typeof WsImport;
-    };
-    "/_ws/lobbies": {
-      preLoaderRoute: typeof WsLobbiesImport;
-      parentRoute: typeof WsImport;
-    };
-    "/_ws/menu-multiplayer": {
-      preLoaderRoute: typeof WsMenuMultiplayerImport;
-      parentRoute: typeof WsImport;
-    };
-    "/_ws/lobby/$lobbyId": {
-      preLoaderRoute: typeof WsLobbyLobbyIdImport;
-      parentRoute: typeof WsImport;
-    };
+    '/_ws': {
+      preLoaderRoute: typeof WsImport
+      parentRoute: typeof rootRoute
+    }
+    '/game': {
+      preLoaderRoute: typeof GameImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/menu': {
+      preLoaderRoute: typeof MenuImport
+      parentRoute: typeof rootRoute
+    }
+    '/profile': {
+      preLoaderRoute: typeof ProfileImport
+      parentRoute: typeof rootRoute
+    }
+    '/_ws/create-lobby': {
+      preLoaderRoute: typeof WsCreateLobbyImport
+      parentRoute: typeof WsImport
+    }
+    '/_ws/lobbies': {
+      preLoaderRoute: typeof WsLobbiesImport
+      parentRoute: typeof WsImport
+    }
+    '/_ws/menu-multiplayer': {
+      preLoaderRoute: typeof WsMenuMultiplayerImport
+      parentRoute: typeof WsImport
+    }
+    '/_ws/lobby/$lobbyId': {
+      preLoaderRoute: typeof WsLobbyLobbyIdImport
+      parentRoute: typeof WsImport
+    }
   }
 }
 
@@ -110,9 +120,10 @@ export const routeTree = rootRoute.addChildren([
     WsMenuMultiplayerRoute,
     WsLobbyLobbyIdRoute,
   ]),
+  GameRoute,
   LoginRoute,
   MenuRoute,
   ProfileRoute,
-]);
+])
 
 /* prettier-ignore-end */

@@ -7,7 +7,7 @@ import { CampaignProgressionStatus } from "src/database/enums/campaign-progressi
 import { CampaignStageProgressionStatus } from "src/database/enums/campaign-stage-progression-status.enum";
 import { CampaignStageStatus } from "src/database/enums/campaign-stage-status.enum";
 import { CampaignStatus } from "src/database/enums/campaign-status.enum";
-import { Repository } from "typeorm";
+import type { Repository } from "typeorm";
 
 @Injectable()
 export class NewCampaignStartedRepository {

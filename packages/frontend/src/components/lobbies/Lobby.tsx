@@ -1,8 +1,8 @@
-import { User } from "@auth0/auth0-react";
+import type { User } from "@auth0/auth0-react";
 import { ClientLobbyEvent } from "@dnd/shared";
 import { useNavigate } from "@tanstack/react-router";
-import { GetLobbyResponse } from "../../hooks/api/lobby/get-lobby";
-import { ClientSocket } from "../../types/socket.type";
+import type { GetLobbyResponse } from "../../hooks/api/lobby/get-lobby";
+import type { ClientSocket } from "../../types/socket.type";
 
 type Props = {
   user: User;

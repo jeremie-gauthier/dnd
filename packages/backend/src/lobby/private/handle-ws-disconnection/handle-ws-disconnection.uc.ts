@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { EventEmitter2 } from "@nestjs/event-emitter";
+import type { EventEmitter2 } from "@nestjs/event-emitter";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import { UserForceLeftLobbyPayload } from "src/lobby/events/emitters/user-force-left-lobby.payload";
-import { MessageContext, ServerSocket } from "src/types/socket.type";
-import { UseCase } from "src/types/use-case.interface";
-import { HandleWsDisconnectionRepository } from "./handle-ws-disconnection.repository";
+import type { MessageContext, ServerSocket } from "src/types/socket.type";
+import type { UseCase } from "src/types/use-case.interface";
+import type { HandleWsDisconnectionRepository } from "./handle-ws-disconnection.repository";
 
 @Injectable()
 export class HandleWsDisconnectionUseCase implements UseCase {

@@ -1,7 +1,7 @@
 import { ClientLobbyEvent } from "@dnd/shared";
 import { useNavigate } from "@tanstack/react-router";
-import { GetLobbiesResponse } from "../../../hooks/api/lobby/get-lobbies";
-import { ClientSocket } from "../../../types/socket.type";
+import type { GetLobbiesResponse } from "../../../hooks/api/lobby/get-lobbies";
+import type { ClientSocket } from "../../../types/socket.type";
 
 type Props = {
   lobbies: GetLobbiesResponse;
