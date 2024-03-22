@@ -15,26 +15,26 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@dnd/shared": "file:../shared",
-    "@tanstack/react-form": "^0.14.0",
-    "@tanstack/react-query": "^5.28.4",
-    "@tanstack/react-router": "^1.20.1",
-    "@tanstack/router-cli": "^1.20.0",
-    "@tanstack/zod-form-adapter": "^0.14.0",
+    "@tanstack/react-form": "^0.16.0",
+    "@tanstack/react-query": "^5.28.6",
+    "@tanstack/react-router": "^1.22.2",
+    "@tanstack/router-cli": "^1.20.5",
+    "@tanstack/zod-form-adapter": "^0.16.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "socket.io-client": "^4.7.5",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.6.1",
-    "@tanstack/react-query-devtools": "^5.28.4",
-    "@tanstack/router-devtools": "^1.20.1",
-    "@types/react": "^18.2.66",
+    "@biomejs/biome": "^1.6.2",
+    "@tanstack/react-query-devtools": "^5.28.6",
+    "@tanstack/router-devtools": "^1.22.2",
+    "@types/react": "^18.2.69",
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-basic-ssl": "^1.1.0",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "concurrently": "^8.2.2",
-    "typescript": "^5.4.2",
-    "vite": "^5.1.6"
+    "typescript": "^5.4.3",
+    "vite": "^5.2.3"
   }
 }

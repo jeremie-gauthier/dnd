@@ -14,8 +14,8 @@
     "publish": "sh ../../scripts/publish-shared.sh"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.6.1",
-    "typescript": "^5.4.2"
+    "@biomejs/biome": "^1.6.2",
+    "typescript": "^5.4.3"
   },
   "dependencies": {
     "zod": "^3.22.4"
