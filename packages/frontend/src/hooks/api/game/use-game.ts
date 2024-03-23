@@ -1,7 +1,6 @@
 import {
   PlayerGamePhase,
   ServerGameEvent,
-  ServerLobbyEvent,
   ServerToClientEvents,
   type GameEntity,
 } from "@dnd/shared";
@@ -14,13 +13,6 @@ export const useGame = (socket: ClientSocket) => {
   const [phase, setPhase] = useState<PlayerGamePhase>("idle");
 
   useEffect(() => {
-    const errorHandler = (payload: { name: string; message: string }) => {
-      // TODO: send a toast message instead
-      console.log(payload);
-    };
-
-    socket.on(ServerLobbyEvent.Error, errorHandler);
-
     const handleGameChanges: ServerToClientEvents["server.game.changes_detected"] =
       ({ game, phase }) => {
         setGame(game);
@@ -30,7 +22,6 @@ export const useGame = (socket: ClientSocket) => {
     socket.on(ServerGameEvent.GameChangesDetected, handleGameChanges);
 
     return () => {
-      socket.removeListener(ServerLobbyEvent.Error, errorHandler);
       socket.removeListener(
         ServerGameEvent.GameChangesDetected,
         handleGameChanges,
