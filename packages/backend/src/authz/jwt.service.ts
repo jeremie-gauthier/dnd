@@ -10,7 +10,7 @@ export class JwtService {
   private readonly client: jwksClient.JwksClient;
 
   constructor(readonly configService: ConfigService<EnvSchema>) {
-    const auth0Issuer = configService.getOrThrow<string>("AUTH0_AUDIENCE");
+    const auth0Issuer = configService.getOrThrow<string>("AUTH0_ISSUER");
 
     this.client = jwksClient({
       jwksUri: `${auth0Issuer}.well-known/jwks.json`,
