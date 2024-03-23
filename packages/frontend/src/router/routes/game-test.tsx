@@ -3,11 +3,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Game } from "../../components/game/Game";
 import { useMap } from "../../components/map/hooks/useMap.hook";
 
-export const Route = createFileRoute("/game")({
-  component: withAuthenticationRequired(GameRouteComponent),
+export const Route = createFileRoute("/game-test")({
+  component: withAuthenticationRequired(GameTestRouteComponent),
 });
 
-export function GameRouteComponent() {
+export function GameTestRouteComponent() {
   const map = useMap();
   const mockGame = {
     id: "mock-game-id",

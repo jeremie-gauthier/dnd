@@ -14,7 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as ProfileImport } from './routes/profile'
 import { Route as MenuImport } from './routes/menu'
 import { Route as LoginImport } from './routes/login'
-import { Route as GameImport } from './routes/game'
+import { Route as GameTestImport } from './routes/game-test'
 import { Route as WsImport } from './routes/_ws'
 import { Route as WsMenuMultiplayerImport } from './routes/_ws.menu-multiplayer'
 import { Route as WsLobbiesImport } from './routes/_ws.lobbies'
@@ -38,8 +38,8 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const GameRoute = GameImport.update({
-  path: '/game',
+const GameTestRoute = GameTestImport.update({
+  path: '/game-test',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -76,8 +76,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WsImport
       parentRoute: typeof rootRoute
     }
-    '/game': {
-      preLoaderRoute: typeof GameImport
+    '/game-test': {
+      preLoaderRoute: typeof GameTestImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -120,7 +120,7 @@ export const routeTree = rootRoute.addChildren([
     WsMenuMultiplayerRoute,
     WsLobbyLobbyIdRoute,
   ]),
-  GameRoute,
+  GameTestRoute,
   LoginRoute,
   MenuRoute,
   ProfileRoute,
