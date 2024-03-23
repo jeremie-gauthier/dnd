@@ -3,6 +3,8 @@ import { GameChangedListener } from "./events/listeners/game-changed/game-change
 import { GameChangedRepository } from "./events/listeners/game-changed/game-changed.repository";
 import { GameInitializationListener } from "./events/listeners/game-initialization/game-initialization.listener";
 import { GameInitializationRepository } from "./events/listeners/game-initialization/game-initialization.repository";
+import { GamePreparationPhaseListener } from "./events/listeners/game-preparation-phase/game-preparation-phase.listener";
+import { GamePreparationPhaseRepository } from "./events/listeners/game-preparation-phase/game-preparation-phase.repository";
 import { MapModule } from "./map/map.module";
 import { StartingModule } from "./starting/starting.module";
 
@@ -13,6 +15,8 @@ import { StartingModule } from "./starting/starting.module";
     GameChangedRepository,
     GameInitializationListener,
     GameInitializationRepository,
+    GamePreparationPhaseListener,
+    GamePreparationPhaseRepository,
   ],
 })
 export class GameModule {}

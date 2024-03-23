@@ -7,6 +7,7 @@ producers:
   - Game Initialization Listener
 consumers:
   - Game Initialization Done Listener
+  - Game Preparation Phase Listener
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />
