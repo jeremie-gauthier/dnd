@@ -1,5 +1,5 @@
 import type { z } from "zod";
-import type { GameEntity } from "../database/game";
+import type { GameEntity, PlayableEntity } from "../database/game";
 import type { PlayerGamePhase } from "../database/game/player-phase.type";
 import type { LobbyEntity } from "../database/lobby";
 import type { getLobbiesOutputSchema } from "../schemas";
@@ -27,10 +27,19 @@ interface ServerToClientEventsAndPayloads
     game: GameEntity;
   }) => void;
   [ServerGameEvent.GameStart]: () => void;
-  [ServerGameEvent.GameChangesDetected]: (payload: {
-    phase: PlayerGamePhase;
-    game: GameEntity;
-  }) => void;
+  [ServerGameEvent.GameChangesDetected]: (
+    payload:
+      | {
+          game: GameEntity<"prepare_for_battle">;
+          playerPhase: PlayerGamePhase;
+        }
+      | {
+          game: GameEntity<"battle_ongoing">;
+          playerPhase: PlayerGamePhase;
+          userIdTurn: PlayableEntity["playedByUserId"];
+          entityIdTurn: PlayableEntity["id"];
+        },
+  ) => void;
 }
 
 export type ServerToClientEvents =

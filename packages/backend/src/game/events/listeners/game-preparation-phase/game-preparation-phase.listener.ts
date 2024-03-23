@@ -18,6 +18,7 @@ export class GamePreparationPhaseListener {
   @OnEvent(GameEvent.GameInitializationDone)
   public async handler({ game, ctx, lobbyId }: GameInitializationDonePayload) {
     this.randomlyPlaceHeroesOnStartingTiles(game);
+    this.setPlayerGamePhase(game);
     await this.repository.saveGame(game);
 
     this.eventEmitter.emitAsync(
@@ -49,5 +50,12 @@ export class GamePreparationPhaseListener {
     }
 
     return firstFreeStartingTile;
+  }
+
+  private setPlayerGamePhase(game: GameEntity): void {
+    const playableEntities = Object.values(game.playableEntities);
+    for (const playableEntity of playableEntities) {
+      playableEntity.currentPhase = "preparation";
+    }
   }
 }

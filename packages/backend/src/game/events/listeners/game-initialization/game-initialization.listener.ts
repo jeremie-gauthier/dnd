@@ -57,6 +57,7 @@ export class GameInitializationListener {
 
     const game = await this.repository.saveGame({
       id: lobby.id,
+      status: "prepare_for_battle",
       map,
       playableEntities,
       timeline: [],
@@ -83,6 +84,7 @@ export class GameInitializationListener {
         {
           id: hero.id,
           type: "hero",
+          currentPhase: "preparation",
           playedByUserId: heroPlayersMap[hero.id]!,
           name: hero.name,
           class: hero.class,

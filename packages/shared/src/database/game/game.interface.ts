@@ -89,8 +89,11 @@ export type Map = {
   tiles: Tile[];
 };
 
-export type GameEntity = {
+export type GameStatus = "prepare_for_battle" | "battle_ongoing";
+
+export type GameEntity<TGameStatus extends GameStatus = GameStatus> = {
   id: string;
+  status: TGameStatus;
   map: Map;
   playableEntities: Record<PlayableEntity["id"], PlayableEntity>;
   timeline: PlayableEntity["id"][];

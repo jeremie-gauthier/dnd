@@ -2,8 +2,7 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import { RedisModule } from "src/redis/redis.module";
-import { GameChangedListener } from "./events/listeners/game-changed/game-changed.listener";
-import { GameChangedRepository } from "./events/listeners/game-changed/game-changed.repository";
+import { GameChangesListener } from "./events/listeners/game-changes/game-changes.listener";
 import { GameInitializationListener } from "./events/listeners/game-initialization/game-initialization.listener";
 import { GameInitializationRepository } from "./events/listeners/game-initialization/game-initialization.repository";
 import { GamePreparationPhaseListener } from "./events/listeners/game-preparation-phase/game-preparation-phase.listener";
@@ -21,8 +20,7 @@ import { StartingModule } from "./starting/starting.module";
     TypeOrmModule.forFeature([CampaignStageProgression]),
   ],
   providers: [
-    GameChangedListener,
-    GameChangedRepository,
+    GameChangesListener,
     GameInitializationListener,
     GameInitializationRepository,
     GamePreparationPhaseListener,

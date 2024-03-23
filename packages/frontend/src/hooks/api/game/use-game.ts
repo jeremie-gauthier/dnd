@@ -14,9 +14,9 @@ export const useGame = (socket: ClientSocket) => {
 
   useEffect(() => {
     const handleGameChanges: ServerToClientEvents["server.game.changes_detected"] =
-      ({ game, phase }) => {
-        setGame(game);
-        setPhase(phase);
+      (payload) => {
+        setGame(payload.game);
+        setPhase(payload.playerPhase);
       };
 
     socket.on(ServerGameEvent.GameChangesDetected, handleGameChanges);
