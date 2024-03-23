@@ -1,7 +1,7 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Game } from "../../components/game/Game";
-import { useGame } from "../../hooks/api/game/useGame";
+import { useGame } from "../../hooks/api/game/use-game";
 
 export const Route = createFileRoute("/_ws/lobby/$lobbyId/game")({
   component: withAuthenticationRequired(GameRouteComponent),
