@@ -1,5 +1,6 @@
 import type { z } from "zod";
 import type { GameEntity } from "../database/game";
+import type { PlayerGamePhase } from "../database/game/player-phase.type";
 import type { LobbyEntity } from "../database/lobby";
 import type { getLobbiesOutputSchema } from "../schemas";
 import { ServerGameEvent } from "./game-events/game-events.server";
@@ -27,6 +28,7 @@ interface ServerToClientEventsAndPayloads
   }) => void;
   [ServerGameEvent.GameStart]: () => void;
   [ServerGameEvent.GameChangesDetected]: (payload: {
+    phase: PlayerGamePhase;
     game: GameEntity;
   }) => void;
 }

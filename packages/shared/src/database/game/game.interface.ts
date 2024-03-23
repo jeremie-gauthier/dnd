@@ -1,7 +1,12 @@
 import type { HeroClassType } from "../enums/hero-class.enum";
 import type { EnemyKind } from "./enemy-kind.type";
+import type { PlayerGamePhase } from "./player-phase.type";
 
-type BasePlayableEntity = {
+type Player = {
+  currentPhase: PlayerGamePhase;
+};
+
+type BasePlayableEntity = Player & {
   id: string;
 
   playedByUserId: string;
