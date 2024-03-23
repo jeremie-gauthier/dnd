@@ -1,5 +1,5 @@
 import { ServerLobbyEvent } from "@dnd/shared";
-import { type ArgumentsHost, Catch, HttpException } from "@nestjs/common";
+import { Catch, HttpException, type ArgumentsHost } from "@nestjs/common";
 import { WsException } from "@nestjs/websockets";
 import type { Socket } from "socket.io";
 
@@ -7,10 +7,10 @@ import type { Socket } from "socket.io";
 export class WsExceptionFilter {
   public catch(exception: HttpException, host: ArgumentsHost) {
     const client = host.switchToWs().getClient();
-    this.handleError(client, exception);
+    this.sendErrorMsg(client, exception);
   }
 
-  public handleError(client: Socket, exception: HttpException | WsException) {
+  private sendErrorMsg(client: Socket, exception: HttpException | WsException) {
     client.emit(ServerLobbyEvent.Error, {
       name: exception.name,
       message: exception.message,
