@@ -1,8 +1,8 @@
 import type { LobbyEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import type { User } from "src/database/entities/user.entity";
-import type { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
-import type { UsersRepository } from "src/redis/repositories/users.repository";
+import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
+import { UsersRepository } from "src/redis/repositories/users.repository";
 
 @Injectable()
 export class LeaveLobbyRepository {

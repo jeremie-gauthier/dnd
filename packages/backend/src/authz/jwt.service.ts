@@ -1,15 +1,16 @@
 import { Injectable } from "@nestjs/common";
-import type { ConfigService } from "@nestjs/config";
+import { ConfigService } from "@nestjs/config";
 import jwt from "jsonwebtoken";
 import jwksClient from "jwks-rsa";
+import type { EnvSchema } from "src/config/env.config";
 import type { AuthToken } from "./auth-token.interface";
 
 @Injectable()
 export class JwtService {
   private readonly client: jwksClient.JwksClient;
 
-  constructor(readonly configService: ConfigService) {
-    const auth0Issuer = configService.getOrThrow("AUTH0_ISSUER");
+  constructor(readonly configService: ConfigService<EnvSchema>) {
+    const auth0Issuer = configService.getOrThrow<string>("AUTH0_AUDIENCE");
 
     this.client = jwksClient({
       jwksUri: `${auth0Issuer}.well-known/jwks.json`,

@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
-import type { EventEmitter2 } from "@nestjs/event-emitter";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { User } from "src/database/entities/user.entity";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import { UserLeftLobbyPayload } from "src/lobby/events/emitters/user-left-lobby.payload";
 import type { MessageContext } from "src/types/socket.type";
 import type { UseCase } from "src/types/use-case.interface";
-import type { LeaveLobbyRepository } from "./leave-lobby.repository";
+import { LeaveLobbyRepository } from "./leave-lobby.repository";
 
 @Injectable()
 export class LeaveLobbyUseCase implements UseCase {

@@ -3,7 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import type { Campaign } from "src/database/entities/campaign.entity";
-import type { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
+import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
 import type { Repository } from "typeorm";
 
 @Injectable()

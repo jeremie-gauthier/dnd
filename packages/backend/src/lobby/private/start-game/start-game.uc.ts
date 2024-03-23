@@ -1,10 +1,10 @@
-import { type LobbyEntity, LobbyEntityStatus } from "@dnd/shared";
+import { LobbyEntityStatus, type LobbyEntity } from "@dnd/shared";
 import {
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import type { EventEmitter2 } from "@nestjs/event-emitter";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { User } from "src/database/entities/user.entity";
 import { HostRequestedGameStartPayload } from "src/lobby/events/emitters/host-requested-game-start.payload";
 import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.payload";
@@ -12,7 +12,7 @@ import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import type { MessageContext } from "src/types/socket.type";
 import type { UseCase } from "src/types/use-case.interface";
 import type { StartGameInputDto } from "./start-game.dto";
-import type { StartGameRepository } from "./start-game.repository";
+import { StartGameRepository } from "./start-game.repository";
 
 @Injectable()
 export class StartGameUseCase implements UseCase {

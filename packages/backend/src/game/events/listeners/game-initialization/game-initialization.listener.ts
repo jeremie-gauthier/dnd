@@ -1,14 +1,14 @@
 import type { GameEntity, LobbyEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import { type EventEmitter2, OnEvent } from "@nestjs/event-emitter";
+import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
-import type { MapSerializerService } from "src/game/map/map-serializer/map-serializer.service";
+import { MapSerializerService } from "src/game/map/map-serializer/map-serializer.service";
 import type { HostRequestedGameStartPayload } from "src/lobby/events/emitters/host-requested-game-start.payload";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import { GameEvent } from "../../emitters/game-events.enum";
 import { GameInitializationDonePayload } from "../../emitters/game-initialization-done.payload";
 import { GameInitializationStartedPayload } from "../../emitters/game-initialization-started.payload";
-import type { GameInitializationRepository } from "./game-initialization.repository";
+import { GameInitializationRepository } from "./game-initialization.repository";
 
 @Injectable()
 export class GameInitializationListener {

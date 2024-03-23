@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import type { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
+import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
 
 @Injectable()
 export class GetLobbiesRepository {

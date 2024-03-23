@@ -1,7 +1,7 @@
 import type { LobbyEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import type { User } from "src/database/entities/user.entity";
-import type { RedisService } from "../redis.service";
+import { RedisService } from "../redis.service";
 
 type UsersKey = Record<User["id"], LobbyEntity["id"]>;
 

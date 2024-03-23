@@ -2,7 +2,7 @@ import { Controller, Get, UseGuards } from "@nestjs/common";
 import type { Request } from "express";
 import { JWTAuthGuard } from "src/authz/jwt-auth.guard";
 import { JWTUser } from "src/authz/jwt-user.decorator";
-import type { UserConnectionUseCase } from "./user-connection/user-connection.uc";
+import { UserConnectionUseCase } from "./user-connection/user-connection.uc";
 
 @UseGuards(JWTAuthGuard)
 @Controller("auth/private")

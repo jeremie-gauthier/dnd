@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
 import { CampaignEvent } from "../../emitters/campaign-events.enum";
 import type { UnlockCampaignForUserPayload } from "../../emitters/unlock-campaign-for-user.payload";
-import type { CreateCampaignForUserRepository } from "./create-campaign-for-user.repository";
+import { CreateCampaignForUserRepository } from "./create-campaign-for-user.repository";
 
 @Injectable()
 export class CreateCampaignForUserListener {

@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { type EventEmitter2, OnEvent } from "@nestjs/event-emitter";
+import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
 import { AuthEvent } from "src/auth/events/emitters/auth-events.enum";
 import type { NewUserRegisteredPayload } from "src/auth/events/emitters/new-user-registered.payload";
 import { NewUserCreatedPayload } from "../../emitters/new-user-created.payload";
 import { UserEvent } from "../../emitters/user-events.enum";
-import type { NewUserRegisteredRepository } from "./new-user-registered.repository";
+import { NewUserRegisteredRepository } from "./new-user-registered.repository";
 
 @Injectable()
 export class NewUserRegisteredListener {

@@ -3,7 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import type { GameInitializationDonePayload } from "src/game/events/emitters/game-initialization-done.payload";
-import type { GameInitializationDoneRepository } from "./game-initialization-done.repository";
+import { GameInitializationDoneRepository } from "./game-initialization-done.repository";
 
 @Injectable()
 export class GameInitializationDoneListener {

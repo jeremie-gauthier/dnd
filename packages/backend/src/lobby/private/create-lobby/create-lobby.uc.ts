@@ -1,14 +1,17 @@
 import { LobbyEntityStatus } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import type { EventEmitter2 } from "@nestjs/event-emitter";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import type { User } from "src/database/entities/user.entity";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import { UserJoinedLobbyPayload } from "src/lobby/events/emitters/user-joined-lobby.payload";
 import type { MessageContext } from "src/types/socket.type";
 import type { UseCase } from "src/types/use-case.interface";
-import type { CreateLobbyInputDto, CreateLobbyOutputDto } from "./create-lobby.dto";
-import type { CreateLobbyRepository } from "./create-lobby.repository";
+import type {
+  CreateLobbyInputDto,
+  CreateLobbyOutputDto,
+} from "./create-lobby.dto";
+import { CreateLobbyRepository } from "./create-lobby.repository";
 
 @Injectable()
 export class CreateLobbyUseCase implements UseCase {

@@ -11,12 +11,12 @@ import type { Request } from "express";
 import { ZodSerializerDto } from "nestjs-zod";
 import { JWTAuthGuard } from "src/authz/jwt-auth.guard";
 import { JWTUser } from "src/authz/jwt-user.decorator";
-import type { GetCampaignsUseCase } from "./get-campaigns/get-campaigns.uc";
+import { GetCampaignsUseCase } from "./get-campaigns/get-campaigns.uc";
 import {
-  type NewCampaignStartedInputDto,
   NewCampaignStartedOutputDto,
+  type NewCampaignStartedInputDto,
 } from "./new-campaign-started/new-campaign-started.dto";
-import type { NewCampaignStartedUseCase } from "./new-campaign-started/new-campaign-started.uc";
+import { NewCampaignStartedUseCase } from "./new-campaign-started/new-campaign-started.uc";
 
 @UseGuards(JWTAuthGuard)
 @Controller("campaign/private")

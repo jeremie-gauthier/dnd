@@ -4,7 +4,7 @@ import type { User } from "src/database/entities/user.entity";
 import { CampaignStageProgressionStatus } from "src/database/enums/campaign-stage-progression-status.enum";
 import type { UseCase } from "src/types/use-case.interface";
 import type { NewCampaignStartedOutputDto } from "./get-campaigns.dto";
-import type { GetCampaignsRepository } from "./get-campaigns.repository";
+import { GetCampaignsRepository } from "./get-campaigns.repository";
 
 @Injectable()
 export class GetCampaignsUseCase implements UseCase {
