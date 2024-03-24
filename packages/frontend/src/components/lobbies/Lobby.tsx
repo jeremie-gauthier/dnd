@@ -95,23 +95,28 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
 
       <div>
         <h2>Choose your heroes:</h2>
-        {lobby.heroesAvailable.map((hero) => (
-          <div key={hero.id}>
-            <h3>
-              {hero.name} ({hero.class.toLowerCase()})
-            </h3>
-            {hero.pickedBy === undefined ? (
-              <button type="button" onClick={() => handlePickHero(hero.id)}>
-                Pick
-              </button>
-            ) : null}
-            {hero.pickedBy === user.sub ? (
-              <button type="button" onClick={() => handleDiscardHero(hero.id)}>
-                Discard
-              </button>
-            ) : null}
-          </div>
-        ))}
+        <div className="flex flex-row">
+          {lobby.heroesAvailable.map((hero) => (
+            <div key={hero.id}>
+              <h3>
+                {hero.name} ({hero.class.toLowerCase()})
+              </h3>
+              {hero.pickedBy === undefined ? (
+                <button type="button" onClick={() => handlePickHero(hero.id)}>
+                  Pick
+                </button>
+              ) : null}
+              {hero.pickedBy === user.sub ? (
+                <button
+                  type="button"
+                  onClick={() => handleDiscardHero(hero.id)}
+                >
+                  Discard
+                </button>
+              ) : null}
+            </div>
+          ))}
+        </div>
       </div>
 
       <br />
