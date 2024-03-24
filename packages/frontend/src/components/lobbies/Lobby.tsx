@@ -44,6 +44,13 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
     lobby.players.find((player) => player.userId === user.sub)?.isReady ??
     false;
 
+  const canStartGame = lobby.players.every(({ isReady }) => isReady);
+  const handleStartGame = () => {
+    socket.emit(ClientLobbyEvent.RequestStartLobby, { lobbyId: lobby.id });
+  };
+
+  const isLobbyHost = user.sub === lobby.host.userId;
+
   return (
     <div>
       <h1>Lobby</h1>
@@ -115,6 +122,16 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
       <button type="button" onClick={handleClickOnReady}>
         {currentUserIsReady ? "I'm not ready" : "I'm ready!"}
       </button>
+
+      {isLobbyHost ? (
+        <button
+          type="button"
+          onClick={handleStartGame}
+          disabled={!canStartGame}
+        >
+          Start game
+        </button>
+      ) : null}
     </div>
   );
 };
