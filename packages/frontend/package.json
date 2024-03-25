@@ -17,6 +17,8 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@dnd/shared": "file:../shared",
+    "@headlessui/react": "^1.7.18",
+    "@heroicons/react": "^2.1.3",
     "@tanstack/react-form": "^0.16.0",
     "@tanstack/react-query": "^5.28.6",
     "@tanstack/react-router": "^1.22.2",
