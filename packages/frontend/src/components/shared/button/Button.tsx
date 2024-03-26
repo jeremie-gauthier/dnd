@@ -4,8 +4,8 @@ type ReactButtonProps = ReactHTMLElement<HTMLButtonElement>["props"];
 
 type Props = PropsWithChildren<{
   onClick?: ReactButtonProps["onClick"];
-  type: HTMLButtonElement["type"];
-  disabled: ReactButtonProps["disabled"];
+  type?: HTMLButtonElement["type"];
+  disabled?: ReactButtonProps["disabled"];
 }>;
 
 export const Button = ({
