@@ -31,7 +31,7 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
   };
 
   return (
-    <div className="flex flex-col space-y-8">
+    <div className="flex flex-col items-center space-y-8">
       <h1 className="font-semibold text-2xl">Host a game</h1>
 
       <form onSubmit={handleLobbyCreation} className="space-y-4">
