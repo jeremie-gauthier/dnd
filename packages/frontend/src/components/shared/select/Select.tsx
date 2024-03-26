@@ -16,7 +16,6 @@ export const Select = <Value, List extends any[]>({
   onChange,
   getDisplayedValue,
 }: Props<Value, List>) => {
-  console.log(value, list);
   return (
     <Listbox value={value} onChange={onChange}>
       {({ open }) => (
