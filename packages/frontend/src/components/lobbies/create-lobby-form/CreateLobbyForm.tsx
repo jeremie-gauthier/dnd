@@ -42,6 +42,7 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
             validators={campaignValidators}
             children={(field) => (
               <Select
+                label="Select your campaign"
                 value={field.state.value}
                 list={campaigns}
                 onChange={field.handleChange}
