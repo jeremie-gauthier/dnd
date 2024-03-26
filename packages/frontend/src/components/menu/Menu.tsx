@@ -1,15 +1,14 @@
-import { Link } from "@tanstack/react-router";
+import { LinkButton } from "../shared/button/LinkButton";
 
 export const Menu = () => {
   return (
-    <div>
-      <h2>Menu</h2>
+    <div className="flex flex-col items-center space-y-8">
+      <h1 className="font-semibold text-xl text-center">Menu</h1>
 
-      <Link to="/menu/solo">Solo player</Link>
-
-      <br />
-
-      <Link to="/menu-multiplayer">Multiplayer</Link>
+      <div className="flex flex-col space-y-4">
+        <LinkButton to="/menu/solo">Solo player</LinkButton>
+        <LinkButton to="/menu-multiplayer">Multiplayer</LinkButton>
+      </div>
     </div>
   );
 };

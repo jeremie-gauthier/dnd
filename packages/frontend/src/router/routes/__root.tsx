@@ -34,7 +34,7 @@ function RootComponent() {
           <RouterLoader />
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex flex-col justify-center">
           <Outlet />
         </div>
       </div>
