@@ -6,8 +6,8 @@ import {
   type Relation,
 } from "typeorm";
 import {
-  type UserStatusType,
   UserStatusValues,
+  type UserStatusType,
 } from "../enums/user-status.enum";
 import { CampaignProgression } from "./campaign-progression.entity";
 
@@ -27,4 +27,10 @@ export class User {
     },
   )
   campaignProgressions: Relation<CampaignProgression[]>;
+
+  @Column()
+  avatarUrl: string;
+
+  @Column()
+  username: string;
 }
