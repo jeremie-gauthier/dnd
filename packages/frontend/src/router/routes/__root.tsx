@@ -2,7 +2,7 @@ import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   Outlet,
-  rootRouteWithContext,
+  createRootRouteWithContext,
   useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
@@ -18,7 +18,7 @@ function RouterLoader() {
   }
 }
 
-export const Route = rootRouteWithContext<{
+export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
   socket: ClientSocket;
 }>()({

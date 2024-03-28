@@ -6,8 +6,16 @@ export class NewUserRegisteredPayload
 {
   public readonly name = AuthEvent.NewUserRegistered;
   public readonly userId: string;
+  public readonly avatarUrl: string;
+  public readonly username: string;
 
-  constructor({ userId }: Omit<NewUserRegisteredPayload, "name">) {
+  constructor({
+    userId,
+    avatarUrl,
+    username,
+  }: Omit<NewUserRegisteredPayload, "name">) {
     this.userId = userId;
+    this.avatarUrl = avatarUrl;
+    this.username = username;
   }
 }

@@ -15,7 +15,7 @@ export class NewUserRegisteredListener {
 
   @OnEvent(AuthEvent.NewUserRegistered)
   public async handler(payload: NewUserRegisteredPayload) {
-    const newUser = await this.repository.createNewUser(payload.userId);
+    const newUser = await this.repository.createNewUser(payload);
 
     this.eventEmitter.emitAsync(
       UserEvent.NewUserCreated,

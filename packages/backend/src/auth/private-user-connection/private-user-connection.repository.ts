@@ -4,7 +4,7 @@ import { User } from "src/database/entities/user.entity";
 import type { Repository } from "typeorm";
 
 @Injectable()
-export class UserConnectionRepository {
+export class PrivateUserConnectionRepository {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,

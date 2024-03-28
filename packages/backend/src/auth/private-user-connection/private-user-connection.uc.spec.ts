@@ -5,29 +5,29 @@ import { AuthEvent } from "src/auth/events/emitters/auth-events.enum";
 import { NewUserRegisteredPayload } from "src/auth/events/emitters/new-user-registered.payload";
 import { User } from "src/database/entities/user.entity";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { UserConnectionRepository } from "./user-connection.repository";
-import { UserConnectionUseCase } from "./user-connection.uc";
+import { PrivateUserConnectionRepository } from "./private-user-connection.repository";
+import { PrivateUserConnectionUseCase } from "./private-user-connection.uc";
 
 describe("UserConnectionUseCase", () => {
-  let userConnectionUseCase: UserConnectionUseCase;
-  let userConnectionRepository: UserConnectionRepository;
+  let userConnectionUseCase: PrivateUserConnectionUseCase;
+  let userConnectionRepository: PrivateUserConnectionRepository;
   let eventEmitter2: EventEmitter2;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       providers: [
-        UserConnectionUseCase,
-        UserConnectionRepository,
+        PrivateUserConnectionUseCase,
+        PrivateUserConnectionRepository,
         EventEmitter2,
         { provide: getRepositoryToken(User), useValue: {} },
       ],
     }).compile();
 
-    userConnectionUseCase = app.get<UserConnectionUseCase>(
-      UserConnectionUseCase,
+    userConnectionUseCase = app.get<PrivateUserConnectionUseCase>(
+      PrivateUserConnectionUseCase,
     );
-    userConnectionRepository = app.get<UserConnectionRepository>(
-      UserConnectionRepository,
+    userConnectionRepository = app.get<PrivateUserConnectionRepository>(
+      PrivateUserConnectionRepository,
     );
     eventEmitter2 = app.get<EventEmitter2>(EventEmitter2);
   });
@@ -40,12 +40,16 @@ describe("UserConnectionUseCase", () => {
     ).mockImplementation(() => Promise.resolve(true));
     const eventEmitter = vi.spyOn(eventEmitter2, "emitAsync");
 
-    await userConnectionUseCase.execute({ userId });
+    await userConnectionUseCase.execute({
+      userId,
+      avatarUrl: "",
+      username: "",
+    });
 
     expect(eventEmitter).toHaveBeenCalledOnce();
     expect(eventEmitter).toHaveBeenCalledWith(
       AuthEvent.NewUserRegistered,
-      new NewUserRegisteredPayload({ userId }),
+      new NewUserRegisteredPayload({ userId, avatarUrl: "", username: "" }),
     );
   });
 
@@ -57,7 +61,11 @@ describe("UserConnectionUseCase", () => {
     ).mockImplementation(() => Promise.resolve(false));
     const eventEmitter = vi.spyOn(eventEmitter2, "emitAsync");
 
-    await userConnectionUseCase.execute({ userId });
+    await userConnectionUseCase.execute({
+      userId,
+      avatarUrl: "",
+      username: "",
+    });
 
     expect(eventEmitter).not.toHaveBeenCalled();
   });

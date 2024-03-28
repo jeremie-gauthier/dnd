@@ -5,7 +5,6 @@ import {
 } from "@auth0/auth0-react";
 import { createFileRoute } from "@tanstack/react-router";
 import Profile from "../../components/profile/Profile";
-import { useIdentity } from "../../hooks/api/auth/identity";
 
 export const Route = createFileRoute("/profile")({
   component: withAuthenticationRequired(ProfileRouteComponent),
@@ -13,7 +12,6 @@ export const Route = createFileRoute("/profile")({
 
 export function ProfileRouteComponent() {
   const { user, isLoading } = useAuth0();
-  const { data: userMetadata = null } = useIdentity();
 
   const isUserDataReady = (user?: User): user is User => {
     return isLoading === false && user !== undefined;
@@ -23,5 +21,5 @@ export function ProfileRouteComponent() {
     return <div>User data is loading</div>;
   }
 
-  return <Profile user={user} userMetadata={userMetadata} />;
+  return <Profile user={user} />;
 }

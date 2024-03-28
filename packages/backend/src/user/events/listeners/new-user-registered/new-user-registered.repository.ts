@@ -11,10 +11,20 @@ export class NewUserRegisteredRepository {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  public async createNewUser(userId: User["id"]): Promise<User> {
+  public async createNewUser({
+    userId,
+    avatarUrl,
+    username,
+  }: {
+    userId: User["id"];
+    avatarUrl: string;
+    username: string;
+  }): Promise<User> {
     const newUser = this.userRepository.create({
       id: userId,
       status: UserStatus.CREATED,
+      avatarUrl,
+      username,
     });
 
     return await this.userRepository.save(newUser);
