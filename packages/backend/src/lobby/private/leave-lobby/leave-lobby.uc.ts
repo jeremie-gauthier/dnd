@@ -21,6 +21,7 @@ export class LeaveLobbyUseCase implements UseCase {
     ctx: MessageContext;
     userId: User["id"];
   }): Promise<void> {
+    // TODO: DRY this logic of removing a player from a lobby
     const lobbyId = await this.repository.getUserLobby(userId);
     if (!lobbyId) {
       return;

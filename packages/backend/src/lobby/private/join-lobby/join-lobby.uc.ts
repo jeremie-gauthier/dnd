@@ -7,6 +7,7 @@ import {
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { User } from "src/database/entities/user.entity";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
+import { UserForceLeftLobbyPayload } from "src/lobby/events/emitters/user-force-left-lobby.payload";
 import { UserJoinedLobbyPayload } from "src/lobby/events/emitters/user-joined-lobby.payload";
 import type { MessageContext } from "src/types/socket.type";
 import type { UseCase } from "src/types/use-case.interface";
@@ -27,6 +28,19 @@ export class JoinLobbyUseCase implements UseCase {
   }: { ctx: MessageContext; userId: User["id"] } & JoinLobbyInputDto): Promise<
     LobbyEntity["id"]
   > {
+    // TODO: DRY this logic of removing a player from a lobby
+    const oldLobbyId = await this.repository.getUserLobby({ userId });
+    if (oldLobbyId) {
+      await this.repository.removePlayerFromLobby({
+        userId,
+        lobbyId: oldLobbyId,
+      });
+      await this.eventEmitter.emitAsync(
+        LobbyEvent.UserForceLeftLobby,
+        new UserForceLeftLobbyPayload({ ctx, userId, lobbyId: oldLobbyId }),
+      );
+    }
+
     const lobby = await this.repository.getLobbyById(lobbyId);
     this.assertsCanEnterLobby(userId, lobby);
 
