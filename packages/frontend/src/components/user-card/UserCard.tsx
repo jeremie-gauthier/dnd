@@ -2,9 +2,15 @@ import { useUser } from "../../hooks/api/user/use-user";
 
 type Props = {
   userId: string;
+  size?: "xs" | "md";
 };
 
-export const UserCard = ({ userId }: Props) => {
+const sizes: Readonly<Record<NonNullable<Props["size"]>, string>> = {
+  xs: "w-6",
+  md: "w-32",
+};
+
+export const UserCard = ({ userId, size = "md" }: Props) => {
   const { data: user, isLoading } = useUser(userId);
 
   if (isLoading) {
@@ -13,7 +19,7 @@ export const UserCard = ({ userId }: Props) => {
 
   return (
     <>
-      <img src={user?.avatarUrl} alt="" className="w-32" />
+      <img src={user?.avatarUrl} alt="" className={sizes[size]} />
       <p className="font-medium truncate">{user?.username}</p>
     </>
   );
