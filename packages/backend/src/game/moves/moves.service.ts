@@ -24,10 +24,13 @@ export class MovesService {
     });
 
     // remove hero from its origin position
-    const oldTile = game.map.tiles[oldTileIdx]!;
-    oldTile.entities = oldTile.entities.filter(
-      (entity) => entity.type === "playable-entity" && entity.id === hero.id,
-    );
+    const oldTile = game.map.tiles[oldTileIdx];
+    // can be null during game creation, where heroes are not yet positioned
+    if (oldTile) {
+      oldTile.entities = oldTile.entities.filter(
+        (entity) => entity.type === "playable-entity" && entity.id === hero.id,
+      );
+    }
 
     // add hero to its destination position
     const requestedTile = game.map.tiles[requestedTileIdx]!;
