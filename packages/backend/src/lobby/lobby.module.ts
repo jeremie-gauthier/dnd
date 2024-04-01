@@ -4,6 +4,8 @@ import { AuthzModule } from "src/authz/authz.module";
 import { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import { Campaign } from "src/database/entities/campaign.entity";
 import { RedisModule } from "src/redis/redis.module";
+import { GameInitializationDoneListener } from "./events/listeners/game-initialization-done/game-initialization-done.listener";
+import { GameInitializationDoneRepository } from "./events/listeners/game-initialization-done/game-initialization-done.repository";
 import { LobbiesChangesListener } from "./events/listeners/lobbies-changes/lobbies-changes.listener";
 import { LobbiesChangesRepository } from "./events/listeners/lobbies-changes/lobbies-changes.repository";
 import { LobbyChangedListener } from "./events/listeners/lobby-changed/lobby-changed.listener";
@@ -74,6 +76,8 @@ import { TogglePlayerReadyStateUseCase } from "./private/toggle-player-ready-sta
     TogglePlayerReadyStateRepository,
     StartGameUseCase,
     StartGameRepository,
+    GameInitializationDoneListener,
+    GameInitializationDoneRepository,
   ],
 })
 export class LobbyModule {}
