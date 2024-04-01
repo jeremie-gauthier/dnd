@@ -3,7 +3,11 @@ import {
   withAuthenticationRequired,
   type User,
 } from "@auth0/auth0-react";
-import { ServerLobbyEvent, type LobbyEntity } from "@dnd/shared";
+import {
+  ClientLobbyEvent,
+  ServerLobbyEvent,
+  type LobbyEntity,
+} from "@dnd/shared";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Lobby } from "../../components/lobbies/Lobby";
@@ -65,6 +69,12 @@ export function MenuRouteComponent() {
 
     return () => {};
   }, [socket, queryClient, router, lobbyId]);
+
+  useEffect(() => {
+    return () => {
+      socket?.emitWithAck(ClientLobbyEvent.RequestLeaveLobby);
+    };
+  }, [socket]);
 
   const isUserDataReady = (user?: User): user is User => {
     return isLoading === false && user !== undefined;
