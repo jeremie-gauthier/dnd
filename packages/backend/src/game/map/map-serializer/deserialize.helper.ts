@@ -35,6 +35,14 @@ export function inferOffMapTileEntities({
     entity.kind === "door" ||
     entity.isBlocking === false;
   const addTileToExploreAt = (coord: Coord): Coord | undefined => {
+    if (
+      coord.column < 0 ||
+      coord.column >= metadata.width ||
+      coord.row < 0 ||
+      coord.row > metadata.height
+    )
+      return;
+
     const tileIndex = translateCoordToIndex({ coord, metadata });
     const tile = tiles[tileIndex];
     if (!tile) return;
