@@ -306,5 +306,5 @@ export function addTileEntities({
 }
 
 export function sanitize(input: string): string {
-  return input.replace(/[ \t\r\v\f]/g, "").trim();
+  return input.replace(/\s+/g, "\n").trim();
 }
