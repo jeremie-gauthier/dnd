@@ -27,10 +27,12 @@ export const translateIsometricTo2DCoord = (
   coord: Coord,
   config: CanvasConfig,
 ): Coord => {
+  const size = Math.max(config.map.width, config.map.height);
+
   const translatedCoord = {
     row: coord.row,
     // on deduit l'offset en x
-    column: coord.column - config.map.width / 2,
+    column: coord.column - size / 2,
   };
 
   const { row, column } = translatedCoord;

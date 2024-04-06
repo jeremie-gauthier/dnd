@@ -11,9 +11,10 @@ export const centerIsometricDrawing = ({
   map,
   assetSize,
 }: Params): void => {
+  const size = Math.max(map.width, map.height);
   const halfAssetSize = assetSize / 2;
 
   // (* halfAssetSize) => un offset pour centrer le canvas
   // (- halfAssetSize) => un offset pour afficher le haut de la premiere TILE en 0,0 sur le canvas
-  context.translate(map.width * halfAssetSize - halfAssetSize, 0);
+  context.translate(size * halfAssetSize - halfAssetSize, 0);
 };
