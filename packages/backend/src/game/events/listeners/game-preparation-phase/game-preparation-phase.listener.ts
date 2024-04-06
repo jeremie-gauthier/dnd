@@ -43,7 +43,12 @@ export class GamePreparationPhaseListener {
 
   private getFirstFreeStartingTileOrThrow(game: GameEntity): Tile {
     const firstFreeStartingTile = game.map.tiles.find(
-      (tile) => tile.isStartingTile,
+      (tile) =>
+        tile.isStartingTile &&
+        this.movesService.canMoveToRequestedPosition({
+          game,
+          requestedPosition: tile.coord,
+        }),
     );
     if (!firstFreeStartingTile) {
       throw new NotFoundException("No free starting tile found");

@@ -42,4 +42,27 @@ export class MovesService {
     // update hero coords
     hero.coord = requestedPosition;
   }
+
+  public canMoveToRequestedPosition({
+    game,
+    requestedPosition,
+  }: {
+    game: GameEntity;
+    requestedPosition: Coord;
+  }): boolean {
+    const metadata = { width: game.map.width, height: game.map.height };
+    const requestedTileIdx = translateCoordToIndex({
+      coord: requestedPosition,
+      metadata,
+    });
+
+    const tile = game.map.tiles[requestedTileIdx];
+    if (!tile) {
+      return false;
+    }
+
+    return tile.entities.every(
+      (entity) => entity.type !== "playable-entity" && !entity.isBlocking,
+    );
+  }
 }
