@@ -121,6 +121,21 @@ const MOCK_MAP: GameEntity["map"] = {
       },
       entities: [
         {
+          type: "non-playable-interactive-entity",
+          kind: "door",
+          canInteract: true,
+          isBlocking: true,
+          isVisible: true,
+        },
+      ],
+    },
+    {
+      coord: {
+        row: 2,
+        column: 2,
+      },
+      entities: [
+        {
           type: "non-playable-non-interactive-entity",
           kind: "wall",
           isVisible: true,
@@ -132,7 +147,7 @@ const MOCK_MAP: GameEntity["map"] = {
     {
       coord: {
         row: 2,
-        column: 2,
+        column: 3,
       },
       entities: [
         {
@@ -147,21 +162,6 @@ const MOCK_MAP: GameEntity["map"] = {
     {
       coord: {
         row: 2,
-        column: 3,
-      },
-      entities: [
-        {
-          type: "non-playable-non-interactive-entity",
-          kind: "wall",
-          isVisible: true,
-          isBlocking: true,
-          canInteract: false,
-        },
-      ],
-    },
-    {
-      coord: {
-        row: 2,
         column: 4,
       },
       entities: [
@@ -221,7 +221,15 @@ const MOCK_MAP: GameEntity["map"] = {
         row: 4,
         column: 1,
       },
-      entities: [],
+      entities: [
+        {
+          type: "non-playable-non-interactive-entity",
+          kind: "wall",
+          isBlocking: true,
+          isVisible: true,
+          canInteract: false,
+        },
+      ],
     },
     {
       coord: {
@@ -264,7 +272,15 @@ const MOCK_MAP: GameEntity["map"] = {
         row: 5,
         column: 1,
       },
-      entities: [],
+      entities: [
+        {
+          type: "non-playable-interactive-entity",
+          kind: "door",
+          isBlocking: true,
+          isVisible: true,
+          canInteract: true,
+        },
+      ],
     },
     {
       coord: {
@@ -299,7 +315,15 @@ const MOCK_MAP: GameEntity["map"] = {
         row: 6,
         column: 1,
       },
-      entities: [],
+      entities: [
+        {
+          type: "non-playable-non-interactive-entity",
+          kind: "wall",
+          isBlocking: true,
+          isVisible: true,
+          canInteract: false,
+        },
+      ],
     },
     {
       coord: {
@@ -394,11 +418,11 @@ const MOCK_MAP: GameEntity["map"] = {
       },
       entities: [
         {
-          type: "non-playable-non-interactive-entity",
-          kind: "wall",
-          isVisible: true,
-          isBlocking: true,
+          type: "non-playable-interactive-entity",
+          kind: "door",
           canInteract: false,
+          isBlocking: false,
+          isVisible: true,
         },
       ],
     },
