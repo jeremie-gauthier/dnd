@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import type { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import type { User } from "src/database/entities/user.entity";
-import type { GamesRepository } from "src/redis/repositories/games.repository";
+import { GamesRepository } from "src/redis/repositories/games.repository";
 import type { Repository } from "typeorm";
 
 @Injectable()

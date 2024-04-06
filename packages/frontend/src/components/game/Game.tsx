@@ -1,19 +1,22 @@
-import type { GameEntity } from "@dnd/shared";
+import type { GameEntity, PlayerGamePhase } from "@dnd/shared";
 import { useRef } from "react";
 import { useGameEngine } from "../../game-engine";
-import type { Strategy } from "../../game-engine/renderer/render-strategies";
 import { Canvas } from "../canvas/canvas";
 import { useCanvasSize } from "./useCanvasSize";
 
 type Props = {
   game: GameEntity;
+  phase: PlayerGamePhase;
 };
 
-export const Game = ({ game }: Props) => {
+export const Game = ({ game, phase }: Props) => {
   const ref = useRef<HTMLCanvasElement>(null);
 
-  const gamePhase: Strategy = "preparation";
-  const { assetSize } = useGameEngine(ref, game, gamePhase);
+  const { assetSize } = useGameEngine({
+    canvasRef: ref,
+    gameEntity: game,
+    gamePhase: phase,
+  });
 
   const { width, height } = useCanvasSize({
     mapWidth: game.map.width,

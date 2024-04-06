@@ -14,12 +14,13 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as ProfileImport } from './routes/profile'
 import { Route as MenuImport } from './routes/menu'
 import { Route as LoginImport } from './routes/login'
-import { Route as GameImport } from './routes/game'
+import { Route as GameTestImport } from './routes/game-test'
 import { Route as WsImport } from './routes/_ws'
 import { Route as WsMenuMultiplayerImport } from './routes/_ws.menu-multiplayer'
 import { Route as WsLobbiesImport } from './routes/_ws.lobbies'
 import { Route as WsCreateLobbyImport } from './routes/_ws.create-lobby'
 import { Route as WsLobbyLobbyIdImport } from './routes/_ws.lobby.$lobbyId'
+import { Route as WsGameGameIdImport } from './routes/_ws.game.$gameId'
 
 // Create/Update Routes
 
@@ -38,8 +39,8 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const GameRoute = GameImport.update({
-  path: '/game',
+const GameTestRoute = GameTestImport.update({
+  path: '/game-test',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -68,6 +69,11 @@ const WsLobbyLobbyIdRoute = WsLobbyLobbyIdImport.update({
   getParentRoute: () => WsRoute,
 } as any)
 
+const WsGameGameIdRoute = WsGameGameIdImport.update({
+  path: '/game/$gameId',
+  getParentRoute: () => WsRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -76,8 +82,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WsImport
       parentRoute: typeof rootRoute
     }
-    '/game': {
-      preLoaderRoute: typeof GameImport
+    '/game-test': {
+      preLoaderRoute: typeof GameTestImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -104,6 +110,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WsMenuMultiplayerImport
       parentRoute: typeof WsImport
     }
+    '/_ws/game/$gameId': {
+      preLoaderRoute: typeof WsGameGameIdImport
+      parentRoute: typeof WsImport
+    }
     '/_ws/lobby/$lobbyId': {
       preLoaderRoute: typeof WsLobbyLobbyIdImport
       parentRoute: typeof WsImport
@@ -118,9 +128,10 @@ export const routeTree = rootRoute.addChildren([
     WsCreateLobbyRoute,
     WsLobbiesRoute,
     WsMenuMultiplayerRoute,
+    WsGameGameIdRoute,
     WsLobbyLobbyIdRoute,
   ]),
-  GameRoute,
+  GameTestRoute,
   LoginRoute,
   MenuRoute,
   ProfileRoute,

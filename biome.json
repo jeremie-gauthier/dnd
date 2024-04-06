@@ -12,7 +12,8 @@
       },
       "style": {
         "noNonNullAssertion": "off",
-        "noUselessElse": "off"
+        "noUselessElse": "off",
+        "useImportType": "off"
       },
       "suspicious": {
         "noExplicitAny": "off"

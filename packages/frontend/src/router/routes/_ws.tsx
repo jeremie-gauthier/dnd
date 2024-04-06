@@ -33,9 +33,9 @@ export function WsRouteComponent() {
   const { socket } = Route.useRouteContext();
 
   return (
-    <div>
+    <>
       <div>socket id: {socket.id}</div>
       <Outlet />
-    </div>
+    </>
   );
 }

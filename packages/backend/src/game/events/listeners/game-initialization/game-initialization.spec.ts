@@ -7,7 +7,15 @@ import type { User } from "src/database/entities/user.entity";
 import { MapSerializerService } from "src/game/map/map-serializer/map-serializer.service";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import type { MessageContext } from "src/types/socket.type";
-import { type Mock, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  type Mock,
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 import { GameEvent } from "../../emitters/game-events.enum";
 import { GameInitializationDonePayload } from "../../emitters/game-initialization-done.payload";
 import { GameInitializationStartedPayload } from "../../emitters/game-initialization-started.payload";

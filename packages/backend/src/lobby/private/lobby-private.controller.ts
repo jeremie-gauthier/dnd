@@ -1,9 +1,9 @@
 import { Controller, Get, Param, UseGuards } from "@nestjs/common";
 import { JWTAuthGuard } from "src/authz/jwt-auth.guard";
 import type { GetLobbiesOutputDto } from "./get-lobbies/get-lobbies.dto";
-import type { GetLobbiesUseCase } from "./get-lobbies/get-lobbies.uc";
+import { GetLobbiesUseCase } from "./get-lobbies/get-lobbies.uc";
 import type { GetLobbyOutputDto } from "./get-lobby/get-lobby.dto";
-import type { GetLobbyUseCase } from "./get-lobby/get-lobby.uc";
+import { GetLobbyUseCase } from "./get-lobby/get-lobby.uc";
 
 @UseGuards(JWTAuthGuard)
 @Controller("lobby/private")

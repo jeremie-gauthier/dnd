@@ -1,10 +1,10 @@
-import { type LobbyEntity, ServerLobbyEvent } from "@dnd/shared";
+import { ServerLobbyEvent, type LobbyEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
 import { LOBBIES_ROOM } from "src/lobby/constants";
 import type { MessageContext } from "src/types/socket.type";
 import { LobbyEvent } from "../../emitters/lobby-events.enum";
-import type { LobbiesChangesRepository } from "./lobbies-changes.repository";
+import { LobbiesChangesRepository } from "./lobbies-changes.repository";
 
 @Injectable()
 export class LobbiesChangesListener {

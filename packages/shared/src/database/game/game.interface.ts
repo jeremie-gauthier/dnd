@@ -1,7 +1,12 @@
 import type { HeroClassType } from "../enums/hero-class.enum";
 import type { EnemyKind } from "./enemy-kind.type";
+import type { PlayerGamePhase } from "./player-phase.type";
 
-type BasePlayableEntity = {
+type Player = {
+  currentPhase: PlayerGamePhase;
+};
+
+type BasePlayableEntity = Player & {
   id: string;
 
   playedByUserId: string;
@@ -84,8 +89,11 @@ export type Map = {
   tiles: Tile[];
 };
 
-export type GameEntity = {
+export type GameStatus = "prepare_for_battle" | "battle_ongoing";
+
+export type GameEntity<TGameStatus extends GameStatus = GameStatus> = {
   id: string;
+  status: TGameStatus;
   map: Map;
   playableEntities: Record<PlayableEntity["id"], PlayableEntity>;
   timeline: PlayableEntity["id"][];

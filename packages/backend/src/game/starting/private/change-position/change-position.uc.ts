@@ -5,21 +5,19 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import type { EventEmitter2 } from "@nestjs/event-emitter";
 import type { Hero } from "src/database/entities/hero.entity";
 import type { User } from "src/database/entities/user.entity";
-import { GameChangedPayload } from "src/game/events/emitters/game-changed.payload";
-import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import { translateCoordToIndex } from "src/game/map/utils/translate-coord-to-index.util";
+import { MovesService } from "src/game/moves/moves.service";
 import type { MessageContext } from "src/types/socket.type";
 import type { UseCase } from "src/types/use-case.interface";
-import type { ChangePositionRepository } from "./change-position.repository";
+import { ChangePositionRepository } from "./change-position.repository";
 
 @Injectable()
 export class ChangePositionUseCase implements UseCase {
   constructor(
+    private readonly movesService: MovesService,
     private readonly repository: ChangePositionRepository,
-    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   public async execute({
@@ -35,13 +33,14 @@ export class ChangePositionUseCase implements UseCase {
 
     this.assertsCanChangePosition(game, { userId, heroId, requestedPosition });
 
-    this.moveHeroToRequestedPosition({ game, heroId, requestedPosition });
+    this.movesService.moveHeroToRequestedPosition({
+      game,
+      heroId,
+      requestedPosition,
+    });
     await this.repository.updateGame(game);
 
-    this.eventEmitter.emitAsync(
-      GameEvent.GameChanged,
-      new GameChangedPayload({ ctx, gameId }),
-    );
+    // TODO: add emitter "entity position changed" or smthg like that
   }
 
   private assertsCanChangePosition(
@@ -84,37 +83,5 @@ export class ChangePositionUseCase implements UseCase {
         "Requested position is blocked by an entity",
       );
     }
-  }
-
-  private moveHeroToRequestedPosition({
-    game,
-    heroId,
-    requestedPosition,
-  }: {
-    game: GameEntity;
-    heroId: Hero["id"];
-    requestedPosition: Coord;
-  }): void {
-    const hero = game.playableEntities[heroId]!;
-
-    const metadata = { width: game.map.width, height: game.map.height };
-    const oldTileIdx = translateCoordToIndex({ coord: hero.coord, metadata });
-    const requestedTileIdx = translateCoordToIndex({
-      coord: requestedPosition,
-      metadata,
-    });
-
-    const oldTile = game.map.tiles[oldTileIdx]!;
-    oldTile.entities = oldTile.entities.filter(
-      (entity) => entity.type === "playable-entity" && entity.id === hero.id,
-    );
-
-    const requestedTile = game.map.tiles[requestedTileIdx]!;
-    requestedTile.entities.push({
-      type: "playable-entity",
-      id: hero.id,
-    });
-
-    hero.coord = requestedPosition;
   }
 }

@@ -1,6 +1,6 @@
 import type { GameEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import type { GamesRepository } from "src/redis/repositories/games.repository";
+import { GamesRepository } from "src/redis/repositories/games.repository";
 
 @Injectable()
 export class ChangePositionRepository {

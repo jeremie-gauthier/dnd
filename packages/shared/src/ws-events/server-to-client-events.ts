@@ -2,7 +2,10 @@ import type { z } from "zod";
 import type { GameEntity } from "../database/game";
 import type { LobbyEntity } from "../database/lobby";
 import type { getLobbiesOutputSchema } from "../schemas";
-import { ServerGameEvent } from "./game-events/game-events.server";
+import {
+  ServerGameEvent,
+  type PlayerGameState,
+} from "./game-events/game-events.server";
 import { ServerLobbyEvent } from "./lobby-events/lobby-events.server";
 import type { EventsMapper } from "./utils.type";
 
@@ -26,9 +29,7 @@ interface ServerToClientEventsAndPayloads
     game: GameEntity;
   }) => void;
   [ServerGameEvent.GameStart]: () => void;
-  [ServerGameEvent.GameChangesDetected]: (payload: {
-    game: GameEntity;
-  }) => void;
+  [ServerGameEvent.GameChangesDetected]: (payload: PlayerGameState) => void;
 }
 
 export type ServerToClientEvents =

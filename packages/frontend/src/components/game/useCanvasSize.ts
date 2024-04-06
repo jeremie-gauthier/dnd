@@ -7,11 +7,16 @@ type Params = {
 };
 
 export const useCanvasSize = ({ mapWidth, mapHeight, assetSize }: Params) => {
-  const height = useMemo(
-    () => (mapHeight * assetSize) / 2 + assetSize / 2,
-    [mapHeight, assetSize],
+  const size = useMemo(
+    () => Math.max(mapWidth, mapHeight),
+    [mapWidth, mapHeight],
   );
-  const width = useMemo(() => mapWidth * assetSize, [mapWidth, assetSize]);
+
+  const height = useMemo(
+    () => (size * assetSize) / 2 + assetSize / 2,
+    [size, assetSize],
+  );
+  const width = useMemo(() => size * assetSize, [size, assetSize]);
 
   return { height, width };
 };

@@ -1,9 +1,9 @@
-import { ClientLobbyEvent } from "@dnd/shared";
-import { useNavigate } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-form-adapter";
-import { z } from "zod";
 import type { GetCampaignsResponse } from "../../../hooks/api/campaign/get-campaigns";
 import type { ClientSocket } from "../../../types/socket.type";
+import { Button } from "../../shared/button/Button";
+import { MinMaxRange } from "../../shared/range/MinMaxRange";
+import { Select } from "../../shared/select/Select";
 import { useCreateLobbyForm } from "./useCreateLobbyForm";
 
 type Props = {
@@ -12,10 +12,14 @@ type Props = {
 };
 
 export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
-  const navigate = useNavigate();
-  const form = useCreateLobbyForm({
+  const {
+    form,
+    getCampaignDisplayedValue,
+    campaignValidators,
+    nbPlayersMaxValidators,
+  } = useCreateLobbyForm(socket, {
     nbPlayersMax: 2,
-    stageId: campaigns[0]?.currentStage.id ?? "",
+    campaign: campaigns[0],
   });
 
   const handleLobbyCreation: React.FormEventHandler<HTMLFormElement> = async (
@@ -23,86 +27,71 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
   ) => {
     e.preventDefault();
     e.stopPropagation();
-
-    const lobby = await socket.emitWithAck(
-      ClientLobbyEvent.RequestCreateLobby,
-      form.state.values,
-    );
-
-    return navigate({
-      to: "/lobby/$lobbyId",
-      params: { lobbyId: lobby.id },
-    });
+    await form.handleSubmit();
   };
 
   return (
-    <div>
-      <h2>Host a game</h2>
+    <div className="flex flex-col items-center space-y-8">
+      <h1 className="font-semibold text-2xl">Host a game</h1>
 
-      <form.Provider>
-        <form onSubmit={handleLobbyCreation}>
-          <div>
-            <form.Field
-              name="nbPlayersMax"
-              validatorAdapter={zodValidator}
-              validators={{
-                onChange: z
-                  .number()
-                  .min(2, "Your lobby must at least accept 2 players")
-                  .max(5, "Your lobby must at most accept 5 players"),
-              }}
-              children={(field) => (
-                <>
-                  <input
-                    type="number"
-                    name={field.name}
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.valueAsNumber)}
-                  />
-
-                  {field.state.meta.errors ? (
-                    <em>{field.state.meta.errors.join(", ")}</em>
-                  ) : null}
-                </>
-              )}
-            />
-          </div>
-
-          <div>
-            <form.Field
-              name="stageId"
-              validatorAdapter={zodValidator}
-              validators={{
-                onChange: z.string().uuid(),
-              }}
-              children={(field) => (
-                <select
-                  name={field.name}
-                  value={field.state.value}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                >
-                  {campaigns.map((campaign) => (
-                    <option key={campaign.id} value={campaign.currentStage.id}>
-                      {campaign.currentStage.order}/{campaign.nbStages} --
-                      {campaign.title} --
-                      {campaign.currentStage.title}
-                    </option>
-                  ))}
-                </select>
-              )}
-            />
-          </div>
-
-          <form.Subscribe
-            selector={(state) => [state.canSubmit, state.isSubmitting]}
-            children={([canSubmit, isSubmitting]) => (
-              <button type="submit" disabled={!canSubmit}>
-                {isSubmitting ? "Your Lobby is being created" : "Create Lobby"}
-              </button>
+      <form onSubmit={handleLobbyCreation} className="space-y-4">
+        <div>
+          <form.Field
+            name="campaign"
+            validatorAdapter={zodValidator}
+            validators={campaignValidators}
+            children={(field) => (
+              <Select
+                label="Select your campaign"
+                value={field.state.value}
+                list={campaigns}
+                onChange={field.handleChange}
+                getDisplayedValue={getCampaignDisplayedValue}
+              />
             )}
           />
-        </form>
-      </form.Provider>
+        </div>
+
+        <div className="relative !mb-6">
+          <form.Field
+            name="nbPlayersMax"
+            validatorAdapter={zodValidator}
+            validators={nbPlayersMaxValidators}
+            children={(field) => (
+              <>
+                <MinMaxRange
+                  min={2}
+                  max={5}
+                  value={field.state.value}
+                  onChange={field.handleChange}
+                  label="Select the number of players"
+                />
+                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6">
+                  2
+                </span>
+                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-1/3 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
+                  3
+                </span>
+                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-2/3 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
+                  4
+                </span>
+                <span className="text-sm text-gray-500 dark:text-gray-400 absolute end-0 -bottom-6">
+                  5
+                </span>
+              </>
+            )}
+          />
+        </div>
+
+        <form.Subscribe
+          selector={(state) => [state.canSubmit, state.isSubmitting]}
+          children={([canSubmit, isSubmitting]) => (
+            <Button type="submit" disabled={!canSubmit}>
+              {isSubmitting ? "Your Lobby is being created" : "Create Lobby"}
+            </Button>
+          )}
+        />
+      </form>
     </div>
   );
 };

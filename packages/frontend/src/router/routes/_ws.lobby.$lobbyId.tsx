@@ -3,8 +3,8 @@ import {
   withAuthenticationRequired,
   type User,
 } from "@auth0/auth0-react";
-import { ServerLobbyEvent, type LobbyEntity } from "@dnd/shared";
-import { createFileRoute } from "@tanstack/react-router";
+import { GameEntity, ServerLobbyEvent, type LobbyEntity } from "@dnd/shared";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Lobby } from "../../components/lobbies/Lobby";
 import {
@@ -12,6 +12,7 @@ import {
   useGetLobby,
   type GetLobbyResponse,
 } from "../../hooks/api/lobby/get-lobby";
+import { useServerLobbyError } from "../../hooks/api/lobby/use-server-lobby-error";
 
 export const Route = createFileRoute("/_ws/lobby/$lobbyId")({
   component: withAuthenticationRequired(MenuRouteComponent),
@@ -22,14 +23,25 @@ export function MenuRouteComponent() {
   const { lobbyId } = Route.useParams();
   const { user, isLoading } = useAuth0();
   const { data: lobby, isLoading: isLobbyLoading } = useGetLobby(lobbyId);
+  useServerLobbyError(socket);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // TODO: send a toast message instead
-    const errorHandler = (payload: { name: string; message: string }) =>
-      console.log(payload);
+    // TODO: useGameInitializationDone hook ?
+    const gameInitializationDoneHandler = async ({
+      game,
+    }: { game: GameEntity }) => {
+      navigate({
+        to: "/game/$gameId",
+        params: { gameId: game.id },
+      });
+    };
+    socket.on(
+      ServerLobbyEvent.GameInitializationDone,
+      gameInitializationDoneHandler,
+    );
 
-    socket.on(ServerLobbyEvent.Error, errorHandler);
-
+    // TODO: useLobbyChangesHandler hook ?
     const handleLobbyChanges = ({ lobby }: { lobby: LobbyEntity }) => {
       const heroMap = new Map(
         lobby.heroesAvailable.map((heroAvailable) => [
@@ -54,9 +66,12 @@ export function MenuRouteComponent() {
         },
       );
     };
-
     socket.on(ServerLobbyEvent.LobbyChangesDetected, handleLobbyChanges);
-  }, [socket, queryClient]);
+
+    return () => {
+      socket.removeAllListeners();
+    };
+  }, [socket, queryClient, navigate]);
 
   const isUserDataReady = (user?: User): user is User => {
     return isLoading === false && user !== undefined;

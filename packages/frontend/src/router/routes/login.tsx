@@ -22,15 +22,19 @@ function LoginComponent() {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   React.useLayoutEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && user) {
+      console.log("useLayoutEffect", isAuthenticated, user);
       router.invalidate();
-      connection();
+      connection({
+        avatarUrl: user.picture ?? "",
+        username: user.name ?? "",
+      });
 
       if (search.redirect) {
         router.history.push(search.redirect);
       }
     }
-  }, [isAuthenticated, search.redirect]);
+  }, [isAuthenticated, user, search.redirect]);
 
   return isAuthenticated && user ? (
     <div>

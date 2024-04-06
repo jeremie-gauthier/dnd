@@ -34,7 +34,6 @@ import { UserModule } from "./user/user.module";
       useFactory: async (configService: ConfigService) =>
         configService.getOrThrow("typeorm"),
     }),
-
     AuthModule,
     CampaignModule,
     AnalyticsModule,

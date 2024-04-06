@@ -1,14 +1,17 @@
-import type { GameEntity } from "@dnd/shared";
+import type { GameEntity, PlayerGamePhase } from "@dnd/shared";
 import { useEffect, type RefObject } from "react";
 import { useMouseInputs } from ".";
 import { useMapRenderer } from "./renderer";
-import type { Strategy } from "./renderer/render-strategies";
 
-export const useGameEngine = (
-  canvasRef: RefObject<HTMLCanvasElement>,
-  gameEntity: GameEntity,
-  gamePhase: Strategy,
-) => {
+export const useGameEngine = ({
+  canvasRef,
+  gameEntity,
+  gamePhase,
+}: {
+  canvasRef: RefObject<HTMLCanvasElement>;
+  gameEntity: GameEntity;
+  gamePhase: PlayerGamePhase;
+}) => {
   const { render, assetSize } = useMapRenderer(canvasRef);
 
   const { addClickEvent, clearMouseEvents } = useMouseInputs(canvasRef, {

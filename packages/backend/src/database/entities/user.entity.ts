@@ -1,5 +1,14 @@
-import { Column, Entity, OneToMany, PrimaryColumn, type Relation } from "typeorm";
-import { type UserStatusType, UserStatusValues } from "../enums/user-status.enum";
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryColumn,
+  type Relation,
+} from "typeorm";
+import {
+  UserStatusValues,
+  type UserStatusType,
+} from "../enums/user-status.enum";
 import { CampaignProgression } from "./campaign-progression.entity";
 
 @Entity()
@@ -18,4 +27,10 @@ export class User {
     },
   )
   campaignProgressions: Relation<CampaignProgression[]>;
+
+  @Column()
+  avatarUrl: string;
+
+  @Column()
+  username: string;
 }

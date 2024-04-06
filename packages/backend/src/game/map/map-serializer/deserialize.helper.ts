@@ -35,6 +35,14 @@ export function inferOffMapTileEntities({
     entity.kind === "door" ||
     entity.isBlocking === false;
   const addTileToExploreAt = (coord: Coord): Coord | undefined => {
+    if (
+      coord.column < 0 ||
+      coord.column >= metadata.width ||
+      coord.row < 0 ||
+      coord.row > metadata.height
+    )
+      return;
+
     const tileIndex = translateCoordToIndex({ coord, metadata });
     const tile = tiles[tileIndex];
     if (!tile) return;
@@ -95,8 +103,6 @@ export function createDummyTiles({
   height,
 }: { width: number; height: number }): Tile[] {
   return Array.from({ length: width * height }).map((_, index) => ({
-    // rely only on width even if the height is different
-    // as the resulting array is just a "`height` chunks of `width` size"
     coord: translateIndexToCoord({ index, metadata: { width, height } }),
     entities: [],
   }));
@@ -306,5 +312,5 @@ export function addTileEntities({
 }
 
 export function sanitize(input: string): string {
-  return input.replace(/[ \t\r\v\f]/g, "").trim();
+  return input.replace(/\s+/g, "\n").trim();
 }

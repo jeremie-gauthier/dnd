@@ -4,14 +4,14 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import type { EventEmitter2 } from "@nestjs/event-emitter";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { User } from "src/database/entities/user.entity";
 import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.payload";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import type { MessageContext } from "src/types/socket.type";
 import type { UseCase } from "src/types/use-case.interface";
 import type { TogglePlayerReadyStateInputDto } from "./toggle-player-ready-state.dto";
-import type { TogglePlayerReadyStateRepository } from "./toggle-player-ready-state.repository";
+import { TogglePlayerReadyStateRepository } from "./toggle-player-ready-state.repository";
 
 @Injectable()
 export class TogglePlayerReadyStateUseCase implements UseCase {

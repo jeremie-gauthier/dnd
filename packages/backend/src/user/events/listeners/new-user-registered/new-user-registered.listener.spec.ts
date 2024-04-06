@@ -39,7 +39,11 @@ describe("NewUserRegisteredListener", () => {
 
     const eventEmitter = vi.spyOn(eventEmitter2, "emitAsync");
 
-    const eventPayload = new NewUserRegisteredPayload({ userId });
+    const eventPayload = new NewUserRegisteredPayload({
+      userId,
+      avatarUrl: "",
+      username: "",
+    });
     await newUserRegisteredListener.handler(eventPayload);
 
     expect(eventEmitter).toHaveBeenCalledOnce();

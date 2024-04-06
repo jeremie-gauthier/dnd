@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import type { UseCase } from "src/types/use-case.interface";
 import type { GetLobbiesOutputDto } from "./get-lobbies.dto";
-import type { GetLobbiesRepository } from "./get-lobbies.repository";
+import { GetLobbiesRepository } from "./get-lobbies.repository";
 
 @Injectable()
 export class GetLobbiesUseCase implements UseCase {

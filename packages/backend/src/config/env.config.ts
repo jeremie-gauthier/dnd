@@ -15,6 +15,8 @@ const validationSchema = z.object({
   REDIS_PORT: z.coerce.number().default(6379),
 });
 
+export type EnvSchema = z.infer<typeof validationSchema>;
+
 export const validate = (config: Record<string, unknown>) => {
   const parsedSchema = validationSchema.parse(config);
   return parsedSchema;

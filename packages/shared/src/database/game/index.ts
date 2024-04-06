@@ -1,2 +1,3 @@
+export * from "./enemy-kind.type";
 export * from "./game.interface";
-export * from "./enemy-kind.type"
+export * from "./player-phase.type";

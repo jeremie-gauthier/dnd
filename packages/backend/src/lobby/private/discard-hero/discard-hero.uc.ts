@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import type { EventEmitter2 } from "@nestjs/event-emitter";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { Hero } from "src/database/entities/hero.entity";
 import type { User } from "src/database/entities/user.entity";
 import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.payload";
@@ -12,7 +12,7 @@ import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import type { MessageContext } from "src/types/socket.type";
 import type { UseCase } from "src/types/use-case.interface";
 import type { DiscardHeroInputDto } from "./discard-hero.dto";
-import type { DiscardHeroRepository } from "./discard-hero.repository";
+import { DiscardHeroRepository } from "./discard-hero.repository";
 
 @Injectable()
 export class DiscardHeroUseCase implements UseCase {

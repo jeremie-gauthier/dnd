@@ -3,7 +3,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import type { HeroTemplate } from "src/database/entities/hero-template.entity";
 import type { UseCase } from "src/types/use-case.interface";
 import type { GetLobbyOutputDto } from "./get-lobby.dto";
-import type { GetLobbyRepository } from "./get-lobby.repository";
+import { GetLobbyRepository } from "./get-lobby.repository";
 
 @Injectable()
 export class GetLobbyUseCase implements UseCase {

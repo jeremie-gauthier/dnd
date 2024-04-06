@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { WsException } from "@nestjs/websockets";
-import type { JwtService } from "src/authz/jwt.service";
+import { JwtService } from "src/authz/jwt.service";
 import type { ServerSocket } from "src/types/socket.type";
 import type { UseCase } from "src/types/use-case.interface";
 

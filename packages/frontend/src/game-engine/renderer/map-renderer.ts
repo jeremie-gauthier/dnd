@@ -1,4 +1,9 @@
-import type { GameEntity, Tile, TileEntity } from "@dnd/shared";
+import type {
+  GameEntity,
+  PlayerGamePhase,
+  Tile,
+  TileEntity,
+} from "@dnd/shared";
 import type { RefObject } from "react";
 import { translate2DToIsometricCoord } from "../utils/coords-conversion.util";
 import { useAssetsLoader } from "./assets-loader/assets-loader";
@@ -6,7 +11,7 @@ import { assetCollection } from "./assets-loader/assets.config";
 import { drawBackground } from "./draw/draw-background";
 import { drawFloor } from "./draw/entities/draw-floor";
 import { centerIsometricDrawing } from "./draw/utils/center-isometric-drawing.util";
-import { getRenderer, type Strategy } from "./render-strategies";
+import { getRenderer } from "./render-strategies";
 
 export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const canvas = canvasRef.current;
@@ -16,7 +21,7 @@ export const useMapRenderer = (canvasRef: RefObject<HTMLCanvasElement>) => {
   const render = (
     map: GameEntity["map"],
     playableEntities: GameEntity["playableEntities"],
-    gamePhase: Strategy,
+    gamePhase: PlayerGamePhase,
   ) => {
     if (!canvas || !context || !assets) return;
 
