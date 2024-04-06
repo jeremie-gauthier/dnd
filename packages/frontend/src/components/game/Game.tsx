@@ -12,7 +12,11 @@ type Props = {
 export const Game = ({ game, phase }: Props) => {
   const ref = useRef<HTMLCanvasElement>(null);
 
-  const { assetSize } = useGameEngine(ref, game, phase);
+  const { assetSize } = useGameEngine({
+    canvasRef: ref,
+    gameEntity: game,
+    gamePhase: phase,
+  });
 
   const { width, height } = useCanvasSize({
     mapWidth: game.map.width,

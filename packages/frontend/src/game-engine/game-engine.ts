@@ -3,11 +3,15 @@ import { useEffect, type RefObject } from "react";
 import { useMouseInputs } from ".";
 import { useMapRenderer } from "./renderer";
 
-export const useGameEngine = (
-  canvasRef: RefObject<HTMLCanvasElement>,
-  gameEntity: GameEntity,
-  gamePhase: PlayerGamePhase,
-) => {
+export const useGameEngine = ({
+  canvasRef,
+  gameEntity,
+  gamePhase,
+}: {
+  canvasRef: RefObject<HTMLCanvasElement>;
+  gameEntity: GameEntity;
+  gamePhase: PlayerGamePhase;
+}) => {
   const { render, assetSize } = useMapRenderer(canvasRef);
 
   const { addClickEvent, clearMouseEvents } = useMouseInputs(canvasRef, {
