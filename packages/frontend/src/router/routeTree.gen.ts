@@ -20,7 +20,7 @@ import { Route as WsMenuMultiplayerImport } from './routes/_ws.menu-multiplayer'
 import { Route as WsLobbiesImport } from './routes/_ws.lobbies'
 import { Route as WsCreateLobbyImport } from './routes/_ws.create-lobby'
 import { Route as WsLobbyLobbyIdImport } from './routes/_ws.lobby.$lobbyId'
-import { Route as WsLobbyLobbyIdGameImport } from './routes/_ws.lobby.$lobbyId.game'
+import { Route as WsGameGameIdImport } from './routes/_ws.game.$gameId'
 
 // Create/Update Routes
 
@@ -69,9 +69,9 @@ const WsLobbyLobbyIdRoute = WsLobbyLobbyIdImport.update({
   getParentRoute: () => WsRoute,
 } as any)
 
-const WsLobbyLobbyIdGameRoute = WsLobbyLobbyIdGameImport.update({
-  path: '/game',
-  getParentRoute: () => WsLobbyLobbyIdRoute,
+const WsGameGameIdRoute = WsGameGameIdImport.update({
+  path: '/game/$gameId',
+  getParentRoute: () => WsRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -110,13 +110,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WsMenuMultiplayerImport
       parentRoute: typeof WsImport
     }
+    '/_ws/game/$gameId': {
+      preLoaderRoute: typeof WsGameGameIdImport
+      parentRoute: typeof WsImport
+    }
     '/_ws/lobby/$lobbyId': {
       preLoaderRoute: typeof WsLobbyLobbyIdImport
       parentRoute: typeof WsImport
-    }
-    '/_ws/lobby/$lobbyId/game': {
-      preLoaderRoute: typeof WsLobbyLobbyIdGameImport
-      parentRoute: typeof WsLobbyLobbyIdImport
     }
   }
 }
@@ -128,7 +128,8 @@ export const routeTree = rootRoute.addChildren([
     WsCreateLobbyRoute,
     WsLobbiesRoute,
     WsMenuMultiplayerRoute,
-    WsLobbyLobbyIdRoute.addChildren([WsLobbyLobbyIdGameRoute]),
+    WsGameGameIdRoute,
+    WsLobbyLobbyIdRoute,
   ]),
   GameTestRoute,
   LoginRoute,

@@ -5,10 +5,11 @@ import {
 } from "@auth0/auth0-react";
 import {
   ClientLobbyEvent,
+  GameEntity,
   ServerLobbyEvent,
   type LobbyEntity,
 } from "@dnd/shared";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Lobby } from "../../components/lobbies/Lobby";
 import {
@@ -27,13 +28,18 @@ export function MenuRouteComponent() {
   const { lobbyId } = Route.useParams();
   const { user, isLoading } = useAuth0();
   const { data: lobby, isLoading: isLobbyLoading } = useGetLobby(lobbyId);
-  const router = useRouter();
   useServerLobbyError(socket);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // TODO: useGameInitializationDone hook ?
-    const gameInitializationDoneHandler = () => {
-      router.history.push(`/lobby/${lobbyId}/game`);
+    const gameInitializationDoneHandler = async ({
+      game,
+    }: { game: GameEntity }) => {
+      navigate({
+        to: "/game/$gameId",
+        params: { gameId: game.id },
+      });
     };
     socket.on(
       ServerLobbyEvent.GameInitializationDone,
@@ -67,8 +73,10 @@ export function MenuRouteComponent() {
     };
     socket.on(ServerLobbyEvent.LobbyChangesDetected, handleLobbyChanges);
 
-    return () => {};
-  }, [socket, queryClient, router, lobbyId]);
+    return () => {
+      socket.removeAllListeners();
+    };
+  }, [socket, queryClient, navigate]);
 
   useEffect(() => {
     return () => {

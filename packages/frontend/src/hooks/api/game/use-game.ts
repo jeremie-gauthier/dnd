@@ -1,22 +1,35 @@
 import {
+  GameEntity,
   PlayerGamePhase,
   ServerGameEvent,
   ServerToClientEvents,
-  type GameEntity,
 } from "@dnd/shared";
-import { useEffect, useState } from "react";
+import { QueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { ClientSocket } from "../../../types/socket.type";
-import { useIsLoading } from "../../useIsLoading";
+import {
+  GET_PLAYER_GAME_STATE_QUERY_KEY,
+  useGetPlayerGameState,
+} from "./get-player-game-state";
 
-export const useGame = (socket: ClientSocket) => {
-  const [game, setGame] = useState<GameEntity>();
-  const [phase, setPhase] = useState<PlayerGamePhase>("idle");
+export const useGame = ({
+  gameId,
+  queryClient,
+  socket,
+}: {
+  socket: ClientSocket;
+  gameId: GameEntity["id"];
+  queryClient: QueryClient;
+}) => {
+  const { data: playerGameState, isLoading } = useGetPlayerGameState(gameId);
 
   useEffect(() => {
     const handleGameChanges: ServerToClientEvents["server.game.changes_detected"] =
       (payload) => {
-        setGame(payload.game);
-        setPhase(payload.playerPhase);
+        queryClient.setQueryData(
+          GET_PLAYER_GAME_STATE_QUERY_KEY(gameId),
+          () => payload,
+        );
       };
 
     socket.on(ServerGameEvent.GameChangesDetected, handleGameChanges);
@@ -27,11 +40,13 @@ export const useGame = (socket: ClientSocket) => {
         handleGameChanges,
       );
     };
-  }, [socket]);
+  }, [socket, queryClient, gameId]);
 
-  const { state, isLoading } = useIsLoading(game);
-
-  return isLoading
-    ? { game: state, isLoading, phase }
-    : { game: state, isLoading, phase };
+  return isLoading || playerGameState === undefined
+    ? { game: undefined, isLoading, phase: "idle" as PlayerGamePhase }
+    : {
+        game: playerGameState.game,
+        isLoading,
+        phase: playerGameState.playerPhase,
+      };
 };
