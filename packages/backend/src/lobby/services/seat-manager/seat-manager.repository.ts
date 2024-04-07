@@ -1,11 +1,11 @@
-import type { LobbyEntity } from "@dnd/shared";
+import { LobbyEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import type { User } from "src/database/entities/user.entity";
+import { User } from "src/database/entities/user.entity";
 import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
 import { UsersRepository } from "src/redis/repositories/users.repository";
 
 @Injectable()
-export class LeaveLobbyRepository {
+export class SeatManagerRepository {
   constructor(
     private readonly lobbiesRepository: LobbiesRepository,
     private readonly usersRepository: UsersRepository,
@@ -31,5 +31,25 @@ export class LeaveLobbyRepository {
       ...lobby,
       players: lobby.players.filter((player) => player.userId !== userId),
     });
+  }
+
+  public async getLobbyById(
+    lobbyId: LobbyEntity["id"],
+  ): Promise<LobbyEntity | null> {
+    return await this.lobbiesRepository.getOne(lobbyId);
+  }
+
+  public async addPlayerToLobby({
+    player,
+    lobbyId,
+  }: {
+    lobbyId: LobbyEntity["id"];
+    player: LobbyEntity["players"][number];
+  }) {
+    await this.lobbiesRepository.client.json.arrAppend(
+      LobbiesRepository.KEY,
+      `${lobbyId}.players`,
+      player,
+    );
   }
 }

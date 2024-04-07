@@ -24,15 +24,15 @@ import { GetLobbyUseCase } from "./get-lobby/get-lobby.uc";
 import { HandleWsConnectionUseCase } from "./handle-ws-connection/handle-ws-connection.uc";
 import { HandleWsDisconnectionRepository } from "./handle-ws-disconnection/handle-ws-disconnection.repository";
 import { HandleWsDisconnectionUseCase } from "./handle-ws-disconnection/handle-ws-disconnection.uc";
-import { JoinLobbyRepository } from "./join-lobby/join-lobby.repository";
 import { JoinLobbyUseCase } from "./join-lobby/join-lobby.uc";
-import { LeaveLobbyRepository } from "./leave-lobby/leave-lobby.repository";
 import { LeaveLobbyUseCase } from "./leave-lobby/leave-lobby.uc";
 import { ListenLobbiesChangesUseCase } from "./listen-lobbies-changes/listen-lobbies-changes.uc";
 import { LobbyPrivateController } from "./lobby.private-controller";
 import { LobbyPrivateGateway } from "./lobby.private-gateway";
 import { PickHeroRepository } from "./pick-hero/pick-hero.repository";
 import { PickHeroUseCase } from "./pick-hero/pick-hero.uc";
+import { SeatManagerRepository } from "./services/seat-manager/seat-manager.repository";
+import { SeatManagerService } from "./services/seat-manager/seat-manager.service";
 import { StartGameRepository } from "./start-game/start-game.repository";
 import { StartGameUseCase } from "./start-game/start-game.uc";
 import { TogglePlayerReadyStateRepository } from "./toggle-player-ready-state/toggle-player-ready-state.repository";
@@ -57,7 +57,6 @@ import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggl
     GetLobbyUseCase,
     GetLobbyRepository,
     JoinLobbyUseCase,
-    JoinLobbyRepository,
     ListenLobbiesChangesUseCase,
     LobbiesChangesListener,
     LobbiesChangesRepository,
@@ -65,7 +64,6 @@ import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggl
     LobbyCleanerRepository,
     RoomManagerListener,
     LeaveLobbyUseCase,
-    LeaveLobbyRepository,
     LobbyChangedListener,
     LobbyChangedRepository,
     PickHeroUseCase,
@@ -78,6 +76,8 @@ import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggl
     StartGameRepository,
     GameInitializationDoneListener,
     GameInitializationDoneRepository,
+    SeatManagerService,
+    SeatManagerRepository,
   ],
 })
 export class LobbyModule {}

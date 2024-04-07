@@ -1,32 +1,27 @@
-import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { JoinLobbyRepository } from "./join-lobby.repository";
+import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
 import { JoinLobbyUseCase } from "./join-lobby.uc";
 
 describe("StartGameUseCase", () => {
   let useCase: JoinLobbyUseCase;
-  let repository: JoinLobbyRepository;
-  let eventEmitter2: EventEmitter2;
+  let seatManagerService: SeatManagerService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
         JoinLobbyUseCase,
-        EventEmitter2,
         {
-          provide: JoinLobbyRepository,
+          provide: SeatManagerService,
           useValue: {
-            getLobbyById: () => Promise.resolve(null),
-            addPlayerToLobby: () => Promise.resolve(),
+            take: () => Promise.resolve("fake-lobby-id"),
           },
         },
       ],
     }).compile();
 
     useCase = module.get<JoinLobbyUseCase>(JoinLobbyUseCase);
-    repository = module.get<JoinLobbyRepository>(JoinLobbyRepository);
-    eventEmitter2 = module.get<EventEmitter2>(EventEmitter2);
+    seatManagerService = module.get<SeatManagerService>(SeatManagerService);
   });
 
   afterEach(() => {
@@ -35,7 +30,6 @@ describe("StartGameUseCase", () => {
 
   it("should be defined", () => {
     expect(useCase).toBeDefined();
-    expect(repository).toBeDefined();
-    expect(eventEmitter2).toBeDefined();
+    expect(seatManagerService).toBeDefined();
   });
 });
