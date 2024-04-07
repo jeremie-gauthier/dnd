@@ -1,7 +1,7 @@
 import { GameEntity, Tile } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
-import { MovesService } from "src/game/moves/moves.service";
+import { MovesService } from "src/game/moves/services/moves.service";
 import { GameEvent } from "../../emitters/game-events.enum";
 import type { GameInitializationDonePayload } from "../../emitters/game-initialization-done.payload";
 import { GamePreparationPhaseStartedPayload } from "../../emitters/game-preparation-phase-started.payload";

@@ -6,7 +6,7 @@ import {
 } from "@nestjs/common";
 import { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/types/use-case.interface";
-import { PlayerStateService } from "../player-state.service";
+import { PlayerStateService } from "../services/player-state/player-state.service";
 import { GetUserGameStateRepository } from "./get-user-game-state.repository";
 
 @Injectable()
