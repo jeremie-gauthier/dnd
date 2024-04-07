@@ -1,23 +1,25 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/database/entities/user.entity";
-import type { Repository } from "typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
-export class PrivateUserConnectionRepository {
+export class GetUserRepository {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
 
-  public async shouldSetupUserEnvironment(
-    userId: User["id"],
-  ): Promise<boolean> {
-    const user = await this.userRepository.findOne({
+  public getUserById(userId: User["id"]): Promise<User> {
+    return this.userRepository.findOneOrFail({
+      select: {
+        id: true,
+        avatarUrl: true,
+        username: true,
+      },
       where: {
         id: userId,
       },
     });
-    return user === null;
   }
 }

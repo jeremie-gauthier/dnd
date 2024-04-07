@@ -10,23 +10,21 @@ import type { Request } from "express";
 import { ZodSerializerDto } from "nestjs-zod";
 import { JWTAuthGuard } from "src/authz/jwt-auth.guard";
 import { JWTUser } from "src/authz/jwt-user.decorator";
-import { PrivateGetUserOutputDto } from "src/user/private-get-user/private-get-user.dto";
-import { PrivateUserConnectionInputDto } from "./private-user-connection/private-user-connection.dto";
-import { PrivateUserConnectionUseCase } from "./private-user-connection/private-user-connection.uc";
+import { GetUserOutputDto } from "src/user/get-user/get-user.dto";
+import { UserConnectionInputDto } from "./user-connection/user-connection.dto";
+import { UserConnectionUseCase } from "./user-connection/user-connection.uc";
 
 @UseGuards(JWTAuthGuard)
 @Controller("auth/private")
 export class AuthPrivateController {
-  constructor(
-    private readonly userConnectionUseCase: PrivateUserConnectionUseCase,
-  ) {}
+  constructor(private readonly userConnectionUseCase: UserConnectionUseCase) {}
 
   @Post("connection")
   @HttpCode(HttpStatus.CREATED)
-  @ZodSerializerDto(PrivateGetUserOutputDto)
+  @ZodSerializerDto(GetUserOutputDto)
   public async connection(
     @JWTUser() user: Request["user"],
-    @Body() userConnectionDto: PrivateUserConnectionInputDto,
+    @Body() userConnectionDto: UserConnectionInputDto,
   ) {
     return await this.userConnectionUseCase.execute({
       userId: user.id,

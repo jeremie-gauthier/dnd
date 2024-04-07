@@ -1,7 +1,7 @@
 import type { Coord, GameEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import type { Hero } from "src/database/entities/hero.entity";
-import { translateCoordToIndex } from "../map/utils/translate-coord-to-index.util";
+import { translateCoordToIndex } from "../../map/utils/translate-coord-to-index.util";
 
 @Injectable()
 export class MovesService {

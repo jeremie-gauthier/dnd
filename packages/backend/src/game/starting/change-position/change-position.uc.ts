@@ -8,7 +8,7 @@ import {
 import type { Hero } from "src/database/entities/hero.entity";
 import type { User } from "src/database/entities/user.entity";
 import { translateCoordToIndex } from "src/game/map/utils/translate-coord-to-index.util";
-import { MovesService } from "src/game/moves/moves.service";
+import { MovesService } from "src/game/moves/services/moves.service";
 import type { MessageContext } from "src/types/socket.type";
 import type { UseCase } from "src/types/use-case.interface";
 import { ChangePositionRepository } from "./change-position.repository";

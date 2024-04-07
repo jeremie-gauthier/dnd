@@ -7,8 +7,8 @@ import {
   WebSocketServer,
 } from "@nestjs/websockets";
 import type { ServerSocket, WsServer } from "src/types/socket.type";
-import type { ChangePositionInputDto } from "./private/change-position/change-position.dto";
-import { ChangePositionUseCase } from "./private/change-position/change-position.uc";
+import type { ChangePositionInputDto } from "./change-position/change-position.dto";
+import { ChangePositionUseCase } from "./change-position/change-position.uc";
 
 @WebSocketGateway({
   cors: {

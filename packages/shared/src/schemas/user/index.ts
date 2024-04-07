@@ -1,2 +1,2 @@
-export * from './private-get-user/private-get-user-input.schema';
-export * from './private-get-user/private-get-user-output.schema';
+export * from "./get-user/get-user-input.schema";
+export * from "./get-user/get-user-output.schema";

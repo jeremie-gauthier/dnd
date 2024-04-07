@@ -5,29 +5,29 @@ import { AuthEvent } from "src/auth/events/emitters/auth-events.enum";
 import { NewUserRegisteredPayload } from "src/auth/events/emitters/new-user-registered.payload";
 import { User } from "src/database/entities/user.entity";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { PrivateUserConnectionRepository } from "./private-user-connection.repository";
-import { PrivateUserConnectionUseCase } from "./private-user-connection.uc";
+import { UserConnectionRepository } from "./user-connection.repository";
+import { UserConnectionUseCase } from "./user-connection.uc";
 
 describe("UserConnectionUseCase", () => {
-  let userConnectionUseCase: PrivateUserConnectionUseCase;
-  let userConnectionRepository: PrivateUserConnectionRepository;
+  let userConnectionUseCase: UserConnectionUseCase;
+  let userConnectionRepository: UserConnectionRepository;
   let eventEmitter2: EventEmitter2;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       providers: [
-        PrivateUserConnectionUseCase,
-        PrivateUserConnectionRepository,
+        UserConnectionUseCase,
+        UserConnectionRepository,
         EventEmitter2,
         { provide: getRepositoryToken(User), useValue: {} },
       ],
     }).compile();
 
-    userConnectionUseCase = app.get<PrivateUserConnectionUseCase>(
-      PrivateUserConnectionUseCase,
+    userConnectionUseCase = app.get<UserConnectionUseCase>(
+      UserConnectionUseCase,
     );
-    userConnectionRepository = app.get<PrivateUserConnectionRepository>(
-      PrivateUserConnectionRepository,
+    userConnectionRepository = app.get<UserConnectionRepository>(
+      UserConnectionRepository,
     );
     eventEmitter2 = app.get<EventEmitter2>(EventEmitter2);
   });
