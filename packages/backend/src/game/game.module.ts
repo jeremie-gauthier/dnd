@@ -13,6 +13,7 @@ import { MapModule } from "./map/map.module";
 import { MovesModule } from "./moves/moves.module";
 import { StartingModule } from "./starting/starting.module";
 import { StateMachineModule } from "./state-machine/state-machine.module";
+import { TimelineModule } from './timeline/timeline.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { StateMachineModule } from "./state-machine/state-machine.module";
     StateMachineModule,
     TypeOrmModule.forFeature([CampaignStageProgression]),
     AuthzModule,
+    TimelineModule,
   ],
   controllers: [GamePrivateController],
   providers: [
