@@ -1,7 +1,7 @@
 import { GameEntity, ServerGameEvent } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
-import { PlayerStateService } from "src/game/state-machine/services/player-state.service";
+import { PlayerStateService } from "src/game/state-machine/services/player-state/player-state.service";
 import { MessageContext } from "src/types/socket.type";
 import { GameEvent } from "../../emitters/game-events.enum";
 

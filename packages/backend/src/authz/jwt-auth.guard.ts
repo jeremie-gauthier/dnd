@@ -6,7 +6,7 @@ import {
   type ExecutionContext,
 } from "@nestjs/common";
 import type { Request } from "express";
-import { JwtService } from "./services/jwt.service";
+import { JwtService } from "./services/jwt/jwt.service";
 
 @Injectable()
 export class JWTAuthGuard implements CanActivate {

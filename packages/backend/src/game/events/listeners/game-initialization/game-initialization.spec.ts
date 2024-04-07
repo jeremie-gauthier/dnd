@@ -1,20 +1,20 @@
-import { type GameEntity, HeroClass, type LobbyEntity } from "@dnd/shared";
+import { HeroClass, type GameEntity, type LobbyEntity } from "@dnd/shared";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import type { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import type { User } from "src/database/entities/user.entity";
-import { MapSerializerService } from "src/game/map/map-serializer/map-serializer.service";
+import { MapSerializerService } from "src/game/map/services/map-serializer/map-serializer.service";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import type { MessageContext } from "src/types/socket.type";
 import {
-  type Mock,
   afterEach,
   beforeEach,
   describe,
   expect,
   it,
   vi,
+  type Mock,
 } from "vitest";
 import { GameEvent } from "../../emitters/game-events.enum";
 import { GameInitializationDonePayload } from "../../emitters/game-initialization-done.payload";

@@ -1,8 +1,9 @@
 import { Module } from "@nestjs/common";
-import { MapSerializerService } from "./map-serializer/map-serializer.service";
+import { MapSerializerService } from "./services/map-serializer/map-serializer.service";
+import { CoordService } from './services/coord/coord.service';
 
 @Module({
-  providers: [MapSerializerService],
+  providers: [MapSerializerService, CoordService],
   exports: [MapSerializerService],
 })
 export class MapModule {}

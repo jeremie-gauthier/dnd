@@ -2,7 +2,7 @@ import type { GameEntity, LobbyEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
-import { MapSerializerService } from "src/game/map/map-serializer/map-serializer.service";
+import { MapSerializerService } from "src/game/map/services/map-serializer/map-serializer.service";
 import type { HostRequestedGameStartPayload } from "src/lobby/events/emitters/host-requested-game-start.payload";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import { GameEvent } from "../../emitters/game-events.enum";

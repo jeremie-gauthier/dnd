@@ -6,8 +6,9 @@ import type {
   TileNonPlayableNonInteractiveEntity,
 } from "@dnd/shared";
 import { InternalServerErrorException } from "@nestjs/common";
-import { translateCoordToIndex } from "../utils/translate-coord-to-index.util";
-import { translateIndexToCoord } from "../utils/translate-index-to-coord.util";
+import { CoordService } from "../coord/coord.service";
+
+const coordService = new CoordService();
 
 const NON_PLAYABLE_NON_INTERACTIVE_TILE_ENTITY = [
   "wall",
@@ -43,7 +44,7 @@ export function inferOffMapTileEntities({
     )
       return;
 
-    const tileIndex = translateCoordToIndex({ coord, metadata });
+    const tileIndex = coordService.coordToIndex({ coord, metadata });
     const tile = tiles[tileIndex];
     if (!tile) return;
 
@@ -78,14 +79,17 @@ export function inferOffMapTileEntities({
     });
 
     reachableTiles.add(
-      translateCoordToIndex({ coord: currentCoordExplored, metadata }),
+      coordService.coordToIndex({ coord: currentCoordExplored, metadata }),
     );
 
     currentCoordExplored = coordsToExploreQueue.shift();
   }
 
   for (const tile of tiles) {
-    const tileIndex = translateCoordToIndex({ coord: tile.coord, metadata });
+    const tileIndex = coordService.coordToIndex({
+      coord: tile.coord,
+      metadata,
+    });
     if (reachableTiles.has(tileIndex) || tile.entities.length > 0) continue;
 
     tile.entities.push({
@@ -103,7 +107,7 @@ export function createDummyTiles({
   height,
 }: { width: number; height: number }): Tile[] {
   return Array.from({ length: width * height }).map((_, index) => ({
-    coord: translateIndexToCoord({ index, metadata: { width, height } }),
+    coord: coordService.indexToCoord({ index, metadata: { width, height } }),
     entities: [],
   }));
 }
@@ -161,7 +165,10 @@ export function addStartingPositions({
   metadata: { width: number; height: number };
 }): void {
   for (const startingPosition of startingPositions) {
-    const idx = translateCoordToIndex({ coord: startingPosition, metadata });
+    const idx = coordService.coordToIndex({
+      coord: startingPosition,
+      metadata,
+    });
     const tile = tiles[idx];
     if (!tile) {
       throw new InternalServerErrorException(
@@ -299,7 +306,7 @@ export function addTileEntities({
   metadata: { width: number; height: number };
 }): void {
   for (const { coord, tileEntity } of tileEntities) {
-    const idx = translateCoordToIndex({ coord, metadata });
+    const idx = coordService.coordToIndex({ coord, metadata });
     const tile = tiles[idx];
     if (!tile) {
       throw new InternalServerErrorException(
