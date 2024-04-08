@@ -3,6 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { AuthzModule } from "src/authz/authz.module";
 import { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import { Campaign } from "src/database/entities/campaign.entity";
+import { Hero } from "src/database/entities/hero.entity";
 import { RedisModule } from "src/redis/redis.module";
 import { CreateLobbyRepository } from "./create-lobby/create-lobby.repository";
 import { CreateLobbyUseCase } from "./create-lobby/create-lobby.uc";
@@ -41,7 +42,7 @@ import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggl
 @Module({
   imports: [
     AuthzModule,
-    TypeOrmModule.forFeature([Campaign, CampaignStage]),
+    TypeOrmModule.forFeature([Campaign, CampaignStage, Hero]),
     RedisModule,
   ],
   controllers: [LobbyPrivateController],

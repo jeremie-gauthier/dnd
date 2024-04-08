@@ -1,8 +1,10 @@
-import type { GameEntity, LobbyEntity } from "@dnd/shared";
-import { Injectable } from "@nestjs/common";
+import type { GameEntity, LobbyEntity, Tile } from "@dnd/shared";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import { MapSerializerService } from "src/game/map/services/map-serializer/map-serializer.service";
+import { MovesService } from "src/game/moves/services/moves.service";
+import { InitiativeService } from "src/game/timeline/services/initiative/initiative.service";
 import type { HostRequestedGameStartPayload } from "src/lobby/events/emitters/host-requested-game-start.payload";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import { GameEvent } from "../../emitters/game-events.enum";
@@ -16,6 +18,8 @@ export class GameInitializationListener {
     private readonly eventEmitter: EventEmitter2,
     private readonly repository: GameInitializationRepository,
     private readonly mapSerializer: MapSerializerService,
+    private readonly movesService: MovesService,
+    private readonly initiativeService: InitiativeService,
   ) {}
 
   @OnEvent(LobbyEvent.HostRequestedGameStart)
@@ -55,15 +59,21 @@ export class GameInitializationListener {
       campaignStageProgression,
     });
 
-    const game = await this.repository.saveGame({
+    const game: GameEntity = {
       id: lobby.id,
-      status: "prepare_for_battle",
+      status: "battle_ongoing",
       map,
       playableEntities,
       timeline: [],
-    });
+    };
 
-    return game;
+    this.randomlyPlaceHeroesOnStartingTiles({ game });
+    this.initiativeService.rollPlayableEntitiesInitiative({ game });
+    this.setPlayerGamePhase({ game });
+
+    const savedGame = await this.repository.saveGame(game);
+
+    return savedGame;
   }
 
   private getPlayableEntitiesMap({
@@ -113,5 +123,53 @@ export class GameInitializationListener {
         },
       ]),
     );
+  }
+
+  private randomlyPlaceHeroesOnStartingTiles({
+    game,
+  }: { game: GameEntity }): void {
+    const playableEntities = Object.values(game.playableEntities);
+    for (const playableEntity of playableEntities) {
+      if (playableEntity.type !== "hero") continue;
+
+      const firstFreeStartingTile = this.getFirstFreeStartingTileOrThrow(game);
+      this.movesService.moveHeroToRequestedPosition({
+        game,
+        heroId: playableEntity.id,
+        requestedPosition: firstFreeStartingTile.coord,
+      });
+    }
+  }
+
+  private getFirstFreeStartingTileOrThrow(game: GameEntity): Tile {
+    const firstFreeStartingTile = game.map.tiles.find(
+      (tile) =>
+        tile.isStartingTile &&
+        this.movesService.canMoveToRequestedPosition({
+          game,
+          requestedPosition: tile.coord,
+        }),
+    );
+    if (!firstFreeStartingTile) {
+      throw new NotFoundException("No free starting tile found");
+    }
+
+    return firstFreeStartingTile;
+  }
+
+  private setPlayerGamePhase({ game }: { game: GameEntity }): void {
+    const playableEntities = Object.values(game.playableEntities);
+    for (const playableEntity of playableEntities) {
+      playableEntity.currentPhase = "idle";
+    }
+
+    const firstPlayableEntityIdToPlay = game.timeline[0];
+    if (!firstPlayableEntityIdToPlay) return;
+
+    const firstPlayableEntityToPlay =
+      game.playableEntities[firstPlayableEntityIdToPlay];
+    if (!firstPlayableEntityToPlay) return;
+
+    firstPlayableEntityToPlay.currentPhase = "action";
   }
 }

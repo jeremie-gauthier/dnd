@@ -3,6 +3,8 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import type { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import { Campaign } from "src/database/entities/campaign.entity";
+import { Hero } from "src/database/entities/hero.entity";
+import { User } from "src/database/entities/user.entity";
 import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
 import type { Repository } from "typeorm";
 
@@ -12,6 +14,8 @@ export class CreateLobbyRepository {
     private readonly lobbiesRepository: LobbiesRepository,
     @InjectRepository(Campaign)
     private readonly campaignRepository: Repository<Campaign>,
+    @InjectRepository(Hero)
+    private readonly heroRepository: Repository<Hero>,
   ) {}
 
   public async createLobby(
@@ -20,9 +24,9 @@ export class CreateLobbyRepository {
     return await this.lobbiesRepository.set(lobby);
   }
 
-  public async getCampaignByStageId(
-    stageId: CampaignStage["id"],
-  ): Promise<Campaign> {
+  public async getCampaignByStageId({
+    stageId,
+  }: { stageId: CampaignStage["id"] }): Promise<Campaign> {
     const campaigns = await this.campaignRepository.findOneOrFail({
       select: {
         id: true,
@@ -40,10 +44,34 @@ export class CreateLobbyRepository {
       },
       relations: {
         stages: true,
-        playableHeroes: true,
       },
     });
 
     return campaigns;
+  }
+
+  public async getHeroes({
+    stageId,
+    userId,
+  }: {
+    stageId: CampaignStage["id"];
+    userId: User["id"];
+  }) {
+    const heroes = await this.heroRepository.find({
+      where: {
+        campaignProgression: {
+          user: {
+            id: userId,
+          },
+          stageProgressions: {
+            stage: {
+              id: stageId,
+            },
+          },
+        },
+      },
+    });
+
+    return heroes;
   }
 }

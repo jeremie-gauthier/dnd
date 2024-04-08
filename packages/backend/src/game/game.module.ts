@@ -6,13 +6,12 @@ import { RedisModule } from "src/redis/redis.module";
 import { GameChangesListener } from "./events/listeners/game-changes/game-changes.listener";
 import { GameInitializationListener } from "./events/listeners/game-initialization/game-initialization.listener";
 import { GameInitializationRepository } from "./events/listeners/game-initialization/game-initialization.repository";
-import { GamePreparationPhaseListener } from "./events/listeners/game-preparation-phase/game-preparation-phase.listener";
-import { GamePreparationPhaseRepository } from "./events/listeners/game-preparation-phase/game-preparation-phase.repository";
 import { GamePrivateController } from "./game.private-controller";
 import { MapModule } from "./map/map.module";
 import { MovesModule } from "./moves/moves.module";
 import { StartingModule } from "./starting/starting.module";
 import { StateMachineModule } from "./state-machine/state-machine.module";
+import { TimelineModule } from "./timeline/timeline.module";
 
 @Module({
   imports: [
@@ -23,14 +22,13 @@ import { StateMachineModule } from "./state-machine/state-machine.module";
     StateMachineModule,
     TypeOrmModule.forFeature([CampaignStageProgression]),
     AuthzModule,
+    TimelineModule,
   ],
   controllers: [GamePrivateController],
   providers: [
     GameChangesListener,
     GameInitializationListener,
     GameInitializationRepository,
-    GamePreparationPhaseListener,
-    GamePreparationPhaseRepository,
   ],
 })
 export class GameModule {}

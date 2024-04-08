@@ -1,6 +1,4 @@
-import type { LobbyEntity } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
-import type { HeroTemplate } from "src/database/entities/hero-template.entity";
 import type { UseCase } from "src/types/use-case.interface";
 import type { GetLobbyOutputDto } from "./get-lobby.dto";
 import { GetLobbyRepository } from "./get-lobby.repository";
@@ -21,11 +19,6 @@ export class GetLobbyUseCase implements UseCase {
       lobby.config.campaign.stage.id,
     );
 
-    const heroesAvailable = this.getHeroesAvailableDetails(
-      lobby.heroesAvailable,
-      stage.campaign.playableHeroes,
-    );
-
     return {
       ...lobby,
       config: {
@@ -39,29 +32,6 @@ export class GetLobbyUseCase implements UseCase {
           },
         },
       },
-      heroesAvailable,
     };
-  }
-
-  private getHeroesAvailableDetails(
-    heroesLobby: LobbyEntity["heroesAvailable"],
-    heroesTemplates: HeroTemplate[],
-  ): GetLobbyOutputDto["heroesAvailable"] {
-    const heroTemplateByIdMap = new Map(
-      heroesTemplates.map((heroTemplate) => [heroTemplate.id, heroTemplate]),
-    );
-    const heroesAvailable = heroesLobby.map((heroLobby) => {
-      const heroTemplate = heroTemplateByIdMap.get(heroLobby.id);
-      if (!heroTemplate) {
-        throw new NotFoundException("Hero not found");
-      }
-
-      return {
-        ...heroLobby,
-        ...heroTemplate,
-      };
-    });
-
-    return heroesAvailable;
   }
 }

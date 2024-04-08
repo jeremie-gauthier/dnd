@@ -1,7 +1,16 @@
+import { HeroClassType } from "../enums";
 import type { LobbyEntityStatusType } from "./lobby.enum";
 
 type Hero = {
   id: string;
+  name: string;
+  class: HeroClassType;
+  level: number;
+  baseHealthPoints: number;
+  baseManaPoints: number;
+  baseArmorClass: number;
+  baseMovementPoints: number;
+  baseActionPoints: number;
   pickedBy?: string;
 };
 
