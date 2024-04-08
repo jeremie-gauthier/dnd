@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import type { Campaign } from "src/database/entities/campaign.entity";
 import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
-import type { Repository } from "typeorm";
+import { type Repository } from "typeorm";
 
 @Injectable()
 export class GetLobbyRepository {
@@ -22,11 +22,6 @@ export class GetLobbyRepository {
     return this.campaignStageRepository.findOneOrFail({
       where: {
         id: campaignStageId,
-      },
-      relations: {
-        campaign: {
-          playableHeroes: true,
-        },
       },
     });
   }

@@ -1,4 +1,5 @@
 import { PlayerGamePhase } from "@dnd/shared";
+import { actionRenderer } from "./action-renderer";
 import { idleRenderer } from "./idle-renderer";
 import { preparationRenderer } from "./preparation-renderer";
 import type { RendererParams } from "./renderer-params.interface";
@@ -12,7 +13,7 @@ export function getRenderer(strategy: PlayerGamePhase) {
 const strategyToRendererMap: Readonly<
   Record<PlayerGamePhase, (_: RendererParams) => void>
 > = {
-  action: () => undefined,
+  action: actionRenderer,
   idle: idleRenderer,
   preparation: preparationRenderer,
 };

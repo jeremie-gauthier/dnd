@@ -1,10 +1,12 @@
 import type { Coord, GameEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import type { Hero } from "src/database/entities/hero.entity";
-import { translateCoordToIndex } from "../../map/utils/translate-coord-to-index.util";
+import { CoordService } from "src/game/map/services/coord/coord.service";
 
 @Injectable()
 export class MovesService {
+  constructor(private readonly coordService: CoordService) {}
+
   public moveHeroToRequestedPosition({
     game,
     heroId,
@@ -17,8 +19,11 @@ export class MovesService {
     const hero = game.playableEntities[heroId]!;
 
     const metadata = { width: game.map.width, height: game.map.height };
-    const oldTileIdx = translateCoordToIndex({ coord: hero.coord, metadata });
-    const requestedTileIdx = translateCoordToIndex({
+    const oldTileIdx = this.coordService.coordToIndex({
+      coord: hero.coord,
+      metadata,
+    });
+    const requestedTileIdx = this.coordService.coordToIndex({
       coord: requestedPosition,
       metadata,
     });
@@ -51,7 +56,7 @@ export class MovesService {
     requestedPosition: Coord;
   }): boolean {
     const metadata = { width: game.map.width, height: game.map.height };
-    const requestedTileIdx = translateCoordToIndex({
+    const requestedTileIdx = this.coordService.coordToIndex({
       coord: requestedPosition,
       metadata,
     });

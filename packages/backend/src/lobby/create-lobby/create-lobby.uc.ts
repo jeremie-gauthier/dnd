@@ -33,7 +33,10 @@ export class CreateLobbyUseCase implements UseCase {
   }): Promise<CreateLobbyOutputDto> {
     await this.seatManagerService.leave({ ctx, userId });
 
-    const campaign = await this.repository.getCampaignByStageId(stageId);
+    const [campaign, heroes] = await Promise.all([
+      this.repository.getCampaignByStageId({ stageId }),
+      this.repository.getHeroes({ stageId, userId }),
+    ]);
 
     const selectedStage = this.getStageById(campaign.stages, stageId);
 
@@ -58,8 +61,8 @@ export class CreateLobbyUseCase implements UseCase {
           isReady: false,
         },
       ],
-      heroesAvailable: campaign.playableHeroes.map(({ id }) => ({
-        id,
+      heroesAvailable: heroes.map((hero) => ({
+        ...hero,
         pickedBy: undefined,
       })),
     });
@@ -73,10 +76,7 @@ export class CreateLobbyUseCase implements UseCase {
       }),
     );
 
-    return {
-      ...lobby,
-      heroesAvailable: campaign.playableHeroes,
-    };
+    return lobby;
   }
 
   private getStageById(
