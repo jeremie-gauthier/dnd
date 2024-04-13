@@ -1,4 +1,4 @@
-import { GameEntity, Tile } from "../../database";
+import { Coord, GameEntity, Tile } from "../../database";
 import { NonNegativeNumber } from "../../types";
 import { canMoveToRequestedPosition } from "./collision";
 import { coordToIndex } from "./coord";
@@ -19,16 +19,22 @@ export type TilePath = OriginTilePath | ChildTilePath;
 
 type Params = {
   map: GameEntity["map"];
-  originTile: Tile;
+  originCoord: Coord;
   maxRange: NonNegativeNumber<number>;
 };
 
 export function getAllPathsFromTileWithinRange({
   map,
-  originTile,
+  originCoord,
   maxRange,
 }: Params): TilePath[] {
   const metadata = { width: map.width, height: map.height };
+
+  const originTileIdx = coordToIndex({ coord: originCoord, metadata });
+  const originTile = map.tiles[originTileIdx];
+  if (!originTile) {
+    return [];
+  }
 
   const queue: TilePath[] = [];
   const explored: Tile[] = [];
@@ -99,4 +105,26 @@ export function unfoldTilePath(tilePath: TilePath): Tile[] {
   }
 
   return tilePaths.map((tilePath) => tilePath.tile);
+}
+
+export function getCoordsFromTilePaths(tilePaths: TilePath[]): Coord[] {
+  const uniqCoords: Coord[] = [];
+
+  for (const tilePath of tilePaths) {
+    const coords = unfoldTilePath(tilePath).map((tile) => tile.coord);
+    for (const coord of coords) {
+      const isNewCoord = uniqCoords.every(
+        (existingCoord) =>
+          !(
+            existingCoord.column === coord.column &&
+            existingCoord.row === coord.row
+          ),
+      );
+      if (isNewCoord) {
+        uniqCoords.push(coord);
+      }
+    }
+  }
+
+  return uniqCoords;
 }

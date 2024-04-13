@@ -1,7 +1,13 @@
 import { getElevationOffset } from "../utils/get-elevation-offset.util";
 import type { EntityDrawerParams } from "./entity-drawer-params.interface";
 
-export function drawWall({ context, config, subject }: EntityDrawerParams) {
+type RequiredAssets = { readonly wall: string };
+
+export function drawWall({
+  context,
+  config,
+  subject,
+}: EntityDrawerParams<RequiredAssets>) {
   context.drawImage(
     config.assets.wall,
     subject.coordIsometric.column,

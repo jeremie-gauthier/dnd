@@ -1,11 +1,14 @@
 import type { PlayableEnemyEntity, PlayableHeroEntity } from "@dnd/shared";
+import { entitiesAssetsCollection } from "../../assets-loader/assets.config";
 import type { EntityDrawerParams } from "./entity-drawer-params.interface";
+
+type RequiredAssets = typeof entitiesAssetsCollection;
 
 export function drawPlayableEntityIcon({
   context,
   config,
   subject,
-}: EntityDrawerParams) {
+}: EntityDrawerParams<RequiredAssets>) {
   if (
     subject.entity.type !== "playable-entity" ||
     subject.playableEntity === undefined
@@ -29,7 +32,7 @@ function getPlayableEntityAsset({
   assets,
 }: Required<
   Pick<EntityDrawerParams["subject"], "playableEntity"> &
-    Pick<EntityDrawerParams["config"], "assets">
+    Pick<EntityDrawerParams<RequiredAssets>["config"], "assets">
 >): HTMLImageElement {
   switch (playableEntity.type) {
     case "enemy":
@@ -44,12 +47,14 @@ function getHeroAsset({
   assets,
 }: {
   heroEntity: PlayableHeroEntity;
-  assets: EntityDrawerParams["config"]["assets"];
+  assets: EntityDrawerParams<RequiredAssets>["config"]["assets"];
 }): HTMLImageElement {
   switch (heroEntity.class) {
     // TODO: add all supported classes
-    default:
+    case "WARRIOR":
       return assets.warrior_icon;
+    default:
+      return assets.unknown_icon;
   }
 }
 
@@ -58,10 +63,12 @@ function getEnemyAsset({
   assets,
 }: {
   enemyEntity: PlayableEnemyEntity;
-  assets: EntityDrawerParams["config"]["assets"];
+  assets: EntityDrawerParams<RequiredAssets>["config"]["assets"];
 }): HTMLImageElement {
   switch (enemyEntity.kind) {
     case "goblin":
       return assets.goblin_icon;
+    default:
+      return assets.unknown_icon;
   }
 }

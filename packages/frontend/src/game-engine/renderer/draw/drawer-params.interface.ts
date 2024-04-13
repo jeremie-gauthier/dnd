@@ -2,10 +2,14 @@ import type { GameEntity } from "@dnd/shared";
 import type { AssetsLoaded } from "../assets-loader/assets-loader";
 import type { assetCollection } from "../assets-loader/assets.config";
 
-export type DrawerParams = {
+export type DrawerParams<
+  AssetCollection extends Readonly<
+    Record<string, string>
+  > = typeof assetCollection,
+> = {
   context: CanvasRenderingContext2D;
   config: {
-    assets: AssetsLoaded<typeof assetCollection>;
+    assets: AssetsLoaded<AssetCollection>;
     assetSize: number;
     map: GameEntity["map"];
   };

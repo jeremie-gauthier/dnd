@@ -1,11 +1,15 @@
 import type { GameEntity } from "@dnd/shared";
+import { entitiesAssetsCollection } from "../assets-loader/assets.config";
 import { drawDoor } from "./entities/draw-door";
 import { drawPillar } from "./entities/draw-pillar";
 import { drawPlayableEntityIcon } from "./entities/draw-playable-entity-icon";
 import { drawWall } from "./entities/draw-wall";
 import type { EntityDrawerParams } from "./entities/entity-drawer-params.interface";
 
-type Params = Pick<EntityDrawerParams, "config" | "context"> & {
+type Params = Pick<
+  EntityDrawerParams<typeof entitiesAssetsCollection>,
+  "config" | "context"
+> & {
   subject: Pick<
     EntityDrawerParams["subject"],
     "coord2D" | "coordIsometric" | "entity"

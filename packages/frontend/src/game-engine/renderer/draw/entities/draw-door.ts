@@ -1,7 +1,16 @@
 import { getElevationOffset } from "../utils/get-elevation-offset.util";
 import type { EntityDrawerParams } from "./entity-drawer-params.interface";
 
-export function drawDoor({ context, config, subject }: EntityDrawerParams) {
+type RequiredAssets = {
+  readonly door_close: string;
+  readonly door_open: string;
+};
+
+export function drawDoor({
+  context,
+  config,
+  subject,
+}: EntityDrawerParams<RequiredAssets>) {
   if (subject.entity.type !== "non-playable-interactive-entity") return;
 
   const isClosed = subject.entity.isBlocking;

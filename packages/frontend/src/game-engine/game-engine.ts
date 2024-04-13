@@ -1,26 +1,38 @@
 import type { GameEntity, PlayerGamePhase } from "@dnd/shared";
-import { useEffect, type RefObject } from "react";
+import { RefObject, useEffect } from "react";
 import { useMouseInputs } from ".";
 import { useMapRenderer } from "./renderer";
 
 export const useGameEngine = ({
-  canvasRef,
+  floorCanvasRef,
+  previewCanvasRef,
+  entitiesCanvasRef,
   gameEntity,
   gamePhase,
 }: {
-  canvasRef: RefObject<HTMLCanvasElement>;
+  floorCanvasRef: RefObject<HTMLCanvasElement>;
+  previewCanvasRef: RefObject<HTMLCanvasElement>;
+  entitiesCanvasRef: RefObject<HTMLCanvasElement>;
   gameEntity: GameEntity;
   gamePhase: PlayerGamePhase;
 }) => {
-  const { render, assetSize } = useMapRenderer(canvasRef);
+  const { render, renderPreviewLayer, clearPreviewLayer, assetSize } =
+    useMapRenderer({
+      floorCanvasRef,
+      previewCanvasRef,
+      entitiesCanvasRef,
+    });
 
-  const { addClickEvent, clearMouseEvents } = useMouseInputs(canvasRef, {
-    assetSize,
-    map: {
-      height: gameEntity.map.height * assetSize,
-      width: gameEntity.map.width * assetSize,
+  const { addClickEvent, clearMouseEvents } = useMouseInputs(
+    entitiesCanvasRef,
+    {
+      assetSize,
+      map: {
+        height: gameEntity.map.height * assetSize,
+        width: gameEntity.map.width * assetSize,
+      },
     },
-  });
+  );
 
   useEffect(() => {
     if (!render) return;
@@ -29,14 +41,16 @@ export const useGameEngine = ({
   }, [gameEntity.map, gameEntity.playableEntities, gamePhase, render]);
 
   useEffect(() => {
-    if (!canvasRef.current) return;
+    if (!entitiesCanvasRef.current) return;
 
     addClickEvent();
 
     return clearMouseEvents;
-  }, [canvasRef.current, addClickEvent, clearMouseEvents]);
+  }, [entitiesCanvasRef.current, addClickEvent, clearMouseEvents]);
 
   return {
     assetSize,
+    renderPreviewLayer,
+    clearPreviewLayer,
   };
 };

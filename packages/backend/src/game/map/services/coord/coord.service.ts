@@ -1,4 +1,4 @@
-import { Coord } from "@dnd/shared";
+import { Coord, coordToIndex, indexToCoord } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
@@ -13,7 +13,7 @@ export class CoordService {
       height: number;
     };
   }) {
-    return coord.row * metadata.width + coord.column;
+    return coordToIndex({ coord, metadata });
   }
 
   public indexToCoord({
@@ -26,11 +26,6 @@ export class CoordService {
       height: number;
     };
   }) {
-    // rely only on width even if the height is different
-    // as the resulting array is just a "`height` chunks of `width` size"
-    return {
-      row: Math.floor(index / metadata.width),
-      column: index % metadata.width,
-    };
+    return indexToCoord({ index, metadata });
   }
 }

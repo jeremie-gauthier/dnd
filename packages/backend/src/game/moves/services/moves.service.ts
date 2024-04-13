@@ -1,4 +1,4 @@
-import type { Coord, GameEntity } from "@dnd/shared";
+import { Coord, GameEntity, canMoveToRequestedPosition } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import type { Hero } from "src/database/entities/hero.entity";
 import { CoordService } from "src/game/map/services/coord/coord.service";
@@ -66,8 +66,6 @@ export class MovesService {
       return false;
     }
 
-    return tile.entities.every(
-      (entity) => entity.type !== "playable-entity" && !entity.isBlocking,
-    );
+    return canMoveToRequestedPosition({ tile });
   }
 }

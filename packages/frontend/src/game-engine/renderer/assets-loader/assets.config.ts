@@ -25,3 +25,24 @@ export const assetCollection = {
   ref_blue,
   ref_red,
 } as const;
+
+export const floorAssetCollection = {
+  floor_light,
+  floor_dark,
+  ref_blue,
+  ref_red,
+} as const;
+
+export const entitiesAssetsCollection = {
+  wall,
+  pillar,
+  door_open,
+  door_close,
+  warrior_icon,
+  unknown_icon,
+  goblin_icon,
+} as const;
+
+export const previewsAssetsCollection = {
+  move_layer,
+} as const;
