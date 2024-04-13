@@ -537,7 +537,7 @@ const MOCK_MAP: GameEntity["map"] = {
 const MOCK_PLAYABLE_ENTITIES: GameEntity["playableEntities"] = {
   "4d66d84f-bc8d-40b1-9799-7b8c73df00f7": {
     id: "4d66d84f-bc8d-40b1-9799-7b8c73df00f7",
-    playedByUserId: "oauth2|discord|282196886662807553	",
+    playedByUserId: "oauth2|discord|282196886662807553",
     type: "hero",
     currentPhase: "preparation",
     name: "Regdar",
@@ -562,7 +562,7 @@ const MOCK_PLAYABLE_ENTITIES: GameEntity["playableEntities"] = {
   },
   "b03ecb32-82b1-4d40-9b7d-db7ae9030388": {
     id: "b03ecb32-82b1-4d40-9b7d-db7ae9030388",
-    playedByUserId: "oauth2|discord|282196886662807553	",
+    playedByUserId: "oauth2|discord|282196886662807553",
     type: "hero",
     currentPhase: "preparation",
     name: "Lidda",
@@ -587,7 +587,7 @@ const MOCK_PLAYABLE_ENTITIES: GameEntity["playableEntities"] = {
   },
   "acdf39ff-95ad-4370-b640-178eafc9e1a0": {
     id: "acdf39ff-95ad-4370-b640-178eafc9e1a0",
-    playedByUserId: "oauth2|discord|282196886662807553	",
+    playedByUserId: "oauth2|discord|282196886662807553",
     type: "hero",
     currentPhase: "preparation",
     name: "Mialyë",
@@ -612,7 +612,7 @@ const MOCK_PLAYABLE_ENTITIES: GameEntity["playableEntities"] = {
   },
   "f95b77cc-d934-4e82-aa7d-373493db4a43": {
     id: "f95b77cc-d934-4e82-aa7d-373493db4a43",
-    playedByUserId: "oauth2|discord|282196886662807553	",
+    playedByUserId: "oauth2|discord|282196886662807553",
     type: "hero",
     currentPhase: "preparation",
     name: "Jozan",
@@ -643,9 +643,11 @@ export const useFakeUserGameState = (): PlayerGameState => {
       id: "fake-game-id",
       map: MOCK_MAP,
       playableEntities: MOCK_PLAYABLE_ENTITIES,
-      status: "prepare_for_battle",
+      status: "battle_ongoing",
       timeline: [],
     },
-    playerPhase: "preparation",
+    playerPhase: "action",
+    entityIdTurn: "4d66d84f-bc8d-40b1-9799-7b8c73df00f7",
+    userIdTurn: "oauth2|discord|282196886662807553",
   };
 };
