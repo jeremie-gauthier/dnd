@@ -3,12 +3,10 @@
   "private": true,
   "version": "1.0.0",
   "workspaces": {
-    "packages": [
-      "packages/*"
-    ]
+    "packages": ["packages/*"]
   },
   "scripts": {
-		"format": "biome format scripts/ --write",
+    "format": "biome format scripts/ --write",
     "lint": "biome lint scripts/",
     "lint:fix": "biome lint scripts/ --apply",
     "start:dev:db": "docker-compose -f ./packages/backend/docker-compose.yml up -d --build",
@@ -24,9 +22,9 @@
     "new-emitter": "node ./scripts/new-emitter"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.5.3",
-    "@inquirer/prompts": "^4.1.0",
-    "dedent": "^1.5.1",
+    "@biomejs/biome": "^1.7.0",
+    "@inquirer/prompts": "^5.0.1",
+    "dedent": "^1.5.3",
     "inquirer-directory": "^2.2.0",
     "lodash.camelcase": "^4.3.0",
     "lodash.kebabcase": "^4.1.1"
