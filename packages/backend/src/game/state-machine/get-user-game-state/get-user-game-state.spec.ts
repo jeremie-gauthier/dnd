@@ -9,6 +9,7 @@ import {
   it,
   vi,
 } from "vitest";
+import { PlayerStateService } from "../services/player-state/player-state.service";
 import { GetUserGameStateRepository } from "./get-user-game-state.repository";
 import { GetUserGameStateUseCase } from "./get-user-game-state.uc";
 
@@ -29,6 +30,10 @@ describe("GetUserGameStateUseCase", () => {
         EventEmitter2,
         {
           provide: GetUserGameStateRepository,
+          useValue: {},
+        },
+        {
+          provide: PlayerStateService,
           useValue: {},
         },
       ],
@@ -52,8 +57,4 @@ describe("GetUserGameStateUseCase", () => {
     expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
   });
-
-  describe("Happy path", () => {});
-
-  describe("Negative path", () => {});
 });

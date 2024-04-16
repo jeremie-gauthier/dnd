@@ -1,5 +1,6 @@
 import { Test, type TestingModule } from "@nestjs/testing";
-import { beforeEach, describe, expect, it } from "vitest";
+import { CoordService } from "src/game/map/services/coord/coord.service";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { MovesService } from "./moves.service";
 
 describe("MovesService", () => {
@@ -7,7 +8,15 @@ describe("MovesService", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MovesService],
+      providers: [
+        MovesService,
+        {
+          provide: CoordService,
+          useValue: {
+            coordToIndex: vi.fn(),
+          },
+        },
+      ],
     }).compile();
 
     service = module.get<MovesService>(MovesService);
