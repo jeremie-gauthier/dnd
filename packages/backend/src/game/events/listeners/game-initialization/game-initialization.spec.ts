@@ -1,21 +1,20 @@
-import { HeroClass, type GameEntity, type LobbyEntity } from "@dnd/shared";
+import {
+  GameEntity,
+  HeroClass,
+  LobbyEntity,
+  PlayerGamePhase,
+} from "@dnd/shared";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import type { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import type { User } from "src/database/entities/user.entity";
 import { MapSerializerService } from "src/game/map/services/map-serializer/map-serializer.service";
+import { MovesService } from "src/game/moves/services/moves.service";
+import { InitiativeService } from "src/game/timeline/services/initiative/initiative.service";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import type { MessageContext } from "src/types/socket.type";
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-  type Mock,
-} from "vitest";
+import { Mock, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GameEvent } from "../../emitters/game-events.enum";
 import { GameInitializationDonePayload } from "../../emitters/game-initialization-done.payload";
 import { GameInitializationStartedPayload } from "../../emitters/game-initialization-started.payload";
@@ -70,6 +69,19 @@ describe("GameInitializationListener", () => {
             deserialize: vi.fn().mockReturnValue({ id: "dummy-map" }),
           },
         },
+        {
+          provide: MovesService,
+          useValue: {
+            moveHeroToRequestedPosition: vi.fn(),
+            canMoveToRequestedPosition: vi.fn().mockReturnValue(true),
+          },
+        },
+        {
+          provide: InitiativeService,
+          useValue: {
+            rollPlayableEntitiesInitiative: vi.fn(),
+          },
+        },
       ],
     }).compile();
 
@@ -103,6 +115,7 @@ describe("GameInitializationListener", () => {
       const eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
       const fakeHeroStats = {
         type: "hero",
+        currentPhase: "preparation" as PlayerGamePhase,
         level: 1,
         initiative: Number.NaN,
         coord: {
@@ -159,7 +172,7 @@ describe("GameInitializationListener", () => {
           ],
         },
       } as unknown as CampaignStageProgression);
-      mapSerializerService.deserialize.mockResolvedValueOnce({
+      mapSerializerService.deserialize.mockReturnValueOnce({
         width: 1,
         height: 1,
         tiles: [
@@ -172,6 +185,7 @@ describe("GameInitializationListener", () => {
       });
       repository.saveGame.mockResolvedValueOnce({
         id: "mock-lobby-id",
+        status: "prepare_for_battle",
         map: {
           width: 1,
           height: 1,
@@ -285,6 +299,7 @@ describe("GameInitializationListener", () => {
           lobbyId: "mock-lobby-id",
           game: {
             id: "mock-lobby-id",
+            status: "prepare_for_battle",
             map: {
               width: 1,
               height: 1,

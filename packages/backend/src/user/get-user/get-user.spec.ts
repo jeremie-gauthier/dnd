@@ -50,8 +50,4 @@ describe("GetUserUseCase", () => {
     expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
   });
-
-  describe("Happy path", () => {});
-
-  describe("Negative path", () => {});
 });

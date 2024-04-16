@@ -20,7 +20,8 @@ describe("NewUserRegisteredListener", () => {
         {
           provide: NewUserRegisteredRepository,
           useValue: {
-            createNewUser: (id: User["id"]) => Promise.resolve({ id }),
+            createNewUser: (user: { userId: string; [x: string]: unknown }) =>
+              Promise.resolve({ ...user, id: user.userId }),
           },
         },
         EventEmitter2,

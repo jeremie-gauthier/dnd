@@ -7,13 +7,13 @@ import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.pay
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import type { MessageContext } from "src/types/socket.type";
 import {
-  type MockInstance,
   afterEach,
   beforeEach,
   describe,
   expect,
   it,
   vi,
+  type MockInstance,
 } from "vitest";
 import { PickHeroRepository } from "./pick-hero.repository";
 import { PickHeroUseCase } from "./pick-hero.uc";
