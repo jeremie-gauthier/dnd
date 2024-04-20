@@ -6,7 +6,7 @@ const renderUseCaseInputSchema = ({ inputSchemaName, inputTypeName }) => {
 
 		export const ${inputSchemaName} = z.object({});\n
 
-    export type ${inputTypeName} = z.infer<typeof ${inputSchemaName}>;
+		export type ${inputTypeName} = z.infer<typeof ${inputSchemaName}>;
 	`;
 };
 

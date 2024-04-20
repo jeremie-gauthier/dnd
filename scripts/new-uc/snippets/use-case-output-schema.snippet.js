@@ -6,7 +6,7 @@ const renderUseCaseOutputSchema = ({ outputSchemaName, outputTypeName }) => {
 
 		export const ${outputSchemaName} = z.object({});\n
 
-    export type ${outputTypeName} = z.infer<typeof ${outputSchemaName}>;
+		export type ${outputTypeName} = z.infer<typeof ${outputSchemaName}>;
 	`;
 };
 
