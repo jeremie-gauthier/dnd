@@ -1,4 +1,5 @@
 import { Coord } from "../../database";
+import { isInRange } from "../number";
 
 export function coordToIndex({
   coord,
@@ -10,6 +11,12 @@ export function coordToIndex({
     height: number;
   };
 }) {
+  if (
+    !isInRange(coord.row, 0, metadata.height - 1) ||
+    !isInRange(coord.column, 0, metadata.width - 1)
+  )
+    return -1;
+
   return coord.row * metadata.width + coord.column;
 }
 

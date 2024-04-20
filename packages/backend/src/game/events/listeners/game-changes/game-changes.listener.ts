@@ -9,7 +9,7 @@ import { GameEvent } from "../../emitters/game-events.enum";
 export class GameChangesListener {
   constructor(private readonly playerStateService: PlayerStateService) {}
 
-  @OnEvent(GameEvent.GameChanged)
+  @OnEvent(GameEvent.PlayableEntityMoved)
   @OnEvent(GameEvent.GameInitializationDone)
   public async handler({
     ctx,

@@ -1,4 +1,5 @@
 import type { LobbyEntity } from "../database/lobby/lobby.interface";
+import { PlayableEntityMoveInput } from "../schemas";
 import { ClientGameEvent } from "./game-events/game-events.client";
 import { ClientLobbyEvent } from "./lobby-events/lobby-events.client";
 import type { EventsMapper } from "./utils.type";
@@ -27,6 +28,9 @@ interface ClientToServerEventsAndPayloads
   }) => void;
   [ClientLobbyEvent.ListenLobbiesChanges]: () => void;
   [ClientGameEvent.PlayerIsReady]: () => void;
+  [ClientGameEvent.PlayableEntityMoves]: (
+    payload: PlayableEntityMoveInput,
+  ) => void;
 }
 
 export type ClientToServerEvents =
