@@ -15,6 +15,8 @@ export class HandleWsDisconnectionUseCase implements UseCase {
 
   public async execute(ctx: MessageContext): Promise<void> {
     const { userId } = ctx.client.data;
+    ctx.client.leave(userId);
+
     const lobbyId = await this.repository.getCachedUserLobbyId(userId);
     if (!lobbyId) {
       return;

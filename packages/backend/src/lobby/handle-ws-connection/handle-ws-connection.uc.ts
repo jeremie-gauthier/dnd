@@ -24,6 +24,8 @@ export class HandleWsConnectionUseCase implements UseCase {
       client.data = {
         userId: decodedToken.sub,
       };
+
+      client.join(client.data.userId);
     } catch (error) {
       client.disconnect(true);
       if (error instanceof Error) {
