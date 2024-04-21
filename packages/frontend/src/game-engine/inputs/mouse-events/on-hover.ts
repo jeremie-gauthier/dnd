@@ -1,3 +1,4 @@
+import { GameEventManager } from "../../events";
 import {
   translateIsometricTo2DCoord,
   type CanvasConfig,
@@ -8,21 +9,20 @@ export type HandleCanvasClickParams = {
   canvas: HTMLCanvasElement;
   ev: MouseEvent;
   canvasConfig: CanvasConfig;
+  gameEventManager: GameEventManager;
 };
 
-export const handleClick = ({
+export const handleHover = ({
   ev,
   canvas,
   canvasConfig,
+  gameEventManager,
 }: HandleCanvasClickParams) => {
-  const { x, y } = getCursorCoordinates(ev, canvas);
-  console.log(`x: ${x} y: ${y}`);
-
-  const translatedCoord = translateIsometricTo2DCoord(
-    { row: y, column: x },
+  const coord = getCursorCoordinates(ev, canvas);
+  const isometricCoord = translateIsometricTo2DCoord(
+    { row: coord.y, column: coord.x },
     canvasConfig,
   );
-  console.log(translatedCoord);
 
-  // TODO: emit event with coords ?
+  gameEventManager.emitTileHovered(coord, isometricCoord);
 };

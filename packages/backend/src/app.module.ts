@@ -1,4 +1,9 @@
-import { Module } from "@nestjs/common";
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { APP_INTERCEPTOR, APP_PIPE } from "@nestjs/core";
 import { EventEmitterModule } from "@nestjs/event-emitter";
@@ -10,6 +15,7 @@ import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { AuthzModule } from "./authz/authz.module";
 import { CampaignModule } from "./campaign/campaign.module";
+import { LoggerMiddleware } from "./common/logger.middleware";
 import envConfig, { validate } from "./config/env.config";
 import redis from "./config/redis.config";
 import typeorm from "./config/typeorm.config";
@@ -56,4 +62,10 @@ import { UserModule } from "./user/user.module";
     AppService,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes({ path: "*", method: RequestMethod.ALL });
+  }
+}

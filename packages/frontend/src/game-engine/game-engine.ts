@@ -1,7 +1,14 @@
-import type { GameEntity, PlayerGamePhase } from "@dnd/shared";
+import {
+  getAllPathsFromTileWithinRange,
+  getCoordsFromTilePaths,
+  type GameEntity,
+  type PlayerGamePhase,
+} from "@dnd/shared";
 import { RefObject, useEffect } from "react";
-import { useMouseInputs } from ".";
+import { GameEventManager } from "./events";
+import { useMouseInputs } from "./inputs";
 import { useMapRenderer } from "./renderer";
+import { usePlayerState } from "./state-machine";
 
 export const useGameEngine = ({
   floorCanvasRef,
@@ -16,6 +23,12 @@ export const useGameEngine = ({
   gameEntity: GameEntity;
   gamePhase: PlayerGamePhase;
 }) => {
+  const gameEventManager = GameEventManager.getInstance();
+
+  const playerState = usePlayerState({
+    playerPhase: gamePhase,
+  });
+
   const { render, renderPreviewLayer, clearPreviewLayer, assetSize } =
     useMapRenderer({
       floorCanvasRef,
@@ -23,14 +36,21 @@ export const useGameEngine = ({
       entitiesCanvasRef,
     });
 
-  const { addClickEvent, clearMouseEvents } = useMouseInputs(
-    entitiesCanvasRef,
+  const { addTileClickEvent, addHoverEvent, clearMouseEvents } = useMouseInputs(
     {
-      assetSize,
-      map: {
-        height: gameEntity.map.height * assetSize,
-        width: gameEntity.map.width * assetSize,
+      canvasRef: entitiesCanvasRef,
+      canvasConfig: {
+        assetSize,
+        map: {
+          height: gameEntity.map.height * assetSize,
+          width: gameEntity.map.width * assetSize,
+        },
       },
+      mapMetadata: {
+        height: gameEntity.map.height,
+        width: gameEntity.map.width,
+      },
+      gameEventManager,
     },
   );
 
@@ -43,14 +63,58 @@ export const useGameEngine = ({
   useEffect(() => {
     if (!entitiesCanvasRef.current) return;
 
-    addClickEvent();
+    addTileClickEvent();
+    addHoverEvent();
 
     return clearMouseEvents;
-  }, [entitiesCanvasRef.current, addClickEvent, clearMouseEvents]);
+  }, [
+    entitiesCanvasRef.current,
+    addTileClickEvent,
+    addHoverEvent,
+    clearMouseEvents,
+  ]);
+
+  useEffect(() => {
+    if (playerState.currentAction !== "move") {
+      return;
+    }
+
+    const playableEntities = Object.values(gameEntity.playableEntities);
+    const activeHero = playableEntities.find(
+      (playableEntity) => playableEntity.currentPhase === "action",
+    );
+    if (!activeHero) return;
+    const originCoord = activeHero.coord;
+
+    const tilePaths = getAllPathsFromTileWithinRange({
+      map: gameEntity.map,
+      originCoord,
+      maxRange: activeHero.movementPoints,
+    });
+    const coords = getCoordsFromTilePaths(tilePaths).filter(
+      (coord) =>
+        !(coord.column === originCoord.column && coord.row === originCoord.row),
+    );
+
+    renderPreviewLayer({ map: gameEntity.map, coords });
+  }, [
+    playerState.currentAction,
+    gameEntity.map,
+    gameEntity.playableEntities,
+    renderPreviewLayer,
+  ]);
+
+  useEffect(() => {
+    if (playerState.currentAction !== "idle") {
+      return;
+    }
+
+    clearPreviewLayer();
+  }, [playerState.currentAction, clearPreviewLayer]);
 
   return {
     assetSize,
-    renderPreviewLayer,
-    clearPreviewLayer,
+    gameEventManager,
+    playerState,
   };
 };

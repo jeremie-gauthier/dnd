@@ -15,6 +15,7 @@ export function GameRouteComponent() {
     game,
     isLoading: isGameLoading,
     phase,
+    actionHandlers,
   } = useGame({ gameId, queryClient, socket });
   useServerLobbyError(socket);
 
@@ -23,5 +24,5 @@ export function GameRouteComponent() {
     return <div>Game data is loading</div>;
   }
 
-  return <Game game={game} phase={phase} />;
+  return <Game game={game} phase={phase} actionHandlers={actionHandlers} />;
 }

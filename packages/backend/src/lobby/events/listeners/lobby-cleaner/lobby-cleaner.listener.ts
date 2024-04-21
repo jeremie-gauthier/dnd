@@ -28,6 +28,13 @@ export class LobbyCleanerListener {
       ctx.server.to(LOBBIES_ROOM).emit(ServerLobbyEvent.LobbiesDeleted, {
         lobbyId,
       });
+
+      if (
+        lobby.status === "GAME_INITIALIZING" ||
+        lobby.status === "GAME_STARTED"
+      ) {
+        await this.repository.delGameById({ gameId: lobbyId });
+      }
     }
   }
 }
