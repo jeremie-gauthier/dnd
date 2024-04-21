@@ -9,6 +9,7 @@ import {
   it,
   vi,
 } from "vitest";
+import { MovesService } from "../services/moves.service";
 import { PlayableEntityMoveRepository } from "./playable-entity-move.repository";
 import { PlayableEntityMoveUseCase } from "./playable-entity-move.uc";
 
@@ -16,6 +17,7 @@ describe("PlayableEntityMoveUseCase", () => {
   let useCase: PlayableEntityMoveUseCase;
   let repository: PlayableEntityMoveRepository;
   let eventEmitter2: EventEmitter2;
+  let movesSerivce: MovesService;
 
   let eventEmitterMock: MockInstance<
     [event: any, ...values: any[]],
@@ -31,14 +33,17 @@ describe("PlayableEntityMoveUseCase", () => {
           provide: PlayableEntityMoveRepository,
           useValue: {},
         },
+        {
+          provide: MovesService,
+          useValue: {},
+        },
       ],
     }).compile();
 
-    useCase = module.get<PlayableEntityMoveUseCase>(PlayableEntityMoveUseCase);
-    repository = module.get<PlayableEntityMoveRepository>(
-      PlayableEntityMoveRepository,
-    );
-    eventEmitter2 = module.get<EventEmitter2>(EventEmitter2);
+    useCase = module.get(PlayableEntityMoveUseCase);
+    repository = module.get(PlayableEntityMoveRepository);
+    eventEmitter2 = module.get(EventEmitter2);
+    movesSerivce = module.get(MovesService);
 
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
   });
@@ -51,5 +56,6 @@ describe("PlayableEntityMoveUseCase", () => {
     expect(useCase).toBeDefined();
     expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
+    expect(movesSerivce).toBeDefined();
   });
 });
