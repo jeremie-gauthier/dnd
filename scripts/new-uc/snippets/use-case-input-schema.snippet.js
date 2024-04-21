@@ -4,7 +4,7 @@ const renderUseCaseInputSchema = ({ inputSchemaName, inputTypeName }) => {
   return dedent`
 		import { z } from 'zod';
 
-		export const ${inputSchemaName} = z.object({});\n
+		export const ${inputSchemaName} = z.object({});
 
 		export type ${inputTypeName} = z.infer<typeof ${inputSchemaName}>;
 	`;
