@@ -1,4 +1,6 @@
 import {
+  ClientGameEvent,
+  ClientToServerEvents,
   GameEntity,
   PlayerGamePhase,
   ServerGameEvent,
@@ -26,6 +28,8 @@ export const useGame = ({
   useEffect(() => {
     const handleGameChanges: ServerToClientEvents["server.game.changes_detected"] =
       (payload) => {
+        console.log("game changes:", payload);
+
         queryClient.setQueryData(
           GET_PLAYER_GAME_STATE_QUERY_KEY(gameId),
           () => payload,
@@ -42,11 +46,19 @@ export const useGame = ({
     };
   }, [socket, queryClient, gameId]);
 
+  const moveHandler: ClientToServerEvents["client.game.player_requests_playable_entity_moves"] =
+    (payload) => {
+      socket.emit(ClientGameEvent.PlayableEntityMoves, payload);
+    };
+
   return isLoading || playerGameState === undefined
     ? { game: undefined, isLoading, phase: "idle" as PlayerGamePhase }
     : {
         game: playerGameState.game,
         isLoading,
         phase: playerGameState.playerPhase,
+        actionHandlers: {
+          move: moveHandler,
+        },
       };
 };

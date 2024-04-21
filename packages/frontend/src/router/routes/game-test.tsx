@@ -11,6 +11,12 @@ export function GameTestRouteComponent() {
   const fakeUserGameState = useFakeUserGameState();
 
   return (
-    <Game game={fakeUserGameState.game} phase={fakeUserGameState.playerPhase} />
+    <Game
+      game={fakeUserGameState.game}
+      phase={fakeUserGameState.playerPhase}
+      actionHandlers={{
+        move: (payload) => console.log(payload),
+      }}
+    />
   );
 }
