@@ -1,10 +1,14 @@
-import type { LobbyEntity } from "@dnd/shared";
+import type { GameEntity, LobbyEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
+import { GamesRepository } from "src/redis/repositories/games.repository";
 import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
 
 @Injectable()
 export class LobbyCleanerRepository {
-  constructor(private readonly lobbiesRepository: LobbiesRepository) {}
+  constructor(
+    private readonly lobbiesRepository: LobbiesRepository,
+    private readonly gamesRepository: GamesRepository,
+  ) {}
 
   public async getLobbyById(
     lobbyId: LobbyEntity["id"],
@@ -14,5 +18,11 @@ export class LobbyCleanerRepository {
 
   public async delLobbyById(lobbyId: LobbyEntity["id"]): Promise<void> {
     await this.lobbiesRepository.del(lobbyId);
+  }
+
+  public async delGameById({
+    gameId,
+  }: { gameId: GameEntity["id"] }): Promise<void> {
+    await this.gamesRepository.del(gameId);
   }
 }
