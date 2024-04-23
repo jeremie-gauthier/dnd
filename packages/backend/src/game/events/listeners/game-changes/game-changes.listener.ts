@@ -10,6 +10,7 @@ export class GameChangesListener {
   constructor(private readonly playerStateService: PlayerStateService) {}
 
   @OnEvent(GameEvent.PlayableEntityMoved)
+  @OnEvent(GameEvent.PlayableEntityTurnEnded)
   @OnEvent(GameEvent.GameInitializationDone)
   public async handler({
     ctx,

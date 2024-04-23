@@ -8,6 +8,7 @@ import { useEffect, useRef } from "react";
 import { useGameEngine } from "../../game-engine";
 import { TileClickedEvent } from "../../game-engine/events/tile-clicked.event";
 import { Canvas } from "../canvas/canvas";
+import { EndTurnButton } from "./action-bar/EndTurnButton";
 import { MoveButton } from "./action-bar/MoveButton";
 import { useCanvasSize } from "./useCanvasSize";
 
@@ -16,6 +17,7 @@ type Props = {
   phase: PlayerGamePhase;
   actionHandlers: {
     move: ClientToServerEvents["client.game.player_requests_playable_entity_moves"];
+    endTurn: ClientToServerEvents["client.game.player_requests_playable_entity_turn_ends"];
   };
 };
 
@@ -125,6 +127,12 @@ export const Game = ({ game, phase, actionHandlers }: Props) => {
               isMoving={playerState.currentAction === "move"}
               onClick={() => playerState.toggleTo("move")}
               onCancel={() => playerState.toggleTo("idle")}
+            />
+            <EndTurnButton
+              onClick={() => {
+                playerState.toggleTo("idle");
+                actionHandlers.endTurn();
+              }}
             />
           </div>
         </>

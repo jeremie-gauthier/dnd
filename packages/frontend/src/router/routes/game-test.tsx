@@ -16,6 +16,7 @@ export function GameTestRouteComponent() {
       phase={fakeUserGameState.playerPhase}
       actionHandlers={{
         move: (payload) => console.log(payload),
+        endTurn: () => console.log("turn ends"),
       }}
     />
   );
