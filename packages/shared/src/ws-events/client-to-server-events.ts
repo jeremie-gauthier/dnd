@@ -31,6 +31,7 @@ interface ClientToServerEventsAndPayloads
   [ClientGameEvent.PlayableEntityMoves]: (
     payload: PlayableEntityMoveInput,
   ) => void;
+  [ClientGameEvent.PlayableEntityTurnEnds]: () => void;
 }
 
 export type ClientToServerEvents =

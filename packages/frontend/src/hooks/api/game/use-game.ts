@@ -51,6 +51,11 @@ export const useGame = ({
       socket.emit(ClientGameEvent.PlayableEntityMoves, payload);
     };
 
+  const endTurnHandler: ClientToServerEvents["client.game.player_requests_playable_entity_turn_ends"] =
+    () => {
+      socket.emit(ClientGameEvent.PlayableEntityTurnEnds);
+    };
+
   return isLoading || playerGameState === undefined
     ? { game: undefined, isLoading, phase: "idle" as PlayerGamePhase }
     : {
@@ -59,6 +64,7 @@ export const useGame = ({
         phase: playerGameState.playerPhase,
         actionHandlers: {
           move: moveHandler,
+          endTurn: endTurnHandler,
         },
       };
 };
