@@ -30,7 +30,10 @@ describe("EndPlayerTurnUseCase", () => {
         EventEmitter2,
         {
           provide: EndPlayerTurnRepository,
-          useValue: {},
+          useValue: {
+            getGameByUserId: vi.fn(),
+            updateGame: vi.fn(),
+          },
         },
         TurnService,
       ],
