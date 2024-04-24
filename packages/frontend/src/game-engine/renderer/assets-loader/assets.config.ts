@@ -1,3 +1,6 @@
+import cleric_icon from "../../../assets/classes/cleric_icon.png";
+import sorcerer_icon from "../../../assets/classes/sorcerer_icon.png";
+import thief_icon from "../../../assets/classes/thief_icon.png";
 import unknown_icon from "../../../assets/classes/unknown_icon.png";
 import warrior_icon from "../../../assets/classes/warrior_icon.png";
 import move_layer from "../../../assets/layers/move_layer.png";
@@ -39,6 +42,9 @@ export const entitiesAssetsCollection = {
   door_open,
   door_close,
   warrior_icon,
+  sorcerer_icon,
+  cleric_icon,
+  thief_icon,
   unknown_icon,
   goblin_icon,
 } as const;
