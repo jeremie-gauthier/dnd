@@ -53,6 +53,12 @@ function getHeroAsset({
     // TODO: add all supported classes
     case "WARRIOR":
       return assets.warrior_icon;
+    case "SORCERER":
+      return assets.sorcerer_icon;
+    case "CLERIC":
+      return assets.cleric_icon;
+    case "THIEF":
+      return assets.thief_icon;
     default:
       return assets.unknown_icon;
   }
