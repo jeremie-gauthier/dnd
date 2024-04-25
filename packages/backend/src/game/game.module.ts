@@ -7,6 +7,7 @@ import { GameChangesListener } from "./events/listeners/game-changes/game-change
 import { GameInitializationListener } from "./events/listeners/game-initialization/game-initialization.listener";
 import { GameInitializationRepository } from "./events/listeners/game-initialization/game-initialization.repository";
 import { GamePrivateController } from "./game.private-controller";
+import { InteractionModule } from "./interaction/interaction.module";
 import { MapModule } from "./map/map.module";
 import { MovesModule } from "./moves/moves.module";
 import { StartingModule } from "./starting/starting.module";
@@ -23,6 +24,7 @@ import { TimelineModule } from "./timeline/timeline.module";
     TypeOrmModule.forFeature([CampaignStageProgression]),
     AuthzModule,
     TimelineModule,
+    InteractionModule,
   ],
   controllers: [GamePrivateController],
   providers: [

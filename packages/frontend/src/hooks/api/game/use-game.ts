@@ -56,6 +56,11 @@ export const useGame = ({
       socket.emit(ClientGameEvent.PlayableEntityTurnEnds);
     };
 
+  const openDoorHandler: ClientToServerEvents["client.game.player_requests_playable_entity_open_door"] =
+    (payload) => {
+      socket.emit(ClientGameEvent.PlayableEntityOpenDoor, payload);
+    };
+
   return isLoading || playerGameState === undefined
     ? { game: undefined, isLoading, phase: "idle" as PlayerGamePhase }
     : {
@@ -65,6 +70,7 @@ export const useGame = ({
         actionHandlers: {
           move: moveHandler,
           endTurn: endTurnHandler,
+          openDoor: openDoorHandler,
         },
       };
 };

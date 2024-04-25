@@ -1,5 +1,5 @@
 import type { LobbyEntity } from "../database/lobby/lobby.interface";
-import { PlayableEntityMoveInput } from "../schemas";
+import { OpenDoorInput, PlayableEntityMoveInput } from "../schemas";
 import { ClientGameEvent } from "./game-events/game-events.client";
 import { ClientLobbyEvent } from "./lobby-events/lobby-events.client";
 import type { EventsMapper } from "./utils.type";
@@ -32,6 +32,7 @@ interface ClientToServerEventsAndPayloads
     payload: PlayableEntityMoveInput,
   ) => void;
   [ClientGameEvent.PlayableEntityTurnEnds]: () => void;
+  [ClientGameEvent.PlayableEntityOpenDoor]: (payload: OpenDoorInput) => void;
 }
 
 export type ClientToServerEvents =
