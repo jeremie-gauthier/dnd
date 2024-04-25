@@ -13,6 +13,7 @@ import { Canvas } from "../canvas/canvas";
 import { EndTurnButton } from "./action-bar/EndTurnButton";
 import { MoveButton } from "./action-bar/MoveButton";
 import { OpenDoorButton } from "./action-bar/OpenDoorButton";
+import { Timeline } from "./action-bar/Timeline";
 import { useCanvasSize } from "./useCanvasSize";
 
 type Props = {
@@ -140,6 +141,9 @@ export const Game = ({ game, phase, actionHandlers }: Props) => {
           className="absolute z-20"
         />
       </div>
+
+      <Timeline game={game} />
+
       {isPlaying ? (
         <>
           <div>
