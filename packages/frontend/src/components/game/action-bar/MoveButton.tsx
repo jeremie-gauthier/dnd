@@ -5,9 +5,15 @@ type Params = {
   onClick: () => void;
   onCancel: () => void;
   isMoving: boolean;
+  disabled: boolean;
 };
 
-export const MoveButton = ({ onClick, onCancel, isMoving }: Params) => {
+export const MoveButton = ({
+  onClick,
+  onCancel,
+  isMoving,
+  disabled,
+}: Params) => {
   const handleClick = () => {
     if (isMoving) {
       onCancel();
@@ -17,7 +23,7 @@ export const MoveButton = ({ onClick, onCancel, isMoving }: Params) => {
   };
 
   return (
-    <Button variant="outlined" onClick={handleClick}>
+    <Button variant="outlined" onClick={handleClick} disabled={disabled}>
       <div className="flex items-center">
         <ChevronDoubleRightIcon className="h-5 w-5 text-green-500" />
         <span>{isMoving ? "Cancel Move" : "Move"}</span>

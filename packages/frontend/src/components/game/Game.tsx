@@ -144,16 +144,16 @@ export const Game = ({ game, phase, actionHandlers }: Props) => {
 
       <Timeline game={game} />
 
-      {isPlaying ? (
+      {isPlaying && heroPlaying ? (
         <>
           <div>
             <p>Status bar</p>
-            <p>Hero turn: {heroPlaying?.name}</p>
+            <p>Hero turn: {heroPlaying.name}</p>
             <p>
-              Hero current coord: {JSON.stringify(heroPlaying?.coord ?? "{}")}
+              Hero current coord: {JSON.stringify(heroPlaying.coord ?? "{}")}
             </p>
-            <p>Movement points: {heroPlaying?.movementPoints}</p>
-            <p>Health points: {heroPlaying?.healthPoints}</p>
+            <p>Movement points: {heroPlaying.movementPoints}</p>
+            <p>Health points: {heroPlaying.healthPoints}</p>
           </div>
 
           <div className="flex flex-row gap-2">
@@ -161,6 +161,7 @@ export const Game = ({ game, phase, actionHandlers }: Props) => {
               isMoving={playerState.currentAction === "move"}
               onClick={() => playerState.toggleTo("move")}
               onCancel={() => playerState.toggleTo("idle")}
+              disabled={heroPlaying.movementPoints <= 0}
             />
             <OpenDoorButton
               onClick={() => {
