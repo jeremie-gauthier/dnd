@@ -9,6 +9,7 @@ import { GameEvent } from "../../emitters/game-events.enum";
 export class GameChangesListener {
   constructor(private readonly playerStateService: PlayerStateService) {}
 
+  @OnEvent(GameEvent.DoorOpened)
   @OnEvent(GameEvent.PlayableEntityMoved)
   @OnEvent(GameEvent.PlayableEntityTurnEnded)
   @OnEvent(GameEvent.GameInitializationDone)
