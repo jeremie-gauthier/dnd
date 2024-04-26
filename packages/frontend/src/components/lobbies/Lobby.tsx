@@ -3,7 +3,8 @@ import { ClientLobbyEvent } from "@dnd/shared";
 import { useNavigate } from "@tanstack/react-router";
 import type { GetLobbyResponse } from "../../hooks/api/lobby/get-lobby";
 import type { ClientSocket } from "../../types/socket.type";
-import { HeroCard } from "../hero-card/HeroCard";
+import { GameMasterCard } from "../playable-card/GameMasterCard";
+import { HeroCard } from "../playable-card/HeroCard";
 import { Button } from "../shared/button/Button";
 import { UserCard } from "../user-card/UserCard";
 import { PickedByUser } from "./PickedByUser";
@@ -44,6 +45,16 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
     });
   };
 
+  const handlePickGameMaster = () => {
+    socket.emit(ClientLobbyEvent.RequestPickGameMaster, { lobbyId: lobby.id });
+  };
+
+  const handleDiscardGameMaster = () => {
+    socket.emit(ClientLobbyEvent.RequestDiscardGameMaster, {
+      lobbyId: lobby.id,
+    });
+  };
+
   const currentUserIsReady =
     lobby.players.find((player) => player.userId === user.sub)?.isReady ??
     false;
@@ -54,6 +65,9 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
   };
 
   const isLobbyHost = user.sub === lobby.host.userId;
+
+  const canPickGameMasterRole = lobby.gameMaster.userId === undefined;
+  const hasGameMasterRole = lobby.gameMaster.userId === user.sub;
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -87,6 +101,25 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
       <div>
         <h2 className="font-medium text-lg">Choose your heroes:</h2>
         <div className="flex flex-row gap-6">
+          <div className="flex flex-col p-2 rounded shadow-lg justify-between">
+            <div>
+              <GameMasterCard />
+            </div>
+            {canPickGameMasterRole ? (
+              <Button onClick={handlePickGameMaster}>Pick</Button>
+            ) : null}
+            {hasGameMasterRole ? (
+              <Button onClick={handleDiscardGameMaster} variant="outlined">
+                Discard
+              </Button>
+            ) : null}
+            {!canPickGameMasterRole && !hasGameMasterRole ? (
+              <div className="flex flex-row justify-center items-center gap-2 h-9 max-w-[190px]">
+                <PickedByUser userId={lobby.gameMaster.userId!} />
+              </div>
+            ) : null}
+          </div>
+
           {lobby.heroesAvailable.map((hero) => {
             const canBePicked = hero.pickedBy === undefined;
             const isPickedByMe = hero.pickedBy === user.sub;

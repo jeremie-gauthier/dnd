@@ -62,6 +62,9 @@ export class GameInitializationListener {
     const game: GameEntity = {
       id: lobby.id,
       status: "battle_ongoing",
+      gameMaster: {
+        userId: lobby.gameMaster.userId!,
+      },
       map,
       playableEntities,
       timeline: [],

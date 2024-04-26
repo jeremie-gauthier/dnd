@@ -4,7 +4,9 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
+import { EnvSchema } from "src/config/env.config";
 import type { User } from "src/database/entities/user.entity";
 import { HostRequestedGameStartPayload } from "src/lobby/events/emitters/host-requested-game-start.payload";
 import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.payload";
@@ -19,6 +21,7 @@ export class StartGameUseCase implements UseCase {
   constructor(
     private readonly eventEmitter: EventEmitter2,
     private readonly repository: StartGameRepository,
+    private readonly configService: ConfigService<EnvSchema>,
   ) {}
 
   public async execute({
@@ -70,6 +73,19 @@ export class StartGameUseCase implements UseCase {
 
     if (heroesAvailable.some((heroAvailable) => !heroAvailable.pickedBy)) {
       throw new ForbiddenException("Some hero are not picked");
+    }
+
+    if (lobby.gameMaster.userId === undefined) {
+      throw new ForbiddenException("No Game Master found for this lobby");
+    }
+
+    const gameMasterPlayer = lobby.players.find(
+      ({ userId }) => userId === lobby.gameMaster.userId,
+    )!;
+    const isEnabled =
+      this.configService.getOrThrow("NODE_ENV") !== "development";
+    if (isEnabled && gameMasterPlayer.heroesSelected.length > 0) {
+      throw new ForbiddenException("Game Master cannot control heroes");
     }
 
     lobby.status = LobbyEntityStatus.GAME_INITIALIZING;

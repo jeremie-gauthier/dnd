@@ -6,6 +6,8 @@ summary: |
 producers:
   - Pick Hero UC
   - Discard Hero UC
+  - Pick Game Master UC
+  - Discard Game Master UC
   - Toggle Player Ready State UC
   - Start Game UC
 consumers:

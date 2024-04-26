@@ -88,6 +88,7 @@ describe("PickHeroUseCase", () => {
             { id: "thief" },
           ],
           status: LobbyEntityStatus.OPENED,
+          gameMaster: {},
         } as unknown as LobbyEntity);
 
       await useCase.execute({ ...mockParams, heroId: "warrior" });
@@ -103,6 +104,7 @@ describe("PickHeroUseCase", () => {
           { id: "thief" },
         ],
         status: LobbyEntityStatus.OPENED,
+        gameMaster: {},
       });
       expect(eventEmitterMock).toHaveBeenCalledOnce();
       expect(eventEmitterMock).toHaveBeenCalledWith(
@@ -133,6 +135,7 @@ describe("PickHeroUseCase", () => {
             { id: "thief", pickedBy: "mock-another-user-id-1" },
           ],
           status: LobbyEntityStatus.OPENED,
+          gameMaster: {},
         } as unknown as LobbyEntity);
 
       await useCase.execute({ ...mockParams, heroId: "cleric" });
@@ -155,6 +158,7 @@ describe("PickHeroUseCase", () => {
           { id: "thief", pickedBy: "mock-another-user-id-1" },
         ],
         status: LobbyEntityStatus.OPENED,
+        gameMaster: {},
       });
       expect(eventEmitterMock).toHaveBeenCalledOnce();
       expect(eventEmitterMock).toHaveBeenCalledWith(
@@ -186,6 +190,7 @@ describe("PickHeroUseCase", () => {
         .mockResolvedValue({
           id: "mock-lobby-id",
           status: LobbyEntityStatus.GAME_INITIALIZING,
+          gameMaster: {},
         } as unknown as LobbyEntity);
 
       await expect(useCase.execute(mockParams)).rejects.toThrowError(
@@ -209,6 +214,7 @@ describe("PickHeroUseCase", () => {
             { id: "thief" },
           ],
           status: LobbyEntityStatus.OPENED,
+          gameMaster: {},
         } as unknown as LobbyEntity);
 
       await expect(
@@ -233,6 +239,7 @@ describe("PickHeroUseCase", () => {
             { id: "warrior", pickedBy: "mock-another-user-id" },
           ],
           status: LobbyEntityStatus.OPENED,
+          gameMaster: {},
         } as unknown as LobbyEntity);
 
       await expect(
@@ -252,6 +259,51 @@ describe("PickHeroUseCase", () => {
           players: [{ userId: "mock-another-user-id", heroesSelected: [] }],
           heroesAvailable: [{ id: "warrior" }],
           status: LobbyEntityStatus.OPENED,
+          gameMaster: {},
+        } as unknown as LobbyEntity);
+
+      await expect(
+        useCase.execute({ ...mockParams, heroId: "warrior" }),
+      ).rejects.toThrowError(ForbiddenException);
+
+      expect(getLobbyByIdMock).toHaveBeenCalledOnce();
+      expect(updateLobbyMock).not.toHaveBeenCalled();
+      expect(eventEmitterMock).not.toHaveBeenCalled();
+    });
+
+    it("should throw a ForbiddenException when the user is the Game Master", async () => {
+      const getLobbyByIdMock = vi
+        .spyOn(repository, "getLobbyById")
+        .mockResolvedValue({
+          id: "mock-lobby-id",
+          players: [{ userId: "mock-user-id", heroesSelected: [] }],
+          heroesAvailable: [{ id: "warrior" }],
+          status: LobbyEntityStatus.OPENED,
+          gameMaster: {
+            userId: "mock-user-id",
+          },
+        } as unknown as LobbyEntity);
+
+      await expect(
+        useCase.execute({ ...mockParams, heroId: "warrior" }),
+      ).rejects.toThrowError(ForbiddenException);
+
+      expect(getLobbyByIdMock).toHaveBeenCalledOnce();
+      expect(updateLobbyMock).not.toHaveBeenCalled();
+      expect(eventEmitterMock).not.toHaveBeenCalled();
+    });
+
+    it("should throw a ForbiddenException when the user has declared ready", async () => {
+      const getLobbyByIdMock = vi
+        .spyOn(repository, "getLobbyById")
+        .mockResolvedValue({
+          id: "mock-lobby-id",
+          players: [
+            { userId: "mock-user-id", isReady: true, heroesSelected: [] },
+          ],
+          heroesAvailable: [{ id: "warrior" }],
+          status: LobbyEntityStatus.OPENED,
+          gameMaster: {},
         } as unknown as LobbyEntity);
 
       await expect(

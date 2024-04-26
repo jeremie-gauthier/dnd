@@ -56,6 +56,7 @@ export function MenuRouteComponent() {
           return {
             ...oldLobby,
             players: lobby.players,
+            gameMaster: lobby.gameMaster,
             heroesAvailable: oldLobby.heroesAvailable.map((heroAvailable) => {
               return {
                 ...heroAvailable,

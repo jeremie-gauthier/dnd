@@ -18,6 +18,8 @@ import {
   type CreateLobbyInputDto,
 } from "./create-lobby/create-lobby.dto";
 import { CreateLobbyUseCase } from "./create-lobby/create-lobby.uc";
+import { DiscardGameMasterInputDto } from "./discard-game-master/discard-game-master.dto";
+import { DiscardGameMasterUseCase } from "./discard-game-master/discard-game-master.uc";
 import type { DiscardHeroInputDto } from "./discard-hero/discard-hero.dto";
 import { DiscardHeroUseCase } from "./discard-hero/discard-hero.uc";
 import { HandleWsConnectionUseCase } from "./handle-ws-connection/handle-ws-connection.uc";
@@ -30,6 +32,8 @@ import { JoinLobbyUseCase } from "./join-lobby/join-lobby.uc";
 import { LeaveLobbyOutputDto } from "./leave-lobby/leave-lobby.dto";
 import { LeaveLobbyUseCase } from "./leave-lobby/leave-lobby.uc";
 import { ListenLobbiesChangesUseCase } from "./listen-lobbies-changes/listen-lobbies-changes.uc";
+import { PickGameMasterInputDto } from "./pick-game-master/pick-game-master.dto";
+import { PickGameMasterUseCase } from "./pick-game-master/pick-game-master.uc";
 import type { PickHeroInputDto } from "./pick-hero/pick-hero.dto";
 import { PickHeroUseCase } from "./pick-hero/pick-hero.uc";
 import type { StartGameInputDto } from "./start-game/start-game.dto";
@@ -59,6 +63,8 @@ export class LobbyPrivateGateway
     private readonly discardHeroUseCase: DiscardHeroUseCase,
     private readonly togglePlayerReadyStateUseCase: TogglePlayerReadyStateUseCase,
     private readonly startGameUseCase: StartGameUseCase,
+    private readonly pickGameMasterUseCase: PickGameMasterUseCase,
+    private readonly discardGameMasterUseCase: DiscardGameMasterUseCase,
   ) {}
 
   @WebSocketServer()
@@ -167,6 +173,30 @@ export class LobbyPrivateGateway
       ctx: this.getMessageContext(client),
       userId: client.data.userId,
       ...startGameDto,
+    });
+  }
+
+  @SubscribeMessage(ClientLobbyEvent.RequestPickGameMaster)
+  public async pickGameMaster(
+    @MessageBody() pickGameMasterDto: PickGameMasterInputDto,
+    @ConnectedSocket() client: ServerSocket,
+  ) {
+    await this.pickGameMasterUseCase.execute({
+      ctx: this.getMessageContext(client),
+      userId: client.data.userId,
+      ...pickGameMasterDto,
+    });
+  }
+
+  @SubscribeMessage(ClientLobbyEvent.RequestDiscardGameMaster)
+  public async discardGameMaster(
+    @MessageBody() discardGameMasterDto: DiscardGameMasterInputDto,
+    @ConnectedSocket() client: ServerSocket,
+  ) {
+    await this.discardGameMasterUseCase.execute({
+      ctx: this.getMessageContext(client),
+      userId: client.data.userId,
+      ...discardGameMasterDto,
     });
   }
 }

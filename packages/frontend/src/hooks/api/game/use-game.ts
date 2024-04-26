@@ -28,8 +28,6 @@ export const useGame = ({
   useEffect(() => {
     const handleGameChanges: ServerToClientEvents["server.game.changes_detected"] =
       (payload) => {
-        console.log("game changes:", payload);
-
         queryClient.setQueryData(
           GET_PLAYER_GAME_STATE_QUERY_KEY(gameId),
           () => payload,
