@@ -61,6 +61,9 @@ export class CreateLobbyUseCase implements UseCase {
           isReady: false,
         },
       ],
+      gameMaster: {
+        userId: undefined,
+      },
       heroesAvailable: heroes.map((hero) => ({
         ...hero,
         pickedBy: undefined,

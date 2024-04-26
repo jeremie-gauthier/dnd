@@ -197,6 +197,7 @@ describe("GameInitializationListener", () => {
             },
           ],
         },
+        gameMaster: { userId: "player-3" },
         playableEntities: {
           "Regdar-id": {
             ...fakeHeroStats,
@@ -251,6 +252,7 @@ describe("GameInitializationListener", () => {
               },
             },
           },
+          gameMaster: { userId: "player-3" },
           heroesAvailable: [
             {
               ...fakeHeroStats,
@@ -311,6 +313,7 @@ describe("GameInitializationListener", () => {
                 },
               ],
             },
+            gameMaster: { userId: "player-3" },
             playableEntities: {
               "Regdar-id": {
                 ...fakeHeroStats,

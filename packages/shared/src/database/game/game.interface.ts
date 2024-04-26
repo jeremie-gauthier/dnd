@@ -95,6 +95,9 @@ export type GameEntity<TGameStatus extends GameStatus = GameStatus> = {
   id: string;
   status: TGameStatus;
   map: Map;
+  gameMaster: {
+    userId: string;
+  };
   playableEntities: Record<PlayableEntity["id"], PlayableEntity>;
   timeline: PlayableEntity["id"][];
 };

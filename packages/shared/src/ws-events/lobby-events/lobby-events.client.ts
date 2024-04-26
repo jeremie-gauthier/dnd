@@ -5,6 +5,8 @@ export const ClientLobbyEvent = {
   ListenLobbiesChanges: "client.lobbies.listen_changes",
   RequestPickHero: "client.lobby.pick_hero",
   RequestDiscardHero: "client.lobby.discard_hero",
+  RequestPickGameMaster: "client.lobby.pick_game_master",
+  RequestDiscardGameMaster: "client.lobby.discard_game_master",
   RequestToggleReadyState: "client.lobby.toggle_ready_state",
   RequestStartLobby: "client.lobby.request_start_lobby",
 } as const;

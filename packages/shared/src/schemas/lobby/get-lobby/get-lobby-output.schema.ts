@@ -39,6 +39,9 @@ export const getLobbyOutputSchema = z.object({
       isReady: z.boolean(),
     }),
   ),
+  gameMaster: z.object({
+    userId: z.string().optional(),
+  }),
   heroesAvailable: z.array(heroSchema),
 });
 

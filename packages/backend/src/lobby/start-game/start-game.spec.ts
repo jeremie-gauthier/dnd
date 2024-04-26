@@ -1,5 +1,6 @@
-import { type LobbyEntity, LobbyEntityStatus } from "@dnd/shared";
+import { LobbyEntityStatus, type LobbyEntity } from "@dnd/shared";
 import { ForbiddenException } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
 import { HostRequestedGameStartPayload } from "src/lobby/events/emitters/host-requested-game-start.payload";
@@ -7,13 +8,13 @@ import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.pay
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import type { MessageContext } from "src/types/socket.type";
 import {
-  type MockInstance,
   afterEach,
   beforeEach,
   describe,
   expect,
   it,
   vi,
+  type MockInstance,
 } from "vitest";
 import { StartGameRepository } from "./start-game.repository";
 import { StartGameUseCase } from "./start-game.uc";
@@ -46,6 +47,12 @@ describe("StartGameUseCase", () => {
             getLobbyById: () => Promise.resolve(null),
             updateLobby: () => Promise.resolve(),
             createGame: () => Promise.resolve({}),
+          },
+        },
+        {
+          provide: ConfigService,
+          useValue: {
+            getOrThrow: (key: string) => key,
           },
         },
       ],
@@ -105,7 +112,13 @@ describe("StartGameUseCase", () => {
               heroesSelected: ["thief"],
               isReady: true,
             },
+            {
+              userId: "mock-user-id-4",
+              heroesSelected: [],
+              isReady: true,
+            },
           ],
+          gameMaster: { userId: "mock-user-id-4" },
           heroesAvailable: [
             { id: "warrior", pickedBy: "mock-user-id" },
             { id: "cleric", pickedBy: "mock-user-id-2" },
@@ -147,7 +160,13 @@ describe("StartGameUseCase", () => {
             heroesSelected: ["thief"],
             isReady: true,
           },
+          {
+            userId: "mock-user-id-4",
+            heroesSelected: [],
+            isReady: true,
+          },
         ],
+        gameMaster: { userId: "mock-user-id-4" },
         heroesAvailable: [
           { id: "warrior", pickedBy: "mock-user-id" },
           { id: "cleric", pickedBy: "mock-user-id-2" },
@@ -198,7 +217,13 @@ describe("StartGameUseCase", () => {
                 heroesSelected: ["thief"],
                 isReady: true,
               },
+              {
+                userId: "mock-user-id-4",
+                heroesSelected: [],
+                isReady: true,
+              },
             ],
+            gameMaster: { userId: "mock-user-id-4" },
             heroesAvailable: [
               { id: "warrior", pickedBy: "mock-user-id" },
               { id: "cleric", pickedBy: "mock-user-id-2" },

@@ -4,7 +4,9 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
+import { EnvSchema } from "src/config/env.config";
 import type { Hero } from "src/database/entities/hero.entity";
 import type { User } from "src/database/entities/user.entity";
 import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.payload";
@@ -19,6 +21,7 @@ export class PickHeroUseCase implements UseCase {
   constructor(
     private readonly eventEmitter: EventEmitter2,
     private readonly repository: PickHeroRepository,
+    private readonly configService: ConfigService<EnvSchema>,
   ) {}
 
   public async execute({
@@ -31,7 +34,6 @@ export class PickHeroUseCase implements UseCase {
     userId: User["id"];
   }): Promise<void> {
     // TODO: the lobby fetched might lack of a lock
-    // TODO: peut-on pick un hero si on s'est declare "ready" ?
     const lobby = await this.repository.getLobbyById(lobbyId);
     if (!lobby) {
       throw new NotFoundException("Lobby not found");
@@ -58,6 +60,14 @@ export class PickHeroUseCase implements UseCase {
   }) {
     if (lobby.status !== "OPENED") {
       throw new ForbiddenException("Lobby is not opened");
+    }
+
+    const isEnabled =
+      this.configService.getOrThrow("NODE_ENV") !== "development";
+    if (isEnabled && lobby.gameMaster.userId === userId) {
+      throw new ForbiddenException(
+        "You cannot pick any hero when you are the Game Master",
+      );
     }
 
     const heroIdx = lobby.heroesAvailable.findIndex(({ id }) => id === heroId);

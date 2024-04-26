@@ -7,13 +7,13 @@ import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.pay
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import type { MessageContext } from "src/types/socket.type";
 import {
-  type MockInstance,
   afterEach,
   beforeEach,
   describe,
   expect,
   it,
   vi,
+  type MockInstance,
 } from "vitest";
 import { DiscardHeroRepository } from "./discard-hero.repository";
 import { DiscardHeroUseCase } from "./discard-hero.uc";
@@ -247,6 +247,31 @@ describe("DiscardHeroUseCase", () => {
           heroesAvailable: [
             { id: "warrior", pickedBy: "mock-another-user-id" },
           ],
+          status: LobbyEntityStatus.OPENED,
+        } as unknown as LobbyEntity);
+
+      await expect(
+        useCase.execute({ ...mockParams, heroId: "warrior" }),
+      ).rejects.toThrowError(ForbiddenException);
+
+      expect(getLobbyByIdMock).toHaveBeenCalledOnce();
+      expect(updateLobbyMock).not.toHaveBeenCalled();
+      expect(eventEmitterMock).not.toHaveBeenCalled();
+    });
+
+    it("should throw a ForbiddenException when the user has declared ready", async () => {
+      const getLobbyByIdMock = vi
+        .spyOn(repository, "getLobbyById")
+        .mockResolvedValue({
+          id: "mock-lobby-id",
+          players: [
+            {
+              userId: "mock-user-id",
+              isReady: true,
+              heroesSelected: ["warrior"],
+            },
+          ],
+          heroesAvailable: [{ id: "warrior", pickedBy: "mock-user-id" }],
           status: LobbyEntityStatus.OPENED,
         } as unknown as LobbyEntity);
 

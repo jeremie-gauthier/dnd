@@ -42,5 +42,8 @@ export type LobbyEntity = {
     campaign: LobbyCampaign;
   };
   players: LobbyPlayer[];
+  gameMaster: {
+    userId?: string;
+  };
   heroesAvailable: Hero[];
 };

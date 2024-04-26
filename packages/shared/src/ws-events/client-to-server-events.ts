@@ -1,5 +1,10 @@
 import type { LobbyEntity } from "../database/lobby/lobby.interface";
-import { OpenDoorInput, PlayableEntityMoveInput } from "../schemas";
+import {
+  DiscardGameMasterInput,
+  OpenDoorInput,
+  PickGameMasterInput,
+  PlayableEntityMoveInput,
+} from "../schemas";
 import { ClientGameEvent } from "./game-events/game-events.client";
 import { ClientLobbyEvent } from "./lobby-events/lobby-events.client";
 import type { EventsMapper } from "./utils.type";
@@ -33,6 +38,12 @@ interface ClientToServerEventsAndPayloads
   ) => void;
   [ClientGameEvent.PlayableEntityTurnEnds]: () => void;
   [ClientGameEvent.PlayableEntityOpenDoor]: (payload: OpenDoorInput) => void;
+  [ClientLobbyEvent.RequestPickGameMaster]: (
+    payload: PickGameMasterInput,
+  ) => void;
+  [ClientLobbyEvent.RequestDiscardGameMaster]: (
+    payload: DiscardGameMasterInput,
+  ) => void;
 }
 
 export type ClientToServerEvents =
