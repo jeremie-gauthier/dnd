@@ -88,16 +88,20 @@ export class PlayableEntityMoveUseCase implements UseCase {
       );
     }
 
-    if (playableEntity.healthPoints === 0) {
+    if (playableEntity.healthPoints <= 0) {
       throw new ForbiddenException(
         "Cannot move a playable entity that is not alive",
       );
     }
 
-    if (playableEntity.movementPoints === 0) {
+    if (playableEntity.movementPoints <= 0) {
       throw new ForbiddenException(
         "Playable entity has no movement points left",
       );
+    }
+
+    if (playableEntity.actionPoints <= 0) {
+      throw new ForbiddenException("Playable entity has no action points left");
     }
   }
 
@@ -120,6 +124,8 @@ export class PlayableEntityMoveUseCase implements UseCase {
       playableEntity,
     });
 
+    let movementPoints = playableEntity.movementPoints;
+
     // slice to remove the entity self position (which is the origin in the bfs algo)
     const pathTiles = unfoldTilePath(pathToTile).slice(1);
     for (const pathTile of pathTiles) {
@@ -136,7 +142,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
       // TODO: FUTUR: traps management
 
       playableEntity.coord = pathTile.coord;
-      playableEntity.movementPoints -= 1;
+      movementPoints -= 1;
 
       validTiles.push(pathTile);
     }
@@ -161,6 +167,8 @@ export class PlayableEntityMoveUseCase implements UseCase {
       type: "playable-entity",
       id: playableEntity.id,
     });
+
+    playableEntity.actionPoints -= 1;
 
     return validTiles;
   }

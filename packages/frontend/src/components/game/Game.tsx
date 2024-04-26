@@ -162,7 +162,9 @@ export const Game = ({ game, phase, actionHandlers }: Props) => {
               isMoving={playerState.currentAction === "move"}
               onClick={() => playerState.toggleTo("move")}
               onCancel={() => playerState.toggleTo("idle")}
-              disabled={heroPlaying.movementPoints <= 0}
+              disabled={
+                heroPlaying.movementPoints <= 0 || heroPlaying.actionPoints <= 0
+              }
             />
             <OpenDoorButton
               onClick={() => {
@@ -174,7 +176,7 @@ export const Game = ({ game, phase, actionHandlers }: Props) => {
                   coordOfTileWithDoor: neighbourDoorCoord,
                 });
               }}
-              disabled={!neighbourDoorCoord}
+              disabled={!neighbourDoorCoord || heroPlaying.actionPoints <= 0}
             />
             <EndTurnButton
               onClick={() => {
