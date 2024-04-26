@@ -3,7 +3,7 @@ import { ClientLobbyEvent } from "@dnd/shared";
 import { useNavigate } from "@tanstack/react-router";
 import type { GetLobbyResponse } from "../../hooks/api/lobby/get-lobby";
 import type { ClientSocket } from "../../types/socket.type";
-import { HeroCard } from "../hero-card/HeroCard";
+import { HeroCard } from "../playable-card/HeroCard";
 import { Button } from "../shared/button/Button";
 import { UserCard } from "../user-card/UserCard";
 import { PickedByUser } from "./PickedByUser";
