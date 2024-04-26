@@ -45,15 +45,13 @@ export class OpenDoorUseCase implements UseCase {
 
     this.assertCanOpenDoor(game, { userId, coordOfTileWithDoor });
 
-    // TODO: open the door (reroll all init, reload timeline and pass playing hero turn)
     const { doorEntity, entityThatOpenedTheDoor } = this.openDoor({
       userId,
       game,
       coordOfTileWithDoor,
     });
-    // TODO: save game changes to db
     await this.repository.updateGame({ game });
-    // TODO: publish event door_opened
+
     this.eventEmitter.emitAsync(
       GameEvent.DoorOpened,
       new DoorOpenedPayload({ ctx, doorEntity, entityThatOpenedTheDoor, game }),
@@ -186,6 +184,7 @@ export class OpenDoorUseCase implements UseCase {
       game,
     }) as PlayableEntity;
     nextEntityToPlay.currentPhase = "action";
+    nextEntityToPlay.actionPoints = nextEntityToPlay.baseActionPoints;
 
     return {
       doorEntity,
