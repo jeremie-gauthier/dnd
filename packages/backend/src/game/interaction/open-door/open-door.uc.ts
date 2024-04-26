@@ -184,6 +184,7 @@ export class OpenDoorUseCase implements UseCase {
       game,
     }) as PlayableEntity;
     nextEntityToPlay.currentPhase = "action";
+    nextEntityToPlay.actionPoints = nextEntityToPlay.baseActionPoints;
 
     return {
       doorEntity,
