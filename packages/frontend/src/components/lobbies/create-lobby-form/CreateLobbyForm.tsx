@@ -40,7 +40,8 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
             name="campaign"
             validatorAdapter={zodValidator}
             validators={campaignValidators}
-            children={(field) => (
+          >
+            {(field) => (
               <Select
                 label="Select your campaign"
                 value={field.state.value}
@@ -49,7 +50,7 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
                 getDisplayedValue={getCampaignDisplayedValue}
               />
             )}
-          />
+          </form.Field>
         </div>
 
         <div className="relative !mb-6">
@@ -57,7 +58,8 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
             name="nbPlayersMax"
             validatorAdapter={zodValidator}
             validators={nbPlayersMaxValidators}
-            children={(field) => (
+          >
+            {(field) => (
               <>
                 <MinMaxRange
                   min={2}
@@ -80,17 +82,18 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
                 </span>
               </>
             )}
-          />
+          </form.Field>
         </div>
 
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
-          children={([canSubmit, isSubmitting]) => (
+        >
+          {([canSubmit, isSubmitting]) => (
             <Button type="submit" disabled={!canSubmit}>
               {isSubmitting ? "Your Lobby is being created" : "Create Lobby"}
             </Button>
           )}
-        />
+        </form.Subscribe>
       </form>
     </div>
   );
