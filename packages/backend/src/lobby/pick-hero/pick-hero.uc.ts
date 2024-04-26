@@ -86,6 +86,9 @@ export class PickHeroUseCase implements UseCase {
     }
 
     const player = lobby.players[playerIdx]!;
+    if (player.isReady) {
+      throw new ForbiddenException("You cannot pick hero when you are ready");
+    }
 
     player.heroesSelected.push(heroId);
     hero.pickedBy = userId;
