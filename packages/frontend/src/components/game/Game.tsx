@@ -153,6 +153,7 @@ export const Game = ({ game, phase, actionHandlers }: Props) => {
               Hero current coord: {JSON.stringify(heroPlaying.coord ?? "{}")}
             </p>
             <p>Movement points: {heroPlaying.movementPoints}</p>
+            <p>Action points: {heroPlaying.actionPoints}</p>
             <p>Health points: {heroPlaying.healthPoints}</p>
           </div>
 
