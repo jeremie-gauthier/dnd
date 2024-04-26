@@ -153,6 +153,7 @@ export const Game = ({ game, phase, actionHandlers }: Props) => {
               Hero current coord: {JSON.stringify(heroPlaying.coord ?? "{}")}
             </p>
             <p>Movement points: {heroPlaying.movementPoints}</p>
+            <p>Action points: {heroPlaying.actionPoints}</p>
             <p>Health points: {heroPlaying.healthPoints}</p>
           </div>
 
@@ -161,7 +162,9 @@ export const Game = ({ game, phase, actionHandlers }: Props) => {
               isMoving={playerState.currentAction === "move"}
               onClick={() => playerState.toggleTo("move")}
               onCancel={() => playerState.toggleTo("idle")}
-              disabled={heroPlaying.movementPoints <= 0}
+              disabled={
+                heroPlaying.movementPoints <= 0 || heroPlaying.actionPoints <= 0
+              }
             />
             <OpenDoorButton
               onClick={() => {
@@ -173,7 +176,7 @@ export const Game = ({ game, phase, actionHandlers }: Props) => {
                   coordOfTileWithDoor: neighbourDoorCoord,
                 });
               }}
-              disabled={!neighbourDoorCoord}
+              disabled={!neighbourDoorCoord || heroPlaying.actionPoints <= 0}
             />
             <EndTurnButton
               onClick={() => {
