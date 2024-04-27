@@ -1,17 +1,31 @@
 import { GameEntity, PlayerGamePhase, PlayerGameState } from "@dnd/shared";
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { User } from "src/database/entities/user.entity";
+import { VisibilityService } from "src/game/map/services/visibility/visibility.service";
 
 @Injectable()
 export class PlayerStateService {
+  constructor(private readonly visibilityService: VisibilityService) {}
+
   public getPlayerState({
     game,
     userId,
   }: { game: GameEntity; userId: User["id"] }): PlayerGameState {
-    if (this.isPreparingForBattle(game)) {
-      return this.sendGamePreparationMessage({ game, userId });
-    } else if (this.isBattleOngoing(game)) {
-      return this.sendNewPlayerTurnMessage({ game, userId });
+    const isGameMaster = game.gameMaster.userId === userId;
+    const gameFromRoleVisibility = isGameMaster
+      ? this.visibilityService.getMapForGameMaster({ game })
+      : this.visibilityService.getMapForHero({ game });
+
+    if (this.isPreparingForBattle(gameFromRoleVisibility)) {
+      return this.sendGamePreparationMessage({
+        game: gameFromRoleVisibility,
+        userId,
+      });
+    } else if (this.isBattleOngoing(gameFromRoleVisibility)) {
+      return this.sendNewPlayerTurnMessage({
+        game: gameFromRoleVisibility,
+        userId,
+      });
     }
 
     throw new InternalServerErrorException("Unknown game status");
