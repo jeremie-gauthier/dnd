@@ -17,6 +17,7 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import { PlayableEntityMovedPayload } from "src/game/events/emitters/playable-entity-moved.payload";
+import { CoordService } from "src/game/map/services/coord/coord.service";
 import { TrapService } from "src/game/trap/services/trap.service";
 import { MessageContext } from "src/types/socket.type";
 import { UseCase } from "src/types/use-case.interface";
@@ -30,6 +31,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
     private readonly movesSerivce: MovesService,
     private readonly eventEmitter: EventEmitter2,
     private readonly trapService: TrapService,
+    private readonly coordService: CoordService,
   ) {}
 
   public async execute({
@@ -147,12 +149,10 @@ export class PlayableEntityMoveUseCase implements UseCase {
       validTiles.push(pathTile);
 
       if (this.hasTriggerTrap({ tile: pathTile })) {
-        const trapEntity = pathTile.entities.find(
-          (entity) =>
-            entity.type === "non-playable-interactive-entity" &&
-            entity.kind === "trap" &&
-            entity.canInteract,
-        ) as TrapEntity;
+        const trapEntity = this.getTrapEntityOnCoord({
+          game,
+          coord: pathTile.coord,
+        });
         this.trapService.trigger({
           game,
           trapEntity,
@@ -219,5 +219,28 @@ export class PlayableEntityMoveUseCase implements UseCase {
         entity.kind === "trap" &&
         entity.canInteract,
     );
+  }
+
+  private getTrapEntityOnCoord({
+    game,
+    coord,
+  }: { game: GameEntity; coord: Coord }): TrapEntity {
+    const index = this.coordService.coordToIndex({
+      coord,
+      metadata: {
+        width: game.map.width,
+        height: game.map.height,
+      },
+    });
+    const tile = game.map.tiles[index] as Tile;
+
+    const trapEntity = tile.entities.find(
+      (entity) =>
+        entity.type === "non-playable-interactive-entity" &&
+        entity.kind === "trap" &&
+        entity.canInteract,
+    ) as TrapEntity;
+
+    return trapEntity;
   }
 }
