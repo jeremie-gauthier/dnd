@@ -3,6 +3,7 @@ import { entitiesAssetsCollection } from "../assets-loader/assets.config";
 import { drawDoor } from "./entities/draw-door";
 import { drawPillar } from "./entities/draw-pillar";
 import { drawPlayableEntityIcon } from "./entities/draw-playable-entity-icon";
+import { drawTrap } from "./entities/draw-trap";
 import { drawWall } from "./entities/draw-wall";
 import type { EntityDrawerParams } from "./entities/entity-drawer-params.interface";
 
@@ -49,7 +50,7 @@ const dummyDrawer = (_: EntityDrawerParams) => {};
 const ENTITY_MAP = {
   "non-playable-interactive-entity": {
     door: drawDoor,
-    trap: dummyDrawer,
+    trap: drawTrap,
   },
   "non-playable-non-interactive-entity": {
     "off-map": dummyDrawer,
