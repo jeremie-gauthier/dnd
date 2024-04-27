@@ -33,7 +33,8 @@ export class MovesService {
     // can be null during game creation, where heroes are not yet positioned
     if (oldTile) {
       oldTile.entities = oldTile.entities.filter(
-        (entity) => entity.type === "playable-entity" && entity.id === hero.id,
+        (entity) =>
+          !(entity.type === "playable-entity" && entity.id === hero.id),
       );
     }
 

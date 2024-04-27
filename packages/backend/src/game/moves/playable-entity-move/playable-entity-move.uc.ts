@@ -4,7 +4,6 @@ import {
   PlayableEntity,
   PlayableEntityMoveInput,
   Tile,
-  coordToIndex,
   getNeighbourCoords,
   unfoldTilePath,
 } from "@dnd/shared";
@@ -122,10 +121,6 @@ export class PlayableEntityMoveUseCase implements UseCase {
     const playableEntity = game.playableEntities[
       playableEntityId
     ] as PlayableEntity;
-    const startingPlayableEntityTile = this.getPlayableEntityTile({
-      game,
-      playableEntity,
-    });
 
     let movementPoints = playableEntity.movementPoints;
 
@@ -142,7 +137,11 @@ export class PlayableEntityMoveUseCase implements UseCase {
         break;
       }
 
-      playableEntity.coord = pathTile.coord;
+      this.movesSerivce.moveHeroToRequestedPosition({
+        game,
+        heroId: playableEntityId,
+        requestedPosition: pathTile.coord,
+      });
       movementPoints -= 1;
 
       validTiles.push(pathTile);
@@ -162,27 +161,6 @@ export class PlayableEntityMoveUseCase implements UseCase {
         break;
       }
     }
-
-    const finalPlayableEntityTile = this.getPlayableEntityTile({
-      game,
-      playableEntity,
-    });
-
-    if (startingPlayableEntityTile) {
-      startingPlayableEntityTile.entities =
-        startingPlayableEntityTile.entities.filter(
-          (tileEntity) =>
-            !(
-              tileEntity.type === "playable-entity" &&
-              tileEntity.id === playableEntity.id
-            ),
-        );
-    }
-
-    finalPlayableEntityTile?.entities.push({
-      type: "playable-entity",
-      id: playableEntity.id,
-    });
 
     playableEntity.actionPoints -= 1;
 
@@ -232,19 +210,6 @@ export class PlayableEntityMoveUseCase implements UseCase {
       ({ row, column }) =>
         row === tileToCompareCoord.row && column === tileToCompareCoord.column,
     );
-  }
-
-  private getPlayableEntityTile({
-    game,
-    playableEntity,
-  }: { game: GameEntity; playableEntity: PlayableEntity }): Tile | undefined {
-    const coord = playableEntity.coord;
-    const tileIdx = coordToIndex({
-      coord,
-      metadata: { height: game.map.height, width: game.map.width },
-    });
-    const tile = game.map.tiles[tileIdx];
-    return tile;
   }
 
   private hasTriggerTrap({ tile }: { tile: Tile }): boolean {
