@@ -118,6 +118,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
     pathToTile: PlayableEntityMoveInput["pathToTile"];
     playableEntityId: PlayableEntityMoveInput["playableEntityId"];
   }): Tile[] {
+    const metadata = { width: game.map.width, height: game.map.height };
     const validTiles: Tile[] = [];
 
     const playableEntity = game.playableEntities[
@@ -129,12 +130,14 @@ export class PlayableEntityMoveUseCase implements UseCase {
     // slice to remove the entity self position (which is the origin in the bfs algo)
     const pathTiles = unfoldTilePath(pathToTile).slice(1);
     for (const pathTile of pathTiles) {
+      const index = this.coordService.coordToIndex({
+        coord: pathTile.coord,
+        metadata,
+      });
+      const tile = game.map.tiles[index] as Tile;
+
       if (
-        !this.isPlayableEntityAbleToMoveToTile({
-          game,
-          playableEntity,
-          tile: pathTile,
-        })
+        !this.isPlayableEntityAbleToMoveToTile({ game, playableEntity, tile })
       ) {
         break;
       }
@@ -148,11 +151,8 @@ export class PlayableEntityMoveUseCase implements UseCase {
 
       validTiles.push(pathTile);
 
-      if (this.hasTriggerTrap({ tile: pathTile })) {
-        const trapEntity = this.getTrapEntityOnCoord({
-          game,
-          coord: pathTile.coord,
-        });
+      if (this.hasTriggerTrap({ tile })) {
+        const trapEntity = this.getTrapEntityOnCoord({ tile });
         this.trapService.trigger({
           game,
           trapEntity,
@@ -221,19 +221,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
     );
   }
 
-  private getTrapEntityOnCoord({
-    game,
-    coord,
-  }: { game: GameEntity; coord: Coord }): TrapEntity {
-    const index = this.coordService.coordToIndex({
-      coord,
-      metadata: {
-        width: game.map.width,
-        height: game.map.height,
-      },
-    });
-    const tile = game.map.tiles[index] as Tile;
-
+  private getTrapEntityOnCoord({ tile }: { tile: Tile }): TrapEntity {
     const trapEntity = tile.entities.find(
       (entity) =>
         entity.type === "non-playable-interactive-entity" &&
