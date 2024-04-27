@@ -1,5 +1,6 @@
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
+import { TrapService } from "src/game/trap/services/trap.service";
 import {
   MockInstance,
   afterEach,
@@ -18,6 +19,7 @@ describe("PlayableEntityMoveUseCase", () => {
   let repository: PlayableEntityMoveRepository;
   let eventEmitter2: EventEmitter2;
   let movesSerivce: MovesService;
+  let trapService: TrapService;
 
   let eventEmitterMock: MockInstance<
     [event: any, ...values: any[]],
@@ -29,6 +31,7 @@ describe("PlayableEntityMoveUseCase", () => {
       providers: [
         PlayableEntityMoveUseCase,
         EventEmitter2,
+        TrapService,
         {
           provide: PlayableEntityMoveRepository,
           useValue: {},

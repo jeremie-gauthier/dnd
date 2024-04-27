@@ -13,6 +13,8 @@ import { MovesModule } from "./moves/moves.module";
 import { StartingModule } from "./starting/starting.module";
 import { StateMachineModule } from "./state-machine/state-machine.module";
 import { TimelineModule } from "./timeline/timeline.module";
+import { TrapModule } from './trap/trap.module';
+import { CombatModule } from './combat/combat.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { TimelineModule } from "./timeline/timeline.module";
     AuthzModule,
     TimelineModule,
     InteractionModule,
+    TrapModule,
+    CombatModule,
   ],
   controllers: [GamePrivateController],
   providers: [

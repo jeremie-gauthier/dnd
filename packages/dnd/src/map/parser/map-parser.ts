@@ -1,13 +1,13 @@
-import { EntityFactory } from '../../entities/entity.factory';
-import { Coord } from '../coord';
-import { ParsingError } from '../errors/parsing-error';
-import { Tile } from '../tile';
-import type { MapReader } from './map-reader';
+import { EntityFactory } from "../../entities/entity.factory";
+import { Coord } from "../coord";
+import { ParsingError } from "../errors/parsing-error";
+import { Tile } from "../tile";
+import type { MapReader } from "./map-reader";
 
 enum MapGrammar {
-  SECTION_SEPARATOR = ';',
-  ENUMERATION_SYMBOL = ',',
-  CONTEXT_SYMBOL = ':',
+  SECTION_SEPARATOR = ";",
+  ENUMERATION_SYMBOL = ",",
+  CONTEXT_SYMBOL = ":",
 }
 
 export class MapParser {
@@ -72,7 +72,7 @@ export class MapParser {
         lineIndex,
       );
     }
-    if (!['free', 'blocked'].includes(tileContentType)) {
+    if (!["free", "blocked"].includes(tileContentType)) {
       throw new ParsingError(
         `The tile content type token "${tileContentType}" is not recognized`,
         lineIndex,
@@ -86,7 +86,7 @@ export class MapParser {
     });
     const entities = entityType
       ?.split(MapGrammar.ENUMERATION_SYMBOL)
-      .filter((entityType) => entityType !== '')
+      .filter((entityType) => entityType !== "")
       .map((entityType) => EntityFactory.create(entityType, tileCoord));
     return new Tile(tileCoord, JSON.stringify(tileCoord), entities);
   }

@@ -4,10 +4,10 @@ import {
   PlayableEntity,
   PlayableEntityMoveInput,
   Tile,
-  coordToIndex,
   getNeighbourCoords,
   unfoldTilePath,
 } from "@dnd/shared";
+import { TrapEntity } from "@dnd/shared/dist/database/game/interactive-entities.type";
 import {
   ForbiddenException,
   Injectable,
@@ -17,6 +17,8 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import { PlayableEntityMovedPayload } from "src/game/events/emitters/playable-entity-moved.payload";
+import { CoordService } from "src/game/map/services/coord/coord.service";
+import { TrapService } from "src/game/trap/services/trap.service";
 import { MessageContext } from "src/types/socket.type";
 import { UseCase } from "src/types/use-case.interface";
 import { MovesService } from "../services/moves.service";
@@ -28,6 +30,8 @@ export class PlayableEntityMoveUseCase implements UseCase {
     private readonly repository: PlayableEntityMoveRepository,
     private readonly movesSerivce: MovesService,
     private readonly eventEmitter: EventEmitter2,
+    private readonly trapService: TrapService,
+    private readonly coordService: CoordService,
   ) {}
 
   public async execute({
@@ -114,59 +118,49 @@ export class PlayableEntityMoveUseCase implements UseCase {
     pathToTile: PlayableEntityMoveInput["pathToTile"];
     playableEntityId: PlayableEntityMoveInput["playableEntityId"];
   }): Tile[] {
+    const metadata = { width: game.map.width, height: game.map.height };
     const validTiles: Tile[] = [];
 
     const playableEntity = game.playableEntities[
       playableEntityId
     ] as PlayableEntity;
-    const startingPlayableEntityTile = this.getPlayableEntityTile({
-      game,
-      playableEntity,
-    });
 
     let movementPoints = playableEntity.movementPoints;
 
     // slice to remove the entity self position (which is the origin in the bfs algo)
     const pathTiles = unfoldTilePath(pathToTile).slice(1);
     for (const pathTile of pathTiles) {
+      const index = this.coordService.coordToIndex({
+        coord: pathTile.coord,
+        metadata,
+      });
+      const tile = game.map.tiles[index] as Tile;
+
       if (
-        !this.isPlayableEntityAbleToMoveToTile({
-          game,
-          playableEntity,
-          tile: pathTile,
-        })
+        !this.isPlayableEntityAbleToMoveToTile({ game, playableEntity, tile })
       ) {
         break;
       }
 
-      // TODO: FUTUR: traps management
-
-      playableEntity.coord = pathTile.coord;
+      this.movesSerivce.moveHeroToRequestedPosition({
+        game,
+        heroId: playableEntityId,
+        requestedPosition: pathTile.coord,
+      });
       movementPoints -= 1;
 
       validTiles.push(pathTile);
+
+      if (this.hasTriggerTrap({ tile })) {
+        const trapEntity = this.getTrapEntityOnCoord({ tile });
+        this.trapService.trigger({
+          game,
+          trapEntity,
+          subjectEntity: playableEntity,
+        });
+        break;
+      }
     }
-
-    const finalPlayableEntityTile = this.getPlayableEntityTile({
-      game,
-      playableEntity,
-    });
-
-    if (startingPlayableEntityTile) {
-      startingPlayableEntityTile.entities =
-        startingPlayableEntityTile.entities.filter(
-          (tileEntity) =>
-            !(
-              tileEntity.type === "playable-entity" &&
-              tileEntity.id === playableEntity.id
-            ),
-        );
-    }
-
-    finalPlayableEntityTile?.entities.push({
-      type: "playable-entity",
-      id: playableEntity.id,
-    });
 
     playableEntity.actionPoints -= 1;
 
@@ -218,16 +212,23 @@ export class PlayableEntityMoveUseCase implements UseCase {
     );
   }
 
-  private getPlayableEntityTile({
-    game,
-    playableEntity,
-  }: { game: GameEntity; playableEntity: PlayableEntity }): Tile | undefined {
-    const coord = playableEntity.coord;
-    const tileIdx = coordToIndex({
-      coord,
-      metadata: { height: game.map.height, width: game.map.width },
-    });
-    const tile = game.map.tiles[tileIdx];
-    return tile;
+  private hasTriggerTrap({ tile }: { tile: Tile }): boolean {
+    return tile.entities.some(
+      (entity) =>
+        entity.type === "non-playable-interactive-entity" &&
+        entity.kind === "trap" &&
+        entity.canInteract,
+    );
+  }
+
+  private getTrapEntityOnCoord({ tile }: { tile: Tile }): TrapEntity {
+    const trapEntity = tile.entities.find(
+      (entity) =>
+        entity.type === "non-playable-interactive-entity" &&
+        entity.kind === "trap" &&
+        entity.canInteract,
+    ) as TrapEntity;
+
+    return trapEntity;
   }
 }

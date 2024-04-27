@@ -18,9 +18,12 @@ export class GameChangesListener {
     game,
   }: { ctx: MessageContext; game: GameEntity }) {
     const playableEntities = Object.values(game.playableEntities);
-    const userIds = new Set(
-      playableEntities.map((playableEntity) => playableEntity.playedByUserId),
-    );
+    const userIds = new Set([
+      game.gameMaster.userId,
+      ...playableEntities.map(
+        (playableEntity) => playableEntity.playedByUserId,
+      ),
+    ]);
 
     for (const userId of userIds) {
       const playerGameState = this.playerStateService.getPlayerState({
