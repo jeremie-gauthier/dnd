@@ -8,6 +8,7 @@ import {
   getNeighbourCoords,
   unfoldTilePath,
 } from "@dnd/shared";
+import { TrapEntity } from "@dnd/shared/dist/database/game/interactive-entities.type";
 import {
   ForbiddenException,
   Injectable,
@@ -17,6 +18,7 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import { PlayableEntityMovedPayload } from "src/game/events/emitters/playable-entity-moved.payload";
+import { TrapService } from "src/game/trap/services/trap.service";
 import { MessageContext } from "src/types/socket.type";
 import { UseCase } from "src/types/use-case.interface";
 import { MovesService } from "../services/moves.service";
@@ -28,6 +30,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
     private readonly repository: PlayableEntityMoveRepository,
     private readonly movesSerivce: MovesService,
     private readonly eventEmitter: EventEmitter2,
+    private readonly trapService: TrapService,
   ) {}
 
   public async execute({
@@ -139,12 +142,25 @@ export class PlayableEntityMoveUseCase implements UseCase {
         break;
       }
 
-      // TODO: FUTUR: traps management
-
       playableEntity.coord = pathTile.coord;
       movementPoints -= 1;
 
       validTiles.push(pathTile);
+
+      if (this.hasTriggerTrap({ tile: pathTile })) {
+        const trapEntity = pathTile.entities.find(
+          (entity) =>
+            entity.type === "non-playable-interactive-entity" &&
+            entity.kind === "trap" &&
+            entity.canInteract,
+        ) as TrapEntity;
+        this.trapService.trigger({
+          game,
+          trapEntity,
+          subjectEntity: playableEntity,
+        });
+        break;
+      }
     }
 
     const finalPlayableEntityTile = this.getPlayableEntityTile({
@@ -229,5 +245,14 @@ export class PlayableEntityMoveUseCase implements UseCase {
     });
     const tile = game.map.tiles[tileIdx];
     return tile;
+  }
+
+  private hasTriggerTrap({ tile }: { tile: Tile }): boolean {
+    return tile.entities.some(
+      (entity) =>
+        entity.type === "non-playable-interactive-entity" &&
+        entity.kind === "trap" &&
+        entity.canInteract,
+    );
   }
 }

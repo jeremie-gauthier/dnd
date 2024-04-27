@@ -1,5 +1,6 @@
 import type { HeroClassType } from "../enums/hero-class.enum";
 import type { EnemyKind } from "./enemy-kind.type";
+import { DoorEntity, TrapEntity } from "./interactive-entities.type";
 import type { PlayerGamePhase } from "./player-phase.type";
 
 type Player = {
@@ -51,13 +52,7 @@ export type TilePlayableEntity = {
   id: PlayableEntity["id"];
 };
 
-export type TileNonPlayableInteractiveEntity = {
-  type: "non-playable-interactive-entity";
-  kind: "door" | "trap";
-  isVisible: boolean;
-  isBlocking: boolean;
-  canInteract: boolean;
-};
+export type TileNonPlayableInteractiveEntity = DoorEntity | TrapEntity;
 
 export type TileNonPlayableNonInteractiveEntity = {
   type: "non-playable-non-interactive-entity";

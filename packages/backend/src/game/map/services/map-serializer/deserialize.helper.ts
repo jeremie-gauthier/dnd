@@ -5,6 +5,10 @@ import type {
   TileNonPlayableInteractiveEntity,
   TileNonPlayableNonInteractiveEntity,
 } from "@dnd/shared";
+import {
+  DoorEntity,
+  TrapEntity,
+} from "@dnd/shared/dist/database/game/interactive-entities.type";
 import { InternalServerErrorException } from "@nestjs/common";
 import { CoordService } from "../coord/coord.service";
 
@@ -243,9 +247,8 @@ function parseTileEntity(entityCompiled?: string): TileEntity {
   } else if (isNonPlayableInteractiveTileEntity(kind)) {
     return {
       type: "non-playable-interactive-entity",
-      kind,
       ...getNonPlayableInteractiveEntityAttributes(kind),
-    };
+    } as TileNonPlayableInteractiveEntity;
   } else if (isPlayableTileEntity(kind)) {
     return {
       type: "playable-entity",
@@ -276,12 +279,23 @@ function isPlayableTileEntity(kind: string): boolean {
 
 function getNonPlayableInteractiveEntityAttributes(
   kind: TileNonPlayableInteractiveEntity["kind"],
-): { canInteract: boolean; isBlocking: boolean; isVisible: boolean } {
+): Omit<TileNonPlayableInteractiveEntity, "type"> {
   switch (kind) {
     case "door":
-      return { canInteract: true, isBlocking: true, isVisible: true };
+      return {
+        kind,
+        canInteract: true,
+        isBlocking: true,
+        isVisible: true,
+      } as Omit<DoorEntity, "type">;
     case "trap":
-      return { canInteract: true, isBlocking: false, isVisible: false };
+      return {
+        kind,
+        canInteract: true,
+        isBlocking: false,
+        isVisible: false,
+        name: "pit",
+      } as Omit<TrapEntity, "type">;
   }
 }
 

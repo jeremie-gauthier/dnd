@@ -207,6 +207,7 @@ describe("MapSerializerService", () => {
                     isVisible: false,
                     isBlocking: false,
                     canInteract: true,
+                    name: "pit",
                   },
                 ],
               },
