@@ -8,3 +8,5 @@ export const HeroClass = {
 export const HeroClassValues = Object.values(HeroClass);
 
 export type HeroClassType = (typeof HeroClass)[keyof typeof HeroClass];
+
+export type MagicHeroClassType = Extract<HeroClassType, "CLERIC" | "SORCERER">;
