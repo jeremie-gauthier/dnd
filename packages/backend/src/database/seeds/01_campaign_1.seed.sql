@@ -27,7 +27,7 @@ VALUES
 		'Les bandits gobelins',
 		'Le mal et les ténèbres se sont abattus sur le pays de Rallion et la région est devenue la proie des Monstres...',
 		'Félicitations ! Vous avez vaincu les bandits gobelins...',
-		'00T0001',
+		'10;5     0,0;0,1;0,2;0,3;0,4      1,0;trap   2,0;wall     2,1;wall     2,2;door     2,3;wall     2,4;wall     4,4;pillar     8,0;wall     8,1;wall     8,2;wall     8,3;wall     8,4;wall',
 		'AVAILABLE'
 	),
 	(
