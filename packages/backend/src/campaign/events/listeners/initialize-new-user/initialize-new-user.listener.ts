@@ -17,7 +17,6 @@ export class InitializeNewUserListener {
   public async handler({ userId }: NewUserCreatedPayload) {
     const campaignsForNewUsers =
       await this.repository.getAvailableCampaignsForNewUsers();
-    console.log(campaignsForNewUsers);
 
     await Promise.all(
       campaignsForNewUsers.map((campaign) =>
