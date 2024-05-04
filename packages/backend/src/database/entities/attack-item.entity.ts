@@ -1,4 +1,10 @@
-import { ChildEntity, JoinTable, ManyToMany, OneToMany } from "typeorm";
+import {
+  ChildEntity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  Relation,
+} from "typeorm";
 import { Attack } from "./attack.entity";
 import { Item } from "./item.entity";
 import { Perk } from "./perk.entity";
@@ -10,9 +16,9 @@ export class AttackItem extends Item {
     (attack) => attack.item,
     { cascade: true },
   )
-  readonly attacks: Attack[];
+  readonly attacks: Relation<Attack[]>;
 
   @ManyToMany(() => Perk)
   @JoinTable()
-  readonly perks: Perk[];
+  readonly perks: Relation<Perk[]>;
 }
