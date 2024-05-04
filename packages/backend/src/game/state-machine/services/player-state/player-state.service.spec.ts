@@ -13,7 +13,12 @@ describe("PlayerStateService", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [MapModule],
-      providers: [PlayerStateService, CoordService, MapService, VisibilityService],
+      providers: [
+        PlayerStateService,
+        CoordService,
+        MapService,
+        VisibilityService,
+      ],
     }).compile();
 
     service = module.get(PlayerStateService);
