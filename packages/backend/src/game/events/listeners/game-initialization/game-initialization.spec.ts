@@ -124,20 +124,22 @@ describe("GameInitializationListener", () => {
         },
         isBlocking: true,
 
-        baseHealthPoints: 10,
-        healthPoints: 10,
+        characteristic: {
+          baseHealthPoints: 10,
+          healthPoints: 10,
 
-        baseManaPoints: 0,
-        manaPoints: 0,
+          baseManaPoints: 0,
+          manaPoints: 0,
 
-        baseArmorClass: 2,
-        armorClass: 2,
+          baseArmorClass: 2,
+          armorClass: 2,
 
-        baseMovementPoints: 3,
-        movementPoints: 3,
+          baseMovementPoints: 3,
+          movementPoints: 3,
 
-        baseActionPoints: 2,
-        actionPoints: 2,
+          baseActionPoints: 2,
+          actionPoints: 2,
+        },
       };
       repository.getUserCampaignStageProgression.mockResolvedValueOnce({
         stage: {

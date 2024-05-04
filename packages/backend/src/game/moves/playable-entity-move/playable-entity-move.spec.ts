@@ -1,5 +1,7 @@
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
+import { CombatService } from "src/game/combat/services/combat.service";
+import { CoordService } from "src/game/map/services/coord/coord.service";
 import { TrapService } from "src/game/trap/services/trap.service";
 import {
   MockInstance,
@@ -20,6 +22,7 @@ describe("PlayableEntityMoveUseCase", () => {
   let eventEmitter2: EventEmitter2;
   let movesSerivce: MovesService;
   let trapService: TrapService;
+  let coordService: CoordService;
 
   let eventEmitterMock: MockInstance<
     [event: any, ...values: any[]],
@@ -32,6 +35,8 @@ describe("PlayableEntityMoveUseCase", () => {
         PlayableEntityMoveUseCase,
         EventEmitter2,
         TrapService,
+        CoordService,
+        CombatService,
         {
           provide: PlayableEntityMoveRepository,
           useValue: {},
@@ -47,6 +52,8 @@ describe("PlayableEntityMoveUseCase", () => {
     repository = module.get(PlayableEntityMoveRepository);
     eventEmitter2 = module.get(EventEmitter2);
     movesSerivce = module.get(MovesService);
+    trapService = module.get(TrapService);
+    coordService = module.get(CoordService);
 
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
   });
@@ -60,5 +67,7 @@ describe("PlayableEntityMoveUseCase", () => {
     expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
     expect(movesSerivce).toBeDefined();
+    expect(trapService).toBeDefined();
+    expect(coordService).toBeDefined();
   });
 });

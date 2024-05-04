@@ -86,11 +86,7 @@ export class CreateCampaignForUserRepository {
     heroesTemplate: HeroTemplate[],
   ): Partial<Hero>[] {
     return heroesTemplate.map((heroTemplate) => ({
-      baseActionPoints: heroTemplate.baseActionPoints,
-      baseArmorClass: heroTemplate.baseArmorClass,
-      baseHealthPoints: heroTemplate.baseHealthPoints,
-      baseManaPoints: heroTemplate.baseManaPoints,
-      baseMovementPoints: heroTemplate.baseMovementPoints,
+      characteristic: heroTemplate.characteristic,
       name: heroTemplate.name,
       class: heroTemplate.class,
       level: heroTemplate.level,

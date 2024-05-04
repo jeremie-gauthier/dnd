@@ -18,20 +18,22 @@ type BasePlayableEntity = Player & {
   coord: Coord;
   isBlocking: boolean;
 
-  baseHealthPoints: number;
-  healthPoints: number;
+  characteristic: {
+    baseHealthPoints: number;
+    healthPoints: number;
 
-  baseManaPoints: number;
-  manaPoints: number;
+    baseManaPoints: number;
+    manaPoints: number;
 
-  baseArmorClass: number;
-  armorClass: number;
+    baseArmorClass: number;
+    armorClass: number;
 
-  baseMovementPoints: number;
-  movementPoints: number;
+    baseMovementPoints: number;
+    movementPoints: number;
 
-  baseActionPoints: number;
-  actionPoints: number;
+    baseActionPoints: number;
+    actionPoints: number;
+  };
 };
 
 export type PlayableEnemyEntity = BasePlayableEntity & {

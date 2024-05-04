@@ -48,19 +48,19 @@ describe("CombatService", () => {
     it("should minus the target's HP value", () => {
       const payload = {
         game: {} as unknown as GameEntity,
-        target: { healthPoints: 10 } as PlayableEntity,
+        target: { characteristic: { healthPoints: 10 } } as PlayableEntity,
         amount: 2,
       };
 
       service.takeDamage(payload);
 
-      expect(payload.target.healthPoints).toEqual(8);
+      expect(payload.target.characteristic.healthPoints).toEqual(8);
       expect(eventEmitterMock).toHaveBeenCalledOnce();
       expect(eventEmitterMock).toHaveBeenCalledWith(
         GameEvent.EntityTookDamage,
         new EntityTookDamagePayload({
           game: {} as unknown as GameEntity,
-          target: { healthPoints: 8 } as PlayableEntity,
+          target: { characteristic: { healthPoints: 8 } } as PlayableEntity,
           amount: 2,
         }),
       );
@@ -69,19 +69,25 @@ describe("CombatService", () => {
     it("should declare the target entity dead when HP is lte 0", () => {
       const payload = {
         game: {} as unknown as GameEntity,
-        target: { healthPoints: 10, isBlocking: true } as PlayableEntity,
+        target: {
+          characteristic: { healthPoints: 10 },
+          isBlocking: true,
+        } as PlayableEntity,
         amount: 12,
       };
 
       service.takeDamage(payload);
 
-      expect(payload.target.healthPoints).toEqual(0);
+      expect(payload.target.characteristic.healthPoints).toEqual(0);
       expect(eventEmitterMock).toHaveBeenCalledTimes(2);
       expect(eventEmitterMock).toHaveBeenCalledWith(
         GameEvent.EntityTookDamage,
         new EntityTookDamagePayload({
           game: {} as unknown as GameEntity,
-          target: { healthPoints: 0, isBlocking: false } as PlayableEntity,
+          target: {
+            characteristic: { healthPoints: 0 },
+            isBlocking: false,
+          } as PlayableEntity,
           amount: 12,
         }),
       );
@@ -89,7 +95,10 @@ describe("CombatService", () => {
         GameEvent.EntityDied,
         new EntityDiedPayload({
           game: {} as unknown as GameEntity,
-          target: { healthPoints: 0, isBlocking: false } as PlayableEntity,
+          target: {
+            characteristic: { healthPoints: 0 },
+            isBlocking: false,
+          } as PlayableEntity,
         }),
       );
     });
@@ -99,18 +108,24 @@ describe("CombatService", () => {
     it("should declare the target entity dead", () => {
       const payload = {
         game: {} as unknown as GameEntity,
-        target: { healthPoints: 10, isBlocking: true } as PlayableEntity,
+        target: {
+          characteristic: { healthPoints: 10 },
+          isBlocking: true,
+        } as PlayableEntity,
       };
 
       service.entityDeath(payload);
 
-      expect(payload.target.healthPoints).toEqual(0);
+      expect(payload.target.characteristic.healthPoints).toEqual(0);
       expect(eventEmitterMock).toHaveBeenCalledTimes(1);
       expect(eventEmitterMock).toHaveBeenCalledWith(
         GameEvent.EntityDied,
         new EntityDiedPayload({
           game: {} as unknown as GameEntity,
-          target: { healthPoints: 0, isBlocking: false } as PlayableEntity,
+          target: {
+            characteristic: { healthPoints: 0 },
+            isBlocking: false,
+          } as PlayableEntity,
         }),
       );
     });

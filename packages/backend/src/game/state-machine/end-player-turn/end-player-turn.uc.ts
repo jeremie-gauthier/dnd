@@ -83,7 +83,8 @@ export class EndPlayerTurnUseCase implements UseCase {
 
     // update next playable entity
     nextEntityToPlay.currentPhase = "action";
-    nextEntityToPlay.actionPoints = nextEntityToPlay.baseActionPoints;
+    nextEntityToPlay.characteristic.actionPoints =
+      nextEntityToPlay.characteristic.baseActionPoints;
 
     return { playingEntity, nextEntityToPlay };
   }
