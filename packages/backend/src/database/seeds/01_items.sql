@@ -84,7 +84,7 @@ VALUES
   );
 
 INSERT INTO
-  "attack_dices_dice" ("id", "attack_id", "dice_name")
+  "attack_dice" ("id", "attack_id", "dice_name")
 VALUES
   (
     '41bf1485-fcd5-4aaa-90be-e3acf01f071e',
