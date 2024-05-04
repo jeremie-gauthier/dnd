@@ -55,7 +55,7 @@ export const Game = ({ game, phase, actionHandlers }: Props) => {
       const tilePaths = getAllPathsFromTileWithinRange({
         map: game.map,
         originCoord: heroPlaying.coord,
-        maxRange: heroPlaying.movementPoints,
+        maxRange: heroPlaying.characteristic.movementPoints,
       });
       const selectedPath = tilePaths.find(
         ({ tile }) =>
@@ -152,9 +152,9 @@ export const Game = ({ game, phase, actionHandlers }: Props) => {
             <p>
               Hero current coord: {JSON.stringify(heroPlaying.coord ?? "{}")}
             </p>
-            <p>Movement points: {heroPlaying.movementPoints}</p>
-            <p>Action points: {heroPlaying.actionPoints}</p>
-            <p>Health points: {heroPlaying.healthPoints}</p>
+            <p>Movement points: {heroPlaying.characteristic.movementPoints}</p>
+            <p>Action points: {heroPlaying.characteristic.actionPoints}</p>
+            <p>Health points: {heroPlaying.characteristic.healthPoints}</p>
           </div>
 
           <div className="flex flex-row gap-2">
@@ -163,7 +163,8 @@ export const Game = ({ game, phase, actionHandlers }: Props) => {
               onClick={() => playerState.toggleTo("move")}
               onCancel={() => playerState.toggleTo("idle")}
               disabled={
-                heroPlaying.movementPoints <= 0 || heroPlaying.actionPoints <= 0
+                heroPlaying.characteristic.movementPoints <= 0 ||
+                heroPlaying.characteristic.actionPoints <= 0
               }
             />
             <OpenDoorButton
@@ -176,7 +177,10 @@ export const Game = ({ game, phase, actionHandlers }: Props) => {
                   coordOfTileWithDoor: neighbourDoorCoord,
                 });
               }}
-              disabled={!neighbourDoorCoord || heroPlaying.actionPoints <= 0}
+              disabled={
+                !neighbourDoorCoord ||
+                heroPlaying.characteristic.actionPoints <= 0
+              }
             />
             <EndTurnButton
               onClick={() => {

@@ -1,4 +1,5 @@
-import { HeroClassType } from "../enums";
+import { HeroClassType, StorageSpaceType } from "../enums";
+import { StuffStorageCapacityJson } from "../json";
 import type { LobbyEntityStatusType } from "./lobby.enum";
 
 type Hero = {
@@ -6,11 +7,25 @@ type Hero = {
   name: string;
   class: HeroClassType;
   level: number;
-  baseHealthPoints: number;
-  baseManaPoints: number;
-  baseArmorClass: number;
-  baseMovementPoints: number;
-  baseActionPoints: number;
+  characteristic: {
+    baseHealthPoints: number;
+    baseManaPoints: number;
+    baseArmorClass: number;
+    baseMovementPoints: number;
+    baseActionPoints: number;
+  };
+  inventory: {
+    storageCapacity: StuffStorageCapacityJson;
+    stuff: {
+      id: string;
+      storageSpace: StorageSpaceType;
+      item: {
+        name: string;
+        level: number;
+        imgUrl: string;
+      };
+    }[];
+  };
   pickedBy?: string;
 };
 

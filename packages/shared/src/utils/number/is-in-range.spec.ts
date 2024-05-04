@@ -1,9 +1,9 @@
-import { describe, expect, it } from 'vitest';
-import { isInRange } from './is-in-range';
+import { describe, expect, it } from "vitest";
+import { isInRange } from "./is-in-range";
 
-describe('number: isInRange', () => {
-  describe('when min <= number <= max', () => {
-    it('should return true', () => {
+describe("number: isInRange", () => {
+  describe("when min <= number <= max", () => {
+    it("should return true", () => {
       const lowerBound = 0;
       const upperBound = 3;
 
@@ -13,7 +13,7 @@ describe('number: isInRange', () => {
       expect(isInRange(3, lowerBound, upperBound)).toBe(true);
     });
 
-    it('should still works when args are mixed up', () => {
+    it("should still works when args are mixed up", () => {
       const lowerBound = 0;
       const upperBound = 3;
 
@@ -24,8 +24,8 @@ describe('number: isInRange', () => {
     });
   });
 
-  describe('when number not in range [min, max]', () => {
-    it('should return false if number not in range [min, max]', () => {
+  describe("when number not in range [min, max]", () => {
+    it("should return false if number not in range [min, max]", () => {
       const lowerBound = 0;
       const upperBound = 3;
 
@@ -33,7 +33,7 @@ describe('number: isInRange', () => {
       expect(isInRange(4, lowerBound, upperBound)).toBe(false);
     });
 
-    it('should still works when args are mixed up', () => {
+    it("should still works when args are mixed up", () => {
       const lowerBound = 0;
       const upperBound = 3;
 

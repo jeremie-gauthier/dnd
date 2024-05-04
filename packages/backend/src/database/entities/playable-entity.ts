@@ -1,21 +1,20 @@
+import { HeroClassType, HeroClassValues } from "@dnd/shared";
 import { Column, PrimaryGeneratedColumn } from "typeorm";
+import { Characteristic } from "./characteristic";
 
 export class PlayableEntity {
   @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
-  @Column()
-  readonly baseHealthPoints: number;
+  @Column({ nullable: false })
+  readonly name: string;
 
-  @Column()
-  readonly baseManaPoints: number;
+  @Column({ type: "enum", enum: HeroClassValues, nullable: false })
+  readonly class: HeroClassType;
 
-  @Column()
-  readonly baseArmorClass: number;
+  @Column({ nullable: false })
+  readonly level: number;
 
-  @Column()
-  readonly baseMovementPoints: number;
-
-  @Column()
-  readonly baseActionPoints: number;
+  @Column(() => Characteristic)
+  readonly characteristic: Characteristic;
 }

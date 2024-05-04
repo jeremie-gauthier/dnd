@@ -22,5 +22,5 @@ export * from "./start-game/start-game-input.schema";
 export * from "./start-game/start-game-output.schema";
 export * from "./toggle-player-ready-state/toggle-player-ready-state-input.schema";
 export * from "./toggle-player-ready-state/toggle-player-ready-state-output.schema";
-export * from './discard-game-master/discard-game-master-input.schema';
-export * from './discard-game-master/discard-game-master-output.schema';
+export * from "./discard-game-master/discard-game-master-input.schema";
+export * from "./discard-game-master/discard-game-master-output.schema";

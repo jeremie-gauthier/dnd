@@ -1,21 +1,11 @@
-import { type HeroClassType, HeroClassValues } from "@dnd/shared";
-import {
-  Column,
-  Entity,
-  Index,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-  type Relation,
-} from "typeorm";
+import { InventoryJson } from "@dnd/shared";
+import { Column, Entity, Index, ManyToMany, type Relation } from "typeorm";
 import { Campaign } from "./campaign.entity";
 import { PlayableEntity } from "./playable-entity";
 
 @Entity()
 @Index(["name", "class", "level"], { unique: true })
 export class HeroTemplate extends PlayableEntity {
-  @PrimaryGeneratedColumn("uuid")
-  readonly id: string;
-
   @ManyToMany(
     () => Campaign,
     (campaign) => campaign.playableHeroes,
@@ -23,12 +13,6 @@ export class HeroTemplate extends PlayableEntity {
   )
   readonly playableInCampaigns: Relation<Campaign[]>;
 
-  @Column()
-  readonly name: string;
-
-  @Column({ type: "enum", enum: HeroClassValues })
-  readonly class: HeroClassType;
-
-  @Column()
-  readonly level: number;
+  @Column({ type: "json", nullable: false })
+  readonly inventory: InventoryJson;
 }

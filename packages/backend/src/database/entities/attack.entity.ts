@@ -31,7 +31,7 @@ export class Attack {
     (attackItem) => attackItem.attacks,
     { onDelete: "CASCADE", nullable: false },
   )
-  readonly item: AttackItem;
+  readonly item: Relation<AttackItem>;
 
   @OneToMany(
     () => AttackDice,

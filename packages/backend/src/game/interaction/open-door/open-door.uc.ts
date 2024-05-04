@@ -120,7 +120,7 @@ export class OpenDoorUseCase implements UseCase {
       );
     }
 
-    if (playingEntity.actionPoints < 1) {
+    if (playingEntity.characteristic.actionPoints < 1) {
       throw new ForbiddenException(
         "You must have at least one action point to open a door",
       );
@@ -173,7 +173,7 @@ export class OpenDoorUseCase implements UseCase {
         currentPhase === "action" && playedByUserId === userId,
     ) as PlayableEntity;
 
-    playingEntity.actionPoints -= 1;
+    playingEntity.characteristic.actionPoints -= 1;
     playingEntity.currentPhase = "idle";
 
     // reroll initiative
@@ -184,7 +184,8 @@ export class OpenDoorUseCase implements UseCase {
       game,
     }) as PlayableEntity;
     nextEntityToPlay.currentPhase = "action";
-    nextEntityToPlay.actionPoints = nextEntityToPlay.baseActionPoints;
+    nextEntityToPlay.characteristic.actionPoints =
+      nextEntityToPlay.characteristic.baseActionPoints;
 
     return {
       doorEntity,

@@ -1,5 +1,5 @@
-import { openDoorInputSchema, openDoorOutputSchema } from '@dnd/shared';
-import { createZodDto } from 'nestjs-zod';
+import { openDoorInputSchema, openDoorOutputSchema } from "@dnd/shared";
+import { createZodDto } from "nestjs-zod";
 
 export class OpenDoorInputDto extends createZodDto(openDoorInputSchema) {}
 

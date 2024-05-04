@@ -92,19 +92,19 @@ export class PlayableEntityMoveUseCase implements UseCase {
       );
     }
 
-    if (playableEntity.healthPoints <= 0) {
+    if (playableEntity.characteristic.healthPoints <= 0) {
       throw new ForbiddenException(
         "Cannot move a playable entity that is not alive",
       );
     }
 
-    if (playableEntity.movementPoints <= 0) {
+    if (playableEntity.characteristic.movementPoints <= 0) {
       throw new ForbiddenException(
         "Playable entity has no movement points left",
       );
     }
 
-    if (playableEntity.actionPoints <= 0) {
+    if (playableEntity.characteristic.actionPoints <= 0) {
       throw new ForbiddenException("Playable entity has no action points left");
     }
   }
@@ -125,7 +125,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
       playableEntityId
     ] as PlayableEntity;
 
-    let movementPoints = playableEntity.movementPoints;
+    let movementPoints = playableEntity.characteristic.movementPoints;
 
     // slice to remove the entity self position (which is the origin in the bfs algo)
     const pathTiles = unfoldTilePath(pathToTile).slice(1);
@@ -162,7 +162,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
       }
     }
 
-    playableEntity.actionPoints -= 1;
+    playableEntity.characteristic.actionPoints -= 1;
 
     return validTiles;
   }
@@ -176,7 +176,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
     playableEntity: PlayableEntity;
     tile: Tile;
   }): boolean {
-    if (playableEntity.movementPoints <= 0) {
+    if (playableEntity.characteristic.movementPoints <= 0) {
       return false;
     }
 

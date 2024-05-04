@@ -70,6 +70,13 @@ export class CreateLobbyRepository {
           },
         },
       },
+      relations: {
+        inventory: {
+          stuff: {
+            item: true,
+          },
+        },
+      },
     });
 
     return heroes;

@@ -5,11 +5,32 @@ const heroSchema = z.object({
   pickedBy: z.string().optional(),
   name: z.string(),
   class: z.enum(["WARRIOR", "CLERIC", "SORCERER", "THIEF"]),
-  baseHealthPoints: z.number(),
-  baseManaPoints: z.number(),
-  baseArmorClass: z.number(),
-  baseMovementPoints: z.number(),
-  baseActionPoints: z.number(),
+  characteristic: z.object({
+    baseHealthPoints: z.number(),
+    baseManaPoints: z.number(),
+    baseArmorClass: z.number(),
+    baseMovementPoints: z.number(),
+    baseActionPoints: z.number(),
+  }),
+  inventory: z.object({
+    storageCapacity: z.object({
+      nbArtifactSlots: z.number().min(0),
+      nbSpellSlots: z.number().min(0),
+      nbWeaponSlots: z.number().min(0),
+      nbBackpackSlots: z.number().min(0),
+    }),
+    stuff: z.array(
+      z.object({
+        id: z.string().uuid(),
+        storageSpace: z.string(),
+        item: z.object({
+          name: z.string(),
+          level: z.number().min(0),
+          imgUrl: z.string(),
+        }),
+      }),
+    ),
+  }),
 });
 
 export const createLobbyOutputSchema = z.object({

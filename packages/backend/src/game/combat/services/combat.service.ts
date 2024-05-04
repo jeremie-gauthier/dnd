@@ -14,14 +14,14 @@ export class CombatService {
     target,
     amount,
   }: { game: GameEntity; target: PlayableEntity; amount: number }): void {
-    target.healthPoints -= amount;
+    target.characteristic.healthPoints -= amount;
 
     this.eventEmitter.emitAsync(
       GameEvent.EntityTookDamage,
       new EntityTookDamagePayload({ game, target, amount }),
     );
 
-    if (target.healthPoints <= 0) {
+    if (target.characteristic.healthPoints <= 0) {
       this.entityDeath({ game, target });
     }
   }
@@ -30,7 +30,7 @@ export class CombatService {
     game,
     target,
   }: { game: GameEntity; target: PlayableEntity }): void {
-    target.healthPoints = 0;
+    target.characteristic.healthPoints = 0;
     target.isBlocking = false;
 
     this.eventEmitter.emitAsync(

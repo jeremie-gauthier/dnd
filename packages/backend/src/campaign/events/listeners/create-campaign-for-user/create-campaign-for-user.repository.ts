@@ -8,7 +8,7 @@ import type { Hero } from "src/database/entities/hero.entity";
 import type { User } from "src/database/entities/user.entity";
 import { CampaignProgressionStatus } from "src/database/enums/campaign-progression-status.enum";
 import { CampaignStageProgressionStatus } from "src/database/enums/campaign-stage-progression-status.enum";
-import type { Repository } from "typeorm";
+import type { DeepPartial, Repository } from "typeorm";
 
 @Injectable()
 export class CreateCampaignForUserRepository {
@@ -84,16 +84,23 @@ export class CreateCampaignForUserRepository {
 
   private getHeroesFromTemplate(
     heroesTemplate: HeroTemplate[],
-  ): Partial<Hero>[] {
+  ): DeepPartial<Hero>[] {
     return heroesTemplate.map((heroTemplate) => ({
-      baseActionPoints: heroTemplate.baseActionPoints,
-      baseArmorClass: heroTemplate.baseArmorClass,
-      baseHealthPoints: heroTemplate.baseHealthPoints,
-      baseManaPoints: heroTemplate.baseManaPoints,
-      baseMovementPoints: heroTemplate.baseMovementPoints,
+      characteristic: heroTemplate.characteristic,
       name: heroTemplate.name,
       class: heroTemplate.class,
       level: heroTemplate.level,
+      inventory: {
+        storageCapacity: heroTemplate.inventory.storageCapacity,
+        stuff: heroTemplate.inventory.items.map(
+          ({ itemName, storageSpace }) => ({
+            storageSpace,
+            item: {
+              name: itemName,
+            },
+          }),
+        ),
+      },
     }));
   }
 

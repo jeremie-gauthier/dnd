@@ -109,20 +109,14 @@ export class GameInitializationListener {
           },
           isBlocking: true,
 
-          baseHealthPoints: hero.baseHealthPoints,
-          healthPoints: hero.baseHealthPoints,
-
-          baseManaPoints: hero.baseManaPoints,
-          manaPoints: hero.baseManaPoints,
-
-          baseArmorClass: hero.baseArmorClass,
-          armorClass: hero.baseArmorClass,
-
-          baseMovementPoints: hero.baseMovementPoints,
-          movementPoints: hero.baseMovementPoints,
-
-          baseActionPoints: hero.baseActionPoints,
-          actionPoints: hero.baseActionPoints,
+          characteristic: {
+            ...hero.characteristic,
+            healthPoints: hero.characteristic.baseHealthPoints,
+            manaPoints: hero.characteristic.baseManaPoints,
+            armorClass: hero.characteristic.baseArmorClass,
+            movementPoints: hero.characteristic.baseMovementPoints,
+            actionPoints: hero.characteristic.baseActionPoints,
+          },
         },
       ]),
     );
