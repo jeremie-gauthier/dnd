@@ -11,7 +11,7 @@ describe("InitiativeService", () => {
       providers: [InitiativeService],
     }).compile();
 
-    service = module.get<InitiativeService>(InitiativeService);
+    service = module.get(InitiativeService);
   });
 
   it("should be defined", () => {

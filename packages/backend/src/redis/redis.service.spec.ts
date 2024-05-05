@@ -19,7 +19,7 @@ describe("RedisService", () => {
       ],
     }).compile();
 
-    service = module.get<RedisService>(RedisService);
+    service = module.get(RedisService);
   });
 
   it("should be defined", () => {

@@ -12,7 +12,7 @@ describe("MapSerializerService", () => {
       providers: [MapSerializerService],
     }).compile();
 
-    service = module.get<MapSerializerService>(MapSerializerService);
+    service = module.get(MapSerializerService);
   });
 
   it("should be defined", () => {
@@ -23,7 +23,11 @@ describe("MapSerializerService", () => {
     describe("Happy path", () => {
       describe("1x2 map", () => {
         it("should parse a wall", () => {
-          const compiledMap = `
+          const compiledMap = {
+            height: 1,
+            width: 2,
+            startingPositions: [{}],
+          }`
 						1;2
 						0,1
 						0,0;wall

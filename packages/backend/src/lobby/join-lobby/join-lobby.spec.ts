@@ -20,8 +20,8 @@ describe("StartGameUseCase", () => {
       ],
     }).compile();
 
-    useCase = module.get<JoinLobbyUseCase>(JoinLobbyUseCase);
-    seatManagerService = module.get<SeatManagerService>(SeatManagerService);
+    useCase = module.get(JoinLobbyUseCase);
+    seatManagerService = module.get(SeatManagerService);
   });
 
   afterEach(() => {

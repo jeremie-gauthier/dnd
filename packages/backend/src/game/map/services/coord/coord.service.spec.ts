@@ -10,7 +10,7 @@ describe("CoordService", () => {
       providers: [CoordService],
     }).compile();
 
-    service = module.get<CoordService>(CoordService);
+    service = module.get(CoordService);
   });
 
   it("should be defined", () => {

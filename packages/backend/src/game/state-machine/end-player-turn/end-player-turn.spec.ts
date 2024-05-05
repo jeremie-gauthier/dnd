@@ -39,9 +39,9 @@ describe("EndPlayerTurnUseCase", () => {
       ],
     }).compile();
 
-    useCase = module.get<EndPlayerTurnUseCase>(EndPlayerTurnUseCase);
-    repository = module.get<EndPlayerTurnRepository>(EndPlayerTurnRepository);
-    eventEmitter2 = module.get<EventEmitter2>(EventEmitter2);
+    useCase = module.get(EndPlayerTurnUseCase);
+    repository = module.get(EndPlayerTurnRepository);
+    eventEmitter2 = module.get(EventEmitter2);
 
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
   });

@@ -57,9 +57,9 @@ describe("PickHeroUseCase", () => {
       ],
     }).compile();
 
-    useCase = module.get<PickHeroUseCase>(PickHeroUseCase);
-    repository = module.get<PickHeroRepository>(PickHeroRepository);
-    eventEmitter2 = module.get<EventEmitter2>(EventEmitter2);
+    useCase = module.get(PickHeroUseCase);
+    repository = module.get(PickHeroRepository);
+    eventEmitter2 = module.get(EventEmitter2);
 
     updateLobbyMock = vi.spyOn(repository, "updateLobby");
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");

@@ -19,7 +19,7 @@ describe("JwtService", () => {
       ],
     }).compile();
 
-    service = module.get<JwtService>(JwtService);
+    service = module.get(JwtService);
   });
 
   it("should be defined", () => {

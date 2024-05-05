@@ -37,8 +37,8 @@ describe("ChangePositionUseCase", () => {
       ],
     }).compile();
 
-    useCase = module.get<ChangePositionUseCase>(ChangePositionUseCase);
-    repository = module.get<ChangePositionRepository>(ChangePositionRepository);
+    useCase = module.get(ChangePositionUseCase);
+    repository = module.get(ChangePositionRepository);
     movesService = module.get(MovesService);
     coordService = module.get(CoordService);
   });

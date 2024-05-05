@@ -20,7 +20,7 @@ describe("SeatManagerService", () => {
       ],
     }).compile();
 
-    service = module.get<SeatManagerService>(SeatManagerService);
+    service = module.get(SeatManagerService);
   });
 
   it("should be defined", () => {

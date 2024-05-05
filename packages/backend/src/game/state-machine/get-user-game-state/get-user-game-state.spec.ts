@@ -39,11 +39,9 @@ describe("GetUserGameStateUseCase", () => {
       ],
     }).compile();
 
-    useCase = module.get<GetUserGameStateUseCase>(GetUserGameStateUseCase);
-    repository = module.get<GetUserGameStateRepository>(
-      GetUserGameStateRepository,
-    );
-    eventEmitter2 = module.get<EventEmitter2>(EventEmitter2);
+    useCase = module.get(GetUserGameStateUseCase);
+    repository = module.get(GetUserGameStateRepository);
+    eventEmitter2 = module.get(EventEmitter2);
 
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
   });
