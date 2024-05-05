@@ -31,9 +31,9 @@ const renderUseCaseSpec = ({
 		      ],
 		    }).compile();
 		
-		    useCase = module.get<${useCaseClassName}>(${useCaseClassName});
-		    repository = module.get<${repositoryName}>(${repositoryName});
-		    eventEmitter2 = module.get<EventEmitter2>(EventEmitter2);
+		    useCase = module.get(${useCaseClassName});
+		    repository = module.get(${repositoryName});
+		    eventEmitter2 = module.get(EventEmitter2);
 		
 		    eventEmitterMock = vi.spyOn(eventEmitter2, 'emitAsync');
 		  });
