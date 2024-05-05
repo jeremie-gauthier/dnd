@@ -22,10 +22,6 @@ const NON_PLAYABLE_NON_INTERACTIVE_TILE_ENTITY = [
 ];
 const NON_PLAYABLE_INTERACTIVE_TILE_ENTITY = ["door", "trap"];
 
-export function parseFile(mapCompiled: string): string[] {
-  return mapCompiled.split("\n");
-}
-
 export function inferOffMapTileEntities({
   tiles,
   startingPositions,
@@ -104,44 +100,6 @@ export function inferOffMapTileEntities({
       canInteract: false,
     });
   }
-}
-
-export function createDummyTiles({
-  width,
-  height,
-}: { width: number; height: number }): Tile[] {
-  return Array.from({ length: width * height }).map((_, index) => ({
-    coord: coordService.indexToCoord({ index, metadata: { width, height } }),
-    entities: [],
-  }));
-}
-
-export function parseMetadata(metadataCompiled?: string): {
-  width: number;
-  height: number;
-} {
-  if (!metadataCompiled) {
-    throw new InternalServerErrorException(
-      "Error while parsing map metadata (not found)",
-    );
-  }
-
-  const [height, width] = metadataCompiled.split(";");
-
-  const metadata = {
-    width: Number(width),
-    height: Number(height),
-  };
-
-  if (
-    Object.values(metadata).some((data) => !Number.isInteger(data) || data <= 0)
-  ) {
-    throw new InternalServerErrorException(
-      "Error while parsing map metadata (type)",
-    );
-  }
-
-  return metadata;
 }
 
 export function parseStartingPositions(
@@ -330,8 +288,4 @@ export function addTileEntities({
 
     tile.entities.push(tileEntity);
   }
-}
-
-export function sanitize(input: string): string {
-  return input.replace(/\s+/g, "\n").trim();
 }

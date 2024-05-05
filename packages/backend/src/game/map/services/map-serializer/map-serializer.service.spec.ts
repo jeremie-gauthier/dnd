@@ -1,7 +1,9 @@
-import type { GameEntity } from "@dnd/shared";
+import type { GameEntity, MapCompiledJson } from "@dnd/shared";
 import { InternalServerErrorException } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { beforeEach, describe, expect, it } from "vitest";
+import { CoordService } from "../coord/coord.service";
+import { MapService } from "../map/map.service";
 import { MapSerializerService } from "./map-serializer.service";
 
 describe("MapSerializerService", () => {
@@ -9,7 +11,7 @@ describe("MapSerializerService", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MapSerializerService],
+      providers: [MapSerializerService, MapService, CoordService],
     }).compile();
 
     service = module.get(MapSerializerService);
@@ -23,15 +25,12 @@ describe("MapSerializerService", () => {
     describe("Happy path", () => {
       describe("1x2 map", () => {
         it("should parse a wall", () => {
-          const compiledMap = {
+          const compiledMap: MapCompiledJson = {
             height: 1,
             width: 2,
-            startingPositions: [{}],
-          }`
-						1;2
-						0,1
-						0,0;wall
-					`;
+            startingPositions: [{ row: 0, column: 1 }],
+            entities: [{ row: 0, column: 0, kind: "wall" }],
+          };
           const expected: GameEntity["map"] = {
             height: 1,
             width: 2,
@@ -62,11 +61,12 @@ describe("MapSerializerService", () => {
         });
 
         it("should parse a tree", () => {
-          const compiledMap = `
-						1;2
-						0,1
-						0,0;tree
-					`;
+          const compiledMap: MapCompiledJson = {
+            height: 1,
+            width: 2,
+            startingPositions: [{ row: 0, column: 1 }],
+            entities: [{ row: 0, column: 0, kind: "tree" }],
+          };
           const expected: GameEntity["map"] = {
             height: 1,
             width: 2,
@@ -97,11 +97,12 @@ describe("MapSerializerService", () => {
         });
 
         it("should parse a pillar", () => {
-          const compiledMap = `
-						1;2
-						0,1
-						0,0;pillar
-					`;
+          const compiledMap: MapCompiledJson = {
+            height: 1,
+            width: 2,
+            startingPositions: [{ row: 0, column: 1 }],
+            entities: [{ row: 0, column: 0, kind: "pillar" }],
+          };
           const expected: GameEntity["map"] = {
             height: 1,
             width: 2,
@@ -132,10 +133,12 @@ describe("MapSerializerService", () => {
         });
 
         it("should parse an empty tile", () => {
-          const compiledMap = `
-						1;2
-						0,1
-					`;
+          const compiledMap: MapCompiledJson = {
+            height: 1,
+            width: 2,
+            startingPositions: [{ row: 0, column: 1 }],
+            entities: [],
+          };
           const expected: GameEntity["map"] = {
             height: 1,
             width: 2,
@@ -158,11 +161,12 @@ describe("MapSerializerService", () => {
         });
 
         it("should parse a door", () => {
-          const compiledMap = `
-						1;2
-						0,1
-						0,0;door
-					`;
+          const compiledMap: MapCompiledJson = {
+            height: 1,
+            width: 2,
+            startingPositions: [{ row: 0, column: 1 }],
+            entities: [{ row: 0, column: 0, kind: "door" }],
+          };
           const expected: GameEntity["map"] = {
             height: 1,
             width: 2,
@@ -193,11 +197,12 @@ describe("MapSerializerService", () => {
         });
 
         it("should parse a trap", () => {
-          const compiledMap = `
-						1;2
-						0,1
-						0,0;trap
-					`;
+          const compiledMap: MapCompiledJson = {
+            height: 1,
+            width: 2,
+            startingPositions: [{ row: 0, column: 1 }],
+            entities: [{ row: 0, column: 0, kind: "trap" }],
+          };
           const expected: GameEntity["map"] = {
             height: 1,
             width: 2,
@@ -227,80 +232,16 @@ describe("MapSerializerService", () => {
 
           expect(result).toStrictEqual(expected);
         });
-
-        it("should parse a playable entity", () => {
-          const playableEntityId = "f9c7b04f-78c7-4e09-9114-5f6cdfaf18cf";
-          const compiledMap = `
-						1;2
-						0,1
-						0,0;playable,${playableEntityId}
-					`;
-          const expected: GameEntity["map"] = {
-            height: 1,
-            width: 2,
-            tiles: [
-              {
-                coord: { row: 0, column: 0 },
-                entities: [
-                  {
-                    type: "playable-entity",
-                    id: playableEntityId,
-                  },
-                ],
-              },
-              {
-                coord: { row: 0, column: 1 },
-                entities: [],
-                isStartingTile: true,
-              },
-            ],
-          };
-
-          const result = service.deserialize(compiledMap);
-
-          expect(result).toStrictEqual(expected);
-        });
-
-        it("should parse a playable entity that is on a starting tile", () => {
-          const playableEntityId = "f9c7b04f-78c7-4e09-9114-5f6cdfaf18cf";
-          const compiledMap = `
-						1;2
-						0,0
-						0,0;playable,${playableEntityId}
-					`;
-          const expected: GameEntity["map"] = {
-            height: 1,
-            width: 2,
-            tiles: [
-              {
-                coord: { row: 0, column: 0 },
-                entities: [
-                  {
-                    type: "playable-entity",
-                    id: playableEntityId,
-                  },
-                ],
-                isStartingTile: true,
-              },
-              {
-                coord: { row: 0, column: 1 },
-                entities: [],
-              },
-            ],
-          };
-          const result = service.deserialize(compiledMap);
-
-          expect(result).toStrictEqual(expected);
-        });
       });
 
       describe("3x2 map", () => {
         it("should parse pillar in the top right corner of the map", () => {
-          const compiledMap = `
-						3;2
-						0,0
-						0,1;pillar
-					`;
+          const compiledMap: MapCompiledJson = {
+            height: 3,
+            width: 2,
+            startingPositions: [{ row: 0, column: 0 }],
+            entities: [{ row: 0, column: 1, kind: "pillar" }],
+          };
           const expected: GameEntity["map"] = {
             height: 3,
             width: 2,
@@ -347,14 +288,17 @@ describe("MapSerializerService", () => {
         });
 
         it("should parse a wall on the top and bot lines", () => {
-          const compiledMap = `
-						3;2
-						1,1
-						0,0;wall
-						0,1;wall
-						2,0;wall
-						2,1;wall
-					`;
+          const compiledMap: MapCompiledJson = {
+            height: 3,
+            width: 2,
+            startingPositions: [{ row: 1, column: 1 }],
+            entities: [
+              { row: 0, column: 0, kind: "wall" },
+              { row: 0, column: 1, kind: "wall" },
+              { row: 2, column: 0, kind: "wall" },
+              { row: 2, column: 1, kind: "wall" },
+            ],
+          };
           const expected: GameEntity["map"] = {
             height: 3,
             width: 2,
@@ -426,10 +370,12 @@ describe("MapSerializerService", () => {
         });
 
         it("should parse an empty map", () => {
-          const compiledMap = `
-						3;2
-						0,0
-					`;
+          const compiledMap: MapCompiledJson = {
+            height: 3,
+            width: 2,
+            startingPositions: [{ row: 0, column: 0 }],
+            entities: [],
+          };
           const expected: GameEntity["map"] = {
             height: 3,
             width: 2,
@@ -468,13 +414,16 @@ describe("MapSerializerService", () => {
         });
 
         it("should parse a door vertically surrounded by walls in the middle of the map", () => {
-          const compiledMap = `
-						3;2
-						0,0
-						0,1;wall
-						1,1;door
-						2,1;wall
-					`;
+          const compiledMap: MapCompiledJson = {
+            height: 3,
+            width: 2,
+            startingPositions: [{ row: 0, column: 0 }],
+            entities: [
+              { row: 0, column: 1, kind: "wall" },
+              { row: 1, column: 1, kind: "door" },
+              { row: 2, column: 1, kind: "wall" },
+            ],
+          };
           const expected: GameEntity["map"] = {
             height: 3,
             width: 2,
@@ -539,10 +488,12 @@ describe("MapSerializerService", () => {
 
       describe("5x5 map", () => {
         it("should parse an empty map", () => {
-          const compiledMap = `
-						5;5
-						0,0
-					`;
+          const compiledMap: MapCompiledJson = {
+            height: 5,
+            width: 5,
+            startingPositions: [{ row: 0, column: 0 }],
+            entities: [],
+          };
           const expected: GameEntity["map"] = {
             height: 5,
             width: 5,
@@ -657,20 +608,23 @@ describe("MapSerializerService", () => {
         });
 
         it("should parse a map with an off-map section", () => {
-          const compiledMap = `
-						5;5
-						0,0
-						1,0;wall
-						1,1;wall
-						1,2;door
-						1,3;wall
-						1,4;wall
-						3,0;wall
-						3,1;wall
-						3,2;wall
-						3,3;wall
-						3,4;wall
-					`;
+          const compiledMap: MapCompiledJson = {
+            height: 5,
+            width: 5,
+            startingPositions: [{ row: 0, column: 0 }],
+            entities: [
+              { row: 1, column: 0, kind: "wall" },
+              { row: 1, column: 1, kind: "wall" },
+              { row: 1, column: 2, kind: "door" },
+              { row: 1, column: 3, kind: "wall" },
+              { row: 1, column: 4, kind: "wall" },
+              { row: 3, column: 0, kind: "wall" },
+              { row: 3, column: 1, kind: "wall" },
+              { row: 3, column: 2, kind: "wall" },
+              { row: 3, column: 3, kind: "wall" },
+              { row: 3, column: 4, kind: "wall" },
+            ],
+          };
           const expected: GameEntity["map"] = {
             height: 5,
             width: 5,
@@ -908,7 +862,12 @@ describe("MapSerializerService", () => {
 
     describe("Negative path", () => {
       it("should throw an InternalServerErrorException if the map has no starting-tile", () => {
-        const compiledMap = "1;1";
+        const compiledMap: MapCompiledJson = {
+          height: 1,
+          width: 1,
+          startingPositions: [],
+          entities: [],
+        };
 
         expect(() => service.deserialize(compiledMap)).toThrowError(
           InternalServerErrorException,
@@ -916,11 +875,12 @@ describe("MapSerializerService", () => {
       });
 
       it("should throw an InternalServerErrorException if the map contains unrecognized entities", () => {
-        const compiledMap = `
-					1;2
-					0,0
-					0,1;banana
-				`;
+        const compiledMap = {
+          height: 1,
+          width: 2,
+          startingPositions: [{ row: 0, column: 0 }],
+          entities: [{ row: 0, column: 1, kind: "banana" }],
+        } as unknown as MapCompiledJson;
 
         expect(() => service.deserialize(compiledMap)).toThrowError(
           InternalServerErrorException,
@@ -928,35 +888,71 @@ describe("MapSerializerService", () => {
       });
 
       it("should throw an InternalServerErrorException if the map contains invalid metadata", () => {
-        expect(() => service.deserialize("-1;2")).toThrowError(
+        expect(() =>
+          service.deserialize({
+            height: -1,
+            width: 2,
+            startingPositions: [],
+            entities: [],
+          }),
+        ).toThrowError(InternalServerErrorException);
+        expect(() =>
+          service.deserialize({
+            height: 0,
+            width: 2,
+            startingPositions: [],
+            entities: [],
+          }),
+        ).toThrowError(InternalServerErrorException);
+        expect(() => service.deserialize({
+          height: 2,
+          width: 0,
+          startingPositions: [],
+          entities: [],
+        })).toThrowError(
           InternalServerErrorException,
         );
-        expect(() => service.deserialize("0;2")).toThrowError(
+        expect(() => service.deserialize({
+          height: 1,
+          width: -2,
+          startingPositions: [],
+          entities: [],
+        })).toThrowError(
           InternalServerErrorException,
         );
-        expect(() => service.deserialize("2;0")).toThrowError(
+        expect(() => service.deserialize({
+          height: 'banana',
+          width: 2,
+          startingPositions: [],
+          entities: [],
+        } as unknown as MapCompiledJson)).toThrowError(
           InternalServerErrorException,
         );
-        expect(() => service.deserialize("1;-2")).toThrowError(
+        expect(() => service.deserialize({
+          height: 1,
+          width: 'banana',
+          startingPositions: [],
+          entities: [],
+        } as unknown as MapCompiledJson)).toThrowError(
           InternalServerErrorException,
         );
-        expect(() => service.deserialize("banana;2")).toThrowError(
-          InternalServerErrorException,
-        );
-        expect(() => service.deserialize("1;banana")).toThrowError(
-          InternalServerErrorException,
-        );
-        expect(() => service.deserialize("apple;banana")).toThrowError(
+        expect(() => service.deserialize({
+          height: 'apple',
+          width: 'banana',
+          startingPositions: [],
+          entities: [],
+        } as unknown as MapCompiledJson)).toThrowError(
           InternalServerErrorException,
         );
       });
 
       it("should throw an InternalServerErrorException if the map declare an entity out of range", () => {
-        const compiledMap = `
-					1;2
-					0,0
-					0,42;door
-				`;
+        const compiledMap: MapCompiledJson = {
+          height: 1,
+          width: 2,
+          startingPositions: [{ row: 0, column: 0 }],
+          entities: [{ row: 0, column: 42, kind: "door" }],
+        };
 
         expect(() => service.deserialize(compiledMap)).toThrowError(
           InternalServerErrorException,
