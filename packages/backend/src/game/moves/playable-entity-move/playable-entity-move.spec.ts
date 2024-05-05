@@ -1,8 +1,8 @@
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
-import { CombatService } from "src/game/combat/services/combat.service";
+import { CombatService } from "src/game/combat/services/combat/combat.service";
 import { CoordService } from "src/game/map/services/coord/coord.service";
-import { TrapService } from "src/game/trap/services/trap.service";
+import { TrapService } from "src/game/trap/services/trap/trap.service";
 import {
   MockInstance,
   afterEach,
