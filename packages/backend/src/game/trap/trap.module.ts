@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { CombatModule } from "../combat/combat.module";
-import { TrapService } from "./services/trap.service";
+import { TrapService } from "./services/trap/trap.service";
 
 @Module({
   imports: [CombatModule],

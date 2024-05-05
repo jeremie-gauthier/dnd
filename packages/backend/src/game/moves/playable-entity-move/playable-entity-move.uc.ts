@@ -18,7 +18,7 @@ import { User } from "src/database/entities/user.entity";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import { PlayableEntityMovedPayload } from "src/game/events/emitters/playable-entity-moved.payload";
 import { CoordService } from "src/game/map/services/coord/coord.service";
-import { TrapService } from "src/game/trap/services/trap.service";
+import { TrapService } from "src/game/trap/services/trap/trap.service";
 import { MessageContext } from "src/types/socket.type";
 import { UseCase } from "src/types/use-case.interface";
 import { MovesService } from "../services/moves.service";

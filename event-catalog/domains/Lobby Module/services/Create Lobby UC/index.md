@@ -4,7 +4,7 @@ summary: |
   UC to create a new lobby.
 repository:
   language: TypeScript
-  url: https://github.com/jeremie-gauthier/dnd/tree/main/packages/backend/src/lobby/private/create-lobby
+  url: https://github.com/jeremie-gauthier/dnd/tree/main/packages/backend/src/lobby/create-lobby
 ---
 
 <NodeGraph />

@@ -4,7 +4,7 @@ summary: |
   UC to open a door.
 repository:
   language: TypeScript
-  url: https://github.com/jeremie-gauthier/dnd/tree/main/packages/backend/src/game/interaction/private/open-door
+  url: https://github.com/jeremie-gauthier/dnd/tree/main/packages/backend/src/game/interaction/open-door
 ---
 
 <NodeGraph />
