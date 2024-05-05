@@ -12,7 +12,7 @@ describe("VisibilityService", () => {
       providers: [VisibilityService, MapService, CoordService],
     }).compile();
 
-    service = module.get<VisibilityService>(VisibilityService);
+    service = module.get(VisibilityService);
   });
 
   it("should be defined", () => {

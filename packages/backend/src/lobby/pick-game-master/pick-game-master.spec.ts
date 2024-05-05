@@ -41,9 +41,9 @@ describe("PickGameMasterUseCase", () => {
       ],
     }).compile();
 
-    useCase = module.get<PickGameMasterUseCase>(PickGameMasterUseCase);
-    repository = module.get<PickGameMasterRepository>(PickGameMasterRepository);
-    eventEmitter2 = module.get<EventEmitter2>(EventEmitter2);
+    useCase = module.get(PickGameMasterUseCase);
+    repository = module.get(PickGameMasterRepository);
+    eventEmitter2 = module.get(EventEmitter2);
 
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
   });

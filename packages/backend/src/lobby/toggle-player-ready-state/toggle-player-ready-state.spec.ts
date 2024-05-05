@@ -6,13 +6,13 @@ import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.pay
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import type { MessageContext } from "src/types/socket.type";
 import {
-  type MockInstance,
   afterEach,
   beforeEach,
   describe,
   expect,
   it,
   vi,
+  type MockInstance,
 } from "vitest";
 import { TogglePlayerReadyStateRepository } from "./toggle-player-ready-state.repository";
 import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state.uc";
@@ -49,13 +49,9 @@ describe("TogglePlayerReadyStateUseCase", () => {
       ],
     }).compile();
 
-    useCase = module.get<TogglePlayerReadyStateUseCase>(
-      TogglePlayerReadyStateUseCase,
-    );
-    repository = module.get<TogglePlayerReadyStateRepository>(
-      TogglePlayerReadyStateRepository,
-    );
-    eventEmitter2 = module.get<EventEmitter2>(EventEmitter2);
+    useCase = module.get(TogglePlayerReadyStateUseCase);
+    repository = module.get(TogglePlayerReadyStateRepository);
+    eventEmitter2 = module.get(EventEmitter2);
 
     updateLobbyMock = vi.spyOn(repository, "updateLobby");
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");

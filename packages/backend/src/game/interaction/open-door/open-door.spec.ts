@@ -38,9 +38,9 @@ describe("OpenDoorUseCase", () => {
       ],
     }).compile();
 
-    useCase = module.get<OpenDoorUseCase>(OpenDoorUseCase);
-    repository = module.get<OpenDoorRepository>(OpenDoorRepository);
-    eventEmitter2 = module.get<EventEmitter2>(EventEmitter2);
+    useCase = module.get(OpenDoorUseCase);
+    repository = module.get(OpenDoorRepository);
+    eventEmitter2 = module.get(EventEmitter2);
 
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
   });

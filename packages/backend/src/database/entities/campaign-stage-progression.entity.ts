@@ -4,12 +4,12 @@ import {
   Index,
   ManyToOne,
   PrimaryGeneratedColumn,
-  type Relation,
   RelationId,
+  type Relation,
 } from "typeorm";
 import {
-  type CampaignStageProgressionStatusType,
   CampaignStageProgressionStatusValues,
+  type CampaignStageProgressionStatusType,
 } from "../enums/campaign-stage-progression-status.enum";
 import { CampaignProgression } from "./campaign-progression.entity";
 import { CampaignStage } from "./campaign-stage.entity";
@@ -23,16 +23,14 @@ export class CampaignStageProgression {
   @ManyToOne(
     () => CampaignProgression,
     (campaignProgression) => campaignProgression.stageProgressions,
-    { onDelete: "CASCADE" },
+    { onDelete: "CASCADE", nullable: false },
   )
   readonly campaignProgression: Relation<CampaignProgression>;
 
   @ManyToOne(
     () => CampaignStage,
     (campaignStage) => campaignStage.progressions,
-    {
-      onDelete: "CASCADE",
-    },
+    { onDelete: "CASCADE", nullable: false },
   )
   readonly stage: Relation<CampaignStage>;
 

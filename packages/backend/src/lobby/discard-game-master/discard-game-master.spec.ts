@@ -41,11 +41,9 @@ describe("DiscardGameMasterUseCase", () => {
       ],
     }).compile();
 
-    useCase = module.get<DiscardGameMasterUseCase>(DiscardGameMasterUseCase);
-    repository = module.get<DiscardGameMasterRepository>(
-      DiscardGameMasterRepository,
-    );
-    eventEmitter2 = module.get<EventEmitter2>(EventEmitter2);
+    useCase = module.get(DiscardGameMasterUseCase);
+    repository = module.get(DiscardGameMasterRepository);
+    eventEmitter2 = module.get(EventEmitter2);
 
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
   });

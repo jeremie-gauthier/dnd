@@ -57,9 +57,9 @@ describe("DiscardHeroUseCase", () => {
       ],
     }).compile();
 
-    useCase = module.get<DiscardHeroUseCase>(DiscardHeroUseCase);
-    repository = module.get<DiscardHeroRepository>(DiscardHeroRepository);
-    eventEmitter2 = module.get<EventEmitter2>(EventEmitter2);
+    useCase = module.get(DiscardHeroUseCase);
+    repository = module.get(DiscardHeroRepository);
+    eventEmitter2 = module.get(EventEmitter2);
 
     updateLobbyMock = vi.spyOn(repository, "updateLobby");
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");

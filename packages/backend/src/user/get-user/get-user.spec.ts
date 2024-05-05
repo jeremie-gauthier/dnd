@@ -34,9 +34,9 @@ describe("GetUserUseCase", () => {
       ],
     }).compile();
 
-    useCase = module.get<GetUserUseCase>(GetUserUseCase);
-    repository = module.get<GetUserRepository>(GetUserRepository);
-    eventEmitter2 = module.get<EventEmitter2>(EventEmitter2);
+    useCase = module.get(GetUserUseCase);
+    repository = module.get(GetUserRepository);
+    eventEmitter2 = module.get(EventEmitter2);
 
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
   });

@@ -19,7 +19,7 @@ describe("MovesService", () => {
       ],
     }).compile();
 
-    service = module.get<MovesService>(MovesService);
+    service = module.get(MovesService);
   });
 
   it("should be defined", () => {

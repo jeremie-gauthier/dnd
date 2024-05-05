@@ -1,3 +1,4 @@
+import { MapCompiledJson } from "@dnd/shared";
 import {
   Column,
   Entity,
@@ -8,8 +9,8 @@ import {
   type Relation,
 } from "typeorm";
 import {
-  type CampaignStageStatusType,
   CampaignStageStatusValues,
+  type CampaignStageStatusType,
 } from "../enums/campaign-stage-status.enum";
 import { CampaignStageProgression } from "./campaign-stage-progression.entity";
 import { Campaign } from "./campaign.entity";
@@ -23,7 +24,7 @@ export class CampaignStage {
   @ManyToOne(
     () => Campaign,
     (campaign) => campaign.stages,
-    { onDelete: "CASCADE" },
+    { onDelete: "CASCADE", nullable: false },
   )
   readonly campaign: Relation<Campaign>;
 
@@ -46,8 +47,8 @@ export class CampaignStage {
   @Column()
   readonly outro: string;
 
-  @Column()
-  readonly mapCompiled: string;
+  @Column({ type: "json" })
+  readonly mapCompiled: MapCompiledJson;
 
   @Column({ type: "enum", enum: CampaignStageStatusValues })
   status: CampaignStageStatusType;
