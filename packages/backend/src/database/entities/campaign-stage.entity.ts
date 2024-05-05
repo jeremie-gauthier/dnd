@@ -1,3 +1,4 @@
+import { MapCompiledJson } from "@dnd/shared";
 import {
   Column,
   Entity,
@@ -46,8 +47,8 @@ export class CampaignStage {
   @Column()
   readonly outro: string;
 
-  @Column()
-  readonly mapCompiled: string;
+  @Column({ type: "json" })
+  readonly mapCompiled: MapCompiledJson;
 
   @Column({ type: "enum", enum: CampaignStageStatusValues })
   status: CampaignStageStatusType;
