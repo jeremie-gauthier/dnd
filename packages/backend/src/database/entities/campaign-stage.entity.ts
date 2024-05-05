@@ -9,8 +9,8 @@ import {
   type Relation,
 } from "typeorm";
 import {
-  type CampaignStageStatusType,
   CampaignStageStatusValues,
+  type CampaignStageStatusType,
 } from "../enums/campaign-stage-status.enum";
 import { CampaignStageProgression } from "./campaign-stage-progression.entity";
 import { Campaign } from "./campaign.entity";
@@ -24,7 +24,7 @@ export class CampaignStage {
   @ManyToOne(
     () => Campaign,
     (campaign) => campaign.stages,
-    { onDelete: "CASCADE" },
+    { onDelete: "CASCADE", nullable: false },
   )
   readonly campaign: Relation<Campaign>;
 

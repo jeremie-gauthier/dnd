@@ -14,6 +14,6 @@ export class AttackDice {
   )
   readonly attack: Relation<Attack>;
 
-  @ManyToOne(() => Dice)
+  @ManyToOne(() => Dice, { onDelete: "CASCADE", nullable: false })
   readonly dice: Relation<Dice>;
 }
