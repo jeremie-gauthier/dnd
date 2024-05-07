@@ -1,5 +1,6 @@
 import type { HeroClassType } from "../enums/hero-class.enum";
 import type { EnemyKind } from "./enemy-kind.type";
+import { GameEvent } from "./game-event.type";
 import { DoorEntity, TrapEntity } from "./interactive-entities.type";
 import type { PlayerGamePhase } from "./player-phase.type";
 
@@ -97,4 +98,5 @@ export type GameEntity<TGameStatus extends GameStatus = GameStatus> = {
   };
   playableEntities: Record<PlayableEntity["id"], PlayableEntity>;
   timeline: PlayableEntity["id"][];
+  events: GameEvent[];
 };

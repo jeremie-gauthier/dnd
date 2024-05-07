@@ -51,7 +51,7 @@ export class GameInitializationListener {
         userId: lobby.host.userId,
       });
 
-    const map = this.mapSerializer.deserialize(
+    const { map, events } = this.mapSerializer.deserialize(
       campaignStageProgression.stage.mapCompiled,
     );
     const playableEntities = this.getPlayableEntitiesMap({
@@ -68,6 +68,7 @@ export class GameInitializationListener {
       map,
       playableEntities,
       timeline: [],
+      events,
     };
 
     this.randomlyPlaceHeroesOnStartingTiles({ game });

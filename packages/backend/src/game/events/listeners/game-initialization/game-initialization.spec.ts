@@ -143,7 +143,7 @@ describe("GameInitializationListener", () => {
       };
       repository.getUserCampaignStageProgression.mockResolvedValueOnce({
         stage: {
-          mapCompiled: "",
+          mapCompiled: {},
         },
         campaignProgression: {
           heroes: [
@@ -175,15 +175,18 @@ describe("GameInitializationListener", () => {
         },
       } as unknown as CampaignStageProgression);
       mapSerializerService.deserialize.mockReturnValueOnce({
-        width: 1,
-        height: 1,
-        tiles: [
-          {
-            coord: { row: 0, column: 0 },
-            entities: [],
-            isStartingTile: true,
-          },
-        ],
+        map: {
+          width: 1,
+          height: 1,
+          tiles: [
+            {
+              coord: { row: 0, column: 0 },
+              entities: [],
+              isStartingTile: true,
+            },
+          ],
+        },
+        events: [],
       });
       repository.saveGame.mockResolvedValueOnce({
         id: "mock-lobby-id",
@@ -235,6 +238,7 @@ describe("GameInitializationListener", () => {
           },
         },
         timeline: [],
+        events: [],
       });
 
       await listener.handler({
@@ -351,6 +355,7 @@ describe("GameInitializationListener", () => {
               },
             },
             timeline: [],
+            events: [],
           },
         }),
       );

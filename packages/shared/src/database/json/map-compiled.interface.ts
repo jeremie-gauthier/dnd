@@ -1,4 +1,4 @@
-import { Coord, TileEntity } from "../game";
+import { Coord, GameEvent, TileEntity } from "../game";
 
 type Entity = Coord &
   Pick<
@@ -18,4 +18,5 @@ export type MapCompiledJson = {
   width: number;
   startingPositions: Coord[];
   entities: Entity[];
+  events: GameEvent[];
 };
