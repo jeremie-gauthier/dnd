@@ -73,7 +73,7 @@ export class MapService {
         coord.column < 0 ||
         coord.column >= metadata.width ||
         coord.row < 0 ||
-        coord.row > metadata.height
+        coord.row >= metadata.height
       )
         return;
 
@@ -83,7 +83,11 @@ export class MapService {
 
       if (
         !reachableTiles.has(tileIndex) &&
-        tile.entities.every((entity) => isNonBlockingEntity(entity))
+        tile.entities.every((entity) => isNonBlockingEntity(entity)) &&
+        !coordsToExploreQueue.some(
+          ({ row, column }) =>
+            row === tile.coord.row && column === tile.coord.column,
+        )
       ) {
         coordsToExploreQueue.push(coord);
       }
@@ -94,6 +98,13 @@ export class MapService {
     const coordsToExploreQueue: Coord[] = [];
     let currentCoordExplored: Coord | undefined = startingPositions[0];
     while (currentCoordExplored !== undefined) {
+      reachableTiles.add(
+        this.coordService.coordToIndex({
+          coord: currentCoordExplored,
+          metadata,
+        }),
+      );
+
       addTileToExploreAt({
         column: currentCoordExplored.column,
         row: currentCoordExplored.row + 1,
@@ -110,13 +121,6 @@ export class MapService {
         column: currentCoordExplored.column - 1,
         row: currentCoordExplored.row,
       });
-
-      reachableTiles.add(
-        this.coordService.coordToIndex({
-          coord: currentCoordExplored,
-          metadata,
-        }),
-      );
 
       currentCoordExplored = coordsToExploreQueue.shift();
     }

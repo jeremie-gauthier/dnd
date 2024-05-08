@@ -1,9 +1,16 @@
-import type { GameEntity, LobbyEntity, Tile } from "@dnd/shared";
+import {
+  EnemyKind,
+  unique,
+  type GameEntity,
+  type LobbyEntity,
+  type Tile,
+} from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import { MapSerializerService } from "src/game/map/services/map-serializer/map-serializer.service";
 import { MovesService } from "src/game/moves/services/moves.service";
+import { PlayableEntityService } from "src/game/playable-entity/services/playable-entity/playable-entity.service";
 import { InitiativeService } from "src/game/timeline/services/initiative/initiative.service";
 import type { HostRequestedGameStartPayload } from "src/lobby/events/emitters/host-requested-game-start.payload";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
@@ -20,6 +27,7 @@ export class GameInitializationListener {
     private readonly mapSerializer: MapSerializerService,
     private readonly movesService: MovesService,
     private readonly initiativeService: InitiativeService,
+    private readonly playableEntityService: PlayableEntityService,
   ) {}
 
   @OnEvent(LobbyEvent.HostRequestedGameStart)
@@ -27,7 +35,6 @@ export class GameInitializationListener {
     this.eventEmitter.emitAsync(
       GameEvent.GameInitializationStarted,
       new GameInitializationStartedPayload({
-        ctx: payload.ctx,
         lobbyId: payload.lobby.id,
       }),
     );
@@ -51,13 +58,14 @@ export class GameInitializationListener {
         userId: lobby.host.userId,
       });
 
-    const map = this.mapSerializer.deserialize(
+    const { map, events } = this.mapSerializer.deserialize(
       campaignStageProgression.stage.mapCompiled,
     );
     const playableEntities = this.getPlayableEntitiesMap({
       lobby,
       campaignStageProgression,
     });
+    const enemyTemplates = await this.getEnemyTemplates({ events });
 
     const game: GameEntity = {
       id: lobby.id,
@@ -68,6 +76,8 @@ export class GameInitializationListener {
       map,
       playableEntities,
       timeline: [],
+      events,
+      enemyTemplates,
     };
 
     this.randomlyPlaceHeroesOnStartingTiles({ game });
@@ -168,5 +178,27 @@ export class GameInitializationListener {
     if (!firstPlayableEntityToPlay) return;
 
     firstPlayableEntityToPlay.currentPhase = "action";
+  }
+
+  private async getEnemyTemplates({
+    events,
+  }: { events: GameEntity["events"] }): Promise<GameEntity["enemyTemplates"]> {
+    const enemiesName = this.getDistinctAvailableEnemies({ events });
+    const enemyTemplates = await this.playableEntityService.getEnemiesTemplates(
+      { enemiesName },
+    );
+
+    return Object.fromEntries(
+      enemyTemplates.map((enemyTemplate) => [
+        enemyTemplate.name,
+        enemyTemplate,
+      ]),
+    );
+  }
+
+  private getDistinctAvailableEnemies({
+    events,
+  }: { events: GameEntity["events"] }): EnemyKind[] {
+    return unique(events.flatMap((event) => event?.enemies ?? []));
   }
 }

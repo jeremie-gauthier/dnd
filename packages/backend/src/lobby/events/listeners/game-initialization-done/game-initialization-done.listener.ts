@@ -24,6 +24,9 @@ export class GameInitializationDoneListener {
     lobby.status = LobbyEntityStatus.GAME_STARTED;
     await this.repository.updateLobby(lobby);
 
+    // TODO: tmp - need refactoring to properly remove these ctx
+    if (!ctx) return;
+
     this.emitter.emitAsync(
       LobbyEvent.LobbyChanged,
       new LobbyChangedPayload({ ctx, lobbyId }),

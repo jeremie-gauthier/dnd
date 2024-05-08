@@ -1,6 +1,7 @@
 import type {
   GameEntity,
   MapCompiledJson,
+  OnDoorOpeningGameEvent,
   Tile,
   TileEntity,
   TileNonPlayableInteractiveEntity,
@@ -34,7 +35,9 @@ export class MapSerializerService {
     throw new Error("Not implemented");
   }
 
-  public deserialize(mapCompiled: MapCompiledJson): GameEntity["map"] {
+  public deserialize(
+    mapCompiled: MapCompiledJson,
+  ): Pick<GameEntity, "map" | "events"> {
     const metadata = {
       width: mapCompiled.width,
       height: mapCompiled.height,
@@ -75,7 +78,12 @@ export class MapSerializerService {
       metadata,
     });
 
-    return { ...metadata, tiles };
+    this.assertsValidEvents({ tiles, events: mapCompiled.events, metadata });
+
+    return {
+      map: { ...metadata, tiles },
+      events: mapCompiled.events,
+    };
   }
 
   private createTileEntity({
@@ -148,11 +156,6 @@ export class MapSerializerService {
       kind,
     );
   }
-
-  private isPlayableTileEntity(kind: string): boolean {
-    return kind === "playable";
-  }
-
   private assertsValidMetadata({
     height,
     width,
@@ -184,6 +187,80 @@ export class MapSerializerService {
       throw new InternalServerErrorException(
         "Error while registering a starting position (out of range)",
       );
+    }
+  }
+
+  private assertsValidEvents({
+    tiles,
+    events,
+    metadata,
+  }: Pick<MapCompiledJson, "events"> & {
+    tiles: Tile[];
+    metadata: { width: number; height: number };
+  }): void {
+    for (const event of events) {
+      if (event.name === "on_door_opening") {
+        this.assertValidDoorOpeningEvent({ tiles, event, metadata });
+      } else {
+        throw new InternalServerErrorException("Game event not recognized");
+      }
+    }
+  }
+
+  private assertValidDoorOpeningEvent({
+    tiles,
+    event,
+    metadata,
+  }: {
+    tiles: Tile[];
+    event: OnDoorOpeningGameEvent;
+    metadata: { width: number; height: number };
+  }): void {
+    const doorCoordIdx = this.coordService.coordToIndex({
+      coord: event.doorCoord,
+      metadata,
+    });
+    const tile = tiles[doorCoordIdx];
+
+    if (!tile) {
+      throw new InternalServerErrorException(
+        "Bad event coord (tile not found)",
+      );
+    }
+
+    if (
+      !tile.entities.some(
+        (entity) =>
+          entity.type === "non-playable-interactive-entity" &&
+          entity.kind === "door",
+      )
+    ) {
+      throw new InternalServerErrorException(
+        "Bad event coord (door not found)",
+      );
+    }
+
+    if (
+      event.action === "spawn_enemies" &&
+      event.startingTiles.length < event.enemies.length
+    ) {
+      throw new InternalServerErrorException(
+        "Not enough starting tiles defined",
+      );
+    }
+
+    if (
+      event.action === "spawn_enemies" &&
+      event.startingTiles.some((startingTile) => {
+        const startingTileIdx = this.coordService.coordToIndex({
+          coord: startingTile,
+          metadata,
+        });
+        const tile = tiles[startingTileIdx];
+        return tile === undefined;
+      })
+    ) {
+      throw new InternalServerErrorException("Bad starting tile coord");
     }
   }
 }

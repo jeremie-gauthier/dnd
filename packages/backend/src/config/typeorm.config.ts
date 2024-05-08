@@ -10,6 +10,7 @@ import { CampaignStageProgression } from "../database/entities/campaign-stage-pr
 import { CampaignStage } from "../database/entities/campaign-stage.entity";
 import { Campaign } from "../database/entities/campaign.entity";
 import { Dice } from "../database/entities/dice.entity";
+import { EnemyTemplate } from "../database/entities/enemy-template.entity";
 import { HeroTemplate } from "../database/entities/hero-template.entity";
 import { Hero } from "../database/entities/hero.entity";
 import { Item } from "../database/entities/item.entity";
@@ -41,6 +42,7 @@ const config: DataSourceOptions = {
     Weapon,
     Spell,
     Stuff,
+    EnemyTemplate,
   ],
   migrations: ["dist/src/database/migrations/*.js"],
   migrationsRun: true,

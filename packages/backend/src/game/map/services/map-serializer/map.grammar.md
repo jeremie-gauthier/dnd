@@ -1,54 +1,79 @@
 # Compiled Map File Format
 
+The format used to describe a compiled map is JSON.
+
+Here is a full example of a map compiled, check the sections below for more informations:
+
+```json
+{
+  "height": 1,
+  "width": 2,
+  "startingPositions": [
+    { "row": 0, "column": 1 }
+  ],
+  "entities": [
+    { "row": 0, "column": 0, "kind": "wall" }
+  ],
+  "events": [
+    { 
+      "type": "on_door_opening",
+      "data": {
+        "doorCoord": { "row": 2, "column": 1 },
+        "action": "spawn_enemies", 
+        "enemies": ["goblin", "goblin", "skeleton"], 
+        "startingTiles": [
+          { "row": 3, "column": 0 },
+          { "row": 3, "column": 1 }, 
+          { "row": 3, "column": 2 }, 
+          { "row": 3, "column": 3 }
+        ] 
+      }
+    }
+  ]
+}
+```
+
 ## 1. Map's dimension
 
-The first line must describe the shape of the map (its width (=max nb of columns) and height (max nb of rows)), in the following form:
+They are defined in the `height` and `width` keys:
 
-```txt
-<height>;<width>
-```
-
-or in other terms:
-
-```txt
-<max_nb_of_rows>;<max_nb_of_columns>
-```
-
-So, the following would describe a map of 4 tiles width by 5 tiles height:
-
-```txt
-4;5
+```ts
+{
+  height: number; // the nb of rows
+  width: number; // the nb of columns
+}
 ```
 
 ## 2. Starting positions
 
-The second line must describe all the starting positions for this map, in the following form:
+They are defined in the `startingPositions` key, which is an array of `Coord`:
 
-```txt
-<row>,<column>[;<row>,<column>...]
-```
-
-So the following describe 3 different starting positions:
-
-```txt
-4;5
-0,0;2,3;4,4
+```ts
+  startingPositions: Array<{ 
+    row: number;
+    column: number;
+  }>;
 ```
 
 ## 3. Entities
 
-The following lines must describe entities on the map.
-Each entity is declared by by its (row, column) coordinates on the map, followed by its name.
-As in the following example:
+They are defined in the `entities` key, which is an array of objects like the following:
 
-```txt
-<row>,<column>;<entity_tag>
+```ts
+  entities: Array<{ 
+    row: number;
+    column: number;
+    kind: 'wall' | 'door' | 'trap' | 'pillar' | ...
+  }>;
 ```
 
-So, the following would describe a map of 2 tiles width by 2 tiles height with a tree on the top right corner:
+## 4. Events
 
-```txt
-2;2
-0,0
-0,1;tree
+They are defined in the `events` key, which is an array of objects like the following:
+
+```ts
+  events: Array<{ 
+    type: string;
+    data: Record<string, any>;
+  }>;
 ```

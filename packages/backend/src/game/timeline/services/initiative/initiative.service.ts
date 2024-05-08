@@ -1,8 +1,13 @@
 import { GameEntity, PlayableEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { GameEvent } from "src/game/events/emitters/game-events.enum";
+import { InitiativesRerolledPayload } from "src/game/events/emitters/initiatives-rerolled.payload";
 
 @Injectable()
 export class InitiativeService {
+  constructor(private readonly eventEmitter: EventEmitter2) {}
+
   public rollPlayableEntitiesInitiative({ game }: { game: GameEntity }) {
     const playableEntities = Object.values(game.playableEntities);
     for (const playableEntity of playableEntities) {
@@ -10,6 +15,11 @@ export class InitiativeService {
     }
 
     game.timeline = this.getTimelineFromPlayableEntities({ playableEntities });
+
+    this.eventEmitter.emitAsync(
+      GameEvent.InitiativesRerolled,
+      new InitiativesRerolledPayload({ game }),
+    );
   }
 
   private roll(): number {

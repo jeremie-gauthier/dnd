@@ -19,7 +19,6 @@ import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import { PlayableEntityMovedPayload } from "src/game/events/emitters/playable-entity-moved.payload";
 import { CoordService } from "src/game/map/services/coord/coord.service";
 import { TrapService } from "src/game/trap/services/trap/trap.service";
-import { MessageContext } from "src/types/socket.type";
 import { UseCase } from "src/types/use-case.interface";
 import { MovesService } from "../services/moves.service";
 import { PlayableEntityMoveRepository } from "./playable-entity-move.repository";
@@ -35,13 +34,11 @@ export class PlayableEntityMoveUseCase implements UseCase {
   ) {}
 
   public async execute({
-    ctx,
     gameId,
     pathToTile,
     playableEntityId,
     userId,
   }: PlayableEntityMoveInput & {
-    ctx: MessageContext;
     userId: User["id"];
   }): Promise<void> {
     const game = await this.repository.getGameById({ gameId });
@@ -57,7 +54,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
 
     this.eventEmitter.emitAsync(
       GameEvent.PlayableEntityMoved,
-      new PlayableEntityMovedPayload({ ctx, game }),
+      new PlayableEntityMovedPayload({ game }),
     );
   }
 

@@ -8,6 +8,6 @@ import type { GameInitializationStartedPayload } from "src/game/events/emitters/
 export class GameInitializationStartedListener {
   @OnEvent(GameEvent.GameInitializationStarted)
   public async handler({ ctx, lobbyId }: GameInitializationStartedPayload) {
-    ctx.server.to(lobbyId).emit(ServerLobbyEvent.GameInitializationStarted);
+    ctx?.server.to(lobbyId).emit(ServerLobbyEvent.GameInitializationStarted);
   }
 }

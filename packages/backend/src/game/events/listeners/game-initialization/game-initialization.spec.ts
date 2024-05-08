@@ -11,6 +11,7 @@ import type { CampaignStage } from "src/database/entities/campaign-stage.entity"
 import type { User } from "src/database/entities/user.entity";
 import { MapSerializerService } from "src/game/map/services/map-serializer/map-serializer.service";
 import { MovesService } from "src/game/moves/services/moves.service";
+import { PlayableEntityService } from "src/game/playable-entity/services/playable-entity/playable-entity.service";
 import { InitiativeService } from "src/game/timeline/services/initiative/initiative.service";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import type { MessageContext } from "src/types/socket.type";
@@ -43,6 +44,7 @@ describe("GameInitializationListener", () => {
   let repository: RepositoryMock;
   let eventEmitter2: EventEmitter2;
   let mapSerializerService: MapSerializerMock;
+  let playableEntityService: MapSerializerMock;
 
   let mockParams = {
     name: LobbyEvent.HostRequestedGameStart as const,
@@ -82,6 +84,13 @@ describe("GameInitializationListener", () => {
             rollPlayableEntitiesInitiative: vi.fn(),
           },
         },
+        {
+          provide: PlayableEntityService,
+          useValue: {
+            getEnemiesTemplates: vi.fn().mockReturnValue([]),
+            createEnemies: vi.fn(),
+          },
+        },
       ],
     }).compile();
 
@@ -89,6 +98,7 @@ describe("GameInitializationListener", () => {
     repository = module.get(GameInitializationRepository);
     eventEmitter2 = module.get(EventEmitter2);
     mapSerializerService = module.get(MapSerializerService);
+    playableEntityService = module.get(PlayableEntityService);
 
     mockParams = {
       name: LobbyEvent.HostRequestedGameStart as const,
@@ -108,6 +118,7 @@ describe("GameInitializationListener", () => {
     expect(eventEmitter2).toBeDefined();
     expect(mapSerializerService).toBeDefined();
     expect(mockParams).toBeDefined();
+    expect(playableEntityService).toBeDefined();
   });
 
   describe("Happy path", () => {
@@ -143,7 +154,7 @@ describe("GameInitializationListener", () => {
       };
       repository.getUserCampaignStageProgression.mockResolvedValueOnce({
         stage: {
-          mapCompiled: "",
+          mapCompiled: {},
         },
         campaignProgression: {
           heroes: [
@@ -175,15 +186,18 @@ describe("GameInitializationListener", () => {
         },
       } as unknown as CampaignStageProgression);
       mapSerializerService.deserialize.mockReturnValueOnce({
-        width: 1,
-        height: 1,
-        tiles: [
-          {
-            coord: { row: 0, column: 0 },
-            entities: [],
-            isStartingTile: true,
-          },
-        ],
+        map: {
+          width: 1,
+          height: 1,
+          tiles: [
+            {
+              coord: { row: 0, column: 0 },
+              entities: [],
+              isStartingTile: true,
+            },
+          ],
+        },
+        events: [],
       });
       repository.saveGame.mockResolvedValueOnce({
         id: "mock-lobby-id",
@@ -235,6 +249,8 @@ describe("GameInitializationListener", () => {
           },
         },
         timeline: [],
+        events: [],
+        enemyTemplates: {},
       });
 
       await listener.handler({
@@ -292,14 +308,13 @@ describe("GameInitializationListener", () => {
       expect(eventEmitterMock).toHaveBeenCalledWith(
         GameEvent.GameInitializationStarted,
         new GameInitializationStartedPayload({
-          ctx: {} as MessageContext,
           lobbyId: "mock-lobby-id",
         }),
       );
       expect(eventEmitterMock).toHaveBeenCalledWith(
         GameEvent.GameInitializationDone,
         new GameInitializationDonePayload({
-          ctx: {} as MessageContext,
+          ctx: mockParams.ctx,
           lobbyId: "mock-lobby-id",
           game: {
             id: "mock-lobby-id",
@@ -351,6 +366,8 @@ describe("GameInitializationListener", () => {
               },
             },
             timeline: [],
+            events: [],
+            enemyTemplates: {},
           },
         }),
       );
