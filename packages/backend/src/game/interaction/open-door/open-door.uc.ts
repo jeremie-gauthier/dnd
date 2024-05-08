@@ -17,9 +17,6 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { DoorOpenedPayload } from "src/game/events/emitters/door-opened.payload";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
-import { InitiativeService } from "src/game/timeline/services/initiative/initiative.service";
-import { TurnService } from "src/game/timeline/services/turn/turn.service";
-import { MessageContext } from "src/types/socket.type";
 import { UseCase } from "src/types/use-case.interface";
 import { OpenDoorRepository } from "./open-door.repository";
 
@@ -27,8 +24,6 @@ import { OpenDoorRepository } from "./open-door.repository";
 export class OpenDoorUseCase implements UseCase {
   constructor(
     private readonly repository: OpenDoorRepository,
-    private readonly initiativeService: InitiativeService,
-    private readonly turnService: TurnService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
@@ -44,15 +39,21 @@ export class OpenDoorUseCase implements UseCase {
     this.assertCanOpenDoor(game, { userId, coordOfTileWithDoor });
 
     const { doorEntity, entityThatOpenedTheDoor } = this.openDoor({
-      userId,
-      game,
       coordOfTileWithDoor,
+      game,
+      userId,
     });
+
     await this.repository.updateGame({ game });
 
     this.eventEmitter.emitAsync(
       GameEvent.DoorOpened,
-      new DoorOpenedPayload({ ctx, doorEntity, entityThatOpenedTheDoor, game }),
+      new DoorOpenedPayload({
+        doorEntity,
+        doorCoord: coordOfTileWithDoor,
+        entityThatOpenedTheDoor,
+        game,
+      }),
     );
   }
 
@@ -151,7 +152,7 @@ export class OpenDoorUseCase implements UseCase {
       coord: coordOfTileWithDoor,
       metadata: { width: game.map.width, height: game.map.height },
     });
-    // open the door
+
     const tileWithDoor = game.map.tiles[tileWithDoorIdx] as Tile;
     const doorEntity = tileWithDoor.entities.find(
       (entity) =>
@@ -164,30 +165,14 @@ export class OpenDoorUseCase implements UseCase {
     doorEntity.isBlocking = false;
     doorEntity.canInteract = false;
 
-    // end playing entity's turn
     const playableEntities = Object.values(game.playableEntities);
-    const playingEntity = playableEntities.find(
+    const entityThatOpenedTheDoor = playableEntities.find(
       ({ currentPhase, playedByUserId }) =>
         currentPhase === "action" && playedByUserId === userId,
     ) as PlayableEntity;
 
-    playingEntity.characteristic.actionPoints -= 1;
-    playingEntity.currentPhase = "idle";
+    entityThatOpenedTheDoor.characteristic.actionPoints -= 1;
 
-    // reroll initiative
-    this.initiativeService.rollPlayableEntitiesInitiative({ game });
-
-    // restart timeline at first entity
-    const nextEntityToPlay = this.turnService.getNextEntityToPlay({
-      game,
-    }) as PlayableEntity;
-    nextEntityToPlay.currentPhase = "action";
-    nextEntityToPlay.characteristic.actionPoints =
-      nextEntityToPlay.characteristic.baseActionPoints;
-
-    return {
-      doorEntity,
-      entityThatOpenedTheDoor: playingEntity,
-    };
+    return { doorEntity, entityThatOpenedTheDoor };
   }
 }

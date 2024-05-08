@@ -26,11 +26,23 @@ export class TurnService {
       }
     }
 
+    return this.getFirstEntity({ game });
+  }
+
+  public getFirstEntity({
+    game,
+  }: { game: GameEntity }): PlayableEntity | undefined {
     const nextEntityId = game.timeline[0];
     if (nextEntityId) {
       return game.playableEntities[nextEntityId];
     }
 
     return undefined;
+  }
+
+  public endPlayableEntityTurn({
+    playableEntity,
+  }: { playableEntity: PlayableEntity }): void {
+    playableEntity.currentPhase = "idle";
   }
 }

@@ -1,4 +1,5 @@
 import type { HeroClassType } from "../enums/hero-class.enum";
+import { EnemyAttackJson } from "../json";
 import type { EnemyKind } from "./enemy-kind.type";
 import { GameEvent } from "./game-event.type";
 import { DoorEntity, TrapEntity } from "./interactive-entities.type";
@@ -89,6 +90,18 @@ export type Map = {
 
 export type GameStatus = "prepare_for_battle" | "battle_ongoing";
 
+type EnemyTemplate = {
+  name: string;
+  characteristic: {
+    baseHealthPoints: number;
+    baseManaPoints: number;
+    baseArmorClass: number;
+    baseMovementPoints: number;
+    baseActionPoints: number;
+  };
+  attacks: EnemyAttackJson[];
+};
+
 export type GameEntity<TGameStatus extends GameStatus = GameStatus> = {
   id: string;
   status: TGameStatus;
@@ -99,4 +112,5 @@ export type GameEntity<TGameStatus extends GameStatus = GameStatus> = {
   playableEntities: Record<PlayableEntity["id"], PlayableEntity>;
   timeline: PlayableEntity["id"][];
   events: GameEvent[];
+  enemyTemplates: Record<EnemyTemplate["name"], EnemyTemplate>;
 };

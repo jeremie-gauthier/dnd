@@ -1,14 +1,11 @@
 ---
-name: DoorOpened
+name: EnemiesSpawned
 version: 0.0.1
 summary: |
-  Represents when a door is opened.
+  Represents when some enemies spawn on the map.
 producers:
-  - Open Door UC
-consumers:
-  - End Playing Entity Turn Listener
   - Spawn Enemies Listener
-  - Reroll Initiatives Listener
+consumers:
   - State Machine Publish Gateway
 ---
 

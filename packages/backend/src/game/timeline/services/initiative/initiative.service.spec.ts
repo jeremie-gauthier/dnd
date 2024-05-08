@@ -1,21 +1,25 @@
 import { GameEntity } from "@dnd/shared";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test, TestingModule } from "@nestjs/testing";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { InitiativeService } from "./initiative.service";
 
 describe("InitiativeService", () => {
   let service: InitiativeService;
+  let eventEmitter2: EventEmitter2;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [InitiativeService],
+      providers: [InitiativeService, EventEmitter2],
     }).compile();
 
     service = module.get(InitiativeService);
+    eventEmitter2 = module.get(EventEmitter2);
   });
 
   it("should be defined", () => {
     expect(service).toBeDefined();
+    expect(eventEmitter2).toBeDefined();
   });
 
   describe("rollPlayableEntitiesInitiative", () => {
