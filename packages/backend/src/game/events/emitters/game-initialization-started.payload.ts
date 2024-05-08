@@ -7,7 +7,7 @@ export class GameInitializationStartedPayload
   implements EventPayload<GameEvent.GameInitializationStarted>
 {
   public readonly name = GameEvent.GameInitializationStarted;
-  public readonly ctx: MessageContext;
+  public readonly ctx?: MessageContext;
   public readonly lobbyId: LobbyEntity["id"];
 
   constructor({

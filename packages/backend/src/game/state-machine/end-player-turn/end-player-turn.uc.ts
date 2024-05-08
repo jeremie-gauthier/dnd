@@ -9,7 +9,6 @@ import { User } from "src/database/entities/user.entity";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import { PlayableEntityTurnEndedPayload } from "src/game/events/emitters/playable-entity-turn-ended.payload";
 import { TurnService } from "src/game/timeline/services/turn/turn.service";
-import { MessageContext } from "src/types/socket.type";
 import { UseCase } from "src/types/use-case.interface";
 import { EndPlayerTurnRepository } from "./end-player-turn.repository";
 
@@ -21,10 +20,7 @@ export class EndPlayerTurnUseCase implements UseCase {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  public async execute({
-    ctx,
-    userId,
-  }: { ctx: MessageContext; userId: User["id"] }): Promise<void> {
+  public async execute({ userId }: { userId: User["id"] }): Promise<void> {
     const game = await this.repository.getGameByUserId({ userId });
 
     this.assertCanEndPlayerTurn(game, { userId });
@@ -35,7 +31,6 @@ export class EndPlayerTurnUseCase implements UseCase {
     this.eventEmitter.emitAsync(
       GameEvent.PlayableEntityTurnEnded,
       new PlayableEntityTurnEndedPayload({
-        ctx,
         entityId: playingEntity.id,
         game,
       }),

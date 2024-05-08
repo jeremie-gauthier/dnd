@@ -27,7 +27,6 @@ export class GameInitializationListener {
     this.eventEmitter.emitAsync(
       GameEvent.GameInitializationStarted,
       new GameInitializationStartedPayload({
-        ctx: payload.ctx,
         lobbyId: payload.lobby.id,
       }),
     );

@@ -33,12 +33,10 @@ export class OpenDoorUseCase implements UseCase {
   ) {}
 
   public async execute({
-    ctx,
     userId,
     gameId,
     coordOfTileWithDoor,
   }: OpenDoorInput & {
-    ctx: MessageContext;
     userId: User["id"];
   }): Promise<void> {
     const game = await this.repository.getGameById({ gameId });

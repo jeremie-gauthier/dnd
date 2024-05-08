@@ -296,14 +296,12 @@ describe("GameInitializationListener", () => {
       expect(eventEmitterMock).toHaveBeenCalledWith(
         GameEvent.GameInitializationStarted,
         new GameInitializationStartedPayload({
-          ctx: {} as MessageContext,
           lobbyId: "mock-lobby-id",
         }),
       );
       expect(eventEmitterMock).toHaveBeenCalledWith(
         GameEvent.GameInitializationDone,
         new GameInitializationDonePayload({
-          ctx: {} as MessageContext,
           lobbyId: "mock-lobby-id",
           game: {
             id: "mock-lobby-id",

@@ -12,17 +12,13 @@ import { StateMachinePrivateGateway } from "./state-machine.private-gateway";
 @Module({
   imports: [RedisModule, TimelineModule, MapModule],
   providers: [
-    StateMachinePrivateGateway,
     PlayerStateService,
     GetUserGameStateUseCase,
     GetUserGameStateRepository,
     EndPlayerTurnUseCase,
     EndPlayerTurnRepository,
+    StateMachinePrivateGateway,
   ],
-  exports: [
-    PlayerStateService,
-    GetUserGameStateUseCase,
-    GetUserGameStateRepository,
-  ],
+  exports: [GetUserGameStateUseCase, GetUserGameStateRepository],
 })
 export class StateMachineModule {}
