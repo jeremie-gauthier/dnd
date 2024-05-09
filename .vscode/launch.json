@@ -13,7 +13,17 @@
     },
     {
       "command": "npm run test -w=@dnd/backend",
-      "name": "Run Tests",
+      "name": "Run Backend Tests",
+      "request": "launch",
+      "type": "node-terminal",
+      "skipFiles": [
+        "<node_internals>/**",
+        "${workspaceFolder}/node_modules/**/*"
+      ]
+    },
+    {
+      "command": "npm run test -w=@dnd/shared",
+      "name": "Run Shared Tests",
       "request": "launch",
       "type": "node-terminal",
       "skipFiles": [
