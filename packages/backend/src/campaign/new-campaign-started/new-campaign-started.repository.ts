@@ -3,11 +3,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { CampaignProgression } from "src/database/entities/campaign-progression.entity";
 import { Campaign } from "src/database/entities/campaign.entity";
 import { User } from "src/database/entities/user.entity";
-import { CampaignProgressionStatus } from "src/database/enums/campaign-progression-status.enum";
-import { CampaignStageProgressionStatus } from "src/database/enums/campaign-stage-progression-status.enum";
 import { CampaignStageStatus } from "src/database/enums/campaign-stage-status.enum";
 import { CampaignStatus } from "src/database/enums/campaign-status.enum";
-import type { Repository } from "typeorm";
+import type { DeepPartial, Repository } from "typeorm";
 
 @Injectable()
 export class NewCampaignStartedRepository {
@@ -52,21 +50,8 @@ export class NewCampaignStartedRepository {
   }
 
   public async createCampaignProgressionForUser(
-    userId: User["id"],
-    campaign: Campaign,
+    campaignProgression: DeepPartial<CampaignProgression>,
   ): Promise<CampaignProgression> {
-    return await this.campaignProgressionRepository.save({
-      user: {
-        id: userId,
-      },
-      campaign,
-      status: CampaignProgressionStatus.AVAILABLE,
-      stageProgressions: [
-        {
-          stage: campaign.stages[0],
-          status: CampaignStageProgressionStatus.AVAILABLE,
-        },
-      ],
-    });
+    return await this.campaignProgressionRepository.save(campaignProgression);
   }
 }

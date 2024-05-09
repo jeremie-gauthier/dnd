@@ -4,10 +4,6 @@ import { CampaignProgression } from "src/database/entities/campaign-progression.
 import { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import type { Campaign } from "src/database/entities/campaign.entity";
 import { HeroTemplate } from "src/database/entities/hero-template.entity";
-import type { Hero } from "src/database/entities/hero.entity";
-import type { User } from "src/database/entities/user.entity";
-import { CampaignProgressionStatus } from "src/database/enums/campaign-progression-status.enum";
-import { CampaignStageProgressionStatus } from "src/database/enums/campaign-stage-progression-status.enum";
 import type { DeepPartial, Repository } from "typeorm";
 
 @Injectable()
@@ -21,41 +17,9 @@ export class CreateCampaignForUserRepository {
     private readonly campaignProgressionRepository: Repository<CampaignProgression>,
   ) {}
 
-  public async createCampaignProgressionForUser({
+  public getAvailableHeroesForCampaign({
     campaignId,
-    userId,
-  }: {
-    userId: User["id"];
-    campaignId: Campaign["id"];
-  }): Promise<CampaignProgression> {
-    const [heroesTemplate, campaignStages] = await Promise.all([
-      this.getAvailableHeroesForCampaign(campaignId),
-      this.getCampaignStages(campaignId),
-    ]);
-
-    const heroes = this.getHeroesFromTemplate(heroesTemplate);
-
-    return await this.campaignProgressionRepository.save({
-      campaign: {
-        id: campaignId,
-      },
-      user: {
-        id: userId,
-      },
-      heroes,
-      status: CampaignProgressionStatus.AVAILABLE,
-      stageProgressions: campaignStages.map((campaignStage) => ({
-        stage: { id: campaignStage.id },
-        status: this.isFirstStage(campaignStage)
-          ? CampaignStageProgressionStatus.AVAILABLE
-          : CampaignStageProgressionStatus.LOCKED,
-      })),
-    });
-  }
-
-  private getAvailableHeroesForCampaign(
-    campaignId: Campaign["id"],
-  ): Promise<HeroTemplate[]> {
+  }: { campaignId: Campaign["id"] }): Promise<HeroTemplate[]> {
     return this.heroTemplateRepository.find({
       where: {
         playableInCampaigns: {
@@ -65,9 +29,9 @@ export class CreateCampaignForUserRepository {
     });
   }
 
-  private getCampaignStages(
-    campaignId: Campaign["id"],
-  ): Promise<CampaignStage[]> {
+  public getCampaignStages({
+    campaignId,
+  }: { campaignId: Campaign["id"] }): Promise<CampaignStage[]> {
     return this.campaignStageRepository.find({
       select: {
         id: true,
@@ -82,29 +46,9 @@ export class CreateCampaignForUserRepository {
     });
   }
 
-  private getHeroesFromTemplate(
-    heroesTemplate: HeroTemplate[],
-  ): DeepPartial<Hero>[] {
-    return heroesTemplate.map((heroTemplate) => ({
-      characteristic: heroTemplate.characteristic,
-      name: heroTemplate.name,
-      class: heroTemplate.class,
-      level: heroTemplate.level,
-      inventory: {
-        storageCapacity: heroTemplate.inventory.storageCapacity,
-        stuff: heroTemplate.inventory.items.map(
-          ({ itemName, storageSpace }) => ({
-            storageSpace,
-            item: {
-              name: itemName,
-            },
-          }),
-        ),
-      },
-    }));
-  }
-
-  private isFirstStage(campaignStage: CampaignStage): boolean {
-    return campaignStage.order === 1;
+  public createCampaignProgression(
+    campaignProgression: DeepPartial<CampaignProgression>,
+  ) {
+    return this.campaignProgressionRepository.save(campaignProgression);
   }
 }

@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { ServerSocket } from "src/types/socket.type";
 import type { UseCase } from "src/types/use-case.interface";
 import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
@@ -8,7 +7,6 @@ import { HandleWsDisconnectionRepository } from "./handle-ws-disconnection.repos
 @Injectable()
 export class HandleWsDisconnectionUseCase implements UseCase {
   constructor(
-    private readonly eventEmitter: EventEmitter2,
     private readonly repository: HandleWsDisconnectionRepository,
     private readonly seatManagerService: SeatManagerService,
   ) {}
