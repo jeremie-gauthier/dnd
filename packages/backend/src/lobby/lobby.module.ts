@@ -32,7 +32,7 @@ import { JoinLobbyUseCase } from "./join-lobby/join-lobby.uc";
 import { LeaveLobbyUseCase } from "./leave-lobby/leave-lobby.uc";
 import { ListenLobbiesChangesUseCase } from "./listen-lobbies-changes/listen-lobbies-changes.uc";
 import { LobbyPrivateController } from "./lobby.private-controller";
-import { LobbyPrivateGateway } from "./lobby.private-gateway";
+import { LobbySubscriberGateway } from "./lobby.subscriber-gateway";
 import { PickGameMasterRepository } from "./pick-game-master/pick-game-master.repository";
 import { PickGameMasterUseCase } from "./pick-game-master/pick-game-master.uc";
 import { PickHeroRepository } from "./pick-hero/pick-hero.repository";
@@ -53,7 +53,6 @@ import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggl
   ],
   controllers: [LobbyPrivateController],
   providers: [
-    LobbyPrivateGateway,
     HandleWsConnectionUseCase,
     HandleWsDisconnectionUseCase,
     HandleWsDisconnectionRepository,
@@ -89,6 +88,7 @@ import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggl
     PickGameMasterRepository,
     DiscardGameMasterUseCase,
     DiscardGameMasterRepository,
+    LobbySubscriberGateway,
   ],
 })
 export class LobbyModule {}

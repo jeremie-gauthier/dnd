@@ -49,7 +49,7 @@ import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggl
     origin: "http://localhost:5173",
   },
 })
-export class LobbyPrivateGateway
+export class LobbySubscriberGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(
