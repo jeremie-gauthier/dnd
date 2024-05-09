@@ -17,7 +17,6 @@ export class RerollInitiativesListener {
 
   @OnEvent(GameEvent.DoorOpened)
   public async handler({ game }: DoorOpenedPayload) {
-    console.log("On DoorOpened: RerollInitiativesListener");
     this.initiativeService.rollPlayableEntitiesInitiative({ game });
 
     this.restartTimeline({ game });
