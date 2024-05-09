@@ -5,7 +5,6 @@ import type { CampaignStage } from "src/database/entities/campaign-stage.entity"
 import type { User } from "src/database/entities/user.entity";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import { UserJoinedLobbyPayload } from "src/lobby/events/emitters/user-joined-lobby.payload";
-import type { MessageContext } from "src/types/socket.type";
 import type { UseCase } from "src/types/use-case.interface";
 import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
 import type {
@@ -23,15 +22,13 @@ export class CreateLobbyUseCase implements UseCase {
   ) {}
 
   public async execute({
-    ctx,
     userId,
     createLobbyInputDto: { nbPlayersMax, stageId },
   }: {
-    ctx: MessageContext;
     userId: User["id"];
     createLobbyInputDto: CreateLobbyInputDto;
   }): Promise<CreateLobbyOutputDto> {
-    await this.seatManagerService.leave({ ctx, userId });
+    await this.seatManagerService.leave({ userId });
 
     const [campaign, heroes] = await Promise.all([
       this.repository.getCampaignByStageId({ stageId }),
@@ -72,11 +69,7 @@ export class CreateLobbyUseCase implements UseCase {
 
     this.eventEmitter.emitAsync(
       LobbyEvent.UserJoinedLobby,
-      new UserJoinedLobbyPayload({
-        ctx,
-        userId,
-        lobbyId: lobby.id,
-      }),
+      new UserJoinedLobbyPayload({ userId, lobby }),
     );
 
     return lobby;

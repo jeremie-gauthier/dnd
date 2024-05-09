@@ -8,7 +8,6 @@ import { ConfigService } from "@nestjs/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { EnvSchema } from "src/config/env.config";
 import { User } from "src/database/entities/user.entity";
-import { MessageContext } from "src/types/socket.type";
 import { UseCase } from "src/types/use-case.interface";
 import { LobbyChangedPayload } from "../events/emitters/lobby-changed.payload";
 import { LobbyEvent } from "../events/emitters/lobby-events.enum";
@@ -23,11 +22,9 @@ export class PickGameMasterUseCase implements UseCase {
   ) {}
 
   public async execute({
-    ctx,
     userId,
     lobbyId,
   }: PickGameMasterInput & {
-    ctx: MessageContext;
     userId: User["id"];
   }): Promise<void> {
     const lobby = await this.repository.getLobbyById({ lobbyId });
@@ -39,7 +36,7 @@ export class PickGameMasterUseCase implements UseCase {
 
     this.eventEmitter.emitAsync(
       LobbyEvent.LobbyChanged,
-      new LobbyChangedPayload({ ctx, lobbyId }),
+      new LobbyChangedPayload({ lobby }),
     );
   }
   private assertCanPickGameMaster(

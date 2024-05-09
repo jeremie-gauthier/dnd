@@ -26,8 +26,6 @@ export class SpawnEnemiesListener {
 
   @OnEvent(GameEvent.DoorOpened)
   public async handler({ game, doorCoord }: DoorOpenedPayload) {
-    console.log("On DoorOpened: SpawnEnemiesListener");
-
     const spawnEnemiesEvent = this.getBoundEvent({ game, doorCoord });
     if (!spawnEnemiesEvent) {
       return;

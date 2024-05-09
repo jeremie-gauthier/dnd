@@ -1,4 +1,6 @@
 export enum LobbyEvent {
+  DeleteLobby = "lobby.update.delete_lobby",
+  GameReady = "lobby.update.game_ready",
   LobbyChanged = "lobby.update.data",
   UserLeftLobby = "lobby.update.user_left",
   UserForceLeftLobby = "lobby.update.user_force_left",

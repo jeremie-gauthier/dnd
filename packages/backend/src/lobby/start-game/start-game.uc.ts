@@ -11,7 +11,6 @@ import type { User } from "src/database/entities/user.entity";
 import { HostRequestedGameStartPayload } from "src/lobby/events/emitters/host-requested-game-start.payload";
 import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.payload";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
-import type { MessageContext } from "src/types/socket.type";
 import type { UseCase } from "src/types/use-case.interface";
 import type { StartGameInputDto } from "./start-game.dto";
 import { StartGameRepository } from "./start-game.repository";
@@ -25,11 +24,9 @@ export class StartGameUseCase implements UseCase {
   ) {}
 
   public async execute({
-    ctx,
     userId,
     lobbyId,
   }: StartGameInputDto & {
-    ctx: MessageContext;
     userId: User["id"];
   }): Promise<void> {
     const lobby = await this.repository.getLobbyById(lobbyId);
@@ -40,11 +37,11 @@ export class StartGameUseCase implements UseCase {
 
     this.eventEmitter.emitAsync(
       LobbyEvent.LobbyChanged,
-      new LobbyChangedPayload({ ctx, lobbyId }),
+      new LobbyChangedPayload({ lobby }),
     );
     this.eventEmitter.emitAsync(
       LobbyEvent.HostRequestedGameStart,
-      new HostRequestedGameStartPayload({ ctx, userId, lobby }),
+      new HostRequestedGameStartPayload({ userId, lobby }),
     );
   }
 

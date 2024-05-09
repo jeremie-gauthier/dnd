@@ -14,7 +14,6 @@ export class EndPlayingEntityTurnListener {
 
   @OnEvent(GameEvent.DoorOpened)
   public async handler(payload: DoorOpenedPayload) {
-    console.log("On DoorOpened: EndPlayingEntityTurnListener");
     this.turnService.endPlayableEntityTurn({
       playableEntity: payload.entityThatOpenedTheDoor,
     });

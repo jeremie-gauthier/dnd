@@ -1,8 +1,9 @@
-import { LobbyEntityStatus, ServerLobbyEvent } from "@dnd/shared";
+import { LobbyEntityStatus } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import type { GameInitializationDonePayload } from "src/game/events/emitters/game-initialization-done.payload";
+import { GameReadyPayload } from "../../emitters/game-ready.payload";
 import { LobbyChangedPayload } from "../../emitters/lobby-changed.payload";
 import { LobbyEvent } from "../../emitters/lobby-events.enum";
 import { GameInitializationDoneRepository } from "./game-initialization-done.repository";
@@ -15,25 +16,18 @@ export class GameInitializationDoneListener {
   ) {}
 
   @OnEvent(GameEvent.GameInitializationDone)
-  public async handler({ ctx, game, lobbyId }: GameInitializationDonePayload) {
-    const lobby = await this.repository.getLobbyById(lobbyId);
-    if (!lobby) {
-      return;
-    }
-
+  public async handler({ game, lobby }: GameInitializationDonePayload) {
     lobby.status = LobbyEntityStatus.GAME_STARTED;
     await this.repository.updateLobby(lobby);
 
-    // TODO: tmp - need refactoring to properly remove these ctx
-    if (!ctx) return;
-
     this.emitter.emitAsync(
       LobbyEvent.LobbyChanged,
-      new LobbyChangedPayload({ ctx, lobbyId }),
+      new LobbyChangedPayload({ lobby }),
     );
 
-    ctx.server
-      .to(lobbyId)
-      .emit(ServerLobbyEvent.GameInitializationDone, { game });
+    this.emitter.emitAsync(
+      LobbyEvent.GameReady,
+      new GameReadyPayload({ lobby, game }),
+    );
   }
 }

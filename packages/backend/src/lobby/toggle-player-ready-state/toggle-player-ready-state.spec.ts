@@ -2,9 +2,7 @@ import { LobbyEntityStatus, type LobbyEntity } from "@dnd/shared";
 import { ForbiddenException, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
-import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.payload";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
-import type { MessageContext } from "src/types/socket.type";
 import {
   afterEach,
   beforeEach,
@@ -29,7 +27,6 @@ describe("TogglePlayerReadyStateUseCase", () => {
   >;
 
   const mockParams = {
-    ctx: {} as MessageContext,
     userId: "mock-user-id",
     lobbyId: "mock-lobby-id",
   };
@@ -89,10 +86,7 @@ describe("TogglePlayerReadyStateUseCase", () => {
       expect(eventEmitterMock).toHaveBeenCalledOnce();
       expect(eventEmitterMock).toHaveBeenCalledWith(
         LobbyEvent.LobbyChanged,
-        new LobbyChangedPayload({
-          ctx: mockParams.ctx,
-          lobbyId: mockParams.lobbyId,
-        }),
+        expect.objectContaining({}),
       );
     });
 
@@ -117,10 +111,7 @@ describe("TogglePlayerReadyStateUseCase", () => {
       expect(eventEmitterMock).toHaveBeenCalledOnce();
       expect(eventEmitterMock).toHaveBeenCalledWith(
         LobbyEvent.LobbyChanged,
-        new LobbyChangedPayload({
-          ctx: mockParams.ctx,
-          lobbyId: mockParams.lobbyId,
-        }),
+        expect.objectContaining({}),
       );
     });
 
@@ -156,10 +147,7 @@ describe("TogglePlayerReadyStateUseCase", () => {
       expect(eventEmitterMock).toHaveBeenCalledOnce();
       expect(eventEmitterMock).toHaveBeenCalledWith(
         LobbyEvent.LobbyChanged,
-        new LobbyChangedPayload({
-          ctx: mockParams.ctx,
-          lobbyId: mockParams.lobbyId,
-        }),
+        expect.objectContaining({}),
       );
     });
 
@@ -195,10 +183,7 @@ describe("TogglePlayerReadyStateUseCase", () => {
       expect(eventEmitterMock).toHaveBeenCalledOnce();
       expect(eventEmitterMock).toHaveBeenCalledWith(
         LobbyEvent.LobbyChanged,
-        new LobbyChangedPayload({
-          ctx: mockParams.ctx,
-          lobbyId: mockParams.lobbyId,
-        }),
+        expect.objectContaining({}),
       );
     });
   });

@@ -6,7 +6,6 @@ import {
 } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
-import { MessageContext } from "src/types/socket.type";
 import { UseCase } from "src/types/use-case.interface";
 import { LobbyChangedPayload } from "../events/emitters/lobby-changed.payload";
 import { LobbyEvent } from "../events/emitters/lobby-events.enum";
@@ -20,11 +19,9 @@ export class DiscardGameMasterUseCase implements UseCase {
   ) {}
 
   public async execute({
-    ctx,
     lobbyId,
     userId,
   }: DiscardGameMasterInput & {
-    ctx: MessageContext;
     userId: User["id"];
   }): Promise<void> {
     const lobby = await this.repository.getLobbyById({ lobbyId });
@@ -36,7 +33,7 @@ export class DiscardGameMasterUseCase implements UseCase {
 
     this.eventEmitter.emitAsync(
       LobbyEvent.LobbyChanged,
-      new LobbyChangedPayload({ ctx, lobbyId }),
+      new LobbyChangedPayload({ lobby }),
     );
   }
 

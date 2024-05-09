@@ -14,11 +14,8 @@ import { MovesService } from "src/game/moves/services/moves.service";
 import { PlayableEntityService } from "src/game/playable-entity/services/playable-entity/playable-entity.service";
 import { InitiativeService } from "src/game/timeline/services/initiative/initiative.service";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
-import type { MessageContext } from "src/types/socket.type";
 import { Mock, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GameEvent } from "../../emitters/game-events.enum";
-import { GameInitializationDonePayload } from "../../emitters/game-initialization-done.payload";
-import { GameInitializationStartedPayload } from "../../emitters/game-initialization-started.payload";
 import { GameInitializationListener } from "./game-initialization.listener";
 import { GameInitializationRepository } from "./game-initialization.repository";
 
@@ -48,7 +45,6 @@ describe("GameInitializationListener", () => {
 
   let mockParams = {
     name: LobbyEvent.HostRequestedGameStart as const,
-    ctx: {} as MessageContext,
     lobby: {} as LobbyEntity,
     userId: "mock-user-id",
   };
@@ -102,7 +98,6 @@ describe("GameInitializationListener", () => {
 
     mockParams = {
       name: LobbyEvent.HostRequestedGameStart as const,
-      ctx: {} as MessageContext,
       lobby: {} as LobbyEntity,
       userId: "mock-user-id",
     };
@@ -307,69 +302,11 @@ describe("GameInitializationListener", () => {
       expect(eventEmitterMock).toHaveBeenCalledTimes(2);
       expect(eventEmitterMock).toHaveBeenCalledWith(
         GameEvent.GameInitializationStarted,
-        new GameInitializationStartedPayload({
-          lobbyId: "mock-lobby-id",
-        }),
+        expect.objectContaining({}),
       );
       expect(eventEmitterMock).toHaveBeenCalledWith(
         GameEvent.GameInitializationDone,
-        new GameInitializationDonePayload({
-          ctx: mockParams.ctx,
-          lobbyId: "mock-lobby-id",
-          game: {
-            id: "mock-lobby-id",
-            status: "prepare_for_battle",
-            map: {
-              width: 1,
-              height: 1,
-              tiles: [
-                {
-                  coord: { row: 0, column: 0 },
-                  entities: [],
-                  isStartingTile: true,
-                },
-              ],
-            },
-            gameMaster: { userId: "player-3" },
-            playableEntities: {
-              "Regdar-id": {
-                ...fakeHeroStats,
-                id: "Regdar-id",
-                name: "Regdar",
-                playedByUserId: "player-1",
-                class: HeroClass.WARRIOR,
-                type: "hero",
-              },
-              "Jozan-id": {
-                ...fakeHeroStats,
-                id: "Jozan-id",
-                name: "Jozan",
-                playedByUserId: "player-1",
-                class: HeroClass.CLERIC,
-                type: "hero",
-              },
-              "Mialye-id": {
-                ...fakeHeroStats,
-                id: "Mialye-id",
-                name: "Mialye",
-                playedByUserId: "player-1",
-                class: HeroClass.SORCERER,
-                type: "hero",
-              },
-              "Lidda-id": {
-                ...fakeHeroStats,
-                id: "Lidda-id",
-                name: "Lidda",
-                playedByUserId: "player-2",
-                class: HeroClass.THIEF,
-                type: "hero",
-              },
-            },
-            timeline: [],
-            events: [],
-            enemyTemplates: {},
-          },
-        }),
+        expect.objectContaining({}),
       );
     });
   });

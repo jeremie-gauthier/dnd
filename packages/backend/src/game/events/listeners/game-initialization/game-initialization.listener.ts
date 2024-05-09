@@ -31,23 +31,19 @@ export class GameInitializationListener {
   ) {}
 
   @OnEvent(LobbyEvent.HostRequestedGameStart)
-  public async handler(payload: HostRequestedGameStartPayload): Promise<void> {
+  public async handler({
+    lobby,
+  }: HostRequestedGameStartPayload): Promise<void> {
     this.eventEmitter.emitAsync(
       GameEvent.GameInitializationStarted,
-      new GameInitializationStartedPayload({
-        lobbyId: payload.lobby.id,
-      }),
+      new GameInitializationStartedPayload({ lobby }),
     );
 
-    const game = await this.createGame(payload.lobby);
+    const game = await this.createGame(lobby);
 
     this.eventEmitter.emitAsync(
       GameEvent.GameInitializationDone,
-      new GameInitializationDonePayload({
-        ctx: payload.ctx,
-        lobbyId: payload.lobby.id,
-        game,
-      }),
+      new GameInitializationDonePayload({ lobby, game }),
     );
   }
 
