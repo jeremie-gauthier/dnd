@@ -8,7 +8,6 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { User } from "src/database/entities/user.entity";
 import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.payload";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
-import type { MessageContext } from "src/types/socket.type";
 import type { UseCase } from "src/types/use-case.interface";
 import type { TogglePlayerReadyStateInputDto } from "./toggle-player-ready-state.dto";
 import { TogglePlayerReadyStateRepository } from "./toggle-player-ready-state.repository";
@@ -21,11 +20,9 @@ export class TogglePlayerReadyStateUseCase implements UseCase {
   ) {}
 
   public async execute({
-    ctx,
     userId,
     lobbyId,
   }: TogglePlayerReadyStateInputDto & {
-    ctx: MessageContext;
     userId: User["id"];
   }): Promise<void> {
     const lobby = await this.repository.getLobbyById(lobbyId);
@@ -37,7 +34,7 @@ export class TogglePlayerReadyStateUseCase implements UseCase {
 
     this.eventEmitter.emitAsync(
       LobbyEvent.LobbyChanged,
-      new LobbyChangedPayload({ ctx, lobbyId }),
+      new LobbyChangedPayload({ lobby }),
     );
   }
 

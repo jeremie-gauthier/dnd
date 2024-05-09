@@ -17,7 +17,7 @@ export class StateMachinePublisherGateway {
   @OnEvent(GameEvent.PlayableEntityMoved)
   @OnEvent(GameEvent.PlayableEntityTurnEnded)
   @OnEvent(GameEvent.GameInitializationDone)
-  protected async gameChangesHandler({ game }: { game: GameEntity }) {
+  protected gameChangesHandler({ game }: { game: GameEntity }) {
     const playableEntities = Object.values(game.playableEntities);
     const userIds = new Set([
       game.gameMaster.userId,

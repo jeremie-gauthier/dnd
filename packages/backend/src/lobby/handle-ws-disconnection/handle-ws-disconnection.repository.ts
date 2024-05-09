@@ -11,6 +11,12 @@ export class HandleWsDisconnectionRepository {
     private readonly lobbiesRepository: LobbiesRepository,
   ) {}
 
+  public async getLobbyById({
+    lobbyId,
+  }: { lobbyId: LobbyEntity["id"] }): Promise<LobbyEntity | null> {
+    return await this.lobbiesRepository.getOne(lobbyId);
+  }
+
   public async getCachedUserLobbyId(
     userId: User["id"],
   ): Promise<LobbyEntity["id"] | undefined> {
@@ -37,5 +43,9 @@ export class HandleWsDisconnectionRepository {
       ...lobby,
       players: lobby.players.filter((player) => player.userId !== userId),
     });
+  }
+
+  public async updateLobby({ lobby }: { lobby: LobbyEntity }) {
+    await this.lobbiesRepository.update(lobby);
   }
 }

@@ -9,7 +9,7 @@ consumers:
   - End Playing Entity Turn Listener
   - Spawn Enemies Listener
   - Reroll Initiatives Listener
-  - State Machine Publish Gateway
+  - State Machine Publisher Gateway
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />

@@ -29,7 +29,7 @@ const pathToTileSchema = originTilePathSchema.or(childTilePathSchema);
 export const playableEntityMoveInputSchema = z.object({
   gameId: z.string().uuid(),
   pathToTile: pathToTileSchema,
-  playableEntityId: z.string().uuid(),
+  playableEntityId: z.string(),
 });
 
 export type PlayableEntityMoveInput = z.infer<

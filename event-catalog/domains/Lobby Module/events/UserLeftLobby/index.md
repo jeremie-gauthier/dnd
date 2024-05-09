@@ -7,9 +7,9 @@ producers:
   - Leave Lobby UC
 consumers:
   - Track User Accross Lobbies Listener
-  - Room Manager Listener
-  - Lobbies Changes Listener
-  - Lobby Changed Listener
+  - Lobby Publisher Gateway
+  - Lobby Publisher Gateway
+  - Lobby Publisher Gateway
   - Lobby Cleaner Listener
 ---
 

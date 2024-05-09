@@ -5,14 +5,14 @@ import {
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer,
   type OnGatewayConnection,
   type OnGatewayDisconnect,
 } from "@nestjs/websockets";
 import { ZodValidationPipe } from "nestjs-zod";
 import { JWTAuthGuard } from "src/authz/jwt-auth.guard";
 import { WsExceptionFilter } from "src/errors/ws-exception-filter";
-import type { ServerSocket, WsServer } from "src/types/socket.type";
+import type { ServerSocket } from "src/types/socket.type";
+import { LOBBIES_ROOM } from "./constants";
 import {
   CreateLobbyOutputDto,
   type CreateLobbyInputDto,
@@ -67,24 +67,12 @@ export class LobbySubscriberGateway
     private readonly discardGameMasterUseCase: DiscardGameMasterUseCase,
   ) {}
 
-  @WebSocketServer()
-  private readonly server: WsServer;
-
   public async handleConnection(client: ServerSocket) {
     await this.handleWsConnectionUseCase.execute(client);
   }
 
   public async handleDisconnect(client: ServerSocket) {
-    await this.handleWsDisconnectionUseCase.execute(
-      this.getMessageContext(client),
-    );
-  }
-
-  private getMessageContext(client: ServerSocket) {
-    return {
-      server: this.server,
-      client,
-    };
+    await this.handleWsDisconnectionUseCase.execute(client);
   }
 
   @SubscribeMessage(ClientLobbyEvent.RequestCreateLobby)
@@ -93,10 +81,12 @@ export class LobbySubscriberGateway
     @ConnectedSocket() client: ServerSocket,
   ): Promise<CreateLobbyOutputDto> {
     const lobby = await this.createLobbyUseCase.execute({
-      ctx: this.getMessageContext(client),
       userId: client.data.userId,
       createLobbyInputDto,
     });
+
+    await client.join(lobby.id);
+
     return CreateLobbyOutputDto.schema.parse(lobby);
   }
 
@@ -105,11 +95,12 @@ export class LobbySubscriberGateway
     @MessageBody() joinLobbyDto: JoinLobbyInputDto,
     @ConnectedSocket() client: ServerSocket,
   ) {
+    await client.leave(LOBBIES_ROOM);
     const lobbyId = await this.joinLobbyUseCase.execute({
-      ctx: this.getMessageContext(client),
       userId: client.data.userId,
       ...joinLobbyDto,
     });
+    await client.join(lobbyId);
     return JoinLobbyOutputDto.schema.parse({ lobbyId });
   }
 
@@ -121,10 +112,14 @@ export class LobbySubscriberGateway
 
   @SubscribeMessage(ClientLobbyEvent.RequestLeaveLobby)
   public async leaveLobby(@ConnectedSocket() client: ServerSocket) {
-    await this.leaveLobbyUseCase.execute({
-      ctx: this.getMessageContext(client),
+    const lobbyId = await this.leaveLobbyUseCase.execute({
       userId: client.data.userId,
     });
+
+    if (lobbyId) {
+      await client.leave(lobbyId);
+    }
+
     return LeaveLobbyOutputDto.schema.parse({ message: "Ok" });
   }
 
@@ -134,7 +129,6 @@ export class LobbySubscriberGateway
     @ConnectedSocket() client: ServerSocket,
   ) {
     await this.pickHeroUseCase.execute({
-      ctx: this.getMessageContext(client),
       userId: client.data.userId,
       ...pickHeroDto,
     });
@@ -146,7 +140,6 @@ export class LobbySubscriberGateway
     @ConnectedSocket() client: ServerSocket,
   ) {
     await this.discardHeroUseCase.execute({
-      ctx: this.getMessageContext(client),
       userId: client.data.userId,
       ...discardHeroDto,
     });
@@ -158,7 +151,6 @@ export class LobbySubscriberGateway
     @ConnectedSocket() client: ServerSocket,
   ) {
     await this.togglePlayerReadyStateUseCase.execute({
-      ctx: this.getMessageContext(client),
       userId: client.data.userId,
       ...toggleReadyStateDto,
     });
@@ -170,7 +162,6 @@ export class LobbySubscriberGateway
     @ConnectedSocket() client: ServerSocket,
   ) {
     await this.startGameUseCase.execute({
-      ctx: this.getMessageContext(client),
       userId: client.data.userId,
       ...startGameDto,
     });
@@ -182,7 +173,6 @@ export class LobbySubscriberGateway
     @ConnectedSocket() client: ServerSocket,
   ) {
     await this.pickGameMasterUseCase.execute({
-      ctx: this.getMessageContext(client),
       userId: client.data.userId,
       ...pickGameMasterDto,
     });
@@ -194,7 +184,6 @@ export class LobbySubscriberGateway
     @ConnectedSocket() client: ServerSocket,
   ) {
     await this.discardGameMasterUseCase.execute({
-      ctx: this.getMessageContext(client),
       userId: client.data.userId,
       ...discardGameMasterDto,
     });

@@ -8,8 +8,8 @@ import { UsersRepository } from "src/redis/repositories/users.repository";
 export class TrackUserAccrossLobbiesRepository {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  public async saveUserLobby({ userId, lobbyId }: UserJoinedLobbyPayload) {
-    await this.usersRepository.set({ userId, lobbyId });
+  public async saveUserLobby({ userId, lobby }: UserJoinedLobbyPayload) {
+    await this.usersRepository.set({ userId, lobbyId: lobby.id });
   }
 
   public async removeUserLobby({

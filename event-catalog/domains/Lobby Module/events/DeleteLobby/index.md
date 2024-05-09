@@ -1,10 +1,10 @@
 ---
-name: GameInitializationStarted
+name: DeleteLobby
 version: 0.0.1
 summary: |
-  Represents when a game is initializing.
+  Represents when a lobby has been deleted.
 producers:
-  - Game Initialization Listener
+  - Lobby Cleaner Listener
 consumers:
   - Lobby Publisher Gateway
 ---

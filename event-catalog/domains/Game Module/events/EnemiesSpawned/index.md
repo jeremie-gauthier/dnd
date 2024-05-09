@@ -6,7 +6,7 @@ summary: |
 producers:
   - Spawn Enemies Listener
 consumers:
-  - State Machine Publish Gateway
+  - State Machine Publisher Gateway
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />

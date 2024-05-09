@@ -11,7 +11,7 @@ producers:
   - Toggle Player Ready State UC
   - Start Game UC
 consumers:
-  - Lobby Changed Listener
+  - Lobby Publisher Gateway
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />

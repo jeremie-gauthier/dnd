@@ -9,7 +9,6 @@ import { User } from "src/database/entities/user.entity";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import { UserJoinedLobbyPayload } from "src/lobby/events/emitters/user-joined-lobby.payload";
 import { UserLeftLobbyPayload } from "src/lobby/events/emitters/user-left-lobby.payload";
-import { MessageContext } from "src/types/socket.type";
 import { SeatManagerRepository } from "./seat-manager.repository";
 
 @Injectable()
@@ -20,36 +19,28 @@ export class SeatManagerService {
   ) {}
 
   public async take({
-    ctx,
     userId,
     lobbyId,
   }: {
-    ctx: MessageContext;
     userId: User["id"];
     lobbyId: LobbyEntity["id"];
   }): Promise<void> {
     // remove player from previous lobby (if any) before joining a new one
-    await this.leave({ ctx, userId });
+    await this.leave({ userId });
 
-    const lobby = await this.repository.getLobbyById(lobbyId);
+    const lobby = await this.repository.getLobbyById({ lobbyId });
     this.assertsCanEnterLobby(userId, lobby);
 
-    await this.repository.addPlayerToLobby({
-      player: {
-        userId,
-        heroesSelected: [],
-        isReady: false,
-      },
-      lobbyId,
+    lobby.players.push({
+      userId,
+      heroesSelected: [],
+      isReady: false,
     });
+    await this.repository.updateLobby({ lobby });
 
     this.eventEmitter.emitAsync(
       LobbyEvent.UserJoinedLobby,
-      new UserJoinedLobbyPayload({
-        ctx,
-        userId,
-        lobbyId,
-      }),
+      new UserJoinedLobbyPayload({ userId, lobby }),
     );
   }
 
@@ -74,20 +65,31 @@ export class SeatManagerService {
     }
   }
 
-  public async leave({
-    ctx,
-    userId,
-  }: { ctx: MessageContext; userId: User["id"] }): Promise<void> {
-    const lobbyId = await this.repository.getUserLobby(userId);
+  public async leave({ userId }: { userId: User["id"] }): Promise<void> {
+    const lobbyId = await this.repository.getUserLobby({ userId });
     if (!lobbyId) {
       return;
     }
 
-    await this.repository.removePlayerFromLobby({ userId, lobbyId });
+    const lobby = await this.repository.getLobbyById({ lobbyId });
+    if (!lobby) {
+      return;
+    }
+
+    lobby.players = lobby.players.filter((player) => player.userId !== userId);
+    for (const heroAvailable of lobby.heroesAvailable) {
+      if (heroAvailable.pickedBy === userId) {
+        heroAvailable.pickedBy = undefined;
+      }
+    }
+
+    // TODO: handle ownership change
+
+    await this.repository.updateLobby({ lobby });
 
     await this.eventEmitter.emitAsync(
       LobbyEvent.UserLeftLobby,
-      new UserLeftLobbyPayload({ ctx, userId, lobbyId }),
+      new UserLeftLobbyPayload({ userId, lobby }),
     );
   }
 }

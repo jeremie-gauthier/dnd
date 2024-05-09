@@ -8,9 +8,9 @@ producers:
   - Join Lobby UC
 consumers:
   - Track User Accross Lobbies Listener
-  - Room Manager Listener
-  - Lobby Changed Listener
-  - Lobbies Changes Listener
+  - Lobby Publisher Gateway
+  - Lobby Publisher Gateway
+  - Lobby Publisher Gateway
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />

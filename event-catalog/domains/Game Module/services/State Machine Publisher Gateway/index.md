@@ -1,5 +1,5 @@
 ---
-name: State Machine Publish Gateway
+name: State Machine Publisher Gateway
 summary: |
   The State Machine's module publish gateway.
 repository:

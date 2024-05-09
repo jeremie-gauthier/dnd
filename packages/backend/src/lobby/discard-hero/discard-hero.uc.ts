@@ -9,7 +9,6 @@ import type { Hero } from "src/database/entities/hero.entity";
 import type { User } from "src/database/entities/user.entity";
 import { LobbyChangedPayload } from "src/lobby/events/emitters/lobby-changed.payload";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
-import type { MessageContext } from "src/types/socket.type";
 import type { UseCase } from "src/types/use-case.interface";
 import type { DiscardHeroInputDto } from "./discard-hero.dto";
 import { DiscardHeroRepository } from "./discard-hero.repository";
@@ -22,12 +21,10 @@ export class DiscardHeroUseCase implements UseCase {
   ) {}
 
   public async execute({
-    ctx,
     userId,
     lobbyId,
     heroId,
   }: DiscardHeroInputDto & {
-    ctx: MessageContext;
     userId: User["id"];
   }): Promise<void> {
     // TODO: the lobby fetched might lack of a lock
@@ -42,7 +39,7 @@ export class DiscardHeroUseCase implements UseCase {
 
     this.eventEmitter.emitAsync(
       LobbyEvent.LobbyChanged,
-      new LobbyChangedPayload({ ctx, lobbyId }),
+      new LobbyChangedPayload({ lobby }),
     );
   }
 
