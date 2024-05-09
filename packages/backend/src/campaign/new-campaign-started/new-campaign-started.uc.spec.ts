@@ -26,7 +26,9 @@ describe("NewCampaignStartedUseCase", () => {
           provide: NewCampaignStartedRepository,
           useValue: {
             getUserById: () => ({ id: userId, status: UserStatus.CREATED }),
-            getCampaignWithFirstStageById: () => [],
+            getCampaignWithFirstStageById: () => ({
+              stages: [],
+            }),
             createCampaignProgressionForUser: () => ({
               id: campaignProgressionId,
             }),
