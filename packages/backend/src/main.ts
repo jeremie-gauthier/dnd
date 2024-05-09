@@ -2,6 +2,11 @@ import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 
+// ? https://github.com/nestjs/nest/issues/7249
+import { EventEmitter } from "node:events";
+(EventEmitter.prototype as any)._maxListeners = 15;
+// ? ---
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
