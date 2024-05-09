@@ -8,6 +8,7 @@ export default () => ({
 const validationSchema = z.object({
   NODE_ENV: z.enum(["development", "production"]).default("development"),
   PORT: z.coerce.number().default(3000),
+  FRONTEND_URL: z.string().default("http://localhost:5173"),
   AUTH0_AUDIENCE: z.string(),
   AUTH0_ISSUER: z.string(),
   DATABASE_URL: z.string(),
