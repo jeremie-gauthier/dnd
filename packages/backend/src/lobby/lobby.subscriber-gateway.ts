@@ -46,7 +46,7 @@ import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggl
 @UseFilters(WsExceptionFilter)
 @WebSocketGateway({
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
   },
 })
 export class LobbySubscriberGateway

@@ -18,7 +18,7 @@ import { ChangePositionUseCase } from "./change-position/change-position.uc";
 @UseFilters(WsExceptionFilter)
 @WebSocketGateway({
   cors: {
-    origin: "*",
+    origin: process.env.FRONTEND_URL,
   },
 })
 export class GameStartingSubscriberGateway {

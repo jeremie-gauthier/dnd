@@ -16,7 +16,7 @@ import { EndPlayerTurnUseCase } from "./end-player-turn/end-player-turn.uc";
 @UseFilters(WsExceptionFilter)
 @WebSocketGateway({
   cors: {
-    origin: "*",
+    origin: process.env.FRONTEND_URL,
   },
 })
 export class StateMachineSubscriberGateway {

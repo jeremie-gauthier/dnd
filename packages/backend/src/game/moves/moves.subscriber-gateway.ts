@@ -18,7 +18,7 @@ import { PlayableEntityMoveUseCase } from "./playable-entity-move/playable-entit
 @UseFilters(WsExceptionFilter)
 @WebSocketGateway({
   cors: {
-    origin: "*",
+    origin: process.env.FRONTEND_URL,
   },
 })
 export class MovesSubscriberGateway {
