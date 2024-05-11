@@ -21,7 +21,7 @@ export class PlayableEntityService {
     enemiesName,
   }: { game: GameEntity; enemiesName: EnemyKind[] }): PlayableEnemyEntity[] {
     return enemiesName.map((enemyName) => {
-      const enemyTemplate = game.enemyTemplates[enemyName] as EnemyTemplate;
+      const enemyTemplate = game.enemyTemplates[enemyName]!;
       const id = `${enemyName}:${randomUUID()}`;
 
       return {
@@ -42,6 +42,7 @@ export class PlayableEntityService {
           movementPoints: enemyTemplate.characteristic.baseMovementPoints,
           actionPoints: enemyTemplate.characteristic.baseActionPoints,
         },
+        inventory: enemyTemplate.inventory,
       };
     });
   }

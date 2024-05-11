@@ -1,13 +1,18 @@
 import {
+  EnemyInventoryJson,
   EnemyKind,
+  GameEntity,
+  GameItem,
+  LobbyEntity,
+  StorageSpace,
+  Tile,
   unique,
-  type GameEntity,
-  type LobbyEntity,
-  type Tile,
 } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
+import { Dice } from "src/database/entities/dice.entity";
+import { ItemService } from "src/game/inventory/services/item/item.service";
 import { MapSerializerService } from "src/game/map/services/map-serializer/map-serializer.service";
 import { MovesService } from "src/game/moves/services/moves.service";
 import { PlayableEntityService } from "src/game/playable-entity/services/playable-entity/playable-entity.service";
@@ -28,6 +33,7 @@ export class GameInitializationListener {
     private readonly movesService: MovesService,
     private readonly initiativeService: InitiativeService,
     private readonly playableEntityService: PlayableEntityService,
+    private readonly itemService: ItemService,
   ) {}
 
   @OnEvent(LobbyEvent.HostRequestedGameStart)
@@ -123,6 +129,17 @@ export class GameInitializationListener {
             movementPoints: hero.characteristic.baseMovementPoints,
             actionPoints: hero.characteristic.baseActionPoints,
           },
+          inventory: {
+            storageCapacity: hero.inventory.storageCapacity,
+            gear: hero.inventory.stuff
+              .filter((item) => item.storageSpace === StorageSpace.GEAR)
+              .map(({ item }) => this.itemService.itemEntityToGameItem(item))
+              .filter((item): item is GameItem => item !== undefined),
+            backpack: hero.inventory.stuff
+              .filter((item) => item.storageSpace === StorageSpace.BACKPACK)
+              .map(({ item }) => this.itemService.itemEntityToGameItem(item))
+              .filter((item): item is GameItem => item !== undefined),
+          },
         },
       ]),
     );
@@ -184,12 +201,68 @@ export class GameInitializationListener {
       { enemiesName },
     );
 
+    const dicesNamesUsedByEnemies = Array.from(
+      new Set(
+        enemyTemplates.flatMap((enemyTemplate) =>
+          Object.values(enemyTemplate.inventory).flatMap((weapons) =>
+            weapons.flatMap(({ attacks }) =>
+              attacks.flatMap(({ dices }) => dices),
+            ),
+          ),
+        ),
+      ),
+    );
+    const dices = await this.repository.getDicesByNames({
+      diceNames: dicesNamesUsedByEnemies,
+    });
+
     return Object.fromEntries(
       enemyTemplates.map((enemyTemplate) => [
         enemyTemplate.name,
-        enemyTemplate,
+        {
+          ...enemyTemplate,
+          inventory: this.getPlayableEntityInventoryFromEnemyInventory({
+            dices,
+            enemyInventory: enemyTemplate.inventory,
+          }),
+        },
       ]),
     );
+  }
+
+  private getPlayableEntityInventoryFromEnemyInventory({
+    dices,
+    enemyInventory,
+  }: {
+    dices: Dice[];
+    enemyInventory: EnemyInventoryJson;
+  }): GameEntity["enemyTemplates"][number]["inventory"] {
+    return {
+      storageCapacity: {
+        nbArtifactSlots: 0,
+        nbSpellSlots: 0,
+        nbWeaponSlots: 2,
+        nbBackpackSlots: 1,
+      },
+      backpack: enemyInventory.backpack.map((item) => ({
+        ...item,
+        attacks: item.attacks.map((attack) => ({
+          ...attack,
+          dices: attack.dices.map(
+            (diceName) => dices.find(({ name }) => name === diceName)!,
+          ),
+        })),
+      })),
+      gear: enemyInventory.gear.map((item) => ({
+        ...item,
+        attacks: item.attacks.map((attack) => ({
+          ...attack,
+          dices: attack.dices.map(
+            (diceName) => dices.find(({ name }) => name === diceName)!,
+          ),
+        })),
+      })),
+    };
   }
 
   private getDistinctAvailableEnemies({

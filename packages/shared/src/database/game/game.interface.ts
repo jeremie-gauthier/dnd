@@ -1,9 +1,16 @@
 import type { HeroClassType } from "../enums/hero-class.enum";
-import { EnemyAttackJson } from "../json";
+import { StuffStorageCapacityJson } from "../json";
 import type { EnemyKind } from "./enemy-kind.type";
 import { GameEvent } from "./game-event.type";
+import { GameItem } from "./game-item.type";
 import { DoorEntity, TrapEntity } from "./interactive-entities.type";
 import type { PlayerGamePhase } from "./player-phase.type";
+
+type PlayableEntityInventory = {
+  storageCapacity: StuffStorageCapacityJson;
+  gear: GameItem[];
+  backpack: GameItem[];
+};
 
 type Player = {
   currentPhase: PlayerGamePhase;
@@ -36,6 +43,7 @@ type BasePlayableEntity = Player & {
     baseActionPoints: number;
     actionPoints: number;
   };
+  inventory: PlayableEntityInventory;
 };
 
 export type PlayableEnemyEntity = BasePlayableEntity & {
@@ -99,7 +107,7 @@ type EnemyTemplate = {
     baseMovementPoints: number;
     baseActionPoints: number;
   };
-  attacks: EnemyAttackJson[];
+  inventory: PlayableEntityInventory;
 };
 
 export type GameEntity<TGameStatus extends GameStatus = GameStatus> = {

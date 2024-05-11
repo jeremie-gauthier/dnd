@@ -9,6 +9,7 @@ import { Test } from "@nestjs/testing";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import type { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import type { User } from "src/database/entities/user.entity";
+import { ItemService } from "src/game/inventory/services/item/item.service";
 import { MapSerializerService } from "src/game/map/services/map-serializer/map-serializer.service";
 import { MovesService } from "src/game/moves/services/moves.service";
 import { PlayableEntityService } from "src/game/playable-entity/services/playable-entity/playable-entity.service";
@@ -54,11 +55,13 @@ describe("GameInitializationListener", () => {
       providers: [
         GameInitializationListener,
         EventEmitter2,
+        ItemService,
         {
           provide: GameInitializationRepository,
           useValue: {
             getUserCampaignStageProgression: vi.fn(),
             saveGame: vi.fn(),
+            getDicesByNames: vi.fn(),
           },
         },
         {
@@ -158,24 +161,36 @@ describe("GameInitializationListener", () => {
               id: "Regdar-id",
               name: "Regdar",
               class: HeroClass.WARRIOR,
+              inventory: {
+                stuff: [],
+              },
             },
             {
               ...fakeHeroStats,
               id: "Jozan-id",
               name: "Jozan",
               class: HeroClass.CLERIC,
+              inventory: {
+                stuff: [],
+              },
             },
             {
               ...fakeHeroStats,
               id: "Mialye-id",
               name: "Mialye",
               class: HeroClass.SORCERER,
+              inventory: {
+                stuff: [],
+              },
             },
             {
               ...fakeHeroStats,
               id: "Lidda-id",
               name: "Lidda",
               class: HeroClass.THIEF,
+              inventory: {
+                stuff: [],
+              },
             },
           ],
         },
@@ -217,6 +232,10 @@ describe("GameInitializationListener", () => {
             playedByUserId: "player-1",
             class: HeroClass.WARRIOR,
             type: "hero",
+            inventory: {
+              gear: [],
+              backpack: [],
+            },
           },
           "Jozan-id": {
             ...fakeHeroStats,
@@ -225,6 +244,10 @@ describe("GameInitializationListener", () => {
             playedByUserId: "player-1",
             class: HeroClass.CLERIC,
             type: "hero",
+            inventory: {
+              gear: [],
+              backpack: [],
+            },
           },
           "Mialye-id": {
             ...fakeHeroStats,
@@ -233,6 +256,10 @@ describe("GameInitializationListener", () => {
             playedByUserId: "player-1",
             class: HeroClass.SORCERER,
             type: "hero",
+            inventory: {
+              gear: [],
+              backpack: [],
+            },
           },
           "Lidda-id": {
             ...fakeHeroStats,
@@ -241,6 +268,10 @@ describe("GameInitializationListener", () => {
             playedByUserId: "player-2",
             class: HeroClass.THIEF,
             type: "hero",
+            inventory: {
+              gear: [],
+              backpack: [],
+            },
           },
         },
         timeline: [],
