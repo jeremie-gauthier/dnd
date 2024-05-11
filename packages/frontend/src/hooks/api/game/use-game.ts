@@ -1,6 +1,4 @@
 import {
-  ClientGameEvent,
-  ClientToServerEvents,
   GameEntity,
   PlayerGamePhase,
   ServerGameEvent,
@@ -44,31 +42,11 @@ export const useGame = ({
     };
   }, [socket, queryClient, gameId]);
 
-  const moveHandler: ClientToServerEvents["client.game.player_requests_playable_entity_moves"] =
-    (payload) => {
-      socket.emit(ClientGameEvent.PlayableEntityMoves, payload);
-    };
-
-  const endTurnHandler: ClientToServerEvents["client.game.player_requests_playable_entity_turn_ends"] =
-    () => {
-      socket.emit(ClientGameEvent.PlayableEntityTurnEnds);
-    };
-
-  const openDoorHandler: ClientToServerEvents["client.game.player_requests_playable_entity_open_door"] =
-    (payload) => {
-      socket.emit(ClientGameEvent.PlayableEntityOpenDoor, payload);
-    };
-
   return isLoading || playerGameState === undefined
     ? { game: undefined, isLoading, phase: "idle" as PlayerGamePhase }
     : {
         game: playerGameState.game,
         isLoading,
         phase: playerGameState.playerPhase,
-        actionHandlers: {
-          move: moveHandler,
-          endTurn: endTurnHandler,
-          openDoor: openDoorHandler,
-        },
       };
 };

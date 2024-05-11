@@ -1,196 +1,60 @@
-import {
-  ClientToServerEvents,
-  GameEntity,
-  PlayerGamePhase,
-  coordToIndex,
-  getAllPathsFromTileWithinRange,
-  getNeighbourCoords,
-} from "@dnd/shared";
-import { useEffect, useRef } from "react";
-import { useGameEngine } from "../../game-engine";
-import { TileClickedEvent } from "../../game-engine/events/tile-clicked.event";
-import { Canvas } from "../canvas/canvas";
-import { EndTurnButton } from "./action-bar/EndTurnButton";
-import { MoveButton } from "./action-bar/MoveButton";
-import { OpenDoorButton } from "./action-bar/OpenDoorButton";
-import { Timeline } from "./action-bar/Timeline";
-import { useCanvasSize } from "./useCanvasSize";
+import { ActionPoints } from "./ActionPoints";
+import { BoardGameCanvas } from "./BoardGameCanvas";
+import { EndTurnButton } from "./EndTurnButton";
+import { HealthPoints } from "./HealthPoints";
+import { MovementPoints } from "./MovementPoints";
+import { Timeline } from "./Timeline";
+import { ActionBar } from "./action-bar/ActionBar";
+import { useGameContext } from "./context/useGameContext";
 
-type Props = {
-  game: GameEntity;
-  phase: PlayerGamePhase;
-  actionHandlers: {
-    move: ClientToServerEvents["client.game.player_requests_playable_entity_moves"];
-    endTurn: ClientToServerEvents["client.game.player_requests_playable_entity_turn_ends"];
-    openDoor: ClientToServerEvents["client.game.player_requests_playable_entity_open_door"];
-  };
-};
-
-export const Game = ({ game, phase, actionHandlers }: Props) => {
-  const floorCanvasRef = useRef<HTMLCanvasElement>(null);
-  const previewCanvasRef = useRef<HTMLCanvasElement>(null);
-  const entitiesCanvasRef = useRef<HTMLCanvasElement>(null);
-
-  const isPlaying = phase === "action";
-
-  const heroPlaying = Object.values(game.playableEntities).find(
-    ({ currentPhase }) => currentPhase === "action",
-  );
-
-  const { assetSize, gameEventManager, playerState } = useGameEngine({
-    floorCanvasRef,
-    previewCanvasRef,
-    entitiesCanvasRef,
-    gameEntity: game,
-    gamePhase: phase,
-  });
-
-  useEffect(() => {
-    const handleClick: EventListener = async (e) => {
-      if (playerState.currentAction !== "move" || !heroPlaying || !isPlaying)
-        return;
-
-      const { isometricCoord } = e as TileClickedEvent;
-
-      const tilePaths = getAllPathsFromTileWithinRange({
-        map: game.map,
-        originCoord: heroPlaying.coord,
-        maxRange: heroPlaying.characteristic.movementPoints,
-      });
-      const selectedPath = tilePaths.find(
-        ({ tile }) =>
-          tile.coord.row === isometricCoord.row &&
-          tile.coord.column === isometricCoord.column,
-      );
-      if (!selectedPath) return;
-
-      actionHandlers.move({
-        gameId: game.id,
-        pathToTile: selectedPath,
-        playableEntityId: heroPlaying.id,
-      });
-
-      playerState.toggleTo("idle");
-    };
-
-    gameEventManager.addEventListener("TileClicked", handleClick);
-
-    return () =>
-      gameEventManager.removeEventListener("TileClicked", handleClick);
-  }, [
-    gameEventManager,
-    playerState.currentAction,
-    playerState.toggleTo,
-    game.map,
-    game.id,
-    heroPlaying,
-    actionHandlers,
-    isPlaying,
-  ]);
-
-  const { width, height } = useCanvasSize({
-    mapWidth: game.map.width,
-    mapHeight: game.map.height,
-    assetSize,
-  });
-
-  const neighbourCoords =
-    isPlaying && heroPlaying
-      ? getNeighbourCoords({ coord: heroPlaying.coord })
-      : undefined;
-  const neighbourTiles = neighbourCoords
-    ?.map((coord) => {
-      const tileIdx = coordToIndex({
-        coord,
-        metadata: { width: game.map.width, height: game.map.height },
-      });
-      return game.map.tiles[tileIdx];
-    })
-    .filter((tile) => tile !== undefined);
-
-  const neighbourDoorCoord = neighbourTiles?.find((tile) =>
-    tile.entities.some(
-      (entity) =>
-        entity.type === "non-playable-interactive-entity" &&
-        entity.kind === "door" &&
-        entity.isBlocking &&
-        entity.canInteract,
-    ),
-  )?.coord;
+export const Game = () => {
+  const { game, isPlaying, heroPlaying } = useGameContext();
 
   return (
-    <div className="flex flex-col items-center w-full gap-4">
-      <p>Game ID: {game.id}</p>
-      <div className="relative" style={{ height, width }}>
-        <Canvas
-          ref={floorCanvasRef}
-          height={height}
-          width={width}
-          className="absolute z-0"
-        />
-        <Canvas
-          ref={previewCanvasRef}
-          height={height}
-          width={width}
-          className="absolute z-10"
-        />
-        <Canvas
-          ref={entitiesCanvasRef}
-          height={height}
-          width={width}
-          className="absolute z-20"
-        />
+    <div className="flex flex-col w-full gap-4">
+      <p className="flex justify-start text-xs">Game ID: {game.id}</p>
+
+      <div className="flex flex-col bg-black p-4 gap-4">
+        <div className="flex justify-center">
+          <BoardGameCanvas />
+        </div>
+
+        <div className="flex flex-row justify-end">
+          <Timeline game={game} />
+        </div>
       </div>
 
-      <Timeline game={game} />
+      <div className="flex flex-row justify-center w-full gap-16">
+        {isPlaying && heroPlaying ? (
+          <>
+            <div className="flex flex-col items-center">
+              <HealthPoints />
+              <div className="flex flex-row gap-1">
+                <ActionPoints />
+                <MovementPoints />
+              </div>
+            </div>
 
-      {isPlaying && heroPlaying ? (
-        <>
-          <div>
-            <p>Status bar</p>
-            <p>Hero turn: {heroPlaying.name}</p>
-            <p>
-              Hero current coord: {JSON.stringify(heroPlaying.coord ?? "{}")}
-            </p>
-            <p>Movement points: {heroPlaying.characteristic.movementPoints}</p>
-            <p>Action points: {heroPlaying.characteristic.actionPoints}</p>
-            <p>Health points: {heroPlaying.characteristic.healthPoints}</p>
-          </div>
+            <ActionBar />
+            {/* <div className="flex flex-col">
+              <div>
+                <p className="text-lg font-bold">{heroPlaying.name}</p>
+                <p className="text-xs">
+                  Hero current coord:{" "}
+                  {JSON.stringify(heroPlaying.coord ?? "{}")}
+                </p>
+              </div>
 
-          <div className="flex flex-row gap-2">
-            <MoveButton
-              isMoving={playerState.currentAction === "move"}
-              onClick={() => playerState.toggleTo("move")}
-              onCancel={() => playerState.toggleTo("idle")}
-              disabled={
-                heroPlaying.characteristic.movementPoints <= 0 ||
-                heroPlaying.characteristic.actionPoints <= 0
-              }
-            />
-            <OpenDoorButton
-              onClick={() => {
-                if (!neighbourDoorCoord) return;
+              <div className="flex flex-row gap-2">
+                <MoveButton />
+                <OpenDoorButton />
+              </div>
+            </div> */}
 
-                playerState.toggleTo("idle");
-                actionHandlers.openDoor({
-                  gameId: game.id,
-                  coordOfTileWithDoor: neighbourDoorCoord,
-                });
-              }}
-              disabled={
-                !neighbourDoorCoord ||
-                heroPlaying.characteristic.actionPoints <= 0
-              }
-            />
-            <EndTurnButton
-              onClick={() => {
-                playerState.toggleTo("idle");
-                actionHandlers.endTurn();
-              }}
-            />
-          </div>
-        </>
-      ) : null}
+            <EndTurnButton />
+          </>
+        ) : null}
+      </div>
     </div>
   );
 };

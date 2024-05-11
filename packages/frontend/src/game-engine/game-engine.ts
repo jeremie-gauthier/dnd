@@ -30,11 +30,7 @@ export const useGameEngine = ({
   });
 
   const { render, renderPreviewLayer, clearPreviewLayer, assetSize } =
-    useMapRenderer({
-      floorCanvasRef,
-      previewCanvasRef,
-      entitiesCanvasRef,
-    });
+    useMapRenderer({ floorCanvasRef, previewCanvasRef, entitiesCanvasRef });
 
   const { addTileClickEvent, addHoverEvent, clearMouseEvents } = useMouseInputs(
     {

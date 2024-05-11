@@ -1,6 +1,7 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Game } from "../../components/game/Game";
+import { GameContextProvider } from "../../components/game/context/GameContextProvider";
 import { useGame } from "../../hooks/api/game/use-game";
 import { useServerLobbyError } from "../../hooks/api/lobby/use-server-lobby-error";
 
@@ -15,7 +16,6 @@ export function GameRouteComponent() {
     game,
     isLoading: isGameLoading,
     phase,
-    actionHandlers,
   } = useGame({ gameId, queryClient, socket });
   useServerLobbyError(socket);
 
@@ -24,5 +24,9 @@ export function GameRouteComponent() {
     return <div>Game data is loading</div>;
   }
 
-  return <Game game={game} phase={phase} actionHandlers={actionHandlers} />;
+  return (
+    <GameContextProvider game={game} phase={phase} socket={socket}>
+      <Game />
+    </GameContextProvider>
+  );
 }

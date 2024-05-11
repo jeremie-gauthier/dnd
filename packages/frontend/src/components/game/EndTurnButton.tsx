@@ -1,13 +1,13 @@
 import { PauseCircleIcon } from "@heroicons/react/20/solid";
-import { Button } from "../../shared/button/Button";
+import { Button } from "../shared/button/Button";
+import { useGameContext } from "./context/useGameContext";
 
-type Params = {
-  onClick: () => void;
-};
+export const EndTurnButton = () => {
+  const { playerState, gameActions } = useGameContext();
 
-export const EndTurnButton = ({ onClick }: Params) => {
   const handleClick = () => {
-    onClick();
+    playerState.toggleTo("idle");
+    gameActions.endTurn();
   };
 
   return (
