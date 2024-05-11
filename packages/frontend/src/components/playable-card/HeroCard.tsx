@@ -19,17 +19,15 @@ const CLASS_TO_IMG: Readonly<Record<HeroClassType, string>> = {
 } as const;
 
 type Props = {
-  hero: Pick<
-    PlayableHeroEntity,
-    | "baseActionPoints"
-    | "baseArmorClass"
-    | "baseHealthPoints"
-    | "baseManaPoints"
-    | "baseMovementPoints"
-    | "class"
-    | "id"
-    | "name"
-  >;
+  hero: Pick<PlayableHeroEntity, "class" | "id" | "name"> & {
+    characteristic: {
+      baseHealthPoints: number;
+      baseArmorClass: number;
+      baseMovementPoints: number;
+      baseManaPoints: number;
+      baseActionPoints: number;
+    };
+  };
 };
 
 export const HeroCard = ({ hero }: Props) => {
@@ -41,27 +39,27 @@ export const HeroCard = ({ hero }: Props) => {
       <div className="flex gap-2">
         <div className="flex items-center">
           <HeartIcon className="h-5 w-5 text-red-500" />
-          <span>{hero.baseHealthPoints}</span>
+          <span>{hero.characteristic.baseHealthPoints}</span>
         </div>
 
         <div className="flex items-center">
           <ShieldExclamationIcon className="h-5 w-5 text-gray-500" />
-          <span>{hero.baseArmorClass}</span>
+          <span>{hero.characteristic.baseArmorClass}</span>
         </div>
 
         <div className="flex items-center">
           <ChevronDoubleRightIcon className="h-5 w-5 text-green-500" />
-          <span>{hero.baseMovementPoints}</span>
+          <span>{hero.characteristic.baseMovementPoints}</span>
         </div>
 
         <div className="flex items-center">
           <SparklesIcon className="h-5 w-5 text-blue-500" />
-          <span>{hero.baseManaPoints}</span>
+          <span>{hero.characteristic.baseManaPoints}</span>
         </div>
 
         <div className="flex items-center">
           <StarIcon className="h-5 w-5 text-yellow-500" />
-          <span>{hero.baseActionPoints}</span>
+          <span>{hero.characteristic.baseActionPoints}</span>
         </div>
       </div>
     </>
