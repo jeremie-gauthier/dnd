@@ -36,20 +36,6 @@ export const Game = () => {
             </div>
 
             <ActionBar />
-            {/* <div className="flex flex-col">
-              <div>
-                <p className="text-lg font-bold">{heroPlaying.name}</p>
-                <p className="text-xs">
-                  Hero current coord:{" "}
-                  {JSON.stringify(heroPlaying.coord ?? "{}")}
-                </p>
-              </div>
-
-              <div className="flex flex-row gap-2">
-                <MoveButton />
-                <OpenDoorButton />
-              </div>
-            </div> */}
 
             <EndTurnButton />
           </>
