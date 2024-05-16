@@ -6,7 +6,7 @@ INSERT INTO
     characteristic_base_armor_class,
     characteristic_base_mana_points,
     characteristic_base_health_points,
-    attacks
+    inventory
   )
 VALUES
   (
@@ -16,7 +16,7 @@ VALUES
     1,
     0,
     4,
-    '[{"range": "melee", "dices": ["yellow", "yellow", "orange"]}]'
+    '{"gear":[{"type":"weapon","name":"goblin_scimitar_1","level":1,"imgUrl":"","attacks":[{"range":"melee","type":"regular","dices":["yellow","yellow","orange"]}],"perks":[]}],"backpack":[]}'
   ),
   (
     'bugbear',
@@ -25,5 +25,5 @@ VALUES
     2,
     0,
     7,
-    '[{"range": "melee", "dices": ["yellow", "yellow", "red"]}]'
+    '{"gear":[{"type":"weapon","name":"bugbear_mace_1","level":1,"imgUrl":"","attacks":[{"range":"melee","type":"regular","dices":["yellow","yellow","red"]}],"perks":[]}],"backpack":[]}'
   );

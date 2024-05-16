@@ -1,17 +1,21 @@
 import type { GameEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Attack } from "src/database/entities/attack.entity";
 import { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import type { CampaignStage } from "src/database/entities/campaign-stage.entity";
+import { Dice } from "src/database/entities/dice.entity";
 import type { User } from "src/database/entities/user.entity";
 import { GamesRepository } from "src/redis/repositories/games.repository";
-import type { Repository } from "typeorm";
+import { FindOptionsRelations, In, type Repository } from "typeorm";
 
 @Injectable()
 export class GameInitializationRepository {
   constructor(
     @InjectRepository(CampaignStageProgression)
     private readonly campaignStageProgressionRepository: Repository<CampaignStageProgression>,
+    @InjectRepository(Dice)
+    private readonly diceRepository: Repository<Dice>,
     private readonly gamesRepository: GamesRepository,
   ) {}
 
@@ -38,7 +42,20 @@ export class GameInitializationRepository {
           campaign: true,
         },
         campaignProgression: {
-          heroes: true,
+          heroes: {
+            inventory: {
+              stuff: {
+                item: {
+                  ["attacks" as any]: {
+                    attackDices: {
+                      dice: true,
+                    },
+                  } as FindOptionsRelations<Attack>,
+                  ["perks" as any]: true,
+                },
+              },
+            },
+          },
         },
       },
     });
@@ -46,5 +63,15 @@ export class GameInitializationRepository {
 
   public async saveGame(game: GameEntity): Promise<GameEntity> {
     return await this.gamesRepository.set(game);
+  }
+
+  public getDicesByNames({
+    diceNames,
+  }: { diceNames: Dice["name"][] }): Promise<Dice[]> {
+    return this.diceRepository.find({
+      where: {
+        name: In(diceNames),
+      },
+    });
   }
 }
