@@ -1,4 +1,4 @@
-import { LockOpenIcon } from "@heroicons/react/20/solid";
+import { Icon } from "../../../icon/Icon";
 import { Button } from "../../../shared/button/Button";
 import { useGameContext } from "../../context/useGameContext";
 
@@ -32,11 +32,8 @@ export const OpenDoorButton = () => {
   };
 
   return (
-    <Button variant="outlined" onClick={handleClick} disabled={!canOpenDoor}>
-      <div className="flex items-center">
-        <LockOpenIcon className="h-5 w-5 text-yellow-400" />
-        <span>Open the door</span>
-      </div>
+    <Button variant="primary" onClick={handleClick} disabled={!canOpenDoor}>
+      <Icon icon="openGate" className="fill-white h-10 w-10" />
     </Button>
   );
 };

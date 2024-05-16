@@ -1,7 +1,7 @@
 import { getAllPathsFromTileWithinRange } from "@dnd/shared";
-import { ChevronDoubleRightIcon } from "@heroicons/react/20/solid";
 import { useEffect } from "react";
 import { TileClickedEvent } from "../../../../game-engine/events/tile-clicked.event";
+import { Icon } from "../../../icon/Icon";
 import { Button } from "../../../shared/button/Button";
 import { useGameContext } from "../../context/useGameContext";
 
@@ -76,11 +76,15 @@ export const MoveButton = () => {
   };
 
   return (
-    <Button variant="outlined" onClick={handleClick} disabled={!canMove}>
-      <div className="flex items-center">
-        <ChevronDoubleRightIcon className="h-5 w-5 text-green-500" />
-        <span>{isMoving ? "Cancel Move" : "Move"}</span>
-      </div>
+    <Button
+      variant={isMoving ? "outlined" : "primary"}
+      onClick={handleClick}
+      disabled={!canMove}
+    >
+      <Icon
+        icon="walkingBoot"
+        className={`${isMoving ? "fill-amber-800" : "fill-white"} h-10 w-10`}
+      />
     </Button>
   );
 };

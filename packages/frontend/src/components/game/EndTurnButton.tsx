@@ -1,21 +1,26 @@
-import { PauseCircleIcon } from "@heroicons/react/20/solid";
 import { Button } from "../shared/button/Button";
 import { useGameContext } from "./context/useGameContext";
 
 export const EndTurnButton = () => {
-  const { playerState, gameActions } = useGameContext();
+  const { playerState, heroPlaying, gameActions } = useGameContext();
 
   const handleClick = () => {
     playerState.toggleTo("idle");
     gameActions.endTurn();
   };
 
+  if (!heroPlaying) {
+    return null;
+  }
+
+  const hasActionPointsLeft = heroPlaying.characteristic.actionPoints > 0;
+
   return (
-    <Button variant="outlined" onClick={handleClick}>
-      <div className="flex items-center">
-        <PauseCircleIcon className="h-5 w-5 text-orange-500" />
-        <span>End Turn</span>
-      </div>
+    <Button
+      variant={hasActionPointsLeft ? "outlined" : "primary"}
+      onClick={handleClick}
+    >
+      <span className="text-xl">End Turn</span>
     </Button>
   );
 };

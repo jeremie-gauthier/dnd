@@ -47,8 +47,10 @@ export const ActionTab = ({ gear, storageCapacity }: Props) => {
           </InventorySlot>
         )),
       )}
-      <MoveButton />
-      <OpenDoorButton />
+      <div className="flex flex-col justify-around">
+        <MoveButton />
+        <OpenDoorButton />
+      </div>
     </>
   );
 };
