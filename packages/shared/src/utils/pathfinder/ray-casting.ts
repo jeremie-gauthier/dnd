@@ -1,6 +1,16 @@
-import { Coord, GameEntity, Tile } from "../../database";
-import { canMoveToRequestedPosition } from "./collision";
+import {
+  AttackRangeType,
+  Coord,
+  GameEntity,
+  PlayableEntity,
+  Tile,
+} from "../../database";
+import {
+  isBlockedByNonAllyEntity,
+  isBlockedByNonPlayableEntity,
+} from "./collision";
 import { coordToIndex } from "./coord";
+import { getNeighbourCoords } from "./get-neighbours-coords";
 
 function almostEqual(a: number, b: number) {
   return Math.abs(a - b) < 0.000_001;
@@ -66,29 +76,22 @@ function makeRay(xStart: number, yStart: number, xEnd: number, yEnd: number) {
   };
 }
 
-function isBlockedByEnemyEntity({
-  game,
-  tile,
-}: { game: GameEntity; tile: Tile }) {
-  return tile.entities.some(
-    (entity) =>
-      entity.type === "playable-entity" &&
-      game.playableEntities[entity.id]?.type === "enemy" &&
-      game.playableEntities[entity.id]?.isBlocking,
-  );
-}
-
-// entity enemie, jouable et blocking
 function canBeSeenRay({
+  ally,
   game,
   originTile,
   destinationTile,
-}: { game: GameEntity; originTile: Tile; destinationTile: Tile }) {
-  if (isBlockedByEnemyEntity({ game, tile: destinationTile })) {
-    return true;
+  metadata,
+}: {
+  ally: PlayableEntity["type"];
+  game: GameEntity;
+  originTile: Tile;
+  destinationTile: Tile;
+  metadata: { height: number; width: number };
+}) {
+  if (isBlockedByNonPlayableEntity({ tile: destinationTile })) {
+    return false;
   }
-
-  const metadata = { height: game.map.height, width: game.map.width };
 
   const ray = makeRay(
     originTile.coord.column + 0.5,
@@ -101,34 +104,78 @@ function canBeSeenRay({
     const tileIdx = coordToIndex({ coord: nextCoord, metadata });
     const tile = game.map.tiles[tileIdx];
 
-    if (!tile) {
+    if (!tile || isBlockedByNonPlayableEntity({ tile })) {
       return false;
     }
 
-    if (
-      tile !== originTile &&
-      isBlockedByEnemyEntity({ game, tile: destinationTile })
-    ) {
-      return true;
+    if (isBlockedByNonAllyEntity({ game, tile, ally })) {
+      // stop line of sight the first "non-ally" encountered
+      return !ray.hasNext();
     }
   }
 
   return true;
 }
 
-// ! si y'a un pb dans l'algo c'est que x et y sont mal mappés sur row et column
-// ! => il faudra inverser row et column pour fix
-export function lineOfSight({
+function canAttackTile({ tile }: { tile: Tile }) {
+  return tile.entities.every(
+    (entity) => entity.type !== "non-playable-non-interactive-entity",
+  );
+}
+
+function getTilesToTest({
   game,
   originTile,
-}: { game: GameEntity; originTile: Tile }) {
+  range,
+  metadata,
+}: {
+  game: GameEntity;
+  originTile: Tile;
+  range: AttackRangeType;
+  metadata: { height: number; width: number };
+}) {
+  const meleeCoords = getNeighbourCoords({ coord: originTile.coord });
+  const meleeTiles = meleeCoords
+    .map((meleeCoord) => {
+      const tileIdx = coordToIndex({ coord: meleeCoord, metadata });
+      return game.map.tiles[tileIdx];
+    })
+    .filter((tile): tile is Tile => tile !== undefined);
+
+  if (range === "melee") {
+    return meleeTiles.filter((meleeTile) => canAttackTile({ tile: meleeTile }));
+  }
+
   const tilesToTest = game.map.tiles.filter(
-    (tile) => tile !== originTile && canMoveToRequestedPosition({ tile }),
+    (tile) => tile !== originTile && canAttackTile({ tile }),
   );
+
+  if (range === "long") {
+    return tilesToTest.filter((tileToTest) => !meleeTiles.includes(tileToTest));
+  }
+
+  return tilesToTest;
+}
+
+export function getLineOfSight({
+  ally,
+  game,
+  originTile,
+  range,
+}: {
+  ally: PlayableEntity["type"];
+  game: GameEntity;
+  originTile: Tile;
+  range: AttackRangeType;
+}) {
+  const metadata = { height: game.map.height, width: game.map.width };
+  const tilesToTest = getTilesToTest({ game, originTile, range, metadata });
 
   const tilesInSight: Tile[] = [];
   for (const tile of tilesToTest) {
-    if (canBeSeenRay({ game, originTile, destinationTile: tile })) {
+    if (
+      canBeSeenRay({ ally, game, originTile, destinationTile: tile, metadata })
+    ) {
       tilesInSight.push(tile);
     }
   }
