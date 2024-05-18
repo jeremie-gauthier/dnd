@@ -25,7 +25,11 @@ export const useMapRenderer = ({
     canvasRef: floorCanvasRef,
   });
 
-  const { renderMovePreview, clear: clearPreviewLayer } = usePreviewLayer({
+  const {
+    renderMovePreview,
+    renderAttackPreview,
+    clear: clearPreviewLayer,
+  } = usePreviewLayer({
     canvasRef: previewCanvasRef,
   });
 
@@ -47,6 +51,7 @@ export const useMapRenderer = ({
 
   return {
     render: canRender ? render : null,
+    renderAttackPreview,
     renderMovePreview,
     clearPreviewLayer,
     assetSize,

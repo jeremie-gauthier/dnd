@@ -3,7 +3,9 @@ import { RefObject } from "react";
 import { translate2DToIsometricCoord } from "../../utils/coords-conversion.util";
 import { useAssetsLoader } from "../assets-loader/assets-loader";
 import { previewsAssetsCollection } from "../assets-loader/assets.config";
+import { drawAttackPreview } from "../draw/layers/draw-attack-preview";
 import { drawMovePreview } from "../draw/layers/draw-move-preview";
+import { LayerDrawerParams } from "../draw/layers/layer-drawer-params.interface";
 import { centerIsometricDrawing } from "../draw/utils/center-isometric-drawing.util";
 
 type Params = {
@@ -21,49 +23,52 @@ export const usePreviewLayer = ({ canvasRef }: Params) => {
     context.clearRect(0, 0, canvas.width, canvas.height);
   };
 
-  const renderMovePreview = ({
-    map,
-    coords,
-  }: {
-    map: GameEntity["map"];
-    coords: Coord[];
-  }) => {
-    if (!canvas || !context || !assets) return;
+  const renderPreview =
+    (
+      renderer: (_: LayerDrawerParams<typeof previewsAssetsCollection>) => void,
+    ) =>
+    ({
+      map,
+      coords,
+    }: {
+      map: GameEntity["map"];
+      coords: Coord[];
+    }) => {
+      if (!canvas || !context || !assets) return;
 
-    clear();
+      clear();
 
-    const config = { assets, assetSize, map };
+      const config = { assets, assetSize, map };
 
-    context.save();
+      context.save();
 
-    centerIsometricDrawing({ context, map, assetSize });
+      centerIsometricDrawing({ context, map, assetSize });
 
-    context.globalAlpha = 0.75;
+      context.globalAlpha = 0.75;
 
-    for (const coord2D of coords) {
-      const coordIsometric = translate2DToIsometricCoord(coord2D, {
-        assetSize,
-        // Beware of the offset, it may shift everything being computed here.
-        // We really want to have the tiles next to the borders of the canvas.
-        map: {
-          height: map.height * assetSize,
-          width: map.width * assetSize,
-        },
-      });
+      for (const coord2D of coords) {
+        const coordIsometric = translate2DToIsometricCoord(coord2D, {
+          assetSize,
+          // Beware of the offset, it may shift everything being computed here.
+          // We really want to have the tiles next to the borders of the canvas.
+          map: {
+            height: map.height * assetSize,
+            width: map.width * assetSize,
+          },
+        });
 
-      drawMovePreview({
-        context,
-        config,
-        subject: {
-          coord2D,
-          coordIsometric,
-          tile: {} as Tile,
-        },
-      });
-    }
+        renderer({
+          context,
+          config,
+          subject: { coord2D, coordIsometric, tile: {} as Tile },
+        });
+      }
 
-    context.restore();
-  };
+      context.restore();
+    };
 
-  return { renderMovePreview, clear };
+  const renderMovePreview = renderPreview(drawMovePreview);
+  const renderAttackPreview = renderPreview(drawAttackPreview);
+
+  return { renderMovePreview, renderAttackPreview, clear };
 };
