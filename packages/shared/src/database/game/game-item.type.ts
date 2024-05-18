@@ -19,6 +19,7 @@ type Dice = {
 
 type AttackItem = BaseItem & {
   attacks: {
+    id: string;
     range: AttackRangeType;
     type: AttackTypeType;
     dices: Dice[];

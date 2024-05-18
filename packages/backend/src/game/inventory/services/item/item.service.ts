@@ -14,6 +14,7 @@ export class ItemService {
         level: item.level,
         imgUrl: item.imgUrl,
         attacks: item.attacks.map((attack) => ({
+          id: attack.id,
           range: attack.range,
           type: attack.type,
           dices: attack.attackDices.map(({ dice }) => dice),
@@ -33,6 +34,7 @@ export class ItemService {
         imgUrl: item.imgUrl,
         manaCost: item.manaCost,
         attacks: item.attacks.map((attack) => ({
+          id: attack.id,
           range: attack.range,
           type: attack.type,
           dices: attack.attackDices.map(({ dice }) => dice),
