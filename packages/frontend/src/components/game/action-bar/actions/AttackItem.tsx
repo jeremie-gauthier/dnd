@@ -1,6 +1,7 @@
 import { AttackRangeType, GameItem, sum } from "@dnd/shared";
 import { Icon } from "../../../icon/Icon";
 import { IconName } from "../../../icon/Icon.type";
+import { useGameContext } from "../../context/useGameContext";
 
 type Props = {
   item: GameItem;
@@ -8,8 +9,10 @@ type Props = {
 };
 
 export const AttackItem = ({ item, attack }: Props) => {
+  const { playerState } = useGameContext();
+
   const handleUseAttackItem = () => {
-    console.log("using", item.name, item.type);
+    playerState.toggleTo("attack");
   };
 
   const minDamage = sum(...attack.dices.map(({ minValue }) => minValue));
