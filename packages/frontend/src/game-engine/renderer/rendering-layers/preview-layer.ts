@@ -1,5 +1,13 @@
-import { Coord, GameEntity, Tile } from "@dnd/shared";
-import { RefObject } from "react";
+import {
+  Coord,
+  GameEntity,
+  Tile,
+  coordToIndex,
+  getLineOfSight,
+} from "@dnd/shared";
+import { RefObject, useEffect } from "react";
+import { GameEventManager } from "../../events";
+import { PreparingAttackEvent } from "../../events/preparing-attack.event";
 import { translate2DToIsometricCoord } from "../../utils/coords-conversion.util";
 import { useAssetsLoader } from "../assets-loader/assets-loader";
 import { previewsAssetsCollection } from "../assets-loader/assets.config";
@@ -9,10 +17,11 @@ import { LayerDrawerParams } from "../draw/layers/layer-drawer-params.interface"
 import { centerIsometricDrawing } from "../draw/utils/center-isometric-drawing.util";
 
 type Params = {
+  gameEventManager: GameEventManager;
   canvasRef: RefObject<HTMLCanvasElement>;
 };
 
-export const usePreviewLayer = ({ canvasRef }: Params) => {
+export const usePreviewLayer = ({ gameEventManager, canvasRef }: Params) => {
   const canvas = canvasRef.current;
   const context = canvas?.getContext("2d");
   const { assets, assetSize } = useAssetsLoader(previewsAssetsCollection);
@@ -69,6 +78,45 @@ export const usePreviewLayer = ({ canvasRef }: Params) => {
 
   const renderMovePreview = renderPreview(drawMovePreview);
   const renderAttackPreview = renderPreview(drawAttackPreview);
+
+  useEffect(() => {
+    const handlePreparingAttackEvent: EventListener = (e) => {
+      const { game, heroPlaying, attack } = e as PreparingAttackEvent;
+
+      const originTileIdx = coordToIndex({
+        coord: heroPlaying.coord,
+        metadata: { height: game.map.height, width: game.map.width },
+      });
+      const originTile = game.map.tiles[originTileIdx];
+
+      const tilesInSight = getLineOfSight({
+        ally: heroPlaying.type,
+        game,
+        originTile,
+        range: attack.range,
+      });
+      const coordsInSight = tilesInSight.map(
+        (tileInSight) => tileInSight.coord,
+      );
+      renderAttackPreview({ map: game.map, coords: coordsInSight });
+    };
+
+    gameEventManager.addEventListener(
+      PreparingAttackEvent.EventName,
+      handlePreparingAttackEvent,
+    );
+
+    return () => {
+      gameEventManager.removeEventListener(
+        PreparingAttackEvent.EventName,
+        handlePreparingAttackEvent,
+      );
+    };
+  }, [
+    gameEventManager.addEventListener,
+    gameEventManager.removeEventListener,
+    renderAttackPreview,
+  ]);
 
   return { renderMovePreview, renderAttackPreview, clear };
 };

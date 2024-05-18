@@ -1,4 +1,5 @@
-import { Coord } from "@dnd/shared";
+import { Coord, GameEntity, GameItem, PlayableEntity } from "@dnd/shared";
+import { PreparingAttackEvent } from "./preparing-attack.event";
 import { TileClickedEvent } from "./tile-clicked.event";
 import { TileHoveredEvent } from "./tile-hovered.event";
 
@@ -44,5 +45,21 @@ export class GameEventManager extends EventTarget {
     isometricCoord: Coord,
   ) {
     this.dispatchEvent(new TileClickedEvent(mouseCoord, isometricCoord));
+  }
+
+  public emitPreparingAttack({
+    game,
+    heroPlaying,
+    item,
+    attack,
+  }: {
+    game: GameEntity;
+    heroPlaying: PlayableEntity;
+    item: GameItem;
+    attack: GameItem["attacks"][number];
+  }) {
+    this.dispatchEvent(
+      new PreparingAttackEvent(game, heroPlaying, item, attack),
+    );
   }
 }

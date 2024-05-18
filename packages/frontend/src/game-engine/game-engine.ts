@@ -30,7 +30,12 @@ export const useGameEngine = ({
   });
 
   const { render, renderMovePreview, clearPreviewLayer, assetSize } =
-    useMapRenderer({ floorCanvasRef, previewCanvasRef, entitiesCanvasRef });
+    useMapRenderer({
+      gameEventManager,
+      floorCanvasRef,
+      previewCanvasRef,
+      entitiesCanvasRef,
+    });
 
   const { addTileClickEvent, addHoverEvent, clearMouseEvents } = useMouseInputs(
     {
@@ -99,6 +104,12 @@ export const useGameEngine = ({
     gameEntity.playableEntities,
     renderMovePreview,
   ]);
+
+  useEffect(() => {
+    if (playerState.currentAction !== "attack") {
+      return;
+    }
+  }, [playerState.currentAction]);
 
   useEffect(() => {
     if (playerState.currentAction !== "idle") {

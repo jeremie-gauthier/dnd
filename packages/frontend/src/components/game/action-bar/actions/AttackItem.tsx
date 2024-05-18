@@ -9,10 +9,13 @@ type Props = {
 };
 
 export const AttackItem = ({ item, attack }: Props) => {
-  const { playerState } = useGameContext();
+  const { game, playerState, gameEventManager, heroPlaying } = useGameContext();
 
   const handleUseAttackItem = () => {
+    if (!heroPlaying) return;
+
     playerState.toggleTo("attack");
+    gameEventManager.emitPreparingAttack({ game, heroPlaying, item, attack });
   };
 
   const minDamage = sum(...attack.dices.map(({ minValue }) => minValue));
