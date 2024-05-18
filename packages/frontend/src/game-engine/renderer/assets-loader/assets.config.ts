@@ -3,6 +3,7 @@ import sorcerer_icon from "../../../assets/classes/sorcerer_icon.png";
 import thief_icon from "../../../assets/classes/thief_icon.png";
 import unknown_icon from "../../../assets/classes/unknown_icon.png";
 import warrior_icon from "../../../assets/classes/warrior_icon.png";
+import attack_layer from "../../../assets/layers/attack_layer.png";
 import move_layer from "../../../assets/layers/move_layer.png";
 import goblin_icon from "../../../assets/monsters/goblin_icon.png";
 import door_close from "../../../assets/tiles/doors/door_close.png";
@@ -59,5 +60,6 @@ export const entitiesAssetsCollection = {
 } as const;
 
 export const previewsAssetsCollection = {
+  attack_layer,
   move_layer,
 } as const;
