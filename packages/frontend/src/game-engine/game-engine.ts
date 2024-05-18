@@ -29,7 +29,7 @@ export const useGameEngine = ({
     playerPhase: gamePhase,
   });
 
-  const { render, renderPreviewLayer, clearPreviewLayer, assetSize } =
+  const { render, renderMovePreview, clearPreviewLayer, assetSize } =
     useMapRenderer({ floorCanvasRef, previewCanvasRef, entitiesCanvasRef });
 
   const { addTileClickEvent, addHoverEvent, clearMouseEvents } = useMouseInputs(
@@ -92,12 +92,12 @@ export const useGameEngine = ({
         !(coord.column === originCoord.column && coord.row === originCoord.row),
     );
 
-    renderPreviewLayer({ map: gameEntity.map, coords });
+    renderMovePreview({ map: gameEntity.map, coords });
   }, [
     playerState.currentAction,
     gameEntity.map,
     gameEntity.playableEntities,
-    renderPreviewLayer,
+    renderMovePreview,
   ]);
 
   useEffect(() => {

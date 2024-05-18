@@ -21,7 +21,7 @@ export const usePreviewLayer = ({ canvasRef }: Params) => {
     context.clearRect(0, 0, canvas.width, canvas.height);
   };
 
-  const render = ({
+  const renderMovePreview = ({
     map,
     coords,
   }: {
@@ -65,5 +65,5 @@ export const usePreviewLayer = ({ canvasRef }: Params) => {
     context.restore();
   };
 
-  return { render, clear };
+  return { renderMovePreview, clear };
 };
