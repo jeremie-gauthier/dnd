@@ -5,7 +5,7 @@ type Params = {
   playerPhase: PlayerGamePhase;
 };
 
-type PlayerAction = "move" | "idle";
+type PlayerAction = "move" | "idle" | "attack";
 
 export const usePlayerState = ({ playerPhase }: Params) => {
   const canAct = playerPhase === "action";
