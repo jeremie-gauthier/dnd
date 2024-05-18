@@ -182,3 +182,47 @@ export function getLineOfSight({
 
   return tilesInSight;
 }
+
+export function canAttackTarget({
+  ally,
+  game,
+  originTile,
+  range,
+  targetCoord,
+}: {
+  ally: PlayableEntity["type"];
+  game: GameEntity;
+  originTile: Tile;
+  range: AttackRangeType;
+  targetCoord: Coord;
+}): boolean {
+  if (
+    range === "melee" &&
+    getNeighbourCoords({ coord: originTile.coord }).every(
+      (coord) =>
+        coord.row !== targetCoord.row && coord.column !== targetCoord.column,
+    )
+  ) {
+    return false;
+  }
+
+  if (
+    range === "long" &&
+    getNeighbourCoords({ coord: originTile.coord }).some(
+      (coord) =>
+        coord.row === targetCoord.row && coord.column === targetCoord.column,
+    )
+  ) {
+    return false;
+  }
+
+  const metadata = { height: game.map.height, width: game.map.width };
+
+  const destinationTileIdx = coordToIndex({ coord: targetCoord, metadata });
+  const destinationTile = game.map.tiles[destinationTileIdx];
+  if (!destinationTile) {
+    return false;
+  }
+
+  return canBeSeenRay({ ally, game, originTile, destinationTile, metadata });
+}

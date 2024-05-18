@@ -1,4 +1,10 @@
-import { GameEntity, PlayableEntity } from "@dnd/shared";
+import {
+  AttackRangeType,
+  Coord,
+  GameEntity,
+  PlayableEntity,
+  Tile,
+} from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { EntityDiedPayload } from "src/game/events/emitters/entity-died.payload";
@@ -37,5 +43,21 @@ export class CombatService {
       GameEvent.EntityDied,
       new EntityDiedPayload({ game, target }),
     );
+  }
+
+  public canAttackTarget({
+    ally,
+    game,
+    originTile,
+    range,
+    targetCoord,
+  }: {
+    ally: PlayableEntity["type"];
+    game: GameEntity;
+    originTile: Tile;
+    range: AttackRangeType;
+    targetCoord: Coord;
+  }): boolean {
+    return this.canAttackTarget({ ally, game, originTile, range, targetCoord });
   }
 }
