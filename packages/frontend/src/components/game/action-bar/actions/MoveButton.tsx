@@ -49,10 +49,13 @@ export const MoveButton = () => {
       playerState.toggleTo("idle");
     };
 
-    gameEventManager.addEventListener("TileClicked", handleClick);
+    gameEventManager.addEventListener(TileClickedEvent.EventName, handleClick);
 
     return () =>
-      gameEventManager.removeEventListener("TileClicked", handleClick);
+      gameEventManager.removeEventListener(
+        TileClickedEvent.EventName,
+        handleClick,
+      );
   }, [
     isMoving,
     canMove,
