@@ -1,4 +1,5 @@
 export enum GameEvent {
+  EntityAttacked = "game.update.playable_entity_attacked",
   InitiativesRerolled = "game.update.initiatives_rerolled",
   EnemiesSpawned = "game.update.enemies_spawned",
   TrapTriggered = "game.update.trap_triggered",
