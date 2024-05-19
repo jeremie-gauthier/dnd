@@ -21,9 +21,15 @@ export const useGameActions = ({ socket }: Params) => {
       socket.emit(ClientGameEvent.PlayableEntityOpenDoor, payload);
     };
 
+  const attackHandler: ClientToServerEvents["client.game.player_requests_playable_entity_attacks"] =
+    (payload) => {
+      socket.emit(ClientGameEvent.PlayableEntityAttacks, payload);
+    };
+
   return {
     move: moveHandler,
     endTurn: endTurnHandler,
     openDoor: openDoorHandler,
+    attack: attackHandler,
   };
 };

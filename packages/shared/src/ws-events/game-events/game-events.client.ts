@@ -7,4 +7,5 @@ export const ClientGameEvent = {
     "client.game.player_requests_playable_entity_turn_ends",
   PlayableEntityOpenDoor:
     "client.game.player_requests_playable_entity_open_door",
+  PlayableEntityAttacks: "client.game.player_requests_playable_entity_attacks",
 } as const;
