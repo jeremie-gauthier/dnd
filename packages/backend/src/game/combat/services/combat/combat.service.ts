@@ -58,6 +58,6 @@ export class CombatService {
     range: AttackRangeType;
     targetCoord: Coord;
   }): boolean {
-    return this.canAttackTarget({ ally, game, originTile, range, targetCoord });
+    return canAttackTarget({ ally, game, originTile, range, targetCoord });
   }
 }
