@@ -1,7 +1,11 @@
 import { AttackRangeType, GameItem, sum } from "@dnd/shared";
+import { useEffect } from "react";
+import { TileClickedEvent } from "../../../../game-engine/events/tile-clicked.event";
+import { classNames } from "../../../../utils/class-names.util";
 import { Icon } from "../../../icon/Icon";
 import { IconName } from "../../../icon/Icon.type";
-import { useGameContext } from "../../context/useGameContext";
+import { useActionTabContext } from "../../context/ActionTab/useActionTabContext";
+import { useGameContext } from "../../context/GameContext/useGameContext";
 
 type Props = {
   item: GameItem;
@@ -9,13 +13,76 @@ type Props = {
 };
 
 export const AttackItem = ({ item, attack }: Props) => {
-  const { game, playerState, gameEventManager, heroPlaying } = useGameContext();
+  const { game, playerState, gameEventManager, heroPlaying, gameActions } =
+    useGameContext();
+
+  const { selectedAttack, clearSelectedAttack, selectAttack } =
+    useActionTabContext();
+  const isUsedToAttack = selectedAttack?.id === attack.id;
+
+  useEffect(() => {
+    const handleClick: EventListener = async (e) => {
+      if (
+        !isUsedToAttack ||
+        !heroPlaying ||
+        playerState.currentAction !== "attack"
+      )
+        return;
+
+      const { isometricCoord } = e as TileClickedEvent;
+
+      const playableEntities = Object.values(game.playableEntities);
+      const targetPlayableEntityId = playableEntities.find(
+        ({ coord }) =>
+          coord.row === isometricCoord.row &&
+          coord.column === isometricCoord.column,
+      )?.id;
+
+      if (!targetPlayableEntityId) return;
+
+      gameActions.attack({
+        gameId: game.id,
+        attackId: attack.id,
+        attackerPlayableEntityId: heroPlaying.id,
+        targetPlayableEntityId,
+      });
+
+      playerState.toggleTo("idle");
+      clearSelectedAttack();
+    };
+
+    gameEventManager.addEventListener(TileClickedEvent.EventName, handleClick);
+
+    return () =>
+      gameEventManager.removeEventListener(
+        TileClickedEvent.EventName,
+        handleClick,
+      );
+  }, [
+    clearSelectedAttack,
+    isUsedToAttack,
+    attack.id,
+    game.id,
+    game.playableEntities,
+    gameActions.attack,
+    gameEventManager.addEventListener,
+    gameEventManager.removeEventListener,
+    heroPlaying,
+    playerState.toggleTo,
+    playerState.currentAction,
+  ]);
 
   const handleUseAttackItem = () => {
     if (!heroPlaying) return;
 
-    playerState.toggleTo("attack");
-    gameEventManager.emitPreparingAttack({ game, heroPlaying, item, attack });
+    if (isUsedToAttack) {
+      playerState.toggleTo("idle");
+      clearSelectedAttack();
+    } else {
+      playerState.toggleTo("attack");
+      selectAttack(attack);
+      gameEventManager.emitPreparingAttack({ game, heroPlaying, item, attack });
+    }
   };
 
   const minDamage = sum(...attack.dices.map(({ minValue }) => minValue));
@@ -30,7 +97,14 @@ export const AttackItem = ({ item, attack }: Props) => {
   return (
     <>
       <button type="button" onClick={handleUseAttackItem}>
-        <img src={item.imgUrl} alt={item.name} className="rounded" />
+        <img
+          src={item.imgUrl}
+          alt={item.name}
+          className={classNames(
+            "rounded hover:contrast-125",
+            isUsedToAttack ? "contrast-125" : "",
+          )}
+        />
         <div className="absolute top-1 right-1 h-8 w-8 rounded-full bg-orange-700 flex items-center justify-center">
           <Icon
             icon={attackRangeIcon[attack.range]}

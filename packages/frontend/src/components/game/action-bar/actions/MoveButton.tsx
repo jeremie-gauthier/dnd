@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { TileClickedEvent } from "../../../../game-engine/events/tile-clicked.event";
 import { Icon } from "../../../icon/Icon";
 import { Button } from "../../../shared/button/Button";
-import { useGameContext } from "../../context/useGameContext";
+import { useGameContext } from "../../context/GameContext/useGameContext";
 
 export const MoveButton = () => {
   const {

@@ -1,7 +1,7 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Game } from "../../components/game/Game";
-import { GameContextProvider } from "../../components/game/context/GameContextProvider";
+import { GameContextProvider } from "../../components/game/context/GameContext/GameContextProvider";
 import { useGame } from "../../hooks/api/game/use-game";
 import { useServerLobbyError } from "../../hooks/api/lobby/use-server-lobby-error";
 

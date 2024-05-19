@@ -1,6 +1,6 @@
 import { Icon } from "../../../icon/Icon";
 import { Button } from "../../../shared/button/Button";
-import { useGameContext } from "../../context/useGameContext";
+import { useGameContext } from "../../context/GameContext/useGameContext";
 
 export const OpenDoorButton = () => {
   const { neighbourTiles, heroPlaying, playerState, gameActions, game } =

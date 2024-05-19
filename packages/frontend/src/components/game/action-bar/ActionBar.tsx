@@ -1,7 +1,7 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { useState } from "react";
 import { classNames } from "../../../utils/class-names.util";
-import { useGameContext } from "../context/useGameContext";
+import { useGameContext } from "../context/GameContext/useGameContext";
 import { ActionTab } from "./ActionTab";
 import { BackpackInventory } from "./BackpackInventory";
 import { GearInventory } from "./GearInventory";

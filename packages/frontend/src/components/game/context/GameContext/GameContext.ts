@@ -1,8 +1,8 @@
 import { GameEntity, PlayableEntity, PlayerGamePhase, Tile } from "@dnd/shared";
 import { createContext } from "react";
-import { GameEventManager } from "../../../game-engine/events";
-import { usePlayerState } from "../../../game-engine/state-machine";
-import { useGameActions } from "../../../hooks/api/game/use-game-actions";
+import { GameEventManager } from "../../../../game-engine/events";
+import { usePlayerState } from "../../../../game-engine/state-machine";
+import { useGameActions } from "../../../../hooks/api/game/use-game-actions";
 
 type GameContextParams = {
   canvasRef: {

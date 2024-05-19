@@ -1,5 +1,5 @@
 import { Canvas } from "../canvas/canvas";
-import { useGameContext } from "./context/useGameContext";
+import { useGameContext } from "./context/GameContext/useGameContext";
 import { useCanvasSize } from "./useCanvasSize";
 
 export const BoardGameCanvas = () => {
