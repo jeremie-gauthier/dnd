@@ -45,4 +45,12 @@ export class TurnService {
   }: { playableEntity: PlayableEntity }): void {
     playableEntity.currentPhase = "idle";
   }
+
+  public startPlayableEntityTurn({
+    playableEntity,
+  }: { playableEntity: PlayableEntity }): void {
+    playableEntity.currentPhase = "action";
+    playableEntity.characteristic.actionPoints =
+      playableEntity.characteristic.baseActionPoints;
+  }
 }
