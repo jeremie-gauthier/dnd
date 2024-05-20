@@ -1,17 +1,10 @@
 import { GameEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Attack } from "src/database/entities/attack.entity";
 import { GamesRepository } from "src/redis/repositories/games.repository";
-import { Repository } from "typeorm";
 
 @Injectable()
 export class PlayableEntityAttackRepository {
-  constructor(
-    private readonly gamesRepository: GamesRepository,
-    @InjectRepository(Attack)
-    private readonly attackRepository: Repository<Attack>,
-  ) {}
+  constructor(private readonly gamesRepository: GamesRepository) {}
 
   public async getGameById({
     gameId,
