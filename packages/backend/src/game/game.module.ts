@@ -5,6 +5,7 @@ import { CampaignStageProgression } from "src/database/entities/campaign-stage-p
 import { Dice } from "src/database/entities/dice.entity";
 import { RedisModule } from "src/redis/redis.module";
 import { CombatModule } from "./combat/combat.module";
+import { DiceModule } from "./dice/dice.module";
 import { GameInitializationListener } from "./events/listeners/game-initialization/game-initialization.listener";
 import { GameInitializationRepository } from "./events/listeners/game-initialization/game-initialization.repository";
 import { EndPlayingEntityTurnListener } from "./events/listeners/hooks/end-playing-entity-turn/end-playing-entity-turn.listener";
@@ -39,6 +40,7 @@ import { TrapModule } from "./trap/trap.module";
     PlayableEntityModule,
     StateMachineModule,
     InventoryModule,
+    DiceModule,
   ],
   controllers: [GamePrivateController],
   providers: [

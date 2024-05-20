@@ -5,7 +5,7 @@ import { HealthPoints } from "./HealthPoints";
 import { MovementPoints } from "./MovementPoints";
 import { Timeline } from "./Timeline";
 import { ActionBar } from "./action-bar/ActionBar";
-import { useGameContext } from "./context/useGameContext";
+import { useGameContext } from "./context/GameContext/useGameContext";
 
 export const Game = () => {
   const { game, isPlaying, heroPlaying } = useGameContext();

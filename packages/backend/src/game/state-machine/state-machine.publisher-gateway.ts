@@ -12,6 +12,9 @@ export class StateMachinePublisherGateway {
   @WebSocketServer()
   private readonly server: WsServer;
 
+  @OnEvent(GameEvent.EntityAttacked)
+  @OnEvent(GameEvent.EntityTookDamage)
+  @OnEvent(GameEvent.EntityDied)
   @OnEvent(GameEvent.EnemiesSpawned)
   @OnEvent(GameEvent.DoorOpened)
   @OnEvent(GameEvent.PlayableEntityMoved)

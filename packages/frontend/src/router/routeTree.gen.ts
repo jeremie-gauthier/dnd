@@ -79,42 +79,72 @@ const WsGameGameIdRoute = WsGameGameIdImport.update({
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/_ws': {
+      id: '/_ws'
+      path: ''
+      fullPath: ''
       preLoaderRoute: typeof WsImport
       parentRoute: typeof rootRoute
     }
     '/game-test': {
+      id: '/game-test'
+      path: '/game-test'
+      fullPath: '/game-test'
       preLoaderRoute: typeof GameTestImport
       parentRoute: typeof rootRoute
     }
     '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
     '/menu': {
+      id: '/menu'
+      path: '/menu'
+      fullPath: '/menu'
       preLoaderRoute: typeof MenuImport
       parentRoute: typeof rootRoute
     }
     '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
       preLoaderRoute: typeof ProfileImport
       parentRoute: typeof rootRoute
     }
     '/_ws/create-lobby': {
+      id: '/_ws/create-lobby'
+      path: '/create-lobby'
+      fullPath: '/create-lobby'
       preLoaderRoute: typeof WsCreateLobbyImport
       parentRoute: typeof WsImport
     }
     '/_ws/lobbies': {
+      id: '/_ws/lobbies'
+      path: '/lobbies'
+      fullPath: '/lobbies'
       preLoaderRoute: typeof WsLobbiesImport
       parentRoute: typeof WsImport
     }
     '/_ws/menu-multiplayer': {
+      id: '/_ws/menu-multiplayer'
+      path: '/menu-multiplayer'
+      fullPath: '/menu-multiplayer'
       preLoaderRoute: typeof WsMenuMultiplayerImport
       parentRoute: typeof WsImport
     }
     '/_ws/game/$gameId': {
+      id: '/_ws/game/$gameId'
+      path: '/game/$gameId'
+      fullPath: '/game/$gameId'
       preLoaderRoute: typeof WsGameGameIdImport
       parentRoute: typeof WsImport
     }
     '/_ws/lobby/$lobbyId': {
+      id: '/_ws/lobby/$lobbyId'
+      path: '/lobby/$lobbyId'
+      fullPath: '/lobby/$lobbyId'
       preLoaderRoute: typeof WsLobbyLobbyIdImport
       parentRoute: typeof WsImport
     }
@@ -123,18 +153,18 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([
-  WsRoute.addChildren([
+export const routeTree = rootRoute.addChildren({
+  WsRoute: WsRoute.addChildren({
     WsCreateLobbyRoute,
     WsLobbiesRoute,
     WsMenuMultiplayerRoute,
     WsGameGameIdRoute,
     WsLobbyLobbyIdRoute,
-  ]),
+  }),
   GameTestRoute,
   LoginRoute,
   MenuRoute,
   ProfileRoute,
-])
+})
 
 /* prettier-ignore-end */

@@ -1,13 +1,68 @@
-import { GameEntity, PlayableEntity } from "@dnd/shared";
+import {
+  AttackRangeType,
+  Coord,
+  GameEntity,
+  GameItem,
+  PlayableEntity,
+  Tile,
+  canAttackTarget,
+  sum,
+} from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
+import { DiceService } from "src/game/dice/services/dice/dice.service";
+import { EntityAttackedPayload } from "src/game/events/emitters/entity-attacked.payload";
 import { EntityDiedPayload } from "src/game/events/emitters/entity-died.payload";
 import { EntityTookDamagePayload } from "src/game/events/emitters/entity-took-damage.payload";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
 
 @Injectable()
 export class CombatService {
-  constructor(private readonly eventEmitter: EventEmitter2) {}
+  constructor(
+    private readonly eventEmitter: EventEmitter2,
+    private readonly diceService: DiceService,
+  ) {}
+
+  public attack({
+    game,
+    attackerPlayableEntity,
+    targetPlayableEntity,
+    attack,
+  }: {
+    game: GameEntity;
+    attackerPlayableEntity: PlayableEntity;
+    targetPlayableEntity: PlayableEntity;
+    attack: GameItem["attacks"][number];
+  }): void {
+    // TODO: will need to implement hero bonus check for potential attack bonuses
+    const dicesResults = attack.dices.map((dice) =>
+      this.diceService.roll({ dice }),
+    );
+
+    const damageDone =
+      sum(...dicesResults.map(({ result }) => result)) -
+      targetPlayableEntity.characteristic.armorClass;
+
+    this.eventEmitter.emitAsync(
+      GameEvent.EntityAttacked,
+      new EntityAttackedPayload({
+        game,
+        attacker: attackerPlayableEntity,
+        target: targetPlayableEntity,
+        damageDone: damageDone,
+        dicesResults,
+        attack,
+      }),
+    );
+
+    if (damageDone > 0) {
+      this.takeDamage({
+        game,
+        target: targetPlayableEntity,
+        amount: damageDone,
+      });
+    }
+  }
 
   public takeDamage({
     game,
@@ -37,5 +92,21 @@ export class CombatService {
       GameEvent.EntityDied,
       new EntityDiedPayload({ game, target }),
     );
+  }
+
+  public canAttackTarget({
+    ally,
+    game,
+    originTile,
+    range,
+    targetCoord,
+  }: {
+    ally: PlayableEntity["type"];
+    game: GameEntity;
+    originTile: Tile;
+    range: AttackRangeType;
+    targetCoord: Coord;
+  }): boolean {
+    return canAttackTarget({ ally, game, originTile, range, targetCoord });
   }
 }

@@ -1,19 +1,21 @@
 import type { GameEntity, PlayerGamePhase } from "@dnd/shared";
 import { RefObject } from "react";
+import { GameEventManager } from "../events";
 import { useAssetsLoader } from "./assets-loader/assets-loader";
 import { assetCollection } from "./assets-loader/assets.config";
 import { useEntitiesLayer } from "./rendering-layers/entities-layer";
 import { useFloorLayer } from "./rendering-layers/floor-layer";
 import { usePreviewLayer } from "./rendering-layers/preview-layer";
-("./rendering-layers/preview-layer");
 
 type Params = {
+  gameEventManager: GameEventManager;
   floorCanvasRef: RefObject<HTMLCanvasElement>;
   previewCanvasRef: RefObject<HTMLCanvasElement>;
   entitiesCanvasRef: RefObject<HTMLCanvasElement>;
 };
 
 export const useMapRenderer = ({
+  gameEventManager,
   floorCanvasRef,
   previewCanvasRef,
   entitiesCanvasRef,
@@ -26,8 +28,14 @@ export const useMapRenderer = ({
     canvasRef: floorCanvasRef,
   });
 
-  const { render: renderPreviewLayer, clear: clearPreviewLayer } =
-    usePreviewLayer({ canvasRef: previewCanvasRef });
+  const {
+    renderMovePreview,
+    renderAttackPreview,
+    clear: clearPreviewLayer,
+  } = usePreviewLayer({
+    gameEventManager,
+    canvasRef: previewCanvasRef,
+  });
 
   const { render: renderEntitiesLayer } = useEntitiesLayer({
     canvasRef: entitiesCanvasRef,
@@ -47,7 +55,8 @@ export const useMapRenderer = ({
 
   return {
     render: canRender ? render : null,
-    renderPreviewLayer,
+    renderAttackPreview,
+    renderMovePreview,
     clearPreviewLayer,
     assetSize,
   };

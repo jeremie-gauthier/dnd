@@ -1,4 +1,5 @@
 import { GameItem, StuffStorageCapacityJson } from "@dnd/shared";
+import { ActionTabContextProvider } from "../context/ActionTab/ActionTabContextProvider";
 import { InventorySlot } from "./InventorySlot";
 import { AttackItem } from "./actions/AttackItem";
 import { MoveButton } from "./actions/MoveButton";
@@ -35,7 +36,7 @@ export const ActionTab = ({ gear, storageCapacity }: Props) => {
   ];
 
   return (
-    <>
+    <ActionTabContextProvider>
       {gearInventorySlots.map(({ item, type }) =>
         item?.attacks.map((attack) => (
           <InventorySlot key={`${item.name}-${attack.type}`} type={type}>
@@ -51,6 +52,6 @@ export const ActionTab = ({ gear, storageCapacity }: Props) => {
         <MoveButton />
         <OpenDoorButton />
       </div>
-    </>
+    </ActionTabContextProvider>
   );
 };

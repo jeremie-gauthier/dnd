@@ -1,9 +1,9 @@
 import { GameEntity, PlayerGamePhase } from "@dnd/shared";
 import { PropsWithChildren, useRef } from "react";
-import { useGameEngine } from "../../../game-engine";
-import { useGetNeighbourTiles } from "../../../hooks/api/game/get-neighbour-tiles";
-import { useGameActions } from "../../../hooks/api/game/use-game-actions";
-import { ClientSocket } from "../../../types/socket.type";
+import { useGameEngine } from "../../../../game-engine";
+import { useGetNeighbourTiles } from "../../../../hooks/api/game/get-neighbour-tiles";
+import { useGameActions } from "../../../../hooks/api/game/use-game-actions";
+import { ClientSocket } from "../../../../types/socket.type";
 import { GameContext } from "./GameContext";
 
 type Props = PropsWithChildren<{

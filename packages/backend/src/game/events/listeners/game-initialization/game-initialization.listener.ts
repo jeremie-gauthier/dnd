@@ -4,14 +4,17 @@ import {
   GameEntity,
   GameItem,
   LobbyEntity,
+  PlayableHeroEntity,
   StorageSpace,
   Tile,
   unique,
 } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
+import { randomUUID } from "node:crypto";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import { Dice } from "src/database/entities/dice.entity";
+import { Hero } from "src/database/entities/hero.entity";
 import { ItemService } from "src/game/inventory/services/item/item.service";
 import { MapSerializerService } from "src/game/map/services/map-serializer/map-serializer.service";
 import { MovesService } from "src/game/moves/services/moves.service";
@@ -104,44 +107,52 @@ export class GameInitializationListener {
 
     const heroes = campaignStageProgression.campaignProgression.heroes;
     return Object.fromEntries(
-      heroes.map((hero) => [
-        hero.id,
-        {
-          id: hero.id,
-          type: "hero",
-          currentPhase: "preparation",
-          playedByUserId: heroPlayersMap[hero.id]!,
-          name: hero.name,
-          class: hero.class,
-          level: hero.level,
-          initiative: Number.NaN,
-          coord: {
-            row: Number.NaN,
-            column: Number.NaN,
-          },
-          isBlocking: true,
+      heroes.map(
+        (hero) =>
+          [
+            hero.id,
+            {
+              id: hero.id,
+              type: "hero",
+              currentPhase: "preparation",
+              playedByUserId: heroPlayersMap[hero.id]!,
+              name: hero.name,
+              class: hero.class,
+              level: hero.level,
+              initiative: Number.NaN,
+              coord: {
+                row: Number.NaN,
+                column: Number.NaN,
+              },
+              isBlocking: true,
 
-          characteristic: {
-            ...hero.characteristic,
-            healthPoints: hero.characteristic.baseHealthPoints,
-            manaPoints: hero.characteristic.baseManaPoints,
-            armorClass: hero.characteristic.baseArmorClass,
-            movementPoints: hero.characteristic.baseMovementPoints,
-            actionPoints: hero.characteristic.baseActionPoints,
-          },
-          inventory: {
-            storageCapacity: hero.inventory.storageCapacity,
-            gear: hero.inventory.stuff
-              .filter((item) => item.storageSpace === StorageSpace.GEAR)
-              .map(({ item }) => this.itemService.itemEntityToGameItem(item))
-              .filter((item): item is GameItem => item !== undefined),
-            backpack: hero.inventory.stuff
-              .filter((item) => item.storageSpace === StorageSpace.BACKPACK)
-              .map(({ item }) => this.itemService.itemEntityToGameItem(item))
-              .filter((item): item is GameItem => item !== undefined),
-          },
-        },
-      ]),
+              characteristic: {
+                ...hero.characteristic,
+                healthPoints: hero.characteristic.baseHealthPoints,
+                manaPoints: hero.characteristic.baseManaPoints,
+                armorClass: hero.characteristic.baseArmorClass,
+                movementPoints: hero.characteristic.baseMovementPoints,
+                actionPoints: hero.characteristic.baseActionPoints,
+              },
+              inventory: {
+                storageCapacity: hero.inventory.storageCapacity,
+                gear: hero.inventory.stuff
+                  .filter((item) => item.storageSpace === StorageSpace.GEAR)
+                  .map(({ item }) =>
+                    this.itemService.itemEntityToGameItem(item),
+                  )
+                  .filter((item): item is GameItem => item !== undefined),
+                backpack: hero.inventory.stuff
+                  .filter((item) => item.storageSpace === StorageSpace.BACKPACK)
+                  .map(({ item }) =>
+                    this.itemService.itemEntityToGameItem(item),
+                  )
+                  .filter((item): item is GameItem => item !== undefined),
+              },
+              actionsDoneThisTurn: [],
+            },
+          ] satisfies [Hero["id"], PlayableHeroEntity],
+      ),
     );
   }
 
@@ -248,6 +259,7 @@ export class GameInitializationListener {
         ...item,
         attacks: item.attacks.map((attack) => ({
           ...attack,
+          id: randomUUID(),
           dices: attack.dices.map(
             (diceName) => dices.find(({ name }) => name === diceName)!,
           ),
@@ -257,6 +269,7 @@ export class GameInitializationListener {
         ...item,
         attacks: item.attacks.map((attack) => ({
           ...attack,
+          id: randomUUID(),
           dices: attack.dices.map(
             (diceName) => dices.find(({ name }) => name === diceName)!,
           ),

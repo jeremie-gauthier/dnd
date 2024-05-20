@@ -160,6 +160,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
     }
 
     playableEntity.characteristic.actionPoints -= 1;
+    playableEntity.actionsDoneThisTurn.push({ name: "move" });
 
     return validTiles;
   }

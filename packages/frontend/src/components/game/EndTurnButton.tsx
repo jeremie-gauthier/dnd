@@ -1,5 +1,5 @@
 import { Button } from "../shared/button/Button";
-import { useGameContext } from "./context/useGameContext";
+import { useGameContext } from "./context/GameContext/useGameContext";
 
 export const EndTurnButton = () => {
   const { playerState, heroPlaying, gameActions } = useGameContext();

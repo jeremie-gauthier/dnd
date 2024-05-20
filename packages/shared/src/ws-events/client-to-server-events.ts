@@ -3,6 +3,7 @@ import {
   DiscardGameMasterInput,
   OpenDoorInput,
   PickGameMasterInput,
+  PlayableEntityAttackInput,
   PlayableEntityMoveInput,
 } from "../schemas";
 import { ClientGameEvent } from "./game-events/game-events.client";
@@ -43,6 +44,9 @@ interface ClientToServerEventsAndPayloads
   ) => void;
   [ClientLobbyEvent.RequestDiscardGameMaster]: (
     payload: DiscardGameMasterInput,
+  ) => void;
+  [ClientGameEvent.PlayableEntityAttacks]: (
+    payload: PlayableEntityAttackInput,
   ) => void;
 }
 

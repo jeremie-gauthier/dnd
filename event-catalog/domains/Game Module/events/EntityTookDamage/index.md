@@ -5,6 +5,8 @@ summary: |
   Represents when an entity take damage.
 producers:
   - Combat Service
+consumers:
+  - State Machine Publisher Gateway
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />

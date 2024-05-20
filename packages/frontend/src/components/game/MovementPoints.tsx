@@ -1,5 +1,5 @@
 import { Icon } from "../icon/Icon";
-import { useGameContext } from "./context/useGameContext";
+import { useGameContext } from "./context/GameContext/useGameContext";
 
 export const MovementPoints = () => {
   const { isPlaying, heroPlaying } = useGameContext();

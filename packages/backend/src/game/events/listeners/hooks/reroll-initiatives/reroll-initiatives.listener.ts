@@ -30,8 +30,8 @@ export class RerollInitiativesListener {
       return;
     }
 
-    nextEntityToPlay.currentPhase = "action";
-    nextEntityToPlay.characteristic.actionPoints =
-      nextEntityToPlay.characteristic.baseActionPoints;
+    this.turnService.startPlayableEntityTurn({
+      playableEntity: nextEntityToPlay,
+    });
   }
 }

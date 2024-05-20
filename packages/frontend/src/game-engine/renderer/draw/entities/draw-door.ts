@@ -14,6 +14,8 @@ export function drawDoor({
   if (subject.entity.type !== "non-playable-interactive-entity") return;
 
   const isClosed = subject.entity.isBlocking;
+  // TODO: tmp for better visualization during testing
+  if (!isClosed) return;
   const doorAsset = isClosed
     ? config.assets.door_close
     : config.assets.door_open;

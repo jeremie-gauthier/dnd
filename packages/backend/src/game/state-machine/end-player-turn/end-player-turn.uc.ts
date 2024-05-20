@@ -73,13 +73,10 @@ export class EndPlayerTurnUseCase implements UseCase {
       game,
     }) as PlayableEntity;
 
-    // update current playable entity
-    playingEntity.currentPhase = "idle";
-
-    // update next playable entity
-    nextEntityToPlay.currentPhase = "action";
-    nextEntityToPlay.characteristic.actionPoints =
-      nextEntityToPlay.characteristic.baseActionPoints;
+    this.turnService.endPlayableEntityTurn({ playableEntity: playingEntity });
+    this.turnService.startPlayableEntityTurn({
+      playableEntity: nextEntityToPlay,
+    });
 
     return { playingEntity, nextEntityToPlay };
   }

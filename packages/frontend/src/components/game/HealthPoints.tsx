@@ -1,4 +1,4 @@
-import { useGameContext } from "./context/useGameContext";
+import { useGameContext } from "./context/GameContext/useGameContext";
 
 export const HealthPoints = () => {
   const { isPlaying, heroPlaying } = useGameContext();

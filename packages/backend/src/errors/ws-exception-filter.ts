@@ -11,6 +11,7 @@ export class WsExceptionFilter {
   }
 
   private sendErrorMsg(client: Socket, exception: HttpException | WsException) {
+    console.error(exception);
     client.emit(ServerLobbyEvent.Error, {
       name: exception.name,
       message: exception.message,

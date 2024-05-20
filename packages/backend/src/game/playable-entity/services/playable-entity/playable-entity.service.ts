@@ -43,6 +43,7 @@ export class PlayableEntityService {
           actionPoints: enemyTemplate.characteristic.baseActionPoints,
         },
         inventory: enemyTemplate.inventory,
+        actionsDoneThisTurn: [],
       };
     });
   }
