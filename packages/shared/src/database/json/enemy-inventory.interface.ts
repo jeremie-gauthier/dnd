@@ -6,7 +6,6 @@ type EnemyWeapon = {
   level: number;
   imgUrl: string;
   attacks: {
-    id: string;
     range: AttackRangeType;
     type: AttackTypeType;
     dices: string[];

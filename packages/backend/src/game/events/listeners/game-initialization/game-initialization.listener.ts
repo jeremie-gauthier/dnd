@@ -10,6 +10,7 @@ import {
 } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
+import { randomUUID } from "node:crypto";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import { Dice } from "src/database/entities/dice.entity";
 import { ItemService } from "src/game/inventory/services/item/item.service";
@@ -248,6 +249,7 @@ export class GameInitializationListener {
         ...item,
         attacks: item.attacks.map((attack) => ({
           ...attack,
+          id: randomUUID(),
           dices: attack.dices.map(
             (diceName) => dices.find(({ name }) => name === diceName)!,
           ),
@@ -257,6 +259,7 @@ export class GameInitializationListener {
         ...item,
         attacks: item.attacks.map((attack) => ({
           ...attack,
+          id: randomUUID(),
           dices: attack.dices.map(
             (diceName) => dices.find(({ name }) => name === diceName)!,
           ),
