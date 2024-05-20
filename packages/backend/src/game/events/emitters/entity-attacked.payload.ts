@@ -1,5 +1,4 @@
-import { GameEntity, PlayableEntity } from "@dnd/shared";
-import { Attack } from "src/database/entities/attack.entity";
+import { GameEntity, GameItem, PlayableEntity } from "@dnd/shared";
 import { Dice } from "src/database/entities/dice.entity";
 import { EventPayload } from "src/event-emitter/event-payload.class";
 import { GameEvent } from "./game-events.enum";
@@ -13,7 +12,7 @@ export class EntityAttackedPayload
   public readonly target: PlayableEntity;
   public readonly damageDone: number;
   public readonly dicesResults: { dice: Dice; result: number }[];
-  public readonly attack: Attack;
+  public readonly attack: GameItem["attacks"][number];
 
   constructor({
     game,

@@ -22,20 +22,4 @@ export class PlayableEntityAttackRepository {
   public async updateGame({ game }: { game: GameEntity }): Promise<void> {
     await this.gamesRepository.update(game);
   }
-
-  public async getAttackById({
-    attackId,
-  }: { attackId: Attack["id"] }): Promise<Attack> {
-    return await this.attackRepository.findOneOrFail({
-      where: {
-        id: attackId,
-      },
-      relations: {
-        item: true,
-        attackDices: {
-          dice: true,
-        },
-      },
-    });
-  }
 }

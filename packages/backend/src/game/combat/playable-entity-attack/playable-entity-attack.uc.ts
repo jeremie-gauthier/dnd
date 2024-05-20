@@ -1,5 +1,6 @@
 import {
   GameEntity,
+  GameItem,
   PlayableEntity,
   PlayableEntityAttackInput,
 } from "@dnd/shared";
@@ -38,7 +39,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
       userId,
     });
 
-    await this.attackTarget({
+    this.attackTarget({
       game,
       attackId,
       attackerPlayableEntityId,
@@ -131,7 +132,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
     }
   }
 
-  private async attackTarget({
+  private attackTarget({
     game,
     attackId,
     attackerPlayableEntityId,
@@ -139,14 +140,16 @@ export class PlayableEntityAttackUseCase implements UseCase {
   }: Pick<
     PlayableEntityAttackInput,
     "attackId" | "attackerPlayableEntityId" | "targetPlayableEntityId"
-  > & { game: GameEntity }): Promise<void> {
+  > & { game: GameEntity }): void {
     const attackerPlayableEntity = game.playableEntities[
       attackerPlayableEntityId
     ] as PlayableEntity;
     const targetPlayableEntity = game.playableEntities[
       targetPlayableEntityId
     ] as PlayableEntity;
-    const attack = await this.repository.getAttackById({ attackId });
+    const attack = attackerPlayableEntity.inventory.gear
+      .flatMap(({ attacks }) => attacks.map((attack) => attack))
+      .find((attack) => attack.id === attackId) as GameItem["attacks"][number];
 
     attackerPlayableEntity.characteristic.actionPoints -= 1;
     this.combatService.attack({

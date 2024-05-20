@@ -2,6 +2,7 @@ import {
   AttackRangeType,
   Coord,
   GameEntity,
+  GameItem,
   PlayableEntity,
   Tile,
   canAttackTarget,
@@ -9,7 +10,6 @@ import {
 } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { Attack } from "src/database/entities/attack.entity";
 import { DiceService } from "src/game/dice/services/dice/dice.service";
 import { EntityAttackedPayload } from "src/game/events/emitters/entity-attacked.payload";
 import { EntityDiedPayload } from "src/game/events/emitters/entity-died.payload";
@@ -32,10 +32,10 @@ export class CombatService {
     game: GameEntity;
     attackerPlayableEntity: PlayableEntity;
     targetPlayableEntity: PlayableEntity;
-    attack: Attack;
+    attack: GameItem["attacks"][number];
   }): void {
     // TODO: will need to implement hero bonus check for potential attack bonuses
-    const dicesResults = attack.attackDices.map(({ dice }) =>
+    const dicesResults = attack.dices.map((dice) =>
       this.diceService.roll({ dice }),
     );
 
