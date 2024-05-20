@@ -4,6 +4,7 @@ import type { EnemyKind } from "./enemy-kind.type";
 import { GameEvent } from "./game-event.type";
 import { GameItem } from "./game-item.type";
 import { DoorEntity, TrapEntity } from "./interactive-entities.type";
+import { PlayableEntityAction } from "./playable-entity-action.type";
 import type { PlayerGamePhase } from "./player-phase.type";
 
 type PlayableEntityInventory = {
@@ -44,6 +45,7 @@ type BasePlayableEntity = Player & {
     actionPoints: number;
   };
   inventory: PlayableEntityInventory;
+  actionsDoneThisTurn: PlayableEntityAction[];
 };
 
 export type PlayableEnemyEntity = BasePlayableEntity & {

@@ -23,6 +23,7 @@ export const AttackItem = ({ item, attack }: Props) => {
   useEffect(() => {
     const handleClick: EventListener = async (e) => {
       if (
+        !canAttack ||
         !isUsedToAttack ||
         !heroPlaying ||
         playerState.currentAction !== "attack"
@@ -94,9 +95,22 @@ export const AttackItem = ({ item, attack }: Props) => {
         10,
     ) / 10;
 
+  const canAttack =
+    heroPlaying &&
+    (heroPlaying.type === "hero" ||
+      (heroPlaying.type === "enemy" &&
+        !heroPlaying.actionsDoneThisTurn.some(
+          ({ name }) => name === "attack",
+        )));
+
   return (
     <>
-      <button type="button" onClick={handleUseAttackItem}>
+      <button
+        type="button"
+        onClick={handleUseAttackItem}
+        disabled={!canAttack}
+        className="disabled:grayscale"
+      >
         <img
           src={item.imgUrl}
           alt={item.name}

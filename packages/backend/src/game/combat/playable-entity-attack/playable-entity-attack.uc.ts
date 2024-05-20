@@ -100,8 +100,15 @@ export class PlayableEntityAttackUseCase implements UseCase {
       );
     }
 
-    if (attackerPlayableEntity.type === "enemy") {
-      // TODO: Si l'attaquant est un ennemi, vérifier qu'il n'a pas déjà attaqué ce tour ci.
+    if (
+      attackerPlayableEntity.type === "enemy" &&
+      attackerPlayableEntity.actionsDoneThisTurn.some(
+        (action) => action.name === "attack",
+      )
+    ) {
+      throw new ForbiddenException(
+        "An enemy entity can only attack once per turn",
+      );
     }
 
     const attack = attackerPlayableEntity.inventory.gear
@@ -152,6 +159,8 @@ export class PlayableEntityAttackUseCase implements UseCase {
       .find((attack) => attack.id === attackId) as GameItem["attacks"][number];
 
     attackerPlayableEntity.characteristic.actionPoints -= 1;
+    attackerPlayableEntity.actionsDoneThisTurn.push({ name: "attack" });
+
     this.combatService.attack({
       game,
       attackerPlayableEntity,
