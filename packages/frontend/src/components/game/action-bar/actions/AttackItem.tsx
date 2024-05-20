@@ -97,6 +97,7 @@ export const AttackItem = ({ item, attack }: Props) => {
 
   const canAttack =
     heroPlaying &&
+    heroPlaying.characteristic.actionPoints > 0 &&
     (heroPlaying.type === "hero" ||
       (heroPlaying.type === "enemy" &&
         !heroPlaying.actionsDoneThisTurn.some(

@@ -8,13 +8,18 @@ import { InitiativesRerolledPayload } from "src/game/events/emitters/initiatives
 export class InitiativeService {
   constructor(private readonly eventEmitter: EventEmitter2) {}
 
+  public updateTimelineFromPlayableEntities({
+    game,
+  }: { game: GameEntity }): void {
+    const playableEntities = Object.values(game.playableEntities);
+    game.timeline = this.getTimelineFromPlayableEntities({ playableEntities });
+  }
+
   public rollPlayableEntitiesInitiative({ game }: { game: GameEntity }) {
     const playableEntities = Object.values(game.playableEntities);
     for (const playableEntity of playableEntities) {
       playableEntity.initiative = this.roll();
     }
-
-    game.timeline = this.getTimelineFromPlayableEntities({ playableEntities });
 
     this.eventEmitter.emitAsync(
       GameEvent.InitiativesRerolled,

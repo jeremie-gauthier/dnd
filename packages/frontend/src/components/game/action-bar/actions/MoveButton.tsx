@@ -29,7 +29,7 @@ export const MoveButton = () => {
       const { isometricCoord } = e as TileClickedEvent;
 
       const tilePaths = getAllPathsFromTileWithinRange({
-        map: game.map,
+        game,
         originCoord: heroPlaying.coord,
         maxRange: heroPlaying.characteristic.movementPoints,
       });
@@ -59,8 +59,7 @@ export const MoveButton = () => {
   }, [
     isMoving,
     canMove,
-    game.id,
-    game.map,
+    game,
     gameActions.move,
     gameEventManager.addEventListener,
     gameEventManager.removeEventListener,

@@ -1,8 +1,14 @@
 import { GameEntity, PlayableEntity, Tile } from "../../database";
 
-export function canMoveToRequestedPosition({ tile }: { tile: Tile }) {
+export function canMoveToRequestedPosition({
+  game,
+  tile,
+}: { game: GameEntity; tile: Tile }) {
   return tile.entities.every(
-    (entity) => entity.type !== "playable-entity" && !entity.isBlocking,
+    (entity) =>
+      (entity.type !== "playable-entity" && !entity.isBlocking) ||
+      (entity.type === "playable-entity" &&
+        !game.playableEntities[entity.id]!.isBlocking),
   );
 }
 

@@ -15,29 +15,48 @@ export class TurnService {
   public getNextEntityToPlay({
     game,
   }: { game: GameEntity }): PlayableEntity | undefined {
-    const playingEntity = this.getPlayingEntity({ game });
-
-    if (playingEntity) {
-      const nextEntityIdx =
-        game.timeline.findIndex((id) => id === playingEntity.id) + 1;
-      const nextEntityId = game.timeline[nextEntityIdx];
-      if (nextEntityId) {
-        return game.playableEntities[nextEntityId];
-      }
+    const playableEntities = Object.values(game.playableEntities);
+    if (this.isEveryoneDead({ playableEntities })) {
+      return;
     }
 
-    return this.getFirstEntity({ game });
+    const relativeTimeline = this.getRelativeTimeline({ game });
+    const nextEntityIdToPlay = relativeTimeline.find(
+      (entityId) =>
+        game.playableEntities[entityId] &&
+        game.playableEntities[entityId]!.characteristic.healthPoints > 0,
+    );
+    if (!nextEntityIdToPlay) {
+      return;
+    }
+
+    return game.playableEntities[nextEntityIdToPlay];
   }
 
-  public getFirstEntity({
+  private getRelativeTimeline({
     game,
-  }: { game: GameEntity }): PlayableEntity | undefined {
-    const nextEntityId = game.timeline[0];
-    if (nextEntityId) {
-      return game.playableEntities[nextEntityId];
+  }: { game: GameEntity }): GameEntity["timeline"] {
+    const playingEntity = this.getPlayingEntity({ game });
+    if (!playingEntity) {
+      return game.timeline;
     }
 
-    return undefined;
+    const playingEntityIdx = game.timeline.findIndex(
+      (id) => id === playingEntity.id,
+    );
+
+    return [
+      ...game.timeline.slice(playingEntityIdx + 1),
+      ...game.timeline.slice(0, playingEntityIdx + 1),
+    ];
+  }
+
+  private isEveryoneDead({
+    playableEntities,
+  }: { playableEntities: PlayableEntity[] }): boolean {
+    return playableEntities.every(
+      (playableEntity) => playableEntity.characteristic.healthPoints <= 0,
+    );
   }
 
   public endPlayableEntityTurn({

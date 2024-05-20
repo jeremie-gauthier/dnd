@@ -15,12 +15,14 @@ import { EntityAttackedPayload } from "src/game/events/emitters/entity-attacked.
 import { EntityDiedPayload } from "src/game/events/emitters/entity-died.payload";
 import { EntityTookDamagePayload } from "src/game/events/emitters/entity-took-damage.payload";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
+import { CoordService } from "src/game/map/services/coord/coord.service";
 
 @Injectable()
 export class CombatService {
   constructor(
     private readonly eventEmitter: EventEmitter2,
     private readonly diceService: DiceService,
+    private readonly coordService: CoordService,
   ) {}
 
   public attack({
@@ -88,9 +90,37 @@ export class CombatService {
     target.characteristic.healthPoints = 0;
     target.isBlocking = false;
 
+    if (target.type === "enemy") {
+      this.handleEnemyDeath({ game, target });
+    }
+
     this.eventEmitter.emitAsync(
       GameEvent.EntityDied,
       new EntityDiedPayload({ game, target }),
+    );
+  }
+
+  private handleEnemyDeath({
+    game,
+    target,
+  }: { game: GameEntity; target: PlayableEntity }): void {
+    const playableEntities = Object.entries(game.playableEntities);
+    const remainingEntities = playableEntities.filter(
+      ([id]) => id !== target.id,
+    );
+    game.playableEntities = Object.fromEntries(remainingEntities);
+
+    const targetIdx = this.coordService.coordToIndex({
+      coord: target.coord,
+      metadata: { height: game.map.height, width: game.map.width },
+    });
+    const targetTile = game.map.tiles[targetIdx];
+    if (!targetTile) {
+      return;
+    }
+    targetTile.entities = targetTile.entities.filter(
+      (entity) =>
+        !(entity.type === "playable-entity" && entity.id === target.id),
     );
   }
 

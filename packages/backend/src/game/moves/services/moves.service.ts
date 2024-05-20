@@ -67,6 +67,6 @@ export class MovesService {
       return false;
     }
 
-    return canMoveToRequestedPosition({ tile });
+    return canMoveToRequestedPosition({ game, tile });
   }
 }

@@ -216,7 +216,7 @@ describe("pathfinder: breadth-first-search", () => {
       const maxRange = 4;
 
       const result = getAllPathsFromTileWithinRange({
-        map,
+        game: { map } as GameEntity,
         originCoord,
         maxRange,
       });
