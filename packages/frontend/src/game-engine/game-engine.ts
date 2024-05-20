@@ -88,7 +88,7 @@ export const useGameEngine = ({
     const originCoord = activeHero.coord;
 
     const tilePaths = getAllPathsFromTileWithinRange({
-      map: gameEntity.map,
+      game: gameEntity,
       originCoord,
       maxRange: activeHero.characteristic.movementPoints,
     });
@@ -98,12 +98,7 @@ export const useGameEngine = ({
     );
 
     renderMovePreview({ map: gameEntity.map, coords });
-  }, [
-    playerState.currentAction,
-    gameEntity.map,
-    gameEntity.playableEntities,
-    renderMovePreview,
-  ]);
+  }, [playerState.currentAction, gameEntity, renderMovePreview]);
 
   useEffect(() => {
     if (playerState.currentAction !== "attack") {

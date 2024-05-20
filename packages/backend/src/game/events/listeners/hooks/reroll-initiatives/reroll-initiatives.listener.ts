@@ -25,7 +25,7 @@ export class RerollInitiativesListener {
   }
 
   private restartTimeline({ game }: { game: GameEntity }) {
-    const nextEntityToPlay = this.turnService.getFirstEntity({ game });
+    const nextEntityToPlay = this.turnService.getNextEntityToPlay({ game });
     if (!nextEntityToPlay) {
       return;
     }

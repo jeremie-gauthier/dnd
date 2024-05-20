@@ -18,20 +18,20 @@ export interface ChildTilePath {
 export type TilePath = OriginTilePath | ChildTilePath;
 
 type Params = {
-  map: GameEntity["map"];
+  game: GameEntity;
   originCoord: Coord;
   maxRange: NonNegativeNumber<number>;
 };
 
 export function getAllPathsFromTileWithinRange({
-  map,
+  game,
   originCoord,
   maxRange,
 }: Params): TilePath[] {
-  const metadata = { width: map.width, height: map.height };
+  const metadata = { width: game.map.width, height: game.map.height };
 
   const originTileIdx = coordToIndex({ coord: originCoord, metadata });
-  const originTile = map.tiles[originTileIdx];
+  const originTile = game.map.tiles[originTileIdx];
   if (!originTile) {
     return [];
   }
@@ -64,7 +64,7 @@ export function getAllPathsFromTileWithinRange({
         coord: neighbourCoord,
         metadata,
       });
-      const neighbourTile = map.tiles[neighbourTileIdx];
+      const neighbourTile = game.map.tiles[neighbourTileIdx];
 
       // skip invalid tiles
       if (!neighbourTile) {
@@ -77,7 +77,7 @@ export function getAllPathsFromTileWithinRange({
       }
 
       // skip blocked tiles
-      if (!canMoveToRequestedPosition({ tile: neighbourTile })) {
+      if (!canMoveToRequestedPosition({ game, tile: neighbourTile })) {
         continue;
       }
 
