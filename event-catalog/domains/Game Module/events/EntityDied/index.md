@@ -7,6 +7,7 @@ producers:
   - Combat Service
 consumers:
   - State Machine Publisher Gateway
+  - Update Timeline Listener
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />
