@@ -27,8 +27,11 @@ type AttackItem = BaseItem & {
   perks: { name: string; iconUrl: string }[];
 };
 
-type WeaponItem = AttackItem;
-type SpellItem = AttackItem & {
+export type WeaponItem = AttackItem & {
+  type: "Weapon";
+};
+export type SpellItem = AttackItem & {
+  type: "Spell";
   manaCost: ItemManaCostJson;
 };
 

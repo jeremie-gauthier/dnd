@@ -111,15 +111,35 @@ export class PlayableEntityAttackUseCase implements UseCase {
       );
     }
 
-    const attack = attackerPlayableEntity.inventory.gear
-      .flatMap(({ attacks }) => attacks.map((attack) => attack))
-      .find((attack) => attack.id === attackId);
-    if (!attack) {
+    const attackItem = attackerPlayableEntity.inventory.gear.find((gearItem) =>
+      gearItem.attacks.some((attack) => attack.id === attackId),
+    );
+    if (!attackItem) {
       throw new ForbiddenException(
         "Attack item not found in the gear inventory of the attacker",
       );
     }
 
+    if (
+      attackItem.type === "Spell" &&
+      attackerPlayableEntity.type === "hero" &&
+      attackItem.manaCost[attackerPlayableEntity.class] === undefined
+    ) {
+      throw new ForbiddenException(
+        "This class is not allowed to cast this spell",
+      );
+    }
+
+    if (
+      attackItem.type === "Spell" &&
+      attackerPlayableEntity.type === "hero" &&
+      attackerPlayableEntity.characteristic.manaPoints <
+        attackItem.manaCost[attackerPlayableEntity.class]!
+    ) {
+      throw new ForbiddenException("Not enough mana to cast this spell");
+    }
+
+    const attack = attackItem.attacks.find((attack) => attack.id === attackId)!;
     const originTileIdx = this.coordService.coordToIndex({
       coord: attackerPlayableEntity.coord,
       metadata: { height: game.map.height, width: game.map.width },
