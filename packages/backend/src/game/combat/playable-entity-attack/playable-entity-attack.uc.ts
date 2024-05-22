@@ -174,12 +174,17 @@ export class PlayableEntityAttackUseCase implements UseCase {
     const targetPlayableEntity = game.playableEntities[
       targetPlayableEntityId
     ] as PlayableEntity;
-    const attack = attackerPlayableEntity.inventory.gear
-      .flatMap(({ attacks }) => attacks.map((attack) => attack))
-      .find((attack) => attack.id === attackId) as GameItem["attacks"][number];
+    const attackItem = attackerPlayableEntity.inventory.gear.find((gearItem) =>
+      gearItem.attacks.some((attack) => attack.id === attackId),
+    ) as GameItem;
+    const attack = attackItem.attacks.find((attack) => attack.id === attackId)!;
 
     attackerPlayableEntity.characteristic.actionPoints -= 1;
     attackerPlayableEntity.actionsDoneThisTurn.push({ name: "attack" });
+    if (attackItem.type === "Spell" && attackerPlayableEntity.type === "hero") {
+      attackerPlayableEntity.characteristic.manaPoints -=
+        attackItem.manaCost[attackerPlayableEntity.class]!;
+    }
 
     this.combatService.attack({
       game,
