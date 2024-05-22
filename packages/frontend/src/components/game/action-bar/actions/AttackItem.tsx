@@ -86,6 +86,10 @@ export const AttackItem = ({ item, attack }: Props) => {
     }
   };
 
+  if (!heroPlaying) {
+    return null;
+  }
+
   const minDamage = sum(...attack.dices.map(({ minValue }) => minValue));
   const maxDamage = sum(...attack.dices.map(({ maxValue }) => maxValue));
   const mean =
@@ -95,6 +99,14 @@ export const AttackItem = ({ item, attack }: Props) => {
         10,
     ) / 10;
 
+  const canBeCast =
+    item.type !== "Spell" ||
+    (item.type === "Spell" &&
+      heroPlaying.type === "hero" &&
+      item.manaCost[heroPlaying.class] &&
+      heroPlaying.characteristic.manaPoints >=
+        item.manaCost[heroPlaying.class]!);
+
   const canAttack =
     heroPlaying &&
     heroPlaying.characteristic.actionPoints > 0 &&
@@ -102,7 +114,8 @@ export const AttackItem = ({ item, attack }: Props) => {
       (heroPlaying.type === "enemy" &&
         !heroPlaying.actionsDoneThisTurn.some(
           ({ name }) => name === "attack",
-        )));
+        ))) &&
+    canBeCast;
 
   return (
     <>

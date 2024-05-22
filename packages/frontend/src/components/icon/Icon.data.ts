@@ -1,3 +1,4 @@
+import { IconBrain } from "./icons/IconBrain";
 import { IconHeart } from "./icons/IconHeart";
 import { IconMeleeAttack } from "./icons/IconMeleeAttack";
 import { IconOpenGate } from "./icons/IconOpenGate";
@@ -14,4 +15,5 @@ export const iconMapping = {
   walkingBoot: IconWalkingBoot,
   heart: IconHeart,
   roundStar: IconRoundStar,
+  brain: IconBrain,
 } as const;
