@@ -7,7 +7,7 @@ export class Item {
   readonly name: string;
 
   @Column({ update: false })
-  readonly type: "weapon" | "spell";
+  readonly type: "Weapon" | "Spell";
 
   @Column({ update: false })
   readonly level: number;

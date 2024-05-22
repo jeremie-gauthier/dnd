@@ -2,6 +2,7 @@ import { ActionPoints } from "./ActionPoints";
 import { BoardGameCanvas } from "./BoardGameCanvas";
 import { EndTurnButton } from "./EndTurnButton";
 import { HealthPoints } from "./HealthPoints";
+import { ManaPoints } from "./ManaPoints";
 import { MovementPoints } from "./MovementPoints";
 import { Timeline } from "./Timeline";
 import { ActionBar } from "./action-bar/ActionBar";
@@ -30,6 +31,7 @@ export const Game = () => {
             <div className="flex flex-col items-center">
               <HealthPoints />
               <div className="flex flex-row gap-1">
+                <ManaPoints />
                 <ActionPoints />
                 <MovementPoints />
               </div>

@@ -3,6 +3,9 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { AuthzModule } from "src/authz/authz.module";
 import { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import { Dice } from "src/database/entities/dice.entity";
+import { Item } from "src/database/entities/item.entity";
+import { Spell } from "src/database/entities/spell.entity";
+import { Weapon } from "src/database/entities/weapon.entity";
 import { RedisModule } from "src/redis/redis.module";
 import { CombatModule } from "./combat/combat.module";
 import { DiceModule } from "./dice/dice.module";
@@ -33,7 +36,13 @@ import { TrapModule } from "./trap/trap.module";
     MapModule,
     StartingModule,
     MovesModule,
-    TypeOrmModule.forFeature([CampaignStageProgression, Dice]),
+    TypeOrmModule.forFeature([
+      CampaignStageProgression,
+      Dice,
+      Item,
+      Weapon,
+      Spell,
+    ]),
     AuthzModule,
     TimelineModule,
     InteractionModule,

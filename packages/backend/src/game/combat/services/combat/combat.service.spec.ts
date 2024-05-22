@@ -1,9 +1,11 @@
 import { GameEntity, PlayableEntity } from "@dnd/shared";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test, TestingModule } from "@nestjs/testing";
+import { DiceService } from "src/game/dice/services/dice/dice.service";
 import { EntityDiedPayload } from "src/game/events/emitters/entity-died.payload";
 import { EntityTookDamagePayload } from "src/game/events/emitters/entity-took-damage.payload";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
+import { CoordService } from "src/game/map/services/coord/coord.service";
 import {
   MockInstance,
   afterEach,
@@ -26,7 +28,15 @@ describe("CombatService", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [CombatService, EventEmitter2],
+      providers: [
+        CombatService,
+        CoordService,
+        {
+          provide: DiceService,
+          useValue: {},
+        },
+        EventEmitter2,
+      ],
     }).compile();
 
     service = module.get(CombatService);

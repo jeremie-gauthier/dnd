@@ -24,7 +24,15 @@ describe("TrapService", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [TrapService, CoordService, CombatService, EventEmitter2],
+      providers: [
+        TrapService,
+        CoordService,
+        {
+          provide: CombatService,
+          useValue: {},
+        },
+        EventEmitter2,
+      ],
     }).compile();
 
     service = module.get(TrapService);

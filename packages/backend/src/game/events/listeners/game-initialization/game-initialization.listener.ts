@@ -13,8 +13,10 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
 import { randomUUID } from "node:crypto";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
+import { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import { Dice } from "src/database/entities/dice.entity";
 import { Hero } from "src/database/entities/hero.entity";
+import { User } from "src/database/entities/user.entity";
 import { ItemService } from "src/game/inventory/services/item/item.service";
 import { MapSerializerService } from "src/game/map/services/map-serializer/map-serializer.service";
 import { MovesService } from "src/game/moves/services/moves.service";
@@ -57,11 +59,12 @@ export class GameInitializationListener {
   }
 
   private async createGame(lobby: LobbyEntity): Promise<GameEntity> {
-    const campaignStageProgression =
-      await this.repository.getUserCampaignStageProgression({
+    const campaignStageProgression = await this.getUserCampaignStageProgression(
+      {
         campaignStageId: lobby.config.campaign.stage.id,
         userId: lobby.host.userId,
-      });
+      },
+    );
 
     const { map, events } = this.mapSerializer.deserialize(
       campaignStageProgression.stage.mapCompiled,
@@ -92,6 +95,47 @@ export class GameInitializationListener {
     const savedGame = await this.repository.saveGame(game);
 
     return savedGame;
+  }
+
+  private async getUserCampaignStageProgression({
+    campaignStageId,
+    userId,
+  }: { campaignStageId: CampaignStage["id"]; userId: User["id"] }) {
+    const campaignStageProgression =
+      await this.repository.getUserCampaignStageProgression({
+        campaignStageId,
+        userId,
+      });
+
+    const itemsNames =
+      campaignStageProgression.campaignProgression.heroes.flatMap((hero) =>
+        hero.inventory.stuff.map(({ item }) => item.name),
+      );
+
+    const items = await Promise.all(
+      itemsNames.map((itemName) =>
+        this.repository.getItemAttributes({ itemName }),
+      ),
+    );
+
+    return {
+      ...campaignStageProgression,
+      campaignProgression: {
+        ...campaignStageProgression.campaignProgression,
+        heroes: campaignStageProgression.campaignProgression.heroes.map(
+          (hero) => ({
+            ...hero,
+            inventory: {
+              ...hero.inventory,
+              stuff: hero.inventory.stuff.map((stuffItem) => ({
+                ...stuffItem,
+                item: items.find((item) => stuffItem.item.name === item.name)!,
+              })),
+            },
+          }),
+        ),
+      },
+    };
   }
 
   private getPlayableEntitiesMap({
@@ -257,6 +301,7 @@ export class GameInitializationListener {
       },
       backpack: enemyInventory.backpack.map((item) => ({
         ...item,
+        type: "Weapon",
         attacks: item.attacks.map((attack) => ({
           ...attack,
           id: randomUUID(),
@@ -267,6 +312,7 @@ export class GameInitializationListener {
       })),
       gear: enemyInventory.gear.map((item) => ({
         ...item,
+        type: "Weapon",
         attacks: item.attacks.map((attack) => ({
           ...attack,
           id: randomUUID(),

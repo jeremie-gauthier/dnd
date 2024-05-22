@@ -12,35 +12,35 @@ VALUES
     1,
     'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/broadsword_1.webp',
     NULL,
-    'weapon'
+    'Weapon'
   ),
   (
     'faith_crossbow_1',
     1,
     'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/faith_crossbow_1.webp',
     NULL,
-    'weapon'
+    'Weapon'
   ),
   (
     'throwing_dagger_1',
     1,
     'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/throwing_dagger_1.webp',
     NULL,
-    'weapon'
+    'Weapon'
   ),
   (
     'magic_shot_1',
     1,
     'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/magic_shot_1.webp',
     '{"SORCERER":2,"CLERIC":3}',
-    'spell'
+    'Spell'
   ),
   (
     'elders_shortbow_1',
     1,
     'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/elders_shortbow_1.webp',
     NULL,
-    'weapon'
+    'Weapon'
   );
 
 INSERT INTO

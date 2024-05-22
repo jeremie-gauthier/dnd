@@ -2,7 +2,7 @@ import { AttackRangeType, AttackTypeType } from "../enums";
 import { ItemManaCostJson } from "../json";
 
 type BaseItem = {
-  type: "weapon" | "spell";
+  type: "Weapon" | "Spell";
   name: string;
   level: number;
   imgUrl: string;
@@ -27,8 +27,11 @@ type AttackItem = BaseItem & {
   perks: { name: string; iconUrl: string }[];
 };
 
-type WeaponItem = AttackItem;
-type SpellItem = AttackItem & {
+export type WeaponItem = AttackItem & {
+  type: "Weapon";
+};
+export type SpellItem = AttackItem & {
+  type: "Spell";
   manaCost: ItemManaCostJson;
 };
 

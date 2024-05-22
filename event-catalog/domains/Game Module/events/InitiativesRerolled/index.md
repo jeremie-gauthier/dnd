@@ -5,6 +5,7 @@ summary: |
   Represents when playable entities' initiatives have been rerolled.
 producers:
   - Reroll Initiatives Listener
+  - Update Timeline Listener
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />

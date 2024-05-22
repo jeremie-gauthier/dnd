@@ -1,7 +1,7 @@
 import { AttackRangeType, AttackTypeType } from "../enums";
 
 type EnemyWeapon = {
-  type: "weapon" | "spell";
+  type: "Weapon" | "Spell";
   name: string;
   level: number;
   imgUrl: string;
