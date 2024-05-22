@@ -3,6 +3,6 @@ import { AttackItem } from "./attack-item.entity";
 
 @ChildEntity()
 export class Weapon extends AttackItem {
-  @Column({ default: "weapon", update: false })
-  readonly type: "weapon";
+  @Column({ default: "Weapon", update: false })
+  readonly type: "Weapon";
 }

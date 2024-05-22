@@ -9,27 +9,27 @@ type Props = {
 
 export const GearInventory = ({ gear, storageCapacity }: Props) => {
   const gearWeapons = gear
-    .filter((item) => item.type === "weapon")
-    .map<{ item: GameItem; type: "weapon" }>((item) => ({
+    .filter((item) => item.type === "Weapon")
+    .map<{ item: GameItem; type: "Weapon" }>((item) => ({
       item,
-      type: "weapon",
+      type: "Weapon",
     }));
   const gearSpell = gear
-    .filter((item) => item.type === "spell")
-    .map<{ item: GameItem; type: "spell" }>((item) => ({
+    .filter((item) => item.type === "Spell")
+    .map<{ item: GameItem; type: "Spell" }>((item) => ({
       item,
-      type: "spell",
+      type: "Spell",
     }));
 
   const gearInventorySlots = [
     ...gearWeapons,
-    ...Array.from<{ item: undefined; type: "weapon" }>({
+    ...Array.from<{ item: undefined; type: "Weapon" }>({
       length: storageCapacity.nbWeaponSlots - gearWeapons.length,
-    }).fill({ item: undefined, type: "weapon" }),
+    }).fill({ item: undefined, type: "Weapon" }),
     ...gearSpell,
-    ...Array.from<{ item: undefined; type: "spell" }>({
+    ...Array.from<{ item: undefined; type: "Spell" }>({
       length: storageCapacity.nbSpellSlots - gearSpell.length,
-    }).fill({ item: undefined, type: "spell" }),
+    }).fill({ item: undefined, type: "Spell" }),
   ];
 
   return (

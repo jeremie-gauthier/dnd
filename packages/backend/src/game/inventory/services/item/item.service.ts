@@ -9,7 +9,7 @@ export class ItemService {
   public itemEntityToGameItem(item: Item): GameItem | undefined {
     if (this.isWeapon(item)) {
       return {
-        type: "weapon",
+        type: "Weapon",
         name: item.name,
         level: item.level,
         imgUrl: item.imgUrl,
@@ -28,7 +28,7 @@ export class ItemService {
 
     if (this.isSpell(item)) {
       return {
-        type: "spell",
+        type: "Spell",
         name: item.name,
         level: item.level,
         imgUrl: item.imgUrl,
@@ -48,10 +48,10 @@ export class ItemService {
   }
 
   public isWeapon(item: Item): item is Weapon {
-    return item.type === "weapon";
+    return item.type === "Weapon";
   }
 
   public isSpell(item: Item): item is Spell {
-    return item.type === "spell";
+    return item.type === "Spell";
   }
 }

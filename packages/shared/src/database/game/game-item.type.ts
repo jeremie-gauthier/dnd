@@ -2,7 +2,7 @@ import { AttackRangeType, AttackTypeType } from "../enums";
 import { ItemManaCostJson } from "../json";
 
 type BaseItem = {
-  type: "weapon" | "spell";
+  type: "Weapon" | "Spell";
   name: string;
   level: number;
   imgUrl: string;
