@@ -25,24 +25,29 @@ describe("TurnService", () => {
           "fake-hero-id-1": {
             id: "fake-hero-id-1",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
           "fake-hero-id-2": {
             id: "fake-hero-id-2",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
           "fake-hero-id-3": {
             id: "fake-hero-id-3",
             currentPhase: "action",
+            characteristic: { healthPoints: 10 },
           },
           "fake-hero-id-4": {
             id: "fake-hero-id-4",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
         },
       } as unknown as GameEntity;
       const expected = {
         id: "fake-hero-id-3",
         currentPhase: "action",
+        characteristic: { healthPoints: 10 },
       };
 
       const result = service.getPlayingEntity({ game: GAME_MOCK });
@@ -56,18 +61,22 @@ describe("TurnService", () => {
           "fake-hero-id-1": {
             id: "fake-hero-id-1",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
           "fake-hero-id-2": {
             id: "fake-hero-id-2",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
           "fake-hero-id-3": {
             id: "fake-hero-id-3",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
           "fake-hero-id-4": {
             id: "fake-hero-id-4",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
         },
       } as unknown as GameEntity;
@@ -86,18 +95,22 @@ describe("TurnService", () => {
           "fake-hero-id-1": {
             id: "fake-hero-id-1",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
           "fake-hero-id-2": {
             id: "fake-hero-id-2",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
           "fake-hero-id-3": {
             id: "fake-hero-id-3",
             currentPhase: "action",
+            characteristic: { healthPoints: 10 },
           },
           "fake-hero-id-4": {
             id: "fake-hero-id-4",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
         },
         timeline: [
@@ -110,6 +123,7 @@ describe("TurnService", () => {
       const expected = {
         id: "fake-hero-id-4",
         currentPhase: "idle",
+        characteristic: { healthPoints: 10 },
       };
 
       const result = service.getNextEntityToPlay({ game: GAME_MOCK });
@@ -123,18 +137,22 @@ describe("TurnService", () => {
           "fake-hero-id-1": {
             id: "fake-hero-id-1",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
           "fake-hero-id-2": {
             id: "fake-hero-id-2",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
           "fake-hero-id-3": {
             id: "fake-hero-id-3",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
           "fake-hero-id-4": {
             id: "fake-hero-id-4",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
         },
         timeline: [
@@ -147,6 +165,7 @@ describe("TurnService", () => {
       const expected = {
         id: "fake-hero-id-1",
         currentPhase: "idle",
+        characteristic: { healthPoints: 10 },
       };
 
       const result = service.getNextEntityToPlay({ game: GAME_MOCK });
@@ -160,18 +179,22 @@ describe("TurnService", () => {
           "fake-hero-id-1": {
             id: "fake-hero-id-1",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
           "fake-hero-id-2": {
             id: "fake-hero-id-2",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
           "fake-hero-id-3": {
             id: "fake-hero-id-3",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
           "fake-hero-id-4": {
             id: "fake-hero-id-4",
             currentPhase: "idle",
+            characteristic: { healthPoints: 10 },
           },
         },
         timeline: [],

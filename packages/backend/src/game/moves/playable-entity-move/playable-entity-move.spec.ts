@@ -36,7 +36,10 @@ describe("PlayableEntityMoveUseCase", () => {
         EventEmitter2,
         TrapService,
         CoordService,
-        CombatService,
+        {
+          provide: CombatService,
+          useValue: {},
+        },
         {
           provide: PlayableEntityMoveRepository,
           useValue: {},

@@ -3,6 +3,7 @@ import {
   HeroClass,
   LobbyEntity,
   PlayerGamePhase,
+  StuffStorageCapacityJson,
 } from "@dnd/shared";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
@@ -232,7 +233,9 @@ describe("GameInitializationListener", () => {
             playedByUserId: "player-1",
             class: HeroClass.WARRIOR,
             type: "hero",
+            actionsDoneThisTurn: [],
             inventory: {
+              storageCapacity: {} as StuffStorageCapacityJson,
               gear: [],
               backpack: [],
             },
@@ -244,7 +247,9 @@ describe("GameInitializationListener", () => {
             playedByUserId: "player-1",
             class: HeroClass.CLERIC,
             type: "hero",
+            actionsDoneThisTurn: [],
             inventory: {
+              storageCapacity: {} as StuffStorageCapacityJson,
               gear: [],
               backpack: [],
             },
@@ -256,7 +261,9 @@ describe("GameInitializationListener", () => {
             playedByUserId: "player-1",
             class: HeroClass.SORCERER,
             type: "hero",
+            actionsDoneThisTurn: [],
             inventory: {
+              storageCapacity: {} as StuffStorageCapacityJson,
               gear: [],
               backpack: [],
             },
@@ -268,7 +275,9 @@ describe("GameInitializationListener", () => {
             playedByUserId: "player-2",
             class: HeroClass.THIEF,
             type: "hero",
+            actionsDoneThisTurn: [],
             inventory: {
+              storageCapacity: {} as StuffStorageCapacityJson,
               gear: [],
               backpack: [],
             },

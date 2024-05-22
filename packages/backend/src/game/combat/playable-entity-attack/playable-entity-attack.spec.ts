@@ -1,5 +1,6 @@
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
+import { CoordService } from "src/game/map/services/coord/coord.service";
 import {
   MockInstance,
   afterEach,
@@ -9,6 +10,7 @@ import {
   it,
   vi,
 } from "vitest";
+import { CombatService } from "../services/combat/combat.service";
 import { PlayableEntityAttackRepository } from "./playable-entity-attack.repository";
 import { PlayableEntityAttackUseCase } from "./playable-entity-attack.uc";
 
@@ -27,6 +29,11 @@ describe("PlayableEntityAttackUseCase", () => {
       providers: [
         PlayableEntityAttackUseCase,
         EventEmitter2,
+        CoordService,
+        {
+          provide: CombatService,
+          useValue: {},
+        },
         {
           provide: PlayableEntityAttackRepository,
           useValue: {},
