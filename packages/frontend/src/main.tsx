@@ -2,6 +2,7 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import ReactDOM from "react-dom/client";
 import { queryClient } from "./config/fetcher";
+import "./config/i18n";
 import { AppRouter } from "./router/AppRouter";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

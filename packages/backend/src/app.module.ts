@@ -23,6 +23,7 @@ import { GameModule } from "./game/game.module";
 import { LobbyModule } from "./lobby/lobby.module";
 import { RedisModule } from "./redis/redis.module";
 import { UserModule } from "./user/user.module";
+import { TranslationModule } from './translation/translation.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { UserModule } from "./user/user.module";
     UserModule,
     AuthzModule,
     RedisModule,
+    TranslationModule,
   ],
   controllers: [AppController],
   providers: [
