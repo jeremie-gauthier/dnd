@@ -17,6 +17,7 @@ import { Item } from "../database/entities/item.entity";
 import { Perk } from "../database/entities/perk.entity";
 import { Spell } from "../database/entities/spell.entity";
 import { Stuff } from "../database/entities/stuff.entity";
+import { Translation } from "../database/entities/translation.entity";
 import { User } from "../database/entities/user.entity";
 import { Weapon } from "../database/entities/weapon.entity";
 
@@ -43,6 +44,7 @@ const config: DataSourceOptions = {
     Spell,
     Stuff,
     EnemyTemplate,
+    Translation,
   ],
   migrations: ["dist/src/database/migrations/*.js"],
   migrationsRun: true,
