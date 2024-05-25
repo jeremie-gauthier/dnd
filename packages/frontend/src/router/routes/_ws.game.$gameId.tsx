@@ -1,6 +1,7 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Game } from "../../components/game/Game";
+import { ActionsLog } from "../../components/game/action-log/ActionsLog";
 import { GameContextProvider } from "../../components/game/context/GameContext/GameContextProvider";
 import { useGame } from "../../hooks/api/game/use-game";
 import { useServerLobbyError } from "../../hooks/api/lobby/use-server-lobby-error";
@@ -26,7 +27,10 @@ export function GameRouteComponent() {
 
   return (
     <GameContextProvider game={game} phase={phase} socket={socket}>
-      <Game />
+      <div className="flex flex-col gap-12 items-center">
+        <Game />
+        <ActionsLog socket={socket} />
+      </div>
     </GameContextProvider>
   );
 }

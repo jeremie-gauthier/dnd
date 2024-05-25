@@ -4,9 +4,9 @@ version: 0.0.1
 summary: |
   Represents when a playable entity turn has ended.
 producers:
-  - End Player Turn UC
+  - Turn Service
 consumers:
-  - Game Changed Listener
+  - State Machine Publisher Gateway
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />

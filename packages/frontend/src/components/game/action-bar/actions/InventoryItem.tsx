@@ -1,10 +1,13 @@
 import { GameItem, sum } from "@dnd/shared";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   item: GameItem;
 };
 
 export const InventoryItem = ({ item }: Props) => {
+  const { t } = useTranslation(["items"]);
+
   const handleUseInventoryItem = () => {
     console.log("using", item.name, item.type);
   };
@@ -26,11 +29,10 @@ export const InventoryItem = ({ item }: Props) => {
 
   return (
     <>
-      {/* TODO: je n'aurais plus besoin des icones */}
       <button type="button" onClick={handleUseInventoryItem}>
         <img src={item.imgUrl} alt={item.name} className="rounded" />
         <div className="absolute hidden inset-0 bg-black bg-opacity-35 text-white text-sm group-hover:flex flex-col p-1">
-          <p>{item.name}</p>
+          <p>{t(item.name)}</p>
           <p>
             {minDamage}-{maxDamage}(~{mean}) dmg
           </p>

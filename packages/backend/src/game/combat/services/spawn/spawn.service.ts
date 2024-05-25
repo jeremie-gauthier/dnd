@@ -1,31 +1,32 @@
 import {
+  Coord,
   GameEntity,
   OnDoorOpeningGameEvent,
   PlayableEnemyEntity,
   Tile,
 } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import { DoorOpenedPayload } from "src/game/events/emitters/door-opened.payload";
 import { EnemiesSpawnedPayload } from "src/game/events/emitters/enemies-spawned.payload";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import { CoordService } from "src/game/map/services/coord/coord.service";
 import { MovesService } from "src/game/moves/services/moves.service";
 import { PlayableEntityService } from "src/game/playable-entity/services/playable-entity/playable-entity.service";
-import { SpawnEnemiesRepository } from "./spawn-enemies.repository";
 
 @Injectable()
-export class SpawnEnemiesListener {
+export class SpawnService {
   constructor(
-    private readonly repository: SpawnEnemiesRepository,
     private readonly eventEmitter: EventEmitter2,
     private readonly playableEntityService: PlayableEntityService,
     private readonly movesService: MovesService,
     private readonly coordService: CoordService,
   ) {}
 
-  @OnEvent(GameEvent.DoorOpened)
-  public async handler({ game, doorCoord }: DoorOpenedPayload) {
+  public spawnEnemies({
+    game,
+    doorCoord,
+  }: { game: GameEntity; doorCoord: Coord }) {
     const spawnEnemiesEvent = this.getBoundEvent({ game, doorCoord });
     if (!spawnEnemiesEvent) {
       return;
@@ -35,9 +36,7 @@ export class SpawnEnemiesListener {
       game,
       enemiesName: spawnEnemiesEvent.enemies,
     });
-    this.spawnEnemies({ game, spawnEnemiesEvent, enemies });
-
-    await this.repository.updateGame({ game });
+    this.addEnemiesOnGame({ game, spawnEnemiesEvent, enemies });
 
     this.eventEmitter.emitAsync(
       GameEvent.EnemiesSpawned,
@@ -45,7 +44,7 @@ export class SpawnEnemiesListener {
     );
   }
 
-  private spawnEnemies({
+  private addEnemiesOnGame({
     game,
     spawnEnemiesEvent,
     enemies,

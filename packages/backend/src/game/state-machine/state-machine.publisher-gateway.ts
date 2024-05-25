@@ -12,14 +12,8 @@ export class StateMachinePublisherGateway {
   @WebSocketServer()
   private readonly server: WsServer;
 
-  @OnEvent(GameEvent.EntityAttacked)
-  @OnEvent(GameEvent.EntityTookDamage)
-  @OnEvent(GameEvent.EntityDied)
-  @OnEvent(GameEvent.EnemiesSpawned)
-  @OnEvent(GameEvent.DoorOpened)
-  @OnEvent(GameEvent.PlayableEntityMoved)
-  @OnEvent(GameEvent.PlayableEntityTurnEnded)
   @OnEvent(GameEvent.GameInitializationDone)
+  @OnEvent(GameEvent.GameUpdated)
   protected gameChangesHandler({ game }: { game: GameEntity }) {
     const playableEntities = Object.values(game.playableEntities);
     const userIds = new Set([

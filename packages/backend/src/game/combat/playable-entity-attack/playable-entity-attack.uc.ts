@@ -10,6 +10,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { User } from "src/database/entities/user.entity";
+import { BackupService } from "src/game/backup/services/backup/backup.service";
 import { CoordService } from "src/game/map/services/coord/coord.service";
 import { UseCase } from "src/types/use-case.interface";
 import { CombatService } from "../services/combat/combat.service";
@@ -21,6 +22,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
     private readonly repository: PlayableEntityAttackRepository,
     private readonly combatService: CombatService,
     private readonly coordService: CoordService,
+    private readonly backupService: BackupService,
   ) {}
 
   public async execute({
@@ -45,7 +47,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
       attackerPlayableEntityId,
       targetPlayableEntityId,
     });
-    await this.repository.updateGame({ game });
+    await this.backupService.updateGame({ game });
   }
 
   private assertsCanAttack(
@@ -91,6 +93,12 @@ export class PlayableEntityAttackUseCase implements UseCase {
     if (attackerPlayableEntity.characteristic.healthPoints <= 0) {
       throw new ForbiddenException(
         "Cannot attack with a playable entity that is not alive",
+      );
+    }
+
+    if (targetPlayableEntity.characteristic.healthPoints <= 0) {
+      throw new ForbiddenException(
+        "Cannot attack a playable entity that is not alive",
       );
     }
 
@@ -191,6 +199,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
       attackerPlayableEntity,
       targetPlayableEntity,
       attack,
+      attackItem,
     });
   }
 }

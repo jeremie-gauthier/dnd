@@ -6,7 +6,8 @@ summary: |
 producers:
   - Playable Entity Move UC
 consumers:
-  - Game Changed Listener
+  - State Machine Publisher Gateway
+  - Log Publisher Gateway
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />

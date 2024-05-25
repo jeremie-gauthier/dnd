@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { AuthzModule } from "src/authz/authz.module";
 import { RedisModule } from "src/redis/redis.module";
+import { BackupModule } from "../backup/backup.module";
 import { MapModule } from "../map/map.module";
 import { TimelineModule } from "../timeline/timeline.module";
 import { EndPlayerTurnRepository } from "./end-player-turn/end-player-turn.repository";
@@ -12,7 +13,7 @@ import { StateMachinePublisherGateway } from "./state-machine.publisher-gateway"
 import { StateMachineSubscriberGateway } from "./state-machine.subscriber-gateway";
 
 @Module({
-  imports: [AuthzModule, RedisModule, TimelineModule, MapModule],
+  imports: [AuthzModule, RedisModule, TimelineModule, MapModule, BackupModule],
   providers: [
     PlayerStateService,
     GetUserGameStateUseCase,

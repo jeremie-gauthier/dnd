@@ -6,14 +6,14 @@ export class PlayableEntityTurnEndedPayload
   implements EventPayload<GameEvent.PlayableEntityTurnEnded>
 {
   public readonly name = GameEvent.PlayableEntityTurnEnded;
-  public readonly entityId: PlayableEntity["id"];
   public readonly game: GameEntity;
+  public readonly playableEntity: PlayableEntity;
 
   constructor({
-    entityId,
     game,
+    playableEntity,
   }: Omit<PlayableEntityTurnEndedPayload, "name">) {
-    this.entityId = entityId;
     this.game = game;
+    this.playableEntity = playableEntity;
   }
 }

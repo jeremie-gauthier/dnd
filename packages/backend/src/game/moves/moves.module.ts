@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { AuthzModule } from "src/authz/authz.module";
 import { RedisModule } from "src/redis/redis.module";
+import { BackupModule } from "../backup/backup.module";
 import { MapModule } from "../map/map.module";
 import { TrapModule } from "../trap/trap.module";
 import { MovesSubscriberGateway } from "./moves.subscriber-gateway";
@@ -9,7 +10,7 @@ import { PlayableEntityMoveUseCase } from "./playable-entity-move/playable-entit
 import { MovesService } from "./services/moves.service";
 
 @Module({
-  imports: [AuthzModule, RedisModule, MapModule, TrapModule],
+  imports: [AuthzModule, RedisModule, MapModule, TrapModule, BackupModule],
   exports: [MovesService],
   providers: [
     MovesService,

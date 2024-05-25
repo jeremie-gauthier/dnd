@@ -1,9 +1,9 @@
-import { PlayableHeroEntity } from "../../../../database";
+import { PlayableEntity } from "../../../../database";
 import { ActionLog } from "./action-log.interface";
 
 export interface StartTurnActionLog extends ActionLog {
-  type: "start_turn_log";
+  type: "game.update.playable_entity_turn_started";
   data: {
-    heroId: PlayableHeroEntity["id"];
+    entityName: PlayableEntity["name"];
   };
 }

@@ -6,10 +6,8 @@ summary: |
 producers:
   - Open Door UC
 consumers:
-  - End Playing Entity Turn Listener
-  - Spawn Enemies Listener
-  - Reroll Initiatives Listener
   - State Machine Publisher Gateway
+  - Log Publisher Gateway
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />
