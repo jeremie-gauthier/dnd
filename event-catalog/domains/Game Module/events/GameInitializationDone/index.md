@@ -7,7 +7,7 @@ producers:
   - Game Initialization Listener
 consumers:
   - Game Initialization Done Listener
-  - Game Changed Listener
+  - State Machine Publisher Gateway
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />

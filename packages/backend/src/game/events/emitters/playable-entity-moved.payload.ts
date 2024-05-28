@@ -1,4 +1,4 @@
-import type { GameEntity } from "@dnd/shared";
+import type { GameEntity, PlayableEntity } from "@dnd/shared";
 import type { EventPayload } from "src/event-emitter/event-payload.class";
 import { GameEvent } from "./game-events.enum";
 
@@ -7,8 +7,13 @@ export class PlayableEntityMovedPayload
 {
   public readonly name = GameEvent.PlayableEntityMoved;
   public readonly game: GameEntity;
+  public readonly playableEntity: PlayableEntity;
 
-  constructor({ game }: Omit<PlayableEntityMovedPayload, "name">) {
+  constructor({
+    game,
+    playableEntity,
+  }: Omit<PlayableEntityMovedPayload, "name">) {
     this.game = game;
+    this.playableEntity = playableEntity;
   }
 }

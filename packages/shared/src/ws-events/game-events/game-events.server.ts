@@ -7,6 +7,7 @@ import type {
 export const ServerGameEvent = {
   GameStart: "server.game.start",
   GameChangesDetected: "server.game.changes_detected",
+  GameLogCreated: "server.game.log_created",
 } as const;
 
 export type PlayerGameState =

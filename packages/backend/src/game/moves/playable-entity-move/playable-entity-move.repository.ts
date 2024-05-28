@@ -11,8 +11,4 @@ export class PlayableEntityMoveRepository {
   }: { gameId: GameEntity["id"] }): Promise<GameEntity | null> {
     return await this.gamesRepository.getOne(gameId);
   }
-
-  public async updateGame({ game }: { game: GameEntity }): Promise<void> {
-    await this.gamesRepository.update(game);
-  }
 }

@@ -21,8 +21,4 @@ export class EndPlayerTurnRepository {
 
     return game;
   }
-
-  public async updateGame({ game }: { game: GameEntity }): Promise<void> {
-    await this.gamesRepository.update(game);
-  }
 }

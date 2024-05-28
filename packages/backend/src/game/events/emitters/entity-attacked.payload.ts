@@ -13,6 +13,7 @@ export class EntityAttackedPayload
   public readonly damageDone: number;
   public readonly dicesResults: { dice: Dice; result: number }[];
   public readonly attack: GameItem["attacks"][number];
+  public readonly attackItemUsed: GameItem;
 
   constructor({
     game,
@@ -21,6 +22,7 @@ export class EntityAttackedPayload
     damageDone,
     dicesResults,
     attack,
+    attackItemUsed,
   }: Omit<EntityAttackedPayload, "name">) {
     this.game = game;
     this.attacker = attacker;
@@ -28,5 +30,6 @@ export class EntityAttackedPayload
     this.damageDone = damageDone;
     this.dicesResults = dicesResults;
     this.attack = attack;
+    this.attackItemUsed = attackItemUsed;
   }
 }

@@ -30,20 +30,24 @@ export class CombatService {
     attackerPlayableEntity,
     targetPlayableEntity,
     attack,
+    attackItem,
   }: {
     game: GameEntity;
     attackerPlayableEntity: PlayableEntity;
     targetPlayableEntity: PlayableEntity;
     attack: GameItem["attacks"][number];
+    attackItem: GameItem;
   }): void {
     // TODO: will need to implement hero bonus check for potential attack bonuses
     const dicesResults = attack.dices.map((dice) =>
       this.diceService.roll({ dice }),
     );
 
-    const damageDone =
+    const damageDone = Math.max(
+      0,
       sum(...dicesResults.map(({ result }) => result)) -
-      targetPlayableEntity.characteristic.armorClass;
+        targetPlayableEntity.characteristic.armorClass,
+    );
 
     this.eventEmitter.emitAsync(
       GameEvent.EntityAttacked,
@@ -51,9 +55,10 @@ export class CombatService {
         game,
         attacker: attackerPlayableEntity,
         target: targetPlayableEntity,
-        damageDone: damageDone,
+        damageDone,
         dicesResults,
         attack,
+        attackItemUsed: attackItem,
       }),
     );
 

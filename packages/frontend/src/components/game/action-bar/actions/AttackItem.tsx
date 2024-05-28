@@ -1,5 +1,6 @@
 import { AttackRangeType, GameItem, sum } from "@dnd/shared";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { TileClickedEvent } from "../../../../game-engine/events/tile-clicked.event";
 import { classNames } from "../../../../utils/class-names.util";
 import { Icon } from "../../../icon/Icon";
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export const AttackItem = ({ item, attack }: Props) => {
+  const { t } = useTranslation(["items"]);
   const { game, playerState, gameEventManager, heroPlaying, gameActions } =
     useGameContext();
 
@@ -141,8 +143,8 @@ export const AttackItem = ({ item, attack }: Props) => {
           />
         </div>
         <div className="absolute hidden inset-0 bg-black bg-opacity-35 text-white text-sm group-hover:flex flex-col p-1 items-start">
-          <p>{item.name}</p>
-          <p>{attack.type} attack</p>
+          <p>{t(item.name)}</p>
+          <p>{t(attack.type)}</p>
           <p>
             {minDamage}-{maxDamage}(~{mean}) dmg
           </p>

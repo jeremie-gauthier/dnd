@@ -35,6 +35,7 @@ i18next
     ns: ["common"],
     defaultNS: "common",
     fallbackNS: "common",
+    returnObjects: true,
     interpolation: {
       escapeValue: false,
     },

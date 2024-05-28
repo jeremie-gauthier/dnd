@@ -1,9 +1,9 @@
-import { Module } from "@nestjs/common";
+import { Module, forwardRef } from "@nestjs/common";
 import { CombatModule } from "../combat/combat.module";
 import { TrapService } from "./services/trap/trap.service";
 
 @Module({
-  imports: [CombatModule],
+  imports: [forwardRef(() => CombatModule)],
   exports: [TrapService],
   providers: [TrapService],
 })

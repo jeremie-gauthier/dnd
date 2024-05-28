@@ -15,6 +15,7 @@ import {
 } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
+import { BackupService } from "src/game/backup/services/backup/backup.service";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import { PlayableEntityMovedPayload } from "src/game/events/emitters/playable-entity-moved.payload";
 import { CoordService } from "src/game/map/services/coord/coord.service";
@@ -31,6 +32,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
     private readonly eventEmitter: EventEmitter2,
     private readonly trapService: TrapService,
     private readonly coordService: CoordService,
+    private readonly backupService: BackupService,
   ) {}
 
   public async execute({
@@ -50,12 +52,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
 
     this.getPlayableEntityPath({ game, pathToTile, playableEntityId });
 
-    await this.repository.updateGame({ game });
-
-    this.eventEmitter.emitAsync(
-      GameEvent.PlayableEntityMoved,
-      new PlayableEntityMovedPayload({ game }),
-    );
+    await this.backupService.updateGame({ game });
   }
 
   private assertCanMovePlayableEntity(
@@ -161,6 +158,11 @@ export class PlayableEntityMoveUseCase implements UseCase {
 
     playableEntity.characteristic.actionPoints -= 1;
     playableEntity.actionsDoneThisTurn.push({ name: "move" });
+
+    this.eventEmitter.emitAsync(
+      GameEvent.PlayableEntityMoved,
+      new PlayableEntityMovedPayload({ game, playableEntity }),
+    );
 
     return validTiles;
   }

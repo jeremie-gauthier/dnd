@@ -4,10 +4,8 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
-import { GameEvent } from "src/game/events/emitters/game-events.enum";
-import { PlayableEntityTurnEndedPayload } from "src/game/events/emitters/playable-entity-turn-ended.payload";
+import { BackupService } from "src/game/backup/services/backup/backup.service";
 import { TurnService } from "src/game/timeline/services/turn/turn.service";
 import { UseCase } from "src/types/use-case.interface";
 import { EndPlayerTurnRepository } from "./end-player-turn.repository";
@@ -17,7 +15,7 @@ export class EndPlayerTurnUseCase implements UseCase {
   constructor(
     private readonly repository: EndPlayerTurnRepository,
     private readonly turnService: TurnService,
-    private readonly eventEmitter: EventEmitter2,
+    private readonly backupService: BackupService,
   ) {}
 
   public async execute({ userId }: { userId: User["id"] }): Promise<void> {
@@ -25,16 +23,8 @@ export class EndPlayerTurnUseCase implements UseCase {
 
     this.assertCanEndPlayerTurn(game, { userId });
 
-    const { playingEntity } = this.endPlayerTurn({ game });
-    await this.repository.updateGame({ game });
-
-    this.eventEmitter.emitAsync(
-      GameEvent.PlayableEntityTurnEnded,
-      new PlayableEntityTurnEndedPayload({
-        entityId: playingEntity.id,
-        game,
-      }),
-    );
+    this.endPlayerTurn({ game });
+    await this.backupService.updateGame({ game });
   }
 
   private assertCanEndPlayerTurn(
@@ -62,10 +52,7 @@ export class EndPlayerTurnUseCase implements UseCase {
     }
   }
 
-  private endPlayerTurn({ game }: { game: GameEntity }): {
-    playingEntity: PlayableEntity;
-    nextEntityToPlay: PlayableEntity;
-  } {
+  private endPlayerTurn({ game }: { game: GameEntity }) {
     const playingEntity = this.turnService.getPlayingEntity({
       game,
     }) as PlayableEntity;
@@ -73,11 +60,13 @@ export class EndPlayerTurnUseCase implements UseCase {
       game,
     }) as PlayableEntity;
 
-    this.turnService.endPlayableEntityTurn({ playableEntity: playingEntity });
+    this.turnService.endPlayableEntityTurn({
+      game,
+      playableEntity: playingEntity,
+    });
     this.turnService.startPlayableEntityTurn({
+      game,
       playableEntity: nextEntityToPlay,
     });
-
-    return { playingEntity, nextEntityToPlay };
   }
 }

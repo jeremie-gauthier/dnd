@@ -1,4 +1,5 @@
 export enum GameEvent {
+  GameUpdated = "game.update.data_updated",
   EntityAttacked = "game.update.playable_entity_attacked",
   InitiativesRerolled = "game.update.initiatives_rerolled",
   EnemiesSpawned = "game.update.enemies_spawned",
@@ -9,5 +10,6 @@ export enum GameEvent {
   GameInitializationStarted = "game.initialization.started",
   GameInitializationDone = "game.initialization.done",
   PlayableEntityMoved = "game.update.playable_entity_moved",
+  PlayableEntityTurnStarted = "game.update.playable_entity_turn_started",
   PlayableEntityTurnEnded = "game.update.playable_entity_turn_ended",
 }

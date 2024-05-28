@@ -1,7 +1,7 @@
 import type { z } from "zod";
 import type { GameEntity } from "../database/game";
 import type { LobbyEntity } from "../database/lobby";
-import type { getLobbiesOutputSchema } from "../schemas";
+import type { GameLog, getLobbiesOutputSchema } from "../schemas";
 import {
   ServerGameEvent,
   type PlayerGameState,
@@ -30,6 +30,7 @@ interface ServerToClientEventsAndPayloads
   }) => void;
   [ServerGameEvent.GameStart]: () => void;
   [ServerGameEvent.GameChangesDetected]: (payload: PlayerGameState) => void;
+  [ServerGameEvent.GameLogCreated]: (payload: GameLog) => void;
 }
 
 export type ServerToClientEvents =
