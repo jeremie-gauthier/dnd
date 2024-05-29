@@ -1,19 +1,17 @@
-import type { LobbyEntity } from "@dnd/shared";
+import { LobbyEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import type { User } from "src/database/entities/user.entity";
+import { User } from "src/database/entities/user.entity";
 import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
 import { UsersRepository } from "src/redis/repositories/users.repository";
 
 @Injectable()
-export class HandleWsDisconnectionRepository {
+export class JoinLobbyRepository {
   constructor(
     private readonly lobbiesRepository: LobbiesRepository,
     private readonly usersRepository: UsersRepository,
   ) {}
 
-  public async getCachedUserLobbyId(
-    userId: User["id"],
-  ): Promise<LobbyEntity["id"] | undefined> {
+  public async getUserLobby({ userId }: { userId: User["id"] }) {
     return await this.usersRepository.get(userId);
   }
 
@@ -25,9 +23,5 @@ export class HandleWsDisconnectionRepository {
 
   public async updateLobby({ lobby }: { lobby: LobbyEntity }) {
     await this.lobbiesRepository.update(lobby);
-  }
-
-  public async forgetUser(userId: User["id"]): Promise<void> {
-    await this.usersRepository.del(userId);
   }
 }

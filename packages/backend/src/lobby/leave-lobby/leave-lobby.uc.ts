@@ -1,3 +1,4 @@
+import { LobbyEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import type { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/types/use-case.interface";
@@ -14,11 +15,32 @@ export class LeaveLobbyUseCase implements UseCase {
   public async execute({
     userId,
   }: { userId: User["id"] }): Promise<string | undefined> {
-    const lobbyId = await this.repository.getUserLobby({ userId });
-    if (!lobbyId) return;
+    const lobbyToLeave = await this.getLobbyToLeave({ userId });
+    if (!lobbyToLeave) {
+      return;
+    }
 
-    await this.seatManagerService.leave({ userId });
+    this.seatManagerService.leave({ lobby: lobbyToLeave, userId });
+    await this.repository.updateLobby({ lobby: lobbyToLeave });
 
-    return lobbyId;
+    return lobbyToLeave.id;
+  }
+
+  private async getLobbyToLeave({
+    userId,
+  }: { userId: User["id"] }): Promise<LobbyEntity | undefined> {
+    const lobbyIdToLeave = await this.repository.getUserLobby({ userId });
+    if (!lobbyIdToLeave) {
+      return;
+    }
+
+    const lobbyToLeave = await this.repository.getLobbyById({
+      lobbyId: lobbyIdToLeave,
+    });
+    if (!lobbyToLeave) {
+      return;
+    }
+
+    return lobbyToLeave;
   }
 }

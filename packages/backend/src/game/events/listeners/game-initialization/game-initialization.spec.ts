@@ -10,13 +10,13 @@ import { Test } from "@nestjs/testing";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import type { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import type { User } from "src/database/entities/user.entity";
-import { ItemService } from "src/game/inventory/services/item/item.service";
-import { MapSerializerService } from "src/game/map/services/map-serializer/map-serializer.service";
-import { MovesService } from "src/game/moves/services/moves.service";
-import { PlayableEntityService } from "src/game/playable-entity/services/playable-entity/playable-entity.service";
-import { InitiativeService } from "src/game/timeline/services/initiative/initiative.service";
+import { MoveService } from "src/game/services/move/move.service";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import { Mock, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { InitiativeService } from "../../../services/initiative/initiative.service";
+import { ItemService } from "../../../services/item/item.service";
+import { MapSerializerService } from "../../../services/map-serializer/map-serializer.service";
+import { PlayableEntityService } from "../../../services/playable-entity/playable-entity.service";
 import { GameEvent } from "../../emitters/game-events.enum";
 import { GameInitializationListener } from "./game-initialization.listener";
 import { GameInitializationRepository } from "./game-initialization.repository";
@@ -63,6 +63,7 @@ describe("GameInitializationListener", () => {
             getUserCampaignStageProgression: vi.fn(),
             saveGame: vi.fn(),
             getDicesByNames: vi.fn(),
+            getEnemiesByNames: vi.fn().mockResolvedValue([]),
           },
         },
         {
@@ -72,7 +73,7 @@ describe("GameInitializationListener", () => {
           },
         },
         {
-          provide: MovesService,
+          provide: MoveService,
           useValue: {
             moveHeroToRequestedPosition: vi.fn(),
             canMoveToRequestedPosition: vi.fn().mockReturnValue(true),

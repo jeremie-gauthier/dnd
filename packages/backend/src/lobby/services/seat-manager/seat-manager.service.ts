@@ -9,26 +9,18 @@ import { User } from "src/database/entities/user.entity";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import { UserJoinedLobbyPayload } from "src/lobby/events/emitters/user-joined-lobby.payload";
 import { UserLeftLobbyPayload } from "src/lobby/events/emitters/user-left-lobby.payload";
-import { SeatManagerRepository } from "./seat-manager.repository";
 
 @Injectable()
 export class SeatManagerService {
-  constructor(
-    private readonly eventEmitter: EventEmitter2,
-    private readonly repository: SeatManagerRepository,
-  ) {}
+  constructor(private readonly eventEmitter: EventEmitter2) {}
 
-  public async take({
+  public take({
+    lobby,
     userId,
-    lobbyId,
   }: {
+    lobby: LobbyEntity;
     userId: User["id"];
-    lobbyId: LobbyEntity["id"];
-  }): Promise<void> {
-    // remove player from previous lobby (if any) before joining a new one
-    await this.leave({ userId });
-
-    const lobby = await this.repository.getLobbyById({ lobbyId });
+  }): void {
     this.assertsCanEnterLobby(userId, lobby);
 
     lobby.players.push({
@@ -36,7 +28,6 @@ export class SeatManagerService {
       heroesSelected: [],
       isReady: false,
     });
-    await this.repository.updateLobby({ lobby });
 
     this.eventEmitter.emitAsync(
       LobbyEvent.UserJoinedLobby,
@@ -65,17 +56,13 @@ export class SeatManagerService {
     }
   }
 
-  public async leave({ userId }: { userId: User["id"] }): Promise<void> {
-    const lobbyId = await this.repository.getUserLobby({ userId });
-    if (!lobbyId) {
-      return;
-    }
-
-    const lobby = await this.repository.getLobbyById({ lobbyId });
-    if (!lobby) {
-      return;
-    }
-
+  public leave({
+    lobby,
+    userId,
+  }: {
+    lobby: LobbyEntity;
+    userId: User["id"];
+  }): void {
     lobby.players = lobby.players.filter((player) => player.userId !== userId);
     for (const heroAvailable of lobby.heroesAvailable) {
       if (heroAvailable.pickedBy === userId) {
@@ -85,9 +72,7 @@ export class SeatManagerService {
 
     // TODO: handle ownership change
 
-    await this.repository.updateLobby({ lobby });
-
-    await this.eventEmitter.emitAsync(
+    this.eventEmitter.emitAsync(
       LobbyEvent.UserLeftLobby,
       new UserLeftLobbyPayload({ userId, lobby }),
     );

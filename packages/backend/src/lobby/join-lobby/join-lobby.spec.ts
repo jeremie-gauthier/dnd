@@ -1,6 +1,7 @@
 import { Test } from "@nestjs/testing";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
+import { JoinLobbyRepository } from "./join-lobby.repository";
 import { JoinLobbyUseCase } from "./join-lobby.uc";
 
 describe("StartGameUseCase", () => {
@@ -12,9 +13,17 @@ describe("StartGameUseCase", () => {
       providers: [
         JoinLobbyUseCase,
         {
+          provide: JoinLobbyRepository,
+          useValue: {
+            getUserLobby: vi.fn(),
+            getLobbyById: vi.fn(),
+            updateLobby: vi.fn(),
+          },
+        },
+        {
           provide: SeatManagerService,
           useValue: {
-            take: () => Promise.resolve("fake-lobby-id"),
+            take: vi.fn().mockResolvedValue("fake-lobby-id"),
           },
         },
       ],

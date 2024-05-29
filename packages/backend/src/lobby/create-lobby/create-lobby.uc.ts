@@ -28,7 +28,7 @@ export class CreateLobbyUseCase implements UseCase {
     userId: User["id"];
     createLobbyInputDto: CreateLobbyInputDto;
   }): Promise<CreateLobbyOutputDto> {
-    await this.seatManagerService.leave({ userId });
+    await this.leavePreviousLobby({ userId });
 
     const [campaign, heroes] = await Promise.all([
       this.repository.getCampaignByStageId({ stageId }),
@@ -80,5 +80,22 @@ export class CreateLobbyUseCase implements UseCase {
     stageId: CampaignStage["id"],
   ): CampaignStage {
     return stages.find(({ id }) => id === stageId)!;
+  }
+
+  private async leavePreviousLobby({ userId }: { userId: User["id"] }) {
+    const lobbyIdToLeave = await this.repository.getUserLobby({ userId });
+    if (!lobbyIdToLeave) {
+      return;
+    }
+
+    const lobbyToLeave = await this.repository.getLobbyById({
+      lobbyId: lobbyIdToLeave,
+    });
+    if (!lobbyToLeave) {
+      return;
+    }
+
+    this.seatManagerService.leave({ lobby: lobbyToLeave, userId });
+    await this.repository.updateLobby({ lobby: lobbyToLeave });
   }
 }
