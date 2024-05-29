@@ -1,10 +1,7 @@
 import { LobbyEntityStatus } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import type { User } from "src/database/entities/user.entity";
-import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
-import { UserJoinedLobbyPayload } from "src/lobby/events/emitters/user-joined-lobby.payload";
 import type { UseCase } from "src/types/use-case.interface";
 import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
 import type {
@@ -16,7 +13,6 @@ import { CreateLobbyRepository } from "./create-lobby.repository";
 @Injectable()
 export class CreateLobbyUseCase implements UseCase {
   constructor(
-    private readonly eventEmitter: EventEmitter2,
     private readonly repository: CreateLobbyRepository,
     private readonly seatManagerService: SeatManagerService,
   ) {}
@@ -67,10 +63,7 @@ export class CreateLobbyUseCase implements UseCase {
       })),
     });
 
-    this.eventEmitter.emitAsync(
-      LobbyEvent.UserJoinedLobby,
-      new UserJoinedLobbyPayload({ userId, lobby }),
-    );
+    this.seatManagerService.take({ lobby, userId });
 
     return lobby;
   }

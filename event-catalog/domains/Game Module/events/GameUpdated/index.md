@@ -1,10 +1,10 @@
 ---
-name: EntityTookDamage
+name: GameUpdated
 version: 0.0.1
 summary: |
-  Represents when an entity take damage.
+  Represents when an entity died.
 producers:
-  - Combat Service
+  - Backup Service
 consumers:
   - Game Publisher Gateway
 ---

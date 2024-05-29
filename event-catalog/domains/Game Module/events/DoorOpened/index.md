@@ -6,8 +6,7 @@ summary: |
 producers:
   - Open Door UC
 consumers:
-  - State Machine Publisher Gateway
-  - Log Publisher Gateway
+  - Game Publisher Gateway
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />
