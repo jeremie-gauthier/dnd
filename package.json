@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.7.3",
-    "@inquirer/prompts": "^5.0.3",
+    "@inquirer/prompts": "^5.0.4",
     "dedent": "^1.5.3",
     "inquirer-directory": "^2.2.0",
     "lodash.camelcase": "^4.3.0",
