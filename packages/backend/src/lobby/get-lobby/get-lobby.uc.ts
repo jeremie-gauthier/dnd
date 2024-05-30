@@ -1,6 +1,6 @@
+import { GetLobbyOutput } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import type { UseCase } from "src/types/use-case.interface";
-import type { GetLobbyOutputDto } from "./get-lobby.dto";
 import { GetLobbyRepository } from "./get-lobby.repository";
 
 @Injectable()
@@ -9,7 +9,7 @@ export class GetLobbyUseCase implements UseCase {
 
   public async execute({
     lobbyId,
-  }: { lobbyId: string }): Promise<GetLobbyOutputDto> {
+  }: { lobbyId: string }): Promise<GetLobbyOutput> {
     const lobby = await this.repository.getLobbyById(lobbyId);
     if (!lobby) {
       throw new NotFoundException("Lobby not found");

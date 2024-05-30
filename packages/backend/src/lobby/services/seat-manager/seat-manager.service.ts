@@ -6,37 +6,35 @@ import {
 } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
+import { DeleteLobbyPayload } from "src/lobby/events/emitters/delete-lobby.payload";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import { UserJoinedLobbyPayload } from "src/lobby/events/emitters/user-joined-lobby.payload";
 import { UserLeftLobbyPayload } from "src/lobby/events/emitters/user-left-lobby.payload";
+import { BackupService } from "../backup/backup.service";
 import { SeatManagerRepository } from "./seat-manager.repository";
 
 @Injectable()
 export class SeatManagerService {
   constructor(
-    private readonly eventEmitter: EventEmitter2,
     private readonly repository: SeatManagerRepository,
+    private readonly eventEmitter: EventEmitter2,
+    private readonly backupService: BackupService,
   ) {}
 
-  public async take({
+  public take({
+    lobby,
     userId,
-    lobbyId,
   }: {
+    lobby: LobbyEntity;
     userId: User["id"];
-    lobbyId: LobbyEntity["id"];
-  }): Promise<void> {
-    // remove player from previous lobby (if any) before joining a new one
-    await this.leave({ userId });
-
-    const lobby = await this.repository.getLobbyById({ lobbyId });
-    this.assertsCanEnterLobby(userId, lobby);
+  }): void {
+    this.assertCanEnterLobby(userId, lobby);
 
     lobby.players.push({
       userId,
       heroesSelected: [],
       isReady: false,
     });
-    await this.repository.updateLobby({ lobby });
 
     this.eventEmitter.emitAsync(
       LobbyEvent.UserJoinedLobby,
@@ -44,7 +42,7 @@ export class SeatManagerService {
     );
   }
 
-  private assertsCanEnterLobby(
+  private assertCanEnterLobby(
     userId: User["id"],
     lobby: LobbyEntity | null,
   ): asserts lobby is LobbyEntity {
@@ -65,17 +63,13 @@ export class SeatManagerService {
     }
   }
 
-  public async leave({ userId }: { userId: User["id"] }): Promise<void> {
-    const lobbyId = await this.repository.getUserLobby({ userId });
-    if (!lobbyId) {
-      return;
-    }
-
-    const lobby = await this.repository.getLobbyById({ lobbyId });
-    if (!lobby) {
-      return;
-    }
-
+  public async leave({
+    lobby,
+    userId,
+  }: {
+    lobby: LobbyEntity;
+    userId: User["id"];
+  }): Promise<void> {
     lobby.players = lobby.players.filter((player) => player.userId !== userId);
     for (const heroAvailable of lobby.heroesAvailable) {
       if (heroAvailable.pickedBy === userId) {
@@ -83,13 +77,34 @@ export class SeatManagerService {
       }
     }
 
-    // TODO: handle ownership change
-
-    await this.repository.updateLobby({ lobby });
-
-    await this.eventEmitter.emitAsync(
+    this.eventEmitter.emitAsync(
       LobbyEvent.UserLeftLobby,
       new UserLeftLobbyPayload({ userId, lobby }),
     );
+
+    const hasNoPlayersLeft = lobby.players.length === 0;
+    if (hasNoPlayersLeft) {
+      await this.deleteLobby({ lobby });
+    } else {
+      await this.backupService.updateLobby({ lobby });
+    }
+
+    // TODO: handle ownership change
+  }
+
+  private async deleteLobby({ lobby }: { lobby: LobbyEntity }) {
+    await this.repository.delLobbyById(lobby.id);
+
+    this.eventEmitter.emitAsync(
+      LobbyEvent.DeleteLobby,
+      new DeleteLobbyPayload({ lobby }),
+    );
+
+    if (
+      lobby.status === "GAME_INITIALIZING" ||
+      lobby.status === "GAME_STARTED"
+    ) {
+      await this.repository.delGameById({ gameId: lobby.id });
+    }
   }
 }

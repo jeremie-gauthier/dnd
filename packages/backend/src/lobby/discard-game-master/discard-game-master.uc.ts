@@ -4,18 +4,16 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/types/use-case.interface";
-import { LobbyChangedPayload } from "../events/emitters/lobby-changed.payload";
-import { LobbyEvent } from "../events/emitters/lobby-events.enum";
+import { BackupService } from "../services/backup/backup.service";
 import { DiscardGameMasterRepository } from "./discard-game-master.repository";
 
 @Injectable()
 export class DiscardGameMasterUseCase implements UseCase {
   constructor(
     private readonly repository: DiscardGameMasterRepository,
-    private readonly eventEmitter: EventEmitter2,
+    private readonly backupService: BackupService,
   ) {}
 
   public async execute({
@@ -29,12 +27,7 @@ export class DiscardGameMasterUseCase implements UseCase {
     this.assertCanDiscardGameMaster(lobby, { userId });
 
     this.discardGameMaster({ lobby });
-    await this.repository.updateLobby({ lobby });
-
-    this.eventEmitter.emitAsync(
-      LobbyEvent.LobbyChanged,
-      new LobbyChangedPayload({ lobby }),
-    );
+    await this.backupService.updateLobby({ lobby });
   }
 
   private assertCanDiscardGameMaster(

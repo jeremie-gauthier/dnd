@@ -2,7 +2,6 @@ import { LobbyEntityStatus, type LobbyEntity } from "@dnd/shared";
 import { ForbiddenException, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
-import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import {
   afterEach,
   beforeEach,
@@ -12,15 +11,17 @@ import {
   vi,
   type MockInstance,
 } from "vitest";
+import { BackupService } from "../services/backup/backup.service";
 import { TogglePlayerReadyStateRepository } from "./toggle-player-ready-state.repository";
 import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state.uc";
 
 describe("TogglePlayerReadyStateUseCase", () => {
   let useCase: TogglePlayerReadyStateUseCase;
+  let backupService: BackupService;
   let repository: TogglePlayerReadyStateRepository;
   let eventEmitter2: EventEmitter2;
 
-  let updateLobbyMock: MockInstance<[lobby: LobbyEntity], Promise<void>>;
+  let updateLobbyMock: MockInstance<[{ lobby: LobbyEntity }], Promise<void>>;
   let eventEmitterMock: MockInstance<
     [event: any, ...values: any[]],
     Promise<any[]>
@@ -37,20 +38,26 @@ describe("TogglePlayerReadyStateUseCase", () => {
         TogglePlayerReadyStateUseCase,
         EventEmitter2,
         {
+          provide: BackupService,
+          useValue: {
+            updateLobby: () => Promise.resolve(),
+          },
+        },
+        {
           provide: TogglePlayerReadyStateRepository,
           useValue: {
             getLobbyById: () => Promise.resolve(null),
-            updateLobby: () => Promise.resolve(),
           },
         },
       ],
     }).compile();
 
     useCase = module.get(TogglePlayerReadyStateUseCase);
+    backupService = module.get(BackupService);
     repository = module.get(TogglePlayerReadyStateRepository);
     eventEmitter2 = module.get(EventEmitter2);
 
-    updateLobbyMock = vi.spyOn(repository, "updateLobby");
+    updateLobbyMock = vi.spyOn(backupService, "updateLobby");
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
   });
 
@@ -79,15 +86,12 @@ describe("TogglePlayerReadyStateUseCase", () => {
       expect(getLobbyByIdMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledWith({
-        id: "mock-lobby-id",
-        players: [{ userId: "mock-user-id", isReady: true }],
-        status: LobbyEntityStatus.OPENED,
+        lobby: {
+          id: "mock-lobby-id",
+          players: [{ userId: "mock-user-id", isReady: true }],
+          status: LobbyEntityStatus.OPENED,
+        },
       });
-      expect(eventEmitterMock).toHaveBeenCalledOnce();
-      expect(eventEmitterMock).toHaveBeenCalledWith(
-        LobbyEvent.LobbyChanged,
-        expect.objectContaining({}),
-      );
     });
 
     it("should toggle the user's ready state from true to false when alone in the lobby", async () => {
@@ -104,15 +108,12 @@ describe("TogglePlayerReadyStateUseCase", () => {
       expect(getLobbyByIdMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledWith({
-        id: "mock-lobby-id",
-        players: [{ userId: "mock-user-id", isReady: false }],
-        status: LobbyEntityStatus.OPENED,
+        lobby: {
+          id: "mock-lobby-id",
+          players: [{ userId: "mock-user-id", isReady: false }],
+          status: LobbyEntityStatus.OPENED,
+        },
       });
-      expect(eventEmitterMock).toHaveBeenCalledOnce();
-      expect(eventEmitterMock).toHaveBeenCalledWith(
-        LobbyEvent.LobbyChanged,
-        expect.objectContaining({}),
-      );
     });
 
     it("should toggle the user's ready state from false to true when with other users in the lobby", async () => {
@@ -136,19 +137,19 @@ describe("TogglePlayerReadyStateUseCase", () => {
       expect(getLobbyByIdMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledWith({
-        id: "mock-lobby-id",
-        players: [
-          { userId: "mock-user-id", isReady: true },
-          { userId: "mock-another-user-id-that-is-ready", isReady: true },
-          { userId: "mock-another-user-id-that-is-not-ready", isReady: false },
-        ],
-        status: LobbyEntityStatus.OPENED,
+        lobby: {
+          id: "mock-lobby-id",
+          players: [
+            { userId: "mock-user-id", isReady: true },
+            { userId: "mock-another-user-id-that-is-ready", isReady: true },
+            {
+              userId: "mock-another-user-id-that-is-not-ready",
+              isReady: false,
+            },
+          ],
+          status: LobbyEntityStatus.OPENED,
+        },
       });
-      expect(eventEmitterMock).toHaveBeenCalledOnce();
-      expect(eventEmitterMock).toHaveBeenCalledWith(
-        LobbyEvent.LobbyChanged,
-        expect.objectContaining({}),
-      );
     });
 
     it("should toggle the user's ready state from true to false when with other users in the lobby", async () => {
@@ -172,19 +173,19 @@ describe("TogglePlayerReadyStateUseCase", () => {
       expect(getLobbyByIdMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledWith({
-        id: "mock-lobby-id",
-        players: [
-          { userId: "mock-user-id", isReady: false },
-          { userId: "mock-another-user-id-that-is-ready", isReady: true },
-          { userId: "mock-another-user-id-that-is-not-ready", isReady: false },
-        ],
-        status: LobbyEntityStatus.OPENED,
+        lobby: {
+          id: "mock-lobby-id",
+          players: [
+            { userId: "mock-user-id", isReady: false },
+            { userId: "mock-another-user-id-that-is-ready", isReady: true },
+            {
+              userId: "mock-another-user-id-that-is-not-ready",
+              isReady: false,
+            },
+          ],
+          status: LobbyEntityStatus.OPENED,
+        },
       });
-      expect(eventEmitterMock).toHaveBeenCalledOnce();
-      expect(eventEmitterMock).toHaveBeenCalledWith(
-        LobbyEvent.LobbyChanged,
-        expect.objectContaining({}),
-      );
     });
   });
 

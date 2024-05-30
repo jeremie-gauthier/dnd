@@ -6,12 +6,14 @@ import { Campaign } from "src/database/entities/campaign.entity";
 import { Hero } from "src/database/entities/hero.entity";
 import { User } from "src/database/entities/user.entity";
 import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
+import { UsersRepository } from "src/redis/repositories/users.repository";
 import type { Repository } from "typeorm";
 
 @Injectable()
 export class CreateLobbyRepository {
   constructor(
     private readonly lobbiesRepository: LobbiesRepository,
+    private readonly usersRepository: UsersRepository,
     @InjectRepository(Campaign)
     private readonly campaignRepository: Repository<Campaign>,
     @InjectRepository(Hero)
@@ -80,5 +82,17 @@ export class CreateLobbyRepository {
     });
 
     return heroes;
+  }
+
+  public async getUserLobby({
+    userId,
+  }: { userId: User["id"] }): Promise<string | undefined> {
+    return await this.usersRepository.get(userId);
+  }
+
+  public async getLobbyById({
+    lobbyId,
+  }: { lobbyId: LobbyEntity["id"] }): Promise<LobbyEntity | null> {
+    return await this.lobbiesRepository.getOne(lobbyId);
   }
 }

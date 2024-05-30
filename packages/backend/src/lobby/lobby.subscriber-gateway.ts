@@ -31,7 +31,7 @@ import {
 import { JoinLobbyUseCase } from "./join-lobby/join-lobby.uc";
 import { LeaveLobbyOutputDto } from "./leave-lobby/leave-lobby.dto";
 import { LeaveLobbyUseCase } from "./leave-lobby/leave-lobby.uc";
-import { ListenLobbiesChangesUseCase } from "./listen-lobbies-changes/listen-lobbies-changes.uc";
+import { ListenLobbiesUpdatesUseCase } from "./listen-lobbies-updates/listen-lobbies-updates.uc";
 import { PickGameMasterInputDto } from "./pick-game-master/pick-game-master.dto";
 import { PickGameMasterUseCase } from "./pick-game-master/pick-game-master.uc";
 import type { PickHeroInputDto } from "./pick-hero/pick-hero.dto";
@@ -58,7 +58,7 @@ export class LobbySubscriberGateway
     private readonly createLobbyUseCase: CreateLobbyUseCase,
     private readonly joinLobbyUseCase: JoinLobbyUseCase,
     private readonly leaveLobbyUseCase: LeaveLobbyUseCase,
-    private readonly listenLobbiesChangesUseCase: ListenLobbiesChangesUseCase,
+    private readonly listenLobbiesUpdatesUseCase: ListenLobbiesUpdatesUseCase,
     private readonly pickHeroUseCase: PickHeroUseCase,
     private readonly discardHeroUseCase: DiscardHeroUseCase,
     private readonly togglePlayerReadyStateUseCase: TogglePlayerReadyStateUseCase,
@@ -82,7 +82,7 @@ export class LobbySubscriberGateway
   ): Promise<CreateLobbyOutputDto> {
     const lobby = await this.createLobbyUseCase.execute({
       userId: client.data.userId,
-      createLobbyInputDto,
+      createLobbyInput: createLobbyInputDto,
     });
 
     await client.join(lobby.id);
@@ -106,7 +106,7 @@ export class LobbySubscriberGateway
 
   @SubscribeMessage(ClientLobbyEvent.ListenLobbiesChanges)
   public async listenLobbiesChanges(@ConnectedSocket() client: ServerSocket) {
-    await this.listenLobbiesChangesUseCase.execute(client);
+    await this.listenLobbiesUpdatesUseCase.execute(client);
     return { message: "You are now listening on lobbies changes" };
   }
 

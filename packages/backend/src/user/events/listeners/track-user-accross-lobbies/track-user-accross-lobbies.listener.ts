@@ -2,8 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import type { UserJoinedLobbyPayload } from "src/lobby/events/emitters/user-joined-lobby.payload";
+import { UserLeftLobbyPayload } from "src/lobby/events/emitters/user-left-lobby.payload";
 import { TrackUserAccrossLobbiesRepository } from "./track-user-accross-lobbies.repository";
-import type { TrackUserAccrossLobbiesEventPayloads } from "./track-user-accross-lobbies.type";
 
 @Injectable()
 export class TrackUserAccrossLobbiesListener {
@@ -11,8 +11,7 @@ export class TrackUserAccrossLobbiesListener {
 
   @OnEvent(LobbyEvent.UserJoinedLobby)
   @OnEvent(LobbyEvent.UserLeftLobby)
-  @OnEvent(LobbyEvent.UserForceLeftLobby)
-  public async handler(payload: TrackUserAccrossLobbiesEventPayloads) {
+  public async handler(payload: UserJoinedLobbyPayload | UserLeftLobbyPayload) {
     if (this.isAJoinLobbyEvent(payload)) {
       await this.repository.saveUserLobby(payload);
     } else {
@@ -21,7 +20,7 @@ export class TrackUserAccrossLobbiesListener {
   }
 
   private isAJoinLobbyEvent(
-    payload: TrackUserAccrossLobbiesEventPayloads,
+    payload: UserJoinedLobbyPayload | UserLeftLobbyPayload,
   ): payload is UserJoinedLobbyPayload {
     return payload.name === LobbyEvent.UserJoinedLobby;
   }

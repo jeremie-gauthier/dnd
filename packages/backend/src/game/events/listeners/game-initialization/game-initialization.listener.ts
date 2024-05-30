@@ -17,13 +17,13 @@ import { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import { Dice } from "src/database/entities/dice.entity";
 import { Hero } from "src/database/entities/hero.entity";
 import { User } from "src/database/entities/user.entity";
-import { ItemService } from "src/game/inventory/services/item/item.service";
-import { MapSerializerService } from "src/game/map/services/map-serializer/map-serializer.service";
-import { MovesService } from "src/game/moves/services/moves.service";
-import { PlayableEntityService } from "src/game/playable-entity/services/playable-entity/playable-entity.service";
-import { InitiativeService } from "src/game/timeline/services/initiative/initiative.service";
+import { MoveService } from "src/game/services/move/move.service";
 import type { HostRequestedGameStartPayload } from "src/lobby/events/emitters/host-requested-game-start.payload";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
+import { InitiativeService } from "../../../services/initiative/initiative.service";
+import { ItemService } from "../../../services/item/item.service";
+import { MapSerializerService } from "../../../services/map-serializer/map-serializer.service";
+import { PlayableEntityService } from "../../../services/playable-entity/playable-entity.service";
 import { GameEvent } from "../../emitters/game-events.enum";
 import { GameInitializationDonePayload } from "../../emitters/game-initialization-done.payload";
 import { GameInitializationStartedPayload } from "../../emitters/game-initialization-started.payload";
@@ -35,7 +35,7 @@ export class GameInitializationListener {
     private readonly eventEmitter: EventEmitter2,
     private readonly repository: GameInitializationRepository,
     private readonly mapSerializer: MapSerializerService,
-    private readonly movesService: MovesService,
+    private readonly moveService: MoveService,
     private readonly initiativeService: InitiativeService,
     private readonly playableEntityService: PlayableEntityService,
     private readonly itemService: ItemService,
@@ -208,7 +208,7 @@ export class GameInitializationListener {
       if (playableEntity.type !== "hero") continue;
 
       const firstFreeStartingTile = this.getFirstFreeStartingTileOrThrow(game);
-      this.movesService.moveHeroToRequestedPosition({
+      this.moveService.moveHeroToRequestedPosition({
         game,
         heroId: playableEntity.id,
         requestedPosition: firstFreeStartingTile.coord,
@@ -220,7 +220,7 @@ export class GameInitializationListener {
     const firstFreeStartingTile = game.map.tiles.find(
       (tile) =>
         tile.isStartingTile &&
-        this.movesService.canMoveToRequestedPosition({
+        this.moveService.canMoveToRequestedPosition({
           game,
           requestedPosition: tile.coord,
         }),
@@ -252,9 +252,9 @@ export class GameInitializationListener {
     events,
   }: { events: GameEntity["events"] }): Promise<GameEntity["enemyTemplates"]> {
     const enemiesName = this.getDistinctAvailableEnemies({ events });
-    const enemyTemplates = await this.playableEntityService.getEnemiesTemplates(
-      { enemiesName },
-    );
+    const enemyTemplates = await this.repository.getEnemiesByNames({
+      enemiesName,
+    });
 
     const dicesNamesUsedByEnemies = Array.from(
       new Set(

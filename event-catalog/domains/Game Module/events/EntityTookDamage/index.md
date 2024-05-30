@@ -6,7 +6,7 @@ summary: |
 producers:
   - Combat Service
 consumers:
-  - State Machine Publisher Gateway
+  - Game Publisher Gateway
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />

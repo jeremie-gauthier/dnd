@@ -3,7 +3,7 @@ import { Controller, Get, Param, UseGuards } from "@nestjs/common";
 import { Request } from "express";
 import { JWTAuthGuard } from "src/authz/jwt-auth.guard";
 import { JWTUser } from "src/authz/jwt-user.decorator";
-import { GetUserGameStateUseCase } from "./state-machine/get-user-game-state/get-user-game-state.uc";
+import { GetUserGameStateUseCase } from "./get-user-game-state/get-user-game-state.uc";
 
 @UseGuards(JWTAuthGuard)
 @Controller("game/private")

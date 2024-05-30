@@ -10,11 +10,13 @@ import {
   it,
   vi,
 } from "vitest";
+import { BackupService } from "../services/backup/backup.service";
 import { DiscardGameMasterRepository } from "./discard-game-master.repository";
 import { DiscardGameMasterUseCase } from "./discard-game-master.uc";
 
 describe("DiscardGameMasterUseCase", () => {
   let useCase: DiscardGameMasterUseCase;
+  let backupService: BackupService;
   let repository: DiscardGameMasterRepository;
   let eventEmitter2: EventEmitter2;
 
@@ -33,6 +35,12 @@ describe("DiscardGameMasterUseCase", () => {
           useValue: {},
         },
         {
+          provide: BackupService,
+          useValue: {
+            updateLobby: () => Promise.resolve(),
+          },
+        },
+        {
           provide: ConfigService,
           useValue: {
             getOrThrow: (key: string) => key,
@@ -42,6 +50,7 @@ describe("DiscardGameMasterUseCase", () => {
     }).compile();
 
     useCase = module.get(DiscardGameMasterUseCase);
+    backupService = module.get(BackupService);
     repository = module.get(DiscardGameMasterRepository);
     eventEmitter2 = module.get(EventEmitter2);
 
@@ -56,5 +65,6 @@ describe("DiscardGameMasterUseCase", () => {
     expect(useCase).toBeDefined();
     expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
+    expect(backupService).toBeDefined();
   });
 });

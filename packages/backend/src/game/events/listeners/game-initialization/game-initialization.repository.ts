@@ -4,6 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import type { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import { Dice } from "src/database/entities/dice.entity";
+import { EnemyTemplate } from "src/database/entities/enemy-template.entity";
 import { Item } from "src/database/entities/item.entity";
 import { Spell } from "src/database/entities/spell.entity";
 import type { User } from "src/database/entities/user.entity";
@@ -24,8 +25,22 @@ export class GameInitializationRepository {
     private readonly campaignStageProgressionRepository: Repository<CampaignStageProgression>,
     @InjectRepository(Dice)
     private readonly diceRepository: Repository<Dice>,
+    @InjectRepository(EnemyTemplate)
+    private readonly enemyTemplateRepository: Repository<EnemyTemplate>,
     private readonly gamesRepository: GamesRepository,
   ) {}
+
+  public async getEnemiesByNames({
+    enemiesName,
+  }: {
+    enemiesName: EnemyTemplate["name"][];
+  }): Promise<EnemyTemplate[]> {
+    return this.enemyTemplateRepository.find({
+      where: {
+        name: In(enemiesName),
+      },
+    });
+  }
 
   public async getUserCampaignStageProgression({
     campaignStageId,

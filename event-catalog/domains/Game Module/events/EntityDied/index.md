@@ -6,8 +6,7 @@ summary: |
 producers:
   - Combat Service
 consumers:
-  - State Machine Publisher Gateway
-  - Update Timeline Listener
+  - Game Publisher Gateway
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />

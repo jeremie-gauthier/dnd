@@ -20,12 +20,15 @@ export class HandleWsDisconnectionUseCase implements UseCase {
       return;
     }
 
-    await Promise.all([
+    const [lobbyToLeave] = await Promise.all([
+      this.repository.getLobbyById({ lobbyId }),
       this.leaveRooms(client),
       this.repository.forgetUser(userId),
     ]);
 
-    await this.seatManagerService.leave({ userId });
+    if (lobbyToLeave) {
+      await this.seatManagerService.leave({ lobby: lobbyToLeave, userId });
+    }
 
     await client.leave(lobbyId);
   }

@@ -1,27 +1,28 @@
-import { LobbyEntity } from "@dnd/shared";
+import type { GameEntity, LobbyEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import { User } from "src/database/entities/user.entity";
+import { GamesRepository } from "src/redis/repositories/games.repository";
 import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
-import { UsersRepository } from "src/redis/repositories/users.repository";
 
 @Injectable()
 export class SeatManagerRepository {
   constructor(
     private readonly lobbiesRepository: LobbiesRepository,
-    private readonly usersRepository: UsersRepository,
+    private readonly gamesRepository: GamesRepository,
   ) {}
 
-  public async getUserLobby({ userId }: { userId: User["id"] }) {
-    return await this.usersRepository.get(userId);
-  }
-
-  public async getLobbyById({
-    lobbyId,
-  }: { lobbyId: LobbyEntity["id"] }): Promise<LobbyEntity | null> {
+  public async getLobbyById(
+    lobbyId: LobbyEntity["id"],
+  ): Promise<LobbyEntity | null> {
     return await this.lobbiesRepository.getOne(lobbyId);
   }
 
-  public async updateLobby({ lobby }: { lobby: LobbyEntity }) {
-    await this.lobbiesRepository.update(lobby);
+  public async delLobbyById(lobbyId: LobbyEntity["id"]): Promise<void> {
+    await this.lobbiesRepository.del(lobbyId);
+  }
+
+  public async delGameById({
+    gameId,
+  }: { gameId: GameEntity["id"] }): Promise<void> {
+    await this.gamesRepository.del(gameId);
   }
 }

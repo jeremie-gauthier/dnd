@@ -13,9 +13,6 @@ import { DiscardGameMasterUseCase } from "./discard-game-master/discard-game-mas
 import { DiscardHeroRepository } from "./discard-hero/discard-hero.repository";
 import { DiscardHeroUseCase } from "./discard-hero/discard-hero.uc";
 import { GameInitializationDoneListener } from "./events/listeners/game-initialization-done/game-initialization-done.listener";
-import { GameInitializationDoneRepository } from "./events/listeners/game-initialization-done/game-initialization-done.repository";
-import { LobbyCleanerListener } from "./events/listeners/lobby-cleaner/lobby-cleaner.listener";
-import { LobbyCleanerRepository } from "./events/listeners/lobby-cleaner/lobby-cleaner.repository";
 import { GetLobbiesRepository } from "./get-lobbies/get-lobbies.repository";
 import { GetLobbiesUseCase } from "./get-lobbies/get-lobbies.uc";
 import { GetLobbyRepository } from "./get-lobby/get-lobby.repository";
@@ -23,10 +20,11 @@ import { GetLobbyUseCase } from "./get-lobby/get-lobby.uc";
 import { HandleWsConnectionUseCase } from "./handle-ws-connection/handle-ws-connection.uc";
 import { HandleWsDisconnectionRepository } from "./handle-ws-disconnection/handle-ws-disconnection.repository";
 import { HandleWsDisconnectionUseCase } from "./handle-ws-disconnection/handle-ws-disconnection.uc";
+import { JoinLobbyRepository } from "./join-lobby/join-lobby.repository";
 import { JoinLobbyUseCase } from "./join-lobby/join-lobby.uc";
 import { LeaveLobbyRepository } from "./leave-lobby/leave-lobby.repository";
 import { LeaveLobbyUseCase } from "./leave-lobby/leave-lobby.uc";
-import { ListenLobbiesChangesUseCase } from "./listen-lobbies-changes/listen-lobbies-changes.uc";
+import { ListenLobbiesUpdatesUseCase } from "./listen-lobbies-updates/listen-lobbies-updates.uc";
 import { LobbyPrivateController } from "./lobby.private-controller";
 import { LobbyPublisherGateway } from "./lobby.publisher-gateway";
 import { LobbySubscriberGateway } from "./lobby.subscriber-gateway";
@@ -34,6 +32,8 @@ import { PickGameMasterRepository } from "./pick-game-master/pick-game-master.re
 import { PickGameMasterUseCase } from "./pick-game-master/pick-game-master.uc";
 import { PickHeroRepository } from "./pick-hero/pick-hero.repository";
 import { PickHeroUseCase } from "./pick-hero/pick-hero.uc";
+import { BackupRepository } from "./services/backup/backup.repository";
+import { BackupService } from "./services/backup/backup.service";
 import { SeatManagerRepository } from "./services/seat-manager/seat-manager.repository";
 import { SeatManagerService } from "./services/seat-manager/seat-manager.service";
 import { StartGameRepository } from "./start-game/start-game.repository";
@@ -60,9 +60,8 @@ import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggl
     GetLobbyUseCase,
     GetLobbyRepository,
     JoinLobbyUseCase,
-    ListenLobbiesChangesUseCase,
-    LobbyCleanerListener,
-    LobbyCleanerRepository,
+    JoinLobbyRepository,
+    ListenLobbiesUpdatesUseCase,
     LeaveLobbyUseCase,
     LeaveLobbyRepository,
     PickHeroUseCase,
@@ -74,7 +73,6 @@ import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggl
     StartGameUseCase,
     StartGameRepository,
     GameInitializationDoneListener,
-    GameInitializationDoneRepository,
     SeatManagerService,
     SeatManagerRepository,
     PickGameMasterUseCase,
@@ -83,6 +81,8 @@ import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggl
     DiscardGameMasterRepository,
     LobbySubscriberGateway,
     LobbyPublisherGateway,
+    BackupService,
+    BackupRepository,
   ],
 })
 export class LobbyModule {}
