@@ -11,8 +11,4 @@ export class DiscardGameMasterRepository {
   }: { lobbyId: LobbyEntity["id"] }): Promise<LobbyEntity | null> {
     return this.lobbiesRepository.getOne(lobbyId);
   }
-
-  public async updateLobby({ lobby }: { lobby: LobbyEntity }): Promise<void> {
-    await this.lobbiesRepository.update(lobby);
-  }
 }

@@ -20,8 +20,4 @@ export class JoinLobbyRepository {
   }: { lobbyId: LobbyEntity["id"] }): Promise<LobbyEntity | null> {
     return await this.lobbiesRepository.getOne(lobbyId);
   }
-
-  public async updateLobby({ lobby }: { lobby: LobbyEntity }) {
-    await this.lobbiesRepository.update(lobby);
-  }
 }

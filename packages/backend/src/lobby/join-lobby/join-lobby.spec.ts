@@ -1,11 +1,13 @@
 import { Test } from "@nestjs/testing";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { BackupService } from "../services/backup/backup.service";
 import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
 import { JoinLobbyRepository } from "./join-lobby.repository";
 import { JoinLobbyUseCase } from "./join-lobby.uc";
 
 describe("StartGameUseCase", () => {
   let useCase: JoinLobbyUseCase;
+  let backupService: BackupService;
   let seatManagerService: SeatManagerService;
 
   beforeEach(async () => {
@@ -21,6 +23,12 @@ describe("StartGameUseCase", () => {
           },
         },
         {
+          provide: BackupService,
+          useValue: {
+            updateLobby: () => Promise.resolve(),
+          },
+        },
+        {
           provide: SeatManagerService,
           useValue: {
             take: vi.fn().mockResolvedValue("fake-lobby-id"),
@@ -30,6 +38,7 @@ describe("StartGameUseCase", () => {
     }).compile();
 
     useCase = module.get(JoinLobbyUseCase);
+    backupService = module.get(BackupService);
     seatManagerService = module.get(SeatManagerService);
   });
 
@@ -39,6 +48,7 @@ describe("StartGameUseCase", () => {
 
   it("should be defined", () => {
     expect(useCase).toBeDefined();
+    expect(backupService).toBeDefined();
     expect(seatManagerService).toBeDefined();
   });
 });

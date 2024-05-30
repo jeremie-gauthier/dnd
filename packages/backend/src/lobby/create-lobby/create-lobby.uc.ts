@@ -1,13 +1,11 @@
-import { LobbyEntityStatus } from "@dnd/shared";
+import { CreateLobbyInput, LobbyEntityStatus } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import type { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import type { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/types/use-case.interface";
+import { BackupService } from "../services/backup/backup.service";
 import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
-import type {
-  CreateLobbyInputDto,
-  CreateLobbyOutputDto,
-} from "./create-lobby.dto";
+import type { CreateLobbyOutputDto } from "./create-lobby.dto";
 import { CreateLobbyRepository } from "./create-lobby.repository";
 
 @Injectable()
@@ -15,14 +13,15 @@ export class CreateLobbyUseCase implements UseCase {
   constructor(
     private readonly repository: CreateLobbyRepository,
     private readonly seatManagerService: SeatManagerService,
+    private readonly backupService: BackupService,
   ) {}
 
   public async execute({
     userId,
-    createLobbyInputDto: { nbPlayersMax, stageId },
+    createLobbyInput: { nbPlayersMax, stageId },
   }: {
     userId: User["id"];
-    createLobbyInputDto: CreateLobbyInputDto;
+    createLobbyInput: CreateLobbyInput;
   }): Promise<CreateLobbyOutputDto> {
     await this.leavePreviousLobby({ userId });
 
@@ -47,13 +46,7 @@ export class CreateLobbyUseCase implements UseCase {
           stage: selectedStage,
         },
       },
-      players: [
-        {
-          userId,
-          heroesSelected: [],
-          isReady: false,
-        },
-      ],
+      players: [],
       gameMaster: {
         userId: undefined,
       },
@@ -64,6 +57,8 @@ export class CreateLobbyUseCase implements UseCase {
     });
 
     this.seatManagerService.take({ lobby, userId });
+
+    await this.backupService.updateLobby({ lobby });
 
     return lobby;
   }
@@ -88,7 +83,6 @@ export class CreateLobbyUseCase implements UseCase {
       return;
     }
 
-    this.seatManagerService.leave({ lobby: lobbyToLeave, userId });
-    await this.repository.updateLobby({ lobby: lobbyToLeave });
+    await this.seatManagerService.leave({ lobby: lobbyToLeave, userId });
   }
 }

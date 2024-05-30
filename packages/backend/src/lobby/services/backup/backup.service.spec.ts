@@ -4,7 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { BackupRepository } from "./backup.repository";
 import { BackupService } from "./backup.service";
 
-describe("Game BackupService", () => {
+describe("Lobby BackupService", () => {
   let service: BackupService;
 
   beforeEach(async () => {
@@ -15,7 +15,7 @@ describe("Game BackupService", () => {
         {
           provide: BackupRepository,
           useValue: {
-            updateGame: vi.fn(),
+            updateLobby: vi.fn(),
           },
         },
       ],

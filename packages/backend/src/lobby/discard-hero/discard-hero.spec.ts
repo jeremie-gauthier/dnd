@@ -3,7 +3,6 @@ import { ForbiddenException, NotFoundException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
-import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import {
   afterEach,
   beforeEach,
@@ -13,15 +12,17 @@ import {
   vi,
   type MockInstance,
 } from "vitest";
+import { BackupService } from "../services/backup/backup.service";
 import { DiscardHeroRepository } from "./discard-hero.repository";
 import { DiscardHeroUseCase } from "./discard-hero.uc";
 
 describe("DiscardHeroUseCase", () => {
   let useCase: DiscardHeroUseCase;
+  let backupService: BackupService;
   let repository: DiscardHeroRepository;
   let eventEmitter2: EventEmitter2;
 
-  let updateLobbyMock: MockInstance<[lobby: LobbyEntity], Promise<void>>;
+  let updateLobbyMock: MockInstance<[{ lobby: LobbyEntity }], Promise<void>>;
   let eventEmitterMock: MockInstance<
     [event: any, ...values: any[]],
     Promise<any[]>
@@ -45,20 +46,26 @@ describe("DiscardHeroUseCase", () => {
           },
         },
         {
+          provide: BackupService,
+          useValue: {
+            updateLobby: () => Promise.resolve(),
+          },
+        },
+        {
           provide: DiscardHeroRepository,
           useValue: {
             getLobbyById: () => Promise.resolve(null),
-            updateLobby: () => Promise.resolve(),
           },
         },
       ],
     }).compile();
 
     useCase = module.get(DiscardHeroUseCase);
+    backupService = module.get(BackupService);
     repository = module.get(DiscardHeroRepository);
     eventEmitter2 = module.get(EventEmitter2);
 
-    updateLobbyMock = vi.spyOn(repository, "updateLobby");
+    updateLobbyMock = vi.spyOn(backupService, "updateLobby");
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
   });
 
@@ -92,16 +99,17 @@ describe("DiscardHeroUseCase", () => {
       expect(getLobbyByIdMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledWith({
-        id: "mock-lobby-id",
-        players: [{ userId: "mock-user-id", heroesSelected: [] }],
-        heroesAvailable: [{ id: "warrior" }, { id: "cleric" }, { id: "thief" }],
-        status: LobbyEntityStatus.OPENED,
+        lobby: {
+          id: "mock-lobby-id",
+          players: [{ userId: "mock-user-id", heroesSelected: [] }],
+          heroesAvailable: [
+            { id: "warrior" },
+            { id: "cleric" },
+            { id: "thief" },
+          ],
+          status: LobbyEntityStatus.OPENED,
+        },
       });
-      expect(eventEmitterMock).toHaveBeenCalledOnce();
-      expect(eventEmitterMock).toHaveBeenCalledWith(
-        LobbyEvent.LobbyChanged,
-        expect.objectContaining({}),
-      );
     });
 
     it("should remove the selected hero from the user that is in the lobby with other users", async () => {
@@ -130,27 +138,24 @@ describe("DiscardHeroUseCase", () => {
       expect(getLobbyByIdMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledWith({
-        id: "mock-lobby-id",
-        players: [
-          { userId: "mock-user-id", heroesSelected: [] },
-          {
-            userId: "mock-another-user-id-1",
-            heroesSelected: ["warrior", "thief"],
-          },
-          { userId: "mock-another-user-id-2", heroesSelected: [] },
-        ],
-        heroesAvailable: [
-          { id: "warrior", pickedBy: "mock-another-user-id-1" },
-          { id: "cleric" },
-          { id: "thief", pickedBy: "mock-another-user-id-1" },
-        ],
-        status: LobbyEntityStatus.OPENED,
+        lobby: {
+          id: "mock-lobby-id",
+          players: [
+            { userId: "mock-user-id", heroesSelected: [] },
+            {
+              userId: "mock-another-user-id-1",
+              heroesSelected: ["warrior", "thief"],
+            },
+            { userId: "mock-another-user-id-2", heroesSelected: [] },
+          ],
+          heroesAvailable: [
+            { id: "warrior", pickedBy: "mock-another-user-id-1" },
+            { id: "cleric" },
+            { id: "thief", pickedBy: "mock-another-user-id-1" },
+          ],
+          status: LobbyEntityStatus.OPENED,
+        },
       });
-      expect(eventEmitterMock).toHaveBeenCalledOnce();
-      expect(eventEmitterMock).toHaveBeenCalledWith(
-        LobbyEvent.LobbyChanged,
-        expect.objectContaining({}),
-      );
     });
   });
 

@@ -20,8 +20,7 @@ export class LeaveLobbyUseCase implements UseCase {
       return;
     }
 
-    this.seatManagerService.leave({ lobby: lobbyToLeave, userId });
-    await this.repository.updateLobby({ lobby: lobbyToLeave });
+    await this.seatManagerService.leave({ lobby: lobbyToLeave, userId });
 
     return lobbyToLeave.id;
   }

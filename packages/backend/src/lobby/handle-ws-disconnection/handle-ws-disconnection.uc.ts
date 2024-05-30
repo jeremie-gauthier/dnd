@@ -27,8 +27,7 @@ export class HandleWsDisconnectionUseCase implements UseCase {
     ]);
 
     if (lobbyToLeave) {
-      this.seatManagerService.leave({ lobby: lobbyToLeave, userId });
-      await this.repository.updateLobby({ lobby: lobbyToLeave });
+      await this.seatManagerService.leave({ lobby: lobbyToLeave, userId });
     }
 
     await client.leave(lobbyId);

@@ -3,12 +3,10 @@ import { Injectable } from "@nestjs/common";
 import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
 
 @Injectable()
-export class PickGameMasterRepository {
+export class BackupRepository {
   constructor(private readonly lobbiesRepository: LobbiesRepository) {}
 
-  public getLobbyById({
-    lobbyId,
-  }: { lobbyId: LobbyEntity["id"] }): Promise<LobbyEntity | null> {
-    return this.lobbiesRepository.getOne(lobbyId);
+  public async updateLobby({ lobby }: { lobby: LobbyEntity }) {
+    await this.lobbiesRepository.update(lobby);
   }
 }

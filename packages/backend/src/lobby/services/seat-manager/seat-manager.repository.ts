@@ -4,7 +4,7 @@ import { GamesRepository } from "src/redis/repositories/games.repository";
 import { LobbiesRepository } from "src/redis/repositories/lobbies.repository";
 
 @Injectable()
-export class LobbyCleanerRepository {
+export class SeatManagerRepository {
   constructor(
     private readonly lobbiesRepository: LobbiesRepository,
     private readonly gamesRepository: GamesRepository,

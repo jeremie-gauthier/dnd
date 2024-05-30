@@ -13,15 +13,17 @@ import {
   vi,
   type MockInstance,
 } from "vitest";
+import { BackupService } from "../services/backup/backup.service";
 import { StartGameRepository } from "./start-game.repository";
 import { StartGameUseCase } from "./start-game.uc";
 
 describe("StartGameUseCase", () => {
   let useCase: StartGameUseCase;
+  let backupService: BackupService;
   let repository: StartGameRepository;
   let eventEmitter2: EventEmitter2;
 
-  let updateLobbyMock: MockInstance<[lobby: LobbyEntity], Promise<void>>;
+  let updateLobbyMock: MockInstance<[{ lobby: LobbyEntity }], Promise<void>>;
   let eventEmitterMock: MockInstance<
     [event: any, ...values: any[]],
     Promise<any[]>
@@ -38,10 +40,15 @@ describe("StartGameUseCase", () => {
         StartGameUseCase,
         EventEmitter2,
         {
+          provide: BackupService,
+          useValue: {
+            updateLobby: () => Promise.resolve(),
+          },
+        },
+        {
           provide: StartGameRepository,
           useValue: {
             getLobbyById: () => Promise.resolve(null),
-            updateLobby: () => Promise.resolve(),
             createGame: () => Promise.resolve({}),
           },
         },
@@ -55,10 +62,11 @@ describe("StartGameUseCase", () => {
     }).compile();
 
     useCase = module.get(StartGameUseCase);
+    backupService = module.get(BackupService);
     repository = module.get(StartGameRepository);
     eventEmitter2 = module.get(EventEmitter2);
 
-    updateLobbyMock = vi.spyOn(repository, "updateLobby");
+    updateLobbyMock = vi.spyOn(backupService, "updateLobby");
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
   });
 
@@ -127,54 +135,52 @@ describe("StartGameUseCase", () => {
       expect(getLobbyByIdMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledOnce();
       expect(updateLobbyMock).toHaveBeenCalledWith({
-        id: "mock-lobby-id",
-        status: LobbyEntityStatus.GAME_INITIALIZING,
-        config: {
-          campaign: {
-            id: "mock-campaign-id",
-            stage: {
-              id: "mock-stage-id",
+        lobby: {
+          id: "mock-lobby-id",
+          status: LobbyEntityStatus.GAME_INITIALIZING,
+          config: {
+            campaign: {
+              id: "mock-campaign-id",
+              stage: {
+                id: "mock-stage-id",
+              },
             },
           },
-        },
-        host: {
-          userId: "mock-user-id",
-        },
-        players: [
-          {
+          host: {
             userId: "mock-user-id",
-            heroesSelected: ["warrior"],
-            isReady: true,
           },
-          {
-            userId: "mock-user-id-2",
-            heroesSelected: ["cleric"],
-            isReady: true,
-          },
-          {
-            userId: "mock-user-id-3",
-            heroesSelected: ["thief"],
-            isReady: true,
-          },
-          {
-            userId: "mock-user-id-4",
-            heroesSelected: [],
-            isReady: true,
-          },
-        ],
-        gameMaster: { userId: "mock-user-id-4" },
-        heroesAvailable: [
-          { id: "warrior", pickedBy: "mock-user-id" },
-          { id: "cleric", pickedBy: "mock-user-id-2" },
-          { id: "thief", pickedBy: "mock-user-id-3" },
-        ],
+          players: [
+            {
+              userId: "mock-user-id",
+              heroesSelected: ["warrior"],
+              isReady: true,
+            },
+            {
+              userId: "mock-user-id-2",
+              heroesSelected: ["cleric"],
+              isReady: true,
+            },
+            {
+              userId: "mock-user-id-3",
+              heroesSelected: ["thief"],
+              isReady: true,
+            },
+            {
+              userId: "mock-user-id-4",
+              heroesSelected: [],
+              isReady: true,
+            },
+          ],
+          gameMaster: { userId: "mock-user-id-4" },
+          heroesAvailable: [
+            { id: "warrior", pickedBy: "mock-user-id" },
+            { id: "cleric", pickedBy: "mock-user-id-2" },
+            { id: "thief", pickedBy: "mock-user-id-3" },
+          ],
+        },
       });
 
-      expect(eventEmitterMock).toHaveBeenCalledTimes(2);
-      expect(eventEmitterMock).toHaveBeenCalledWith(
-        LobbyEvent.LobbyChanged,
-        expect.objectContaining({}),
-      );
+      expect(eventEmitterMock).toHaveBeenCalledTimes(1);
       expect(eventEmitterMock).toHaveBeenCalledWith(
         LobbyEvent.HostRequestedGameStart,
         expect.objectContaining({}),

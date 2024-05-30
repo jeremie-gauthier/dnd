@@ -8,7 +8,6 @@ producers:
 consumers:
   - Track User Accross Lobbies Listener
   - Lobby Publisher Gateway
-  - Lobby Cleaner Listener
 ---
 
 <NodeGraph title="Consumer / Producer Diagram" />

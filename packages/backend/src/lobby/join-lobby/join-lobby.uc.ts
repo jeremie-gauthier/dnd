@@ -1,9 +1,9 @@
-import type { LobbyEntity } from "@dnd/shared";
+import type { JoinLobbyInput, LobbyEntity } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import type { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/types/use-case.interface";
+import { BackupService } from "../services/backup/backup.service";
 import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
-import type { JoinLobbyInputDto } from "./join-lobby.dto";
 import { JoinLobbyRepository } from "./join-lobby.repository";
 
 @Injectable()
@@ -11,20 +11,21 @@ export class JoinLobbyUseCase implements UseCase {
   constructor(
     private readonly repository: JoinLobbyRepository,
     private readonly seatManagerService: SeatManagerService,
+    private readonly backupService: BackupService,
   ) {}
 
   public async execute({
     userId,
     lobbyId,
-  }: { userId: User["id"] } & JoinLobbyInputDto): Promise<LobbyEntity["id"]> {
+  }: { userId: User["id"] } & JoinLobbyInput): Promise<LobbyEntity["id"]> {
     const lobbyToLeave = await this.getLobbyToLeave({ userId });
     if (lobbyToLeave) {
-      this.seatManagerService.leave({ lobby: lobbyToLeave, userId });
-      await this.repository.updateLobby({ lobby: lobbyToLeave });
+      await this.seatManagerService.leave({ lobby: lobbyToLeave, userId });
     }
 
     const lobbyToJoin = await this.getLobbyToJoin({ lobbyId });
-    await this.repository.updateLobby({ lobby: lobbyToJoin });
+    this.seatManagerService.take({ lobby: lobbyToJoin, userId });
+    await this.backupService.updateLobby({ lobby: lobbyToJoin });
 
     return lobbyId;
   }

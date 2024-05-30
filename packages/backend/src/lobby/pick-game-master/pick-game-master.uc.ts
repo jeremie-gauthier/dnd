@@ -5,20 +5,18 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { EventEmitter2 } from "@nestjs/event-emitter";
 import { EnvSchema } from "src/config/env.config";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/types/use-case.interface";
-import { LobbyChangedPayload } from "../events/emitters/lobby-changed.payload";
-import { LobbyEvent } from "../events/emitters/lobby-events.enum";
+import { BackupService } from "../services/backup/backup.service";
 import { PickGameMasterRepository } from "./pick-game-master.repository";
 
 @Injectable()
 export class PickGameMasterUseCase implements UseCase {
   constructor(
     private readonly repository: PickGameMasterRepository,
-    private readonly eventEmitter: EventEmitter2,
     private readonly configService: ConfigService<EnvSchema>,
+    private readonly backupService: BackupService,
   ) {}
 
   public async execute({
@@ -32,13 +30,9 @@ export class PickGameMasterUseCase implements UseCase {
     this.assertCanPickGameMaster(lobby, { userId });
 
     this.pickGameMaster({ lobby, userId });
-    await this.repository.updateLobby({ lobby });
-
-    this.eventEmitter.emitAsync(
-      LobbyEvent.LobbyChanged,
-      new LobbyChangedPayload({ lobby }),
-    );
+    await this.backupService.updateLobby({ lobby });
   }
+
   private assertCanPickGameMaster(
     lobby: LobbyEntity | null,
     { userId }: { userId: User["id"] },

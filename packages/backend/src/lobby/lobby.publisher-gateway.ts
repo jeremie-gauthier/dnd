@@ -12,7 +12,6 @@ export class LobbyPublisherGateway {
   private readonly server: WsServer;
 
   @OnEvent(LobbyEvent.UserJoinedLobby)
-  @OnEvent(LobbyEvent.UserForceLeftLobby)
   @OnEvent(LobbyEvent.UserLeftLobby)
   protected lobbiesChangesHandler({ lobby }: { lobby: LobbyEntity }) {
     this.server.to(LOBBIES_ROOM).emit(ServerLobbyEvent.LobbiesChangesDetected, {
@@ -30,9 +29,8 @@ export class LobbyPublisherGateway {
       .emit(ServerLobbyEvent.LobbiesDeleted, { lobbyId: lobby.id });
   }
 
-  @OnEvent(LobbyEvent.LobbyChanged)
+  @OnEvent(LobbyEvent.LobbyUpdated)
   @OnEvent(LobbyEvent.UserJoinedLobby)
-  @OnEvent(LobbyEvent.UserForceLeftLobby)
   @OnEvent(LobbyEvent.UserLeftLobby)
   protected lobbyChangesHandler({ lobby }: { lobby: LobbyEntity }) {
     this.server

@@ -23,10 +23,6 @@ export class HandleWsDisconnectionRepository {
     return await this.lobbiesRepository.getOne(lobbyId);
   }
 
-  public async updateLobby({ lobby }: { lobby: LobbyEntity }) {
-    await this.lobbiesRepository.update(lobby);
-  }
-
   public async forgetUser(userId: User["id"]): Promise<void> {
     await this.usersRepository.del(userId);
   }

@@ -4,7 +4,7 @@ import type { ServerSocket } from "src/types/socket.type";
 import type { UseCase } from "src/types/use-case.interface";
 
 @Injectable()
-export class ListenLobbiesChangesUseCase implements UseCase {
+export class ListenLobbiesUpdatesUseCase implements UseCase {
   public async execute(client: ServerSocket): Promise<void> {
     await client.join(LOBBIES_ROOM);
   }
