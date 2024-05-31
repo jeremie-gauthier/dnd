@@ -23,7 +23,6 @@ import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import { InitiativeService } from "../../../services/initiative/initiative.service";
 import { ItemService } from "../../../services/item/item.service";
 import { MapSerializerService } from "../../../services/map-serializer/map-serializer.service";
-import { PlayableEntityService } from "../../../services/playable-entity/playable-entity.service";
 import { GameEvent } from "../../emitters/game-events.enum";
 import { GameInitializationDonePayload } from "../../emitters/game-initialization-done.payload";
 import { GameInitializationStartedPayload } from "../../emitters/game-initialization-started.payload";
@@ -37,7 +36,6 @@ export class GameInitializationListener {
     private readonly mapSerializer: MapSerializerService,
     private readonly moveService: MoveService,
     private readonly initiativeService: InitiativeService,
-    private readonly playableEntityService: PlayableEntityService,
     private readonly itemService: ItemService,
   ) {}
 

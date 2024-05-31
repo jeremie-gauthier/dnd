@@ -1,6 +1,5 @@
 import type { GameEntity } from "@dnd/shared";
 import { Injectable, type OnApplicationBootstrap } from "@nestjs/common";
-import { EventEmitter2 } from "@nestjs/event-emitter";
 import { RedisService } from "../redis.service";
 
 type GamesKey = Record<GameEntity["id"], GameEntity>;
@@ -10,10 +9,7 @@ export class GamesRepository implements OnApplicationBootstrap {
   public readonly client;
   public static KEY = "games";
 
-  constructor(
-    redisService: RedisService,
-    private readonly eventEmitter: EventEmitter2,
-  ) {
+  constructor(redisService: RedisService) {
     this.client = redisService.client;
   }
 
