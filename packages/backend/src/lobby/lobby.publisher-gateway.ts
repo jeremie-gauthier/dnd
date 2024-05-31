@@ -30,8 +30,6 @@ export class LobbyPublisherGateway {
   }
 
   @OnEvent(LobbyEvent.LobbyUpdated)
-  @OnEvent(LobbyEvent.UserJoinedLobby)
-  @OnEvent(LobbyEvent.UserLeftLobby)
   protected lobbyChangesHandler({ lobby }: { lobby: LobbyEntity }) {
     this.server
       .to(lobby.id)
