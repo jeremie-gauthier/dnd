@@ -28,7 +28,7 @@ import { PlayableEntityMoveRepository } from "./playable-entity-move.repository"
 export class PlayableEntityMoveUseCase implements UseCase {
   constructor(
     private readonly repository: PlayableEntityMoveRepository,
-    private readonly moveSerivce: MoveService,
+    private readonly moveService: MoveService,
     private readonly eventEmitter: EventEmitter2,
     private readonly trapService: TrapService,
     private readonly coordService: CoordService,
@@ -136,7 +136,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
         break;
       }
 
-      this.moveSerivce.moveHeroToRequestedPosition({
+      this.moveService.moveHeroToRequestedPosition({
         game,
         heroId: playableEntityId,
         requestedPosition: pathTile.coord,
@@ -190,7 +190,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
     }
 
     if (
-      !this.moveSerivce.canMoveToRequestedPosition({
+      !this.moveService.canMoveToRequestedPosition({
         game,
         requestedPosition: tile.coord,
       })
