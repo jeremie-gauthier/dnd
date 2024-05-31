@@ -76,6 +76,9 @@ export class SeatManagerService {
         heroAvailable.pickedBy = undefined;
       }
     }
+    if (lobby.gameMaster.userId === userId) {
+      lobby.gameMaster.userId = undefined;
+    }
 
     this.eventEmitter.emitAsync(
       LobbyEvent.UserLeftLobby,
@@ -86,10 +89,13 @@ export class SeatManagerService {
     if (hasNoPlayersLeft) {
       await this.deleteLobby({ lobby });
     } else {
+      const shouldSwapHost = lobby.host.userId === userId;
+      if (shouldSwapHost) {
+        lobby.host.userId = lobby.players[0]!.userId;
+      }
+
       await this.backupService.updateLobby({ lobby });
     }
-
-    // TODO: handle ownership change
   }
 
   private async deleteLobby({ lobby }: { lobby: LobbyEntity }) {
