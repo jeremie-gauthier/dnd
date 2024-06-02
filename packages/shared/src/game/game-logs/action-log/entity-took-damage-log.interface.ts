@@ -1,4 +1,4 @@
-import { PlayableEntity } from "../../../../database";
+import { PlayableEntity } from "../../../database";
 import { ActionLog } from "./action-log.interface";
 
 export interface EntityTookDamageActionLog extends ActionLog {
