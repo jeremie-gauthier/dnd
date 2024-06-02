@@ -1,5 +1,6 @@
 import type { HeroClassType } from "../enums/hero-class.enum";
 import { StuffStorageCapacityJson } from "../json";
+import { Coord } from "./coord.interface";
 import type { EnemyKind } from "./enemy-kind.type";
 import { GameEvent } from "./game-event.type";
 import { GameItem } from "./game-item.type";
@@ -80,11 +81,6 @@ export type TileEntity =
   | TilePlayableEntity
   | TileNonPlayableInteractiveEntity
   | TileNonPlayableNonInteractiveEntity;
-
-export type Coord = {
-  row: number;
-  column: number;
-};
 
 export type Tile = {
   coord: Coord;

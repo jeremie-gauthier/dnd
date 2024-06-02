@@ -1,3 +1,4 @@
+export * from "./coord.interface";
 export * from "./enemy-kind.type";
 export * from "./game-event.type";
 export * from "./game-item.type";

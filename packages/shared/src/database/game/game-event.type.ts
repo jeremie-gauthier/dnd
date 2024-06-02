@@ -1,5 +1,5 @@
+import { Coord } from "./coord.interface";
 import { EnemyKind } from "./enemy-kind.type";
-import { Coord } from "./game.interface";
 
 export type OnDoorOpeningGameEvent = {
   name: "on_door_opening";
