@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { TilePath } from "../../../../utils";
+import { TilePath } from "../../utils";
 
 const coordSchema = z.object({
   row: z.number().min(0),

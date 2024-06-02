@@ -1,7 +1,8 @@
 import type { z } from "zod";
 import type { GameEntity } from "../database/game";
 import type { LobbyEntity } from "../database/lobby";
-import type { GameLog, getLobbiesOutputSchema } from "../schemas";
+import type { GameLog } from "../game";
+import { getLobbiesOutputSchema } from "../lobby";
 import {
   ServerGameEvent,
   type PlayerGameState,

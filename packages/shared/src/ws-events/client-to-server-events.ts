@@ -1,11 +1,10 @@
 import type { LobbyEntity } from "../database/lobby/lobby.interface";
 import {
-  DiscardGameMasterInput,
   OpenDoorInput,
-  PickGameMasterInput,
   PlayableEntityAttackInput,
   PlayableEntityMoveInput,
-} from "../schemas";
+} from "../game";
+import { DiscardGameMasterInput, PickGameMasterInput } from "../lobby";
 import { ClientGameEvent } from "./game-events/game-events.client";
 import { ClientLobbyEvent } from "./lobby-events/lobby-events.client";
 import type { EventsMapper } from "./utils.type";
