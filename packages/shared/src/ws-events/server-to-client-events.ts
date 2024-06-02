@@ -31,6 +31,7 @@ interface ServerToClientEventsAndPayloads
   [ServerGameEvent.GameStart]: () => void;
   [ServerGameEvent.GameChangesDetected]: (payload: PlayerGameState) => void;
   [ServerGameEvent.GameLogCreated]: (payload: GameLog) => void;
+  [ServerLobbyEvent.UserLeftLobby]: () => void;
 }
 
 export type ServerToClientEvents =

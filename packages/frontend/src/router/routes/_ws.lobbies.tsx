@@ -65,15 +65,7 @@ export function LobbiesRouteComponent() {
     socket.on(ServerLobbyEvent.LobbiesDeleted, handleLobbyDeleted);
 
     return () => {
-      socket.removeListener(ServerLobbyEvent.Error, errorHandler);
-      socket.removeListener(
-        ServerLobbyEvent.LobbiesChangesDetected,
-        handleLobbiesChanges,
-      );
-      socket.removeListener(
-        ServerLobbyEvent.LobbiesDeleted,
-        handleLobbyDeleted,
-      );
+      socket.removeAllListeners();
     };
   }, [socket, queryClient]);
 

@@ -70,6 +70,12 @@ export function MenuRouteComponent() {
     };
     socket.on(ServerLobbyEvent.LobbyChangesDetected, handleLobbyChanges);
 
+    const handleUserLeftLobby = () => {
+      navigate({ to: "/lobbies" });
+    };
+
+    socket.on(ServerLobbyEvent.UserLeftLobby, handleUserLeftLobby);
+
     return () => {
       socket.removeAllListeners();
     };
