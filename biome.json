@@ -28,5 +28,18 @@
     "parser": {
       "unsafeParameterDecoratorsEnabled": true
     }
-  }
+  },
+  "overrides": [
+    {
+      "include": ["shared/src/**"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "noBarrelFile": "off",
+            "noReExportAll": "off"
+          }
+        }
+      }
+    }
+  ]
 }
