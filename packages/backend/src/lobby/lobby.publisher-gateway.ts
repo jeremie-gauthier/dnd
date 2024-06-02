@@ -1,6 +1,7 @@
 import { GameEntity, LobbyEntity, ServerLobbyEvent } from "@dnd/shared";
 import { OnEvent } from "@nestjs/event-emitter";
 import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
+import { User } from "src/database/entities/user.entity";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import { WsServer } from "src/types/socket.type";
 import { LOBBIES_ROOM } from "./constants";
@@ -51,5 +52,11 @@ export class LobbyPublisherGateway {
     this.server
       .to(lobby.id)
       .emit(ServerLobbyEvent.GameInitializationDone, { game });
+  }
+
+  @OnEvent(LobbyEvent.UserLeftLobby)
+  protected userLeftLobby({ userId }: { userId: User["id"] }) {
+    console.log("publish ServerLobbyEvent.UserLeftLobby");
+    this.server.to(userId).emit(ServerLobbyEvent.UserLeftLobby);
   }
 }

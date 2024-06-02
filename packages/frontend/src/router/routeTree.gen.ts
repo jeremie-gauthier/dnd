@@ -168,3 +168,62 @@ export const routeTree = rootRoute.addChildren({
 })
 
 /* prettier-ignore-end */
+
+/* ROUTE_MANIFEST_START
+{
+  "routes": {
+    "__root__": {
+      "filePath": "__root.tsx",
+      "children": [
+        "/_ws",
+        "/game-test",
+        "/login",
+        "/menu",
+        "/profile"
+      ]
+    },
+    "/_ws": {
+      "filePath": "_ws.tsx",
+      "children": [
+        "/_ws/create-lobby",
+        "/_ws/lobbies",
+        "/_ws/menu-multiplayer",
+        "/_ws/game/$gameId",
+        "/_ws/lobby/$lobbyId"
+      ]
+    },
+    "/game-test": {
+      "filePath": "game-test.tsx"
+    },
+    "/login": {
+      "filePath": "login.tsx"
+    },
+    "/menu": {
+      "filePath": "menu.tsx"
+    },
+    "/profile": {
+      "filePath": "profile.tsx"
+    },
+    "/_ws/create-lobby": {
+      "filePath": "_ws.create-lobby.tsx",
+      "parent": "/_ws"
+    },
+    "/_ws/lobbies": {
+      "filePath": "_ws.lobbies.tsx",
+      "parent": "/_ws"
+    },
+    "/_ws/menu-multiplayer": {
+      "filePath": "_ws.menu-multiplayer.tsx",
+      "parent": "/_ws"
+    },
+    "/_ws/game/$gameId": {
+      "filePath": "_ws.game.$gameId.tsx",
+      "parent": "/_ws"
+    },
+    "/_ws/lobby/$lobbyId": {
+      "filePath": "_ws.lobby.$lobbyId.tsx",
+      "parent": "/_ws"
+    }
+  }
+}
+ROUTE_MANIFEST_END */

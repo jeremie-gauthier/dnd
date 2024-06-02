@@ -1,6 +1,5 @@
 import { type User } from "@auth0/auth0-react";
 import { ClientLobbyEvent } from "@dnd/shared";
-import { useNavigate } from "@tanstack/react-router";
 import type { GetLobbyResponse } from "../../hooks/api/lobby/get-lobby";
 import type { ClientSocket } from "../../types/socket.type";
 import { GameMasterCard } from "../playable-card/GameMasterCard";
@@ -16,13 +15,8 @@ type Props = {
 };
 
 export const Lobby = ({ user, lobby, socket }: Props) => {
-  const navigate = useNavigate();
-
   const handleClickOnLeaveLobby = async () => {
     await socket.emitWithAck(ClientLobbyEvent.RequestLeaveLobby);
-    return navigate({
-      to: "/lobbies",
-    });
   };
 
   const handleClickOnReady = () => {

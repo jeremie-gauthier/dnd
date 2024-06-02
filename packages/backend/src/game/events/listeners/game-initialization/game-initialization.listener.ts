@@ -48,7 +48,7 @@ export class GameInitializationListener {
       new GameInitializationStartedPayload({ lobby }),
     );
 
-    const game = await this.createGame(lobby);
+    const game = await this.createGame({ lobby });
 
     this.eventEmitter.emitAsync(
       GameEvent.GameInitializationDone,
@@ -56,7 +56,9 @@ export class GameInitializationListener {
     );
   }
 
-  private async createGame(lobby: LobbyEntity): Promise<GameEntity> {
+  private async createGame({
+    lobby,
+  }: { lobby: LobbyEntity }): Promise<GameEntity> {
     const campaignStageProgression = await this.getUserCampaignStageProgression(
       {
         campaignStageId: lobby.config.campaign.stage.id,

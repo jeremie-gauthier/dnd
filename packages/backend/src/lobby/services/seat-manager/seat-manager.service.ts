@@ -86,19 +86,23 @@ export class SeatManagerService {
     );
 
     const hasNoPlayersLeft = lobby.players.length === 0;
-    if (hasNoPlayersLeft) {
+    const hasHostLeft = lobby.host.userId === userId;
+    const shouldDeleteLobby = hasNoPlayersLeft || hasHostLeft;
+    if (shouldDeleteLobby) {
       await this.deleteLobby({ lobby });
     } else {
-      const shouldSwapHost = lobby.host.userId === userId;
-      if (shouldSwapHost) {
-        lobby.host.userId = lobby.players[0]!.userId;
-      }
-
       await this.backupService.updateLobby({ lobby });
     }
   }
 
   private async deleteLobby({ lobby }: { lobby: LobbyEntity }) {
+    for (const { userId } of lobby.players) {
+      this.eventEmitter.emitAsync(
+        LobbyEvent.UserLeftLobby,
+        new UserLeftLobbyPayload({ userId, lobby }),
+      );
+    }
+
     await this.repository.delLobbyById(lobby.id);
 
     this.eventEmitter.emitAsync(
