@@ -127,6 +127,7 @@ export class OpenDoorUseCase implements UseCase {
     }
 
     this.playableEntityService.mustBeAbleToAct(playingEntity);
+    this.playableEntityService.mustBeAlive(playingEntity);
   }
 
   private isNeighbourTiles({

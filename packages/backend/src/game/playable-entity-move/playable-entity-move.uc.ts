@@ -80,12 +80,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
     }
 
     this.playableEntityService.mustBeInActionPhase(playableEntity);
-
-    if (playableEntity.characteristic.healthPoints <= 0) {
-      throw new ForbiddenException(
-        "Cannot move a playable entity that is not alive",
-      );
-    }
+    this.playableEntityService.mustBeAlive(playableEntity);
 
     if (playableEntity.characteristic.movementPoints <= 0) {
       throw new ForbiddenException(

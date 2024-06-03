@@ -1,7 +1,6 @@
 import {
   EnemyKind,
   GameEntity,
-  NonNegativeNumber,
   PlayableEnemyEntity,
   PlayableEntity,
 } from "@dnd/shared";
@@ -44,11 +43,7 @@ export class PlayableEntityService {
 
   public mustBeAbleToAct(
     playableEntity: PlayableEntity,
-  ): asserts playableEntity is PlayableEntity & {
-    characteristic: PlayableEntity["characteristic"] & {
-      actionPoints: NonNegativeNumber<number>;
-    };
-  } {
+  ): asserts playableEntity is PlayableEntity {
     if (playableEntity.characteristic.actionPoints <= 0) {
       throw new ForbiddenException(
         "Cannot act with a playable entity that has no action points left",
@@ -62,6 +57,16 @@ export class PlayableEntityService {
     if (playableEntity.currentPhase !== "action") {
       throw new ForbiddenException(
         "Cannot act with a playable entity that is not in action phase",
+      );
+    }
+  }
+
+  public mustBeAlive(
+    playableEntity: PlayableEntity,
+  ): asserts playableEntity is PlayableEntity {
+    if (playableEntity.characteristic.healthPoints <= 0) {
+      throw new ForbiddenException(
+        "Cannot act with a playable entity that is not alive",
       );
     }
   }

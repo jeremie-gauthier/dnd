@@ -87,19 +87,8 @@ export class PlayableEntityAttackUseCase implements UseCase {
     }
 
     this.playableEntityService.mustBeInActionPhase(attackerPlayableEntity);
-
-    if (attackerPlayableEntity.characteristic.healthPoints <= 0) {
-      throw new ForbiddenException(
-        "Cannot attack with a playable entity that is not alive",
-      );
-    }
-
-    if (targetPlayableEntity.characteristic.healthPoints <= 0) {
-      throw new ForbiddenException(
-        "Cannot attack a playable entity that is not alive",
-      );
-    }
-
+    this.playableEntityService.mustBeAlive(attackerPlayableEntity);
+    this.playableEntityService.mustBeAlive(targetPlayableEntity);
     this.playableEntityService.mustBeAbleToAct(attackerPlayableEntity);
 
     if (
