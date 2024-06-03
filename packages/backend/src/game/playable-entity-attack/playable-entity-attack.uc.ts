@@ -14,6 +14,7 @@ import { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
 import { CombatService } from "../services/combat/combat.service";
 import { CoordService } from "../services/coord/coord.service";
+import { PlayableEntityService } from "../services/playable-entity/playable-entity.service";
 import { PlayableEntityAttackRepository } from "./playable-entity-attack.repository";
 
 @Injectable()
@@ -23,6 +24,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
     private readonly combatService: CombatService,
     private readonly coordService: CoordService,
     private readonly backupService: BackupService,
+    private readonly playableEntityService: PlayableEntityService,
   ) {}
 
   public async execute({
@@ -102,11 +104,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
       );
     }
 
-    if (attackerPlayableEntity.characteristic.actionPoints <= 0) {
-      throw new ForbiddenException(
-        "Attacker playable entity has no action points left",
-      );
-    }
+    this.playableEntityService.mustBeAbleToAct(attackerPlayableEntity);
 
     if (
       attackerPlayableEntity.type === "enemy" &&

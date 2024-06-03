@@ -1,5 +1,10 @@
-import { EnemyKind, GameEntity, PlayableEnemyEntity } from "@dnd/shared";
-import { Injectable } from "@nestjs/common";
+import {
+  EnemyKind,
+  GameEntity,
+  PlayableEnemyEntity,
+  PlayableEntity,
+} from "@dnd/shared";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { randomUUID } from "node:crypto";
 
 @Injectable()
@@ -34,5 +39,13 @@ export class PlayableEntityService {
         actionsDoneThisTurn: [],
       };
     });
+  }
+
+  public mustBeAbleToAct(
+    playableEntity: PlayableEntity,
+  ): asserts playableEntity is PlayableEntity {
+    if (playableEntity.characteristic.actionPoints <= 0) {
+      throw new ForbiddenException("Playable entity has no action points left");
+    }
   }
 }

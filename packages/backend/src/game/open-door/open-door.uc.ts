@@ -20,6 +20,7 @@ import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
 import { InitiativeService } from "../services/initiative/initiative.service";
+import { PlayableEntityService } from "../services/playable-entity/playable-entity.service";
 import { SpawnService } from "../services/spawn/spawn.service";
 import { TurnService } from "../services/turn/turn.service";
 import { OpenDoorRepository } from "./open-door.repository";
@@ -33,6 +34,7 @@ export class OpenDoorUseCase implements UseCase {
     private readonly spawnService: SpawnService,
     private readonly eventEmitter: EventEmitter2,
     private readonly backupService: BackupService,
+    private readonly playableEntityService: PlayableEntityService,
   ) {}
 
   public async execute({
@@ -124,11 +126,7 @@ export class OpenDoorUseCase implements UseCase {
       );
     }
 
-    if (playingEntity.characteristic.actionPoints < 1) {
-      throw new ForbiddenException(
-        "You must have at least one action point to open a door",
-      );
-    }
+    this.playableEntityService.mustBeAbleToAct(playingEntity);
   }
 
   private isNeighbourTiles({

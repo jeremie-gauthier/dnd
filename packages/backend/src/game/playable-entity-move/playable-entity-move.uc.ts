@@ -21,6 +21,7 @@ import { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
 import { CoordService } from "../services/coord/coord.service";
 import { MoveService } from "../services/move/move.service";
+import { PlayableEntityService } from "../services/playable-entity/playable-entity.service";
 import { TrapService } from "../services/trap/trap.service";
 import { PlayableEntityMoveRepository } from "./playable-entity-move.repository";
 
@@ -33,6 +34,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
     private readonly trapService: TrapService,
     private readonly coordService: CoordService,
     private readonly backupService: BackupService,
+    private readonly playableEntityService: PlayableEntityService,
   ) {}
 
   public async execute({
@@ -98,9 +100,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
       );
     }
 
-    if (playableEntity.characteristic.actionPoints <= 0) {
-      throw new ForbiddenException("Playable entity has no action points left");
-    }
+    this.playableEntityService.mustBeAbleToAct(playableEntity);
   }
 
   private getPlayableEntityPath({
