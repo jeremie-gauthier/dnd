@@ -86,11 +86,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
       );
     }
 
-    if (attackerPlayableEntity.currentPhase !== "action") {
-      throw new ForbiddenException(
-        "Cannot attack with a playable entity that is not in action phase",
-      );
-    }
+    this.playableEntityService.mustBeInActionPhase(attackerPlayableEntity);
 
     if (attackerPlayableEntity.characteristic.healthPoints <= 0) {
       throw new ForbiddenException(

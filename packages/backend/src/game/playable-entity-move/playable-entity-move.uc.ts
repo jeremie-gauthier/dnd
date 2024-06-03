@@ -79,11 +79,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
       );
     }
 
-    if (playableEntity.currentPhase !== "action") {
-      throw new ForbiddenException(
-        "Cannot move a playable entity that is not in action phase",
-      );
-    }
+    this.playableEntityService.mustBeInActionPhase(playableEntity);
 
     if (playableEntity.characteristic.healthPoints <= 0) {
       throw new ForbiddenException(
