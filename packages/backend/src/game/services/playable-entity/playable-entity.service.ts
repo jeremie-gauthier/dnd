@@ -1,8 +1,10 @@
 import {
+  Coord,
   EnemyKind,
   GameEntity,
   PlayableEnemyEntity,
   PlayableEntity,
+  getNeighbourCoords,
 } from "@dnd/shared";
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { randomUUID } from "node:crypto";
@@ -77,6 +79,23 @@ export class PlayableEntityService {
     if (playableEntity.characteristic.healthPoints <= 0) {
       throw new ForbiddenException(
         "Cannot act with a playable entity that is not alive",
+      );
+    }
+  }
+
+  public mustBeAdjacent({
+    adjacencyCoord,
+    playableEntity,
+  }: { adjacencyCoord: Coord; playableEntity: PlayableEntity }) {
+    const neighbourCoords = getNeighbourCoords({ coord: playableEntity.coord });
+    const isAdjacent = neighbourCoords.some(
+      ({ row, column }) =>
+        row === adjacencyCoord.row && column === adjacencyCoord.column,
+    );
+
+    if (!isAdjacent) {
+      throw new ForbiddenException(
+        "Cannot act with an entity that is not adjacent",
       );
     }
   }

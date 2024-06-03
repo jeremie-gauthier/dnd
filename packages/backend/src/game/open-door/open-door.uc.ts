@@ -1,12 +1,10 @@
 import {
-  Coord,
   GameEntity,
   OpenDoorInput,
   PlayableEntity,
   Tile,
   TileNonPlayableInteractiveEntity,
   coordToIndex,
-  getNeighbourCoords,
 } from "@dnd/shared";
 import {
   ForbiddenException,
@@ -115,30 +113,12 @@ export class OpenDoorUseCase implements UseCase {
       throw new NotFoundException("No closed door found at these coordinates");
     }
 
-    if (
-      !this.isNeighbourTiles({
-        tileCoord: playingEntity.coord,
-        tileToCompareCoord: coordOfTileWithDoor,
-      })
-    ) {
-      throw new ForbiddenException(
-        "You must be adjacent to the door to open it",
-      );
-    }
-
+    this.playableEntityService.mustBeAdjacent({
+      adjacencyCoord: coordOfTileWithDoor,
+      playableEntity: playingEntity,
+    });
     this.playableEntityService.mustBeAbleToAct(playingEntity);
     this.playableEntityService.mustBeAlive(playingEntity);
-  }
-
-  private isNeighbourTiles({
-    tileCoord,
-    tileToCompareCoord,
-  }: { tileCoord: Coord; tileToCompareCoord: Coord }): boolean {
-    const neighbourCoords = getNeighbourCoords({ coord: tileCoord });
-    return neighbourCoords.some(
-      ({ row, column }) =>
-        row === tileToCompareCoord.row && column === tileToCompareCoord.column,
-    );
   }
 
   private openDoor({
