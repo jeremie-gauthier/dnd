@@ -28,7 +28,7 @@ export class SeatManagerService {
     lobby: LobbyEntity;
     userId: User["id"];
   }): void {
-    this.assertCanEnterLobby(userId, lobby);
+    this.mustExecute(userId, lobby);
 
     lobby.players.push({
       userId,
@@ -42,7 +42,7 @@ export class SeatManagerService {
     );
   }
 
-  private assertCanEnterLobby(
+  private mustExecute(
     userId: User["id"],
     lobby: LobbyEntity | null,
   ): asserts lobby is LobbyEntity {

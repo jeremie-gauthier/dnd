@@ -24,13 +24,13 @@ export class DiscardGameMasterUseCase implements UseCase {
   }): Promise<void> {
     const lobby = await this.repository.getLobbyById({ lobbyId });
 
-    this.assertCanDiscardGameMaster(lobby, { userId });
+    this.mustExecute(lobby, { userId });
 
     this.discardGameMaster({ lobby });
     await this.backupService.updateLobby({ lobby });
   }
 
-  private assertCanDiscardGameMaster(
+  private mustExecute(
     lobby: LobbyEntity | null,
     { userId }: { userId: User["id"] },
   ): asserts lobby is LobbyEntity {

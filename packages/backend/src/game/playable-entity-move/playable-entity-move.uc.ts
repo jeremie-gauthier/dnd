@@ -47,17 +47,14 @@ export class PlayableEntityMoveUseCase implements UseCase {
   }): Promise<void> {
     const game = await this.repository.getGameById({ gameId });
 
-    this.assertCanMovePlayableEntity(game, {
-      playableEntityId,
-      userId,
-    });
+    this.mustExecute(game, { playableEntityId, userId });
 
     this.getPlayableEntityPath({ game, pathToTile, playableEntityId });
 
     await this.backupService.updateGame({ game });
   }
 
-  private assertCanMovePlayableEntity(
+  private mustExecute(
     game: GameEntity | null,
     {
       playableEntityId,

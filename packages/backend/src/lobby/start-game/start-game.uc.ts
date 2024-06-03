@@ -34,7 +34,7 @@ export class StartGameUseCase implements UseCase {
     userId: User["id"];
   }): Promise<void> {
     const lobby = await this.repository.getLobbyById(lobbyId);
-    this.assertCanStartGame(lobby, { userId });
+    this.mustExecute(lobby, { userId });
 
     this.setLobbyAsReadyForGameInitializing(lobby);
     await this.backupService.updateLobby({ lobby });
@@ -45,7 +45,7 @@ export class StartGameUseCase implements UseCase {
     );
   }
 
-  private assertCanStartGame(
+  private mustExecute(
     lobby: LobbyEntity | null,
     {
       userId,

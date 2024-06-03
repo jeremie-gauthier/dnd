@@ -23,14 +23,14 @@ export class TogglePlayerReadyStateUseCase implements UseCase {
     userId: User["id"];
   }): Promise<void> {
     const lobby = await this.repository.getLobbyById(lobbyId);
-    this.assertCanToggleReadyState(lobby, { userId });
+    this.mustExecute(lobby, { userId });
 
     this.toggleUserReadyState({ lobby, userId });
 
     await this.backupService.updateLobby({ lobby });
   }
 
-  private assertCanToggleReadyState(
+  private mustExecute(
     lobby: LobbyEntity | null,
     { userId }: { userId: User["id"] },
   ): asserts lobby is LobbyEntity {

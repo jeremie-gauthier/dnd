@@ -27,13 +27,13 @@ export class PickGameMasterUseCase implements UseCase {
   }): Promise<void> {
     const lobby = await this.repository.getLobbyById({ lobbyId });
 
-    this.assertCanPickGameMaster(lobby, { userId });
+    this.mustExecute(lobby, { userId });
 
     this.pickGameMaster({ lobby, userId });
     await this.backupService.updateLobby({ lobby });
   }
 
-  private assertCanPickGameMaster(
+  private mustExecute(
     lobby: LobbyEntity | null,
     { userId }: { userId: User["id"] },
   ): asserts lobby is LobbyEntity {

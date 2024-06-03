@@ -26,14 +26,14 @@ export class DiscardHeroUseCase implements UseCase {
   }): Promise<void> {
     // TODO: the lobby fetched might lack of a lock
     const lobby = await this.repository.getLobbyById(lobbyId);
-    this.assertCanDiscardHero(lobby, { userId, heroId });
+    this.mustExecute(lobby, { userId, heroId });
 
     this.discardHero({ lobby, userId, heroId });
 
     await this.backupService.updateLobby({ lobby });
   }
 
-  private assertCanDiscardHero(
+  private mustExecute(
     lobby: LobbyEntity | null,
     { userId, heroId }: { userId: User["id"]; heroId: Hero["id"] },
   ): asserts lobby is LobbyEntity {

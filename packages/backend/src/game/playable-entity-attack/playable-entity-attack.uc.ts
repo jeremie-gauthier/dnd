@@ -35,7 +35,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
     userId,
   }: PlayableEntityAttackInput & { userId: User["id"] }): Promise<void> {
     const game = await this.repository.getGameById({ gameId });
-    this.assertCanAttack(game, {
+    this.mustExecute(game, {
       gameId,
       attackId,
       attackerPlayableEntityId,
@@ -52,7 +52,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
     await this.backupService.updateGame({ game });
   }
 
-  private assertCanAttack(
+  private mustExecute(
     game: GameEntity | null,
     {
       attackId,

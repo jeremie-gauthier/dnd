@@ -46,7 +46,7 @@ export class OpenDoorUseCase implements UseCase {
   }): Promise<void> {
     const game = await this.repository.getGameById({ gameId });
 
-    this.assertCanOpenDoor(game, { userId, coordOfTileWithDoor });
+    this.mustExecute(game, { userId, coordOfTileWithDoor });
 
     const { entityThatOpenedTheDoor } = this.openDoor({
       coordOfTileWithDoor,
@@ -64,7 +64,7 @@ export class OpenDoorUseCase implements UseCase {
     this.backupService.updateGame({ game });
   }
 
-  private assertCanOpenDoor(
+  private mustExecute(
     game: GameEntity | null,
     {
       userId,
