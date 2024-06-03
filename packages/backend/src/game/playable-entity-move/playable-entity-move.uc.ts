@@ -81,13 +81,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
 
     this.playableEntityService.mustBeInActionPhase(playableEntity);
     this.playableEntityService.mustBeAlive(playableEntity);
-
-    if (playableEntity.characteristic.movementPoints <= 0) {
-      throw new ForbiddenException(
-        "Playable entity has no movement points left",
-      );
-    }
-
+    this.playableEntityService.mustBeAbleToMove(playableEntity);
     this.playableEntityService.mustBeAbleToAct(playableEntity);
   }
 

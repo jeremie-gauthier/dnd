@@ -51,6 +51,16 @@ export class PlayableEntityService {
     }
   }
 
+  public mustBeAbleToMove(
+    playableEntity: PlayableEntity,
+  ): asserts playableEntity is PlayableEntity {
+    if (playableEntity.characteristic.movementPoints <= 0) {
+      throw new ForbiddenException(
+        "Cannot move with a playable entity that has no movement points left",
+      );
+    }
+  }
+
   public mustBeInActionPhase(
     playableEntity: PlayableEntity,
   ): asserts playableEntity is PlayableEntity & { currentPhase: "action" } {
