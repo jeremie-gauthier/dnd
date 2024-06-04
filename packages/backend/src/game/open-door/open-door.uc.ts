@@ -1,4 +1,5 @@
 import {
+  Coord,
   GameEntity,
   OpenDoorInput,
   PlayableEntity,
@@ -85,20 +86,11 @@ export class OpenDoorUseCase implements UseCase {
       );
     }
 
-    const tileWithDoor = this.mapService.getTileOrThrow({
+    const tileWithDoor = this.getDoor({
       coord: coordOfTileWithDoor,
       game,
     });
-
-    if (
-      !tileWithDoor.entities.some(
-        (entity) =>
-          entity.type === "non-playable-interactive-entity" &&
-          entity.kind === "door" &&
-          entity.isBlocking &&
-          entity.canInteract,
-      )
-    ) {
+    if (!tileWithDoor) {
       throw new NotFoundException("No closed door found at these coordinates");
     }
 
@@ -118,18 +110,10 @@ export class OpenDoorUseCase implements UseCase {
     userId: User["id"];
     game: GameEntity;
   }): { entityThatOpenedTheDoor: PlayableEntity } {
-    const tileWithDoor = this.mapService.getTileOrThrow({
+    const doorEntity = this.getDoor({
       coord: coordOfTileWithDoor,
       game,
-    });
-
-    const doorEntity = tileWithDoor.entities.find(
-      (entity) =>
-        entity.type === "non-playable-interactive-entity" &&
-        entity.kind === "door" &&
-        entity.isBlocking &&
-        entity.canInteract,
-    ) as TileNonPlayableInteractiveEntity;
+    }) as TileNonPlayableInteractiveEntity;
 
     doorEntity.isBlocking = false;
     doorEntity.canInteract = false;
@@ -153,5 +137,22 @@ export class OpenDoorUseCase implements UseCase {
     );
 
     return { entityThatOpenedTheDoor };
+  }
+
+  private getDoor({
+    coord,
+    game,
+  }: { coord: Coord; game: GameEntity }):
+    | TileNonPlayableInteractiveEntity
+    | undefined {
+    const tileWithDoor = this.mapService.getTileOrThrow({ coord, game });
+    const doorEntity = tileWithDoor.entities.find(
+      (entity) =>
+        entity.type === "non-playable-interactive-entity" &&
+        entity.kind === "door" &&
+        entity.isBlocking &&
+        entity.canInteract,
+    ) as TileNonPlayableInteractiveEntity | undefined;
+    return doorEntity;
   }
 }

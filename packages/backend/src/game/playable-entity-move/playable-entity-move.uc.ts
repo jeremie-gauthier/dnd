@@ -8,11 +8,7 @@ import {
   unfoldTilePath,
 } from "@dnd/shared";
 import { TrapEntity } from "@dnd/shared/dist/database/game/interactive-entities.type";
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
@@ -61,17 +57,11 @@ export class PlayableEntityMoveUseCase implements UseCase {
     userId: User["id"];
     playableEntityId: PlayableEntity["id"];
   }) {
-    const playableEntity = game.playableEntities[playableEntityId];
-    if (!playableEntity) {
-      throw new NotFoundException("Playable entity not found in this game");
-    }
-
-    if (playableEntity.playedByUserId !== userId) {
-      throw new ForbiddenException(
-        "Cannot move a playable entity that you does not own",
-      );
-    }
-
+    const playableEntity = this.playableEntityService.getPlayableEntityOrThrow({
+      game,
+      playableEntityId,
+    });
+    this.playableEntityService.mustBePlayedByUserId({ playableEntity, userId });
     this.playableEntityService.mustBeInActionPhase(playableEntity);
     this.playableEntityService.mustBeAlive(playableEntity);
     this.playableEntityService.mustBeAbleToMove(playableEntity);
@@ -89,10 +79,10 @@ export class PlayableEntityMoveUseCase implements UseCase {
   }): Tile[] {
     const validTiles: Tile[] = [];
 
-    const playableEntity = game.playableEntities[
-      playableEntityId
-    ] as PlayableEntity;
-
+    const playableEntity = this.playableEntityService.getPlayableEntityOrThrow({
+      game,
+      playableEntityId,
+    });
     let movementPoints = playableEntity.characteristic.movementPoints;
 
     // slice to remove the entity self position (which is the origin in the bfs algo)

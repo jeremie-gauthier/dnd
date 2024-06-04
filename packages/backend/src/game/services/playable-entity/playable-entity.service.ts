@@ -2,12 +2,19 @@ import {
   Coord,
   EnemyKind,
   GameEntity,
+  GameItem,
   PlayableEnemyEntity,
   PlayableEntity,
   getNeighbourCoords,
 } from "@dnd/shared";
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { randomUUID } from "node:crypto";
+import { Attack } from "src/database/entities/attack.entity";
+import { User } from "src/database/entities/user.entity";
 
 @Injectable()
 export class PlayableEntityService {
@@ -41,6 +48,38 @@ export class PlayableEntityService {
         actionsDoneThisTurn: [],
       };
     });
+  }
+
+  public getPlayableEntityOrThrow({
+    game,
+    playableEntityId,
+  }: { game: GameEntity; playableEntityId: PlayableEntity["id"] }) {
+    const playableEntity = game.playableEntities[playableEntityId];
+    if (!playableEntity) {
+      throw new NotFoundException("Playable entity not found in this game");
+    }
+    return playableEntity;
+  }
+
+  public getAttackItemOrThrow({
+    attackId,
+    playableEntity: { inventory },
+  }: { attackId: Attack["id"]; playableEntity: PlayableEntity }): GameItem {
+    const attackItem =
+      inventory.gear.find(({ attacks }) =>
+        attacks.some(({ id }) => id === attackId),
+      ) ||
+      inventory.backpack.find(({ attacks }) =>
+        attacks.some(({ id }) => id === attackId),
+      );
+
+    if (!attackItem) {
+      throw new NotFoundException(
+        "Attack item not found in playable entity's inventory",
+      );
+    }
+
+    return attackItem;
   }
 
   public mustBeAbleToAct(
@@ -97,6 +136,26 @@ export class PlayableEntityService {
       throw new ForbiddenException(
         "Cannot act with an entity that is not adjacent",
       );
+    }
+  }
+
+  public mustBePlayedByUserId({
+    playableEntity,
+    userId,
+  }: { playableEntity: PlayableEntity; userId: User["id"] }) {
+    if (playableEntity.playedByUserId !== userId) {
+      throw new ForbiddenException(
+        "Cannot act with a playable entity that you does not own",
+      );
+    }
+  }
+
+  public mustHaveItemInGear({
+    item,
+    playableEntity: { inventory },
+  }: { item: GameItem; playableEntity: PlayableEntity }) {
+    if (inventory.gear.every(({ name }) => name !== item.name)) {
+      throw new ForbiddenException("Cannot use item that is not in gear");
     }
   }
 }

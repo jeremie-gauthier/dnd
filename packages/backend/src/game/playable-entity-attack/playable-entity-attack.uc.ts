@@ -4,26 +4,18 @@ import {
   PlayableEntity,
   PlayableEntityAttackInput,
 } from "@dnd/shared";
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
 import { CombatService } from "../services/combat/combat.service";
-import { CoordService } from "../services/coord/coord.service";
 import { MapService } from "../services/map/map.service";
 import { PlayableEntityService } from "../services/playable-entity/playable-entity.service";
-import { PlayableEntityAttackRepository } from "./playable-entity-attack.repository";
 
 @Injectable()
 export class PlayableEntityAttackUseCase implements UseCase {
   constructor(
-    private readonly repository: PlayableEntityAttackRepository,
     private readonly combatService: CombatService,
-    private readonly coordService: CoordService,
     private readonly backupService: BackupService,
     private readonly playableEntityService: PlayableEntityService,
     private readonly mapService: MapService,
@@ -36,8 +28,9 @@ export class PlayableEntityAttackUseCase implements UseCase {
     targetPlayableEntityId,
     userId,
   }: PlayableEntityAttackInput & { userId: User["id"] }): Promise<void> {
-    const game = await this.repository.getGameById({ gameId });
-    this.mustExecute(game, {
+    const game = await this.backupService.getGameOrThrow({ gameId });
+    this.mustExecute({
+      game,
       gameId,
       attackId,
       attackerPlayableEntityId,
@@ -54,44 +47,32 @@ export class PlayableEntityAttackUseCase implements UseCase {
     await this.backupService.updateGame({ game });
   }
 
-  private mustExecute(
-    game: GameEntity | null,
-    {
-      attackId,
-      attackerPlayableEntityId,
-      targetPlayableEntityId,
-      userId,
-    }: PlayableEntityAttackInput & { userId: User["id"] },
-  ): asserts game is GameEntity {
-    if (!game) {
-      throw new NotFoundException("Game not found");
-    }
-
+  private mustExecute({
+    game,
+    attackId,
+    attackerPlayableEntityId,
+    targetPlayableEntityId,
+    userId,
+  }: PlayableEntityAttackInput & { game: GameEntity; userId: User["id"] }) {
     const attackerPlayableEntity =
-      game.playableEntities[attackerPlayableEntityId];
-    if (!attackerPlayableEntity) {
-      throw new NotFoundException(
-        "Attacker playable entity not found in this game",
-      );
-    }
-
-    const targetPlayableEntity = game.playableEntities[targetPlayableEntityId];
-    if (!targetPlayableEntity) {
-      throw new NotFoundException(
-        "Target playable entity not found in this game",
-      );
-    }
-
-    if (attackerPlayableEntity.playedByUserId !== userId) {
-      throw new ForbiddenException(
-        "Cannot attack with a playable entity that you does not own",
-      );
-    }
-
+      this.playableEntityService.getPlayableEntityOrThrow({
+        game,
+        playableEntityId: attackerPlayableEntityId,
+      });
+    this.playableEntityService.mustBePlayedByUserId({
+      playableEntity: attackerPlayableEntity,
+      userId,
+    });
     this.playableEntityService.mustBeInActionPhase(attackerPlayableEntity);
     this.playableEntityService.mustBeAlive(attackerPlayableEntity);
-    this.playableEntityService.mustBeAlive(targetPlayableEntity);
     this.playableEntityService.mustBeAbleToAct(attackerPlayableEntity);
+
+    const targetPlayableEntity =
+      this.playableEntityService.getPlayableEntityOrThrow({
+        game,
+        playableEntityId: targetPlayableEntityId,
+      });
+    this.playableEntityService.mustBeAlive(targetPlayableEntity);
 
     if (
       attackerPlayableEntity.type === "enemy" &&
@@ -104,14 +85,14 @@ export class PlayableEntityAttackUseCase implements UseCase {
       );
     }
 
-    const attackItem = attackerPlayableEntity.inventory.gear.find((gearItem) =>
-      gearItem.attacks.some((attack) => attack.id === attackId),
-    );
-    if (!attackItem) {
-      throw new ForbiddenException(
-        "Attack item not found in the gear inventory of the attacker",
-      );
-    }
+    const attackItem = this.playableEntityService.getAttackItemOrThrow({
+      attackId,
+      playableEntity: attackerPlayableEntity,
+    });
+    this.playableEntityService.mustHaveItemInGear({
+      item: attackItem,
+      playableEntity: attackerPlayableEntity,
+    });
 
     if (
       attackItem.type === "Spell" &&
