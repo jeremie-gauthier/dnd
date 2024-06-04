@@ -1,5 +1,5 @@
 import { GameEntity } from "@dnd/shared";
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import { GameUpdatedPayload } from "src/game/events/emitters/game-updated.payload";
@@ -11,6 +11,16 @@ export class BackupService {
     private readonly repository: BackupRepository,
     private readonly eventEmitter: EventEmitter2,
   ) {}
+
+  public async getGameOrThrow({
+    gameId,
+  }: { gameId: GameEntity["id"] }): Promise<GameEntity> {
+    const game = await this.repository.getGame({ gameId });
+    if (!game) {
+      throw new NotFoundException("Game not found");
+    }
+    return game;
+  }
 
   public async updateGame({ game }: { game: GameEntity }): Promise<void> {
     await this.repository.updateGame({ game });

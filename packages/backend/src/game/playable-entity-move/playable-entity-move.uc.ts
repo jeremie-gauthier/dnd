@@ -23,12 +23,10 @@ import { MapService } from "../services/map/map.service";
 import { MoveService } from "../services/move/move.service";
 import { PlayableEntityService } from "../services/playable-entity/playable-entity.service";
 import { TrapService } from "../services/trap/trap.service";
-import { PlayableEntityMoveRepository } from "./playable-entity-move.repository";
 
 @Injectable()
 export class PlayableEntityMoveUseCase implements UseCase {
   constructor(
-    private readonly repository: PlayableEntityMoveRepository,
     private readonly moveService: MoveService,
     private readonly eventEmitter: EventEmitter2,
     private readonly trapService: TrapService,
@@ -45,29 +43,24 @@ export class PlayableEntityMoveUseCase implements UseCase {
   }: PlayableEntityMoveInput & {
     userId: User["id"];
   }): Promise<void> {
-    const game = await this.repository.getGameById({ gameId });
+    const game = await this.backupService.getGameOrThrow({ gameId });
 
-    this.mustExecute(game, { playableEntityId, userId });
+    this.mustExecute({ game, playableEntityId, userId });
 
     this.getPlayableEntityPath({ game, pathToTile, playableEntityId });
 
     await this.backupService.updateGame({ game });
   }
 
-  private mustExecute(
-    game: GameEntity | null,
-    {
-      playableEntityId,
-      userId,
-    }: {
-      userId: User["id"];
-      playableEntityId: PlayableEntity["id"];
-    },
-  ): asserts game is GameEntity {
-    if (!game) {
-      throw new NotFoundException("Game not found");
-    }
-
+  private mustExecute({
+    game,
+    playableEntityId,
+    userId,
+  }: {
+    game: GameEntity;
+    userId: User["id"];
+    playableEntityId: PlayableEntity["id"];
+  }) {
     const playableEntity = game.playableEntities[playableEntityId];
     if (!playableEntity) {
       throw new NotFoundException("Playable entity not found in this game");

@@ -6,7 +6,11 @@ import { GamesRepository } from "src/redis/repositories/games.repository";
 export class BackupRepository {
   constructor(private readonly gamesRepository: GamesRepository) {}
 
-  public async updateGame({ game }: { game: GameEntity }): Promise<void> {
+  public getGame({ gameId }: { gameId: GameEntity["id"] }) {
+    return this.gamesRepository.getOne(gameId);
+  }
+
+  public async updateGame({ game }: { game: GameEntity }) {
     await this.gamesRepository.update(game);
   }
 }

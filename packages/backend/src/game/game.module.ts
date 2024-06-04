@@ -17,11 +17,8 @@ import { GamePublisherGateway } from "./game.publisher-gateway";
 import { GameSubscriberGateway } from "./game.subscriber-gateway";
 import { GetUserGameStateRepository } from "./get-user-game-state/get-user-game-state.repository";
 import { GetUserGameStateUseCase } from "./get-user-game-state/get-user-game-state.uc";
-import { OpenDoorRepository } from "./open-door/open-door.repository";
 import { OpenDoorUseCase } from "./open-door/open-door.uc";
-import { PlayableEntityAttackRepository } from "./playable-entity-attack/playable-entity-attack.repository";
 import { PlayableEntityAttackUseCase } from "./playable-entity-attack/playable-entity-attack.uc";
-import { PlayableEntityMoveRepository } from "./playable-entity-move/playable-entity-move.repository";
 import { PlayableEntityMoveUseCase } from "./playable-entity-move/playable-entity-move.uc";
 import { BackupRepository } from "./services/backup/backup.repository";
 import { BackupService } from "./services/backup/backup.service";
@@ -65,11 +62,8 @@ import { VisibilityService } from "./services/visibility/visibility.service";
     GetUserGameStateUseCase,
     GetUserGameStateRepository,
     OpenDoorUseCase,
-    OpenDoorRepository,
     PlayableEntityAttackUseCase,
-    PlayableEntityAttackRepository,
     PlayableEntityMoveUseCase,
-    PlayableEntityMoveRepository,
     BackupService,
     BackupRepository,
     CombatService,

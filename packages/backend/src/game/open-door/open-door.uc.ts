@@ -20,12 +20,10 @@ import { MapService } from "../services/map/map.service";
 import { PlayableEntityService } from "../services/playable-entity/playable-entity.service";
 import { SpawnService } from "../services/spawn/spawn.service";
 import { TurnService } from "../services/turn/turn.service";
-import { OpenDoorRepository } from "./open-door.repository";
 
 @Injectable()
 export class OpenDoorUseCase implements UseCase {
   constructor(
-    private readonly repository: OpenDoorRepository,
     private readonly turnService: TurnService,
     private readonly initiativeService: InitiativeService,
     private readonly spawnService: SpawnService,
@@ -42,9 +40,9 @@ export class OpenDoorUseCase implements UseCase {
   }: OpenDoorInput & {
     userId: User["id"];
   }): Promise<void> {
-    const game = await this.repository.getGameById({ gameId });
+    const game = await this.backupService.getGameOrThrow({ gameId });
 
-    this.mustExecute(game, { userId, coordOfTileWithDoor });
+    this.mustExecute({ game, userId, coordOfTileWithDoor });
 
     const { entityThatOpenedTheDoor } = this.openDoor({
       coordOfTileWithDoor,
@@ -62,19 +60,14 @@ export class OpenDoorUseCase implements UseCase {
     this.backupService.updateGame({ game });
   }
 
-  private mustExecute(
-    game: GameEntity | null,
-    {
-      userId,
-      coordOfTileWithDoor,
-    }: Pick<OpenDoorInput, "coordOfTileWithDoor"> & {
-      userId: User["id"];
-    },
-  ): asserts game is GameEntity {
-    if (!game) {
-      throw new NotFoundException("Game not found");
-    }
-
+  private mustExecute({
+    game,
+    userId,
+    coordOfTileWithDoor,
+  }: Pick<OpenDoorInput, "coordOfTileWithDoor"> & {
+    game: GameEntity;
+    userId: User["id"];
+  }) {
     const playableEntities = Object.values(game.playableEntities);
     if (
       playableEntities.every(({ playedByUserId }) => playedByUserId !== userId)
