@@ -14,6 +14,7 @@ import { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
 import { CombatService } from "../services/combat/combat.service";
 import { CoordService } from "../services/coord/coord.service";
+import { MapService } from "../services/map/map.service";
 import { PlayableEntityService } from "../services/playable-entity/playable-entity.service";
 import { PlayableEntityAttackRepository } from "./playable-entity-attack.repository";
 
@@ -25,6 +26,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
     private readonly coordService: CoordService,
     private readonly backupService: BackupService,
     private readonly playableEntityService: PlayableEntityService,
+    private readonly mapService: MapService,
   ) {}
 
   public async execute({
@@ -131,11 +133,10 @@ export class PlayableEntityAttackUseCase implements UseCase {
     }
 
     const attack = attackItem.attacks.find((attack) => attack.id === attackId)!;
-    const originTileIdx = this.coordService.coordToIndex({
+    const originTile = this.mapService.getTileOrThrow({
       coord: attackerPlayableEntity.coord,
-      metadata: { height: game.map.height, width: game.map.width },
+      game,
     });
-    const originTile = game.map.tiles[originTileIdx];
     if (
       !originTile ||
       !this.combatService.canAttackTarget({

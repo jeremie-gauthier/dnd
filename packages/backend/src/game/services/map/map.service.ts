@@ -1,5 +1,5 @@
 import { Coord, GameEntity, Tile, TileEntity } from "@dnd/shared";
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { CoordService } from "../coord/coord.service";
 
 @Injectable()
@@ -140,5 +140,36 @@ export class MapService {
         canInteract: false,
       });
     }
+  }
+
+  public getTile({
+    coord,
+    game,
+  }: { coord: Coord; game: GameEntity }): Tile | undefined {
+    const metadata = this.getMetadata({ game });
+    const tileIdx = this.coordService.coordToIndex({ coord, metadata });
+    const tile = game.map.tiles[tileIdx];
+    return tile;
+  }
+
+  public getTileOrThrow({
+    coord,
+    game,
+  }: { coord: Coord; game: GameEntity }): Tile {
+    const tile = this.getTile({ coord, game });
+    if (!tile) {
+      throw new NotFoundException("No tile found at these coordinates");
+    }
+    return tile;
+  }
+
+  public getMetadata({ game }: { game: GameEntity }): {
+    width: number;
+    height: number;
+  } {
+    return {
+      width: game.map.width,
+      height: game.map.height,
+    };
   }
 }

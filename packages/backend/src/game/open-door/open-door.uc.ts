@@ -2,9 +2,7 @@ import {
   GameEntity,
   OpenDoorInput,
   PlayableEntity,
-  Tile,
   TileNonPlayableInteractiveEntity,
-  coordToIndex,
 } from "@dnd/shared";
 import {
   ForbiddenException,
@@ -18,6 +16,7 @@ import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
 import { InitiativeService } from "../services/initiative/initiative.service";
+import { MapService } from "../services/map/map.service";
 import { PlayableEntityService } from "../services/playable-entity/playable-entity.service";
 import { SpawnService } from "../services/spawn/spawn.service";
 import { TurnService } from "../services/turn/turn.service";
@@ -33,6 +32,7 @@ export class OpenDoorUseCase implements UseCase {
     private readonly eventEmitter: EventEmitter2,
     private readonly backupService: BackupService,
     private readonly playableEntityService: PlayableEntityService,
+    private readonly mapService: MapService,
   ) {}
 
   public async execute({
@@ -92,14 +92,10 @@ export class OpenDoorUseCase implements UseCase {
       );
     }
 
-    const tileWithDoorIdx = coordToIndex({
+    const tileWithDoor = this.mapService.getTileOrThrow({
       coord: coordOfTileWithDoor,
-      metadata: { width: game.map.width, height: game.map.height },
+      game,
     });
-    const tileWithDoor = game.map.tiles[tileWithDoorIdx];
-    if (!tileWithDoor) {
-      throw new ForbiddenException("No tile found at these coordinates");
-    }
 
     if (
       !tileWithDoor.entities.some(
@@ -129,12 +125,11 @@ export class OpenDoorUseCase implements UseCase {
     userId: User["id"];
     game: GameEntity;
   }): { entityThatOpenedTheDoor: PlayableEntity } {
-    const tileWithDoorIdx = coordToIndex({
+    const tileWithDoor = this.mapService.getTileOrThrow({
       coord: coordOfTileWithDoor,
-      metadata: { width: game.map.width, height: game.map.height },
+      game,
     });
 
-    const tileWithDoor = game.map.tiles[tileWithDoorIdx] as Tile;
     const doorEntity = tileWithDoor.entities.find(
       (entity) =>
         entity.type === "non-playable-interactive-entity" &&

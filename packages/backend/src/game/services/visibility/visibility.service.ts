@@ -6,15 +6,11 @@ import {
   getNeighbourCoords,
 } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import { CoordService } from "../coord/coord.service";
 import { MapService } from "../map/map.service";
 
 @Injectable()
 export class VisibilityService {
-  constructor(
-    private readonly coordService: CoordService,
-    private readonly mapService: MapService,
-  ) {}
+  constructor(private readonly mapService: MapService) {}
 
   public getMapForHero({ game }: { game: GameEntity }): GameEntity {
     const exploredTiles = this.getExploredTiles({ game });
@@ -68,8 +64,11 @@ export class VisibilityService {
     const exploredTiles = new Set<Tile>();
 
     for (const startingCoord of startingCoords) {
-      const tile = this.getTileFromCoord({ game, coord: startingCoord });
-      if (!tile || (tile && exploredTiles.has(tile))) continue;
+      const tile = this.mapService.getTileOrThrow({
+        game,
+        coord: startingCoord,
+      });
+      if (exploredTiles.has(tile)) continue;
 
       const newExploredTiles = this.floodFill({ game, startingCoord });
       for (const newExploredTile of newExploredTiles) {
@@ -98,16 +97,15 @@ export class VisibilityService {
     game,
     startingCoord,
   }: { game: GameEntity; startingCoord: Coord }): Tile[] {
-    const startingTile = this.getTileFromCoord({ game, coord: startingCoord });
-    if (!startingTile) {
-      return [];
-    }
-
+    const startingTile = this.mapService.getTileOrThrow({
+      game,
+      coord: startingCoord,
+    });
     const tilesVisited = new Set([startingTile]);
     const tilesToVisit = getNeighbourCoords({
       coord: startingCoord,
     })
-      .map((coord) => this.getTileFromCoord({ game, coord }))
+      .map((coord) => this.mapService.getTile({ game, coord }))
       .filter((tile): tile is Tile => tile !== undefined);
 
     let currentTile = tilesToVisit.shift();
@@ -116,7 +114,7 @@ export class VisibilityService {
         const validNeighbouringTiles = getNeighbourCoords({
           coord: currentTile.coord,
         })
-          .map((coord) => this.getTileFromCoord({ game, coord }))
+          .map((coord) => this.mapService.getTile({ game, coord }))
           .filter(
             (tile): tile is Tile =>
               tile !== undefined && !tilesVisited.has(tile),
@@ -130,20 +128,6 @@ export class VisibilityService {
     }
 
     return Array.from(tilesVisited);
-  }
-
-  private getTileFromCoord({
-    game,
-    coord,
-  }: { game: GameEntity; coord: Coord }): Tile | undefined {
-    const tileIdx = this.coordService.coordToIndex({
-      coord,
-      metadata: {
-        height: game.map.height,
-        width: game.map.width,
-      },
-    });
-    return game.map.tiles[tileIdx];
   }
 
   private isVisitableTile({ tile }: { tile: Tile }): boolean {

@@ -1,11 +1,11 @@
 import { Coord, GameEntity, canMoveToRequestedPosition } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import type { Hero } from "src/database/entities/hero.entity";
-import { CoordService } from "../coord/coord.service";
+import { MapService } from "../map/map.service";
 
 @Injectable()
 export class MoveService {
-  constructor(private readonly coordService: CoordService) {}
+  constructor(private readonly mapService: MapService) {}
 
   public moveHeroToRequestedPosition({
     game,
@@ -18,18 +18,8 @@ export class MoveService {
   }): void {
     const hero = game.playableEntities[heroId]!;
 
-    const metadata = { width: game.map.width, height: game.map.height };
-    const oldTileIdx = this.coordService.coordToIndex({
-      coord: hero.coord,
-      metadata,
-    });
-    const requestedTileIdx = this.coordService.coordToIndex({
-      coord: requestedPosition,
-      metadata,
-    });
-
     // remove hero from its origin position
-    const oldTile = game.map.tiles[oldTileIdx];
+    const oldTile = this.mapService.getTile({ coord: hero.coord, game });
     // can be null during game creation, where heroes are not yet positioned
     if (oldTile) {
       oldTile.entities = oldTile.entities.filter(
@@ -39,7 +29,10 @@ export class MoveService {
     }
 
     // add hero to its destination position
-    const requestedTile = game.map.tiles[requestedTileIdx]!;
+    const requestedTile = this.mapService.getTileOrThrow({
+      coord: requestedPosition,
+      game,
+    });
     requestedTile.entities.push({
       type: "playable-entity",
       id: hero.id,
@@ -56,17 +49,10 @@ export class MoveService {
     game: GameEntity;
     requestedPosition: Coord;
   }): boolean {
-    const metadata = { width: game.map.width, height: game.map.height };
-    const requestedTileIdx = this.coordService.coordToIndex({
+    const tile = this.mapService.getTileOrThrow({
       coord: requestedPosition,
-      metadata,
+      game,
     });
-
-    const tile = game.map.tiles[requestedTileIdx];
-    if (!tile) {
-      return false;
-    }
-
     return canMoveToRequestedPosition({ game, tile });
   }
 }
