@@ -118,18 +118,13 @@ export class PlayableEntityAttackUseCase implements UseCase {
       coord: attackerPlayableEntity.coord,
       game,
     });
-    if (
-      !originTile ||
-      !this.combatService.canAttackTarget({
-        ally: attackerPlayableEntity.type,
-        game,
-        originTile,
-        range: attack.range,
-        targetCoord: targetPlayableEntity.coord,
-      })
-    ) {
-      throw new ForbiddenException("Target playable entity is out of range");
-    }
+    this.combatService.mustHaveTargetInRange({
+      ally: attackerPlayableEntity.type,
+      game,
+      originTile,
+      range: attack.range,
+      targetCoord: targetPlayableEntity.coord,
+    });
   }
 
   private attackTarget({

@@ -8,7 +8,7 @@ import {
   canAttackTarget,
   sum,
 } from "@dnd/shared";
-import { Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { EntityAttackedPayload } from "src/game/events/emitters/entity-attacked.payload";
 import { EntityDiedPayload } from "src/game/events/emitters/entity-died.payload";
@@ -125,7 +125,7 @@ export class CombatService {
     );
   }
 
-  public canAttackTarget({
+  public mustHaveTargetInRange({
     ally,
     game,
     originTile,
@@ -137,7 +137,9 @@ export class CombatService {
     originTile: Tile;
     range: AttackRangeType;
     targetCoord: Coord;
-  }): boolean {
-    return canAttackTarget({ ally, game, originTile, range, targetCoord });
+  }) {
+    if (!canAttackTarget({ ally, game, originTile, range, targetCoord })) {
+      throw new ForbiddenException("Target playable entity is out of range");
+    }
   }
 }
