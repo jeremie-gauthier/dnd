@@ -1,20 +1,12 @@
 import type { LobbyEntity, TogglePlayerReadyStateInput } from "@dnd/shared";
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import type { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
-import { TogglePlayerReadyStateRepository } from "./toggle-player-ready-state.repository";
 
 @Injectable()
 export class TogglePlayerReadyStateUseCase implements UseCase {
-  constructor(
-    private readonly repository: TogglePlayerReadyStateRepository,
-    private readonly backupService: BackupService,
-  ) {}
+  constructor(private readonly backupService: BackupService) {}
 
   public async execute({
     userId,
@@ -22,22 +14,21 @@ export class TogglePlayerReadyStateUseCase implements UseCase {
   }: TogglePlayerReadyStateInput & {
     userId: User["id"];
   }): Promise<void> {
-    const lobby = await this.repository.getLobbyById(lobbyId);
-    this.mustExecute(lobby, { userId });
+    const lobby = await this.backupService.getLobbyOrThrow({ lobbyId });
+    this.mustExecute({ lobby, userId });
 
     this.toggleUserReadyState({ lobby, userId });
 
     await this.backupService.updateLobby({ lobby });
   }
 
-  private mustExecute(
-    lobby: LobbyEntity | null,
-    { userId }: { userId: User["id"] },
-  ): asserts lobby is LobbyEntity {
-    if (!lobby) {
-      throw new NotFoundException("Lobby not found");
-    }
-
+  private mustExecute({
+    lobby,
+    userId,
+  }: {
+    lobby: LobbyEntity;
+    userId: User["id"];
+  }) {
     if (lobby.status !== "OPENED") {
       throw new ForbiddenException("Lobby is not opened");
     }

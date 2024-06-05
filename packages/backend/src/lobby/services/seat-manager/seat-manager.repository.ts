@@ -10,12 +10,6 @@ export class SeatManagerRepository {
     private readonly gamesRepository: GamesRepository,
   ) {}
 
-  public async getLobbyById(
-    lobbyId: LobbyEntity["id"],
-  ): Promise<LobbyEntity | null> {
-    return await this.lobbiesRepository.getOne(lobbyId);
-  }
-
   public async delLobbyById(lobbyId: LobbyEntity["id"]): Promise<void> {
     await this.lobbiesRepository.del(lobbyId);
   }

@@ -1,6 +1,8 @@
+import { LobbyEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import type { ServerSocket } from "src/types/socket.type";
 import type { UseCase } from "src/types/use-case.interface";
+import { BackupService } from "../services/backup/backup.service";
 import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
 import { HandleWsDisconnectionRepository } from "./handle-ws-disconnection.repository";
 
@@ -9,6 +11,7 @@ export class HandleWsDisconnectionUseCase implements UseCase {
   constructor(
     private readonly repository: HandleWsDisconnectionRepository,
     private readonly seatManagerService: SeatManagerService,
+    private readonly backupService: BackupService,
   ) {}
 
   public async execute(client: ServerSocket): Promise<void> {
@@ -21,7 +24,7 @@ export class HandleWsDisconnectionUseCase implements UseCase {
     }
 
     const [lobbyToLeave] = await Promise.all([
-      this.repository.getLobbyById({ lobbyId }),
+      this.getLobbyToLeave({ lobbyId }),
       this.leaveRooms(client),
       this.repository.forgetUser(userId),
     ]);
@@ -37,5 +40,15 @@ export class HandleWsDisconnectionUseCase implements UseCase {
     return await Promise.all(
       Array.from(client.rooms).map((room) => client.leave(room)),
     );
+  }
+
+  private async getLobbyToLeave({
+    lobbyId,
+  }: { lobbyId: LobbyEntity["id"] }): Promise<LobbyEntity | undefined> {
+    try {
+      return await this.backupService.getLobbyOrThrow({ lobbyId });
+    } catch {
+      return undefined;
+    }
   }
 }

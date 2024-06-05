@@ -1,20 +1,12 @@
 import { DiscardGameMasterInput, LobbyEntity } from "@dnd/shared";
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
-import { DiscardGameMasterRepository } from "./discard-game-master.repository";
 
 @Injectable()
 export class DiscardGameMasterUseCase implements UseCase {
-  constructor(
-    private readonly repository: DiscardGameMasterRepository,
-    private readonly backupService: BackupService,
-  ) {}
+  constructor(private readonly backupService: BackupService) {}
 
   public async execute({
     lobbyId,
@@ -22,22 +14,21 @@ export class DiscardGameMasterUseCase implements UseCase {
   }: DiscardGameMasterInput & {
     userId: User["id"];
   }): Promise<void> {
-    const lobby = await this.repository.getLobbyById({ lobbyId });
+    const lobby = await this.backupService.getLobbyOrThrow({ lobbyId });
 
-    this.mustExecute(lobby, { userId });
+    this.mustExecute({ lobby, userId });
 
     this.discardGameMaster({ lobby });
     await this.backupService.updateLobby({ lobby });
   }
 
-  private mustExecute(
-    lobby: LobbyEntity | null,
-    { userId }: { userId: User["id"] },
-  ): asserts lobby is LobbyEntity {
-    if (!lobby) {
-      throw new NotFoundException("Lobby not found");
-    }
-
+  private mustExecute({
+    lobby,
+    userId,
+  }: {
+    lobby: LobbyEntity;
+    userId: User["id"];
+  }) {
     if (lobby.status !== "OPENED") {
       throw new ForbiddenException("Lobby is not opened");
     }

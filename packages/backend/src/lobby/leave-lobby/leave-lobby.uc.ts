@@ -2,6 +2,7 @@ import { LobbyEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import type { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/types/use-case.interface";
+import { BackupService } from "../services/backup/backup.service";
 import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
 import { LeaveLobbyRepository } from "./leave-lobby.repository";
 
@@ -9,6 +10,7 @@ import { LeaveLobbyRepository } from "./leave-lobby.repository";
 export class LeaveLobbyUseCase implements UseCase {
   constructor(
     private readonly repository: LeaveLobbyRepository,
+    private readonly backupService: BackupService,
     private readonly seatManagerService: SeatManagerService,
   ) {}
 
@@ -33,12 +35,9 @@ export class LeaveLobbyUseCase implements UseCase {
       return;
     }
 
-    const lobbyToLeave = await this.repository.getLobbyById({
+    const lobbyToLeave = await this.backupService.getLobbyOrThrow({
       lobbyId: lobbyIdToLeave,
     });
-    if (!lobbyToLeave) {
-      return;
-    }
 
     return lobbyToLeave;
   }

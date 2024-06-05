@@ -1,9 +1,5 @@
 import { LobbyEntity } from "@dnd/shared";
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { DeleteLobbyPayload } from "src/lobby/events/emitters/delete-lobby.payload";
@@ -28,7 +24,7 @@ export class SeatManagerService {
     lobby: LobbyEntity;
     userId: User["id"];
   }): void {
-    this.mustExecute(userId, lobby);
+    this.mustExecute({ userId, lobby });
 
     lobby.players.push({
       userId,
@@ -42,14 +38,10 @@ export class SeatManagerService {
     );
   }
 
-  private mustExecute(
-    userId: User["id"],
-    lobby: LobbyEntity | null,
-  ): asserts lobby is LobbyEntity {
-    if (!lobby) {
-      throw new NotFoundException("Lobby not found");
-    }
-
+  private mustExecute({
+    userId,
+    lobby,
+  }: { userId: User["id"]; lobby: LobbyEntity }) {
     if (lobby.status !== "OPENED") {
       throw new ForbiddenException("Lobby is not opened");
     }

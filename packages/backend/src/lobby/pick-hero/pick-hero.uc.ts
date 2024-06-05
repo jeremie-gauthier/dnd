@@ -10,12 +10,10 @@ import type { Hero } from "src/database/entities/hero.entity";
 import type { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
-import { PickHeroRepository } from "./pick-hero.repository";
 
 @Injectable()
 export class PickHeroUseCase implements UseCase {
   constructor(
-    private readonly repository: PickHeroRepository,
     private readonly configService: ConfigService<EnvSchema>,
     private readonly backupService: BackupService,
   ) {}
@@ -28,7 +26,7 @@ export class PickHeroUseCase implements UseCase {
     userId: User["id"];
   }): Promise<void> {
     // TODO: the lobby fetched might lack of a lock
-    const lobby = await this.repository.getLobbyById(lobbyId);
+    const lobby = await this.backupService.getLobbyOrThrow({ lobbyId });
     this.mustExecute(lobby, { userId, heroId });
 
     this.pickHero({ lobby, userId, heroId });

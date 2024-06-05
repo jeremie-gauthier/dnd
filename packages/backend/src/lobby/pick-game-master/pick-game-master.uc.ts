@@ -9,12 +9,10 @@ import { EnvSchema } from "src/config/env.config";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
-import { PickGameMasterRepository } from "./pick-game-master.repository";
 
 @Injectable()
 export class PickGameMasterUseCase implements UseCase {
   constructor(
-    private readonly repository: PickGameMasterRepository,
     private readonly configService: ConfigService<EnvSchema>,
     private readonly backupService: BackupService,
   ) {}
@@ -25,7 +23,7 @@ export class PickGameMasterUseCase implements UseCase {
   }: PickGameMasterInput & {
     userId: User["id"];
   }): Promise<void> {
-    const lobby = await this.repository.getLobbyById({ lobbyId });
+    const lobby = await this.backupService.getLobbyOrThrow({ lobbyId });
 
     this.mustExecute(lobby, { userId });
 

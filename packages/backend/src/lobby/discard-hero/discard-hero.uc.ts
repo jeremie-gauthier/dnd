@@ -8,14 +8,10 @@ import type { Hero } from "src/database/entities/hero.entity";
 import type { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
-import { DiscardHeroRepository } from "./discard-hero.repository";
 
 @Injectable()
 export class DiscardHeroUseCase implements UseCase {
-  constructor(
-    private readonly repository: DiscardHeroRepository,
-    private readonly backupService: BackupService,
-  ) {}
+  constructor(private readonly backupService: BackupService) {}
 
   public async execute({
     userId,
@@ -25,22 +21,23 @@ export class DiscardHeroUseCase implements UseCase {
     userId: User["id"];
   }): Promise<void> {
     // TODO: the lobby fetched might lack of a lock
-    const lobby = await this.repository.getLobbyById(lobbyId);
-    this.mustExecute(lobby, { userId, heroId });
+    const lobby = await this.backupService.getLobbyOrThrow({ lobbyId });
+    this.mustExecute({ lobby, userId, heroId });
 
     this.discardHero({ lobby, userId, heroId });
 
     await this.backupService.updateLobby({ lobby });
   }
 
-  private mustExecute(
-    lobby: LobbyEntity | null,
-    { userId, heroId }: { userId: User["id"]; heroId: Hero["id"] },
-  ): asserts lobby is LobbyEntity {
-    if (!lobby) {
-      throw new NotFoundException("Lobby not found");
-    }
-
+  private mustExecute({
+    lobby,
+    userId,
+    heroId,
+  }: {
+    lobby: LobbyEntity;
+    userId: User["id"];
+    heroId: Hero["id"];
+  }) {
     if (lobby.status !== "OPENED") {
       throw new ForbiddenException("Lobby is not opened");
     }

@@ -1,5 +1,5 @@
 import { LobbyEntity } from "@dnd/shared";
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { LobbyUpdatedPayload } from "src/lobby/events/emitters/lobby-changed.payload";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
@@ -11,6 +11,16 @@ export class BackupService {
     private readonly repository: BackupRepository,
     private readonly eventEmitter: EventEmitter2,
   ) {}
+
+  public async getLobbyOrThrow({
+    lobbyId,
+  }: { lobbyId: LobbyEntity["id"] }): Promise<LobbyEntity> {
+    const lobby = await this.repository.getLobby({ lobbyId });
+    if (!lobby) {
+      throw new NotFoundException("Lobby not found");
+    }
+    return lobby;
+  }
 
   public async updateLobby({ lobby }: { lobby: LobbyEntity }): Promise<void> {
     await this.repository.updateLobby({ lobby });
