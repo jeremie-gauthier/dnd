@@ -1,6 +1,7 @@
 import { Test, type TestingModule } from "@nestjs/testing";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CoordService } from "../coord/coord.service";
+import { MapService } from "../map/map.service";
 import { MoveService } from "./move.service";
 
 describe("MovesService", () => {
@@ -10,6 +11,7 @@ describe("MovesService", () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         MoveService,
+        MapService,
         {
           provide: CoordService,
           useValue: {

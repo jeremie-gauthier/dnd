@@ -10,15 +10,16 @@ import {
   vi,
 } from "vitest";
 import { BackupService } from "../services/backup/backup.service";
+import { CoordService } from "../services/coord/coord.service";
 import { InitiativeService } from "../services/initiative/initiative.service";
+import { MapService } from "../services/map/map.service";
+import { PlayableEntityService } from "../services/playable-entity/playable-entity.service";
 import { SpawnService } from "../services/spawn/spawn.service";
 import { TurnService } from "../services/turn/turn.service";
-import { OpenDoorRepository } from "./open-door.repository";
 import { OpenDoorUseCase } from "./open-door.uc";
 
 describe("OpenDoorUseCase", () => {
   let useCase: OpenDoorUseCase;
-  let repository: OpenDoorRepository;
   let eventEmitter2: EventEmitter2;
 
   let eventEmitterMock: MockInstance<
@@ -33,10 +34,9 @@ describe("OpenDoorUseCase", () => {
         EventEmitter2,
         InitiativeService,
         TurnService,
-        {
-          provide: OpenDoorRepository,
-          useValue: {},
-        },
+        PlayableEntityService,
+        MapService,
+        CoordService,
         {
           provide: SpawnService,
           useValue: {
@@ -53,7 +53,6 @@ describe("OpenDoorUseCase", () => {
     }).compile();
 
     useCase = module.get(OpenDoorUseCase);
-    repository = module.get(OpenDoorRepository);
     eventEmitter2 = module.get(EventEmitter2);
 
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
@@ -65,7 +64,6 @@ describe("OpenDoorUseCase", () => {
 
   it("should be defined", () => {
     expect(useCase).toBeDefined();
-    expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
   });
 });

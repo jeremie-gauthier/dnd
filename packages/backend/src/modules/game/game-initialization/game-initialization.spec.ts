@@ -13,13 +13,13 @@ import type { User } from "src/database/entities/user.entity";
 import { MoveService } from "src/modules/game/services/move/move.service";
 import { LobbyEvent } from "src/modules/lobby/events/lobby-event.enum";
 import { Mock, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { InitiativeService } from "../../../services/initiative/initiative.service";
-import { ItemService } from "../../../services/item/item.service";
-import { MapSerializerService } from "../../../services/map-serializer/map-serializer.service";
-import { PlayableEntityService } from "../../../services/playable-entity/playable-entity.service";
-import { GameEvent } from "../../emitters/game-event.enum";
-import { GameInitializationListener } from "./game-initialization.listener";
+import { GameEvent } from "../events/game-event.enum";
+import { InitiativeService } from "../services/initiative/initiative.service";
+import { ItemService } from "../services/item/item.service";
+import { MapSerializerService } from "../services/map-serializer/map-serializer.service";
+import { PlayableEntityService } from "../services/playable-entity/playable-entity.service";
 import { GameInitializationRepository } from "./game-initialization.repository";
+import { GameInitializationUseCase } from "./game-initialization.uc";
 
 type RepositoryMock = {
   getUserCampaignStageProgression: Mock<
@@ -38,8 +38,8 @@ type MapSerializerMock = {
   deserialize: Mock<any, any>;
 };
 
-describe("GameInitializationListener", () => {
-  let listener: GameInitializationListener;
+describe("GameInitializationUseCase", () => {
+  let useCase: GameInitializationUseCase;
   let repository: RepositoryMock;
   let eventEmitter2: EventEmitter2;
   let mapSerializerService: MapSerializerMock;
@@ -54,7 +54,7 @@ describe("GameInitializationListener", () => {
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
-        GameInitializationListener,
+        GameInitializationUseCase,
         EventEmitter2,
         ItemService,
         {
@@ -95,7 +95,7 @@ describe("GameInitializationListener", () => {
       ],
     }).compile();
 
-    listener = module.get(GameInitializationListener);
+    useCase = module.get(GameInitializationUseCase);
     repository = module.get(GameInitializationRepository);
     eventEmitter2 = module.get(EventEmitter2);
     mapSerializerService = module.get(MapSerializerService);
@@ -113,7 +113,7 @@ describe("GameInitializationListener", () => {
   });
 
   it("should be defined", () => {
-    expect(listener).toBeDefined();
+    expect(useCase).toBeDefined();
     expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
     expect(mapSerializerService).toBeDefined();
@@ -289,7 +289,7 @@ describe("GameInitializationListener", () => {
         enemyTemplates: {},
       });
 
-      await listener.handler({
+      await useCase.execute({
         ...mockParams,
         lobby: {
           id: "mock-lobby-id",

@@ -15,6 +15,7 @@ import {
 } from "vitest";
 import { CoordService } from "../coord/coord.service";
 import { DiceService } from "../dice/dice.service";
+import { MapService } from "../map/map.service";
 import { CombatService } from "./combat.service";
 
 describe("CombatService", () => {
@@ -31,6 +32,7 @@ describe("CombatService", () => {
       providers: [
         CombatService,
         CoordService,
+        MapService,
         {
           provide: DiceService,
           useValue: {},

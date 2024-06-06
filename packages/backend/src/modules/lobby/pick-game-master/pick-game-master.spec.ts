@@ -11,12 +11,12 @@ import {
   vi,
 } from "vitest";
 import { BackupService } from "../services/backup/backup.service";
-import { PickGameMasterRepository } from "./pick-game-master.repository";
+import { SeatManagerRepository } from "../services/seat-manager/seat-manager.repository";
+import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
 import { PickGameMasterUseCase } from "./pick-game-master.uc";
 
 describe("PickGameMasterUseCase", () => {
   let useCase: PickGameMasterUseCase;
-  let repository: PickGameMasterRepository;
   let backupService: BackupService;
   let eventEmitter2: EventEmitter2;
 
@@ -30,9 +30,13 @@ describe("PickGameMasterUseCase", () => {
       providers: [
         PickGameMasterUseCase,
         EventEmitter2,
+        SeatManagerService,
         {
-          provide: PickGameMasterRepository,
-          useValue: {},
+          provide: SeatManagerRepository,
+          useValue: {
+            delLobbyById: vi.fn(),
+            delGameById: vi.fn(),
+          },
         },
         {
           provide: BackupService,
@@ -51,7 +55,6 @@ describe("PickGameMasterUseCase", () => {
 
     useCase = module.get(PickGameMasterUseCase);
     backupService = module.get(BackupService);
-    repository = module.get(PickGameMasterRepository);
     eventEmitter2 = module.get(EventEmitter2);
 
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
@@ -63,7 +66,6 @@ describe("PickGameMasterUseCase", () => {
 
   it("should be defined", () => {
     expect(useCase).toBeDefined();
-    expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
     expect(backupService).toBeDefined();
   });

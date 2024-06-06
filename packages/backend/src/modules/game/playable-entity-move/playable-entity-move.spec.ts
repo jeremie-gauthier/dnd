@@ -12,14 +12,14 @@ import {
 import { BackupService } from "../services/backup/backup.service";
 import { CombatService } from "../services/combat/combat.service";
 import { CoordService } from "../services/coord/coord.service";
+import { MapService } from "../services/map/map.service";
 import { MoveService } from "../services/move/move.service";
+import { PlayableEntityService } from "../services/playable-entity/playable-entity.service";
 import { TrapService } from "../services/trap/trap.service";
-import { PlayableEntityMoveRepository } from "./playable-entity-move.repository";
 import { PlayableEntityMoveUseCase } from "./playable-entity-move.uc";
 
 describe("PlayableEntityMoveUseCase", () => {
   let useCase: PlayableEntityMoveUseCase;
-  let repository: PlayableEntityMoveRepository;
   let eventEmitter2: EventEmitter2;
   let moveSerivce: MoveService;
   let trapService: TrapService;
@@ -36,13 +36,11 @@ describe("PlayableEntityMoveUseCase", () => {
         PlayableEntityMoveUseCase,
         EventEmitter2,
         TrapService,
+        PlayableEntityService,
+        MapService,
         CoordService,
         {
           provide: CombatService,
-          useValue: {},
-        },
-        {
-          provide: PlayableEntityMoveRepository,
           useValue: {},
         },
         {
@@ -59,7 +57,6 @@ describe("PlayableEntityMoveUseCase", () => {
     }).compile();
 
     useCase = module.get(PlayableEntityMoveUseCase);
-    repository = module.get(PlayableEntityMoveRepository);
     eventEmitter2 = module.get(EventEmitter2);
     moveSerivce = module.get(MoveService);
     trapService = module.get(TrapService);
@@ -74,7 +71,6 @@ describe("PlayableEntityMoveUseCase", () => {
 
   it("should be defined", () => {
     expect(useCase).toBeDefined();
-    expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
     expect(moveSerivce).toBeDefined();
     expect(trapService).toBeDefined();

@@ -1,6 +1,7 @@
 import { ConfigService } from "@nestjs/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
+import { PlayableEntityService } from "src/modules/game/services/playable-entity/playable-entity.service";
 import {
   MockInstance,
   afterEach,
@@ -11,13 +12,13 @@ import {
   vi,
 } from "vitest";
 import { BackupService } from "../services/backup/backup.service";
-import { DiscardGameMasterRepository } from "./discard-game-master.repository";
+import { SeatManagerRepository } from "../services/seat-manager/seat-manager.repository";
+import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
 import { DiscardGameMasterUseCase } from "./discard-game-master.uc";
 
 describe("DiscardGameMasterUseCase", () => {
   let useCase: DiscardGameMasterUseCase;
   let backupService: BackupService;
-  let repository: DiscardGameMasterRepository;
   let eventEmitter2: EventEmitter2;
 
   let eventEmitterMock: MockInstance<
@@ -30,14 +31,20 @@ describe("DiscardGameMasterUseCase", () => {
       providers: [
         DiscardGameMasterUseCase,
         EventEmitter2,
+        PlayableEntityService,
+        SeatManagerService,
         {
-          provide: DiscardGameMasterRepository,
-          useValue: {},
+          provide: SeatManagerRepository,
+          useValue: {
+            delLobbyById: vi.fn(),
+            delGameById: vi.fn(),
+          },
         },
         {
           provide: BackupService,
           useValue: {
             updateLobby: () => Promise.resolve(),
+            getLobbyOrThrow: vi.fn(),
           },
         },
         {
@@ -51,7 +58,6 @@ describe("DiscardGameMasterUseCase", () => {
 
     useCase = module.get(DiscardGameMasterUseCase);
     backupService = module.get(BackupService);
-    repository = module.get(DiscardGameMasterRepository);
     eventEmitter2 = module.get(EventEmitter2);
 
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
@@ -63,7 +69,6 @@ describe("DiscardGameMasterUseCase", () => {
 
   it("should be defined", () => {
     expect(useCase).toBeDefined();
-    expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
     expect(backupService).toBeDefined();
   });

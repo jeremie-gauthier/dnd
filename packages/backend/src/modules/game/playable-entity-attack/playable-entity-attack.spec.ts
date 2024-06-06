@@ -12,12 +12,12 @@ import {
 import { BackupService } from "../services/backup/backup.service";
 import { CombatService } from "../services/combat/combat.service";
 import { CoordService } from "../services/coord/coord.service";
-import { PlayableEntityAttackRepository } from "./playable-entity-attack.repository";
+import { MapService } from "../services/map/map.service";
+import { PlayableEntityService } from "../services/playable-entity/playable-entity.service";
 import { PlayableEntityAttackUseCase } from "./playable-entity-attack.uc";
 
 describe("PlayableEntityAttackUseCase", () => {
   let useCase: PlayableEntityAttackUseCase;
-  let repository: PlayableEntityAttackRepository;
   let eventEmitter2: EventEmitter2;
 
   let eventEmitterMock: MockInstance<
@@ -31,12 +31,10 @@ describe("PlayableEntityAttackUseCase", () => {
         PlayableEntityAttackUseCase,
         EventEmitter2,
         CoordService,
+        PlayableEntityService,
+        MapService,
         {
           provide: CombatService,
-          useValue: {},
-        },
-        {
-          provide: PlayableEntityAttackRepository,
           useValue: {},
         },
         {
@@ -49,7 +47,6 @@ describe("PlayableEntityAttackUseCase", () => {
     }).compile();
 
     useCase = module.get(PlayableEntityAttackUseCase);
-    repository = module.get(PlayableEntityAttackRepository);
     eventEmitter2 = module.get(EventEmitter2);
 
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
@@ -61,7 +58,6 @@ describe("PlayableEntityAttackUseCase", () => {
 
   it("should be defined", () => {
     expect(useCase).toBeDefined();
-    expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
   });
 });

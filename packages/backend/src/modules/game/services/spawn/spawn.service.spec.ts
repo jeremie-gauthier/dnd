@@ -2,6 +2,7 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test, TestingModule } from "@nestjs/testing";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CoordService } from "../coord/coord.service";
+import { MapService } from "../map/map.service";
 import { MoveService } from "../move/move.service";
 import { PlayableEntityService } from "../playable-entity/playable-entity.service";
 import { SpawnService } from "./spawn.service";
@@ -27,6 +28,7 @@ describe("SpawnService", () => {
           },
         },
         CoordService,
+        MapService,
       ],
     }).compile();
 

@@ -12,13 +12,13 @@ import {
   type MockInstance,
 } from "vitest";
 import { BackupService } from "../services/backup/backup.service";
-import { TogglePlayerReadyStateRepository } from "./toggle-player-ready-state.repository";
+import { SeatManagerRepository } from "../services/seat-manager/seat-manager.repository";
+import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
 import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state.uc";
 
 describe("TogglePlayerReadyStateUseCase", () => {
   let useCase: TogglePlayerReadyStateUseCase;
   let backupService: BackupService;
-  let repository: TogglePlayerReadyStateRepository;
   let eventEmitter2: EventEmitter2;
 
   let updateLobbyMock: MockInstance<[{ lobby: LobbyEntity }], Promise<void>>;
@@ -37,16 +37,19 @@ describe("TogglePlayerReadyStateUseCase", () => {
       providers: [
         TogglePlayerReadyStateUseCase,
         EventEmitter2,
+        SeatManagerService,
+        {
+          provide: SeatManagerRepository,
+          useValue: {
+            delLobbyById: vi.fn(),
+            delGameById: vi.fn(),
+          },
+        },
         {
           provide: BackupService,
           useValue: {
             updateLobby: () => Promise.resolve(),
-          },
-        },
-        {
-          provide: TogglePlayerReadyStateRepository,
-          useValue: {
-            getLobbyById: () => Promise.resolve(null),
+            getLobbyOrThrow: vi.fn(),
           },
         },
       ],
@@ -54,7 +57,6 @@ describe("TogglePlayerReadyStateUseCase", () => {
 
     useCase = module.get(TogglePlayerReadyStateUseCase);
     backupService = module.get(BackupService);
-    repository = module.get(TogglePlayerReadyStateRepository);
     eventEmitter2 = module.get(EventEmitter2);
 
     updateLobbyMock = vi.spyOn(backupService, "updateLobby");
@@ -67,14 +69,13 @@ describe("TogglePlayerReadyStateUseCase", () => {
 
   it("should be defined", () => {
     expect(useCase).toBeDefined();
-    expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
   });
 
   describe("Happy path", () => {
     it("should toggle the user's ready state from false to true when alone in the lobby", async () => {
       const getLobbyByIdMock = vi
-        .spyOn(repository, "getLobbyById")
+        .spyOn(backupService, "getLobbyOrThrow")
         .mockResolvedValue({
           id: "mock-lobby-id",
           players: [{ userId: "mock-user-id", isReady: false }],
@@ -96,7 +97,7 @@ describe("TogglePlayerReadyStateUseCase", () => {
 
     it("should toggle the user's ready state from true to false when alone in the lobby", async () => {
       const getLobbyByIdMock = vi
-        .spyOn(repository, "getLobbyById")
+        .spyOn(backupService, "getLobbyOrThrow")
         .mockResolvedValue({
           id: "mock-lobby-id",
           players: [{ userId: "mock-user-id", isReady: true }],
@@ -118,7 +119,7 @@ describe("TogglePlayerReadyStateUseCase", () => {
 
     it("should toggle the user's ready state from false to true when with other users in the lobby", async () => {
       const getLobbyByIdMock = vi
-        .spyOn(repository, "getLobbyById")
+        .spyOn(backupService, "getLobbyOrThrow")
         .mockResolvedValue({
           id: "mock-lobby-id",
           players: [
@@ -154,7 +155,7 @@ describe("TogglePlayerReadyStateUseCase", () => {
 
     it("should toggle the user's ready state from true to false when with other users in the lobby", async () => {
       const getLobbyByIdMock = vi
-        .spyOn(repository, "getLobbyById")
+        .spyOn(backupService, "getLobbyOrThrow")
         .mockResolvedValue({
           id: "mock-lobby-id",
           players: [
@@ -191,7 +192,9 @@ describe("TogglePlayerReadyStateUseCase", () => {
 
   describe("Negative path", () => {
     it("should throw a NotFoundException when the lobby does not exists", async () => {
-      const getLobbyByIdMock = vi.spyOn(repository, "getLobbyById");
+      const getLobbyByIdMock = vi
+        .spyOn(backupService, "getLobbyOrThrow")
+        .mockRejectedValue(new NotFoundException());
 
       await expect(useCase.execute(mockParams)).rejects.toThrowError(
         NotFoundException,
@@ -204,7 +207,7 @@ describe("TogglePlayerReadyStateUseCase", () => {
 
     it("should throw a ForbiddenException when the lobby is no longer opened", async () => {
       const getLobbyByIdMock = vi
-        .spyOn(repository, "getLobbyById")
+        .spyOn(backupService, "getLobbyOrThrow")
         .mockResolvedValue({
           id: "mock-lobby-id",
           players: [{ userId: "mock-another-user-id", isReady: false }],
@@ -222,7 +225,7 @@ describe("TogglePlayerReadyStateUseCase", () => {
 
     it("should throw a ForbiddenException when the user is not in the lobby", async () => {
       const getLobbyByIdMock = vi
-        .spyOn(repository, "getLobbyById")
+        .spyOn(backupService, "getLobbyOrThrow")
         .mockResolvedValue({
           id: "mock-lobby-id",
           players: [{ userId: "mock-another-user-id", isReady: false }],

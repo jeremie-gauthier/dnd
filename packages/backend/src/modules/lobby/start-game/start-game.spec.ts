@@ -14,13 +14,11 @@ import {
   type MockInstance,
 } from "vitest";
 import { BackupService } from "../services/backup/backup.service";
-import { StartGameRepository } from "./start-game.repository";
 import { StartGameUseCase } from "./start-game.uc";
 
 describe("StartGameUseCase", () => {
   let useCase: StartGameUseCase;
   let backupService: BackupService;
-  let repository: StartGameRepository;
   let eventEmitter2: EventEmitter2;
 
   let updateLobbyMock: MockInstance<[{ lobby: LobbyEntity }], Promise<void>>;
@@ -43,13 +41,7 @@ describe("StartGameUseCase", () => {
           provide: BackupService,
           useValue: {
             updateLobby: () => Promise.resolve(),
-          },
-        },
-        {
-          provide: StartGameRepository,
-          useValue: {
-            getLobbyById: () => Promise.resolve(null),
-            createGame: () => Promise.resolve({}),
+            getLobbyOrThrow: vi.fn(),
           },
         },
         {
@@ -63,7 +55,6 @@ describe("StartGameUseCase", () => {
 
     useCase = module.get(StartGameUseCase);
     backupService = module.get(BackupService);
-    repository = module.get(StartGameRepository);
     eventEmitter2 = module.get(EventEmitter2);
 
     updateLobbyMock = vi.spyOn(backupService, "updateLobby");
@@ -76,7 +67,6 @@ describe("StartGameUseCase", () => {
 
   it("should be defined", () => {
     expect(useCase).toBeDefined();
-    expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
     expect(updateLobbyMock).toBeDefined();
     expect(eventEmitterMock).toBeDefined();
@@ -85,7 +75,7 @@ describe("StartGameUseCase", () => {
   describe("Happy path", async () => {
     it("should set the lobby as ready for a game when everyone is ready", async () => {
       const getLobbyByIdMock = vi
-        .spyOn(repository, "getLobbyById")
+        .spyOn(backupService, "getLobbyOrThrow")
         .mockResolvedValue({
           id: "mock-lobby-id",
           status: LobbyEntityStatus.OPENED,
@@ -191,7 +181,7 @@ describe("StartGameUseCase", () => {
   describe("Negative path", () => {
     it("should throw a ForbiddenException if some players are not ready", async () => {
       const getLobbyByIdMock = vi
-        .spyOn(repository, "getLobbyById")
+        .spyOn(backupService, "getLobbyOrThrow")
         .mockResolvedValue({
           id: "mock-lobby-id",
           status: "preparing",
@@ -224,7 +214,7 @@ describe("StartGameUseCase", () => {
 
     it("should throw a ForbiddenException if some heroes are not picked", async () => {
       const getLobbyByIdMock = vi
-        .spyOn(repository, "getLobbyById")
+        .spyOn(backupService, "getLobbyOrThrow")
         .mockResolvedValue({
           id: "mock-lobby-id",
           status: "preparing",
