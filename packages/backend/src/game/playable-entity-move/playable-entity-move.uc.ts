@@ -8,31 +8,27 @@ import {
   unfoldTilePath,
 } from "@dnd/shared";
 import { TrapEntity } from "@dnd/shared/dist/database/game/interactive-entities.type";
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
 import { PlayableEntityMovedPayload } from "src/game/events/emitters/playable-entity-moved.payload";
 import { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
-import { CoordService } from "../services/coord/coord.service";
+import { MapService } from "../services/map/map.service";
 import { MoveService } from "../services/move/move.service";
+import { PlayableEntityService } from "../services/playable-entity/playable-entity.service";
 import { TrapService } from "../services/trap/trap.service";
-import { PlayableEntityMoveRepository } from "./playable-entity-move.repository";
 
 @Injectable()
 export class PlayableEntityMoveUseCase implements UseCase {
   constructor(
-    private readonly repository: PlayableEntityMoveRepository,
     private readonly moveService: MoveService,
     private readonly eventEmitter: EventEmitter2,
     private readonly trapService: TrapService,
-    private readonly coordService: CoordService,
     private readonly backupService: BackupService,
+    private readonly playableEntityService: PlayableEntityService,
+    private readonly mapService: MapService,
   ) {}
 
   public async execute({
@@ -43,64 +39,33 @@ export class PlayableEntityMoveUseCase implements UseCase {
   }: PlayableEntityMoveInput & {
     userId: User["id"];
   }): Promise<void> {
-    const game = await this.repository.getGameById({ gameId });
+    const game = await this.backupService.getGameOrThrow({ gameId });
 
-    this.assertCanMovePlayableEntity(game, {
-      playableEntityId,
-      userId,
-    });
+    this.mustExecute({ game, playableEntityId, userId });
 
     this.getPlayableEntityPath({ game, pathToTile, playableEntityId });
 
     await this.backupService.updateGame({ game });
   }
 
-  private assertCanMovePlayableEntity(
-    game: GameEntity | null,
-    {
+  private mustExecute({
+    game,
+    playableEntityId,
+    userId,
+  }: {
+    game: GameEntity;
+    userId: User["id"];
+    playableEntityId: PlayableEntity["id"];
+  }) {
+    const playableEntity = this.playableEntityService.getPlayableEntityOrThrow({
+      game,
       playableEntityId,
-      userId,
-    }: {
-      userId: User["id"];
-      playableEntityId: PlayableEntity["id"];
-    },
-  ): asserts game is GameEntity {
-    if (!game) {
-      throw new NotFoundException("Game not found");
-    }
-
-    const playableEntity = game.playableEntities[playableEntityId];
-    if (!playableEntity) {
-      throw new NotFoundException("Playable entity not found in this game");
-    }
-
-    if (playableEntity.playedByUserId !== userId) {
-      throw new ForbiddenException(
-        "Cannot move a playable entity that you does not own",
-      );
-    }
-
-    if (playableEntity.currentPhase !== "action") {
-      throw new ForbiddenException(
-        "Cannot move a playable entity that is not in action phase",
-      );
-    }
-
-    if (playableEntity.characteristic.healthPoints <= 0) {
-      throw new ForbiddenException(
-        "Cannot move a playable entity that is not alive",
-      );
-    }
-
-    if (playableEntity.characteristic.movementPoints <= 0) {
-      throw new ForbiddenException(
-        "Playable entity has no movement points left",
-      );
-    }
-
-    if (playableEntity.characteristic.actionPoints <= 0) {
-      throw new ForbiddenException("Playable entity has no action points left");
-    }
+    });
+    this.playableEntityService.mustBePlayedByUserId({ playableEntity, userId });
+    this.playableEntityService.mustBeInActionPhase(playableEntity);
+    this.playableEntityService.mustBeAlive(playableEntity);
+    this.playableEntityService.mustBeAbleToMove(playableEntity);
+    this.playableEntityService.mustBeAbleToAct(playableEntity);
   }
 
   private getPlayableEntityPath({
@@ -112,23 +77,21 @@ export class PlayableEntityMoveUseCase implements UseCase {
     pathToTile: PlayableEntityMoveInput["pathToTile"];
     playableEntityId: PlayableEntityMoveInput["playableEntityId"];
   }): Tile[] {
-    const metadata = { width: game.map.width, height: game.map.height };
     const validTiles: Tile[] = [];
 
-    const playableEntity = game.playableEntities[
-      playableEntityId
-    ] as PlayableEntity;
-
+    const playableEntity = this.playableEntityService.getPlayableEntityOrThrow({
+      game,
+      playableEntityId,
+    });
     let movementPoints = playableEntity.characteristic.movementPoints;
 
     // slice to remove the entity self position (which is the origin in the bfs algo)
     const pathTiles = unfoldTilePath(pathToTile).slice(1);
     for (const pathTile of pathTiles) {
-      const index = this.coordService.coordToIndex({
+      const tile = this.mapService.getTileOrThrow({
         coord: pathTile.coord,
-        metadata,
+        game,
       });
-      const tile = game.map.tiles[index] as Tile;
 
       if (
         !this.isPlayableEntityAbleToMoveToTile({ game, playableEntity, tile })

@@ -24,10 +24,10 @@ export class GetUserGameStateUseCase implements UseCase {
     gameId: GameEntity["id"];
   }): Promise<GetUserGameStateOutput> {
     const lobby = await this.repository.getLobbyById({ lobbyId: gameId });
-    this.assertCanGetGame({ userId, lobby });
+    this.mustBeInTheLobby({ userId, lobby });
 
     const game = await this.repository.getGameById({ gameId });
-    this.assertGameValidity(game);
+    this.mustExecute(game);
 
     const playerGameState = this.playerStateService.getPlayerState({
       game,
@@ -37,7 +37,7 @@ export class GetUserGameStateUseCase implements UseCase {
     return playerGameState;
   }
 
-  private assertCanGetGame({
+  private mustBeInTheLobby({
     userId,
     lobby,
   }: { userId: User["id"]; lobby: LobbyEntity | null }) {
@@ -50,9 +50,7 @@ export class GetUserGameStateUseCase implements UseCase {
     }
   }
 
-  private assertGameValidity(
-    game: GameEntity | null,
-  ): asserts game is GameEntity {
+  private mustExecute(game: GameEntity | null): asserts game is GameEntity {
     if (!game) {
       throw new NotFoundException("Game not found");
     }

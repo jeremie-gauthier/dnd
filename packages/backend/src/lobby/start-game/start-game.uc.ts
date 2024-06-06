@@ -3,11 +3,7 @@ import {
   StartGameInput,
   type LobbyEntity,
 } from "@dnd/shared";
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { EnvSchema } from "src/config/env.config";
@@ -16,13 +12,11 @@ import { HostRequestedGameStartPayload } from "src/lobby/events/emitters/host-re
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
 import type { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
-import { StartGameRepository } from "./start-game.repository";
 
 @Injectable()
 export class StartGameUseCase implements UseCase {
   constructor(
     private readonly eventEmitter: EventEmitter2,
-    private readonly repository: StartGameRepository,
     private readonly configService: ConfigService<EnvSchema>,
     private readonly backupService: BackupService,
   ) {}
@@ -33,8 +27,8 @@ export class StartGameUseCase implements UseCase {
   }: StartGameInput & {
     userId: User["id"];
   }): Promise<void> {
-    const lobby = await this.repository.getLobbyById(lobbyId);
-    this.assertCanStartGame(lobby, { userId });
+    const lobby = await this.backupService.getLobbyOrThrow({ lobbyId });
+    this.mustExecute({ lobby, userId });
 
     this.setLobbyAsReadyForGameInitializing(lobby);
     await this.backupService.updateLobby({ lobby });
@@ -45,18 +39,13 @@ export class StartGameUseCase implements UseCase {
     );
   }
 
-  private assertCanStartGame(
-    lobby: LobbyEntity | null,
-    {
-      userId,
-    }: {
-      userId: User["id"];
-    },
-  ): asserts lobby is LobbyEntity {
-    if (!lobby) {
-      throw new NotFoundException("Lobby not found");
-    }
-
+  private mustExecute({
+    lobby,
+    userId,
+  }: {
+    lobby: LobbyEntity;
+    userId: User["id"];
+  }) {
     if (lobby.status !== "OPENED") {
       throw new ForbiddenException("Lobby is not opened");
     }

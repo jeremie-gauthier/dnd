@@ -1,5 +1,5 @@
 import type { JoinLobbyInput, LobbyEntity } from "@dnd/shared";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import type { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
@@ -23,7 +23,7 @@ export class JoinLobbyUseCase implements UseCase {
       await this.seatManagerService.leave({ lobby: lobbyToLeave, userId });
     }
 
-    const lobbyToJoin = await this.getLobbyToJoin({ lobbyId });
+    const lobbyToJoin = await this.backupService.getLobbyOrThrow({ lobbyId });
     this.seatManagerService.take({ lobby: lobbyToJoin, userId });
     await this.backupService.updateLobby({ lobby: lobbyToJoin });
 
@@ -38,24 +38,12 @@ export class JoinLobbyUseCase implements UseCase {
       return;
     }
 
-    const lobby = await this.repository.getLobbyById({
-      lobbyId: lobbyIdToLeave,
-    });
-    if (!lobby) {
-      return;
+    try {
+      return await this.backupService.getLobbyOrThrow({
+        lobbyId: lobbyIdToLeave,
+      });
+    } catch {
+      return undefined;
     }
-
-    return lobby;
-  }
-
-  private async getLobbyToJoin({
-    lobbyId,
-  }: { lobbyId: LobbyEntity["id"] }): Promise<LobbyEntity> {
-    const lobbyToJoin = await this.repository.getLobbyById({ lobbyId });
-    if (!lobbyToJoin) {
-      throw new NotFoundException("Lobby not found");
-    }
-
-    return lobbyToJoin;
   }
 }

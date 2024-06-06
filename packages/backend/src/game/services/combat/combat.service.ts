@@ -8,21 +8,21 @@ import {
   canAttackTarget,
   sum,
 } from "@dnd/shared";
-import { Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { EntityAttackedPayload } from "src/game/events/emitters/entity-attacked.payload";
 import { EntityDiedPayload } from "src/game/events/emitters/entity-died.payload";
 import { EntityTookDamagePayload } from "src/game/events/emitters/entity-took-damage.payload";
 import { GameEvent } from "src/game/events/emitters/game-events.enum";
-import { CoordService } from "../coord/coord.service";
 import { DiceService } from "../dice/dice.service";
+import { MapService } from "../map/map.service";
 
 @Injectable()
 export class CombatService {
   constructor(
     private readonly eventEmitter: EventEmitter2,
     private readonly diceService: DiceService,
-    private readonly coordService: CoordService,
+    private readonly mapService: MapService,
   ) {}
 
   public attack({
@@ -115,21 +115,17 @@ export class CombatService {
     );
     game.playableEntities = Object.fromEntries(remainingEntities);
 
-    const targetIdx = this.coordService.coordToIndex({
+    const targetTile = this.mapService.getTileOrThrow({
       coord: target.coord,
-      metadata: { height: game.map.height, width: game.map.width },
+      game,
     });
-    const targetTile = game.map.tiles[targetIdx];
-    if (!targetTile) {
-      return;
-    }
     targetTile.entities = targetTile.entities.filter(
       (entity) =>
         !(entity.type === "playable-entity" && entity.id === target.id),
     );
   }
 
-  public canAttackTarget({
+  public mustHaveTargetInRange({
     ally,
     game,
     originTile,
@@ -141,7 +137,9 @@ export class CombatService {
     originTile: Tile;
     range: AttackRangeType;
     targetCoord: Coord;
-  }): boolean {
-    return canAttackTarget({ ally, game, originTile, range, targetCoord });
+  }) {
+    if (!canAttackTarget({ ally, game, originTile, range, targetCoord })) {
+      throw new ForbiddenException("Target playable entity is out of range");
+    }
   }
 }

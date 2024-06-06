@@ -21,13 +21,13 @@ export class EndPlayerTurnUseCase implements UseCase {
   public async execute({ userId }: { userId: User["id"] }): Promise<void> {
     const game = await this.repository.getGameByUserId({ userId });
 
-    this.assertCanEndPlayerTurn(game, { userId });
+    this.mustExecute(game, { userId });
 
     this.endPlayerTurn({ game });
     await this.backupService.updateGame({ game });
   }
 
-  private assertCanEndPlayerTurn(
+  private mustExecute(
     game: GameEntity | null,
     { userId }: { userId: User["id"] },
   ): asserts game is GameEntity {
