@@ -1,9 +1,9 @@
 import { GameEntity, PlayableEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { GameEvent } from "src/modules/game/events/emitters/game-event.enum";
-import { PlayableEntityTurnEndedPayload } from "src/modules/game/events/emitters/playable-entity-turn-ended.payload";
-import { PlayableEntityTurnStartedPayload } from "src/modules/game/events/emitters/playable-entity-turn-started.payload";
+import { GameEvent } from "src/modules/game/events/game-event.enum";
+import { PlayableEntityTurnEndedPayload } from "src/modules/game/events/playable-entity-turn-ended.payload";
+import { PlayableEntityTurnStartedPayload } from "src/modules/game/events/playable-entity-turn-started.payload";
 
 @Injectable()
 export class TurnService {

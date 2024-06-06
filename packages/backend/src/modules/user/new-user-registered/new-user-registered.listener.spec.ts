@@ -4,19 +4,19 @@ import { getRepositoryToken } from "@nestjs/typeorm";
 import { User } from "src/database/entities/user.entity";
 import { NewUserRegisteredPayload } from "src/modules/auth/events/emitters/new-user-registered.payload";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { NewUserCreatedPayload } from "../../emitters/new-user-created.payload";
-import { UserEvent } from "../../emitters/user-event.enum";
-import { NewUserRegisteredListener } from "./new-user-registered.listener";
+import { NewUserCreatedPayload } from "../events/new-user-created.payload";
+import { UserEvent } from "../events/user-event.enum";
 import { NewUserRegisteredRepository } from "./new-user-registered.repository";
+import { NewUserRegisteredUseCase } from "./new-user-registered.uc";
 
 describe("NewUserRegisteredListener", () => {
-  let newUserRegisteredListener: NewUserRegisteredListener;
+  let newUserRegisteredUseCase: NewUserRegisteredUseCase;
   let eventEmitter2: EventEmitter2;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       providers: [
-        NewUserRegisteredListener,
+        NewUserRegisteredUseCase,
         {
           provide: NewUserRegisteredRepository,
           useValue: {
@@ -29,10 +29,8 @@ describe("NewUserRegisteredListener", () => {
       ],
     }).compile();
 
-    newUserRegisteredListener = app.get<NewUserRegisteredListener>(
-      NewUserRegisteredListener,
-    );
-    eventEmitter2 = app.get<EventEmitter2>(EventEmitter2);
+    newUserRegisteredUseCase = app.get(NewUserRegisteredUseCase);
+    eventEmitter2 = app.get(EventEmitter2);
   });
 
   it("should create a new user", async () => {
@@ -45,7 +43,7 @@ describe("NewUserRegisteredListener", () => {
       avatarUrl: "",
       username: "",
     });
-    await newUserRegisteredListener.handler(eventPayload);
+    await newUserRegisteredUseCase.execute(eventPayload);
 
     expect(eventEmitter).toHaveBeenCalledOnce();
     expect(eventEmitter).toBeCalledWith(

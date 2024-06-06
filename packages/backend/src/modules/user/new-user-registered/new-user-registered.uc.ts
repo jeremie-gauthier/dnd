@@ -1,21 +1,20 @@
 import { Injectable } from "@nestjs/common";
-import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import { UserStatus } from "src/database/enums/user-status.enum";
-import { AuthEvent } from "src/modules/auth/events/emitters/auth-event.enum";
-import type { NewUserRegisteredPayload } from "src/modules/auth/events/emitters/new-user-registered.payload";
-import { NewUserCreatedPayload } from "../../emitters/new-user-created.payload";
-import { UserEvent } from "../../emitters/user-event.enum";
+import { UseCase } from "src/interfaces/use-case.interface";
+import type { NewUserRegisteredPayload } from "src/modules/auth/events/new-user-registered.payload";
+import { NewUserCreatedPayload } from "../events/new-user-created.payload";
+import { UserEvent } from "../events/user-event.enum";
 import { NewUserRegisteredRepository } from "./new-user-registered.repository";
 
 @Injectable()
-export class NewUserRegisteredListener {
+export class NewUserRegisteredUseCase implements UseCase {
   constructor(
     private readonly eventEmitter: EventEmitter2,
     private readonly repository: NewUserRegisteredRepository,
   ) {}
 
-  @OnEvent(AuthEvent.NewUserRegistered)
-  public async handler({
+  public async execute({
     userId,
     avatarUrl,
     username,

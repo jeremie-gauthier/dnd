@@ -10,8 +10,9 @@ import { AuthzModule } from "src/modules/authz/authz.module";
 import { RedisModule } from "src/redis/redis.module";
 import { EndPlayerTurnRepository } from "./end-player-turn/end-player-turn.repository";
 import { EndPlayerTurnUseCase } from "./end-player-turn/end-player-turn.uc";
-import { GameInitializationListener } from "./events/listeners/game-initialization/game-initialization.listener";
-import { GameInitializationRepository } from "./events/listeners/game-initialization/game-initialization.repository";
+import { GameInitializationRepository } from "./game-initialization/game-initialization.repository";
+import { GameInitializationUseCase } from "./game-initialization/game-initialization.uc";
+import { GameListeners } from "./game.listeners";
 import { GamePrivateController } from "./game.private-controller";
 import { GamePublisherGateway } from "./game.publisher-gateway";
 import { GameSubscriberGateway } from "./game.subscriber-gateway";
@@ -53,9 +54,10 @@ import { VisibilityService } from "./services/visibility/visibility.service";
   ],
   controllers: [GamePrivateController],
   providers: [
+    GameListeners,
     GameSubscriberGateway,
     GamePublisherGateway,
-    GameInitializationListener,
+    GameInitializationUseCase,
     GameInitializationRepository,
     EndPlayerTurnUseCase,
     EndPlayerTurnRepository,

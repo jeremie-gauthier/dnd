@@ -1,8 +1,8 @@
 import { LobbyEntity } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { LobbyUpdatedPayload } from "src/modules/lobby/events/emitters/lobby-changed.payload";
-import { LobbyEvent } from "src/modules/lobby/events/emitters/lobby-event.enum";
+import { LobbyUpdatedPayload } from "src/modules/lobby/events/lobby-changed.payload";
+import { LobbyEvent } from "src/modules/lobby/events/lobby-event.enum";
 import { BackupRepository } from "./backup.repository";
 
 @Injectable()

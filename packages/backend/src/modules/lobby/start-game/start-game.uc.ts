@@ -9,8 +9,8 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { EnvSchema } from "src/config/env.config";
 import type { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/interfaces/use-case.interface";
-import { HostRequestedGameStartPayload } from "src/modules/lobby/events/emitters/host-requested-game-start.payload";
-import { LobbyEvent } from "src/modules/lobby/events/emitters/lobby-event.enum";
+import { HostRequestedGameStartPayload } from "src/modules/lobby/events/host-requested-game-start.payload";
+import { LobbyEvent } from "src/modules/lobby/events/lobby-event.enum";
 import { BackupService } from "../services/backup/backup.service";
 
 @Injectable()

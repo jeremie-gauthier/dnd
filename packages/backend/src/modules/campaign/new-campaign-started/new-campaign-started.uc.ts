@@ -6,8 +6,8 @@ import type { User } from "src/database/entities/user.entity";
 import { CampaignProgressionStatus } from "src/database/enums/campaign-progression-status.enum";
 import { CampaignStageProgressionStatus } from "src/database/enums/campaign-stage-progression-status.enum";
 import type { UseCase } from "src/interfaces/use-case.interface";
-import { CampaignEvent } from "src/modules/campaign/events/emitters/campaign-event.enum";
-import { NewCampaignStartedPayload } from "src/modules/campaign/events/emitters/new-campaign-started.payload";
+import { CampaignEvent } from "src/modules/campaign/events/campaign-event.enum";
+import { NewCampaignStartedPayload } from "src/modules/campaign/events/new-campaign-started.payload";
 import { NewCampaignStartedRepository } from "./new-campaign-started.repository";
 
 @Injectable()

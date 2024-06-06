@@ -1,17 +1,15 @@
 import { Injectable } from "@nestjs/common";
-import { OnEvent } from "@nestjs/event-emitter";
-import { LobbyEvent } from "src/modules/lobby/events/emitters/lobby-event.enum";
-import type { UserJoinedLobbyPayload } from "src/modules/lobby/events/emitters/user-joined-lobby.payload";
-import { UserLeftLobbyPayload } from "src/modules/lobby/events/emitters/user-left-lobby.payload";
+import { UseCase } from "src/interfaces/use-case.interface";
+import { LobbyEvent } from "src/modules/lobby/events/lobby-event.enum";
+import type { UserJoinedLobbyPayload } from "src/modules/lobby/events/user-joined-lobby.payload";
+import { UserLeftLobbyPayload } from "src/modules/lobby/events/user-left-lobby.payload";
 import { TrackUserAccrossLobbiesRepository } from "./track-user-accross-lobbies.repository";
 
 @Injectable()
-export class TrackUserAccrossLobbiesListener {
+export class TrackUserAccrossLobbiesUseCase implements UseCase {
   constructor(private readonly repository: TrackUserAccrossLobbiesRepository) {}
 
-  @OnEvent(LobbyEvent.UserJoinedLobby)
-  @OnEvent(LobbyEvent.UserLeftLobby)
-  public async handler(payload: UserJoinedLobbyPayload | UserLeftLobbyPayload) {
+  public async execute(payload: UserJoinedLobbyPayload | UserLeftLobbyPayload) {
     if (this.isAJoinLobbyEvent(payload)) {
       await this.repository.saveUserLobby(payload);
     } else {

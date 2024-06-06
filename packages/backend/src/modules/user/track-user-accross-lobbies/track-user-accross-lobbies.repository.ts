@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import type { UserJoinedLobbyPayload } from "src/modules/lobby/events/emitters/user-joined-lobby.payload";
-import type { UserLeftLobbyPayload } from "src/modules/lobby/events/emitters/user-left-lobby.payload";
+import type { UserJoinedLobbyPayload } from "src/modules/lobby/events/user-joined-lobby.payload";
+import type { UserLeftLobbyPayload } from "src/modules/lobby/events/user-left-lobby.payload";
 import { UsersRepository } from "src/redis/repositories/users.repository";
 
 @Injectable()

@@ -3,8 +3,8 @@ import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/interfaces/use-case.interface";
-import { AuthEvent } from "src/modules/auth/events/emitters/auth-event.enum";
-import { NewUserRegisteredPayload } from "src/modules/auth/events/emitters/new-user-registered.payload";
+import { AuthEvent } from "src/modules/auth/events/auth-event.enum";
+import { NewUserRegisteredPayload } from "src/modules/auth/events/new-user-registered.payload";
 import { UserConnectionRepository } from "./user-connection.repository";
 
 @Injectable()

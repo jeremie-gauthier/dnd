@@ -10,7 +10,7 @@ import { CreateLobbyRepository } from "./create-lobby/create-lobby.repository";
 import { CreateLobbyUseCase } from "./create-lobby/create-lobby.uc";
 import { DiscardGameMasterUseCase } from "./discard-game-master/discard-game-master.uc";
 import { DiscardHeroUseCase } from "./discard-hero/discard-hero.uc";
-import { GameInitializationDoneListener } from "./events/listeners/game-initialization-done/game-initialization-done.listener";
+import { GameInitializationDoneUseCase } from "./game-initialization-done/game-initialization-done.uc";
 import { GetLobbiesRepository } from "./get-lobbies/get-lobbies.repository";
 import { GetLobbiesUseCase } from "./get-lobbies/get-lobbies.uc";
 import { GetLobbyRepository } from "./get-lobby/get-lobby.repository";
@@ -23,6 +23,7 @@ import { JoinLobbyUseCase } from "./join-lobby/join-lobby.uc";
 import { LeaveLobbyRepository } from "./leave-lobby/leave-lobby.repository";
 import { LeaveLobbyUseCase } from "./leave-lobby/leave-lobby.uc";
 import { ListenLobbiesUpdatesUseCase } from "./listen-lobbies-updates/listen-lobbies-updates.uc";
+import { LobbyListeners } from "./lobby.listeners";
 import { LobbyPrivateController } from "./lobby.private-controller";
 import { LobbyPublisherGateway } from "./lobby.publisher-gateway";
 import { LobbySubscriberGateway } from "./lobby.subscriber-gateway";
@@ -45,6 +46,7 @@ import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggl
   ],
   controllers: [LobbyPrivateController],
   providers: [
+    LobbyListeners,
     HandleWsConnectionUseCase,
     HandleWsDisconnectionUseCase,
     HandleWsDisconnectionRepository,
@@ -63,7 +65,7 @@ import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggl
     DiscardHeroUseCase,
     TogglePlayerReadyStateUseCase,
     StartGameUseCase,
-    GameInitializationDoneListener,
+    GameInitializationDoneUseCase,
     SeatManagerService,
     SeatManagerRepository,
     PickGameMasterUseCase,

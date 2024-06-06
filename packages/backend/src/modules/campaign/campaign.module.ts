@@ -6,13 +6,14 @@ import { Campaign } from "src/database/entities/campaign.entity";
 import { HeroTemplate } from "src/database/entities/hero-template.entity";
 import { User } from "src/database/entities/user.entity";
 import { AuthzModule } from "src/modules/authz/authz.module";
+import { CampaignListeners } from "./campaign.listeners";
 import { CampaignPrivateController } from "./campaign.private-controller";
-import { CreateCampaignForUserListener } from "./events/listeners/create-campaign-for-user/create-campaign-for-user.listener";
-import { CreateCampaignForUserRepository } from "./events/listeners/create-campaign-for-user/create-campaign-for-user.repository";
-import { InitializeNewUserListener } from "./events/listeners/initialize-new-user/initialize-new-user.listener";
-import { InitializeNewUserRepository } from "./events/listeners/initialize-new-user/initialize-new-user.repository";
+import { CreateCampaignForUserRepository } from "./create-campaign-for-user/create-campaign-for-user.repository";
+import { CreateCampaignForUserUseCase } from "./create-campaign-for-user/create-campaign-for-user.uc";
 import { GetCampaignsRepository } from "./get-campaigns/get-campaigns.repository";
 import { GetCampaignsUseCase } from "./get-campaigns/get-campaigns.uc";
+import { InitializeNewUserRepository } from "./initialize-new-user/initialize-new-user.repository";
+import { InitializeNewUserUseCase } from "./initialize-new-user/initialize-new-user.uc";
 import { NewCampaignStartedRepository } from "./new-campaign-started/new-campaign-started.repository";
 import { NewCampaignStartedUseCase } from "./new-campaign-started/new-campaign-started.uc";
 
@@ -29,13 +30,14 @@ import { NewCampaignStartedUseCase } from "./new-campaign-started/new-campaign-s
   ],
   controllers: [CampaignPrivateController],
   providers: [
+    CampaignListeners,
     NewCampaignStartedUseCase,
     NewCampaignStartedRepository,
     GetCampaignsUseCase,
     GetCampaignsRepository,
-    InitializeNewUserListener,
+    InitializeNewUserUseCase,
     InitializeNewUserRepository,
-    CreateCampaignForUserListener,
+    CreateCampaignForUserUseCase,
     CreateCampaignForUserRepository,
   ],
 })

@@ -11,7 +11,7 @@ import type { CampaignStageProgression } from "src/database/entities/campaign-st
 import type { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import type { User } from "src/database/entities/user.entity";
 import { MoveService } from "src/modules/game/services/move/move.service";
-import { LobbyEvent } from "src/modules/lobby/events/emitters/lobby-event.enum";
+import { LobbyEvent } from "src/modules/lobby/events/lobby-event.enum";
 import { Mock, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { InitiativeService } from "../../../services/initiative/initiative.service";
 import { ItemService } from "../../../services/item/item.service";

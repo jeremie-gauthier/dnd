@@ -1,20 +1,19 @@
 import { Injectable } from "@nestjs/common";
-import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
-import type { NewUserCreatedPayload } from "src/modules/user/events/emitters/new-user-created.payload";
-import { UserEvent } from "src/modules/user/events/emitters/user-event.enum";
-import { CampaignEvent } from "../../emitters/campaign-event.enum";
-import { UnlockCampaignForUserPayload } from "../../emitters/unlock-campaign-for-user.payload";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { UseCase } from "src/interfaces/use-case.interface";
+import type { NewUserCreatedPayload } from "src/modules/user/events/new-user-created.payload";
+import { CampaignEvent } from "../events/campaign-event.enum";
+import { UnlockCampaignForUserPayload } from "../events/unlock-campaign-for-user.payload";
 import { InitializeNewUserRepository } from "./initialize-new-user.repository";
 
 @Injectable()
-export class InitializeNewUserListener {
+export class InitializeNewUserUseCase implements UseCase {
   constructor(
     private readonly emitter: EventEmitter2,
     private readonly repository: InitializeNewUserRepository,
   ) {}
 
-  @OnEvent(UserEvent.NewUserCreated)
-  public async handler({ userId }: NewUserCreatedPayload) {
+  public async execute({ userId }: NewUserCreatedPayload) {
     const campaignsForNewUsers =
       await this.repository.getAvailableCampaignsForNewUsers();
 

@@ -3,7 +3,7 @@ import { ForbiddenException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
-import { LobbyEvent } from "src/modules/lobby/events/emitters/lobby-event.enum";
+import { LobbyEvent } from "src/modules/lobby/events/lobby-event.enum";
 import {
   afterEach,
   beforeEach,

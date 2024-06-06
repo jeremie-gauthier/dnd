@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
 import type { EventPayload } from "src/interfaces/event-payload.interface";
-import { AnalyticEvent } from "./events/types/analytic-event.enum";
+import { AnalyticEvent } from "./events/analytic-event.enum";
 
 @Injectable()
 export class AnalyticsService {

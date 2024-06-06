@@ -10,26 +10,26 @@ import {
   unique,
 } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import { randomUUID } from "node:crypto";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import { Dice } from "src/database/entities/dice.entity";
 import { Hero } from "src/database/entities/hero.entity";
 import { User } from "src/database/entities/user.entity";
+import { UseCase } from "src/interfaces/use-case.interface";
 import { MoveService } from "src/modules/game/services/move/move.service";
-import type { HostRequestedGameStartPayload } from "src/modules/lobby/events/emitters/host-requested-game-start.payload";
-import { LobbyEvent } from "src/modules/lobby/events/emitters/lobby-event.enum";
-import { InitiativeService } from "../../../services/initiative/initiative.service";
-import { ItemService } from "../../../services/item/item.service";
-import { MapSerializerService } from "../../../services/map-serializer/map-serializer.service";
-import { GameEvent } from "../../emitters/game-event.enum";
-import { GameInitializationDonePayload } from "../../emitters/game-initialization-done.payload";
-import { GameInitializationStartedPayload } from "../../emitters/game-initialization-started.payload";
+import type { HostRequestedGameStartPayload } from "src/modules/lobby/events/host-requested-game-start.payload";
+import { GameEvent } from "../events/game-event.enum";
+import { GameInitializationDonePayload } from "../events/game-initialization-done.payload";
+import { GameInitializationStartedPayload } from "../events/game-initialization-started.payload";
+import { InitiativeService } from "../services/initiative/initiative.service";
+import { ItemService } from "../services/item/item.service";
+import { MapSerializerService } from "../services/map-serializer/map-serializer.service";
 import { GameInitializationRepository } from "./game-initialization.repository";
 
 @Injectable()
-export class GameInitializationListener {
+export class GameInitializationUseCase implements UseCase {
   constructor(
     private readonly eventEmitter: EventEmitter2,
     private readonly repository: GameInitializationRepository,
@@ -39,8 +39,7 @@ export class GameInitializationListener {
     private readonly itemService: ItemService,
   ) {}
 
-  @OnEvent(LobbyEvent.HostRequestedGameStart)
-  public async handler({
+  public async execute({
     lobby,
   }: HostRequestedGameStartPayload): Promise<void> {
     this.eventEmitter.emitAsync(

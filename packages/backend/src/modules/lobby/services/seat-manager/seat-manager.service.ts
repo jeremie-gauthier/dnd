@@ -2,10 +2,10 @@ import { LobbyEntity } from "@dnd/shared";
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
-import { DeleteLobbyPayload } from "src/modules/lobby/events/emitters/delete-lobby.payload";
-import { LobbyEvent } from "src/modules/lobby/events/emitters/lobby-event.enum";
-import { UserJoinedLobbyPayload } from "src/modules/lobby/events/emitters/user-joined-lobby.payload";
-import { UserLeftLobbyPayload } from "src/modules/lobby/events/emitters/user-left-lobby.payload";
+import { DeleteLobbyPayload } from "src/modules/lobby/events/delete-lobby.payload";
+import { LobbyEvent } from "src/modules/lobby/events/lobby-event.enum";
+import { UserJoinedLobbyPayload } from "src/modules/lobby/events/user-joined-lobby.payload";
+import { UserLeftLobbyPayload } from "src/modules/lobby/events/user-left-lobby.payload";
 import { BackupService } from "../backup/backup.service";
 import { SeatManagerRepository } from "./seat-manager.repository";
 
