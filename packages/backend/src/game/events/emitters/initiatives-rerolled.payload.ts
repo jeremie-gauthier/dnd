@@ -1,5 +1,5 @@
 import { GameEntity } from "@dnd/shared";
-import { EventPayload } from "src/event-emitter/event-payload.class";
+import { EventPayload } from "src/shared/event-payload.abstract";
 import { GameEvent } from "./game-events.enum";
 
 export class InitiativesRerolledPayload
@@ -8,7 +8,7 @@ export class InitiativesRerolledPayload
   public readonly name = GameEvent.InitiativesRerolled;
   public readonly game: GameEntity;
 
-  constructor({  game }: Omit<InitiativesRerolledPayload, "name">) {
+  constructor({ game }: Omit<InitiativesRerolledPayload, "name">) {
     this.game = game;
   }
 }

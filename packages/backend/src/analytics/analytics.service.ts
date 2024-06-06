@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
-import type { EventPayload } from "src/event-emitter/event-payload.class";
+import type { EventPayload } from "src/shared/event-payload.abstract";
 import { AnalyticsEvent } from "./events/types/events";
 
 @Injectable()

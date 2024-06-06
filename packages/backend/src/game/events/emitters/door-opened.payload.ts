@@ -4,7 +4,7 @@ import {
   PlayableEntity,
   TileNonPlayableInteractiveEntity,
 } from "@dnd/shared";
-import { EventPayload } from "src/event-emitter/event-payload.class";
+import { EventPayload } from "src/shared/event-payload.abstract";
 import { GameEvent } from "./game-events.enum";
 
 export class DoorOpenedPayload implements EventPayload<GameEvent.DoorOpened> {

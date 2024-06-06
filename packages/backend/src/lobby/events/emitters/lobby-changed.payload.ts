@@ -1,5 +1,5 @@
 import type { LobbyEntity } from "@dnd/shared";
-import type { EventPayload } from "src/event-emitter/event-payload.class";
+import type { EventPayload } from "src/shared/event-payload.abstract";
 import { LobbyEvent } from "./lobby-events.enum";
 
 export class LobbyUpdatedPayload

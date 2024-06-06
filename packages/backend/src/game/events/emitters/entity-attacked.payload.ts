@@ -1,6 +1,6 @@
 import { GameEntity, GameItem, PlayableEntity } from "@dnd/shared";
 import { Dice } from "src/database/entities/dice.entity";
-import { EventPayload } from "src/event-emitter/event-payload.class";
+import { EventPayload } from "src/shared/event-payload.abstract";
 import { GameEvent } from "./game-events.enum";
 
 export class EntityAttackedPayload
