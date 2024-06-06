@@ -34,6 +34,7 @@ import { SeatManagerRepository } from "./services/seat-manager/seat-manager.repo
 import { SeatManagerService } from "./services/seat-manager/seat-manager.service";
 import { StartGameUseCase } from "./start-game/start-game.uc";
 import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggle-player-ready-state.uc";
+import { RoleService } from './services/role/role.service';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggl
     LobbyPublisherGateway,
     BackupService,
     BackupRepository,
+    RoleService,
   ],
 })
 export class LobbyModule {}

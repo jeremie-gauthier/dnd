@@ -1,13 +1,10 @@
 import type { DiscardHeroInput, LobbyEntity } from "@dnd/shared";
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { ForbiddenException, Injectable } from "@nestjs/common";
 import type { Hero } from "src/database/entities/hero.entity";
 import type { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
+import { RoleService } from "../services/role/role.service";
 import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
 
 @Injectable()
@@ -15,6 +12,7 @@ export class DiscardHeroUseCase implements UseCase {
   constructor(
     private readonly backupService: BackupService,
     private readonly seatManagerService: SeatManagerService,
+    private readonly roleService: RoleService,
   ) {}
 
   public async execute({
@@ -24,7 +22,6 @@ export class DiscardHeroUseCase implements UseCase {
   }: DiscardHeroInput & {
     userId: User["id"];
   }): Promise<void> {
-    // TODO: the lobby fetched might lack of a lock
     const lobby = await this.backupService.getLobbyOrThrow({ lobbyId });
     this.mustExecute({ lobby, userId, heroId });
 
@@ -53,12 +50,7 @@ export class DiscardHeroUseCase implements UseCase {
       );
     }
 
-    const heroIdx = lobby.heroesAvailable.findIndex(({ id }) => id === heroId);
-    if (heroIdx < 0) {
-      throw new NotFoundException("Hero not found");
-    }
-
-    const hero = lobby.heroesAvailable[heroIdx]!;
+    const hero = this.roleService.getHeroOrThrow({ lobby, heroId });
 
     const isHeroPickedByUser =
       hero.pickedBy === userId && player.heroesSelected.includes(heroId);
@@ -80,8 +72,7 @@ export class DiscardHeroUseCase implements UseCase {
   }) {
     const player = this.seatManagerService.getPlayerOrThrow({ lobby, userId });
 
-    const heroIdx = lobby.heroesAvailable.findIndex(({ id }) => id === heroId);
-    const hero = lobby.heroesAvailable[heroIdx]!;
+    const hero = this.roleService.getHeroOrThrow({ lobby, heroId });
 
     player.heroesSelected = player.heroesSelected.filter((id) => id !== heroId);
     hero.pickedBy = undefined;
