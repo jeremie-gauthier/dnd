@@ -5,7 +5,7 @@ import { NewUserRegisteredPayload } from "src/auth/events/emitters/new-user-regi
 import { User } from "src/database/entities/user.entity";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NewUserCreatedPayload } from "../../emitters/new-user-created.payload";
-import { UserEvent } from "../../emitters/user-events.enum";
+import { UserEvent } from "../../emitters/user-event.enum";
 import { NewUserRegisteredListener } from "./new-user-registered.listener";
 import { NewUserRegisteredRepository } from "./new-user-registered.repository";
 

@@ -1,7 +1,7 @@
 import { GameEntity, PlayableEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { GameEvent } from "src/game/events/emitters/game-events.enum";
+import { GameEvent } from "src/game/events/emitters/game-event.enum";
 import { InitiativesRerolledPayload } from "src/game/events/emitters/initiatives-rerolled.payload";
 
 @Injectable()

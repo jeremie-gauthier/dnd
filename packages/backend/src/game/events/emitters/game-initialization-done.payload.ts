@@ -1,6 +1,6 @@
 import type { GameEntity, LobbyEntity } from "@dnd/shared";
 import type { EventPayload } from "src/shared/event-payload.abstract";
-import { GameEvent } from "./game-events.enum";
+import { GameEvent } from "./game-event.enum";
 
 export class GameInitializationDonePayload
   implements EventPayload<GameEvent.GameInitializationDone>

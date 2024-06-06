@@ -3,7 +3,7 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test, TestingModule } from "@nestjs/testing";
 import { EntityDiedPayload } from "src/game/events/emitters/entity-died.payload";
 import { EntityTookDamagePayload } from "src/game/events/emitters/entity-took-damage.payload";
-import { GameEvent } from "src/game/events/emitters/game-events.enum";
+import { GameEvent } from "src/game/events/emitters/game-event.enum";
 import {
   MockInstance,
   afterEach,

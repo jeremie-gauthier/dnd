@@ -1,7 +1,7 @@
 import type { Campaign } from "src/database/entities/campaign.entity";
 import type { User } from "src/database/entities/user.entity";
 import type { EventPayload } from "src/shared/event-payload.abstract";
-import { CampaignEvent } from "./campaign-events.enum";
+import { CampaignEvent } from "./campaign-event.enum";
 
 export class UnlockCampaignForUserPayload
   implements EventPayload<CampaignEvent.UnlockCampaignForUser>

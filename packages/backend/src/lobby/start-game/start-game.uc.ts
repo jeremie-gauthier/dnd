@@ -9,7 +9,7 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { EnvSchema } from "src/config/env.config";
 import type { User } from "src/database/entities/user.entity";
 import { HostRequestedGameStartPayload } from "src/lobby/events/emitters/host-requested-game-start.payload";
-import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
+import { LobbyEvent } from "src/lobby/events/emitters/lobby-event.enum";
 import type { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
 

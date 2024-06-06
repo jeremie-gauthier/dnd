@@ -9,7 +9,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { DoorOpenedPayload } from "src/game/events/emitters/door-opened.payload";
 import { EnemiesSpawnedPayload } from "src/game/events/emitters/enemies-spawned.payload";
-import { GameEvent } from "src/game/events/emitters/game-events.enum";
+import { GameEvent } from "src/game/events/emitters/game-event.enum";
 import { MapService } from "../map/map.service";
 import { MoveService } from "../move/move.service";
 import { PlayableEntityService } from "../playable-entity/playable-entity.service";

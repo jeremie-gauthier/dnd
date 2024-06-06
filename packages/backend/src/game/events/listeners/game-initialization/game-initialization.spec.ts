@@ -11,13 +11,13 @@ import type { CampaignStageProgression } from "src/database/entities/campaign-st
 import type { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import type { User } from "src/database/entities/user.entity";
 import { MoveService } from "src/game/services/move/move.service";
-import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
+import { LobbyEvent } from "src/lobby/events/emitters/lobby-event.enum";
 import { Mock, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { InitiativeService } from "../../../services/initiative/initiative.service";
 import { ItemService } from "../../../services/item/item.service";
 import { MapSerializerService } from "../../../services/map-serializer/map-serializer.service";
 import { PlayableEntityService } from "../../../services/playable-entity/playable-entity.service";
-import { GameEvent } from "../../emitters/game-events.enum";
+import { GameEvent } from "../../emitters/game-event.enum";
 import { GameInitializationListener } from "./game-initialization.listener";
 import { GameInitializationRepository } from "./game-initialization.repository";
 

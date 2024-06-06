@@ -1,7 +1,7 @@
 import { GameEntity } from "@dnd/shared";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test, TestingModule } from "@nestjs/testing";
-import { GameEvent } from "src/game/events/emitters/game-events.enum";
+import { GameEvent } from "src/game/events/emitters/game-event.enum";
 import { InitiativesRerolledPayload } from "src/game/events/emitters/initiatives-rerolled.payload";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { InitiativeService } from "./initiative.service";

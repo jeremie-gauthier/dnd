@@ -1,6 +1,6 @@
 import { GameEntity, PlayableEntity } from "@dnd/shared";
 import { EventPayload } from "src/shared/event-payload.abstract";
-import { GameEvent } from "./game-events.enum";
+import { GameEvent } from "./game-event.enum";
 
 export class EntityDiedPayload implements EventPayload<GameEvent.EntityDied> {
   public readonly name = GameEvent.EntityDied;

@@ -1,6 +1,6 @@
 import { GameLog } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import { GameEvent } from "src/game/events/emitters/game-events.enum";
+import { GameEvent } from "src/game/events/emitters/game-event.enum";
 import { LoggableAction } from "./loggable-action.interface";
 
 @Injectable()

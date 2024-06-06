@@ -1,6 +1,6 @@
 import { GameEntity, LobbyEntity } from "@dnd/shared";
 import { EventPayload } from "src/shared/event-payload.abstract";
-import { LobbyEvent } from "./lobby-events.enum";
+import { LobbyEvent } from "./lobby-event.enum";
 
 export class GameReadyPayload implements EventPayload<LobbyEvent.GameReady> {
   public readonly name = LobbyEvent.GameReady;

@@ -6,7 +6,7 @@ import { Hero } from "src/database/entities/hero.entity";
 import { CampaignProgressionStatus } from "src/database/enums/campaign-progression-status.enum";
 import { CampaignStageProgressionStatus } from "src/database/enums/campaign-stage-progression-status.enum";
 import { DeepPartial } from "typeorm";
-import { CampaignEvent } from "../../emitters/campaign-events.enum";
+import { CampaignEvent } from "../../emitters/campaign-event.enum";
 import type { UnlockCampaignForUserPayload } from "../../emitters/unlock-campaign-for-user.payload";
 import { CreateCampaignForUserRepository } from "./create-campaign-for-user.repository";
 

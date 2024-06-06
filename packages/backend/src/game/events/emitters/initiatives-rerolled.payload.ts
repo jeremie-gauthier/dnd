@@ -1,6 +1,6 @@
 import { GameEntity } from "@dnd/shared";
 import { EventPayload } from "src/shared/event-payload.abstract";
-import { GameEvent } from "./game-events.enum";
+import { GameEvent } from "./game-event.enum";
 
 export class InitiativesRerolledPayload
   implements EventPayload<GameEvent.InitiativesRerolled>

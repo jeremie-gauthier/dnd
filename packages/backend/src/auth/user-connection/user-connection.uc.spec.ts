@@ -1,7 +1,7 @@
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { AuthEvent } from "src/auth/events/emitters/auth-events.enum";
+import { AuthEvent } from "src/auth/events/emitters/auth-event.enum";
 import { NewUserRegisteredPayload } from "src/auth/events/emitters/new-user-registered.payload";
 import { User } from "src/database/entities/user.entity";
 import { beforeEach, describe, expect, it, vi } from "vitest";

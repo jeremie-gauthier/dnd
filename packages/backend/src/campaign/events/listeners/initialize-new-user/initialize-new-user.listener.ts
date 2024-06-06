@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
 import type { NewUserCreatedPayload } from "src/user/events/emitters/new-user-created.payload";
-import { UserEvent } from "src/user/events/emitters/user-events.enum";
-import { CampaignEvent } from "../../emitters/campaign-events.enum";
+import { UserEvent } from "src/user/events/emitters/user-event.enum";
+import { CampaignEvent } from "../../emitters/campaign-event.enum";
 import { UnlockCampaignForUserPayload } from "../../emitters/unlock-campaign-for-user.payload";
 import { InitializeNewUserRepository } from "./initialize-new-user.repository";
 

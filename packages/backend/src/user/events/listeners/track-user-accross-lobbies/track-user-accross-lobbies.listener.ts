@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
-import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
+import { LobbyEvent } from "src/lobby/events/emitters/lobby-event.enum";
 import type { UserJoinedLobbyPayload } from "src/lobby/events/emitters/user-joined-lobby.payload";
 import { UserLeftLobbyPayload } from "src/lobby/events/emitters/user-left-lobby.payload";
 import { TrackUserAccrossLobbiesRepository } from "./track-user-accross-lobbies.repository";

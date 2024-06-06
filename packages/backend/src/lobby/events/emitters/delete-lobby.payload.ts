@@ -1,6 +1,6 @@
 import { LobbyEntity } from "@dnd/shared";
 import { EventPayload } from "src/shared/event-payload.abstract";
-import { LobbyEvent } from "./lobby-events.enum";
+import { LobbyEvent } from "./lobby-event.enum";
 
 export class DeleteLobbyPayload
   implements EventPayload<LobbyEvent.DeleteLobby>

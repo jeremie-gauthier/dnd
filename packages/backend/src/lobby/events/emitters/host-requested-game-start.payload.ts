@@ -1,7 +1,7 @@
 import type { LobbyEntity } from "@dnd/shared";
 import type { User } from "src/database/entities/user.entity";
 import type { EventPayload } from "src/shared/event-payload.abstract";
-import { LobbyEvent } from "./lobby-events.enum";
+import { LobbyEvent } from "./lobby-event.enum";
 
 export class HostRequestedGameStartPayload
   implements EventPayload<LobbyEvent.HostRequestedGameStart>

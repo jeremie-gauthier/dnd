@@ -1,7 +1,7 @@
 import { UserConnectionInput } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { AuthEvent } from "src/auth/events/emitters/auth-events.enum";
+import { AuthEvent } from "src/auth/events/emitters/auth-event.enum";
 import { NewUserRegisteredPayload } from "src/auth/events/emitters/new-user-registered.payload";
 import { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/types/use-case.interface";

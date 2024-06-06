@@ -1,11 +1,11 @@
 import { LobbyEntityStatus } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2, OnEvent } from "@nestjs/event-emitter";
-import { GameEvent } from "src/game/events/emitters/game-events.enum";
+import { GameEvent } from "src/game/events/emitters/game-event.enum";
 import type { GameInitializationDonePayload } from "src/game/events/emitters/game-initialization-done.payload";
 import { BackupService } from "src/lobby/services/backup/backup.service";
 import { GameReadyPayload } from "../../emitters/game-ready.payload";
-import { LobbyEvent } from "../../emitters/lobby-events.enum";
+import { LobbyEvent } from "../../emitters/lobby-event.enum";
 
 @Injectable()
 export class GameInitializationDoneListener {

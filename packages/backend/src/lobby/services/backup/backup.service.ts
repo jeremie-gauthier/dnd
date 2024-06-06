@@ -2,7 +2,7 @@ import { LobbyEntity } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { LobbyUpdatedPayload } from "src/lobby/events/emitters/lobby-changed.payload";
-import { LobbyEvent } from "src/lobby/events/emitters/lobby-events.enum";
+import { LobbyEvent } from "src/lobby/events/emitters/lobby-event.enum";
 import { BackupRepository } from "./backup.repository";
 
 @Injectable()

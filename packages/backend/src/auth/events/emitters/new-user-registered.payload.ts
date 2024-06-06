@@ -1,5 +1,5 @@
 import type { EventPayload } from "src/shared/event-payload.abstract";
-import { AuthEvent } from "./auth-events.enum";
+import { AuthEvent } from "./auth-event.enum";
 
 export class NewUserRegisteredPayload
   implements EventPayload<AuthEvent.NewUserRegistered>

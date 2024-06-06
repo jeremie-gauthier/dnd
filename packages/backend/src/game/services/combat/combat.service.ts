@@ -13,7 +13,7 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { EntityAttackedPayload } from "src/game/events/emitters/entity-attacked.payload";
 import { EntityDiedPayload } from "src/game/events/emitters/entity-died.payload";
 import { EntityTookDamagePayload } from "src/game/events/emitters/entity-took-damage.payload";
-import { GameEvent } from "src/game/events/emitters/game-events.enum";
+import { GameEvent } from "src/game/events/emitters/game-event.enum";
 import { DiceService } from "../dice/dice.service";
 import { MapService } from "../map/map.service";
 
