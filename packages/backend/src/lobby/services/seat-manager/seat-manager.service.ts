@@ -109,4 +109,27 @@ export class SeatManagerService {
       await this.repository.delGameById({ gameId: lobby.id });
     }
   }
+
+  public mustBeInTheLobby({
+    lobby,
+    userId,
+  }: { lobby: LobbyEntity; userId: User["id"] }) {
+    if (!lobby.players.some((player) => player.userId === userId)) {
+      throw new ForbiddenException("User does not belong to this lobby");
+    }
+  }
+
+  public getPlayerOrThrow({
+    lobby,
+    userId,
+  }: {
+    lobby: LobbyEntity;
+    userId: User["id"];
+  }): LobbyEntity["players"][number] {
+    const player = lobby.players.find((player) => player.userId === userId);
+    if (!player) {
+      throw new ForbiddenException("User not found in this lobby");
+    }
+    return player;
+  }
 }
