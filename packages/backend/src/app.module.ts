@@ -15,15 +15,15 @@ import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { AuthzModule } from "./authz/authz.module";
 import { CampaignModule } from "./campaign/campaign.module";
-import { LoggerMiddleware } from "./common/logger.middleware";
 import envConfig, { validate } from "./config/env.config";
 import redis from "./config/redis.config";
 import typeorm from "./config/typeorm.config";
 import { GameModule } from "./game/game.module";
 import { LobbyModule } from "./lobby/lobby.module";
+import { LoggerMiddleware } from "./middlewares/logger.middleware";
 import { RedisModule } from "./redis/redis.module";
+import { TranslationModule } from "./translation/translation.module";
 import { UserModule } from "./user/user.module";
-import { TranslationModule } from './translation/translation.module';
 
 @Module({
   imports: [
