@@ -1,6 +1,6 @@
 import { GameEntity, PlayableEntity } from "@dnd/shared";
 import { TrapEntity } from "@dnd/shared/dist/database/game/interactive-entities.type";
-import { EventPayload } from "src/shared/event-payload.abstract";
+import { EventPayload } from "src/interfaces/event-payload.interface";
 import { GameEvent } from "./game-event.enum";
 
 export class TrapTriggeredPayload

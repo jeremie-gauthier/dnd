@@ -1,5 +1,5 @@
 import { GameEntity, PlayableEntity } from "@dnd/shared";
-import { EventPayload } from "src/shared/event-payload.abstract";
+import { EventPayload } from "src/interfaces/event-payload.interface";
 import { GameEvent } from "./game-event.enum";
 
 export class PlayableEntityTurnEndedPayload
