@@ -6,7 +6,7 @@ import {
 } from "@dnd/shared";
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { User } from "src/database/entities/user.entity";
-import { UseCase } from "src/types/use-case.interface";
+import { UseCase } from "src/interfaces/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
 import { CombatService } from "../services/combat/combat.service";
 import { MapService } from "../services/map/map.service";

@@ -4,7 +4,7 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { AuthEvent } from "src/auth/events/emitters/auth-event.enum";
 import { NewUserRegisteredPayload } from "src/auth/events/emitters/new-user-registered.payload";
 import { User } from "src/database/entities/user.entity";
-import type { UseCase } from "src/types/use-case.interface";
+import type { UseCase } from "src/interfaces/use-case.interface";
 import { UserConnectionRepository } from "./user-connection.repository";
 
 @Injectable()

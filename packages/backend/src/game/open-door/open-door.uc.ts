@@ -14,7 +14,7 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { DoorOpenedPayload } from "src/game/events/emitters/door-opened.payload";
 import { GameEvent } from "src/game/events/emitters/game-event.enum";
-import { UseCase } from "src/types/use-case.interface";
+import { UseCase } from "src/interfaces/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
 import { InitiativeService } from "../services/initiative/initiative.service";
 import { MapService } from "../services/map/map.service";

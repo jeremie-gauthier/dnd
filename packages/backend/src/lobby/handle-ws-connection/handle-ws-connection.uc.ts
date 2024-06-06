@@ -1,14 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { WsException } from "@nestjs/websockets";
 import { JwtService } from "src/authz/services/jwt/jwt.service";
-import type { ServerSocket } from "src/types/socket.type";
-import type { UseCase } from "src/types/use-case.interface";
+import type { ServerSocket } from "src/interfaces/socket.type";
+import type { UseCase } from "src/interfaces/use-case.interface";
 
 @Injectable()
 export class HandleWsConnectionUseCase implements UseCase {
   constructor(private readonly jwtService: JwtService) {}
 
-  public async execute(client: ServerSocket): Promise<void> {
+  public async execute({ client }: { client: ServerSocket }): Promise<void> {
     const token: string | undefined = client.handshake.auth.token;
     if (token === undefined || token === null) {
       client.disconnect(true);

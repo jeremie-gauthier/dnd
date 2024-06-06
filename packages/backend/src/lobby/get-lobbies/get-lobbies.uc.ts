@@ -1,6 +1,6 @@
 import { GetLobbiesOutput } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import type { UseCase } from "src/types/use-case.interface";
+import type { UseCase } from "src/interfaces/use-case.interface";
 import { GetLobbiesRepository } from "./get-lobbies.repository";
 
 @Injectable()

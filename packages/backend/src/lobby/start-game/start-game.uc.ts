@@ -8,9 +8,9 @@ import { ConfigService } from "@nestjs/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { EnvSchema } from "src/config/env.config";
 import type { User } from "src/database/entities/user.entity";
+import type { UseCase } from "src/interfaces/use-case.interface";
 import { HostRequestedGameStartPayload } from "src/lobby/events/emitters/host-requested-game-start.payload";
 import { LobbyEvent } from "src/lobby/events/emitters/lobby-event.enum";
-import type { UseCase } from "src/types/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
 
 @Injectable()

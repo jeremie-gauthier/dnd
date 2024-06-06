@@ -2,7 +2,7 @@ import { CreateLobbyInput, LobbyEntityStatus } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import type { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import type { User } from "src/database/entities/user.entity";
-import type { UseCase } from "src/types/use-case.interface";
+import type { UseCase } from "src/interfaces/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
 import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
 import type { CreateLobbyOutputDto } from "./create-lobby.dto";

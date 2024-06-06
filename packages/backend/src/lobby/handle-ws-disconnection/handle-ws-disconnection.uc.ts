@@ -1,7 +1,7 @@
 import { LobbyEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import type { ServerSocket } from "src/types/socket.type";
-import type { UseCase } from "src/types/use-case.interface";
+import type { ServerSocket } from "src/interfaces/socket.type";
+import type { UseCase } from "src/interfaces/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
 import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
 import { HandleWsDisconnectionRepository } from "./handle-ws-disconnection.repository";
@@ -14,7 +14,7 @@ export class HandleWsDisconnectionUseCase implements UseCase {
     private readonly backupService: BackupService,
   ) {}
 
-  public async execute(client: ServerSocket): Promise<void> {
+  public async execute({ client }: { client: ServerSocket }): Promise<void> {
     const { userId } = client.data;
     client.leave(userId);
 

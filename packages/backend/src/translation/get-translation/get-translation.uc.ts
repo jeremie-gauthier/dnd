@@ -1,6 +1,6 @@
 import { GetTranslationInput, GetTranslationOutput } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import { UseCase } from "src/types/use-case.interface";
+import { UseCase } from "src/interfaces/use-case.interface";
 import { GetTranslationRepository } from "./get-translation.repository";
 
 @Injectable()

@@ -1,7 +1,7 @@
 import { GetUserOutput } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { User } from "src/database/entities/user.entity";
-import { UseCase } from "src/types/use-case.interface";
+import { UseCase } from "src/interfaces/use-case.interface";
 import { GetUserRepository } from "./get-user.repository";
 
 @Injectable()

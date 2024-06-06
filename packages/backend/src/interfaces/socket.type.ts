@@ -14,8 +14,3 @@ export type ServerSocket = Socket<
   never,
   { userId: string }
 >;
-
-export type MessageContext = {
-  server: WsServer;
-  client: ServerSocket;
-};

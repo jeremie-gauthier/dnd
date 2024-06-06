@@ -1,7 +1,7 @@
 import { LobbyEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import type { User } from "src/database/entities/user.entity";
-import type { UseCase } from "src/types/use-case.interface";
+import type { UseCase } from "src/interfaces/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
 import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
 import { LeaveLobbyRepository } from "./leave-lobby.repository";

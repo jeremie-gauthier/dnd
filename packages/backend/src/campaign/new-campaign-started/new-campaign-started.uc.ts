@@ -7,7 +7,7 @@ import type { Campaign } from "src/database/entities/campaign.entity";
 import type { User } from "src/database/entities/user.entity";
 import { CampaignProgressionStatus } from "src/database/enums/campaign-progression-status.enum";
 import { CampaignStageProgressionStatus } from "src/database/enums/campaign-stage-progression-status.enum";
-import type { UseCase } from "src/types/use-case.interface";
+import type { UseCase } from "src/interfaces/use-case.interface";
 import { NewCampaignStartedRepository } from "./new-campaign-started.repository";
 
 @Injectable()

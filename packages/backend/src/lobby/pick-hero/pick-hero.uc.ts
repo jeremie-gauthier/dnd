@@ -4,7 +4,7 @@ import { ConfigService } from "@nestjs/config";
 import { EnvSchema } from "src/config/env.config";
 import type { Hero } from "src/database/entities/hero.entity";
 import type { User } from "src/database/entities/user.entity";
-import type { UseCase } from "src/types/use-case.interface";
+import type { UseCase } from "src/interfaces/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
 import { RoleService } from "../services/role/role.service";
 import { SeatManagerService } from "../services/seat-manager/seat-manager.service";

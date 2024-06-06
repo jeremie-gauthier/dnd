@@ -13,7 +13,7 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { GameEvent } from "src/game/events/emitters/game-event.enum";
 import { PlayableEntityMovedPayload } from "src/game/events/emitters/playable-entity-moved.payload";
-import { UseCase } from "src/types/use-case.interface";
+import { UseCase } from "src/interfaces/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
 import { MapService } from "../services/map/map.service";
 import { MoveService } from "../services/move/move.service";

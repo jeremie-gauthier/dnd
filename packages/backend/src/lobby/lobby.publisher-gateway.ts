@@ -3,7 +3,7 @@ import { OnEvent } from "@nestjs/event-emitter";
 import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { User } from "src/database/entities/user.entity";
 import { GameEvent } from "src/game/events/emitters/game-event.enum";
-import { WsServer } from "src/types/socket.type";
+import { WsServer } from "src/interfaces/socket.type";
 import { LOBBIES_ROOM } from "./constants";
 import { LobbyEvent } from "./events/emitters/lobby-event.enum";
 

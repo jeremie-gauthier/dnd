@@ -11,7 +11,7 @@ import {
 import { ZodValidationPipe } from "nestjs-zod";
 import { JWTAuthGuard } from "src/authz/jwt-auth.guard";
 import { WsExceptionFilter } from "src/errors/ws-exception-filter";
-import type { ServerSocket } from "src/types/socket.type";
+import type { ServerSocket } from "src/interfaces/socket.type";
 import { LOBBIES_ROOM } from "./constants";
 import {
   CreateLobbyOutputDto,
@@ -68,11 +68,11 @@ export class LobbySubscriberGateway
   ) {}
 
   public async handleConnection(client: ServerSocket) {
-    await this.handleWsConnectionUseCase.execute(client);
+    await this.handleWsConnectionUseCase.execute({ client });
   }
 
   public async handleDisconnect(client: ServerSocket) {
-    await this.handleWsDisconnectionUseCase.execute(client);
+    await this.handleWsDisconnectionUseCase.execute({ client });
   }
 
   @SubscribeMessage(ClientLobbyEvent.RequestCreateLobby)
@@ -106,7 +106,7 @@ export class LobbySubscriberGateway
 
   @SubscribeMessage(ClientLobbyEvent.ListenLobbiesChanges)
   public async listenLobbiesChanges(@ConnectedSocket() client: ServerSocket) {
-    await this.listenLobbiesUpdatesUseCase.execute(client);
+    await this.listenLobbiesUpdatesUseCase.execute({ client });
     return { message: "You are now listening on lobbies changes" };
   }
 
