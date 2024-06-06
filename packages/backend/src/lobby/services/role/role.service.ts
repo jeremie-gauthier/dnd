@@ -39,4 +39,19 @@ export class RoleService {
       throw new ForbiddenException("Hero already picked");
     }
   }
+
+  public mustOwnTheHero({
+    player,
+    hero,
+  }: {
+    player: LobbyEntity["players"][number];
+    hero: LobbyEntity["heroesAvailable"][number];
+  }) {
+    const isHeroPickedByUser =
+      hero.pickedBy === player.userId &&
+      player.heroesSelected.includes(hero.id);
+    if (!isHeroPickedByUser) {
+      throw new ForbiddenException("Player does not own this hero");
+    }
+  }
 }

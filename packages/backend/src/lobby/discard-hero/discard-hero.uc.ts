@@ -51,14 +51,7 @@ export class DiscardHeroUseCase implements UseCase {
     }
 
     const hero = this.roleService.getHeroOrThrow({ lobby, heroId });
-
-    const isHeroPickedByUser =
-      hero.pickedBy === userId && player.heroesSelected.includes(heroId);
-    if (!isHeroPickedByUser) {
-      throw new ForbiddenException(
-        "You can only discard heroes you have picked",
-      );
-    }
+    this.roleService.mustOwnTheHero({ player, hero });
   }
 
   private discardHero({
