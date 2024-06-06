@@ -2,7 +2,7 @@ import { GameEntity, LobbyEntity, ServerLobbyEvent } from "@dnd/shared";
 import { OnEvent } from "@nestjs/event-emitter";
 import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { User } from "src/database/entities/user.entity";
-import { WsServer } from "src/interfaces/socket.type";
+import { WsServer } from "src/interfaces/socket.interface";
 import { GameEvent } from "src/modules/game/events/emitters/game-event.enum";
 import { LOBBIES_ROOM } from "./constants";
 import { LobbyEvent } from "./events/emitters/lobby-event.enum";

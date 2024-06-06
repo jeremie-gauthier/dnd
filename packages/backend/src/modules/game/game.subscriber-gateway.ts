@@ -8,7 +8,7 @@ import {
 } from "@nestjs/websockets";
 import { ZodValidationPipe } from "nestjs-zod";
 import { WsExceptionFilter } from "src/errors/ws-exception-filter";
-import type { ServerSocket } from "src/interfaces/socket.type";
+import type { ServerSocket } from "src/interfaces/socket.interface";
 import { JWTAuthGuard } from "src/modules/authz/jwt-auth.guard";
 import { EndPlayerTurnUseCase } from "./end-player-turn/end-player-turn.uc";
 import { OpenDoorInputDto } from "./open-door/open-door.dto";

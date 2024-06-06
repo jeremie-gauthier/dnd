@@ -1,6 +1,6 @@
 import { LobbyEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import type { ServerSocket } from "src/interfaces/socket.type";
+import type { ServerSocket } from "src/interfaces/socket.interface";
 import type { UseCase } from "src/interfaces/use-case.interface";
 import { BackupService } from "../services/backup/backup.service";
 import { SeatManagerService } from "../services/seat-manager/seat-manager.service";
