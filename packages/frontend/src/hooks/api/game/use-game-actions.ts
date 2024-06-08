@@ -12,8 +12,8 @@ export const useGameActions = ({ socket }: Params) => {
     };
 
   const endTurnHandler: ClientToServerEvents["client.game.player_requests_playable_entity_turn_ends"] =
-    () => {
-      socket.emit(ClientGameEvent.PlayableEntityTurnEnds);
+    (payload) => {
+      socket.emit(ClientGameEvent.PlayableEntityTurnEnds, payload);
     };
 
   const openDoorHandler: ClientToServerEvents["client.game.player_requests_playable_entity_open_door"] =

@@ -1,4 +1,4 @@
-import { GameEntity, PlayableEntity } from "@dnd/shared";
+import { EndPlayerTurnInput, GameEntity, PlayableEntity } from "@dnd/shared";
 import {
   ForbiddenException,
   Injectable,
@@ -7,34 +7,33 @@ import {
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { BackupService } from "../../domain/backup/backup.service";
+import { PlayableEntityService } from "../../domain/playable-entity/playable-entity.service";
 import { TurnService } from "../../domain/turn/turn.service";
-import { EndPlayerTurnRepository } from "./end-player-turn.repository";
 
 @Injectable()
 export class EndPlayerTurnUseCase implements UseCase {
   constructor(
-    private readonly repository: EndPlayerTurnRepository,
     private readonly turnService: TurnService,
     private readonly backupService: BackupService,
+    private readonly playableEntityService: PlayableEntityService,
   ) {}
 
-  public async execute({ userId }: { userId: User["id"] }): Promise<void> {
-    const game = await this.repository.getGameByUserId({ userId });
+  public async execute({
+    gameId,
+    userId,
+  }: EndPlayerTurnInput & { userId: User["id"] }): Promise<void> {
+    const game = await this.backupService.getGameOrThrow({ gameId });
 
-    this.mustExecute(game, { userId });
+    this.mustExecute({ game, userId });
 
     this.endPlayerTurn({ game });
     await this.backupService.updateGame({ game });
   }
 
-  private mustExecute(
-    game: GameEntity | null,
-    { userId }: { userId: User["id"] },
-  ): asserts game is GameEntity {
-    if (!game) {
-      throw new NotFoundException("Game not found");
-    }
-
+  private mustExecute({
+    game,
+    userId,
+  }: { game: GameEntity; userId: User["id"] }) {
     const playableEntities = Object.values(game.playableEntities);
     if (
       playableEntities.every(({ playedByUserId }) => playedByUserId !== userId)
@@ -45,11 +44,11 @@ export class EndPlayerTurnUseCase implements UseCase {
     const playingEntity = playableEntities.find(
       ({ currentPhase }) => currentPhase === "action",
     );
-    if (!playingEntity || playingEntity.playedByUserId !== userId) {
-      throw new ForbiddenException(
-        "User has no playable entity in action phase",
-      );
+    if (!playingEntity) {
+      throw new NotFoundException("Playable entity not found in this game");
     }
+
+    this.playableEntityService.mustBeInActionPhase(playingEntity);
   }
 
   private endPlayerTurn({ game }: { game: GameEntity }) {

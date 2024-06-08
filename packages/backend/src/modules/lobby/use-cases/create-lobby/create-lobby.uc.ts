@@ -56,18 +56,9 @@ export class CreateLobbyUseCase implements UseCase {
   }
 
   private async leavePreviousLobby({ userId }: { userId: User["id"] }) {
-    const lobbyIdToLeave = await this.repository.getUserLobby({ userId });
-    if (!lobbyIdToLeave) {
-      return;
+    const lobbyToLeave = await this.seatManagerService.getUserLobby({ userId });
+    if (lobbyToLeave) {
+      await this.seatManagerService.leave({ lobby: lobbyToLeave, userId });
     }
-
-    const lobbyToLeave = await this.repository.getLobbyById({
-      lobbyId: lobbyIdToLeave,
-    });
-    if (!lobbyToLeave) {
-      return;
-    }
-
-    await this.seatManagerService.leave({ lobby: lobbyToLeave, userId });
   }
 }

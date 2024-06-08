@@ -32,7 +32,6 @@ import { GameSubscriberGateway } from "./infra/controller/game.subscriber-gatewa
 import { GamesRepository } from "./infra/database/games.repository";
 import { DeleteGameRepository } from "./use-cases/delete-game/delete-game.repository";
 import { DeleteGameUseCase } from "./use-cases/delete-game/delete-game.uc";
-import { EndPlayerTurnRepository } from "./use-cases/end-player-turn/end-player-turn.repository";
 import { EndPlayerTurnUseCase } from "./use-cases/end-player-turn/end-player-turn.uc";
 import { GameInitializationRepository } from "./use-cases/game-initialization/game-initialization.repository";
 import { GameInitializationUseCase } from "./use-cases/game-initialization/game-initialization.uc";
@@ -63,7 +62,6 @@ import { PlayableEntityMoveUseCase } from "./use-cases/playable-entity-move/play
     GameInitializationUseCase,
     GameInitializationRepository,
     EndPlayerTurnUseCase,
-    EndPlayerTurnRepository,
     GetUserGameStateUseCase,
     OpenDoorUseCase,
     PlayableEntityAttackUseCase,

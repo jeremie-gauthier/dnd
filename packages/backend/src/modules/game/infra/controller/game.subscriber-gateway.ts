@@ -10,6 +10,7 @@ import { ZodValidationPipe } from "nestjs-zod";
 import { WsExceptionFilter } from "src/errors/ws-exception-filter";
 import type { ServerSocket } from "src/interfaces/socket.interface";
 import { JWTAuthGuard } from "src/modules/authz/jwt-auth.guard";
+import { EndPlayerTurnInputDto } from "../../use-cases/end-player-turn/end-player-turn.dto";
 import { EndPlayerTurnUseCase } from "../../use-cases/end-player-turn/end-player-turn.uc";
 import { OpenDoorInputDto } from "../../use-cases/open-door/open-door.dto";
 import { OpenDoorUseCase } from "../../use-cases/open-door/open-door.uc";
@@ -36,9 +37,13 @@ export class GameSubscriberGateway {
 
   @SubscribeMessage(ClientGameEvent.PlayableEntityTurnEnds)
   public async endPlayerTurn(
+    @MessageBody() endPlayerTurnInputDto: EndPlayerTurnInputDto,
     @ConnectedSocket() client: ServerSocket,
   ): Promise<void> {
-    await this.endPlayerTurnUseCase.execute({ userId: client.data.userId });
+    await this.endPlayerTurnUseCase.execute({
+      ...endPlayerTurnInputDto,
+      userId: client.data.userId,
+    });
   }
 
   @SubscribeMessage(ClientGameEvent.PlayableEntityMoves)

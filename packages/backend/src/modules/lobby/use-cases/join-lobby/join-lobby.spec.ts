@@ -2,7 +2,6 @@ import { Test } from "@nestjs/testing";
 import { BackupService } from "src/modules/lobby/domain/backup/backup.service";
 import { SeatManagerService } from "src/modules/lobby/domain/seat-manager/seat-manager.service";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { JoinLobbyRepository } from "./join-lobby.repository";
 import { JoinLobbyUseCase } from "./join-lobby.uc";
 
 describe("StartGameUseCase", () => {
@@ -14,14 +13,6 @@ describe("StartGameUseCase", () => {
     const module = await Test.createTestingModule({
       providers: [
         JoinLobbyUseCase,
-        {
-          provide: JoinLobbyRepository,
-          useValue: {
-            getUserLobby: vi.fn(),
-            getLobbyById: vi.fn(),
-            updateLobby: vi.fn(),
-          },
-        },
         {
           provide: BackupService,
           useValue: {

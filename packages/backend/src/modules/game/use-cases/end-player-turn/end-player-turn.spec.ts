@@ -10,13 +10,12 @@ import {
   vi,
 } from "vitest";
 import { BackupService } from "../../domain/backup/backup.service";
+import { PlayableEntityService } from "../../domain/playable-entity/playable-entity.service";
 import { TurnService } from "../../domain/turn/turn.service";
-import { EndPlayerTurnRepository } from "./end-player-turn.repository";
 import { EndPlayerTurnUseCase } from "./end-player-turn.uc";
 
 describe("EndPlayerTurnUseCase", () => {
   let useCase: EndPlayerTurnUseCase;
-  let repository: EndPlayerTurnRepository;
   let eventEmitter2: EventEmitter2;
 
   let eventEmitterMock: MockInstance<
@@ -29,13 +28,6 @@ describe("EndPlayerTurnUseCase", () => {
       providers: [
         EndPlayerTurnUseCase,
         EventEmitter2,
-        {
-          provide: EndPlayerTurnRepository,
-          useValue: {
-            getGameByUserId: vi.fn(),
-            updateGame: vi.fn(),
-          },
-        },
         TurnService,
         {
           provide: BackupService,
@@ -43,11 +35,16 @@ describe("EndPlayerTurnUseCase", () => {
             updateGame: vi.fn(),
           },
         },
+        {
+          provide: PlayableEntityService,
+          useValue: {
+            mustBeInActionPhase: vi.fn(),
+          },
+        },
       ],
     }).compile();
 
     useCase = module.get(EndPlayerTurnUseCase);
-    repository = module.get(EndPlayerTurnRepository);
     eventEmitter2 = module.get(EventEmitter2);
 
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
@@ -59,7 +56,6 @@ describe("EndPlayerTurnUseCase", () => {
 
   it("should be defined", () => {
     expect(useCase).toBeDefined();
-    expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
   });
 });

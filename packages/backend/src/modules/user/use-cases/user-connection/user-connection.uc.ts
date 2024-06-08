@@ -2,9 +2,10 @@ import { UserConnectionInput } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
+import { UserStatus } from "src/database/enums/user-status.enum";
 import type { UseCase } from "src/interfaces/use-case.interface";
-import { AuthEvent } from "src/modules/auth/events/auth-event.enum";
-import { NewUserRegisteredPayload } from "src/modules/auth/events/new-user-registered.payload";
+import { NewUserCreatedPayload } from "../../events/new-user-created.payload";
+import { UserEvent } from "../../events/user-event.enum";
 import { UserConnectionRepository } from "./user-connection.repository";
 
 @Injectable()
@@ -19,12 +20,18 @@ export class UserConnectionUseCase implements UseCase {
     avatarUrl,
     username,
   }: UserConnectionInput & { userId: User["id"] }): Promise<void> {
-    const shouldSetupUserEnvironment =
-      await this.repository.shouldSetupUserEnvironment(userId);
-    if (shouldSetupUserEnvironment) {
+    const user = await this.repository.getUser({ userId });
+    if (!user) {
+      const newUser = await this.repository.createNewUser({
+        id: userId,
+        status: UserStatus.CREATED,
+        avatarUrl,
+        username,
+      });
+
       this.eventEmitter.emitAsync(
-        AuthEvent.NewUserRegistered,
-        new NewUserRegisteredPayload({ userId, avatarUrl, username }),
+        UserEvent.NewUserCreated,
+        new NewUserCreatedPayload({ userId: newUser.id }),
       );
     }
   }

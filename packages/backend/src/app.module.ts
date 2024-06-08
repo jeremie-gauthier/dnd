@@ -15,7 +15,6 @@ import envConfig, { validate } from "./config/env.config";
 import typeorm from "./config/typeorm.config";
 import { LoggerMiddleware } from "./middlewares/logger.middleware";
 import { AnalyticsModule } from "./modules/analytics/analytics.module";
-import { AuthModule } from "./modules/auth/auth.module";
 import { AuthzModule } from "./modules/authz/authz.module";
 import { CampaignModule } from "./modules/campaign/campaign.module";
 import { GameModule } from "./modules/game/game.module";
@@ -41,7 +40,6 @@ import { RedisModule } from "./redis/redis.module";
         configService.getOrThrow("typeorm"),
     }),
     RedisModule,
-    AuthModule,
     CampaignModule,
     AnalyticsModule,
     LobbyModule,

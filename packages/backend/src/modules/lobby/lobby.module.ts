@@ -12,6 +12,7 @@ import { LobbyPrivateController } from "./infra/controller/lobby.private-control
 import { LobbyPublisherGateway } from "./infra/controller/lobby.publisher-gateway";
 import { LobbySubscriberGateway } from "./infra/controller/lobby.subscriber-gateway";
 import { LobbiesRepository } from "./infra/database/lobbies.repository";
+import { UsersRepository } from "./infra/database/users.repository";
 import { CreateLobbyRepository } from "./use-cases/create-lobby/create-lobby.repository";
 import { CreateLobbyUseCase } from "./use-cases/create-lobby/create-lobby.uc";
 import { DiscardGameMasterUseCase } from "./use-cases/discard-game-master/discard-game-master.uc";
@@ -21,11 +22,8 @@ import { GetLobbiesRepository } from "./use-cases/get-lobbies/get-lobbies.reposi
 import { GetLobbiesUseCase } from "./use-cases/get-lobbies/get-lobbies.uc";
 import { GetLobbyUseCase } from "./use-cases/get-lobby/get-lobby.uc";
 import { HandleWsConnectionUseCase } from "./use-cases/handle-ws-connection/handle-ws-connection.uc";
-import { HandleWsDisconnectionRepository } from "./use-cases/handle-ws-disconnection/handle-ws-disconnection.repository";
 import { HandleWsDisconnectionUseCase } from "./use-cases/handle-ws-disconnection/handle-ws-disconnection.uc";
-import { JoinLobbyRepository } from "./use-cases/join-lobby/join-lobby.repository";
 import { JoinLobbyUseCase } from "./use-cases/join-lobby/join-lobby.uc";
-import { LeaveLobbyRepository } from "./use-cases/leave-lobby/leave-lobby.repository";
 import { LeaveLobbyUseCase } from "./use-cases/leave-lobby/leave-lobby.uc";
 import { ListenLobbiesUpdatesUseCase } from "./use-cases/listen-lobbies-updates/listen-lobbies-updates.uc";
 import { ListenLobbyUpdatesUseCase } from "./use-cases/listen-lobby-updates/listen-lobby-updates.uc";
@@ -39,21 +37,19 @@ import { TogglePlayerReadyStateUseCase } from "./use-cases/toggle-player-ready-s
   controllers: [LobbyPrivateController],
   providers: [
     LobbiesRepository,
+    UsersRepository,
     LobbyListeners,
     HandleWsConnectionUseCase,
     HandleWsDisconnectionUseCase,
-    HandleWsDisconnectionRepository,
     CreateLobbyUseCase,
     CreateLobbyRepository,
     GetLobbiesUseCase,
     GetLobbiesRepository,
     GetLobbyUseCase,
     JoinLobbyUseCase,
-    JoinLobbyRepository,
     ListenLobbiesUpdatesUseCase,
     ListenLobbyUpdatesUseCase,
     LeaveLobbyUseCase,
-    LeaveLobbyRepository,
     PickHeroUseCase,
     DiscardHeroUseCase,
     TogglePlayerReadyStateUseCase,

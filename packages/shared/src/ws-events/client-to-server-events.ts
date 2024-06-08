@@ -1,5 +1,6 @@
 import type { LobbyEntity } from "../database/lobby/lobby.interface";
 import {
+  EndPlayerTurnInput,
   OpenDoorInput,
   PlayableEntityAttackInput,
   PlayableEntityMoveInput,
@@ -37,7 +38,9 @@ interface ClientToServerEventsAndPayloads
   [ClientGameEvent.PlayableEntityMoves]: (
     payload: PlayableEntityMoveInput,
   ) => void;
-  [ClientGameEvent.PlayableEntityTurnEnds]: () => void;
+  [ClientGameEvent.PlayableEntityTurnEnds]: (
+    payload: EndPlayerTurnInput,
+  ) => void;
   [ClientGameEvent.PlayableEntityOpenDoor]: (payload: OpenDoorInput) => void;
   [ClientLobbyEvent.RequestPickGameMaster]: (
     payload: PickGameMasterInput,

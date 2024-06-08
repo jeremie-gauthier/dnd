@@ -4,12 +4,10 @@ import type { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/interfaces/use-case.interface";
 import { BackupService } from "src/modules/lobby/domain/backup/backup.service";
 import { SeatManagerService } from "src/modules/lobby/domain/seat-manager/seat-manager.service";
-import { JoinLobbyRepository } from "./join-lobby.repository";
 
 @Injectable()
 export class JoinLobbyUseCase implements UseCase {
   constructor(
-    private readonly repository: JoinLobbyRepository,
     private readonly seatManagerService: SeatManagerService,
     private readonly backupService: BackupService,
   ) {}
@@ -18,7 +16,7 @@ export class JoinLobbyUseCase implements UseCase {
     userId,
     lobbyId,
   }: { userId: User["id"] } & JoinLobbyInput): Promise<LobbyEntity["id"]> {
-    const lobbyToLeave = await this.getLobbyToLeave({ userId });
+    const lobbyToLeave = await this.seatManagerService.getUserLobby({ userId });
     if (lobbyToLeave) {
       await this.seatManagerService.leave({ lobby: lobbyToLeave, userId });
     }
@@ -28,22 +26,5 @@ export class JoinLobbyUseCase implements UseCase {
     await this.backupService.updateLobby({ lobby: lobbyToJoin });
 
     return lobbyId;
-  }
-
-  private async getLobbyToLeave({
-    userId,
-  }: { userId: User["id"] }): Promise<LobbyEntity | undefined> {
-    const lobbyIdToLeave = await this.repository.getUserLobby({ userId });
-    if (!lobbyIdToLeave) {
-      return;
-    }
-
-    try {
-      return await this.backupService.getLobbyOrThrow({
-        lobbyId: lobbyIdToLeave,
-      });
-    } catch {
-      return undefined;
-    }
   }
 }

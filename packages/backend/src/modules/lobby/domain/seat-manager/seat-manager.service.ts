@@ -17,13 +17,13 @@ export class SeatManagerService {
     private readonly backupService: BackupService,
   ) {}
 
-  public take({
+  public async take({
     lobby,
     userId,
   }: {
     lobby: LobbyEntity;
     userId: User["id"];
-  }): void {
+  }): Promise<void> {
     this.mustExecute({ userId, lobby });
 
     lobby.players.push({
@@ -31,6 +31,8 @@ export class SeatManagerService {
       heroesSelected: [],
       isReady: false,
     });
+
+    await this.repository.saveUserLobby({ userId, lobby });
 
     this.eventEmitter.emitAsync(
       LobbyEvent.UserJoinedLobby,
@@ -71,6 +73,8 @@ export class SeatManagerService {
     if (lobby.gameMaster.userId === userId) {
       lobby.gameMaster.userId = undefined;
     }
+
+    await this.repository.removeUserLobby({ userId });
 
     this.eventEmitter.emitAsync(
       LobbyEvent.UserLeftLobby,
@@ -124,5 +128,14 @@ export class SeatManagerService {
       throw new ForbiddenException("User not found in this lobby");
     }
     return player;
+  }
+
+  public async getUserLobby({
+    userId,
+  }: { userId: User["id"] }): Promise<LobbyEntity | undefined> {
+    const lobbyId = await this.repository.getUserLobby({ userId });
+    if (lobbyId) {
+      return this.backupService.getLobbyOrThrow({ lobbyId });
+    }
   }
 }

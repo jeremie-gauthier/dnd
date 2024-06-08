@@ -2,25 +2,18 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { User } from "src/database/entities/user.entity";
 import { AuthzModule } from "src/modules/authz/authz.module";
-import { RedisModule } from "src/redis/redis.module";
-import { GetUserRepository } from "./get-user/get-user.repository";
-import { GetUserUseCase } from "./get-user/get-user.uc";
-import { NewUserRegisteredRepository } from "./new-user-registered/new-user-registered.repository";
-import { NewUserRegisteredUseCase } from "./new-user-registered/new-user-registered.uc";
-import { TrackUserAccrossLobbiesRepository } from "./track-user-accross-lobbies/track-user-accross-lobbies.repository";
-import { TrackUserAccrossLobbiesUseCase } from "./track-user-accross-lobbies/track-user-accross-lobbies.uc";
-import { UserListeners } from "./user.listeners";
-import { UserPrivateController } from "./user.private-controller";
+import { UserPrivateController } from "./infra/controller/user.private-controller";
+import { GetUserRepository } from "./use-cases/get-user/get-user.repository";
+import { GetUserUseCase } from "./use-cases/get-user/get-user.uc";
+import { UserConnectionRepository } from "./use-cases/user-connection/user-connection.repository";
+import { UserConnectionUseCase } from "./use-cases/user-connection/user-connection.uc";
 
 @Module({
-  imports: [AuthzModule, TypeOrmModule.forFeature([User]), RedisModule],
+  imports: [AuthzModule, TypeOrmModule.forFeature([User])],
   controllers: [UserPrivateController],
   providers: [
-    UserListeners,
-    NewUserRegisteredUseCase,
-    NewUserRegisteredRepository,
-    TrackUserAccrossLobbiesUseCase,
-    TrackUserAccrossLobbiesRepository,
+    UserConnectionUseCase,
+    UserConnectionRepository,
     GetUserRepository,
     GetUserUseCase,
   ],
