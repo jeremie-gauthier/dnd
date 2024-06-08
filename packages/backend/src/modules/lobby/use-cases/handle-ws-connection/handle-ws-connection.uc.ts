@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { WsException } from "@nestjs/websockets";
+import { JwtService } from "src/authz/jwt.service";
 import type { ServerSocket } from "src/interfaces/socket.interface";
 import type { UseCase } from "src/interfaces/use-case.interface";
-import { JwtService } from "src/modules/authz/services/jwt/jwt.service";
 
 @Injectable()
 export class HandleWsConnectionUseCase implements UseCase {

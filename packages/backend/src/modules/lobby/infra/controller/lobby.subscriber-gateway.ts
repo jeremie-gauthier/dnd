@@ -11,8 +11,8 @@ import {
 } from "@nestjs/websockets";
 import { ZodValidationPipe } from "nestjs-zod";
 import { WsExceptionFilter } from "src/errors/ws-exception-filter";
+import { AuthGuard } from "src/guards/auth.guard";
 import type { ServerSocket } from "src/interfaces/socket.interface";
-import { JWTAuthGuard } from "src/modules/authz/jwt-auth.guard";
 import { LobbyEvent } from "../../events/lobby-event.enum";
 import { RequestCreateLobbyPayload } from "../../events/request-create-lobby.payload";
 import { LOBBIES_ROOM } from "../../shared/constants";
@@ -42,7 +42,7 @@ import { StartGameUseCase } from "../../use-cases/start-game/start-game.uc";
 import type { TogglePlayerReadyStateInputDto } from "../../use-cases/toggle-player-ready-state/toggle-player-ready-state.dto";
 import { TogglePlayerReadyStateUseCase } from "../../use-cases/toggle-player-ready-state/toggle-player-ready-state.uc";
 
-@UseGuards(JWTAuthGuard)
+@UseGuards(AuthGuard)
 @UsePipes(ZodValidationPipe)
 @UseFilters(WsExceptionFilter)
 @WebSocketGateway({

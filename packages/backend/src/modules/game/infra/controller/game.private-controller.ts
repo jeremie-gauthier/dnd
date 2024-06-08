@@ -1,11 +1,11 @@
 import { GameEntity, GetUserGameStateOutput } from "@dnd/shared";
 import { Controller, Get, Param, UseGuards } from "@nestjs/common";
 import { Request } from "express";
-import { JWTAuthGuard } from "src/modules/authz/jwt-auth.guard";
-import { JWTUser } from "src/modules/authz/jwt-user.decorator";
+import { AuthUser } from "src/decorators/auth-user.decorator";
+import { AuthGuard } from "src/guards/auth.guard";
 import { GetUserGameStateUseCase } from "../../use-cases/get-user-game-state/get-user-game-state.uc";
 
-@UseGuards(JWTAuthGuard)
+@UseGuards(AuthGuard)
 @Controller("game/private")
 export class GamePrivateController {
   constructor(
@@ -14,7 +14,7 @@ export class GamePrivateController {
 
   @Get("get-user-game-state/:gameId")
   public async getLobbies(
-    @JWTUser() user: Request["user"],
+    @AuthUser() user: Request["user"],
     @Param("gameId") gameId: GameEntity["id"],
   ): Promise<GetUserGameStateOutput> {
     return await this.getUserGameStateUseCase.execute({

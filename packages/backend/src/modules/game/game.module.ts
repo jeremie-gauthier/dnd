@@ -6,7 +6,6 @@ import { EnemyTemplate } from "src/database/entities/enemy-template.entity";
 import { Item } from "src/database/entities/item.entity";
 import { Spell } from "src/database/entities/spell.entity";
 import { Weapon } from "src/database/entities/weapon.entity";
-import { AuthzModule } from "src/modules/authz/authz.module";
 import { RedisModule } from "src/redis/redis.module";
 import { BackupRepository } from "./domain/backup/backup.repository";
 import { BackupService } from "./domain/backup/backup.service";
@@ -42,7 +41,6 @@ import { PlayableEntityMoveUseCase } from "./use-cases/playable-entity-move/play
 
 @Module({
   imports: [
-    AuthzModule,
     RedisModule,
     TypeOrmModule.forFeature([
       CampaignStageProgression,

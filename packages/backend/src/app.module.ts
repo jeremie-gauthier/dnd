@@ -11,11 +11,11 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { ZodSerializerInterceptor, ZodValidationPipe } from "nestjs-zod";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
+import { AuthzModule } from "./authz/authz.module";
 import envConfig, { validate } from "./config/env.config";
 import typeorm from "./config/typeorm.config";
 import { LoggerMiddleware } from "./middlewares/logger.middleware";
 import { AnalyticsModule } from "./modules/analytics/analytics.module";
-import { AuthzModule } from "./modules/authz/authz.module";
 import { CampaignModule } from "./modules/campaign/campaign.module";
 import { GameModule } from "./modules/game/game.module";
 import { LobbyModule } from "./modules/lobby/lobby.module";
@@ -29,6 +29,7 @@ import { RedisModule } from "./redis/redis.module";
       load: [envConfig, typeorm],
       validate,
       cache: true,
+      isGlobal: true,
     }),
     EventEmitterModule.forRoot({
       wildcard: true,
@@ -39,13 +40,13 @@ import { RedisModule } from "./redis/redis.module";
       useFactory: async (configService: ConfigService) =>
         configService.getOrThrow("typeorm"),
     }),
+    AuthzModule,
     RedisModule,
     CampaignModule,
     AnalyticsModule,
     LobbyModule,
     GameModule,
     UserModule,
-    AuthzModule,
     TranslationModule,
   ],
   controllers: [AppController],

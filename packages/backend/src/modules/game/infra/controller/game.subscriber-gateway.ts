@@ -8,8 +8,8 @@ import {
 } from "@nestjs/websockets";
 import { ZodValidationPipe } from "nestjs-zod";
 import { WsExceptionFilter } from "src/errors/ws-exception-filter";
+import { AuthGuard } from "src/guards/auth.guard";
 import type { ServerSocket } from "src/interfaces/socket.interface";
-import { JWTAuthGuard } from "src/modules/authz/jwt-auth.guard";
 import { EndPlayerTurnInputDto } from "../../use-cases/end-player-turn/end-player-turn.dto";
 import { EndPlayerTurnUseCase } from "../../use-cases/end-player-turn/end-player-turn.uc";
 import { OpenDoorInputDto } from "../../use-cases/open-door/open-door.dto";
@@ -19,7 +19,7 @@ import { PlayableEntityAttackUseCase } from "../../use-cases/playable-entity-att
 import { PlayableEntityMoveInputDto } from "../../use-cases/playable-entity-move/playable-entity-move.dto";
 import { PlayableEntityMoveUseCase } from "../../use-cases/playable-entity-move/playable-entity-move.uc";
 
-@UseGuards(JWTAuthGuard)
+@UseGuards(AuthGuard)
 @UsePipes(ZodValidationPipe)
 @UseFilters(WsExceptionFilter)
 @WebSocketGateway({

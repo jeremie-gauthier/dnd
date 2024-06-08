@@ -1,11 +1,11 @@
 import { Controller, Get, Param, UseGuards } from "@nestjs/common";
-import { JWTAuthGuard } from "src/modules/authz/jwt-auth.guard";
+import { AuthGuard } from "src/guards/auth.guard";
 import type { GetLobbiesOutputDto } from "../../use-cases/get-lobbies/get-lobbies.dto";
 import { GetLobbiesUseCase } from "../../use-cases/get-lobbies/get-lobbies.uc";
 import type { GetLobbyOutputDto } from "../../use-cases/get-lobby/get-lobby.dto";
 import { GetLobbyUseCase } from "../../use-cases/get-lobby/get-lobby.uc";
 
-@UseGuards(JWTAuthGuard)
+@UseGuards(AuthGuard)
 @Controller("lobby/private")
 export class LobbyPrivateController {
   constructor(

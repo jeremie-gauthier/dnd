@@ -6,15 +6,15 @@ import {
   type ExecutionContext,
 } from "@nestjs/common";
 import type { Request } from "express";
-import { JwtService } from "./services/jwt/jwt.service";
+import { JwtService } from "src/authz/jwt.service";
 
 @Injectable()
-export class JWTAuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate {
   private static readonly getTokenByContextType: Readonly<
     Record<ContextType, (req: any) => string | undefined>
   > = {
-    http: JWTAuthGuard.extractTokenFromHeader,
-    ws: JWTAuthGuard.extractTokenFromHandshake,
+    http: AuthGuard.extractTokenFromHeader,
+    ws: AuthGuard.extractTokenFromHandshake,
     rpc: () => undefined,
   };
 
@@ -39,8 +39,8 @@ export class JWTAuthGuard implements CanActivate {
   public async canActivate(context: ExecutionContext) {
     const type = context.getType();
 
-    const request = JWTAuthGuard.getRequestByType[type](context);
-    const token = JWTAuthGuard.getTokenByContextType[type](request);
+    const request = AuthGuard.getRequestByType[type](context);
+    const token = AuthGuard.getTokenByContextType[type](request);
 
     if (!token) {
       throw new UnauthorizedException("No token found");
@@ -51,7 +51,7 @@ export class JWTAuthGuard implements CanActivate {
       throw new UnauthorizedException("No userId (sub) found in token");
     }
 
-    const payload = JWTAuthGuard.getPayloadToBindUserByType[type](context);
+    const payload = AuthGuard.getPayloadToBindUserByType[type](context);
     if (payload) {
       const user = { id: sub };
       payload.user = user;

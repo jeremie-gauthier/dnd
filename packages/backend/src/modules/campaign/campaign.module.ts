@@ -6,7 +6,6 @@ import { Campaign } from "src/database/entities/campaign.entity";
 import { HeroTemplate } from "src/database/entities/hero-template.entity";
 import { Hero } from "src/database/entities/hero.entity";
 import { User } from "src/database/entities/user.entity";
-import { AuthzModule } from "src/modules/authz/authz.module";
 import { CampaignListeners } from "./infra/controller/campaign.listeners";
 import { CampaignPrivateController } from "./infra/controller/campaign.private-controller";
 import { CreateCampaignForUserRepository } from "./use-cases/create-campaign-for-user/create-campaign-for-user.repository";
@@ -22,7 +21,6 @@ import { RequestCreateLobbyUseCase } from "./use-cases/request-create-lobby/requ
 
 @Module({
   imports: [
-    AuthzModule,
     TypeOrmModule.forFeature([
       Hero,
       HeroTemplate,

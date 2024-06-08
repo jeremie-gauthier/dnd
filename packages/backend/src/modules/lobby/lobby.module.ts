@@ -1,6 +1,5 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { AuthzModule } from "src/modules/authz/authz.module";
 import { RedisModule } from "src/redis/redis.module";
 import { BackupRepository } from "./domain/backup/backup.repository";
 import { BackupService } from "./domain/backup/backup.service";
@@ -33,7 +32,7 @@ import { StartGameUseCase } from "./use-cases/start-game/start-game.uc";
 import { TogglePlayerReadyStateUseCase } from "./use-cases/toggle-player-ready-state/toggle-player-ready-state.uc";
 
 @Module({
-  imports: [AuthzModule, ConfigModule, RedisModule],
+  imports: [ConfigModule, RedisModule],
   controllers: [LobbyPrivateController],
   providers: [
     LobbiesRepository,
