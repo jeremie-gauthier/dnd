@@ -16,7 +16,6 @@ import { GameListeners } from "./game.listeners";
 import { GamePrivateController } from "./game.private-controller";
 import { GamePublisherGateway } from "./game.publisher-gateway";
 import { GameSubscriberGateway } from "./game.subscriber-gateway";
-import { GetUserGameStateRepository } from "./get-user-game-state/get-user-game-state.repository";
 import { GetUserGameStateUseCase } from "./get-user-game-state/get-user-game-state.uc";
 import { OpenDoorUseCase } from "./open-door/open-door.uc";
 import { PlayableEntityAttackUseCase } from "./playable-entity-attack/playable-entity-attack.uc";
@@ -62,7 +61,6 @@ import { VisibilityService } from "./services/visibility/visibility.service";
     EndPlayerTurnUseCase,
     EndPlayerTurnRepository,
     GetUserGameStateUseCase,
-    GetUserGameStateRepository,
     OpenDoorUseCase,
     PlayableEntityAttackUseCase,
     PlayableEntityMoveUseCase,

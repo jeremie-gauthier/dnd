@@ -5,6 +5,7 @@ const heroSchema = z.object({
   pickedBy: z.string().optional(),
   name: z.string(),
   class: z.enum(["WARRIOR", "CLERIC", "SORCERER", "THIEF"]),
+  level: z.number(),
   characteristic: z.object({
     baseHealthPoints: z.number(),
     baseManaPoints: z.number(),
@@ -22,7 +23,7 @@ const heroSchema = z.object({
     stuff: z.array(
       z.object({
         id: z.string().uuid(),
-        storageSpace: z.string(),
+        storageSpace: z.enum(["GEAR", "BACKPACK"]),
         item: z.object({
           name: z.string(),
           level: z.number().min(0),
@@ -35,6 +36,7 @@ const heroSchema = z.object({
 
 export const createLobbyOutputSchema = z.object({
   id: z.string(),
+  status: z.enum(["OPENED", "GAME_INITIALIZING", "GAME_STARTED"]),
   host: z.object({
     userId: z.string(),
   }),
@@ -48,6 +50,8 @@ export const createLobbyOutputSchema = z.object({
         id: z.string(),
         title: z.string(),
         order: z.number(),
+        intro: z.string(),
+        outro: z.string(),
       }),
     }),
   }),
@@ -55,8 +59,12 @@ export const createLobbyOutputSchema = z.object({
     z.object({
       userId: z.string(),
       heroesSelected: z.array(z.string()),
+      isReady: z.boolean(),
     }),
   ),
+  gameMaster: z.object({
+    userId: z.string().optional(),
+  }),
   heroesAvailable: z.array(heroSchema),
 });
 

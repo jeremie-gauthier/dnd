@@ -73,7 +73,6 @@ export function MenuRouteComponent() {
     const handleUserLeftLobby = () => {
       navigate({ to: "/lobbies" });
     };
-
     socket.on(ServerLobbyEvent.UserLeftLobby, handleUserLeftLobby);
 
     return () => {

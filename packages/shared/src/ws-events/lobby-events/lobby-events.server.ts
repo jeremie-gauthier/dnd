@@ -7,4 +7,5 @@ export const ServerLobbyEvent = {
   GameInitializationStarted: "server.lobby.game_initialization_started",
   GameInitializationDone: "server.lobby.game_initialization_done",
   UserLeftLobby: "lobby.update.user_left",
+  LobbyCreated: "server.lobby.create",
 } as const;

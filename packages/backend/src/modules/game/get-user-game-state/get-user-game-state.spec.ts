@@ -9,13 +9,12 @@ import {
   it,
   vi,
 } from "vitest";
+import { BackupService } from "../services/backup/backup.service";
 import { PlayerStateService } from "../services/player-state/player-state.service";
-import { GetUserGameStateRepository } from "./get-user-game-state.repository";
 import { GetUserGameStateUseCase } from "./get-user-game-state.uc";
 
 describe("GetUserGameStateUseCase", () => {
   let useCase: GetUserGameStateUseCase;
-  let repository: GetUserGameStateRepository;
   let eventEmitter2: EventEmitter2;
 
   let eventEmitterMock: MockInstance<
@@ -29,18 +28,19 @@ describe("GetUserGameStateUseCase", () => {
         GetUserGameStateUseCase,
         EventEmitter2,
         {
-          provide: GetUserGameStateRepository,
+          provide: PlayerStateService,
           useValue: {},
         },
         {
-          provide: PlayerStateService,
-          useValue: {},
+          provide: BackupService,
+          useValue: {
+            getGameOrThrow: vi.fn(),
+          },
         },
       ],
     }).compile();
 
     useCase = module.get(GetUserGameStateUseCase);
-    repository = module.get(GetUserGameStateRepository);
     eventEmitter2 = module.get(EventEmitter2);
 
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
@@ -52,7 +52,6 @@ describe("GetUserGameStateUseCase", () => {
 
   it("should be defined", () => {
     expect(useCase).toBeDefined();
-    expect(repository).toBeDefined();
     expect(eventEmitter2).toBeDefined();
   });
 });

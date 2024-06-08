@@ -12,7 +12,6 @@ import { ZodSerializerInterceptor, ZodValidationPipe } from "nestjs-zod";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import envConfig, { validate } from "./config/env.config";
-import redis from "./config/redis.config";
 import typeorm from "./config/typeorm.config";
 import { LoggerMiddleware } from "./middlewares/logger.middleware";
 import { AnalyticsModule } from "./modules/analytics/analytics.module";
@@ -28,7 +27,7 @@ import { RedisModule } from "./redis/redis.module";
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [envConfig, typeorm, redis],
+      load: [envConfig, typeorm],
       validate,
       cache: true,
     }),
@@ -41,6 +40,7 @@ import { RedisModule } from "./redis/redis.module";
       useFactory: async (configService: ConfigService) =>
         configService.getOrThrow("typeorm"),
     }),
+    RedisModule,
     AuthModule,
     CampaignModule,
     AnalyticsModule,
@@ -48,7 +48,6 @@ import { RedisModule } from "./redis/redis.module";
     GameModule,
     UserModule,
     AuthzModule,
-    RedisModule,
     TranslationModule,
   ],
   controllers: [AppController],

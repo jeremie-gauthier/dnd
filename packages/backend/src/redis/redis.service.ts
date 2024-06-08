@@ -1,4 +1,5 @@
 import {
+  Inject,
   Injectable,
   type OnApplicationShutdown,
   type OnModuleInit,
@@ -8,13 +9,13 @@ import { createClient } from "redis";
 
 @Injectable()
 export class RedisService implements OnModuleInit, OnApplicationShutdown {
-  public readonly client;
   public static readonly JSON_ROOT = "$";
 
-  constructor(private readonly configService: ConfigService) {
-    const redisOptions = configService.getOrThrow("redis");
-    this.client = createClient(redisOptions);
-  }
+  constructor(
+    private readonly configService: ConfigService,
+    @Inject("RedisClient")
+    public readonly client: ReturnType<typeof createClient>,
+  ) {}
 
   public async onModuleInit() {
     await this.client.connect();

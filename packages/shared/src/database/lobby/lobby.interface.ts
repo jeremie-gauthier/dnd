@@ -43,6 +43,8 @@ type LobbyCampaign = {
     id: string;
     title: string;
     order: number;
+    intro: string;
+    outro: string;
   };
 };
 

@@ -1,51 +1,44 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { CampaignStage } from "src/database/entities/campaign-stage.entity";
-import { Campaign } from "src/database/entities/campaign.entity";
-import { Hero } from "src/database/entities/hero.entity";
 import { AuthzModule } from "src/modules/authz/authz.module";
 import { RedisModule } from "src/redis/redis.module";
-import { CreateLobbyRepository } from "./create-lobby/create-lobby.repository";
-import { CreateLobbyUseCase } from "./create-lobby/create-lobby.uc";
-import { DiscardGameMasterUseCase } from "./discard-game-master/discard-game-master.uc";
-import { DiscardHeroUseCase } from "./discard-hero/discard-hero.uc";
-import { GameInitializationDoneUseCase } from "./game-initialization-done/game-initialization-done.uc";
-import { GetLobbiesRepository } from "./get-lobbies/get-lobbies.repository";
-import { GetLobbiesUseCase } from "./get-lobbies/get-lobbies.uc";
-import { GetLobbyRepository } from "./get-lobby/get-lobby.repository";
-import { GetLobbyUseCase } from "./get-lobby/get-lobby.uc";
-import { HandleWsConnectionUseCase } from "./handle-ws-connection/handle-ws-connection.uc";
-import { HandleWsDisconnectionRepository } from "./handle-ws-disconnection/handle-ws-disconnection.repository";
-import { HandleWsDisconnectionUseCase } from "./handle-ws-disconnection/handle-ws-disconnection.uc";
-import { JoinLobbyRepository } from "./join-lobby/join-lobby.repository";
-import { JoinLobbyUseCase } from "./join-lobby/join-lobby.uc";
-import { LeaveLobbyRepository } from "./leave-lobby/leave-lobby.repository";
-import { LeaveLobbyUseCase } from "./leave-lobby/leave-lobby.uc";
-import { ListenLobbiesUpdatesUseCase } from "./listen-lobbies-updates/listen-lobbies-updates.uc";
-import { LobbyListeners } from "./lobby.listeners";
-import { LobbyPrivateController } from "./lobby.private-controller";
-import { LobbyPublisherGateway } from "./lobby.publisher-gateway";
-import { LobbySubscriberGateway } from "./lobby.subscriber-gateway";
-import { PickGameMasterUseCase } from "./pick-game-master/pick-game-master.uc";
-import { PickHeroUseCase } from "./pick-hero/pick-hero.uc";
-import { BackupRepository } from "./services/backup/backup.repository";
-import { BackupService } from "./services/backup/backup.service";
-import { RoleService } from "./services/role/role.service";
-import { SeatManagerRepository } from "./services/seat-manager/seat-manager.repository";
-import { SeatManagerService } from "./services/seat-manager/seat-manager.service";
-import { StartGameUseCase } from "./start-game/start-game.uc";
-import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggle-player-ready-state.uc";
+import { BackupRepository } from "./domain/backup/backup.repository";
+import { BackupService } from "./domain/backup/backup.service";
+import { RoleService } from "./domain/role/role.service";
+import { SeatManagerRepository } from "./domain/seat-manager/seat-manager.repository";
+import { SeatManagerService } from "./domain/seat-manager/seat-manager.service";
+import { LobbyListeners } from "./infra/controller/lobby.listeners";
+import { LobbyPrivateController } from "./infra/controller/lobby.private-controller";
+import { LobbyPublisherGateway } from "./infra/controller/lobby.publisher-gateway";
+import { LobbySubscriberGateway } from "./infra/controller/lobby.subscriber-gateway";
+import { LobbiesRepository } from "./infra/database/lobbies.repository";
+import { CreateLobbyRepository } from "./use-cases/create-lobby/create-lobby.repository";
+import { CreateLobbyUseCase } from "./use-cases/create-lobby/create-lobby.uc";
+import { DiscardGameMasterUseCase } from "./use-cases/discard-game-master/discard-game-master.uc";
+import { DiscardHeroUseCase } from "./use-cases/discard-hero/discard-hero.uc";
+import { GameInitializationDoneUseCase } from "./use-cases/game-initialization-done/game-initialization-done.uc";
+import { GetLobbiesRepository } from "./use-cases/get-lobbies/get-lobbies.repository";
+import { GetLobbiesUseCase } from "./use-cases/get-lobbies/get-lobbies.uc";
+import { GetLobbyUseCase } from "./use-cases/get-lobby/get-lobby.uc";
+import { HandleWsConnectionUseCase } from "./use-cases/handle-ws-connection/handle-ws-connection.uc";
+import { HandleWsDisconnectionRepository } from "./use-cases/handle-ws-disconnection/handle-ws-disconnection.repository";
+import { HandleWsDisconnectionUseCase } from "./use-cases/handle-ws-disconnection/handle-ws-disconnection.uc";
+import { JoinLobbyRepository } from "./use-cases/join-lobby/join-lobby.repository";
+import { JoinLobbyUseCase } from "./use-cases/join-lobby/join-lobby.uc";
+import { LeaveLobbyRepository } from "./use-cases/leave-lobby/leave-lobby.repository";
+import { LeaveLobbyUseCase } from "./use-cases/leave-lobby/leave-lobby.uc";
+import { ListenLobbiesUpdatesUseCase } from "./use-cases/listen-lobbies-updates/listen-lobbies-updates.uc";
+import { ListenLobbyUpdatesUseCase } from "./use-cases/listen-lobby-updates/listen-lobby-updates.uc";
+import { PickGameMasterUseCase } from "./use-cases/pick-game-master/pick-game-master.uc";
+import { PickHeroUseCase } from "./use-cases/pick-hero/pick-hero.uc";
+import { StartGameUseCase } from "./use-cases/start-game/start-game.uc";
+import { TogglePlayerReadyStateUseCase } from "./use-cases/toggle-player-ready-state/toggle-player-ready-state.uc";
 
 @Module({
-  imports: [
-    AuthzModule,
-    TypeOrmModule.forFeature([Campaign, CampaignStage, Hero]),
-    RedisModule,
-    ConfigModule,
-  ],
+  imports: [AuthzModule, ConfigModule, RedisModule],
   controllers: [LobbyPrivateController],
   providers: [
+    LobbiesRepository,
     LobbyListeners,
     HandleWsConnectionUseCase,
     HandleWsDisconnectionUseCase,
@@ -55,10 +48,10 @@ import { TogglePlayerReadyStateUseCase } from "./toggle-player-ready-state/toggl
     GetLobbiesUseCase,
     GetLobbiesRepository,
     GetLobbyUseCase,
-    GetLobbyRepository,
     JoinLobbyUseCase,
     JoinLobbyRepository,
     ListenLobbiesUpdatesUseCase,
+    ListenLobbyUpdatesUseCase,
     LeaveLobbyUseCase,
     LeaveLobbyRepository,
     PickHeroUseCase,

@@ -32,6 +32,7 @@ interface ClientToServerEventsAndPayloads
     lobbyId: string;
   }) => void;
   [ClientLobbyEvent.ListenLobbiesChanges]: () => void;
+  [ClientLobbyEvent.ListenLobbyChanges]: () => void;
   [ClientGameEvent.PlayerIsReady]: () => void;
   [ClientGameEvent.PlayableEntityMoves]: (
     payload: PlayableEntityMoveInput,

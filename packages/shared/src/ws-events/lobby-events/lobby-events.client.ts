@@ -3,6 +3,7 @@ export const ClientLobbyEvent = {
   RequestJoinLobby: "client.lobby.request_join_lobby",
   RequestLeaveLobby: "client.lobby.request_leave_lobby",
   ListenLobbiesChanges: "client.lobbies.listen_changes",
+  ListenLobbyChanges: "client.lobby.listen_changes",
   RequestPickHero: "client.lobby.pick_hero",
   RequestDiscardHero: "client.lobby.discard_hero",
   RequestPickGameMaster: "client.lobby.pick_game_master",

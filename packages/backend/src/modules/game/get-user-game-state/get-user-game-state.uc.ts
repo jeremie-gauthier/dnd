@@ -1,19 +1,15 @@
-import { GameEntity, GetUserGameStateOutput, LobbyEntity } from "@dnd/shared";
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { GameEntity, GetUserGameStateOutput } from "@dnd/shared";
+import { Injectable } from "@nestjs/common";
 import { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/interfaces/use-case.interface";
+import { BackupService } from "../services/backup/backup.service";
 import { PlayerStateService } from "../services/player-state/player-state.service";
-import { GetUserGameStateRepository } from "./get-user-game-state.repository";
 
 @Injectable()
 export class GetUserGameStateUseCase implements UseCase {
   constructor(
-    private readonly repository: GetUserGameStateRepository,
     private readonly playerStateService: PlayerStateService,
+    private readonly backupService: BackupService,
   ) {}
 
   public async execute({
@@ -23,11 +19,7 @@ export class GetUserGameStateUseCase implements UseCase {
     userId: User["id"];
     gameId: GameEntity["id"];
   }): Promise<GetUserGameStateOutput> {
-    const lobby = await this.repository.getLobbyById({ lobbyId: gameId });
-    this.mustBeInTheLobby({ userId, lobby });
-
-    const game = await this.repository.getGameById({ gameId });
-    this.mustExecute(game);
+    const game = await this.backupService.getGameOrThrow({ gameId });
 
     const playerGameState = this.playerStateService.getPlayerState({
       game,
@@ -35,24 +27,5 @@ export class GetUserGameStateUseCase implements UseCase {
     });
 
     return playerGameState;
-  }
-
-  private mustBeInTheLobby({
-    userId,
-    lobby,
-  }: { userId: User["id"]; lobby: LobbyEntity | null }) {
-    if (!lobby) {
-      throw new NotFoundException("Lobby not found");
-    }
-
-    if (lobby.players.every((player) => player.userId !== userId)) {
-      throw new ForbiddenException("User does not belong to this lobby");
-    }
-  }
-
-  private mustExecute(game: GameEntity | null): asserts game is GameEntity {
-    if (!game) {
-      throw new NotFoundException("Game not found");
-    }
   }
 }
