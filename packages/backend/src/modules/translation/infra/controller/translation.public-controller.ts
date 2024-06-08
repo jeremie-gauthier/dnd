@@ -3,8 +3,8 @@ import { ZodSerializerDto } from "nestjs-zod";
 import {
   GetTranslationInputDto,
   GetTranslationOutputDto,
-} from "./get-translation/get-translation.dto";
-import { GetTranslationUseCase } from "./get-translation/get-translation.uc";
+} from "../../use-cases/get-translation/get-translation.dto";
+import { GetTranslationUseCase } from "../../use-cases/get-translation/get-translation.uc";
 
 @Controller("translation/public")
 export class TranslationPublicController {
@@ -13,12 +13,8 @@ export class TranslationPublicController {
   @Get("get-translation/:locale/:namespace")
   @ZodSerializerDto(GetTranslationOutputDto)
   public async getLobbies(
-    @Param("locale") locale: GetTranslationInputDto["locale"],
-    @Param("namespace") namespace: GetTranslationInputDto["namespace"],
+    @Param() { locale, namespace }: GetTranslationInputDto,
   ): Promise<GetTranslationOutputDto> {
-    return await this.getTranslationUseCase.execute({
-      locale,
-      namespace,
-    });
+    return await this.getTranslationUseCase.execute({ locale, namespace });
   }
 }
