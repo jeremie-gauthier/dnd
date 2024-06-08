@@ -2,10 +2,10 @@ import { LobbyEntity } from "@dnd/shared";
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
-import { DeleteLobbyPayload } from "src/modules/lobby/events/delete-lobby.payload";
 import { LobbyEvent } from "src/modules/lobby/events/lobby-event.enum";
 import { UserJoinedLobbyPayload } from "src/modules/lobby/events/user-joined-lobby.payload";
 import { UserLeftLobbyPayload } from "src/modules/lobby/events/user-left-lobby.payload";
+import { LobbyDeletedPayload } from "../../events/lobby-deleted.payload";
 import { BackupService } from "../backup/backup.service";
 import { SeatManagerRepository } from "./seat-manager.repository";
 
@@ -98,16 +98,9 @@ export class SeatManagerService {
     await this.repository.delLobbyById(lobby.id);
 
     this.eventEmitter.emitAsync(
-      LobbyEvent.DeleteLobby,
-      new DeleteLobbyPayload({ lobby }),
+      LobbyEvent.LobbyDeleted,
+      new LobbyDeletedPayload({ lobby }),
     );
-
-    if (
-      lobby.status === "GAME_INITIALIZING" ||
-      lobby.status === "GAME_STARTED"
-    ) {
-      await this.repository.delGameById({ gameId: lobby.id });
-    }
   }
 
   public mustBeInTheLobby({

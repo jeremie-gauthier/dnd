@@ -1,7 +1,7 @@
 export enum LobbyEvent {
   LobbyCreated = "lobby.request.lobby_created",
   RequestCreateLobby = "lobby.request.create_lobby",
-  DeleteLobby = "lobby.update.delete_lobby",
+  LobbyDeleted = "lobby.update.lobby_deleted",
   GameReady = "lobby.update.game_ready",
   HostRequestedGameStart = "lobby.update.host_requested_game_start",
   LobbyUpdated = "lobby.update.data_updated",

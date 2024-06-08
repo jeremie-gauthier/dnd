@@ -24,7 +24,7 @@ export class LobbyPublisherGateway {
     });
   }
 
-  @OnEvent(LobbyEvent.DeleteLobby)
+  @OnEvent(LobbyEvent.LobbyDeleted)
   protected deleteLobbyHandler({ lobby }: { lobby: LobbyEntity }) {
     this.server
       .to(LOBBIES_ROOM)

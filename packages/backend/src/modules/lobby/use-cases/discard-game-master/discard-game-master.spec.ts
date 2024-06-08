@@ -1,7 +1,7 @@
 import { ConfigService } from "@nestjs/config";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
-import { PlayableEntityService } from "src/modules/game/services/playable-entity/playable-entity.service";
+import { PlayableEntityService } from "src/modules/game/domain/playable-entity/playable-entity.service";
 import {
   MockInstance,
   afterEach,
