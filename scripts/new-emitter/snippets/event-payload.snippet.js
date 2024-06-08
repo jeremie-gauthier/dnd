@@ -7,8 +7,8 @@ const renderEventPayload = ({
   eventPayloadClassName,
 }) => {
   return dedent`
-		import { EventPayload } from 'src/event-emitter/event-payload.class';
-		import { ${eventEnum} } from './${module}-events.enum';
+		import { EventPayload } from 'src/interfaces/event-payload.interface';
+		import { ${eventEnum} } from './${module}-event.enum';
 
 		export class ${eventPayloadClassName} implements EventPayload<${eventNameEnum}> {
 		  public readonly name = ${eventNameEnum};
