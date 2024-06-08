@@ -3,8 +3,8 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { RequestCreateLobbyPayload } from "src/modules/lobby/events/request-create-lobby.payload";
-import { CampaignEvent } from "../events/campaign-event.enum";
-import { RequestCreateLobbyFulfilledPayload } from "../events/request-create-lobby-fulfilled.payload";
+import { CampaignEvent } from "../../events/campaign-event.enum";
+import { RequestCreateLobbyFulfilledPayload } from "../../events/request-create-lobby-fulfilled.payload";
 import { RequestCreateLobbyRepository } from "./request-create-lobby.repository";
 
 @Injectable()

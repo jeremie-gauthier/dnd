@@ -2,8 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { UseCase } from "src/interfaces/use-case.interface";
 import type { NewUserCreatedPayload } from "src/modules/user/events/new-user-created.payload";
-import { CampaignEvent } from "../events/campaign-event.enum";
-import { UnlockCampaignForUserPayload } from "../events/unlock-campaign-for-user.payload";
+import { CampaignEvent } from "../../events/campaign-event.enum";
+import { UnlockCampaignForUserPayload } from "../../events/unlock-campaign-for-user.payload";
 import { InitializeNewUserRepository } from "./initialize-new-user.repository";
 
 @Injectable()

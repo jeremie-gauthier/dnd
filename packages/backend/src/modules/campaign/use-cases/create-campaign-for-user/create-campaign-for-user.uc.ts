@@ -6,7 +6,7 @@ import { CampaignProgressionStatus } from "src/database/enums/campaign-progressi
 import { CampaignStageProgressionStatus } from "src/database/enums/campaign-stage-progression-status.enum";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { DeepPartial } from "typeorm";
-import type { UnlockCampaignForUserPayload } from "../events/unlock-campaign-for-user.payload";
+import type { UnlockCampaignForUserPayload } from "../../events/unlock-campaign-for-user.payload";
 import { CreateCampaignForUserRepository } from "./create-campaign-for-user.repository";
 
 @Injectable()
