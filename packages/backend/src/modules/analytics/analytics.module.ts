@@ -1,8 +1,9 @@
 import { Module } from "@nestjs/common";
-import { AnalyticsService } from "./analytics.service";
+import { AnalyticsListeners } from "./infra/controller/analytics.listeners";
+import { HandleAnyEventUseCase } from "./use-cases/handle-any-event/handle-any-event.uc";
 
 @Module({
   imports: [],
-  providers: [AnalyticsService],
+  providers: [AnalyticsListeners, HandleAnyEventUseCase],
 })
 export class AnalyticsModule {}
