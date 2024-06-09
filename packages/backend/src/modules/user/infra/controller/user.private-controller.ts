@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
-import { Request } from "express";
+import type { Request } from "express";
 import { ZodSerializerDto } from "nestjs-zod";
 import { User } from "src/database/entities/user.entity";
 import { AuthUser } from "src/decorators/auth-user.decorator";

@@ -1,6 +1,4 @@
-import { registerAs } from "@nestjs/config";
-import { config as dotenvConfig } from "dotenv";
-import { DataSource, type DataSourceOptions } from "typeorm";
+import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from "@nestjs/typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { AttackDice } from "../database/entities/attack-dice.entity";
 import { AttackItem } from "../database/entities/attack-item.entity";
@@ -21,35 +19,33 @@ import { Translation } from "../database/entities/translation.entity";
 import { User } from "../database/entities/user.entity";
 import { Weapon } from "../database/entities/weapon.entity";
 
-dotenvConfig({ path: ".env" });
-
-const config: DataSourceOptions = {
-  url: process.env.DATABASE_URL,
-  type: "postgres",
-  entities: [
-    User,
-    Campaign,
-    CampaignStage,
-    CampaignProgression,
-    CampaignStageProgression,
-    Hero,
-    HeroTemplate,
-    Perk,
-    Dice,
-    Attack,
-    AttackDice,
-    Item,
-    AttackItem,
-    Weapon,
-    Spell,
-    Stuff,
-    EnemyTemplate,
-    Translation,
-  ],
-  migrations: ["dist/src/database/migrations/*.js"],
-  migrationsRun: true,
-  namingStrategy: new SnakeNamingStrategy(),
-};
-
-export default registerAs("typeorm", () => config);
-export const connectionSource = new DataSource(config);
+export class DatabaseConfiguration implements TypeOrmOptionsFactory {
+  createTypeOrmOptions(): TypeOrmModuleOptions | Promise<TypeOrmModuleOptions> {
+    return {
+      url: process.env.DATABASE_URL,
+      type: "postgres",
+      entities: [
+        User,
+        Campaign,
+        CampaignStage,
+        CampaignProgression,
+        CampaignStageProgression,
+        Hero,
+        HeroTemplate,
+        Perk,
+        Dice,
+        Attack,
+        AttackDice,
+        Item,
+        AttackItem,
+        Weapon,
+        Spell,
+        Stuff,
+        EnemyTemplate,
+        Translation,
+      ],
+      migrationsRun: true,
+      namingStrategy: new SnakeNamingStrategy(),
+    };
+  }
+}

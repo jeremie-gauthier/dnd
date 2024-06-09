@@ -1,6 +1,6 @@
 import { GameEntity, GetUserGameStateOutput } from "@dnd/shared";
 import { Controller, Get, Param, UseGuards } from "@nestjs/common";
-import { Request } from "express";
+import type { Request } from "express";
 import { AuthUser } from "src/decorators/auth-user.decorator";
 import { AuthGuard } from "src/guards/auth.guard";
 import { GetUserGameStateUseCase } from "../../use-cases/get-user-game-state/get-user-game-state.uc";

@@ -4,7 +4,7 @@ import {
   NestModule,
   RequestMethod,
 } from "@nestjs/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ConfigModule } from "@nestjs/config";
 import { APP_INTERCEPTOR, APP_PIPE } from "@nestjs/core";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { TypeOrmModule } from "@nestjs/typeorm";
@@ -12,8 +12,8 @@ import { ZodSerializerInterceptor, ZodValidationPipe } from "nestjs-zod";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthzModule } from "./authz/authz.module";
+import { DatabaseConfiguration } from "./config/database.config";
 import envConfig, { validate } from "./config/env.config";
-import typeorm from "./config/typeorm.config";
 import { LoggerMiddleware } from "./middlewares/logger.middleware";
 import { AnalyticsModule } from "./modules/analytics/analytics.module";
 import { CampaignModule } from "./modules/campaign/campaign.module";
@@ -26,7 +26,8 @@ import { RedisModule } from "./redis/redis.module";
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [envConfig, typeorm],
+      envFilePath: ".env",
+      load: [envConfig],
       validate,
       cache: true,
       isGlobal: true,
@@ -35,10 +36,7 @@ import { RedisModule } from "./redis/redis.module";
       wildcard: true,
     }),
     TypeOrmModule.forRootAsync({
-      extraProviders: [ConfigService],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) =>
-        configService.getOrThrow("typeorm"),
+      useClass: DatabaseConfiguration,
     }),
     AuthzModule,
     RedisModule,
