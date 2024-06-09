@@ -3,7 +3,6 @@ import { OnEvent } from "@nestjs/event-emitter";
 import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { User } from "src/database/entities/user.entity";
 import { WsServer } from "src/interfaces/socket.interface";
-import { GameEvent } from "src/modules/game/events/game-event.enum";
 import { LobbyCreatedPayload } from "../../events/lobby-created.payload";
 import { LobbyEvent } from "../../events/lobby-event.enum";
 import { LOBBIES_ROOM } from "../../shared/constants";
@@ -36,13 +35,6 @@ export class LobbyPublisherGateway {
     this.server
       .to(lobby.id)
       .emit(ServerLobbyEvent.LobbyChangesDetected, { lobby });
-  }
-
-  @OnEvent(GameEvent.GameInitializationStarted)
-  protected gameInitializationStartedHandler({
-    lobby,
-  }: { lobby: LobbyEntity }) {
-    this.server.to(lobby.id).emit(ServerLobbyEvent.GameInitializationStarted);
   }
 
   @OnEvent(LobbyEvent.GameReady)

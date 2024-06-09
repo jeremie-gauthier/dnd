@@ -1,8 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import { Dice } from "src/database/entities/dice.entity";
-import { EnemyTemplate } from "src/database/entities/enemy-template.entity";
 import { Item } from "src/database/entities/item.entity";
 import { Spell } from "src/database/entities/spell.entity";
 import { Weapon } from "src/database/entities/weapon.entity";
@@ -15,7 +13,6 @@ import { DiceService } from "./domain/dice/dice.service";
 import { InitiativeService } from "./domain/initiative/initiative.service";
 import { ItemService } from "./domain/item/item.service";
 import { LogService } from "./domain/log/log.service";
-import { MapSerializerService } from "./domain/map-serializer/map-serializer.service";
 import { MapService } from "./domain/map/map.service";
 import { MoveService } from "./domain/move/move.service";
 import { PlayableEntityService } from "./domain/playable-entity/playable-entity.service";
@@ -40,17 +37,7 @@ import { PlayableEntityAttackUseCase } from "./use-cases/playable-entity-attack/
 import { PlayableEntityMoveUseCase } from "./use-cases/playable-entity-move/playable-entity-move.uc";
 
 @Module({
-  imports: [
-    RedisModule,
-    TypeOrmModule.forFeature([
-      CampaignStageProgression,
-      Dice,
-      Item,
-      Weapon,
-      Spell,
-      EnemyTemplate,
-    ]),
-  ],
+  imports: [RedisModule, TypeOrmModule.forFeature([Dice, Item, Weapon, Spell])],
   controllers: [GamePrivateController],
   providers: [
     GamesRepository,
@@ -73,7 +60,6 @@ import { PlayableEntityMoveUseCase } from "./use-cases/playable-entity-move/play
     ItemService,
     LogService,
     MapService,
-    MapSerializerService,
     MoveService,
     PlayableEntityService,
     PlayerStateService,

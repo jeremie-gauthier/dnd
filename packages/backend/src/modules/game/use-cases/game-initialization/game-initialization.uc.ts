@@ -1,31 +1,26 @@
 import {
   EnemyInventoryJson,
-  EnemyKind,
   GameEntity,
   GameItem,
   LobbyEntity,
   PlayableHeroEntity,
   StorageSpace,
   Tile,
-  unique,
 } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { randomUUID } from "node:crypto";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
-import { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import { Dice } from "src/database/entities/dice.entity";
+import { EnemyTemplate } from "src/database/entities/enemy-template.entity";
 import { Hero } from "src/database/entities/hero.entity";
-import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
+import { GameInitializationDonePayload as CampaignGameInitializationDonePayload } from "src/modules/campaign/events/game-initialization-done.payload";
 import { MoveService } from "src/modules/game/domain/move/move.service";
-import type { HostRequestedGameStartPayload } from "src/modules/lobby/events/host-requested-game-start.payload";
 import { InitiativeService } from "../../domain/initiative/initiative.service";
 import { ItemService } from "../../domain/item/item.service";
-import { MapSerializerService } from "../../domain/map-serializer/map-serializer.service";
 import { GameEvent } from "../../events/game-event.enum";
 import { GameInitializationDonePayload } from "../../events/game-initialization-done.payload";
-import { GameInitializationStartedPayload } from "../../events/game-initialization-started.payload";
 import { GameInitializationRepository } from "./game-initialization.repository";
 
 @Injectable()
@@ -33,46 +28,44 @@ export class GameInitializationUseCase implements UseCase {
   constructor(
     private readonly eventEmitter: EventEmitter2,
     private readonly repository: GameInitializationRepository,
-    private readonly mapSerializer: MapSerializerService,
     private readonly moveService: MoveService,
     private readonly initiativeService: InitiativeService,
     private readonly itemService: ItemService,
   ) {}
 
-  public async execute({
-    lobby,
-  }: HostRequestedGameStartPayload): Promise<void> {
-    this.eventEmitter.emitAsync(
-      GameEvent.GameInitializationStarted,
-      new GameInitializationStartedPayload({ lobby }),
-    );
-
-    const game = await this.createGame({ lobby });
+  public async execute(
+    payload: CampaignGameInitializationDonePayload,
+  ): Promise<void> {
+    const game = await this.createGame(payload);
 
     this.eventEmitter.emitAsync(
       GameEvent.GameInitializationDone,
-      new GameInitializationDonePayload({ lobby, game }),
+      new GameInitializationDonePayload({ lobby: payload.lobby, game }),
     );
   }
 
   private async createGame({
+    campaignStageProgression,
+    enemyTemplates,
+    events,
     lobby,
-  }: { lobby: LobbyEntity }): Promise<GameEntity> {
-    const campaignStageProgression = await this.getUserCampaignStageProgression(
-      {
-        campaignStageId: lobby.config.campaign.stage.id,
-        userId: lobby.host.userId,
-      },
-    );
-
-    const { map, events } = this.mapSerializer.deserialize(
-      campaignStageProgression.stage.mapCompiled,
-    );
+    map,
+  }: {
+    campaignStageProgression: CampaignStageProgression;
+    enemyTemplates: EnemyTemplate[];
+    events: GameEntity["events"];
+    lobby: LobbyEntity;
+    map: GameEntity["map"];
+  }): Promise<GameEntity> {
+    const [campaignStageProgressionFormatted, enemyTemplatesFormatted] =
+      await Promise.all([
+        this.getUserCampaignStageProgression({ campaignStageProgression }),
+        this.formatEnemyTemplates({ enemyTemplates }),
+      ]);
     const playableEntities = this.getPlayableEntitiesMap({
       lobby,
-      campaignStageProgression,
+      campaignStageProgression: campaignStageProgressionFormatted,
     });
-    const enemyTemplates = await this.getEnemyTemplates({ events });
 
     const game: GameEntity = {
       id: lobby.id,
@@ -84,7 +77,7 @@ export class GameInitializationUseCase implements UseCase {
       playableEntities,
       timeline: [],
       events,
-      enemyTemplates,
+      enemyTemplates: enemyTemplatesFormatted,
     };
 
     this.randomlyPlaceHeroesOnStartingTiles({ game });
@@ -97,15 +90,10 @@ export class GameInitializationUseCase implements UseCase {
   }
 
   private async getUserCampaignStageProgression({
-    campaignStageId,
-    userId,
-  }: { campaignStageId: CampaignStage["id"]; userId: User["id"] }) {
-    const campaignStageProgression =
-      await this.repository.getUserCampaignStageProgression({
-        campaignStageId,
-        userId,
-      });
-
+    campaignStageProgression,
+  }: {
+    campaignStageProgression: CampaignStageProgression;
+  }) {
     const itemsNames =
       campaignStageProgression.campaignProgression.heroes.flatMap((hero) =>
         hero.inventory.stuff.map(({ item }) => item.name),
@@ -247,14 +235,11 @@ export class GameInitializationUseCase implements UseCase {
     firstPlayableEntityToPlay.currentPhase = "action";
   }
 
-  private async getEnemyTemplates({
-    events,
-  }: { events: GameEntity["events"] }): Promise<GameEntity["enemyTemplates"]> {
-    const enemiesName = this.getDistinctAvailableEnemies({ events });
-    const enemyTemplates = await this.repository.getEnemiesByNames({
-      enemiesName,
-    });
-
+  private async formatEnemyTemplates({
+    enemyTemplates,
+  }: { enemyTemplates: EnemyTemplate[] }): Promise<
+    GameEntity["enemyTemplates"]
+  > {
     const dicesNamesUsedByEnemies = Array.from(
       new Set(
         enemyTemplates.flatMap((enemyTemplate) =>
@@ -321,11 +306,5 @@ export class GameInitializationUseCase implements UseCase {
         })),
       })),
     };
-  }
-
-  private getDistinctAvailableEnemies({
-    events,
-  }: { events: GameEntity["events"] }): EnemyKind[] {
-    return unique(events.flatMap((event) => event?.enemies ?? []));
   }
 }

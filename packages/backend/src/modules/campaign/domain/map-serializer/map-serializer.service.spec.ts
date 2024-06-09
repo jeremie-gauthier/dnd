@@ -3,7 +3,6 @@ import { InternalServerErrorException } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CoordService } from "../coord/coord.service";
-import { MapService } from "../map/map.service";
 import { MapSerializerService } from "./map-serializer.service";
 
 describe("MapSerializerService", () => {
@@ -11,7 +10,7 @@ describe("MapSerializerService", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MapSerializerService, MapService, CoordService],
+      providers: [MapSerializerService, CoordService],
     }).compile();
 
     service = module.get(MapSerializerService);

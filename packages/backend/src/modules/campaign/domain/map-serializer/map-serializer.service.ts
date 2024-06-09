@@ -1,4 +1,5 @@
 import type {
+  Coord,
   GameEntity,
   MapCompiledJson,
   OnDoorOpeningGameEvent,
@@ -13,7 +14,6 @@ import {
 } from "@dnd/shared/dist/database/game/interactive-entities.type";
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { CoordService } from "../coord/coord.service";
-import { MapService } from "../map/map.service";
 
 @Injectable()
 export class MapSerializerService {
@@ -25,10 +25,7 @@ export class MapSerializerService {
   ];
   private static NON_PLAYABLE_INTERACTIVE_TILE_ENTITY = ["door", "trap"];
 
-  constructor(
-    private readonly mapService: MapService,
-    private readonly coordService: CoordService,
-  ) {}
+  constructor(private readonly coordService: CoordService) {}
 
   public serialize(map: GameEntity["map"]): string {
     void map;
@@ -44,7 +41,7 @@ export class MapSerializerService {
     };
     this.assertsValidMetadata(metadata);
 
-    const tiles = this.mapService.createDummyTiles(metadata);
+    const tiles = this.createDummyTiles(metadata);
 
     // adding starting positions
     this.assertsHasStartingPositions(mapCompiled);
@@ -72,7 +69,7 @@ export class MapSerializerService {
     }
 
     // infering the off-map tiles
-    this.mapService.addOffMapTileEntities({
+    this.addOffMapTileEntities({
       tiles,
       startingPositions: mapCompiled.startingPositions,
       metadata,
@@ -261,6 +258,106 @@ export class MapSerializerService {
       })
     ) {
       throw new InternalServerErrorException("Bad starting tile coord");
+    }
+  }
+
+  private createDummyTiles({
+    width,
+    height,
+  }: { width: number; height: number }): Tile[] {
+    return Array.from({ length: width * height }).map((_, index) => ({
+      coord: this.coordService.indexToCoord({
+        index,
+        metadata: { width, height },
+      }),
+      entities: [],
+    }));
+  }
+
+  public addOffMapTileEntities({
+    tiles,
+    startingPositions,
+    metadata,
+  }: {
+    tiles: Tile[];
+    startingPositions: Coord[];
+    metadata: { width: number; height: number };
+  }): void {
+    const isNonBlockingEntity = (entity: TileEntity) =>
+      entity.type === "playable-entity" ||
+      entity.kind === "door" ||
+      entity.isBlocking === false;
+    const addTileToExploreAt = (coord: Coord): Coord | undefined => {
+      if (
+        coord.column < 0 ||
+        coord.column >= metadata.width ||
+        coord.row < 0 ||
+        coord.row >= metadata.height
+      )
+        return;
+
+      const tileIndex = this.coordService.coordToIndex({ coord, metadata });
+      const tile = tiles[tileIndex];
+      if (!tile) return;
+
+      if (
+        !reachableTiles.has(tileIndex) &&
+        tile.entities.every((entity) => isNonBlockingEntity(entity)) &&
+        !coordsToExploreQueue.some(
+          ({ row, column }) =>
+            row === tile.coord.row && column === tile.coord.column,
+        )
+      ) {
+        coordsToExploreQueue.push(coord);
+      }
+    };
+
+    const reachableTiles = new Set();
+
+    const coordsToExploreQueue: Coord[] = [];
+    let currentCoordExplored: Coord | undefined = startingPositions[0];
+    while (currentCoordExplored !== undefined) {
+      reachableTiles.add(
+        this.coordService.coordToIndex({
+          coord: currentCoordExplored,
+          metadata,
+        }),
+      );
+
+      addTileToExploreAt({
+        column: currentCoordExplored.column,
+        row: currentCoordExplored.row + 1,
+      });
+      addTileToExploreAt({
+        column: currentCoordExplored.column,
+        row: currentCoordExplored.row - 1,
+      });
+      addTileToExploreAt({
+        column: currentCoordExplored.column + 1,
+        row: currentCoordExplored.row,
+      });
+      addTileToExploreAt({
+        column: currentCoordExplored.column - 1,
+        row: currentCoordExplored.row,
+      });
+
+      currentCoordExplored = coordsToExploreQueue.shift();
+    }
+
+    for (const tile of tiles) {
+      const tileIndex = this.coordService.coordToIndex({
+        coord: tile.coord,
+        metadata,
+      });
+      if (reachableTiles.has(tileIndex) || tile.entities.length > 0) continue;
+
+      tile.entities.push({
+        type: "non-playable-non-interactive-entity",
+        kind: "off-map",
+        isVisible: true,
+        isBlocking: true,
+        canInteract: false,
+      });
     }
   }
 }

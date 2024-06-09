@@ -4,7 +4,6 @@ export const ServerLobbyEvent = {
   LobbiesDeleted: "server.lobbies.deleted",
   GameReady: "server.lobby.game_is_ready",
   Error: "server.lobby.error",
-  GameInitializationStarted: "server.lobby.game_initialization_started",
   GameInitializationDone: "server.lobby.game_initialization_done",
   UserLeftLobby: "lobby.update.user_left",
   LobbyCreated: "server.lobby.create",

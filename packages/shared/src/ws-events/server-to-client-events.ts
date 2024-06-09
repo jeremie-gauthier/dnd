@@ -25,7 +25,6 @@ interface ServerToClientEventsAndPayloads
     name: string;
     message: string;
   }) => void;
-  [ServerLobbyEvent.GameInitializationStarted]: () => void;
   [ServerLobbyEvent.GameInitializationDone]: (payload: {
     game: GameEntity;
   }) => void;

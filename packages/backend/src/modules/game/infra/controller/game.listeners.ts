@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
-import { HostRequestedGameStartPayload } from "src/modules/lobby/events/host-requested-game-start.payload";
+import { CampaignEvent } from "src/modules/campaign/events/campaign-event.enum";
+import { GameInitializationDonePayload } from "src/modules/campaign/events/game-initialization-done.payload";
 import { LobbyDeletedPayload } from "src/modules/lobby/events/lobby-deleted.payload";
 import { LobbyEvent } from "src/modules/lobby/events/lobby-event.enum";
 import { DeleteGameUseCase } from "../../use-cases/delete-game/delete-game.uc";
@@ -13,8 +14,8 @@ export class GameListeners {
     private readonly deleteGameUseCase: DeleteGameUseCase,
   ) {}
 
-  @OnEvent(LobbyEvent.HostRequestedGameStart)
-  public async gameInitialization(payload: HostRequestedGameStartPayload) {
+  @OnEvent(CampaignEvent.GameInitializationDone)
+  public async gameInitialization(payload: GameInitializationDonePayload) {
     await this.gameInitializationUseCase.execute(payload);
   }
 
