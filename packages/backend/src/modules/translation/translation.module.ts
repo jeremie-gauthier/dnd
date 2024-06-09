@@ -7,7 +7,7 @@ import { GetTranslationUseCase } from "./use-cases/get-translation/get-translati
 
 @Module({
   imports: [TypeOrmModule.forFeature([Translation])],
-  providers: [GetTranslationUseCase, GetTranslationRepository],
   controllers: [TranslationPublicController],
+  providers: [GetTranslationUseCase, GetTranslationRepository],
 })
 export class TranslationModule {}

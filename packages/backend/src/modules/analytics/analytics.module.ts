@@ -4,6 +4,7 @@ import { HandleAnyEventUseCase } from "./use-cases/handle-any-event/handle-any-e
 
 @Module({
   imports: [],
+  controllers: [],
   providers: [AnalyticsListeners, HandleAnyEventUseCase],
 })
 export class AnalyticsModule {}
