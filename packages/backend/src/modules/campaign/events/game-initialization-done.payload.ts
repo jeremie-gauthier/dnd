@@ -1,7 +1,8 @@
-import { GameEntity, LobbyEntity } from "@dnd/shared";
+import { GameEntity } from "@dnd/shared";
 import { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import { EnemyTemplate } from "src/database/entities/enemy-template.entity";
 import { EventPayload } from "src/interfaces/event-payload.interface";
+import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
 import { CampaignEvent } from "./campaign-event.enum";
 
 export class GameInitializationDonePayload
@@ -11,7 +12,7 @@ export class GameInitializationDonePayload
   public readonly campaignStageProgression: CampaignStageProgression;
   public readonly enemyTemplates: EnemyTemplate[];
   public readonly events: GameEntity["events"];
-  public readonly lobby: LobbyEntity;
+  public readonly lobby: Lobby;
   public readonly map: GameEntity["map"];
 
   constructor({

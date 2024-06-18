@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { UseCase } from "src/interfaces/use-case.interface";
-import { LobbyDeletedPayload } from "src/modules/lobby/events/lobby-deleted.payload";
+import { LobbyDeletedPayload } from "src/modules/shared/events/lobby/lobby-deleted.payload";
 import { DeleteGameRepository } from "./delete-game.repository";
 
 @Injectable()

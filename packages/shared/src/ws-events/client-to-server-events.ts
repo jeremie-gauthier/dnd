@@ -5,7 +5,6 @@ import {
   PlayableEntityAttackInput,
   PlayableEntityMoveInput,
 } from "../game";
-import { DiscardGameMasterInput, PickGameMasterInput } from "../lobby";
 import { ClientGameEvent } from "./game-events/game-events.client";
 import { ClientLobbyEvent } from "./lobby-events/lobby-events.client";
 import type { EventsMapper } from "./utils.type";
@@ -21,11 +20,11 @@ interface ClientToServerEventsAndPayloads
     lobbyId: string;
   };
   [ClientLobbyEvent.RequestLeaveLobby]: () => { lobbyId: string };
-  [ClientLobbyEvent.RequestPickHero]: (payload: {
+  [ClientLobbyEvent.RequestPickPlayableCharacter]: (payload: {
     lobbyId: string;
     heroId: string;
   }) => void;
-  [ClientLobbyEvent.RequestDiscardHero]: (payload: {
+  [ClientLobbyEvent.RequestDiscardPlayableCharacter]: (payload: {
     lobbyId: string;
     heroId: string;
   }) => void;
@@ -42,12 +41,6 @@ interface ClientToServerEventsAndPayloads
     payload: EndPlayerTurnInput,
   ) => void;
   [ClientGameEvent.PlayableEntityOpenDoor]: (payload: OpenDoorInput) => void;
-  [ClientLobbyEvent.RequestPickGameMaster]: (
-    payload: PickGameMasterInput,
-  ) => void;
-  [ClientLobbyEvent.RequestDiscardGameMaster]: (
-    payload: DiscardGameMasterInput,
-  ) => void;
   [ClientGameEvent.PlayableEntityAttacks]: (
     payload: PlayableEntityAttackInput,
   ) => void;

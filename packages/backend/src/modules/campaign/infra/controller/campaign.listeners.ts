@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
-import { HostRequestedGameStartPayload } from "src/modules/lobby/events/host-requested-game-start.payload";
-import { LobbyEvent } from "../../../lobby/events/lobby-event.enum";
-import { RequestCreateLobbyPayload } from "../../../lobby/events/request-create-lobby.payload";
+import { HostRequestedGameStartPayload } from "src/modules/shared/events/lobby/host-requested-game-start.payload";
+import { LobbyEvent } from "src/modules/shared/events/lobby/lobby-event.enum";
+import { RequestCreateLobbyPayload } from "src/modules/shared/events/lobby/request-create-lobby.payload";
 import { NewUserCreatedPayload } from "../../../user/events/new-user-created.payload";
 import { UserEvent } from "../../../user/events/user-event.enum";
 import { CampaignEvent } from "../../events/campaign-event.enum";

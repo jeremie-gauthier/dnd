@@ -2,7 +2,6 @@ import {
   EnemyInventoryJson,
   GameEntity,
   GameItem,
-  LobbyEntity,
   PlayableHeroEntity,
   StorageSpace,
   Tile,
@@ -17,6 +16,7 @@ import { Hero } from "src/database/entities/hero.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { GameInitializationDonePayload as CampaignGameInitializationDonePayload } from "src/modules/campaign/events/game-initialization-done.payload";
 import { MoveService } from "src/modules/game/domain/move/move.service";
+import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
 import { InitiativeService } from "../../domain/initiative/initiative.service";
 import { ItemService } from "../../domain/item/item.service";
 import { GameEvent } from "../../events/game-event.enum";
@@ -54,7 +54,7 @@ export class GameInitializationUseCase implements UseCase {
     campaignStageProgression: CampaignStageProgression;
     enemyTemplates: EnemyTemplate[];
     events: GameEntity["events"];
-    lobby: LobbyEntity;
+    lobby: Lobby;
     map: GameEntity["map"];
   }): Promise<GameEntity> {
     const [campaignStageProgressionFormatted, enemyTemplatesFormatted] =
@@ -67,11 +67,15 @@ export class GameInitializationUseCase implements UseCase {
       campaignStageProgression: campaignStageProgressionFormatted,
     });
 
+    const gameMasterUserId = lobby.playableCharacters.values.find(
+      (pc) => pc.type === "game_master",
+    )?.pickedBy!;
+
     const game: GameEntity = {
-      id: lobby.id,
+      id: lobby.id.toString(),
       status: "battle_ongoing",
       gameMaster: {
-        userId: lobby.gameMaster.userId!,
+        userId: gameMasterUserId.toString(),
       },
       map,
       playableEntities,
@@ -129,11 +133,13 @@ export class GameInitializationUseCase implements UseCase {
     lobby,
     campaignStageProgression,
   }: {
-    lobby: LobbyEntity;
+    lobby: Lobby;
     campaignStageProgression: CampaignStageProgression;
   }): GameEntity["playableEntities"] {
     const heroPlayersMap = Object.fromEntries(
-      lobby.heroesAvailable.map((hero) => [hero.id, hero.pickedBy!]),
+      lobby.playableCharacters.values
+        .filter((pc) => pc.type === "hero")
+        .map((hero) => [hero.id.toString(), hero.pickedBy!.id.toString()]),
     );
 
     const heroes = campaignStageProgression.campaignProgression.heroes;

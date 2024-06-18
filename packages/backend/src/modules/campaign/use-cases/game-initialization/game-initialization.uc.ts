@@ -3,7 +3,7 @@ import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { EnemyTemplate } from "src/database/entities/enemy-template.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
-import { HostRequestedGameStartPayload } from "src/modules/lobby/events/host-requested-game-start.payload";
+import { HostRequestedGameStartPayload } from "src/modules/shared/events/lobby/host-requested-game-start.payload";
 import { MapSerializerService } from "../../domain/map-serializer/map-serializer.service";
 import { CampaignEvent } from "../../events/campaign-event.enum";
 import { GameInitializationDonePayload } from "../../events/game-initialization-done.payload";
@@ -23,7 +23,7 @@ export class GameInitializationUseCase implements UseCase {
     const campaignStageProgression =
       await this.repository.getUserCampaignStageProgression({
         campaignStageId: lobby.config.campaign.stage.id,
-        userId: lobby.host.userId,
+        userId: lobby.host.id.toString(),
       });
 
     const { map, events } = this.mapSerializerService.deserialize(

@@ -2,7 +2,7 @@ import { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import { Campaign } from "src/database/entities/campaign.entity";
 import { Hero } from "src/database/entities/hero.entity";
 import { EventPayload } from "src/interfaces/event-payload.interface";
-import { RequestCreateLobbyPayload } from "src/modules/lobby/events/request-create-lobby.payload";
+import { RequestCreateLobbyPayload } from "src/modules/shared/events/lobby/request-create-lobby.payload";
 import { CampaignEvent } from "./campaign-event.enum";
 
 export class RequestCreateLobbyFulfilledPayload
