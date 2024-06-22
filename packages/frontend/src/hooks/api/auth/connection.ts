@@ -1,5 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { PrivateUserConnectionInput } from "@dnd/shared";
+import { UserConnectionInput } from "@dnd/shared";
 import { useRouter } from "@tanstack/react-router";
 
 export const useConnection = () => {
@@ -20,9 +20,9 @@ export const useConnection = () => {
     }
   };
 
-  return async (body: PrivateUserConnectionInput): Promise<void> => {
+  return async (body: UserConnectionInput): Promise<void> => {
     const token = await tokenGetter();
-    await fetch("http://localhost:3000/auth/private/connection", {
+    await fetch("http://localhost:3000/user/private/connection", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

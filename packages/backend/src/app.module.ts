@@ -4,51 +4,47 @@ import {
   NestModule,
   RequestMethod,
 } from "@nestjs/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ConfigModule } from "@nestjs/config";
 import { APP_INTERCEPTOR, APP_PIPE } from "@nestjs/core";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ZodSerializerInterceptor, ZodValidationPipe } from "nestjs-zod";
-import { AnalyticsModule } from "./analytics/analytics.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { AuthModule } from "./auth/auth.module";
 import { AuthzModule } from "./authz/authz.module";
-import { CampaignModule } from "./campaign/campaign.module";
-import { LoggerMiddleware } from "./common/logger.middleware";
+import { DatabaseConfiguration } from "./config/database.config";
 import envConfig, { validate } from "./config/env.config";
-import redis from "./config/redis.config";
-import typeorm from "./config/typeorm.config";
-import { GameModule } from "./game/game.module";
-import { LobbyModule } from "./lobby/lobby.module";
+import { LoggerMiddleware } from "./middlewares/logger.middleware";
+import { AnalyticsModule } from "./modules/analytics/analytics.module";
+import { CampaignModule } from "./modules/campaign/campaign.module";
+import { GameModule } from "./modules/game/game.module";
+import { LobbyModule } from "./modules/lobby/lobby.module";
+import { TranslationModule } from "./modules/translation/translation.module";
+import { UserModule } from "./modules/user/user.module";
 import { RedisModule } from "./redis/redis.module";
-import { UserModule } from "./user/user.module";
-import { TranslationModule } from './translation/translation.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [envConfig, typeorm, redis],
+      envFilePath: ".env",
+      load: [envConfig],
       validate,
       cache: true,
+      isGlobal: true,
     }),
     EventEmitterModule.forRoot({
       wildcard: true,
     }),
     TypeOrmModule.forRootAsync({
-      extraProviders: [ConfigService],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) =>
-        configService.getOrThrow("typeorm"),
+      useClass: DatabaseConfiguration,
     }),
-    AuthModule,
+    AuthzModule,
+    RedisModule,
     CampaignModule,
     AnalyticsModule,
     LobbyModule,
     GameModule,
     UserModule,
-    AuthzModule,
-    RedisModule,
     TranslationModule,
   ],
   controllers: [AppController],

@@ -16,6 +16,8 @@ export const getLobbiesOutputSchema = z.array(
           id: z.string(),
           title: z.string(),
           order: z.number(),
+          intro: z.string(),
+          outro: z.string(),
         }),
       }),
     }),

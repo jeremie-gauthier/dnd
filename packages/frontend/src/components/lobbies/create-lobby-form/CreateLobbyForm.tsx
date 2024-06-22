@@ -1,4 +1,7 @@
+import { ServerLobbyEvent, ServerToClientEvents } from "@dnd/shared";
+import { useNavigate } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-form-adapter";
+import { useEffect } from "react";
 import type { GetCampaignsResponse } from "../../../hooks/api/campaign/get-campaigns";
 import type { ClientSocket } from "../../../types/socket.type";
 import { Button } from "../../shared/button/Button";
@@ -21,6 +24,7 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
     nbPlayersMax: 2,
     campaign: campaigns[0],
   });
+  const navigate = useNavigate();
 
   const handleLobbyCreation: React.FormEventHandler<HTMLFormElement> = async (
     e,
@@ -29,6 +33,23 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
     e.stopPropagation();
     await form.handleSubmit();
   };
+
+  useEffect(() => {
+    const handleLobbyCreated: ServerToClientEvents["server.lobby.create"] = ({
+      lobby,
+    }) => {
+      return navigate({
+        to: "/lobby/$lobbyId",
+        params: { lobbyId: lobby.id },
+      });
+    };
+
+    socket.on(ServerLobbyEvent.LobbyCreated, handleLobbyCreated);
+
+    return () => {
+      socket.removeAllListeners(ServerLobbyEvent.LobbyCreated);
+    };
+  }, [socket, navigate]);
 
   return (
     <div className="flex flex-col items-center space-y-8">

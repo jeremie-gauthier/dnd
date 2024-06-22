@@ -18,11 +18,7 @@ export const LobbiesMenu = ({ socket, lobbies }: Props) => {
   ) => {
     // TODO: API will check player availability in regard of this lobby level
 
-    // With ack ??
-    const result = await socket.emitWithAck(ClientLobbyEvent.RequestJoinLobby, {
-      lobbyId,
-    });
-    console.log(result);
+    await socket.emitWithAck(ClientLobbyEvent.RequestJoinLobby, { lobbyId });
 
     // TODO: if OK => navigate the user to the lobby page
     return navigate({

@@ -43,37 +43,13 @@ export function MenuRouteComponent() {
 
     // TODO: useLobbyChangesHandler hook ?
     const handleLobbyChanges = ({ lobby }: { lobby: LobbyEntity }) => {
-      const heroMap = new Map(
-        lobby.heroesAvailable.map((heroAvailable) => [
-          heroAvailable.id,
-          heroAvailable,
-        ]),
-      );
-
-      queryClient.setQueryData(
-        GET_LOBBY_QUERY_KEY(lobby.id),
-        (oldLobby: GetLobbyResponse) => {
-          return {
-            ...oldLobby,
-            host: lobby.host,
-            players: lobby.players,
-            gameMaster: lobby.gameMaster,
-            heroesAvailable: oldLobby.heroesAvailable.map((heroAvailable) => {
-              return {
-                ...heroAvailable,
-                pickedBy: heroMap.get(heroAvailable.id)?.pickedBy,
-              };
-            }),
-          };
-        },
-      );
+      queryClient.setQueryData(GET_LOBBY_QUERY_KEY(lobby.id), () => lobby);
     };
     socket.on(ServerLobbyEvent.LobbyChangesDetected, handleLobbyChanges);
 
     const handleUserLeftLobby = () => {
       navigate({ to: "/lobbies" });
     };
-
     socket.on(ServerLobbyEvent.UserLeftLobby, handleUserLeftLobby);
 
     return () => {

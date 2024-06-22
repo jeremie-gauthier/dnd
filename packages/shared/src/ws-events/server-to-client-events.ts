@@ -2,7 +2,7 @@ import type { z } from "zod";
 import type { GameEntity } from "../database/game";
 import type { LobbyEntity } from "../database/lobby";
 import type { GameLog } from "../game";
-import { getLobbiesOutputSchema } from "../lobby";
+import { createLobbyOutputSchema, getLobbiesOutputSchema } from "../lobby";
 import {
   ServerGameEvent,
   type PlayerGameState,
@@ -25,7 +25,6 @@ interface ServerToClientEventsAndPayloads
     name: string;
     message: string;
   }) => void;
-  [ServerLobbyEvent.GameInitializationStarted]: () => void;
   [ServerLobbyEvent.GameInitializationDone]: (payload: {
     game: GameEntity;
   }) => void;
@@ -33,6 +32,9 @@ interface ServerToClientEventsAndPayloads
   [ServerGameEvent.GameChangesDetected]: (payload: PlayerGameState) => void;
   [ServerGameEvent.GameLogCreated]: (payload: GameLog) => void;
   [ServerLobbyEvent.UserLeftLobby]: () => void;
+  [ServerLobbyEvent.LobbyCreated]: (payload: {
+    lobby: z.infer<typeof createLobbyOutputSchema>;
+  }) => void;
 }
 
 export type ServerToClientEvents =

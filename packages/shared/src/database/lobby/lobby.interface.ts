@@ -1,64 +1,16 @@
-import { HeroClassType, StorageSpaceType } from "../enums";
-import { StuffStorageCapacityJson } from "../json";
-import type { LobbyEntityStatusType } from "./lobby.enum";
+import { z } from "zod";
+import { lobbyConfigSchema } from "./lobby-config.interface";
+import { lobbyHostSchema } from "./lobby-host.interface";
+import { lobbyPlayableCharacterSchema } from "./lobby-playable-character.interface";
+import { lobbyPlayerSchema } from "./lobby-player.interface";
 
-type Hero = {
-  id: string;
-  name: string;
-  class: HeroClassType;
-  level: number;
-  characteristic: {
-    baseHealthPoints: number;
-    baseManaPoints: number;
-    baseArmorClass: number;
-    baseMovementPoints: number;
-    baseActionPoints: number;
-  };
-  inventory: {
-    storageCapacity: StuffStorageCapacityJson;
-    stuff: {
-      id: string;
-      storageSpace: StorageSpaceType;
-      item: {
-        name: string;
-        level: number;
-        imgUrl: string;
-      };
-    }[];
-  };
-  pickedBy?: string;
-};
+export const lobbySchema = z.object({
+  id: z.string().uuid(),
+  status: z.enum(["OPENED", "GAME_INITIALIZING", "GAME_STARTED"]),
+  host: lobbyHostSchema,
+  config: lobbyConfigSchema,
+  players: z.array(lobbyPlayerSchema),
+  playableCharacters: z.array(lobbyPlayableCharacterSchema),
+});
 
-type LobbyPlayer = {
-  userId: string;
-  heroesSelected: Hero["id"][];
-  isReady: boolean;
-};
-
-type LobbyCampaign = {
-  id: string;
-  title: string;
-  nbStages: number;
-  stage: {
-    id: string;
-    title: string;
-    order: number;
-  };
-};
-
-export type LobbyEntity = {
-  id: string;
-  status: LobbyEntityStatusType;
-  host: {
-    userId: string;
-  };
-  config: {
-    nbPlayersMax: number;
-    campaign: LobbyCampaign;
-  };
-  players: LobbyPlayer[];
-  gameMaster: {
-    userId?: string;
-  };
-  heroesAvailable: Hero[];
-};
+export type LobbyEntity = z.infer<typeof lobbySchema>;

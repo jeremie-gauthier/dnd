@@ -1,63 +1,6 @@
 import { z } from "zod";
+import { lobbySchema } from "../../database";
 
-const heroSchema = z.object({
-  id: z.string(),
-  pickedBy: z.string().optional(),
-  name: z.string(),
-  class: z.enum(["WARRIOR", "CLERIC", "SORCERER", "THIEF"]),
-  characteristic: z.object({
-    baseHealthPoints: z.number(),
-    baseManaPoints: z.number(),
-    baseArmorClass: z.number(),
-    baseMovementPoints: z.number(),
-    baseActionPoints: z.number(),
-  }),
-  inventory: z.object({
-    storageCapacity: z.object({
-      nbArtifactSlots: z.number().min(0),
-      nbSpellSlots: z.number().min(0),
-      nbWeaponSlots: z.number().min(0),
-      nbBackpackSlots: z.number().min(0),
-    }),
-    stuff: z.array(
-      z.object({
-        id: z.string().uuid(),
-        storageSpace: z.string(),
-        item: z.object({
-          name: z.string(),
-          level: z.number().min(0),
-          imgUrl: z.string(),
-        }),
-      }),
-    ),
-  }),
-});
-
-export const createLobbyOutputSchema = z.object({
-  id: z.string(),
-  host: z.object({
-    userId: z.string(),
-  }),
-  config: z.object({
-    nbPlayersMax: z.number(),
-    campaign: z.object({
-      id: z.string(),
-      title: z.string(),
-      nbStages: z.number(),
-      stage: z.object({
-        id: z.string(),
-        title: z.string(),
-        order: z.number(),
-      }),
-    }),
-  }),
-  players: z.array(
-    z.object({
-      userId: z.string(),
-      heroesSelected: z.array(z.string()),
-    }),
-  ),
-  heroesAvailable: z.array(heroSchema),
-});
+export const createLobbyOutputSchema = lobbySchema;
 
 export type CreateLobbyOutput = z.infer<typeof createLobbyOutputSchema>;

@@ -6,7 +6,7 @@ const kebabCase = require("lodash.kebabcase");
 const { renderEventPayload, renderEventEnum } = require("./snippets");
 const { getVarNames } = require("./utils");
 
-const EVENT_EMITTER_BASE_PATH = "./packages/backend/src";
+const EVENT_EMITTER_BASE_PATH = "./packages/backend/src/modules";
 
 const promptEventPayloadName = async () => {
   const rawEventPayloadName = await input({
@@ -56,7 +56,7 @@ const main = async () => {
 
   const eventEmitterDir = `${EVENT_EMITTER_BASE_PATH}/${eventPayloadModule}`;
 
-  const eventEnumFile = `${eventEmitterDir}/${vars.module}-events.enum.ts`;
+  const eventEnumFile = `${eventEmitterDir}/${vars.module}-event.enum.ts`;
   const eventEnumFileContent = await fs.readFile(eventEnumFile, {
     encoding: "utf-8",
   });

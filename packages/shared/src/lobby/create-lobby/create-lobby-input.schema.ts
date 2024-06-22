@@ -1,8 +1,12 @@
 import { z } from "zod";
+import { lobbyConfigSchema } from "../../database/lobby/lobby-config.interface";
 
-export const createLobbyInputSchema = z.object({
-  nbPlayersMax: z.number().min(2).max(5),
-  stageId: z.string().uuid(),
-});
+export const createLobbyInputSchema = lobbyConfigSchema
+  .pick({ nbPlayersMax: true })
+  .merge(
+    z.object({
+      stageId: z.string().uuid(),
+    }),
+  );
 
 export type CreateLobbyInput = z.infer<typeof createLobbyInputSchema>;
