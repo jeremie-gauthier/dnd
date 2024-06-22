@@ -1,5 +1,7 @@
 import { LobbyView } from "@dnd/shared";
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
+import { ConfigType } from "@nestjs/config";
+import envConfig, { EnvSchema } from "src/config/env.config";
 import { List } from "src/modules/shared/domain/list";
 import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { Mapper } from "src/modules/shared/infra/mapper";
@@ -17,8 +19,15 @@ export class LobbiesMapper extends Mapper<
   LobbyDomain,
   LobbyView
 > {
+  constructor(
+    @Inject(envConfig.KEY)
+    private readonly env: ConfigType<typeof envConfig>,
+  ) {
+    super();
+  }
+
   public toDomain(persistence: LobbyPersistence): LobbyDomain {
-    return new LobbyDomain({
+    return new LobbyDomain(this.env, {
       config: persistence.config,
       playableCharacters: new List(
         persistence.playableCharacters.map(

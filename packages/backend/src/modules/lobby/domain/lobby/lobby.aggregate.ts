@@ -1,4 +1,6 @@
 import { LobbyView, lobbySchema } from "@dnd/shared";
+import { ConfigType } from "@nestjs/config";
+import envConfig from "src/config/env.config";
 import { AggregateRoot } from "src/modules/shared/domain/aggregate-root";
 import { List } from "src/modules/shared/domain/list";
 import { UniqueId } from "src/modules/shared/domain/unique-id";
@@ -31,7 +33,10 @@ export class Lobby extends AggregateRoot<Data> {
     }),
   );
 
-  constructor(rawData: Data) {
+  constructor(
+    private readonly env: Pick<ConfigType<typeof envConfig>, "NODE_ENV">,
+    rawData: Data,
+  ) {
     const data = Lobby.schema.parse(rawData);
     super(data, data.id);
   }
@@ -109,8 +114,7 @@ export class Lobby extends AggregateRoot<Data> {
       });
     }
 
-    // TODO: FIND AN IDIOMATIC WAY TO ACCESS ENV VARS
-    if (process.env.NODE_ENV !== "development") {
+    if (this.env.NODE_ENV !== "development") {
       const gameMasterId = this.playableCharacters.values.find(
         (pc) => pc.type === "game_master",
       )!.pickedBy;
@@ -144,8 +148,7 @@ export class Lobby extends AggregateRoot<Data> {
       id: playableCharacterId,
     });
 
-    // TODO: FIND AN IDIOMATIC WAY TO ACCESS ENV VARS
-    if (process.env.NODE_ENV !== "development") {
+    if (this.env.NODE_ENV !== "development") {
       if (playableCharacter.type === "hero") {
         this.mustNotBeGameMaster({ user });
       } else {

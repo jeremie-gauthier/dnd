@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { RedisModule } from "src/redis/redis.module";
 import { LOBBIES_REPOSITORY } from "../../application/repositories/lobbies-repository.interface";
 import { USERS_REPOSITORY } from "../../application/repositories/users-repository.interface";
@@ -7,7 +8,7 @@ import { RedisLobbiesRepository } from "./lobbies/lobbies.repository";
 import { RedisUsersRepository } from "./users/users.repository";
 
 @Module({
-  imports: [RedisModule],
+  imports: [RedisModule, ConfigModule],
   providers: [
     {
       provide: LOBBIES_REPOSITORY,
