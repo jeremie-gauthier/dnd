@@ -26,26 +26,16 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
   };
 
   const handlePickHero = (heroId: string) => {
-    socket.emit(ClientLobbyEvent.RequestPickHero, {
+    socket.emit(ClientLobbyEvent.RequestPickPlayableCharacter, {
       lobbyId: lobby.id,
-      heroId,
+      playableCharacterId: heroId,
     });
   };
 
   const handleDiscardHero = (heroId: string) => {
-    socket.emit(ClientLobbyEvent.RequestDiscardHero, {
+    socket.emit(ClientLobbyEvent.RequestDiscardPlayableCharacter, {
       lobbyId: lobby.id,
-      heroId,
-    });
-  };
-
-  const handlePickGameMaster = () => {
-    socket.emit(ClientLobbyEvent.RequestPickGameMaster, { lobbyId: lobby.id });
-  };
-
-  const handleDiscardGameMaster = () => {
-    socket.emit(ClientLobbyEvent.RequestDiscardGameMaster, {
-      lobbyId: lobby.id,
+      playableCharacterId: heroId,
     });
   };
 
@@ -59,9 +49,6 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
   };
 
   const isLobbyHost = user.sub === lobby.host.userId;
-
-  const canPickGameMasterRole = lobby.gameMaster.userId === undefined;
-  const hasGameMasterRole = lobby.gameMaster.userId === user.sub;
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -95,7 +82,7 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
       <div>
         <h2 className="font-medium text-lg">Choose your heroes:</h2>
         <div className="flex flex-row gap-6">
-          <div className="flex flex-col p-2 rounded shadow-lg justify-between">
+          {/* <div className="flex flex-col p-2 rounded shadow-lg justify-between">
             <div>
               <GameMasterCard />
             </div>
@@ -112,34 +99,49 @@ export const Lobby = ({ user, lobby, socket }: Props) => {
                 <PickedByUser userId={lobby.gameMaster.userId!} />
               </div>
             ) : null}
-          </div>
+          </div> */}
 
-          {lobby.heroesAvailable.map((hero) => {
-            const canBePicked = hero.pickedBy === undefined;
-            const isPickedByMe = hero.pickedBy === user.sub;
+          {lobby.playableCharacters.map((playableCharacter) => {
+            const canBePicked = playableCharacter.pickedBy === undefined;
+            const isPickedByMe = playableCharacter.pickedBy === user.sub;
 
             return (
               <div
-                key={hero.id}
-                className="flex flex-col p-2 rounded shadow-lg"
+                key={playableCharacter.id}
+                className="flex flex-col p-2 rounded shadow-lg justify-between"
               >
-                <HeroCard hero={hero} />
-                {canBePicked ? (
-                  <Button onClick={() => handlePickHero(hero.id)}>Pick</Button>
-                ) : null}
-                {isPickedByMe ? (
-                  <Button
-                    onClick={() => handleDiscardHero(hero.id)}
-                    variant="outlined"
-                  >
-                    Discard
-                  </Button>
-                ) : null}
-                {!canBePicked && !isPickedByMe && hero.pickedBy ? (
-                  <div className="flex flex-row justify-center items-center gap-2 h-9 max-w-[190px]">
-                    <PickedByUser userId={hero.pickedBy} />
-                  </div>
-                ) : null}
+                <div>
+                  {playableCharacter.type === "hero" ? (
+                    <HeroCard hero={playableCharacter} />
+                  ) : (
+                    <GameMasterCard />
+                  )}
+                </div>
+
+                <div className="flex flex-col">
+                  {canBePicked ? (
+                    <Button
+                      onClick={() => handlePickHero(playableCharacter.id)}
+                    >
+                      Pick
+                    </Button>
+                  ) : null}
+                  {isPickedByMe ? (
+                    <Button
+                      onClick={() => handleDiscardHero(playableCharacter.id)}
+                      variant="outlined"
+                    >
+                      Discard
+                    </Button>
+                  ) : null}
+                  {!canBePicked &&
+                  !isPickedByMe &&
+                  playableCharacter.pickedBy ? (
+                    <div className="flex flex-row justify-center items-center gap-2 h-9 max-w-[190px]">
+                      <PickedByUser userId={playableCharacter.pickedBy} />
+                    </div>
+                  ) : null}
+                </div>
               </div>
             );
           })}

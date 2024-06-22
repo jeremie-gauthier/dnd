@@ -17,6 +17,8 @@ import { GameInitializationRepository } from "./use-cases/game-initialization/ga
 import { GameInitializationUseCase } from "./use-cases/game-initialization/game-initialization.uc";
 import { GetCampaignsRepository } from "./use-cases/get-campaigns/get-campaigns.repository";
 import { GetCampaignsUseCase } from "./use-cases/get-campaigns/get-campaigns.uc";
+import { GetHeroDetailsRepository } from "./use-cases/get-hero-details/get-hero-details.repository";
+import { GetHeroDetailsUseCase } from "./use-cases/get-hero-details/get-hero-details.uc";
 import { InitializeNewUserRepository } from "./use-cases/initialize-new-user/initialize-new-user.repository";
 import { InitializeNewUserUseCase } from "./use-cases/initialize-new-user/initialize-new-user.uc";
 import { NewCampaignStartedRepository } from "./use-cases/new-campaign-started/new-campaign-started.repository";
@@ -53,6 +55,8 @@ import { RequestCreateLobbyUseCase } from "./use-cases/request-create-lobby/requ
     GameInitializationRepository,
     CoordService,
     MapSerializerService,
+    GetHeroDetailsUseCase,
+    GetHeroDetailsRepository,
   ],
 })
 export class CampaignModule {}

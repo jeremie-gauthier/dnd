@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   UseGuards,
 } from "@nestjs/common";
@@ -12,6 +13,11 @@ import { ZodSerializerDto } from "nestjs-zod";
 import { AuthUser } from "src/decorators/auth-user.decorator";
 import { AuthGuard } from "src/guards/auth.guard";
 import { GetCampaignsUseCase } from "../../use-cases/get-campaigns/get-campaigns.uc";
+import {
+  GetHeroDetailsInputDto,
+  GetHeroDetailsOutputDto,
+} from "../../use-cases/get-hero-details/get-hero-details.dto";
+import { GetHeroDetailsUseCase } from "../../use-cases/get-hero-details/get-hero-details.uc";
 import {
   NewCampaignStartedOutputDto,
   type NewCampaignStartedInputDto,
@@ -24,6 +30,7 @@ export class CampaignPrivateController {
   constructor(
     private readonly newCampaignStartedUseCase: NewCampaignStartedUseCase,
     private readonly getCampaignsUseCase: GetCampaignsUseCase,
+    private readonly getHeroDetailsUseCase: GetHeroDetailsUseCase,
   ) {}
 
   @Post("new-campaign-started")
@@ -42,5 +49,11 @@ export class CampaignPrivateController {
   @Get("get-campaigns")
   public async getCampaigns(@AuthUser() user: Request["user"]) {
     return await this.getCampaignsUseCase.execute({ userId: user.id });
+  }
+
+  @Get("get-hero-details/:heroId")
+  @ZodSerializerDto(GetHeroDetailsOutputDto)
+  public async getHeroDetails(@Param() params: GetHeroDetailsInputDto) {
+    return await this.getHeroDetailsUseCase.execute(params);
   }
 }

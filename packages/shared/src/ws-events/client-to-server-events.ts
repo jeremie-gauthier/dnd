@@ -22,11 +22,11 @@ interface ClientToServerEventsAndPayloads
   [ClientLobbyEvent.RequestLeaveLobby]: () => { lobbyId: string };
   [ClientLobbyEvent.RequestPickPlayableCharacter]: (payload: {
     lobbyId: string;
-    heroId: string;
+    playableCharacterId: string;
   }) => void;
   [ClientLobbyEvent.RequestDiscardPlayableCharacter]: (payload: {
     lobbyId: string;
-    heroId: string;
+    playableCharacterId: string;
   }) => void;
   [ClientLobbyEvent.RequestToggleReadyState]: (payload: {
     lobbyId: string;
