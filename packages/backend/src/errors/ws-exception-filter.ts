@@ -1,5 +1,5 @@
 import { ServerLobbyEvent } from "@dnd/shared";
-import { Catch, HttpException, type ArgumentsHost } from "@nestjs/common";
+import { type ArgumentsHost, Catch, HttpException } from "@nestjs/common";
 import { WsException } from "@nestjs/websockets";
 import type { Socket } from "socket.io";
 

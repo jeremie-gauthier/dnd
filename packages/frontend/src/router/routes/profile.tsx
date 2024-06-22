@@ -1,7 +1,7 @@
 import {
+  type User,
   useAuth0,
   withAuthenticationRequired,
-  type User,
 } from "@auth0/auth0-react";
 import { createFileRoute } from "@tanstack/react-router";
 import Profile from "../../components/profile/Profile";

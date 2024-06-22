@@ -4,12 +4,12 @@ import {
   Index,
   ManyToOne,
   PrimaryGeneratedColumn,
-  RelationId,
   type Relation,
+  RelationId,
 } from "typeorm";
 import {
-  CampaignStageProgressionStatusValues,
   type CampaignStageProgressionStatusType,
+  CampaignStageProgressionStatusValues,
 } from "../enums/campaign-stage-progression-status.enum";
 import { CampaignProgression } from "./campaign-progression.entity";
 import { CampaignStage } from "./campaign-stage.entity";

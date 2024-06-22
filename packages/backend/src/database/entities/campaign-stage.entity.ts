@@ -9,8 +9,8 @@ import {
   type Relation,
 } from "typeorm";
 import {
-  CampaignStageStatusValues,
   type CampaignStageStatusType,
+  CampaignStageStatusValues,
 } from "../enums/campaign-stage-status.enum";
 import { CampaignStageProgression } from "./campaign-stage-progression.entity";
 import { Campaign } from "./campaign.entity";

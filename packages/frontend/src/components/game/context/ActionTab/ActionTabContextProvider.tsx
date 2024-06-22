@@ -15,11 +15,12 @@ export const ActionTabContextProvider = ({ children }: Props) => {
   const selectAttack = (attack: GameItem["attacks"][number]) =>
     setSelectedAttack(attack);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (playerState.currentAction !== "attack") {
       clearSelectedAttack();
     }
-  }, [playerState.currentAction, clearSelectedAttack]);
+  }, [playerState.currentAction]);
 
   return (
     <ActionTabContext.Provider

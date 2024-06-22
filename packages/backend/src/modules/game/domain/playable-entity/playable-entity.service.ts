@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import {
   Coord,
   EnemyKind,
@@ -12,7 +13,6 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import { randomUUID } from "node:crypto";
 import { Attack } from "src/database/entities/attack.entity";
 import { User } from "src/database/entities/user.entity";
 

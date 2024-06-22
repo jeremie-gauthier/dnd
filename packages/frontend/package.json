@@ -9,21 +9,21 @@
     "start:dev:network": "concurrently \"tsr watch\" \"VITE_ENV=local_network vite --force --host\"",
     "build": "tsc && npm run build:css && vite build --debug",
     "build:css": "NODE_ENV=production tailwindcss -o src/tailwind.css -m",
-    "lint": "biome lint src/",
-    "lint:fix": "biome lint src/ --apply",
+    "check": "biome check src/",
+    "check:fix": "biome check src/ --write",
     "preview": "vite preview",
     "format": "biome format src/ --write"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@dnd/shared": "file:../shared",
-    "@headlessui/react": "^2.0.4",
-    "@heroicons/react": "^2.1.3",
-    "@tanstack/react-form": "^0.20.2",
-    "@tanstack/react-query": "^5.40.0",
-    "@tanstack/react-router": "^1.34.7",
-    "@tanstack/router-cli": "^1.34.8",
-    "@tanstack/zod-form-adapter": "^0.20.2",
+    "@headlessui/react": "^2.1.0",
+    "@heroicons/react": "^2.1.4",
+    "@tanstack/react-form": "^0.20.3",
+    "@tanstack/react-query": "^5.45.1",
+    "@tanstack/react-router": "^1.40.0",
+    "@tanstack/router-cli": "^1.37.0",
+    "@tanstack/zod-form-adapter": "^0.20.3",
     "i18next": "^23.11.5",
     "i18next-http-backend": "^2.5.2",
     "react": "^18.3.1",
@@ -33,16 +33,16 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.7.3",
-    "@tanstack/react-query-devtools": "^5.40.0",
-    "@tanstack/router-devtools": "^1.34.7",
+    "@biomejs/biome": "^1.8.2",
+    "@tanstack/react-query-devtools": "^5.45.1",
+    "@tanstack/router-devtools": "^1.40.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-basic-ssl": "^1.1.0",
     "@vitejs/plugin-react-swc": "^3.7.0",
     "concurrently": "^8.2.2",
-    "tailwindcss": "^3.4.3",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.12"
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.5.2",
+    "vite": "^5.3.1"
   }
 }

@@ -6,8 +6,8 @@ import {
   type Relation,
 } from "typeorm";
 import {
-  UserStatusValues,
   type UserStatusType,
+  UserStatusValues,
 } from "../enums/user-status.enum";
 import { CampaignProgression } from "./campaign-progression.entity";
 

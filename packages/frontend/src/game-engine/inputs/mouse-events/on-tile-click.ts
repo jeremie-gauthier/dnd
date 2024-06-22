@@ -1,8 +1,8 @@
 import { GameEntity, isInRange } from "@dnd/shared";
 import { GameEventManager } from "../../events";
 import {
-  translateIsometricTo2DCoord,
   type CanvasConfig,
+  translateIsometricTo2DCoord,
 } from "../../utils/coords-conversion.util";
 import { getCursorCoordinates } from "./get-cursor-coordinates";
 

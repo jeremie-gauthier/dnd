@@ -19,8 +19,8 @@ import {
 } from "../../use-cases/get-hero-details/get-hero-details.dto";
 import { GetHeroDetailsUseCase } from "../../use-cases/get-hero-details/get-hero-details.uc";
 import {
-  NewCampaignStartedOutputDto,
   type NewCampaignStartedInputDto,
+  NewCampaignStartedOutputDto,
 } from "../../use-cases/new-campaign-started/new-campaign-started.dto";
 import { NewCampaignStartedUseCase } from "../../use-cases/new-campaign-started/new-campaign-started.uc";
 

@@ -4,10 +4,10 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import {
   ConnectedSocket,
   MessageBody,
-  SubscribeMessage,
-  WebSocketGateway,
   type OnGatewayConnection,
   type OnGatewayDisconnect,
+  SubscribeMessage,
+  WebSocketGateway,
 } from "@nestjs/websockets";
 import { ZodValidationPipe } from "nestjs-zod";
 import { WsExceptionFilter } from "src/errors/ws-exception-filter";
@@ -24,8 +24,8 @@ import { type CreateLobbyInputDto } from "../../../application/use-cases/create-
 import { HandleWsConnectionUseCase } from "../../../application/use-cases/handle-ws-connection/handle-ws-connection.uc";
 import { HandleWsDisconnectionUseCase } from "../../../application/use-cases/handle-ws-disconnection/handle-ws-disconnection.uc";
 import {
-  JoinLobbyOutputDto,
   type JoinLobbyInputDto,
+  JoinLobbyOutputDto,
 } from "../../../application/use-cases/join-lobby/join-lobby.dto";
 import { JoinLobbyUseCase } from "../../../application/use-cases/join-lobby/join-lobby.uc";
 import { LeaveLobbyOutputDto } from "../../../application/use-cases/leave-lobby/leave-lobby.dto";

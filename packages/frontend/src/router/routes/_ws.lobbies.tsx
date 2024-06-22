@@ -1,16 +1,16 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import {
   ClientLobbyEvent,
-  ServerLobbyEvent,
   type LobbyView,
+  ServerLobbyEvent,
 } from "@dnd/shared";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { LobbiesMenu } from "../../components/lobbies/lobbies-menu/LobbiesMenu";
 import {
   GET_LOBBIES_QUERY_KEY,
-  useGetLobbies,
   type GetLobbiesResponse,
+  useGetLobbies,
 } from "../../hooks/api/lobby/get-lobbies";
 
 export const Route = createFileRoute("/_ws/lobbies")({

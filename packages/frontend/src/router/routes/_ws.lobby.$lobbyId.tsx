@@ -1,16 +1,16 @@
 import {
+  type User,
   useAuth0,
   withAuthenticationRequired,
-  type User,
 } from "@auth0/auth0-react";
-import { GameEntity, ServerLobbyEvent, type LobbyView } from "@dnd/shared";
+import { GameEntity, type LobbyView, ServerLobbyEvent } from "@dnd/shared";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Lobby } from "../../components/lobbies/Lobby";
 import {
   GET_LOBBY_QUERY_KEY,
-  useGetLobby,
   type GetLobbyResponse,
+  useGetLobby,
 } from "../../hooks/api/lobby/get-lobby";
 import { useServerLobbyError } from "../../hooks/api/lobby/use-server-lobby-error";
 

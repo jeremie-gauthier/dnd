@@ -1,5 +1,5 @@
 import { FactoryProvider } from "@nestjs/common";
-import { createClient, type RedisClientOptions } from "redis";
+import { type RedisClientOptions, createClient } from "redis";
 
 export const redisClientFactory: FactoryProvider<
   ReturnType<typeof createClient>
