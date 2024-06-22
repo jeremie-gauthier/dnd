@@ -109,18 +109,21 @@ export class Lobby extends AggregateRoot<Data> {
       });
     }
 
-    const gameMasterId = this.playableCharacters.values.find(
-      (pc) => pc.type === "game_master",
-    )!.pickedBy;
-    if (
-      this.playableCharacters.values.some(
-        (pc) => pc.type === "hero" && pc.pickedBy?.equals(gameMasterId),
-      )
-    ) {
-      throw new PlayableCharacterError({
-        name: "BAD_USER_ROLE",
-        message: "Game Master cannot control heroes",
-      });
+    // TODO: FIND AN IDIOMATIC WAY TO ACCESS ENV VARS
+    if (process.env.NODE_ENV !== "development") {
+      const gameMasterId = this.playableCharacters.values.find(
+        (pc) => pc.type === "game_master",
+      )!.pickedBy;
+      if (
+        this.playableCharacters.values.some(
+          (pc) => pc.type === "hero" && pc.pickedBy?.equals(gameMasterId),
+        )
+      ) {
+        throw new PlayableCharacterError({
+          name: "BAD_USER_ROLE",
+          message: "Game Master cannot control heroes",
+        });
+      }
     }
 
     this._data.status = this.status.advanceTo({ status: "GAME_INITIALIZING" });
@@ -141,10 +144,13 @@ export class Lobby extends AggregateRoot<Data> {
       id: playableCharacterId,
     });
 
-    if (playableCharacter.type === "hero") {
-      this.mustNotBeGameMaster({ user });
-    } else {
-      this.mustNotBeHero({ user });
+    // TODO: FIND AN IDIOMATIC WAY TO ACCESS ENV VARS
+    if (process.env.NODE_ENV !== "development") {
+      if (playableCharacter.type === "hero") {
+        this.mustNotBeGameMaster({ user });
+      } else {
+        this.mustNotBeHero({ user });
+      }
     }
 
     playableCharacter.setOwner({ user });
