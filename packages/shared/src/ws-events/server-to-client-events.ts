@@ -1,6 +1,6 @@
 import type { z } from "zod";
 import type { GameEntity } from "../database/game";
-import type { LobbyEntity } from "../database/lobby";
+import type { LobbyView } from "../database/lobby";
 import type { GameLog } from "../game";
 import { createLobbyOutputSchema, getLobbiesOutputSchema } from "../lobby";
 import {
@@ -13,13 +13,13 @@ import type { EventsMapper } from "./utils.type";
 interface ServerToClientEventsAndPayloads
   extends Record<string, (...parameters: any[]) => any> {
   [ServerLobbyEvent.LobbyChangesDetected]: (payload: {
-    lobby: LobbyEntity;
+    lobby: LobbyView;
   }) => void;
   [ServerLobbyEvent.LobbiesChangesDetected]: (payload: {
     lobby: z.infer<typeof getLobbiesOutputSchema>[number];
   }) => void;
   [ServerLobbyEvent.LobbiesDeleted]: (payload: {
-    lobbyId: LobbyEntity["id"];
+    lobbyId: LobbyView["id"];
   }) => void;
   [ServerLobbyEvent.Error]: (payload: {
     name: string;

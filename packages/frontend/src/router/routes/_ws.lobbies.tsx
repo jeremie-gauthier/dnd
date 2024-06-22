@@ -2,7 +2,7 @@ import { withAuthenticationRequired } from "@auth0/auth0-react";
 import {
   ClientLobbyEvent,
   ServerLobbyEvent,
-  type LobbyEntity,
+  type LobbyView,
 } from "@dnd/shared";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -33,7 +33,7 @@ export function LobbiesRouteComponent() {
 
     const handleLobbiesChanges = ({
       lobby,
-    }: { lobby: { id: string } & Partial<LobbyEntity> }) => {
+    }: { lobby: { id: string } & Partial<LobbyView> }) => {
       queryClient.setQueryData(
         GET_LOBBIES_QUERY_KEY,
         (oldLobbies: GetLobbiesResponse) => {

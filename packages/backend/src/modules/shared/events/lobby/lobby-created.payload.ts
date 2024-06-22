@@ -1,4 +1,4 @@
-import { LobbyEntity } from "@dnd/shared";
+import { LobbyView } from "@dnd/shared";
 import { EventPayload } from "src/interfaces/event-payload.interface";
 import { LobbyEvent } from "./lobby-event.enum";
 
@@ -6,7 +6,7 @@ export class LobbyCreatedPayload
   implements EventPayload<LobbyEvent.LobbyCreated>
 {
   public readonly name = LobbyEvent.LobbyCreated;
-  public readonly lobby: LobbyEntity;
+  public readonly lobby: LobbyView;
   public readonly userId: string;
 
   constructor({ lobby, userId }: Omit<LobbyCreatedPayload, "name">) {

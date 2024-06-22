@@ -1,4 +1,4 @@
-import type { JoinLobbyInput, LobbyEntity } from "@dnd/shared";
+import type { JoinLobbyInput, LobbyView } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { User as RawUser } from "src/database/entities/user.entity";
@@ -26,7 +26,7 @@ export class JoinLobbyUseCase implements UseCase {
   public async execute({
     userId: rawUserId,
     lobbyId,
-  }: { userId: RawUser["id"] } & JoinLobbyInput): Promise<LobbyEntity["id"]> {
+  }: { userId: RawUser["id"] } & JoinLobbyInput): Promise<LobbyView["id"]> {
     await this.leaveLobbyUseCase.execute({ userId: rawUserId });
 
     const lobby = await this.lobbiesRepository.getDomainOneOrThrow({

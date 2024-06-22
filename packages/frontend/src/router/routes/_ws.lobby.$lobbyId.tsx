@@ -3,7 +3,7 @@ import {
   withAuthenticationRequired,
   type User,
 } from "@auth0/auth0-react";
-import { GameEntity, ServerLobbyEvent, type LobbyEntity } from "@dnd/shared";
+import { GameEntity, ServerLobbyEvent, type LobbyView } from "@dnd/shared";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { Lobby } from "../../components/lobbies/Lobby";
@@ -42,7 +42,7 @@ export function MenuRouteComponent() {
     );
 
     // TODO: useLobbyChangesHandler hook ?
-    const handleLobbyChanges = ({ lobby }: { lobby: LobbyEntity }) => {
+    const handleLobbyChanges = ({ lobby }: { lobby: LobbyView }) => {
       queryClient.setQueryData(GET_LOBBY_QUERY_KEY(lobby.id), () => lobby);
     };
     socket.on(ServerLobbyEvent.LobbyChangesDetected, handleLobbyChanges);

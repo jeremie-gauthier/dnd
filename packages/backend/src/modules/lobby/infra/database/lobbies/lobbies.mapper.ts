@@ -1,4 +1,4 @@
-import { LobbyEntity } from "@dnd/shared";
+import { LobbyView } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { List } from "src/modules/shared/domain/list";
 import { UniqueId } from "src/modules/shared/domain/unique-id";
@@ -15,7 +15,7 @@ import { LobbyPersistence } from "../../database/lobbies/lobby.model";
 export class LobbiesMapper extends Mapper<
   LobbyPersistence,
   LobbyDomain,
-  LobbyEntity
+  LobbyView
 > {
   public toDomain(persistence: LobbyPersistence): LobbyDomain {
     return new LobbyDomain({
@@ -69,7 +69,7 @@ export class LobbiesMapper extends Mapper<
     };
   }
 
-  public toView(persistence: LobbyPersistence): LobbyEntity {
+  public toView(persistence: LobbyPersistence): LobbyView {
     return {
       config: persistence.config,
       host: persistence.host,
@@ -92,7 +92,7 @@ export class LobbiesMapper extends Mapper<
   }: {
     player: LobbyPersistence["players"][number];
     persistenceLobby: LobbyPersistence;
-  }): LobbyEntity["players"][number]["heroesSelected"] {
+  }): LobbyView["players"][number]["heroesSelected"] {
     return persistenceLobby.playableCharacters
       .filter((hero) => hero.pickedBy === player.userId)
       .map((hero) => hero.id);

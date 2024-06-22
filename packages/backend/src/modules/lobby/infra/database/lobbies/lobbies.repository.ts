@@ -1,4 +1,4 @@
-import type { LobbyEntity } from "@dnd/shared";
+import type { LobbyView } from "@dnd/shared";
 import {
   Injectable,
   NotFoundException,
@@ -49,10 +49,10 @@ export class RedisLobbiesRepository
     heroes,
     hostUserId,
   }: {
-    config: LobbyEntity["config"];
+    config: LobbyView["config"];
     heroes: Array<Hero>;
     hostUserId: User["id"];
-  }): Promise<LobbyEntity> {
+  }): Promise<LobbyView> {
     const lobby: LobbyPersistence = {
       id: randomUUID(),
       config,
@@ -97,7 +97,7 @@ export class RedisLobbiesRepository
 
   public async getViewOneOrThrow({
     lobbyId,
-  }: { lobbyId: LobbyPersistence["id"] }): Promise<LobbyEntity> {
+  }: { lobbyId: LobbyPersistence["id"] }): Promise<LobbyView> {
     const lobbyRaw = (await this.client.json.get(RedisLobbiesRepository.KEY, {
       path: lobbyId,
     })) as LobbyPersistence | null;
@@ -116,7 +116,7 @@ export class RedisLobbiesRepository
     );
   }
 
-  public async getViewMany(): Promise<LobbyEntity[]> {
+  public async getViewMany(): Promise<LobbyView[]> {
     const lobbiesRaw = (await this.client.json.get(
       RedisLobbiesRepository.KEY,
     )) as LobbiesKey;

@@ -1,4 +1,4 @@
-import { LobbyEntity } from "@dnd/shared";
+import { LobbyView } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { UseCase } from "src/interfaces/use-case.interface";
@@ -26,7 +26,7 @@ export class CreateLobbyUseCase implements UseCase {
 
   public async execute(
     payload: RequestCreateLobbyFulfilledPayload,
-  ): Promise<LobbyEntity> {
+  ): Promise<LobbyView> {
     await this.leaveLobbyUseCase.execute({ userId: payload.userId });
     const lobby = await this.createLobby(payload);
     return lobby;

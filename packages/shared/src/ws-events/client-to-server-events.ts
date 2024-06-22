@@ -1,4 +1,4 @@
-import type { LobbyEntity } from "../database/lobby/lobby.interface";
+import type { LobbyView } from "../database/lobby/lobby.interface";
 import {
   EndPlayerTurnInput,
   OpenDoorInput,
@@ -14,7 +14,7 @@ interface ClientToServerEventsAndPayloads
   [ClientLobbyEvent.RequestCreateLobby]: (payload: {
     nbPlayersMax: number;
     stageId: string;
-  }) => LobbyEntity;
+  }) => LobbyView;
   [ClientLobbyEvent.RequestStartLobby]: (payload: { lobbyId: string }) => void;
   [ClientLobbyEvent.RequestJoinLobby]: (payload: { lobbyId: string }) => {
     lobbyId: string;

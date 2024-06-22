@@ -1,4 +1,4 @@
-import { LobbyEntity } from "@dnd/shared";
+import { LobbyView } from "@dnd/shared";
 import { List } from "src/modules/shared/domain/list";
 import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { Host } from "../host/host.entity";
@@ -13,7 +13,7 @@ export const FAKE_LOBBY_ID = "00000000-0000-0001-0000-000000000000";
 export const FAKE_CAMPAIGN_ID = "00000000-0000-0000-0000-000000000010";
 export const FAKE_CAMPAIGN_STAGE_ID = "00000000-0000-0000-0000-000000000010";
 
-export const getFakeLobbyData = (): Pick<LobbyEntity, "config"> & {
+export const getFakeLobbyData = (): Pick<LobbyView, "config"> & {
   id: UniqueId;
   players: List<User>;
   playableCharacters: List<PlayableCharacter>;

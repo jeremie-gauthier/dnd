@@ -1,4 +1,4 @@
-import { GameEntity, LobbyEntity, ServerLobbyEvent } from "@dnd/shared";
+import { GameEntity, LobbyView, ServerLobbyEvent } from "@dnd/shared";
 import { OnEvent } from "@nestjs/event-emitter";
 import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { User } from "src/database/entities/user.entity";
@@ -15,7 +15,7 @@ export class LobbyPublisherGateway {
 
   @OnEvent(LobbyEvent.UserJoinedLobby)
   @OnEvent(LobbyEvent.UserLeftLobby)
-  protected lobbiesChangesHandler({ lobby }: { lobby: LobbyEntity }) {
+  protected lobbiesChangesHandler({ lobby }: { lobby: LobbyView }) {
     this.server.to(LOBBIES_ROOM).emit(ServerLobbyEvent.LobbiesChangesDetected, {
       lobby: {
         ...lobby,
@@ -25,14 +25,14 @@ export class LobbyPublisherGateway {
   }
 
   @OnEvent(LobbyEvent.LobbyDeleted)
-  protected deleteLobbyHandler({ lobby }: { lobby: LobbyEntity }) {
+  protected deleteLobbyHandler({ lobby }: { lobby: LobbyView }) {
     this.server
       .to(LOBBIES_ROOM)
       .emit(ServerLobbyEvent.LobbiesDeleted, { lobbyId: lobby.id });
   }
 
   @OnEvent(LobbyEvent.LobbyUpdated)
-  protected lobbyChangesHandler({ lobby }: { lobby: LobbyEntity }) {
+  protected lobbyChangesHandler({ lobby }: { lobby: LobbyView }) {
     this.server
       .to(lobby.id)
       .emit(ServerLobbyEvent.LobbyChangesDetected, { lobby });

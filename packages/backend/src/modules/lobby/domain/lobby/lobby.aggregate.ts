@@ -1,4 +1,4 @@
-import { LobbyEntity, lobbySchema } from "@dnd/shared";
+import { LobbyView, lobbySchema } from "@dnd/shared";
 import { AggregateRoot } from "src/modules/shared/domain/aggregate-root";
 import { List } from "src/modules/shared/domain/list";
 import { UniqueId } from "src/modules/shared/domain/unique-id";
@@ -12,7 +12,7 @@ import { UserStatus } from "../user-status/user-status.vo";
 import { User } from "../user/user.entity";
 import { LobbyError } from "./lobby.error";
 
-type Data = Pick<LobbyEntity, "config"> & {
+type Data = Pick<LobbyView, "config"> & {
   id: UniqueId;
   players: List<User>;
   playableCharacters: List<PlayableCharacter>;

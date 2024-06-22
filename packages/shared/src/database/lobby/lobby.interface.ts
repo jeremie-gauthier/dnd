@@ -13,4 +13,4 @@ export const lobbySchema = z.object({
   playableCharacters: z.array(lobbyPlayableCharacterSchema),
 });
 
-export type LobbyEntity = z.infer<typeof lobbySchema>;
+export type LobbyView = z.infer<typeof lobbySchema>;

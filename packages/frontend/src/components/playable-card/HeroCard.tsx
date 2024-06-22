@@ -1,4 +1,4 @@
-import { HeroClassType, LobbyEntity } from "@dnd/shared";
+import { HeroClassType, LobbyView } from "@dnd/shared";
 import {
   ChevronDoubleRightIcon,
   HeartIcon,
@@ -20,7 +20,7 @@ const CLASS_TO_IMG: Readonly<Record<HeroClassType, string>> = {
 } as const;
 
 type Props = {
-  hero: LobbyEntity["playableCharacters"][number];
+  hero: LobbyView["playableCharacters"][number];
 };
 
 export const HeroCard = ({ hero }: Props) => {
