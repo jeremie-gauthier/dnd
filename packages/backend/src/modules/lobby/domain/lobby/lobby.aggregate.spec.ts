@@ -2,27 +2,27 @@ import { List } from "src/modules/shared/domain/list";
 import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { describe, expect, it } from "vitest";
 import { HostError } from "../host/host.error";
-import { FAKE_HOST } from "../host/host.fixtures";
+import { getFakeHost } from "../host/host.fixtures";
 import { LobbyStatusError } from "../lobby-status/lobby-status.error";
 import { LobbyStatus } from "../lobby-status/lobby-status.vo";
 import { PlayableCharacter } from "../playable-character/playable-character.entity";
 import { PlayableCharacterError } from "../playable-character/playable-character.error";
-import { FAKE_HERO } from "../playable-character/playable-character.fixtures";
+import { getFakeHero } from "../playable-character/playable-character.fixtures";
 import { UserStatusError } from "../user-status/user-status.error";
 import { UserStatus } from "../user-status/user-status.vo";
 import { User } from "../user/user.entity";
-import { FAKE_USER } from "../user/user.fixtures";
+import { getFakeUserData } from "../user/user.fixtures";
 import { Lobby } from "./lobby.aggregate";
 import { LobbyError } from "./lobby.error";
 import { FAKE_LOBBY_ID, getFakeLobbyData } from "./lobby.fixtures";
 
 describe("Lobby Aggregate", () => {
-  const createLobby = (data: ReturnType<typeof getFakeLobbyData>) =>
+  const createTestLobby = (data: ReturnType<typeof getFakeLobbyData>) =>
     new Lobby({ NODE_ENV: "test" }, data);
 
   describe("constructor", () => {
     it("should create a LobbyAggregate and access its data", () => {
-      const lobby = createLobby(getFakeLobbyData());
+      const lobby = createTestLobby(getFakeLobbyData());
 
       expect(lobby.id).toEqual(new UniqueId(FAKE_LOBBY_ID));
       expect(lobby.config).toEqual(getFakeLobbyData().config);
@@ -31,7 +31,7 @@ describe("Lobby Aggregate", () => {
 
   describe("join method", () => {
     it("should add a user in the lobby", () => {
-      const lobby = createLobby(getFakeLobbyData());
+      const lobby = createTestLobby(getFakeLobbyData());
 
       expect(lobby.players.length).toEqual(1);
       lobby.join({ userId: new UniqueId() });
@@ -39,7 +39,7 @@ describe("Lobby Aggregate", () => {
     });
 
     it("should throw when lobby is not opened", () => {
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         status: new LobbyStatus({ status: "GAME_INITIALIZING" }),
       });
@@ -50,16 +50,16 @@ describe("Lobby Aggregate", () => {
     });
 
     it("should throw when user is already in the lobby", () => {
-      const lobby = createLobby(getFakeLobbyData());
+      const lobby = createTestLobby(getFakeLobbyData());
 
-      expect(() => lobby.join({ userId: FAKE_HOST.userId })).toThrow(
+      expect(() => lobby.join({ userId: getFakeHost().userId })).toThrow(
         LobbyError,
       );
     });
 
     it("should throw when lobby is full", () => {
       const fakeLobbyData = getFakeLobbyData();
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...fakeLobbyData,
         config: {
           ...fakeLobbyData.config,
@@ -81,19 +81,19 @@ describe("Lobby Aggregate", () => {
   describe("leave method", () => {
     it("should remove a ready user from the lobby and free its picked characters", () => {
       const hostUser = new User({
-        userId: FAKE_HOST.userId,
+        userId: getFakeHost().userId,
         status: new UserStatus(true),
       });
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         playableCharacters: new List([
           new PlayableCharacter({
-            ...FAKE_HERO,
+            ...getFakeHero(),
             id: new UniqueId("00000000-0000-0000-0000-000000000011"),
             pickedBy: hostUser.id,
           }),
           new PlayableCharacter({
-            ...FAKE_HERO,
+            ...getFakeHero(),
             id: new UniqueId("00000000-0000-0000-0000-000000000012"),
           }),
         ]),
@@ -114,21 +114,21 @@ describe("Lobby Aggregate", () => {
   describe("gameInitializationStarted method", () => {
     it("should update the lobby status", () => {
       const hostUser = new User({
-        userId: FAKE_HOST.userId,
+        userId: getFakeHost().userId,
         status: new UserStatus(true),
       });
       const invitedUser = new User({
         userId: new UniqueId(),
         status: new UserStatus(true),
       });
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         players: new List([hostUser, invitedUser]),
         playableCharacters: new List([
           new PlayableCharacter({
             id: new UniqueId(),
             type: "game_master",
-            pickedBy: FAKE_USER.userId,
+            pickedBy: getFakeUserData().userId,
           }),
           new PlayableCharacter({
             id: new UniqueId(),
@@ -151,18 +151,18 @@ describe("Lobby Aggregate", () => {
     });
 
     it("should throw when lobby is not opened", () => {
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         status: new LobbyStatus({ status: "GAME_INITIALIZING" }),
       });
 
       expect(() =>
-        lobby.gameInitializationStarted({ userId: FAKE_USER.userId }),
+        lobby.gameInitializationStarted({ userId: getFakeUserData().userId }),
       ).toThrow(LobbyStatusError);
     });
 
     it("should throw when action has not been requested by host", () => {
-      const lobby = createLobby(getFakeLobbyData());
+      const lobby = createTestLobby(getFakeLobbyData());
 
       expect(() =>
         lobby.gameInitializationStarted({ userId: new UniqueId() }),
@@ -171,14 +171,14 @@ describe("Lobby Aggregate", () => {
 
     it("should throw when some user are not ready", () => {
       const hostUser = new User({
-        userId: FAKE_HOST.userId,
+        userId: getFakeHost().userId,
         status: new UserStatus(true),
       });
       const invitedUser = new User({
         userId: new UniqueId(),
         status: new UserStatus(false),
       });
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         players: new List([hostUser, invitedUser]),
       });
@@ -190,21 +190,21 @@ describe("Lobby Aggregate", () => {
 
     it("should throw when some playable characters are not picked", () => {
       const hostUser = new User({
-        userId: FAKE_HOST.userId,
+        userId: getFakeHost().userId,
         status: new UserStatus(true),
       });
       const invitedUser = new User({
         userId: new UniqueId(),
         status: new UserStatus(true),
       });
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         players: new List([hostUser, invitedUser]),
         playableCharacters: new List([
           new PlayableCharacter({
             id: new UniqueId(),
             type: "game_master",
-            pickedBy: FAKE_USER.userId,
+            pickedBy: getFakeUserData().userId,
           }),
           new PlayableCharacter({
             id: new UniqueId(),
@@ -226,26 +226,26 @@ describe("Lobby Aggregate", () => {
 
     it("should throw game_master user also have picked hero", () => {
       const hostUser = new User({
-        userId: FAKE_HOST.userId,
+        userId: getFakeHost().userId,
         status: new UserStatus(true),
       });
       const invitedUser = new User({
         userId: new UniqueId(),
         status: new UserStatus(true),
       });
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         players: new List([hostUser, invitedUser]),
         playableCharacters: new List([
           new PlayableCharacter({
             id: new UniqueId(),
             type: "game_master",
-            pickedBy: FAKE_USER.userId,
+            pickedBy: getFakeUserData().userId,
           }),
           new PlayableCharacter({
             id: new UniqueId(),
             type: "hero",
-            pickedBy: FAKE_USER.userId,
+            pickedBy: getFakeUserData().userId,
           }),
           new PlayableCharacter({
             id: new UniqueId(),
@@ -263,7 +263,7 @@ describe("Lobby Aggregate", () => {
 
   describe("gameInitializationDone method", () => {
     it("should update the lobby status", () => {
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         status: new LobbyStatus({ status: "GAME_INITIALIZING" }),
       });
@@ -285,7 +285,7 @@ describe("Lobby Aggregate", () => {
         type: "hero",
         pickedBy: undefined,
       });
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         playableCharacters: new List([pc]),
       });
@@ -293,9 +293,9 @@ describe("Lobby Aggregate", () => {
       expect(pc.pickedBy).toBeUndefined();
       lobby.pickPlayableCharacter({
         playableCharacterId: pc.id,
-        userId: FAKE_HOST.userId,
+        userId: getFakeHost().userId,
       });
-      expect(pc.pickedBy!.equals(FAKE_HOST.userId)).toBe(true);
+      expect(pc.pickedBy!.equals(getFakeHost().userId)).toBe(true);
     });
 
     it("should throw when the lobby is not opened", () => {
@@ -304,7 +304,7 @@ describe("Lobby Aggregate", () => {
         type: "hero",
         pickedBy: undefined,
       });
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         status: new LobbyStatus({ status: "GAME_INITIALIZING" }),
         playableCharacters: new List([pc]),
@@ -313,7 +313,7 @@ describe("Lobby Aggregate", () => {
       expect(() =>
         lobby.pickPlayableCharacter({
           playableCharacterId: pc.id,
-          userId: FAKE_HOST.userId,
+          userId: getFakeHost().userId,
         }),
       ).toThrow(LobbyStatusError);
     });
@@ -324,7 +324,7 @@ describe("Lobby Aggregate", () => {
         type: "hero",
         pickedBy: undefined,
       });
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         playableCharacters: new List([pc]),
       });
@@ -339,12 +339,12 @@ describe("Lobby Aggregate", () => {
     });
 
     it("should throw when the playable character does not exists", () => {
-      const lobby = createLobby(getFakeLobbyData());
+      const lobby = createTestLobby(getFakeLobbyData());
 
       expect(() =>
         lobby.pickPlayableCharacter({
           playableCharacterId: new UniqueId(),
-          userId: FAKE_HOST.userId,
+          userId: getFakeHost().userId,
         }),
       ).toThrow(Error);
     });
@@ -355,13 +355,13 @@ describe("Lobby Aggregate", () => {
         type: "hero",
         pickedBy: undefined,
       });
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         playableCharacters: new List([
           new PlayableCharacter({
             id: new UniqueId(),
             type: "game_master",
-            pickedBy: FAKE_HOST.userId,
+            pickedBy: getFakeHost().userId,
           }),
           pc,
         ]),
@@ -371,7 +371,7 @@ describe("Lobby Aggregate", () => {
       expect(() =>
         lobby.pickPlayableCharacter({
           playableCharacterId: pc.id,
-          userId: FAKE_HOST.userId,
+          userId: getFakeHost().userId,
         }),
       ).toThrow(PlayableCharacterError);
     });
@@ -382,13 +382,13 @@ describe("Lobby Aggregate", () => {
         type: "game_master",
         pickedBy: undefined,
       });
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         playableCharacters: new List([
           new PlayableCharacter({
             id: new UniqueId(),
             type: "hero",
-            pickedBy: FAKE_HOST.userId,
+            pickedBy: getFakeHost().userId,
           }),
           pc,
         ]),
@@ -398,7 +398,7 @@ describe("Lobby Aggregate", () => {
       expect(() =>
         lobby.pickPlayableCharacter({
           playableCharacterId: pc.id,
-          userId: FAKE_HOST.userId,
+          userId: getFakeHost().userId,
         }),
       ).toThrow(PlayableCharacterError);
     });
@@ -409,17 +409,17 @@ describe("Lobby Aggregate", () => {
       const pc = new PlayableCharacter({
         id: new UniqueId(),
         type: "hero",
-        pickedBy: FAKE_HOST.userId,
+        pickedBy: getFakeHost().userId,
       });
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         playableCharacters: new List([pc]),
       });
 
-      expect(pc.pickedBy!.equals(FAKE_HOST.userId)).toBe(true);
+      expect(pc.pickedBy!.equals(getFakeHost().userId)).toBe(true);
       lobby.discardPlayableCharacter({
         playableCharacterId: pc.id,
-        userId: FAKE_HOST.userId,
+        userId: getFakeHost().userId,
       });
       expect(pc.pickedBy).toBeUndefined();
     });
@@ -428,9 +428,9 @@ describe("Lobby Aggregate", () => {
       const pc = new PlayableCharacter({
         id: new UniqueId(),
         type: "hero",
-        pickedBy: FAKE_HOST.userId,
+        pickedBy: getFakeHost().userId,
       });
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         status: new LobbyStatus({ status: "GAME_INITIALIZING" }),
         playableCharacters: new List([pc]),
@@ -439,7 +439,7 @@ describe("Lobby Aggregate", () => {
       expect(() =>
         lobby.discardPlayableCharacter({
           playableCharacterId: pc.id,
-          userId: FAKE_HOST.userId,
+          userId: getFakeHost().userId,
         }),
       ).toThrow(LobbyStatusError);
     });
@@ -448,14 +448,14 @@ describe("Lobby Aggregate", () => {
       const pc = new PlayableCharacter({
         id: new UniqueId(),
         type: "hero",
-        pickedBy: FAKE_HOST.userId,
+        pickedBy: getFakeHost().userId,
       });
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         playableCharacters: new List([pc]),
       });
 
-      expect(pc.pickedBy!.equals(FAKE_HOST.userId)).toBe(true);
+      expect(pc.pickedBy!.equals(getFakeHost().userId)).toBe(true);
       expect(() =>
         lobby.discardPlayableCharacter({
           playableCharacterId: pc.id,
@@ -465,12 +465,12 @@ describe("Lobby Aggregate", () => {
     });
 
     it("should throw when the playable character does not exists", () => {
-      const lobby = createLobby(getFakeLobbyData());
+      const lobby = createTestLobby(getFakeLobbyData());
 
       expect(() =>
         lobby.discardPlayableCharacter({
           playableCharacterId: new UniqueId(),
-          userId: FAKE_HOST.userId,
+          userId: getFakeHost().userId,
         }),
       ).toThrow(Error);
     });
@@ -479,27 +479,27 @@ describe("Lobby Aggregate", () => {
   describe("toggleUserStatus method", () => {
     it("should toggle the user status", () => {
       const hostUser = new User({
-        userId: FAKE_HOST.userId,
+        userId: getFakeHost().userId,
         status: new UserStatus(false),
       });
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         players: new List([hostUser]),
       });
 
       expect(hostUser.status.isReady).toBe(false);
-      lobby.toggleUserStatus({ userId: FAKE_HOST.userId });
+      lobby.toggleUserStatus({ userId: getFakeHost().userId });
       expect(hostUser.status.isReady).toBe(true);
     });
 
     it("should throw when the lobby is not opened", () => {
-      const lobby = createLobby({
+      const lobby = createTestLobby({
         ...getFakeLobbyData(),
         status: new LobbyStatus({ status: "GAME_INITIALIZING" }),
       });
 
       expect(() =>
-        lobby.toggleUserStatus({ userId: FAKE_HOST.userId }),
+        lobby.toggleUserStatus({ userId: getFakeHost().userId }),
       ).toThrow(LobbyStatusError);
     });
   });
