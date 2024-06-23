@@ -58,13 +58,11 @@ export class LobbiesMapper extends Mapper<
     return {
       config: domain.config,
       playableCharacters: domain.playableCharacters.values.map(
-        ({ id, type, pickedBy }) =>
-          ({
-            id: id.id,
-            type,
-            pickedBy: pickedBy ? pickedBy.id : undefined,
-            // TODO: il manque les metadata. Mais c'est normal quand on vient du domain
-          }) as LobbyPersistence["playableCharacters"][number],
+        ({ id, type, pickedBy }) => ({
+          id: id.id,
+          type,
+          pickedBy: pickedBy ? pickedBy.id : undefined,
+        }),
       ),
       host: {
         userId: domain.host.id.id,
