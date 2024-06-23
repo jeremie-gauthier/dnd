@@ -29,21 +29,17 @@ export class JoinLobbyUseCase implements UseCase {
   }: { userId: RawUser["id"] } & JoinLobbyInput): Promise<LobbyView["id"]> {
     await this.leaveLobbyUseCase.execute({ userId: rawUserId });
 
-    const lobby = (
-      await this.lobbiesRepository.getOneOrThrow({
-        lobbyId: new UniqueId(lobbyId),
-      })
-    ).toDomain();
+    const lobby = await this.lobbiesRepository.getDomainOneOrThrow({
+      lobbyId: new UniqueId(lobbyId),
+    });
 
     const userId = new UniqueId(rawUserId);
     lobby.join({ userId });
     await this.lobbiesRepository.update({ lobby });
 
-    const lobbyView = (
-      await this.lobbiesRepository.getOneOrThrow({
-        lobbyId: new UniqueId(lobbyId),
-      })
-    ).toView();
+    const lobbyView = await this.lobbiesRepository.getViewOneOrThrow({
+      lobbyId,
+    });
     this.eventEmitter.emitAsync(
       LobbyEvent.UserJoinedLobby,
       new UserJoinedLobbyPayload({

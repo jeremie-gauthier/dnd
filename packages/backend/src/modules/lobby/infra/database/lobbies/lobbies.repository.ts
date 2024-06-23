@@ -8,16 +8,15 @@ import {
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Hero } from "src/database/entities/hero.entity";
 import { User } from "src/database/entities/user.entity";
-import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { LobbyUpdatedPayload } from "src/modules/shared/events/lobby/lobby-changed.payload";
 import { LobbyEvent } from "src/modules/shared/events/lobby/lobby-event.enum";
 import { RedisService } from "../../../../../redis/redis.service";
 import { LobbiesRepository } from "../../../application/repositories/lobbies-repository.interface";
 import { Lobby } from "../../../domain/lobby/lobby.aggregate";
 import { LobbiesMapper } from "./lobbies.mapper";
-import { ILobbyPersistence, LobbyPersistence } from "./lobby.model";
+import { LobbyPersistence } from "./lobby.model";
 
-type LobbiesKey = Record<ILobbyPersistence["id"], ILobbyPersistence>;
+type LobbiesKey = Record<LobbyPersistence["id"], LobbyPersistence>;
 
 @Injectable()
 export class RedisLobbiesRepository
@@ -53,8 +52,8 @@ export class RedisLobbiesRepository
     config: LobbyView["config"];
     heroes: Array<Hero>;
     hostUserId: User["id"];
-  }): Promise<LobbyPersistence> {
-    const lobby: ILobbyPersistence = {
+  }): Promise<LobbyView> {
+    const lobby: LobbyPersistence = {
       id: randomUUID(),
       config,
       playableCharacters: [
@@ -72,36 +71,57 @@ export class RedisLobbiesRepository
       status: "OPENED",
     };
     await this.client.json.set(RedisLobbiesRepository.KEY, lobby.id, lobby);
-    return new LobbyPersistence(lobby, this.mapper);
+    return this.mapper.toView(lobby);
   }
 
-  public async getOne({
+  public async getDomainOne({
     lobbyId,
-  }: { lobbyId: Lobby["id"] }): Promise<LobbyPersistence | null> {
+  }: { lobbyId: Lobby["id"] }): Promise<Lobby | null> {
     const lobbyRaw = (await this.client.json.get(RedisLobbiesRepository.KEY, {
       path: lobbyId.id,
-    })) as ILobbyPersistence | null;
-    return lobbyRaw ? new LobbyPersistence(lobbyRaw, this.mapper) : null;
+    })) as LobbyPersistence | null;
+    return lobbyRaw ? this.mapper.toDomain(lobbyRaw) : null;
   }
 
-  public async getOneOrThrow({
+  public async getDomainOneOrThrow({
     lobbyId,
-  }: { lobbyId: Lobby["id"] }): Promise<LobbyPersistence> {
+  }: { lobbyId: Lobby["id"] }): Promise<Lobby> {
     const lobbyRaw = (await this.client.json.get(RedisLobbiesRepository.KEY, {
       path: lobbyId.id,
-    })) as ILobbyPersistence | null;
+    })) as LobbyPersistence | null;
     if (!lobbyRaw) {
       throw new NotFoundException("Lobby not found");
     }
-    return new LobbyPersistence(lobbyRaw, this.mapper);
+    return this.mapper.toDomain(lobbyRaw);
   }
 
-  public async getMany(): Promise<LobbyPersistence[]> {
+  public async getViewOneOrThrow({
+    lobbyId,
+  }: { lobbyId: LobbyPersistence["id"] }): Promise<LobbyView> {
+    const lobbyRaw = (await this.client.json.get(RedisLobbiesRepository.KEY, {
+      path: lobbyId,
+    })) as LobbyPersistence | null;
+    if (!lobbyRaw) {
+      throw new NotFoundException("Lobby not found");
+    }
+    return this.mapper.toView(lobbyRaw);
+  }
+
+  public async getDomainMany(): Promise<Lobby[]> {
     const lobbiesRaw = (await this.client.json.get(
       RedisLobbiesRepository.KEY,
     )) as LobbiesKey;
-    return Object.values(lobbiesRaw).map(
-      (lobbyRaw) => new LobbyPersistence(lobbyRaw, this.mapper),
+    return Object.values(lobbiesRaw).map((lobbyRaw) =>
+      this.mapper.toDomain(lobbyRaw),
+    );
+  }
+
+  public async getViewMany(): Promise<LobbyView[]> {
+    const lobbiesRaw = (await this.client.json.get(
+      RedisLobbiesRepository.KEY,
+    )) as LobbiesKey;
+    return Object.values(lobbiesRaw).map((lobbyRaw) =>
+      this.mapper.toView(lobbyRaw),
     );
   }
 

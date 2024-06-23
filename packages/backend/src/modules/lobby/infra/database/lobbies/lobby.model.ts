@@ -1,8 +1,4 @@
-import { LobbyView } from "@dnd/shared";
-import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
-import { LobbiesMapper } from "./lobbies.mapper";
-
-export type ILobbyPersistence = {
+export type LobbyPersistence = {
   id: string;
   status: "OPENED" | "GAME_INITIALIZING" | "GAME_STARTED";
   host: {
@@ -33,18 +29,3 @@ export type ILobbyPersistence = {
     pickedBy?: string;
   }>;
 };
-
-export class LobbyPersistence {
-  constructor(
-    private readonly _data: ILobbyPersistence,
-    private readonly mapper: LobbiesMapper,
-  ) {}
-
-  public toDomain(): Lobby {
-    return this.mapper.toDomain(this._data);
-  }
-
-  public toView(): LobbyView {
-    return this.mapper.toView(this._data);
-  }
-}

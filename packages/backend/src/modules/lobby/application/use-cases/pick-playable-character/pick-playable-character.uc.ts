@@ -23,11 +23,9 @@ export class PickPlayableCharacterUseCase implements UseCase {
   }: PickPlayableCharacterInput & {
     userId: User["id"];
   }): Promise<void> {
-    const lobby = (
-      await this.lobbiesRepository.getOneOrThrow({
-        lobbyId: new UniqueId(lobbyId),
-      })
-    ).toDomain();
+    const lobby = await this.lobbiesRepository.getDomainOneOrThrow({
+      lobbyId: new UniqueId(lobbyId),
+    });
 
     lobby.pickPlayableCharacter({
       playableCharacterId: new UniqueId(playableCharacterId),

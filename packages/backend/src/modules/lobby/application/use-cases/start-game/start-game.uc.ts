@@ -25,11 +25,9 @@ export class StartGameUseCase implements UseCase {
   }: StartGameInput & {
     userId: User["id"];
   }): Promise<void> {
-    const lobby = (
-      await this.lobbiesRepository.getOneOrThrow({
-        lobbyId: new UniqueId(lobbyId),
-      })
-    ).toDomain();
+    const lobby = await this.lobbiesRepository.getDomainOneOrThrow({
+      lobbyId: new UniqueId(lobbyId),
+    });
 
     lobby.gameInitializationStarted({ userId: new UniqueId(userId) });
     await this.lobbiesRepository.update({ lobby });
