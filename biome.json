@@ -19,6 +19,9 @@
       },
       "suspicious": {
         "noExplicitAny": "off"
+      },
+      "correctness": {
+        "noUnusedImports": "error"
       }
     }
   },

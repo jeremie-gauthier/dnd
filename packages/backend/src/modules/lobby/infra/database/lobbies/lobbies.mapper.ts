@@ -1,7 +1,7 @@
 import { LobbyView } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { ConfigType } from "@nestjs/config";
-import envConfig, { EnvSchema } from "src/config/env.config";
+import envConfig from "src/config/env.config";
 import { List } from "src/modules/shared/domain/list";
 import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { Mapper } from "src/modules/shared/infra/mapper";
