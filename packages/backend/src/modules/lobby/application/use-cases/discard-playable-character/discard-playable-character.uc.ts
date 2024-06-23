@@ -22,7 +22,7 @@ export class DiscardPlayableCharacterUseCase implements UseCase {
   }: DiscardPlayableCharacterInput & {
     userId: User["id"];
   }): Promise<void> {
-    const lobby = await this.lobbiesRepository.getDomainOneOrThrow({
+    const lobby = await this.lobbiesRepository.getOneOrThrow({
       // TODO: ca devrait deja etre un UniqueId a ce stade
       lobbyId: new UniqueId(lobbyId),
     });

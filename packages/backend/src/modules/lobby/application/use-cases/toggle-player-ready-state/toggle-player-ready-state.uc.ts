@@ -21,7 +21,7 @@ export class TogglePlayerReadyStateUseCase implements UseCase {
   }: TogglePlayerReadyStateInput & {
     userId: User["id"];
   }): Promise<void> {
-    const lobby = await this.lobbiesRepository.getDomainOneOrThrow({
+    const lobby = await this.lobbiesRepository.getOneOrThrow({
       lobbyId: new UniqueId(lobbyId),
     });
 

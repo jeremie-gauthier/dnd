@@ -25,22 +25,20 @@ export class ListenLobbyUpdatesUseCase implements UseCase {
   }: ListenLobbyChangesInput & { client: ServerSocket }): Promise<void> {
     const userId = new UniqueId(client.data.userId);
 
-    const lobby = await this.lobbiesRepository.getDomainOneOrThrow({
+    const lobby = await this.lobbiesRepository.getOneOrThrow({
       lobbyId: new UniqueId(lobbyId),
     });
     lobby.players.findOrThrow({ id: userId });
 
     await client.join(lobbyId);
 
-    const lobbyView = await this.lobbiesRepository.getViewOneOrThrow({
-      lobbyId,
+    const lobbyView = await this.lobbiesRepository.getOneOrThrow({
+      lobbyId: new UniqueId(lobbyId),
     });
     // ? no update, but it's an easy way to trigger a ws publish for the new user
     this.eventEmitter.emitAsync(
       LobbyEvent.LobbyUpdated,
-      new LobbyUpdatedPayload({
-        lobby: lobbyView,
-      }),
+      new LobbyUpdatedPayload({ lobby: lobby.toPlain() }),
     );
   }
 }

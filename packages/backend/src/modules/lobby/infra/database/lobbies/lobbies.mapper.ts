@@ -1,4 +1,3 @@
-import { LobbyView } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { ConfigType } from "@nestjs/config";
 import envConfig from "src/config/env.config";
@@ -14,11 +13,7 @@ import { User } from "../../../domain/user/user.entity";
 import { LobbyPersistence } from "../../database/lobbies/lobby.model";
 
 @Injectable()
-export class LobbiesMapper extends Mapper<
-  LobbyPersistence,
-  LobbyDomain,
-  LobbyView
-> {
+export class LobbiesMapper extends Mapper<LobbyPersistence, LobbyDomain> {
   constructor(
     @Inject(envConfig.KEY)
     private readonly env: ConfigType<typeof envConfig>,
@@ -74,34 +69,5 @@ export class LobbiesMapper extends Mapper<
       })),
       status: domain.status.current,
     };
-  }
-
-  public toView(persistence: LobbyPersistence): LobbyView {
-    return {
-      config: persistence.config,
-      host: persistence.host,
-      id: persistence.id,
-      playableCharacters: persistence.playableCharacters,
-      players: persistence.players.map((player) => ({
-        ...player,
-        heroesSelected: this.getPlayerHeroesSelected({
-          player,
-          persistenceLobby: persistence,
-        }),
-      })),
-      status: persistence.status,
-    };
-  }
-
-  private getPlayerHeroesSelected({
-    player,
-    persistenceLobby,
-  }: {
-    player: LobbyPersistence["players"][number];
-    persistenceLobby: LobbyPersistence;
-  }): LobbyView["players"][number]["heroesSelected"] {
-    return persistenceLobby.playableCharacters
-      .filter((hero) => hero.pickedBy === player.userId)
-      .map((hero) => hero.id);
   }
 }

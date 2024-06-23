@@ -61,6 +61,27 @@ export class Lobby extends AggregateRoot<Data> {
     return this._data.status;
   }
 
+  public toPlain(): LobbyView {
+    return {
+      config: this.config,
+      host: { userId: this.host.id.toString() },
+      id: this.id.toString(),
+      playableCharacters: this.playableCharacters.values.map((pc) => ({
+        id: pc.id.toString(),
+        type: pc.type,
+        pickedBy: pc.pickedBy ? pc.pickedBy.toString() : undefined,
+      })),
+      players: this.players.values.map((player) => ({
+        userId: player.id.toString(),
+        isReady: player.status.isReady,
+        heroesSelected: this.playableCharacters.values
+          .filter((pc) => pc.pickedBy?.equals(player.id))
+          .map((pc) => pc.id.toString()),
+      })),
+      status: this.status.current,
+    };
+  }
+
   public join({ userId }: { userId: User["id"] }): void {
     this.status.mustBeOpened();
     this.mustHaveEnoughSpace();

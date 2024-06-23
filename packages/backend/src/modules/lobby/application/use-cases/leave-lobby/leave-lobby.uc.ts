@@ -35,7 +35,7 @@ export class LeaveLobbyUseCase implements UseCase {
       return;
     }
 
-    const lobby = await this.lobbiesRepository.getDomainOne({
+    const lobby = await this.lobbiesRepository.getOne({
       lobbyId: lobbyId,
     });
     if (!lobby) {
@@ -50,14 +50,14 @@ export class LeaveLobbyUseCase implements UseCase {
     lobby.leave({ user: userThatLeave });
     await this.usersRepository.del({ userId });
 
-    const lobbyView = await this.lobbiesRepository.getViewOneOrThrow({
-      lobbyId: lobby.id.id,
+    const lobbyView = await this.lobbiesRepository.getOneOrThrow({
+      lobbyId: lobby.id,
     });
     this.eventEmitter.emitAsync(
       LobbyEvent.UserLeftLobby,
       new UserLeftLobbyPayload({
         userId: userId.id,
-        lobby: lobbyView,
+        lobby: lobby.toPlain(),
       }),
     );
 
@@ -75,15 +75,15 @@ export class LeaveLobbyUseCase implements UseCase {
   }
 
   private async deleteLobby({ lobby }: { lobby: Lobby }) {
-    const lobbyView = await this.lobbiesRepository.getViewOneOrThrow({
-      lobbyId: lobby.id.id,
+    const lobbyView = await this.lobbiesRepository.getOneOrThrow({
+      lobbyId: lobby.id,
     });
     for (const { id } of lobby.players) {
       this.eventEmitter.emitAsync(
         LobbyEvent.UserLeftLobby,
         new UserLeftLobbyPayload({
           userId: id.id,
-          lobby: lobbyView,
+          lobby: lobby.toPlain(),
         }),
       );
     }
@@ -93,7 +93,7 @@ export class LeaveLobbyUseCase implements UseCase {
     this.eventEmitter.emitAsync(
       LobbyEvent.LobbyDeleted,
       new LobbyDeletedPayload({
-        lobby: lobbyView,
+        lobby: lobby.toPlain(),
       }),
     );
   }
