@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import type { LobbyView } from "@dnd/shared";
 import {
   Injectable,
@@ -5,9 +6,9 @@ import {
   type OnApplicationBootstrap,
 } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { randomUUID } from "node:crypto";
 import { Hero } from "src/database/entities/hero.entity";
 import { User } from "src/database/entities/user.entity";
+import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { LobbyUpdatedPayload } from "src/modules/shared/events/lobby/lobby-changed.payload";
 import { LobbyEvent } from "src/modules/shared/events/lobby/lobby-event.enum";
 import { RedisService } from "../../../../../redis/redis.service";
