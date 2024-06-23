@@ -1,6 +1,5 @@
 import { Entity } from "src/modules/shared/domain/entity";
 import { UniqueId } from "src/modules/shared/domain/unique-id";
-import { z } from "zod";
 import { UserStatus } from "../user-status/user-status.vo";
 
 type Data = {
@@ -9,13 +8,7 @@ type Data = {
 };
 
 export class User extends Entity<Data> {
-  private static schema = z.object({
-    userId: z.instanceof(UniqueId),
-    status: z.instanceof(UserStatus),
-  });
-
-  constructor(rawData: Data) {
-    const data = User.schema.parse(rawData);
+  constructor(data: Data) {
     super(data, data.userId);
   }
 

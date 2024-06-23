@@ -1,6 +1,5 @@
 import { Entity } from "src/modules/shared/domain/entity";
 import { UniqueId } from "src/modules/shared/domain/unique-id";
-import { z } from "zod";
 import { User } from "../user/user.entity";
 import { PlayableCharacterError } from "./playable-character.error";
 
@@ -11,14 +10,7 @@ type Data = {
 };
 
 export class PlayableCharacter extends Entity<Data> {
-  private static schema = z.object({
-    id: z.instanceof(UniqueId),
-    type: z.enum(["hero", "game_master"]),
-    pickedBy: z.instanceof(UniqueId).optional(),
-  });
-
-  constructor(rawData: Data) {
-    const data = PlayableCharacter.schema.parse(rawData);
+  constructor(data: Data) {
     super(data, data.id);
   }
 

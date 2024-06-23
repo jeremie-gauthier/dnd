@@ -1,10 +1,9 @@
-import { LobbyView, lobbySchema } from "@dnd/shared";
+import { LobbyView } from "@dnd/shared";
 import { ConfigType } from "@nestjs/config";
 import envConfig from "src/config/env.config";
 import { AggregateRoot } from "src/modules/shared/domain/aggregate-root";
 import { List } from "src/modules/shared/domain/list";
 import { UniqueId } from "src/modules/shared/domain/unique-id";
-import { z } from "zod";
 import { Host } from "../host/host.entity";
 import { LobbyStatus } from "../lobby-status/lobby-status.vo";
 import { PlayableCharacter } from "../playable-character/playable-character.entity";
@@ -23,21 +22,10 @@ type Data = Pick<LobbyView, "config"> & {
 };
 
 export class Lobby extends AggregateRoot<Data> {
-  private static schema = lobbySchema.merge(
-    z.object({
-      id: z.instanceof(UniqueId),
-      players: z.instanceof(List<User>),
-      playableCharacters: z.instanceof(List<PlayableCharacter>),
-      host: z.instanceof(Host),
-      status: z.instanceof(LobbyStatus),
-    }),
-  );
-
   constructor(
     private readonly env: Pick<ConfigType<typeof envConfig>, "NODE_ENV">,
-    rawData: Data,
+    data: Data,
   ) {
-    const data = Lobby.schema.parse(rawData);
     super(data, data.id);
   }
 
