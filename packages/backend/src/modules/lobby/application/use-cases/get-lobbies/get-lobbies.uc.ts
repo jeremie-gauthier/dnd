@@ -14,11 +14,15 @@ export class GetLobbiesUseCase implements UseCase {
   ) {}
 
   public async execute(): Promise<GetLobbiesOutput> {
-    const lobbies = await this.lobbiesRepository.getViewMany();
+    const lobbies = await this.lobbiesRepository.getMany();
 
-    return lobbies.map((lobby) => ({
-      ...lobby,
-      nbPlayers: lobby.players.length,
-    }));
+    return lobbies.map((lobby) => {
+      const lobbyView = lobby.toView();
+
+      return {
+        ...lobbyView,
+        nbPlayers: lobbyView.players.length,
+      };
+    });
   }
 }

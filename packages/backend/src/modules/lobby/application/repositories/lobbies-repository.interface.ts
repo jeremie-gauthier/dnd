@@ -9,14 +9,10 @@ export interface LobbiesRepository {
     config: LobbyView["config"];
     heroes: Array<Hero>;
     hostUserId: User["id"];
-  }): Promise<LobbyView>;
-  getDomainOne(data: { lobbyId: Lobby["id"] }): Promise<Lobby | null>;
-  getDomainOneOrThrow(data: { lobbyId: Lobby["id"] }): Promise<Lobby>;
-  getViewOneOrThrow(data: {
-    lobbyId: LobbyPersistence["id"];
-  }): Promise<LobbyView>;
-  getDomainMany(): Promise<Lobby[]>;
-  getViewMany(): Promise<LobbyView[]>;
+  }): Promise<LobbyPersistence>;
+  getOne(data: { lobbyId: Lobby["id"] }): Promise<LobbyPersistence | null>;
+  getOneOrThrow(data: { lobbyId: Lobby["id"] }): Promise<LobbyPersistence>;
+  getMany(): Promise<LobbyPersistence[]>;
   update(data: { lobby: Lobby }): Promise<void>;
   del(data: { lobbyId: Lobby["id"] }): Promise<void>;
 }

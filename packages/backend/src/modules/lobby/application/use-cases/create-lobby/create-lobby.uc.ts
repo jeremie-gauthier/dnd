@@ -29,7 +29,7 @@ export class CreateLobbyUseCase implements UseCase {
   ): Promise<LobbyView> {
     await this.leaveLobbyUseCase.execute({ userId: payload.userId });
     const lobby = await this.createLobby(payload);
-    return lobby;
+    return lobby.toView();
   }
 
   private async createLobby({

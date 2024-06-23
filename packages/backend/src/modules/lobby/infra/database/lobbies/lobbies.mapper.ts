@@ -11,11 +11,11 @@ import { Lobby as LobbyDomain } from "../../../domain/lobby/lobby.aggregate";
 import { PlayableCharacter } from "../../../domain/playable-character/playable-character.entity";
 import { UserStatus } from "../../../domain/user-status/user-status.vo";
 import { User } from "../../../domain/user/user.entity";
-import { LobbyPersistence } from "../../database/lobbies/lobby.model";
+import { ILobbyPersistence } from "./lobby.model";
 
 @Injectable()
 export class LobbiesMapper extends Mapper<
-  LobbyPersistence,
+  ILobbyPersistence,
   LobbyDomain,
   LobbyView
 > {
@@ -26,7 +26,7 @@ export class LobbiesMapper extends Mapper<
     super();
   }
 
-  public toDomain(persistence: LobbyPersistence): LobbyDomain {
+  public toDomain(persistence: ILobbyPersistence): LobbyDomain {
     return new LobbyDomain(this.env, {
       config: persistence.config,
       playableCharacters: new List(
@@ -54,7 +54,7 @@ export class LobbiesMapper extends Mapper<
     });
   }
 
-  public toPersistence(domain: LobbyDomain): LobbyPersistence {
+  public toPersistence(domain: LobbyDomain): ILobbyPersistence {
     return {
       config: domain.config,
       playableCharacters: domain.playableCharacters.values.map(
@@ -76,7 +76,7 @@ export class LobbiesMapper extends Mapper<
     };
   }
 
-  public toView(persistence: LobbyPersistence): LobbyView {
+  public toView(persistence: ILobbyPersistence): LobbyView {
     return {
       config: persistence.config,
       host: persistence.host,
@@ -97,8 +97,8 @@ export class LobbiesMapper extends Mapper<
     player,
     persistenceLobby,
   }: {
-    player: LobbyPersistence["players"][number];
-    persistenceLobby: LobbyPersistence;
+    player: ILobbyPersistence["players"][number];
+    persistenceLobby: ILobbyPersistence;
   }): LobbyView["players"][number]["heroesSelected"] {
     return persistenceLobby.playableCharacters
       .filter((hero) => hero.pickedBy === player.userId)
