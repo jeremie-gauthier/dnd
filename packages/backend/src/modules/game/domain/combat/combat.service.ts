@@ -10,10 +10,10 @@ import {
 } from "@dnd/shared";
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { EntityAttackedPayload } from "src/modules/game/events/entity-attacked.payload";
-import { EntityDiedPayload } from "src/modules/game/events/entity-died.payload";
-import { EntityTookDamagePayload } from "src/modules/game/events/entity-took-damage.payload";
-import { GameEvent } from "src/modules/game/events/game-event.enum";
+import { EntityAttackedPayload } from "src/modules/shared/events/game/entity-attacked.payload";
+import { EntityDiedPayload } from "src/modules/shared/events/game/entity-died.payload";
+import { EntityTookDamagePayload } from "src/modules/shared/events/game/entity-took-damage.payload";
+import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { DiceService } from "../dice/dice.service";
 import { MapService } from "../map/map.service";
 

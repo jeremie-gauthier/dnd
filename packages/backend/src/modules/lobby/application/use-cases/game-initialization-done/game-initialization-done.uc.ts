@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { UseCase } from "src/interfaces/use-case.interface";
-import type { GameInitializationDonePayload } from "src/modules/game/events/game-initialization-done.payload";
+import type { GameInitializationDonePayload } from "src/modules/shared/events/game/game-initialization-done.payload";
 import { GameReadyPayload } from "src/modules/shared/events/lobby/game-ready.payload";
 import { LobbyEvent } from "src/modules/shared/events/lobby/lobby-event.enum";
 import {

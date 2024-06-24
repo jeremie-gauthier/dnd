@@ -2,8 +2,8 @@ import { GameEntity, PlayableEntity } from "@dnd/shared";
 import { TrapEntity } from "@dnd/shared/dist/database/game/interactive-entities.type";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { GameEvent } from "src/modules/game/events/game-event.enum";
-import { TrapTriggeredPayload } from "src/modules/game/events/trap-triggered.payload";
+import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
+import { TrapTriggeredPayload } from "src/modules/shared/events/game/trap-triggered.payload";
 import { CombatService } from "../combat/combat.service";
 
 interface TrapTriggerParams {

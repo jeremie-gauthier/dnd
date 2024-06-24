@@ -1,9 +1,9 @@
 import { GameEntity, PlayableEntity } from "@dnd/shared";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test, TestingModule } from "@nestjs/testing";
-import { EntityDiedPayload } from "src/modules/game/events/entity-died.payload";
-import { EntityTookDamagePayload } from "src/modules/game/events/entity-took-damage.payload";
-import { GameEvent } from "src/modules/game/events/game-event.enum";
+import { EntityDiedPayload } from "src/modules/shared/events/game/entity-died.payload";
+import { EntityTookDamagePayload } from "src/modules/shared/events/game/entity-took-damage.payload";
+import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import {
   MockInstance,
   afterEach,

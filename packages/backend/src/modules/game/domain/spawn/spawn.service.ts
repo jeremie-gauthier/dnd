@@ -7,9 +7,9 @@ import {
 } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { DoorOpenedPayload } from "src/modules/game/events/door-opened.payload";
-import { EnemiesSpawnedPayload } from "src/modules/game/events/enemies-spawned.payload";
-import { GameEvent } from "src/modules/game/events/game-event.enum";
+import { DoorOpenedPayload } from "src/modules/shared/events/game/door-opened.payload";
+import { EnemiesSpawnedPayload } from "src/modules/shared/events/game/enemies-spawned.payload";
+import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { MapService } from "../map/map.service";
 import { MoveService } from "../move/move.service";
 import { PlayableEntityService } from "../playable-entity/playable-entity.service";

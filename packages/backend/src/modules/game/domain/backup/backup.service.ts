@@ -1,8 +1,8 @@
 import { GameEntity } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { GameEvent } from "src/modules/game/events/game-event.enum";
-import { GameUpdatedPayload } from "src/modules/game/events/game-updated.payload";
+import { GameUpdatedPayload } from "src/modules/shared/events/game/game-updated.payload";
+import { GameEvent } from "../../../shared/events/game/game-event.enum";
 import { BackupRepository } from "./backup.repository";
 
 @Injectable()
