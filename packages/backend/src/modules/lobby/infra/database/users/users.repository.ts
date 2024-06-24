@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { RedisService } from "../../../../../redis/redis.service";
 import { UsersRepository } from "../../../application/repositories/users-repository.interface";
 import { Lobby } from "../../../domain/lobby/lobby.aggregate";
@@ -21,19 +20,19 @@ export class RedisUsersRepository implements UsersRepository {
     userId: User["id"];
     lobbyId: Lobby["id"];
   }): Promise<void> {
-    await this.client.hSet(RedisUsersRepository.KEY, userId.id, lobbyId.id);
+    await this.client.hSet(RedisUsersRepository.KEY, userId, lobbyId);
   }
 
   public async getOne({
     userId,
   }: { userId: User["id"] }): Promise<Lobby["id"] | undefined> {
-    const lobbyId = await this.client.hGet(RedisUsersRepository.KEY, userId.id);
+    const lobbyId = await this.client.hGet(RedisUsersRepository.KEY, userId);
     if (lobbyId) {
-      return new UniqueId(lobbyId);
+      return lobbyId;
     }
   }
 
   public async del({ userId }: { userId: User["id"] }): Promise<void> {
-    await this.client.hDel(RedisUsersRepository.KEY, userId.id);
+    await this.client.hDel(RedisUsersRepository.KEY, userId);
   }
 }

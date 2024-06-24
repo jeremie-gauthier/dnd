@@ -1,4 +1,3 @@
-import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { describe, expect, it } from "vitest";
 import { User } from "./user.entity";
 import { FAKE_USER_ID, getFakeUserData } from "./user.fixtures";
@@ -7,7 +6,7 @@ describe("User Entity", () => {
   it("should create a User and access its data", () => {
     const user = new User(getFakeUserData());
 
-    expect(user.id).toEqual(new UniqueId(FAKE_USER_ID));
+    expect(user.id).toEqual(FAKE_USER_ID);
     expect(user.status.isReady).toBe(false);
   });
 });

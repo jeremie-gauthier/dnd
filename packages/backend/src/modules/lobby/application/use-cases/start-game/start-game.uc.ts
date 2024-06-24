@@ -3,7 +3,6 @@ import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/interfaces/use-case.interface";
-import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { HostRequestedGameStartPayload } from "src/modules/shared/events/lobby/host-requested-game-start.payload";
 import { LobbyEvent } from "src/modules/shared/events/lobby/lobby-event.enum";
 import {
@@ -25,11 +24,9 @@ export class StartGameUseCase implements UseCase {
   }: StartGameInput & {
     userId: User["id"];
   }): Promise<void> {
-    const lobby = await this.lobbiesRepository.getOneOrThrow({
-      lobbyId: new UniqueId(lobbyId),
-    });
+    const lobby = await this.lobbiesRepository.getOneOrThrow({ lobbyId });
 
-    lobby.gameInitializationStarted({ userId: new UniqueId(userId) });
+    lobby.gameInitializationStarted({ userId });
     await this.lobbiesRepository.update({ lobby });
 
     this.eventEmitter.emitAsync(

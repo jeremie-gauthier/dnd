@@ -1,16 +1,15 @@
 import { Entity } from "src/modules/shared/domain/entity";
-import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { z } from "zod";
 import { UserStatus } from "../user-status/user-status.vo";
 
 type Data = {
-  userId: UniqueId;
+  userId: string;
   status: UserStatus;
 };
 
 export class User extends Entity<Data> {
   private static schema = z.object({
-    userId: z.instanceof(UniqueId),
+    userId: z.string(),
     status: z.instanceof(UserStatus),
   });
 

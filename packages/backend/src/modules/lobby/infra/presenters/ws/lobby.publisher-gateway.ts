@@ -44,7 +44,7 @@ export class LobbyPublisherGateway {
     game,
   }: { lobby: Lobby; game: GameEntity }) {
     this.server
-      .to(lobby.id.toString())
+      .to(lobby.id)
       .emit(ServerLobbyEvent.GameInitializationDone, { game });
   }
 

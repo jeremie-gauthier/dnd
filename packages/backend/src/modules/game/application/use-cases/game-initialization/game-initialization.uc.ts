@@ -72,10 +72,10 @@ export class GameInitializationUseCase implements UseCase {
     )?.pickedBy!;
 
     const game: GameEntity = {
-      id: lobby.id.toString(),
+      id: lobby.id,
       status: "battle_ongoing",
       gameMaster: {
-        userId: gameMasterUserId.toString(),
+        userId: gameMasterUserId,
       },
       map,
       playableEntities,
@@ -139,7 +139,7 @@ export class GameInitializationUseCase implements UseCase {
     const heroPlayersMap = Object.fromEntries(
       lobby.playableCharacters.values
         .filter((pc) => pc.type === "hero")
-        .map((hero) => [hero.id.toString(), hero.pickedBy!.id.toString()]),
+        .map((hero) => [hero.id, hero.pickedBy]),
     );
 
     const heroes = campaignStageProgression.campaignProgression.heroes;

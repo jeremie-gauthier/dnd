@@ -23,7 +23,7 @@ export class GameInitializationUseCase implements UseCase {
     const campaignStageProgression =
       await this.repository.getUserCampaignStageProgression({
         campaignStageId: lobby.config.campaign.stage.id,
-        userId: lobby.host.id.toString(),
+        userId: lobby.host.id,
       });
 
     const { map, events } = this.mapSerializerService.deserialize(

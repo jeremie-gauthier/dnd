@@ -3,7 +3,6 @@ import { ConfigType } from "@nestjs/config";
 import envConfig from "src/config/env.config";
 import { AggregateRoot } from "src/modules/shared/domain/aggregate-root";
 import { List } from "src/modules/shared/domain/list";
-import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { z } from "zod";
 import { Host } from "../host/host.entity";
 import { LobbyStatus } from "../lobby-status/lobby-status.vo";
@@ -15,7 +14,7 @@ import { User } from "../user/user.entity";
 import { LobbyError } from "./lobby.error";
 
 type Data = Pick<LobbyView, "config"> & {
-  id: UniqueId;
+  id: string;
   players: List<User>;
   playableCharacters: List<PlayableCharacter>;
   host: Host;
@@ -25,7 +24,7 @@ type Data = Pick<LobbyView, "config"> & {
 export class Lobby extends AggregateRoot<Data> {
   private static schema = lobbySchema.merge(
     z.object({
-      id: z.instanceof(UniqueId),
+      id: z.string().uuid(),
       players: z.instanceof(List<User>),
       playableCharacters: z.instanceof(List<PlayableCharacter>),
       host: z.instanceof(Host),
@@ -64,19 +63,19 @@ export class Lobby extends AggregateRoot<Data> {
   public toPlain(): LobbyView {
     return {
       config: this.config,
-      host: { userId: this.host.id.toString() },
-      id: this.id.toString(),
+      host: { userId: this.host.id },
+      id: this.id,
       playableCharacters: this.playableCharacters.values.map((pc) => ({
-        id: pc.id.toString(),
+        id: pc.id,
         type: pc.type,
-        pickedBy: pc.pickedBy ? pc.pickedBy.toString() : undefined,
+        pickedBy: pc.pickedBy,
       })),
       players: this.players.values.map((player) => ({
-        userId: player.id.toString(),
+        userId: player.id,
         isReady: player.status.isReady,
         heroesSelected: this.playableCharacters.values
-          .filter((pc) => pc.pickedBy?.equals(player.id))
-          .map((pc) => pc.id.toString()),
+          .filter((pc) => pc.pickedBy === player.id)
+          .map((pc) => pc.id),
       })),
       status: this.status.current,
     };
@@ -101,7 +100,7 @@ export class Lobby extends AggregateRoot<Data> {
     user.setNotReadyStatus();
     this.players.remove({ id: user.id });
     for (const playableCharacter of this.playableCharacters) {
-      if (playableCharacter.pickedBy?.equals(user.id)) {
+      if (playableCharacter.pickedBy === user.id) {
         playableCharacter.unsetOwner({ user });
       }
     }
@@ -141,7 +140,7 @@ export class Lobby extends AggregateRoot<Data> {
       )!.pickedBy;
       if (
         this.playableCharacters.values.some(
-          (pc) => pc.type === "hero" && pc.pickedBy?.equals(gameMasterId),
+          (pc) => pc.type === "hero" && pc.pickedBy === gameMasterId,
         )
       ) {
         throw new PlayableCharacterError({
@@ -198,7 +197,7 @@ export class Lobby extends AggregateRoot<Data> {
     const isGameMaster = this.playableCharacters.values.some(
       (playableCharacter) =>
         playableCharacter.type === "game_master" &&
-        playableCharacter.pickedBy?.equals(user.id),
+        playableCharacter.pickedBy === user.id,
     );
     if (isGameMaster) {
       throw new PlayableCharacterError({
@@ -212,7 +211,7 @@ export class Lobby extends AggregateRoot<Data> {
     const isHero = this.playableCharacters.values.some(
       (playableCharacter) =>
         playableCharacter.type === "hero" &&
-        playableCharacter.pickedBy?.equals(user.id),
+        playableCharacter.pickedBy === user.id,
     );
     if (isHero) {
       throw new PlayableCharacterError({

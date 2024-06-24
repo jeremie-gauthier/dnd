@@ -3,7 +3,6 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/interfaces/use-case.interface";
 import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
-import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { LobbyDeletedPayload } from "src/modules/shared/events/lobby/lobby-deleted.payload";
 import { LobbyEvent } from "src/modules/shared/events/lobby/lobby-event.enum";
 import { UserLeftLobbyPayload } from "src/modules/shared/events/lobby/user-left-lobby.payload";
@@ -27,9 +26,8 @@ export class LeaveLobbyUseCase implements UseCase {
   ) {}
 
   public async execute({
-    userId: rawUserId,
+    userId,
   }: { userId: User["id"] }): Promise<string | undefined> {
-    const userId = new UniqueId(rawUserId);
     const lobbyId = await this.usersRepository.getOne({ userId });
     if (!lobbyId) {
       return;
@@ -55,14 +53,11 @@ export class LeaveLobbyUseCase implements UseCase {
     });
     this.eventEmitter.emitAsync(
       LobbyEvent.UserLeftLobby,
-      new UserLeftLobbyPayload({
-        userId: userId.id,
-        lobby: lobby.toPlain(),
-      }),
+      new UserLeftLobbyPayload({ userId, lobby: lobby.toPlain() }),
     );
 
     const hasNoPlayersLeft = lobby.players.length === 0;
-    const hasHostLeft = lobby.host.id.equals(userId);
+    const hasHostLeft = lobby.host.id === userId;
     const shouldDeleteLobby = hasNoPlayersLeft || hasHostLeft;
 
     if (shouldDeleteLobby) {
@@ -71,7 +66,7 @@ export class LeaveLobbyUseCase implements UseCase {
       await this.lobbiesRepository.update({ lobby });
     }
 
-    return lobby.id.id;
+    return lobby.id;
   }
 
   private async deleteLobby({ lobby }: { lobby: Lobby }) {
@@ -82,7 +77,7 @@ export class LeaveLobbyUseCase implements UseCase {
       this.eventEmitter.emitAsync(
         LobbyEvent.UserLeftLobby,
         new UserLeftLobbyPayload({
-          userId: id.id,
+          userId: id,
           lobby: lobby.toPlain(),
         }),
       );

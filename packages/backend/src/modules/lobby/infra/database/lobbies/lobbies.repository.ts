@@ -78,7 +78,7 @@ export class RedisLobbiesRepository
     lobbyId,
   }: { lobbyId: Lobby["id"] }): Promise<Lobby | null> {
     const lobbyRaw = (await this.client.json.get(RedisLobbiesRepository.KEY, {
-      path: lobbyId.id,
+      path: lobbyId,
     })) as LobbyPersistence | null;
     return lobbyRaw ? this.mapper.toDomain(lobbyRaw) : null;
   }
@@ -118,6 +118,6 @@ export class RedisLobbiesRepository
   }
 
   public async del({ lobbyId }: { lobbyId: Lobby["id"] }): Promise<void> {
-    await this.client.json.del(RedisLobbiesRepository.KEY, lobbyId.id);
+    await this.client.json.del(RedisLobbiesRepository.KEY, lobbyId);
   }
 }

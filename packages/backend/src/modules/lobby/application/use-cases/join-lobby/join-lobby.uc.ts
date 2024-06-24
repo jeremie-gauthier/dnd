@@ -3,7 +3,6 @@ import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { User as RawUser } from "src/database/entities/user.entity";
 import type { UseCase } from "src/interfaces/use-case.interface";
-import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { LobbyEvent } from "src/modules/shared/events/lobby/lobby-event.enum";
 import { UserJoinedLobbyPayload } from "src/modules/shared/events/lobby/user-joined-lobby.payload";
 import {
@@ -24,28 +23,20 @@ export class JoinLobbyUseCase implements UseCase {
   ) {}
 
   public async execute({
-    userId: rawUserId,
+    userId,
     lobbyId,
   }: { userId: RawUser["id"] } & JoinLobbyInput): Promise<LobbyView["id"]> {
-    await this.leaveLobbyUseCase.execute({ userId: rawUserId });
+    await this.leaveLobbyUseCase.execute({ userId });
 
-    const lobby = await this.lobbiesRepository.getOneOrThrow({
-      lobbyId: new UniqueId(lobbyId),
-    });
+    const lobby = await this.lobbiesRepository.getOneOrThrow({ lobbyId });
 
-    const userId = new UniqueId(rawUserId);
     lobby.join({ userId });
     await this.lobbiesRepository.update({ lobby });
 
-    const lobbyView = await this.lobbiesRepository.getOneOrThrow({
-      lobbyId: new UniqueId(lobbyId),
-    });
+    const lobbyView = await this.lobbiesRepository.getOneOrThrow({ lobbyId });
     this.eventEmitter.emitAsync(
       LobbyEvent.UserJoinedLobby,
-      new UserJoinedLobbyPayload({
-        userId: rawUserId,
-        lobby: lobby.toPlain(),
-      }),
+      new UserJoinedLobbyPayload({ userId, lobby: lobby.toPlain() }),
     );
 
     return lobbyId;

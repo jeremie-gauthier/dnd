@@ -1,10 +1,12 @@
-import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { describe, expect, it } from "vitest";
 import { UserStatus } from "../user-status/user-status.vo";
 import { User } from "../user/user.entity";
 import { getFakeUserData } from "../user/user.fixtures";
 import { PlayableCharacter } from "./playable-character.entity";
-import { getFakeHero } from "./playable-character.fixtures";
+import {
+  FAKE_GAME_MASTER_ID,
+  getFakeHero,
+} from "./playable-character.fixtures";
 
 describe("PlayableCharacter Entity", () => {
   it("should create a PlayableCharacter and access its data", () => {
@@ -25,7 +27,7 @@ describe("PlayableCharacter Entity", () => {
     it("should fail to set new owner when already picked", () => {
       const playableCharacter = new PlayableCharacter({
         ...getFakeHero(),
-        pickedBy: new UniqueId(),
+        pickedBy: FAKE_GAME_MASTER_ID,
       });
       const user = new User(getFakeUserData());
 
@@ -59,7 +61,7 @@ describe("PlayableCharacter Entity", () => {
     it("should fail to unset new owner when he does not own it", () => {
       const playableCharacter = new PlayableCharacter({
         ...getFakeHero(),
-        pickedBy: new UniqueId(),
+        pickedBy: FAKE_GAME_MASTER_ID,
       });
       const user = new User(getFakeUserData());
 

@@ -1,6 +1,5 @@
 import { LobbyView } from "@dnd/shared";
 import { List } from "src/modules/shared/domain/list";
-import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { Host } from "../host/host.entity";
 import { getFakeHost } from "../host/host.fixtures";
 import { LobbyStatus } from "../lobby-status/lobby-status.vo";
@@ -14,7 +13,7 @@ export const FAKE_CAMPAIGN_ID = "00000000-0000-0000-0000-000000000010";
 export const FAKE_CAMPAIGN_STAGE_ID = "00000000-0000-0000-0000-000000000010";
 
 export const getFakeLobbyData = (): Pick<LobbyView, "config"> & {
-  id: UniqueId;
+  id: string;
   players: List<User>;
   playableCharacters: List<PlayableCharacter>;
   host: Host;
@@ -39,23 +38,23 @@ export const getFakeLobbyData = (): Pick<LobbyView, "config"> & {
     playableCharacters: new List([
       new PlayableCharacter({
         ...getFakeHero(),
-        id: new UniqueId("00000000-0000-0000-0000-000000000011"),
+        id: "00000000-0000-0000-0000-000000000011",
       }),
       new PlayableCharacter({
         ...getFakeHero(),
-        id: new UniqueId("00000000-0000-0000-0000-000000000012"),
+        id: "00000000-0000-0000-0000-000000000012",
       }),
       new PlayableCharacter({
         ...getFakeHero(),
-        id: new UniqueId("00000000-0000-0000-0000-000000000013"),
+        id: "00000000-0000-0000-0000-000000000013",
       }),
       new PlayableCharacter({
         ...getFakeHero(),
-        id: new UniqueId("00000000-0000-0000-0000-000000000014"),
+        id: "00000000-0000-0000-0000-000000000014",
       }),
     ]),
     host: new Host(getFakeHost()),
-    id: new UniqueId(FAKE_LOBBY_ID),
+    id: FAKE_LOBBY_ID,
     players: new List([
       new User({ userId: getFakeHost().userId, status: new UserStatus(false) }),
     ]),

@@ -3,7 +3,6 @@ import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { ServerSocket } from "src/interfaces/socket.interface";
 import type { UseCase } from "src/interfaces/use-case.interface";
-import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { LobbyUpdatedPayload } from "src/modules/shared/events/lobby/lobby-changed.payload";
 import { LobbyEvent } from "src/modules/shared/events/lobby/lobby-event.enum";
 import {
@@ -23,18 +22,12 @@ export class ListenLobbyUpdatesUseCase implements UseCase {
     client,
     lobbyId,
   }: ListenLobbyChangesInput & { client: ServerSocket }): Promise<void> {
-    const userId = new UniqueId(client.data.userId);
-
-    const lobby = await this.lobbiesRepository.getOneOrThrow({
-      lobbyId: new UniqueId(lobbyId),
-    });
-    lobby.players.findOrThrow({ id: userId });
+    const lobby = await this.lobbiesRepository.getOneOrThrow({ lobbyId });
+    lobby.players.findOrThrow({ id: client.data.userId });
 
     await client.join(lobbyId);
+    await this.lobbiesRepository.getOneOrThrow({ lobbyId });
 
-    const lobbyView = await this.lobbiesRepository.getOneOrThrow({
-      lobbyId: new UniqueId(lobbyId),
-    });
     // ? no update, but it's an easy way to trigger a ws publish for the new user
     this.eventEmitter.emitAsync(
       LobbyEvent.LobbyUpdated,

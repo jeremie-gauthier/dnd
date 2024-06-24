@@ -20,7 +20,7 @@ export class List<T extends Entity<Data>> {
   }
 
   public find({ id }: { id: T["id"] }) {
-    return this.items.find((item) => id.equals(item.id));
+    return this.items.find((item) => id === item.id);
   }
 
   public findOrThrow({ id }: { id: T["id"] }) {
@@ -36,6 +36,6 @@ export class List<T extends Entity<Data>> {
   }
 
   public remove({ id }: { id: T["id"] }) {
-    this.items = this.items.filter((item) => !id.equals(item.id));
+    this.items = this.items.filter((item) => id !== item.id);
   }
 }

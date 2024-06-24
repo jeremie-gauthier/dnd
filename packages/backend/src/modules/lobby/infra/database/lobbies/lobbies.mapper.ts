@@ -2,7 +2,6 @@ import { Inject, Injectable } from "@nestjs/common";
 import { ConfigType } from "@nestjs/config";
 import envConfig from "src/config/env.config";
 import { List } from "src/modules/shared/domain/list";
-import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { Mapper } from "src/modules/shared/infra/mapper";
 import { Host } from "../../../domain/host/host.entity";
 import { LobbyStatus } from "../../../domain/lobby-status/lobby-status.vo";
@@ -28,20 +27,20 @@ export class LobbiesMapper extends Mapper<LobbyPersistence, LobbyDomain> {
         persistence.playableCharacters.map(
           ({ id, type, pickedBy }) =>
             new PlayableCharacter({
-              id: new UniqueId(id),
+              id,
               type,
-              pickedBy: pickedBy ? new UniqueId(pickedBy) : undefined,
+              pickedBy,
             }),
         ),
       ),
-      host: new Host({ userId: new UniqueId(persistence.host.userId) }),
-      id: new UniqueId(persistence.id),
+      host: new Host({ userId: persistence.host.userId }),
+      id: persistence.id,
       players: new List(
         persistence.players.map(
           (player) =>
             new User({
               status: new UserStatus(player.isReady),
-              userId: new UniqueId(player.userId),
+              userId: player.userId,
             }),
         ),
       ),
@@ -54,18 +53,18 @@ export class LobbiesMapper extends Mapper<LobbyPersistence, LobbyDomain> {
       config: domain.config,
       playableCharacters: domain.playableCharacters.values.map(
         ({ id, type, pickedBy }) => ({
-          id: id.id,
+          id,
           type,
-          pickedBy: pickedBy ? pickedBy.id : undefined,
+          pickedBy: pickedBy ? pickedBy : undefined,
         }),
       ),
       host: {
-        userId: domain.host.id.id,
+        userId: domain.host.id,
       },
-      id: domain.id.id,
+      id: domain.id,
       players: domain.players.values.map((player) => ({
         isReady: player.status.isReady,
-        userId: player.id.id,
+        userId: player.id,
       })),
       status: domain.status.current,
     };
