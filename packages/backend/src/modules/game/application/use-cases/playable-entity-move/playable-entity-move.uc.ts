@@ -14,11 +14,11 @@ import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { GameEvent } from "src/modules/game/events/game-event.enum";
 import { PlayableEntityMovedPayload } from "src/modules/game/events/playable-entity-moved.payload";
-import { BackupService } from "../../domain/backup/backup.service";
-import { MapService } from "../../domain/map/map.service";
-import { MoveService } from "../../domain/move/move.service";
-import { PlayableEntityService } from "../../domain/playable-entity/playable-entity.service";
-import { TrapService } from "../../domain/trap/trap.service";
+import { BackupService } from "../../../domain/backup/backup.service";
+import { MapService } from "../../../domain/map/map.service";
+import { MoveService } from "../../../domain/move/move.service";
+import { PlayableEntityService } from "../../../domain/playable-entity/playable-entity.service";
+import { TrapService } from "../../../domain/trap/trap.service";
 
 @Injectable()
 export class PlayableEntityMoveUseCase implements UseCase {

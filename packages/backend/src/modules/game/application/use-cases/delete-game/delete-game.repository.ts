@@ -1,6 +1,6 @@
 import { GameEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import { GamesRepository } from "../../infra/database/games.repository";
+import { GamesRepository } from "../../../infra/database/games.repository";
 
 @Injectable()
 export class DeleteGameRepository {

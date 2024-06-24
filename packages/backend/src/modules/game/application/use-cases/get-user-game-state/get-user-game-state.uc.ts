@@ -2,8 +2,8 @@ import { GameEntity, GetUserGameStateOutput } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/interfaces/use-case.interface";
-import { BackupService } from "../../domain/backup/backup.service";
-import { PlayerStateService } from "../../domain/player-state/player-state.service";
+import { BackupService } from "../../../domain/backup/backup.service";
+import { PlayerStateService } from "../../../domain/player-state/player-state.service";
 
 @Injectable()
 export class GetUserGameStateUseCase implements UseCase {

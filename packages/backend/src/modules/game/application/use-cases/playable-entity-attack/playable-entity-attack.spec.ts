@@ -9,17 +9,15 @@ import {
   it,
   vi,
 } from "vitest";
-import { BackupService } from "../../domain/backup/backup.service";
-import { CoordService } from "../../domain/coord/coord.service";
-import { InitiativeService } from "../../domain/initiative/initiative.service";
-import { MapService } from "../../domain/map/map.service";
-import { PlayableEntityService } from "../../domain/playable-entity/playable-entity.service";
-import { SpawnService } from "../../domain/spawn/spawn.service";
-import { TurnService } from "../../domain/turn/turn.service";
-import { OpenDoorUseCase } from "./open-door.uc";
+import { BackupService } from "../../../domain/backup/backup.service";
+import { CombatService } from "../../../domain/combat/combat.service";
+import { CoordService } from "../../../domain/coord/coord.service";
+import { MapService } from "../../../domain/map/map.service";
+import { PlayableEntityService } from "../../../domain/playable-entity/playable-entity.service";
+import { PlayableEntityAttackUseCase } from "./playable-entity-attack.uc";
 
-describe("OpenDoorUseCase", () => {
-  let useCase: OpenDoorUseCase;
+describe("PlayableEntityAttackUseCase", () => {
+  let useCase: PlayableEntityAttackUseCase;
   let eventEmitter2: EventEmitter2;
 
   let eventEmitterMock: MockInstance<
@@ -30,18 +28,14 @@ describe("OpenDoorUseCase", () => {
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
-        OpenDoorUseCase,
+        PlayableEntityAttackUseCase,
         EventEmitter2,
-        InitiativeService,
-        TurnService,
+        CoordService,
         PlayableEntityService,
         MapService,
-        CoordService,
         {
-          provide: SpawnService,
-          useValue: {
-            spawnEnemies: vi.fn(),
-          },
+          provide: CombatService,
+          useValue: {},
         },
         {
           provide: BackupService,
@@ -52,7 +46,7 @@ describe("OpenDoorUseCase", () => {
       ],
     }).compile();
 
-    useCase = module.get(OpenDoorUseCase);
+    useCase = module.get(PlayableEntityAttackUseCase);
     eventEmitter2 = module.get(EventEmitter2);
 
     eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");

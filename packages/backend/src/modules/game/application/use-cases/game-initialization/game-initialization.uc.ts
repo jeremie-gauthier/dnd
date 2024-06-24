@@ -17,10 +17,10 @@ import { UseCase } from "src/interfaces/use-case.interface";
 import { GameInitializationDonePayload as CampaignGameInitializationDonePayload } from "src/modules/campaign/events/game-initialization-done.payload";
 import { MoveService } from "src/modules/game/domain/move/move.service";
 import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
-import { InitiativeService } from "../../domain/initiative/initiative.service";
-import { ItemService } from "../../domain/item/item.service";
-import { GameEvent } from "../../events/game-event.enum";
-import { GameInitializationDonePayload } from "../../events/game-initialization-done.payload";
+import { InitiativeService } from "../../../domain/initiative/initiative.service";
+import { ItemService } from "../../../domain/item/item.service";
+import { GameEvent } from "../../../events/game-event.enum";
+import { GameInitializationDonePayload } from "../../../events/game-initialization-done.payload";
 import { GameInitializationRepository } from "./game-initialization.repository";
 
 @Injectable()

@@ -6,7 +6,7 @@ import { Item } from "src/database/entities/item.entity";
 import { Spell } from "src/database/entities/spell.entity";
 import { Weapon } from "src/database/entities/weapon.entity";
 import { In, type Repository } from "typeorm";
-import { GamesRepository } from "../../infra/database/games.repository";
+import { GamesRepository } from "../../../infra/database/games.repository";
 
 @Injectable()
 export class GameInitializationRepository {

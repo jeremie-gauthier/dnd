@@ -10,14 +10,14 @@ import { ZodValidationPipe } from "nestjs-zod";
 import { WsExceptionFilter } from "src/errors/ws-exception-filter";
 import { AuthGuard } from "src/guards/auth.guard";
 import type { ServerSocket } from "src/interfaces/socket.interface";
-import { EndPlayerTurnInputDto } from "../../use-cases/end-player-turn/end-player-turn.dto";
-import { EndPlayerTurnUseCase } from "../../use-cases/end-player-turn/end-player-turn.uc";
-import { OpenDoorInputDto } from "../../use-cases/open-door/open-door.dto";
-import { OpenDoorUseCase } from "../../use-cases/open-door/open-door.uc";
-import { PlayableEntityAttackInputDto } from "../../use-cases/playable-entity-attack/playable-entity-attack.dto";
-import { PlayableEntityAttackUseCase } from "../../use-cases/playable-entity-attack/playable-entity-attack.uc";
-import { PlayableEntityMoveInputDto } from "../../use-cases/playable-entity-move/playable-entity-move.dto";
-import { PlayableEntityMoveUseCase } from "../../use-cases/playable-entity-move/playable-entity-move.uc";
+import { EndPlayerTurnInputDto } from "../../../application/use-cases/end-player-turn/end-player-turn.dto";
+import { EndPlayerTurnUseCase } from "../../../application/use-cases/end-player-turn/end-player-turn.uc";
+import { OpenDoorInputDto } from "../../../application/use-cases/open-door/open-door.dto";
+import { OpenDoorUseCase } from "../../../application/use-cases/open-door/open-door.uc";
+import { PlayableEntityAttackInputDto } from "../../../application/use-cases/playable-entity-attack/playable-entity-attack.dto";
+import { PlayableEntityAttackUseCase } from "../../../application/use-cases/playable-entity-attack/playable-entity-attack.uc";
+import { PlayableEntityMoveInputDto } from "../../../application/use-cases/playable-entity-move/playable-entity-move.dto";
+import { PlayableEntityMoveUseCase } from "../../../application/use-cases/playable-entity-move/playable-entity-move.uc";
 
 @UseGuards(AuthGuard)
 @UsePipes(ZodValidationPipe)

@@ -9,13 +9,13 @@ import {
   it,
   vi,
 } from "vitest";
-import { BackupService } from "../../domain/backup/backup.service";
-import { CombatService } from "../../domain/combat/combat.service";
-import { CoordService } from "../../domain/coord/coord.service";
-import { MapService } from "../../domain/map/map.service";
-import { MoveService } from "../../domain/move/move.service";
-import { PlayableEntityService } from "../../domain/playable-entity/playable-entity.service";
-import { TrapService } from "../../domain/trap/trap.service";
+import { BackupService } from "../../../domain/backup/backup.service";
+import { CombatService } from "../../../domain/combat/combat.service";
+import { CoordService } from "../../../domain/coord/coord.service";
+import { MapService } from "../../../domain/map/map.service";
+import { MoveService } from "../../../domain/move/move.service";
+import { PlayableEntityService } from "../../../domain/playable-entity/playable-entity.service";
+import { TrapService } from "../../../domain/trap/trap.service";
 import { PlayableEntityMoveUseCase } from "./playable-entity-move.uc";
 
 describe("PlayableEntityMoveUseCase", () => {

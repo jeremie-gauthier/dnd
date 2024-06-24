@@ -15,12 +15,12 @@ import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { DoorOpenedPayload } from "src/modules/game/events/door-opened.payload";
 import { GameEvent } from "src/modules/game/events/game-event.enum";
-import { BackupService } from "../../domain/backup/backup.service";
-import { InitiativeService } from "../../domain/initiative/initiative.service";
-import { MapService } from "../../domain/map/map.service";
-import { PlayableEntityService } from "../../domain/playable-entity/playable-entity.service";
-import { SpawnService } from "../../domain/spawn/spawn.service";
-import { TurnService } from "../../domain/turn/turn.service";
+import { BackupService } from "../../../domain/backup/backup.service";
+import { InitiativeService } from "../../../domain/initiative/initiative.service";
+import { MapService } from "../../../domain/map/map.service";
+import { PlayableEntityService } from "../../../domain/playable-entity/playable-entity.service";
+import { SpawnService } from "../../../domain/spawn/spawn.service";
+import { TurnService } from "../../../domain/turn/turn.service";
 
 @Injectable()
 export class OpenDoorUseCase implements UseCase {

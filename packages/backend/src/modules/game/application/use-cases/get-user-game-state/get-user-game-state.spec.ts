@@ -9,8 +9,8 @@ import {
   it,
   vi,
 } from "vitest";
-import { BackupService } from "../../domain/backup/backup.service";
-import { PlayerStateService } from "../../domain/player-state/player-state.service";
+import { BackupService } from "../../../domain/backup/backup.service";
+import { PlayerStateService } from "../../../domain/player-state/player-state.service";
 import { GetUserGameStateUseCase } from "./get-user-game-state.uc";
 
 describe("GetUserGameStateUseCase", () => {

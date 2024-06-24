@@ -6,9 +6,9 @@ import {
 } from "@nestjs/common";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
-import { BackupService } from "../../domain/backup/backup.service";
-import { PlayableEntityService } from "../../domain/playable-entity/playable-entity.service";
-import { TurnService } from "../../domain/turn/turn.service";
+import { BackupService } from "../../../domain/backup/backup.service";
+import { PlayableEntityService } from "../../../domain/playable-entity/playable-entity.service";
+import { TurnService } from "../../../domain/turn/turn.service";
 
 @Injectable()
 export class EndPlayerTurnUseCase implements UseCase {

@@ -7,10 +7,10 @@ import {
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
-import { BackupService } from "../../domain/backup/backup.service";
-import { CombatService } from "../../domain/combat/combat.service";
-import { MapService } from "../../domain/map/map.service";
-import { PlayableEntityService } from "../../domain/playable-entity/playable-entity.service";
+import { BackupService } from "../../../domain/backup/backup.service";
+import { CombatService } from "../../../domain/combat/combat.service";
+import { MapService } from "../../../domain/map/map.service";
+import { PlayableEntityService } from "../../../domain/playable-entity/playable-entity.service";
 
 @Injectable()
 export class PlayableEntityAttackUseCase implements UseCase {

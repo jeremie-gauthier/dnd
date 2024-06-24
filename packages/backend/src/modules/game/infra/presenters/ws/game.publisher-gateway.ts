@@ -2,10 +2,10 @@ import { GameEntity, ServerGameEvent } from "@dnd/shared";
 import { OnEvent } from "@nestjs/event-emitter";
 import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import type { WsServer } from "src/interfaces/socket.interface";
-import { LogService } from "../../domain/log/log.service";
-import { LoggableAction } from "../../domain/log/loggable-action.interface";
-import { PlayerStateService } from "../../domain/player-state/player-state.service";
-import { GameEvent } from "../../events/game-event.enum";
+import { LogService } from "../../../domain/log/log.service";
+import { LoggableAction } from "../../../domain/log/loggable-action.interface";
+import { PlayerStateService } from "../../../domain/player-state/player-state.service";
+import { GameEvent } from "../../../events/game-event.enum";
 
 @WebSocketGateway()
 export class GamePublisherGateway {
