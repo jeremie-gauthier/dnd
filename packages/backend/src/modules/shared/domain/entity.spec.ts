@@ -1,8 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { Entity } from "./entity";
+import { Entity, PlainData } from "./entity";
 
 describe("Entity", () => {
-  class FakeEntity extends Entity<Record<string, any>> {}
+  class FakeEntity extends Entity<Record<string, any>> {
+    public toPlain(): PlainData<Record<string, any>> {
+      throw new Error("Method not implemented.");
+    }
+  }
 
   it("should create an Entity and access its data", () => {
     const playableCharacter = new FakeEntity({}, "FAKE_ID");

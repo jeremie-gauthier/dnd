@@ -1,11 +1,26 @@
 import { randomUUID } from "node:crypto";
+import { Plainable } from "src/interfaces/plainable.interface";
+import { type ValueObject } from "./value-object";
 
 type Data = {
   [x: string]: any;
 };
 
-export abstract class Entity<T extends Data> {
+type PlainData<TData extends Data> = {
+  [key in keyof TData]: TData[key] extends Entity<any> | ValueObject<any>
+    ? ReturnType<TData[key]["toPlain"]>
+    : TData[key] extends Array<infer ArrayItem>
+      ? ArrayItem extends ValueObject<any> | Entity<any>
+        ? PlainData<ArrayItem["toPlain"]>
+        : ArrayItem
+      : TData[key];
+};
+
+export abstract class Entity<T extends Data>
+  implements Plainable<PlainData<T>>
+{
   private readonly _id: string;
+  public abstract toPlain(): PlainData<T>;
 
   constructor(
     protected readonly _data: T,
