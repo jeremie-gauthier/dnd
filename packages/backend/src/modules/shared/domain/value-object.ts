@@ -1,9 +1,9 @@
-export abstract class ValueObject<Data> {
-  protected readonly _data: Data;
+export abstract class ValueObject<TData> {
+  protected readonly _data: TData;
 
-  constructor(data: Data) {
+  constructor(data: TData) {
     this._data = data;
   }
 
-  public abstract equals(other: ValueObject<Data>): boolean;
+  public abstract equals(other: ValueObject<TData>): boolean;
 }

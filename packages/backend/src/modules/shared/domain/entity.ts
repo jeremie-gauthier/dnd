@@ -18,7 +18,7 @@ export abstract class Entity<T extends Data> {
     return this._id;
   }
 
-  public equals(other: Entity<Data>): boolean {
+  public equals(other: Entity<T>): boolean {
     if (this === other) {
       return true;
     }
