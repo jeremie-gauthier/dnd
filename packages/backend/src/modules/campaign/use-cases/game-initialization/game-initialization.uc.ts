@@ -20,10 +20,11 @@ export class GameInitializationUseCase implements UseCase {
   public async execute({
     lobby,
   }: HostRequestedGameStartPayload): Promise<void> {
+    const plainLobby = lobby.toPlain();
     const campaignStageProgression =
       await this.repository.getUserCampaignStageProgression({
-        campaignStageId: lobby.config.campaign.stage.id,
-        userId: lobby.host.id,
+        campaignStageId: plainLobby.config.campaign.stage.id,
+        userId: plainLobby.host.userId,
       });
 
     const { map, events } = this.mapSerializerService.deserialize(

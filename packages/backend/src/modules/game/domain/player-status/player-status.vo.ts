@@ -33,6 +33,12 @@ export class PlayerStatus extends ValueObject<Data> {
     return this._data.currentPhase === other._data.currentPhase;
   }
 
+  public toPlain() {
+    return {
+      currentPhase: this._data.currentPhase,
+    };
+  }
+
   public get current() {
     return this._data.currentPhase;
   }

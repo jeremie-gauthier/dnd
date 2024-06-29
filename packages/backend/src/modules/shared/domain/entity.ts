@@ -6,13 +6,13 @@ type Data = {
   [x: string]: any;
 };
 
-type PlainData<TData extends Data> = {
+export type PlainData<TData extends Data> = {
   [key in keyof TData]: TData[key] extends Entity<any> | ValueObject<any>
     ? ReturnType<TData[key]["toPlain"]>
     : TData[key] extends Array<infer ArrayItem>
       ? ArrayItem extends ValueObject<any> | Entity<any>
         ? PlainData<ArrayItem["toPlain"]>
-        : ArrayItem
+        : TData[key]
       : TData[key];
 };
 

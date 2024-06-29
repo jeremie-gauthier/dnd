@@ -1,13 +1,11 @@
 import { ValueObject } from "src/modules/shared/domain/value-object";
 import { InitiativeError } from "./initiative.error";
 
-type Data = {
-  initiative: number;
-};
+type Data = number;
 
 export class Initiative extends ValueObject<Data> {
   constructor(data: Data) {
-    if (data.initiative < 0) {
+    if (data < 0) {
       throw new InitiativeError({
         name: "NEGATIVE_INITIATIVE",
         message: "Invalid initiative score (negative)",
@@ -17,10 +15,15 @@ export class Initiative extends ValueObject<Data> {
   }
 
   public equals(other: Initiative): boolean {
-    return this._data.initiative === other._data.initiative;
+    return this._data === other._data;
   }
 
-  public roll(): number {
-    return Math.round(Math.random() * 100);
+  public roll(): Initiative {
+    const newInitiativeScore = Math.round(Math.random() * 100);
+    return new Initiative(newInitiativeScore);
+  }
+
+  public toPlain() {
+    return this._data;
   }
 }

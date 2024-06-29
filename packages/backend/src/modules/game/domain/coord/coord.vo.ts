@@ -92,4 +92,8 @@ export class Coord extends ValueObject<Data> {
     const coord = indexToCoord({ index, metadata });
     return new Coord(coord);
   }
+
+  public toPlain() {
+    return { row: this._data.row, column: this._data.column };
+  }
 }

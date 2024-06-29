@@ -67,7 +67,8 @@ export class GameInitializationUseCase implements UseCase {
       campaignStageProgression: campaignStageProgressionFormatted,
     });
 
-    const gameMasterUserId = lobby.playableCharacters.values.find(
+    const plainLobby = lobby.toPlain();
+    const gameMasterUserId = plainLobby.playableCharacters.find(
       (pc) => pc.type === "game_master",
     )?.pickedBy!;
 
@@ -136,8 +137,9 @@ export class GameInitializationUseCase implements UseCase {
     lobby: Lobby;
     campaignStageProgression: CampaignStageProgression;
   }): GameEntity["playableEntities"] {
+    const plainLobby = lobby.toPlain();
     const heroPlayersMap = Object.fromEntries(
-      lobby.playableCharacters.values
+      plainLobby.playableCharacters
         .filter((pc) => pc.type === "hero")
         .map((hero) => [hero.id, hero.pickedBy]),
     );

@@ -4,6 +4,7 @@ import { DiceError } from "./dice.error";
 type D6 = [number, number, number, number, number, number];
 
 type Data = {
+  readonly name: string;
   readonly values: D6;
 };
 
@@ -27,5 +28,12 @@ export class Dice extends ValueObject<Data> {
       });
     }
     return result;
+  }
+
+  public toPlain() {
+    return {
+      name: this._data.name,
+      values: this._data.values,
+    };
   }
 }
