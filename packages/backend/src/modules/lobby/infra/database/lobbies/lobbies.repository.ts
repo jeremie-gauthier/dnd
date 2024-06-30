@@ -86,11 +86,11 @@ export class RedisLobbiesRepository
   public async getOneOrThrow({
     lobbyId,
   }: { lobbyId: Lobby["id"] }): Promise<Lobby> {
-    const lobbyRaw = await this.getOne({ lobbyId });
-    if (!lobbyRaw) {
+    const lobby = await this.getOne({ lobbyId });
+    if (!lobby) {
       throw new NotFoundException("Lobby not found");
     }
-    return lobbyRaw;
+    return lobby;
   }
 
   public async getMany(): Promise<Lobby[]> {
