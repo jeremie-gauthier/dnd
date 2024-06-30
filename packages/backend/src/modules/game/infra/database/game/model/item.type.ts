@@ -30,4 +30,4 @@ type SpellItem = AttackItem & {
   manaCost: ItemManaCostJson;
 };
 
-export type Item = BaseItem;
+export type Item = WeaponItem | SpellItem;

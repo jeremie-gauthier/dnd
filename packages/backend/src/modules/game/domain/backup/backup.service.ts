@@ -1,8 +1,6 @@
 import { GameEntity } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { GameUpdatedPayload } from "src/modules/shared/events/game/game-updated.payload";
-import { GameEvent } from "../../../shared/events/game/game-event.enum";
 import { BackupRepository } from "./backup.repository";
 
 @Injectable()
@@ -25,9 +23,9 @@ export class BackupService {
   public async updateGame({ game }: { game: GameEntity }): Promise<void> {
     await this.repository.updateGame({ game });
 
-    this.eventEmitter.emitAsync(
-      GameEvent.GameUpdated,
-      new GameUpdatedPayload({ game }),
-    );
+    // this.eventEmitter.emitAsync(
+    //   GameEvent.GameUpdated,
+    //   new GameUpdatedPayload({ game }),
+    // );
   }
 }

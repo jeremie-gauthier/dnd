@@ -5,16 +5,14 @@ import { Board } from "../board/board.entity";
 import { GameMaster } from "../game-master/game-master.entity";
 import { GameStatus } from "../game-status/game-status.vo";
 import { MonsterTemplate } from "../monster-template/monster-template.vo";
-import { Playable } from "../playable-entity/playable-entity.abstract";
-import { Timeline } from "../timeline/timeline.entity";
+import { PlayableEntities } from "../playable-entities/playable-entities.aggregate";
 
 type Data = {
   readonly id: string;
   status: GameStatus;
   board: Board;
-  playableEntities: Array<Playable>;
+  playableEntities: PlayableEntities;
   gameMaster: GameMaster;
-  timeline: Timeline;
   monsterTemplates: Array<MonsterTemplate>;
   events: Array<GameEvent>;
 };
@@ -24,9 +22,8 @@ export class Game extends AggregateRoot<Data> {
     id: z.string().uuid(),
     status: z.instanceof(GameStatus),
     board: z.instanceof(Board),
-    playableEntities: z.array(z.instanceof(Playable)),
+    playableEntities: z.instanceof(PlayableEntities),
     gameMaster: z.instanceof(GameMaster),
-    timeline: z.instanceof(Timeline),
     monsterTemplates: z.array(z.instanceof(MonsterTemplate)),
     events: z.array(z.instanceof(GameEvent)),
   });
@@ -41,15 +38,26 @@ export class Game extends AggregateRoot<Data> {
       id: this._data.id,
       status: this._data.status.toPlain(),
       board: this._data.board.toPlain(),
-      playableEntities: this._data.playableEntities.map((playableEntity) =>
-        playableEntity.toPlain(),
-      ),
+      playableEntities: this._data.playableEntities.toPlain(),
       gameMaster: this._data.gameMaster.toPlain(),
-      timeline: this._data.timeline.toPlain(),
       monsterTemplates: this._data.monsterTemplates.map((monsterTemplate) =>
         monsterTemplate.toPlain(),
       ),
       events: this._data.events.map((event) => event.toPlain()),
+    };
+  }
+
+  public endPlayerTurn({ userId }: { userId: string }) {
+    const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
+    playingEntity.mustBePlayedBy({ userId });
+    const nextEntityToPlay = this._data.playableEntities.getNextEntityToPlay();
+
+    playingEntity.endTurn();
+    nextEntityToPlay?.startTurn();
+
+    return {
+      playingEntityWhoseTurnEnded: playingEntity,
+      playingEntityWhoseTurnStarted: nextEntityToPlay,
     };
   }
 }

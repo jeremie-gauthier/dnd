@@ -1,9 +1,6 @@
 import { GameEntity, PlayableEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
-import { PlayableEntityTurnEndedPayload } from "src/modules/shared/events/game/playable-entity-turn-ended.payload";
-import { PlayableEntityTurnStartedPayload } from "src/modules/shared/events/game/playable-entity-turn-started.payload";
 
 @Injectable()
 export class TurnService {
@@ -72,10 +69,10 @@ export class TurnService {
     playableEntity.currentPhase = "idle";
     playableEntity.actionsDoneThisTurn = [];
 
-    this.eventEmitter.emitAsync(
-      GameEvent.PlayableEntityTurnEnded,
-      new PlayableEntityTurnEndedPayload({ game, playableEntity }),
-    );
+    // this.eventEmitter.emitAsync(
+    //   GameEvent.PlayableEntityTurnEnded,
+    //   new PlayableEntityTurnEndedPayload({ game, playableEntity }),
+    // );
   }
 
   public startPlayableEntityTurn({
@@ -86,13 +83,13 @@ export class TurnService {
     playableEntity.characteristic.actionPoints =
       playableEntity.characteristic.baseActionPoints;
 
-    this.eventEmitter.emitAsync(
-      GameEvent.PlayableEntityTurnStarted,
-      new PlayableEntityTurnStartedPayload({
-        game,
-        playableEntity,
-      }),
-    );
+    // this.eventEmitter.emitAsync(
+    //   GameEvent.PlayableEntityTurnStarted,
+    //   new PlayableEntityTurnStartedPayload({
+    //     game,
+    //     playableEntity,
+    //   }),
+    // );
   }
 
   public restartTimeline({ game }: { game: GameEntity }) {

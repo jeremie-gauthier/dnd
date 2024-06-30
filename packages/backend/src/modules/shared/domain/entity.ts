@@ -10,7 +10,7 @@ export type PlainData<TData extends Data> = {
   [key in keyof TData]: TData[key] extends Entity<any> | ValueObject<any>
     ? ReturnType<TData[key]["toPlain"]>
     : TData[key] extends Array<infer ArrayItem>
-      ? ArrayItem extends ValueObject<any> | Entity<any>
+      ? ArrayItem extends Entity<any> | ValueObject<any>
         ? PlainData<ArrayItem["toPlain"]>
         : TData[key]
       : TData[key];

@@ -1,5 +1,5 @@
 import { PlainData } from "src/modules/shared/domain/entity";
-import { Playable } from "../../playable-entity/playable-entity.abstract";
+import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
 import { TileEntity } from "../tile-entity.abstract";
 
 type Data = {

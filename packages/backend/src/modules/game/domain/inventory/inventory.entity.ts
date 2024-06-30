@@ -1,7 +1,8 @@
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { Item } from "../item/item.abstract";
-import { Playable } from "../playable-entity/playable-entity.abstract";
+import { Weapon } from "../item/weapon/weapon.entity";
+import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
 
 type Data = {
   readonly playableId: Playable["id"];
@@ -42,8 +43,8 @@ export class Inventory extends Entity<Data> {
         nbWeaponSlots: this._data.storageCapacity.nbWeaponSlots,
         nbBackpackSlots: this._data.storageCapacity.nbBackpackSlots,
       },
-      gear: this._data.gear.map((item) => item.toPlain()),
-      backpack: this._data.backpack.map((item) => item.toPlain()),
+      gear: this._data.gear.map((item: Weapon) => item.toPlain()),
+      backpack: this._data.backpack.map((item: Weapon) => item.toPlain()),
     };
   }
 }

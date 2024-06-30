@@ -17,7 +17,7 @@ export class LogService {
         return {
           type: GameEvent.PlayableEntityTurnEnded,
           createdAt: new Date(),
-          data: { entityName: payload.playableEntity.name },
+          data: { entityName: payload.playableEntity.toPlain().name },
         };
       case GameEvent.DoorOpened:
         return {
@@ -29,7 +29,7 @@ export class LogService {
         return {
           type: GameEvent.PlayableEntityTurnStarted,
           createdAt: new Date(),
-          data: { entityName: payload.playableEntity.name },
+          data: { entityName: payload.playableEntity.toPlain().name },
         };
       case GameEvent.InitiativesRerolled:
         return {

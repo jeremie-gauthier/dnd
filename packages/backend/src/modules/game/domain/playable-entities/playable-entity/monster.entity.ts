@@ -1,7 +1,7 @@
 import { AttackRangeType, AttackTypeType, EnemyKind } from "@dnd/shared";
-import { Coord } from "../coord/coord.vo";
-import { Initiative } from "../initiative/initiative.vo";
-import { Inventory } from "../inventory/inventory.entity";
+import { Coord } from "../../coord/coord.vo";
+import { Initiative } from "../../initiative/initiative.vo";
+import { Inventory } from "../../inventory/inventory.entity";
 import { BehaviourMove, Playable } from "./playable-entity.abstract";
 
 type Data = {
@@ -11,7 +11,6 @@ type Data = {
   readonly kind: EnemyKind;
   coord: Coord;
   isBlocking: boolean;
-  isVisible: boolean;
 
   status: "preparation" | "idle" | "action";
   playedByUserId: string;
@@ -67,7 +66,6 @@ export class Monster extends Playable<Data> {
       kind: this._data.kind,
       coord: this._data.coord.toPlain(),
       isBlocking: this._data.isBlocking,
-      isVisible: this._data.isVisible,
       initiative: this._data.initiative.toPlain(),
       playedByUserId: this._data.playedByUserId,
       status: this._data.status,

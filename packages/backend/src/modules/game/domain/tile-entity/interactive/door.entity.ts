@@ -1,4 +1,4 @@
-import { Playable } from "../../playable-entity/playable-entity.abstract";
+import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
 import { TileInteractiveEntity } from "./interactive.abstract";
 
 type Data = {

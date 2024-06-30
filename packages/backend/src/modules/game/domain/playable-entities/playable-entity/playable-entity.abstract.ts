@@ -1,8 +1,9 @@
 import { GameItem, TilePath } from "@dnd/shared";
 import { Entity, PlainData } from "src/modules/shared/domain/entity";
-import { Coord } from "../coord/coord.vo";
-import { Initiative } from "../initiative/initiative.vo";
-import { Inventory } from "../inventory/inventory.entity";
+import { Coord } from "../../coord/coord.vo";
+import { Initiative } from "../../initiative/initiative.vo";
+import { Inventory } from "../../inventory/inventory.entity";
+import { PlayableEntityError } from "./playable-entity.error";
 
 export interface BehaviourMove {
   move(_: { path: TilePath }): void;
@@ -14,7 +15,6 @@ type Data = {
   readonly type: "hero" | "monster";
   coord: Coord;
   isBlocking: boolean;
-  isVisible: boolean;
 
   status: "preparation" | "idle" | "action";
   playedByUserId: string;
@@ -62,6 +62,10 @@ export abstract class Playable<
     return this.healthPoints <= 0 && this._data.isBlocking === false;
   }
 
+  get initiative() {
+    return this._data.initiative;
+  }
+
   protected mustBeAlive() {
     if (this.isDead) {
       throw new Error(
@@ -88,5 +92,28 @@ export abstract class Playable<
   protected death(): void {
     this._data.characteristic.healthPoints = 0;
     this._data.isBlocking = false;
+  }
+
+  public mustBePlayedBy({ userId }: { userId: Data["playedByUserId"] }) {
+    if (this._data.playedByUserId !== userId) {
+      throw new PlayableEntityError({
+        name: "BAD_OWNERSHIP",
+        message: `Playable entity does not belongs to user '${userId}'`,
+      });
+    }
+  }
+
+  public isPlaying() {
+    return this._data.status === "action";
+  }
+
+  public endTurn() {
+    this._data.status = "idle";
+  }
+
+  public startTurn() {
+    this._data.status = "action";
+    this._data.characteristic.actionPoints =
+      this._data.characteristic.baseActionPoints;
   }
 }

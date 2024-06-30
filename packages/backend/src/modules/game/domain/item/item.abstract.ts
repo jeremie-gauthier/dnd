@@ -1,4 +1,4 @@
-import { Entity } from "src/modules/shared/domain/entity";
+import { Entity, PlainData } from "src/modules/shared/domain/entity";
 
 type Data = {
   readonly id: string;
@@ -12,6 +12,7 @@ export abstract class Item<
   ChildData extends Data = Data,
 > extends Entity<ChildData> {
   public abstract use(_: unknown): void;
+  public abstract toPlain(): PlainData<ChildData>;
 
   constructor(rawData: ChildData) {
     super(rawData, rawData.id);
