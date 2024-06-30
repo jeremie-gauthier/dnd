@@ -17,6 +17,17 @@ export class GetLobbyUseCase implements UseCase {
     lobbyId,
   }: { lobbyId: string }): Promise<GetLobbyOutput> {
     const lobby = await this.lobbiesRepository.getOneOrThrow({ lobbyId });
-    return lobby.toPlain();
+    const plainLobby = lobby.toPlain();
+    return {
+      ...plainLobby,
+      players: plainLobby.players.map(({ status, ...player }) => ({
+        ...player,
+        isReady: status,
+        heroesSelected: plainLobby.playableCharacters
+          .filter((pc) => pc.pickedBy === player.userId)
+          .map((pc) => pc.id),
+      })),
+      status: plainLobby.status,
+    };
   }
 }

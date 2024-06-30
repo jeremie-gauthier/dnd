@@ -2,7 +2,6 @@ import { LobbyView, lobbySchema } from "@dnd/shared";
 import { ConfigType } from "@nestjs/config";
 import envConfig from "src/config/env.config";
 import { AggregateRoot } from "src/modules/shared/domain/aggregate-root";
-import { List } from "src/modules/shared/domain/list";
 import { z } from "zod";
 import { Host } from "../host/host.entity";
 import { LobbyStatus } from "../lobby-status/lobby-status.vo";
@@ -15,8 +14,8 @@ import { LobbyError } from "./lobby.error";
 
 type Data = Pick<LobbyView, "config"> & {
   id: string;
-  players: List<User>;
-  playableCharacters: List<PlayableCharacter>;
+  players: Array<User>;
+  playableCharacters: Array<PlayableCharacter>;
   host: Host;
   status: LobbyStatus;
 };
@@ -25,8 +24,8 @@ export class Lobby extends AggregateRoot<Data> {
   private static schema = lobbySchema.merge(
     z.object({
       id: z.string().uuid(),
-      players: z.instanceof(List<User>),
-      playableCharacters: z.instanceof(List<PlayableCharacter>),
+      players: z.array(z.instanceof(User)),
+      playableCharacters: z.array(z.instanceof(PlayableCharacter)),
       host: z.instanceof(Host),
       status: z.instanceof(LobbyStatus),
     }),
@@ -40,51 +39,23 @@ export class Lobby extends AggregateRoot<Data> {
     super(data, data.id);
   }
 
-  public get config() {
-    return this._data.config;
-  }
-
-  public get playableCharacters() {
-    return this._data.playableCharacters;
-  }
-
-  public get host() {
-    return this._data.host;
-  }
-
-  public get players() {
-    return this._data.players;
-  }
-
-  public get status() {
-    return this._data.status;
-  }
-
-  public toPlain(): LobbyView {
+  public toPlain() {
     return {
-      config: this.config,
-      host: { userId: this.host.id },
-      id: this.id,
-      playableCharacters: this.playableCharacters.values.map((pc) => ({
-        id: pc.id,
-        type: pc.type,
-        pickedBy: pc.pickedBy,
-      })),
-      players: this.players.values.map((player) => ({
-        userId: player.id,
-        isReady: player.status.isReady,
-        heroesSelected: this.playableCharacters.values
-          .filter((pc) => pc.pickedBy === player.id)
-          .map((pc) => pc.id),
-      })),
-      status: this.status.current,
+      config: this._data.config,
+      host: this._data.host.toPlain(),
+      id: this._data.id,
+      playableCharacters: this._data.playableCharacters.map((pc) =>
+        pc.toPlain(),
+      ),
+      players: this._data.players.map((player) => player.toPlain()),
+      status: this._data.status.toPlain(),
     };
   }
 
   public join({ userId }: { userId: User["id"] }): void {
-    this.status.mustBeOpened();
+    this._data.status.mustBeOpened();
     this.mustHaveEnoughSpace();
-    if (this.players.find({ id: userId })) {
+    if (this._data.players.find(({ id }) => id === userId)) {
       throw new LobbyError({
         name: "ALREADY_IN_LOBBY",
         message: "User is already in this lobby",
@@ -93,13 +64,13 @@ export class Lobby extends AggregateRoot<Data> {
 
     const user = new User({ userId, status: new UserStatus(false) });
 
-    this.players.add(user);
+    this._data.players.push(user);
   }
 
   public leave({ user }: { user: User }): void {
     user.setNotReadyStatus();
-    this.players.remove({ id: user.id });
-    for (const playableCharacter of this.playableCharacters) {
+    this._data.players = this._data.players.filter(({ id }) => id !== user.id);
+    for (const playableCharacter of this._data.playableCharacters) {
       if (playableCharacter.pickedBy === user.id) {
         playableCharacter.unsetOwner({ user });
       }
@@ -107,7 +78,7 @@ export class Lobby extends AggregateRoot<Data> {
   }
 
   private mustHaveEnoughSpace() {
-    if (this.players.length >= this.config.nbPlayersMax) {
+    if (this._data.players.length >= this._data.config.nbPlayersMax) {
       throw new LobbyError({
         name: "PLAYERS_LIMIT_REACHED",
         message: "No space left in this lobby",
@@ -116,17 +87,17 @@ export class Lobby extends AggregateRoot<Data> {
   }
 
   public gameInitializationStarted({ userId }: { userId: User["id"] }) {
-    this.status.mustBeOpened();
-    this.host.mustBeHost({ userId });
+    this._data.status.mustBeOpened();
+    this._data.host.mustBeHost({ userId });
 
-    if (this.players.values.some((player) => !player.status.isReady)) {
+    if (this._data.players.some((player) => !player.status.isReady)) {
       throw new UserStatusError({
         name: "BAD_USER_STATUS",
         message: "Cannot initialize game creation (some players are not ready)",
       });
     }
 
-    if (this.playableCharacters.values.some((pc) => !pc.pickedBy)) {
+    if (this._data.playableCharacters.some((pc) => !pc.pickedBy)) {
       throw new PlayableCharacterError({
         name: "PLAYABLE_CHARACTER_NOT_PICKED",
         message:
@@ -135,11 +106,11 @@ export class Lobby extends AggregateRoot<Data> {
     }
 
     if (this.env.NODE_ENV !== "development") {
-      const gameMasterId = this.playableCharacters.values.find(
+      const gameMasterId = this._data.playableCharacters.find(
         (pc) => pc.type === "game_master",
       )!.pickedBy;
       if (
-        this.playableCharacters.values.some(
+        this._data.playableCharacters.some(
           (pc) => pc.type === "hero" && pc.pickedBy === gameMasterId,
         )
       ) {
@@ -150,23 +121,35 @@ export class Lobby extends AggregateRoot<Data> {
       }
     }
 
-    this._data.status = this.status.advanceTo({ status: "GAME_INITIALIZING" });
+    this._data.status = this._data.status.advanceTo("GAME_INITIALIZING");
   }
 
   public gameInitializationDone() {
-    this._data.status = this.status.advanceTo({ status: "GAME_STARTED" });
+    this._data.status = this._data.status.advanceTo("GAME_STARTED");
   }
 
   public pickPlayableCharacter({
     playableCharacterId,
     userId,
   }: { playableCharacterId: PlayableCharacter["id"]; userId: User["id"] }) {
-    this.status.mustBeOpened();
+    this._data.status.mustBeOpened();
 
-    const user = this.players.findOrThrow({ id: userId });
-    const playableCharacter = this.playableCharacters.findOrThrow({
-      id: playableCharacterId,
-    });
+    const user = this._data.players.find(({ id }) => id === userId);
+    if (!user) {
+      throw new LobbyError({
+        name: "PLAYER_NOT_FOUND",
+        message: "Player not found in this lobby",
+      });
+    }
+    const playableCharacter = this._data.playableCharacters.find(
+      ({ id }) => id === playableCharacterId,
+    );
+    if (!playableCharacter) {
+      throw new LobbyError({
+        name: "PLAYABLE_CHARACTER_NOT_FOUND",
+        message: "Playable Character not found in this lobby",
+      });
+    }
 
     if (this.env.NODE_ENV !== "development") {
       if (playableCharacter.type === "hero") {
@@ -183,18 +166,30 @@ export class Lobby extends AggregateRoot<Data> {
     playableCharacterId,
     userId,
   }: { playableCharacterId: PlayableCharacter["id"]; userId: User["id"] }) {
-    this.status.mustBeOpened();
+    this._data.status.mustBeOpened();
 
-    const user = this.players.findOrThrow({ id: userId });
-    const playableCharacter = this.playableCharacters.findOrThrow({
-      id: playableCharacterId,
-    });
+    const user = this._data.players.find(({ id }) => id === userId);
+    if (!user) {
+      throw new LobbyError({
+        name: "PLAYER_NOT_FOUND",
+        message: "Player not found in this lobby",
+      });
+    }
+    const playableCharacter = this._data.playableCharacters.find(
+      ({ id }) => id === playableCharacterId,
+    );
+    if (!playableCharacter) {
+      throw new LobbyError({
+        name: "PLAYABLE_CHARACTER_NOT_FOUND",
+        message: "Playable Character not found in this lobby",
+      });
+    }
 
     playableCharacter.unsetOwner({ user });
   }
 
   private mustNotBeGameMaster({ user }: { user: User }) {
-    const isGameMaster = this.playableCharacters.values.some(
+    const isGameMaster = this._data.playableCharacters.some(
       (playableCharacter) =>
         playableCharacter.type === "game_master" &&
         playableCharacter.pickedBy === user.id,
@@ -208,7 +203,7 @@ export class Lobby extends AggregateRoot<Data> {
   }
 
   private mustNotBeHero({ user }: { user: User }) {
-    const isHero = this.playableCharacters.values.some(
+    const isHero = this._data.playableCharacters.some(
       (playableCharacter) =>
         playableCharacter.type === "hero" &&
         playableCharacter.pickedBy === user.id,
@@ -222,9 +217,20 @@ export class Lobby extends AggregateRoot<Data> {
   }
 
   public toggleUserStatus({ userId }: { userId: User["id"] }) {
-    this.status.mustBeOpened();
+    this._data.status.mustBeOpened();
 
-    const user = this.players.findOrThrow({ id: userId });
+    const user = this._data.players.find(({ id }) => id === userId);
+    if (!user) {
+      throw new LobbyError({
+        name: "PLAYER_NOT_FOUND",
+        message: "Player not found in this lobby",
+      });
+    }
+
     user.toggleStatus();
+  }
+
+  public findUser({ userId }: { userId: User["id"] }) {
+    return this._data.players.find((player) => player.id === userId);
   }
 }

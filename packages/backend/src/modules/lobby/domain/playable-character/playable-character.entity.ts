@@ -29,6 +29,14 @@ export class PlayableCharacter extends Entity<Data> {
     return this._data.pickedBy;
   }
 
+  public toPlain() {
+    return {
+      id: this._data.id,
+      type: this._data.type,
+      pickedBy: this._data.pickedBy,
+    };
+  }
+
   public setOwner({ user }: { user: User }) {
     this.mustBeAvailable();
     user.status.mustNotBeReady();

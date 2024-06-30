@@ -111,9 +111,22 @@ export class RedisLobbiesRepository
       lobbyRaw,
     );
 
+    const plainLobby = lobby.toPlain();
     this.eventEmitter.emitAsync(
       LobbyEvent.LobbyUpdated,
-      new LobbyUpdatedPayload({ lobby: lobby.toPlain() }),
+      new LobbyUpdatedPayload({
+        lobby: {
+          ...plainLobby,
+          players: plainLobby.players.map(({ status, ...player }) => ({
+            ...player,
+            isReady: status,
+            heroesSelected: plainLobby.playableCharacters
+              .filter((pc) => pc.pickedBy === player.userId)
+              .map((pc) => pc.id),
+          })),
+          status: plainLobby.status,
+        },
+      }),
     );
   }
 

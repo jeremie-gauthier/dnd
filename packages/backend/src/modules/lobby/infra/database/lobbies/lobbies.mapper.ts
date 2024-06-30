@@ -1,7 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ConfigType } from "@nestjs/config";
 import envConfig from "src/config/env.config";
-import { List } from "src/modules/shared/domain/list";
 import { Mapper } from "src/modules/shared/infra/mapper";
 import { Host } from "../../../domain/host/host.entity";
 import { LobbyStatus } from "../../../domain/lobby-status/lobby-status.vo";
@@ -23,50 +22,31 @@ export class LobbiesMapper extends Mapper<LobbyPersistence, LobbyDomain> {
   public toDomain(persistence: LobbyPersistence): LobbyDomain {
     return new LobbyDomain(this.env, {
       config: persistence.config,
-      playableCharacters: new List(
-        persistence.playableCharacters.map(
-          ({ id, type, pickedBy }) =>
-            new PlayableCharacter({
-              id,
-              type,
-              pickedBy,
-            }),
-        ),
+      playableCharacters: persistence.playableCharacters.map(
+        ({ id, type, pickedBy }) =>
+          new PlayableCharacter({ id, type, pickedBy }),
       ),
       host: new Host({ userId: persistence.host.userId }),
       id: persistence.id,
-      players: new List(
-        persistence.players.map(
-          (player) =>
-            new User({
-              status: new UserStatus(player.isReady),
-              userId: player.userId,
-            }),
-        ),
+      players: persistence.players.map(
+        (player) =>
+          new User({
+            status: new UserStatus(player.isReady),
+            userId: player.userId,
+          }),
       ),
-      status: new LobbyStatus({ status: persistence.status }),
+      status: new LobbyStatus(persistence.status),
     });
   }
 
   public toPersistence(domain: LobbyDomain): LobbyPersistence {
+    const plainLobby = domain.toPlain();
     return {
-      config: domain.config,
-      playableCharacters: domain.playableCharacters.values.map(
-        ({ id, type, pickedBy }) => ({
-          id,
-          type,
-          pickedBy: pickedBy ? pickedBy : undefined,
-        }),
-      ),
-      host: {
-        userId: domain.host.id,
-      },
-      id: domain.id,
-      players: domain.players.values.map((player) => ({
-        isReady: player.status.isReady,
-        userId: player.id,
+      ...plainLobby,
+      players: plainLobby.players.map((player) => ({
+        isReady: player.status,
+        userId: player.userId,
       })),
-      status: domain.status.current,
     };
   }
 }

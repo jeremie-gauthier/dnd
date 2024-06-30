@@ -35,7 +35,7 @@ describe("Initiative VO", () => {
 
       const result = initiative.roll();
 
-      expect(result).toEqual(86);
+      expect(result.equals(new Initiative(86))).toBe(true);
     });
   });
 });

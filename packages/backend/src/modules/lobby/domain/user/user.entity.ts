@@ -22,6 +22,13 @@ export class User extends Entity<Data> {
     return this._data.status;
   }
 
+  public toPlain() {
+    return {
+      userId: this._data.userId,
+      status: this._data.status.toPlain(),
+    };
+  }
+
   public toggleStatus() {
     this._data.status = this._data.status.toggle();
   }

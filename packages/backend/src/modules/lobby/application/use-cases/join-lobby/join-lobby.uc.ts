@@ -33,10 +33,24 @@ export class JoinLobbyUseCase implements UseCase {
     lobby.join({ userId });
     await this.lobbiesRepository.update({ lobby });
 
-    const lobbyView = await this.lobbiesRepository.getOneOrThrow({ lobbyId });
+    const plainLobby = lobby.toPlain();
+
     this.eventEmitter.emitAsync(
       LobbyEvent.UserJoinedLobby,
-      new UserJoinedLobbyPayload({ userId, lobby: lobby.toPlain() }),
+      new UserJoinedLobbyPayload({
+        userId,
+        lobby: {
+          ...plainLobby,
+          players: plainLobby.players.map(({ status, ...player }) => ({
+            ...player,
+            isReady: status,
+            heroesSelected: plainLobby.playableCharacters
+              .filter((pc) => pc.pickedBy === player.userId)
+              .map((pc) => pc.id),
+          })),
+          status: plainLobby.status,
+        },
+      }),
     );
 
     return lobbyId;

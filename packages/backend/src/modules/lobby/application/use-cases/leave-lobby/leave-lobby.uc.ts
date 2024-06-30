@@ -40,7 +40,8 @@ export class LeaveLobbyUseCase implements UseCase {
       return;
     }
 
-    const userThatLeave = lobby.players.find({ id: userId });
+    // const plainLobby = lobby.toPlain();
+    const userThatLeave = lobby.findUser({ userId });
     if (!userThatLeave) {
       return;
     }
@@ -48,16 +49,27 @@ export class LeaveLobbyUseCase implements UseCase {
     lobby.leave({ user: userThatLeave });
     await this.usersRepository.del({ userId });
 
-    const lobbyView = await this.lobbiesRepository.getOneOrThrow({
-      lobbyId: lobby.id,
-    });
+    const plainLobby = lobby.toPlain();
     this.eventEmitter.emitAsync(
       LobbyEvent.UserLeftLobby,
-      new UserLeftLobbyPayload({ userId, lobby: lobby.toPlain() }),
+      new UserLeftLobbyPayload({
+        userId,
+        lobby: {
+          ...plainLobby,
+          players: plainLobby.players.map(({ status, ...player }) => ({
+            ...player,
+            isReady: status,
+            heroesSelected: plainLobby.playableCharacters
+              .filter((pc) => pc.pickedBy === player.userId)
+              .map((pc) => pc.id),
+          })),
+          status: plainLobby.status,
+        },
+      }),
     );
 
-    const hasNoPlayersLeft = lobby.players.length === 0;
-    const hasHostLeft = lobby.host.id === userId;
+    const hasNoPlayersLeft = plainLobby.players.length === 0;
+    const hasHostLeft = plainLobby.host.userId === userId;
     const shouldDeleteLobby = hasNoPlayersLeft || hasHostLeft;
 
     if (shouldDeleteLobby) {
@@ -70,15 +82,23 @@ export class LeaveLobbyUseCase implements UseCase {
   }
 
   private async deleteLobby({ lobby }: { lobby: Lobby }) {
-    const lobbyView = await this.lobbiesRepository.getOneOrThrow({
-      lobbyId: lobby.id,
-    });
-    for (const { id } of lobby.players) {
+    const plainLobby = lobby.toPlain();
+    for (const { userId } of plainLobby.players) {
       this.eventEmitter.emitAsync(
         LobbyEvent.UserLeftLobby,
         new UserLeftLobbyPayload({
-          userId: id,
-          lobby: lobby.toPlain(),
+          userId,
+          lobby: {
+            ...plainLobby,
+            players: plainLobby.players.map(({ status, ...player }) => ({
+              ...player,
+              isReady: status,
+              heroesSelected: plainLobby.playableCharacters
+                .filter((pc) => pc.pickedBy === player.userId)
+                .map((pc) => pc.id),
+            })),
+            status: plainLobby.status,
+          },
         }),
       );
     }
@@ -88,7 +108,17 @@ export class LeaveLobbyUseCase implements UseCase {
     this.eventEmitter.emitAsync(
       LobbyEvent.LobbyDeleted,
       new LobbyDeletedPayload({
-        lobby: lobby.toPlain(),
+        lobby: {
+          ...plainLobby,
+          players: plainLobby.players.map(({ status, ...player }) => ({
+            ...player,
+            isReady: status,
+            heroesSelected: plainLobby.playableCharacters
+              .filter((pc) => pc.pickedBy === player.userId)
+              .map((pc) => pc.id),
+          })),
+          status: plainLobby.status,
+        },
       }),
     );
   }

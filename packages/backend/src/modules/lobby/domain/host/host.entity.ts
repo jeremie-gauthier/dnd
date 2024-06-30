@@ -17,6 +17,12 @@ export class Host extends Entity<Data> {
     super(data, data.userId);
   }
 
+  public toPlain() {
+    return {
+      userId: this._data.userId,
+    };
+  }
+
   public mustBeHost({ userId }: { userId: User["id"] }) {
     if (this.id !== userId) {
       throw new HostError({

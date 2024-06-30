@@ -1,5 +1,4 @@
 import { LobbyView } from "@dnd/shared";
-import { List } from "src/modules/shared/domain/list";
 import { Host } from "../host/host.entity";
 import { getFakeHost } from "../host/host.fixtures";
 import { LobbyStatus } from "../lobby-status/lobby-status.vo";
@@ -14,8 +13,8 @@ export const FAKE_CAMPAIGN_STAGE_ID = "00000000-0000-0000-0000-000000000010";
 
 export const getFakeLobbyData = (): Pick<LobbyView, "config"> & {
   id: string;
-  players: List<User>;
-  playableCharacters: List<PlayableCharacter>;
+  players: Array<User>;
+  playableCharacters: Array<PlayableCharacter>;
   host: Host;
   status: LobbyStatus;
 } => {
@@ -35,7 +34,7 @@ export const getFakeLobbyData = (): Pick<LobbyView, "config"> & {
       },
       nbPlayersMax: 5,
     },
-    playableCharacters: new List([
+    playableCharacters: [
       new PlayableCharacter({
         ...getFakeHero(),
         id: "00000000-0000-0000-0000-000000000011",
@@ -52,12 +51,12 @@ export const getFakeLobbyData = (): Pick<LobbyView, "config"> & {
         ...getFakeHero(),
         id: "00000000-0000-0000-0000-000000000014",
       }),
-    ]),
+    ],
     host: new Host(getFakeHost()),
     id: FAKE_LOBBY_ID,
-    players: new List([
+    players: [
       new User({ userId: getFakeHost().userId, status: new UserStatus(false) }),
-    ]),
-    status: new LobbyStatus({ status: "OPENED" }),
+    ],
+    status: new LobbyStatus("OPENED"),
   };
 };

@@ -6,6 +6,10 @@ export class UserStatus extends ValueObject<boolean> {
     return this._data;
   }
 
+  public toPlain(): boolean {
+    return this._data;
+  }
+
   public equals(other: UserStatus): boolean {
     return this.isReady === other.isReady;
   }
