@@ -8,25 +8,29 @@ import {
   unfoldTilePath,
 } from "@dnd/shared";
 import { TrapEntity } from "@dnd/shared/dist/database/game/interactive-entities.type";
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
+import { PlayableEntityService } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.service";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { PlayableEntityMovedPayload } from "src/modules/shared/events/game/playable-entity-moved.payload";
-import { BackupService } from "../../../domain/backup/backup.service";
 import { MapService } from "../../../domain/map/map.service";
 import { MoveService } from "../../../domain/move/move.service";
-import { PlayableEntityService } from "../../../domain/playable-entity/playable-entity.service";
 import { TrapService } from "../../../domain/trap/trap.service";
+import {
+  GAME_REPOSITORY,
+  GameRepository,
+} from "../../repositories/game-repository.interface";
 
 @Injectable()
 export class PlayableEntityMoveUseCase implements UseCase {
   constructor(
+    @Inject(GAME_REPOSITORY)
+    private readonly gameRepository: GameRepository,
     private readonly moveService: MoveService,
     private readonly eventEmitter: EventEmitter2,
     private readonly trapService: TrapService,
-    private readonly backupService: BackupService,
     private readonly playableEntityService: PlayableEntityService,
     private readonly mapService: MapService,
   ) {}
@@ -39,13 +43,13 @@ export class PlayableEntityMoveUseCase implements UseCase {
   }: PlayableEntityMoveInput & {
     userId: User["id"];
   }): Promise<void> {
-    const game = await this.backupService.getGameOrThrow({ gameId });
+    const game = await this.gameRepository.getOneOrThrow({ gameId });
 
-    this.mustExecute({ game, playableEntityId, userId });
+    // this.mustExecute({ game, playableEntityId, userId });
 
-    this.getPlayableEntityPath({ game, pathToTile, playableEntityId });
+    // this.getPlayableEntityPath({ game, pathToTile, playableEntityId });
 
-    await this.backupService.updateGame({ game });
+    // await this.backupService.updateGame({ game });
   }
 
   private mustExecute({

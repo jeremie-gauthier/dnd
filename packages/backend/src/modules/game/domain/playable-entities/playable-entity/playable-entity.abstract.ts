@@ -50,6 +50,10 @@ export abstract class Playable<
   }): void;
   public abstract toPlain(): PlainData<ChildData>;
 
+  constructor(rawData: ChildData) {
+    super(rawData, rawData.id);
+  }
+
   get healthPoints() {
     return this._data.characteristic.healthPoints;
   }
@@ -64,6 +68,10 @@ export abstract class Playable<
 
   get initiative() {
     return this._data.initiative;
+  }
+
+  get coord() {
+    return this._data.coord;
   }
 
   protected mustBeAlive() {
@@ -115,5 +123,21 @@ export abstract class Playable<
     this._data.status = "action";
     this._data.characteristic.actionPoints =
       this._data.characteristic.baseActionPoints;
+  }
+
+  public setCoord(coord: Coord) {
+    this._data.coord = coord;
+  }
+
+  public rollInitiative() {
+    this._data.initiative = this.initiative.roll();
+  }
+
+  public setIdleStatus() {
+    this._data.status = "idle";
+  }
+
+  public setActionStatus() {
+    this._data.status = "action";
   }
 }

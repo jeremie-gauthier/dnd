@@ -925,8 +925,8 @@ describe("MapSerializerService", () => {
               {
                 name: "on_door_opening",
                 doorCoord: { row: 1, column: 2 },
-                action: "spawn_enemies",
-                enemies: ["goblin", "goblin"],
+                action: "spawn_monsters",
+                monsters: ["goblin", "goblin"],
                 startingTiles: [
                   { row: 2, column: 0 },
                   { row: 2, column: 1 },
@@ -1169,8 +1169,8 @@ describe("MapSerializerService", () => {
               {
                 name: "on_door_opening",
                 doorCoord: { row: 1, column: 2 },
-                action: "spawn_enemies",
-                enemies: ["goblin", "goblin"],
+                action: "spawn_monsters",
+                monsters: ["goblin", "goblin"],
                 startingTiles: [
                   { row: 2, column: 0 },
                   { row: 2, column: 1 },
@@ -1308,8 +1308,8 @@ describe("MapSerializerService", () => {
               {
                 name: "on_door_opening",
                 doorCoord: { row: 0, column: 1 },
-                action: "spawn_enemies",
-                enemies: ["goblin"],
+                action: "spawn_monsters",
+                monsters: ["goblin"],
                 startingTiles: [{ row: 0, column: 42 }],
               },
             ],
@@ -1326,8 +1326,8 @@ describe("MapSerializerService", () => {
               {
                 name: "on_door_opening",
                 doorCoord: { row: 0, column: 1 },
-                action: "spawn_enemies",
-                enemies: ["goblin", "goblin"],
+                action: "spawn_monsters",
+                monsters: ["goblin", "goblin"],
                 startingTiles: [{ row: 5, column: 5 }],
               },
             ],
@@ -1344,8 +1344,8 @@ describe("MapSerializerService", () => {
               {
                 name: "on_door_opening",
                 doorCoord: { row: 0, column: 1 },
-                action: "spawn_enemies",
-                enemies: ["goblin", "goblin"],
+                action: "spawn_monsters",
+                monsters: ["goblin", "goblin"],
                 startingTiles: [{ row: 5, column: 5 }],
               },
             ],

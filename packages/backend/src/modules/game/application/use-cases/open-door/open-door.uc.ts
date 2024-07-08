@@ -7,29 +7,34 @@ import {
 } from "@dnd/shared";
 import {
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
+import { PlayableEntityService } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.service";
 import { DoorOpenedPayload } from "src/modules/shared/events/game/door-opened.payload";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
-import { BackupService } from "../../../domain/backup/backup.service";
 import { InitiativeService } from "../../../domain/initiative/initiative.service";
 import { MapService } from "../../../domain/map/map.service";
-import { PlayableEntityService } from "../../../domain/playable-entity/playable-entity.service";
 import { SpawnService } from "../../../domain/spawn/spawn.service";
 import { TurnService } from "../../../domain/turn/turn.service";
+import {
+  GAME_REPOSITORY,
+  GameRepository,
+} from "../../repositories/game-repository.interface";
 
 @Injectable()
 export class OpenDoorUseCase implements UseCase {
   constructor(
+    @Inject(GAME_REPOSITORY)
+    private readonly gameRepository: GameRepository,
     private readonly turnService: TurnService,
     private readonly initiativeService: InitiativeService,
     private readonly spawnService: SpawnService,
     private readonly eventEmitter: EventEmitter2,
-    private readonly backupService: BackupService,
     private readonly playableEntityService: PlayableEntityService,
     private readonly mapService: MapService,
   ) {}
@@ -41,24 +46,24 @@ export class OpenDoorUseCase implements UseCase {
   }: OpenDoorInput & {
     userId: User["id"];
   }): Promise<void> {
-    const game = await this.backupService.getGameOrThrow({ gameId });
+    const game = await this.gameRepository.getOneOrThrow({ gameId });
 
-    this.mustExecute({ game, userId, coordOfTileWithDoor });
+    // this.mustExecute({ game, userId, coordOfTileWithDoor });
 
-    const { entityThatOpenedTheDoor } = this.openDoor({
-      coordOfTileWithDoor,
-      game,
-      userId,
-    });
-    this.turnService.endPlayableEntityTurn({
-      game,
-      playableEntity: entityThatOpenedTheDoor,
-    });
-    this.spawnService.spawnEnemies({ game, doorCoord: coordOfTileWithDoor });
-    this.initiativeService.rollPlayableEntitiesInitiative({ game });
-    this.turnService.restartTimeline({ game });
+    // const { entityThatOpenedTheDoor } = this.openDoor({
+    //   coordOfTileWithDoor,
+    //   game,
+    //   userId,
+    // });
+    // this.turnService.endPlayableEntityTurn({
+    //   game,
+    //   playableEntity: entityThatOpenedTheDoor,
+    // });
+    // this.spawnService.spawnEnemies({ game, doorCoord: coordOfTileWithDoor });
+    // this.initiativeService.rollPlayableEntitiesInitiative({ game });
+    // this.turnService.restartTimeline({ game });
 
-    this.backupService.updateGame({ game });
+    // this.backupService.updateGame({ game });
   }
 
   private mustExecute({

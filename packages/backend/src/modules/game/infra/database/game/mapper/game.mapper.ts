@@ -3,6 +3,8 @@ import { Coord } from "src/modules/game/domain/coord/coord.vo";
 import { GameMaster } from "src/modules/game/domain/game-master/game-master.entity";
 import { GameStatus } from "src/modules/game/domain/game-status/game-status.vo";
 import { Game as GameDomain } from "src/modules/game/domain/game/game.aggregate";
+import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
+import { MonsterTemplate } from "src/modules/game/domain/monster-template/monster-template.vo";
 import { PlayableEntities } from "src/modules/game/domain/playable-entities/playable-entities.aggregate";
 import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/hero.entity";
 import { Monster } from "src/modules/game/domain/playable-entities/playable-entity/monster.entity";
@@ -11,6 +13,7 @@ import { Mapper } from "src/modules/shared/infra/mapper";
 import { GameEvent } from "../model/game-event.type";
 import { GamePersistence } from "../model/game.model";
 import { GameEventFactory } from "./game-event.factory";
+import { ItemFactory } from "./item.factory";
 import { PlayableEntityFactory } from "./playable-entity.factory";
 import { TileEntityFactory } from "./tile-entity.factory";
 
@@ -35,7 +38,22 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
       }),
       events: persistence.events.map((event) => GameEventFactory.create(event)),
       gameMaster: new GameMaster({ userId: persistence.gameMaster.userId }),
-      monsterTemplates: [],
+      monsterTemplates: persistence.enemyTemplates.map(
+        (enemyTemplate) =>
+          new MonsterTemplate({
+            ...enemyTemplate,
+            inventory: new Inventory({
+              ...enemyTemplate.inventory,
+              playableId: enemyTemplate.kind,
+              backpack: enemyTemplate.inventory.backpack.map((item) =>
+                ItemFactory.create(item),
+              ),
+              gear: enemyTemplate.inventory.gear.map((item) =>
+                ItemFactory.create(item),
+              ),
+            }),
+          }),
+      ),
       playableEntities: new PlayableEntities({
         values: Object.values(persistence.playableEntities).map(
           (playableEntity) => PlayableEntityFactory.create(playableEntity),

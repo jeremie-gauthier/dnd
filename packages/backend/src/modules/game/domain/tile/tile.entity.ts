@@ -5,7 +5,6 @@ import { TileEntity } from "../tile-entity/tile-entity.abstract";
 
 type Data = {
   coord: Coord;
-  // ! toutes les entities ne sont pas des TileEntity. Les Playable c'est juste un id
   entities: Array<TileEntity>;
   isStartingTile?: true;
 };
@@ -29,5 +28,11 @@ export class Tile extends Entity<Data> {
       entities: this._data.entities.map((gameEntity) => gameEntity.toPlain()),
       isStartingTile: this._data.isStartingTile,
     };
+  }
+
+  public removeEntity({ tileEntity }: { tileEntity: TileEntity }) {
+    this._data.entities = this._data.entities.filter(
+      (entity) => !entity.equals(tileEntity),
+    );
   }
 }

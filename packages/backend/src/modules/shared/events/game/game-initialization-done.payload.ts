@@ -1,5 +1,5 @@
-import type { GameEntity } from "@dnd/shared";
 import type { EventPayload } from "src/interfaces/event-payload.interface";
+import { Game } from "src/modules/game/domain/game/game.aggregate";
 import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
 import { GameEvent } from "./game-event.enum";
 
@@ -8,7 +8,7 @@ export class GameInitializationDonePayload
 {
   public readonly name = GameEvent.GameInitializationDone;
   public readonly lobby: Lobby;
-  public readonly game: GameEntity;
+  public readonly game: ReturnType<Game["toPlain"]>;
 
   constructor({ lobby, game }: Omit<GameInitializationDonePayload, "name">) {
     this.lobby = lobby;

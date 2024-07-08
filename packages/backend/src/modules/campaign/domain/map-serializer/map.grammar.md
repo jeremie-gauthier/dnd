@@ -19,7 +19,7 @@ Here is a full example of a map compiled, check the sections below for more info
       "type": "on_door_opening",
       "data": {
         "doorCoord": { "row": 2, "column": 1 },
-        "action": "spawn_enemies", 
+        "action": "spawn_monsters", 
         "enemies": ["goblin", "goblin", "skeleton"], 
         "startingTiles": [
           { "row": 3, "column": 0 },

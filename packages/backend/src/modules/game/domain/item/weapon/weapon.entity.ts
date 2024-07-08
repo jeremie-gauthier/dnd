@@ -3,7 +3,6 @@ import { Attack } from "../../attack/attack.entity";
 import { Item } from "../item.abstract";
 
 type Data = {
-  readonly id: string;
   readonly type: "Weapon";
   readonly name: string;
   readonly level: number;
@@ -12,7 +11,6 @@ type Data = {
 
 export class Weapon extends Item<Data> {
   private static schema = z.object({
-    id: z.string().uuid(),
     type: z.literal("Weapon"),
     name: z.string(),
     level: z.number().min(0).max(3),
@@ -41,7 +39,6 @@ export class Weapon extends Item<Data> {
 
   public toPlain() {
     return {
-      id: this._data.id,
       type: this._data.type,
       name: this._data.name,
       level: this._data.level,

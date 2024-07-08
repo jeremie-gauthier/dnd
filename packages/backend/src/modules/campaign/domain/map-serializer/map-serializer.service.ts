@@ -238,8 +238,8 @@ export class MapSerializerService {
     }
 
     if (
-      event.action === "spawn_enemies" &&
-      event.startingTiles.length < event.enemies.length
+      event.action === "spawn_monsters" &&
+      event.startingTiles.length < event.monsters.length
     ) {
       throw new InternalServerErrorException(
         "Not enough starting tiles defined",
@@ -247,7 +247,7 @@ export class MapSerializerService {
     }
 
     if (
-      event.action === "spawn_enemies" &&
+      event.action === "spawn_monsters" &&
       event.startingTiles.some((startingTile) => {
         const startingTileIdx = this.coordService.coordToIndex({
           coord: startingTile,

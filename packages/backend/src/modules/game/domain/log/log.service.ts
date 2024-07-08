@@ -37,9 +37,9 @@ export class LogService {
           createdAt: new Date(),
           data: {},
         };
-      case GameEvent.EnemiesSpawned:
+      case GameEvent.MonstersSpawned:
         return {
-          type: GameEvent.EnemiesSpawned,
+          type: GameEvent.MonstersSpawned,
           createdAt: new Date(),
           data: {},
         };

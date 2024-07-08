@@ -41,6 +41,10 @@ export class Coord extends ValueObject<Data> {
     return this.row === other.row && this.column === other.column;
   }
 
+  public isUndefined(): boolean {
+    return Number.isNaN(this.row) || Number.isNaN(this.column);
+  }
+
   public isAdjacentTo(other: Coord): boolean {
     const neighbours = this.getNeighbours();
     return neighbours.some((neighbour) => other.equals(neighbour));
@@ -95,5 +99,9 @@ export class Coord extends ValueObject<Data> {
 
   public toPlain() {
     return { row: this._data.row, column: this._data.column };
+  }
+
+  public toString() {
+    return `row: ${this.row}; column: ${this.column}`;
   }
 }

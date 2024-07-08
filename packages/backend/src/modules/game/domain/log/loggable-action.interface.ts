@@ -1,5 +1,5 @@
 import { DoorOpenedPayload } from "src/modules/shared/events/game/door-opened.payload";
-import { EnemiesSpawnedPayload } from "src/modules/shared/events/game/enemies-spawned.payload";
+import { MonstersSpawnedPayload } from "src/modules/shared/events/game/enemies-spawned.payload";
 import { EntityAttackedPayload } from "src/modules/shared/events/game/entity-attacked.payload";
 import { EntityDiedPayload } from "src/modules/shared/events/game/entity-died.payload";
 import { EntityTookDamagePayload } from "src/modules/shared/events/game/entity-took-damage.payload";
@@ -14,7 +14,7 @@ export type LoggableAction =
   | DoorOpenedPayload
   | PlayableEntityTurnStartedPayload
   | InitiativesRerolledPayload
-  | EnemiesSpawnedPayload
+  | MonstersSpawnedPayload
   | EntityAttackedPayload
   | EntityDiedPayload
   | EntityTookDamagePayload;

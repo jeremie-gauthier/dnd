@@ -1,7 +1,6 @@
 import { Entity, PlainData } from "src/modules/shared/domain/entity";
 
 type Data = {
-  readonly id: string;
   readonly type: "Weapon" | "Spell";
   readonly name: string;
   readonly level: number;
@@ -15,7 +14,7 @@ export abstract class Item<
   public abstract toPlain(): PlainData<ChildData>;
 
   constructor(rawData: ChildData) {
-    super(rawData, rawData.id);
+    super(rawData, rawData.name);
   }
 
   get type() {

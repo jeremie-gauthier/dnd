@@ -51,6 +51,21 @@ export class PlayableEntities extends Entity<Data> {
     };
   }
 
+  public getOneOrThrow({
+    playableEntityId,
+  }: { playableEntityId: Playable["id"] }) {
+    const playableEntity = this._data.values.find(
+      (playableEntity) => playableEntity.id === playableEntityId,
+    );
+    if (!playableEntity) {
+      throw new PlayableEntityError({
+        name: "PLAYABLE_ENTITY_NOT_FOUND",
+        message: "Playable Entity not found",
+      });
+    }
+    return playableEntity;
+  }
+
   public getPlayingEntityOrThrow(): Playable {
     const playingEntity = this._data.values.find((playableEntity) =>
       playableEntity.isPlaying(),
@@ -67,5 +82,18 @@ export class PlayableEntities extends Entity<Data> {
   public getNextEntityToPlay(): Playable | undefined {
     if (this.isEveryoneDead) return;
     return this._data.values.find((pc) => pc.isAlive);
+  }
+
+  public rollInitiatives() {
+    for (const playableEntity of this._data.values) {
+      playableEntity.rollInitiative();
+      playableEntity.setIdleStatus();
+    }
+
+    this._data.values = this.toSortedValuesAsRelativeTimeline({
+      values: this._data.values,
+    });
+
+    this._data.values[0]?.setActionStatus();
   }
 }

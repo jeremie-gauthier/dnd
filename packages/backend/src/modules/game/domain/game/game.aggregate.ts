@@ -1,11 +1,14 @@
 import { AggregateRoot } from "src/modules/shared/domain/aggregate-root";
 import { z } from "zod";
-import { GameEvent } from "../../game-event/game-event.abstract";
 import { Board } from "../board/board.entity";
+import { Coord } from "../coord/coord.vo";
+import { GameEvent } from "../game-event/game-event.abstract";
 import { GameMaster } from "../game-master/game-master.entity";
 import { GameStatus } from "../game-status/game-status.vo";
 import { MonsterTemplate } from "../monster-template/monster-template.vo";
 import { PlayableEntities } from "../playable-entities/playable-entities.aggregate";
+import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
+import { TilePlayableEntity } from "../tile-entity/playable/playable.entity";
 
 type Data = {
   readonly id: string;
@@ -59,5 +62,27 @@ export class Game extends AggregateRoot<Data> {
       playingEntityWhoseTurnEnded: playingEntity,
       playingEntityWhoseTurnStarted: nextEntityToPlay,
     };
+  }
+
+  public movePlayableEntity({
+    playableEntityId,
+    destinationCoord,
+  }: { playableEntityId: Playable["id"]; destinationCoord: Coord }) {
+    const playableEntity = this._data.playableEntities.getOneOrThrow({
+      playableEntityId,
+    });
+
+    if (!playableEntity.coord.isUndefined()) {
+      this._data.board.removeEntityAtCoord({
+        tileEntity: new TilePlayableEntity({ id: playableEntity.id }),
+        coord: playableEntity.coord,
+      });
+    }
+
+    playableEntity.setCoord(destinationCoord);
+  }
+
+  public rollInitiatives() {
+    this._data.playableEntities.rollInitiatives();
   }
 }

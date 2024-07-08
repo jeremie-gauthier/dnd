@@ -1,6 +1,9 @@
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
+import { Coord } from "../coord/coord.vo";
+import { TileEntity } from "../tile-entity/tile-entity.abstract";
 import { Tile } from "../tile/tile.entity";
+import { BoardError } from "./board.error";
 
 type Data = {
   width: number;
@@ -31,5 +34,24 @@ export class Board extends Entity<Data> {
       height: this._data.height,
       tiles: this._data.tiles.map((tile) => tile.toPlain()),
     };
+  }
+
+  public removeEntityAtCoord({
+    tileEntity,
+    coord,
+  }: { tileEntity: TileEntity; coord: Coord }) {
+    const coordIdx = coord.toIndex({
+      width: this._data.width,
+      height: this._data.height,
+    });
+    const tile = this._data.tiles[coordIdx];
+    if (!tile) {
+      throw new BoardError({
+        name: "OUT_OF_RANGE_COORD",
+        message: `No tile found at coord [${coord}]`,
+      });
+    }
+
+    tile.removeEntity({ tileEntity });
   }
 }

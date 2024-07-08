@@ -1,7 +1,6 @@
 import { AttackRangeType, AttackTypeType, ItemManaCostJson } from "@dnd/shared";
 
 type BaseItem = {
-  id: string;
   type: "Weapon" | "Spell";
   name: string;
   level: number;

@@ -8,11 +8,11 @@ import {
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { DoorOpenedPayload } from "src/modules/shared/events/game/door-opened.payload";
-import { EnemiesSpawnedPayload } from "src/modules/shared/events/game/enemies-spawned.payload";
+import { MonstersSpawnedPayload } from "src/modules/shared/events/game/enemies-spawned.payload";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { MapService } from "../map/map.service";
 import { MoveService } from "../move/move.service";
-import { PlayableEntityService } from "../playable-entity/playable-entity.service";
+import { PlayableEntityService } from "../playable-entities/playable-entity/playable-entity.service";
 
 @Injectable()
 export class SpawnService {
@@ -32,15 +32,15 @@ export class SpawnService {
       return;
     }
 
-    const enemies = this.playableEntityService.createEnemies({
+    const monsters = this.playableEntityService.createEnemies({
       game,
-      enemiesName: spawnEnemiesEvent.enemies,
+      enemiesName: spawnEnemiesEvent.monsters,
     });
-    this.addEnemiesOnGame({ game, spawnEnemiesEvent, enemies });
+    this.addEnemiesOnGame({ game, spawnEnemiesEvent, enemies: monsters });
 
     this.eventEmitter.emitAsync(
-      GameEvent.EnemiesSpawned,
-      new EnemiesSpawnedPayload({ enemies, game }),
+      GameEvent.MonstersSpawned,
+      new MonstersSpawnedPayload({ monsters, game }),
     );
   }
 
@@ -97,7 +97,7 @@ export class SpawnService {
     const spawnEnemiesEvent = game.events.find(
       (event) =>
         event.name === "on_door_opening" &&
-        event.action === "spawn_enemies" &&
+        event.action === "spawn_monsters" &&
         event.doorCoord.column === doorCoord.column &&
         event.doorCoord.row === doorCoord.row,
     );

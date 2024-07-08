@@ -4,19 +4,23 @@ import {
   PlayableEntity,
   PlayableEntityAttackInput,
 } from "@dnd/shared";
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { ForbiddenException, Inject, Injectable } from "@nestjs/common";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
-import { BackupService } from "../../../domain/backup/backup.service";
+import { PlayableEntityService } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.service";
 import { CombatService } from "../../../domain/combat/combat.service";
 import { MapService } from "../../../domain/map/map.service";
-import { PlayableEntityService } from "../../../domain/playable-entity/playable-entity.service";
+import {
+  GAME_REPOSITORY,
+  GameRepository,
+} from "../../repositories/game-repository.interface";
 
 @Injectable()
 export class PlayableEntityAttackUseCase implements UseCase {
   constructor(
+    @Inject(GAME_REPOSITORY)
+    private readonly gameRepository: GameRepository,
     private readonly combatService: CombatService,
-    private readonly backupService: BackupService,
     private readonly playableEntityService: PlayableEntityService,
     private readonly mapService: MapService,
   ) {}
@@ -28,23 +32,23 @@ export class PlayableEntityAttackUseCase implements UseCase {
     targetPlayableEntityId,
     userId,
   }: PlayableEntityAttackInput & { userId: User["id"] }): Promise<void> {
-    const game = await this.backupService.getGameOrThrow({ gameId });
-    this.mustExecute({
-      game,
-      gameId,
-      attackId,
-      attackerPlayableEntityId,
-      targetPlayableEntityId,
-      userId,
-    });
+    const game = await this.gameRepository.getOneOrThrow({ gameId });
+    // this.mustExecute({
+    //   game,
+    //   gameId,
+    //   attackId,
+    //   attackerPlayableEntityId,
+    //   targetPlayableEntityId,
+    //   userId,
+    // });
 
-    this.attackTarget({
-      game,
-      attackId,
-      attackerPlayableEntityId,
-      targetPlayableEntityId,
-    });
-    await this.backupService.updateGame({ game });
+    // this.attackTarget({
+    //   game,
+    //   attackId,
+    //   attackerPlayableEntityId,
+    //   targetPlayableEntityId,
+    // });
+    // await this.backupService.updateGame({ game });
   }
 
   private mustExecute({

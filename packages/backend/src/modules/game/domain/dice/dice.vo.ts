@@ -18,6 +18,14 @@ export class Dice extends ValueObject<Data> {
     return true;
   }
 
+  public get name() {
+    return this._data.name;
+  }
+
+  public get values() {
+    return this._data.values;
+  }
+
   public roll(): number {
     const randIndex = Math.trunc(Math.random() * this._data.values.length);
     const result = this._data.values[randIndex];

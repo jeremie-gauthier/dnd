@@ -1,5 +1,5 @@
 import { EnemyKind } from "@dnd/shared";
-import { Coord } from "../../domain/coord/coord.vo";
+import { Coord } from "../../coord/coord.vo";
 import { GameEvent } from "../game-event.abstract";
 
 type Data = {

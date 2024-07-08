@@ -20,7 +20,7 @@ export class GamePublisherGateway {
   @OnEvent(GameEvent.PlayableEntityMoved)
   @OnEvent(GameEvent.DoorOpened)
   @OnEvent(GameEvent.PlayableEntityTurnEnded)
-  @OnEvent(GameEvent.EnemiesSpawned)
+  @OnEvent(GameEvent.MonstersSpawned)
   @OnEvent(GameEvent.InitiativesRerolled)
   @OnEvent(GameEvent.PlayableEntityTurnStarted)
   @OnEvent(GameEvent.EntityAttacked)

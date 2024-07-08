@@ -7,11 +7,15 @@ export interface BehaviourMove {
 }
 
 type Data = {
-  type: "playable-entity";
-  id: PlayableEntity["id"];
+  readonly type: "playable-entity";
+  readonly id: PlayableEntity["id"];
 };
 
 export class TilePlayableEntity extends TileEntity<Data> {
+  constructor(rawData: Omit<Data, "type">) {
+    super({ ...rawData, type: "playable-entity" });
+  }
+
   public toPlain() {
     return {
       id: this._data.id,

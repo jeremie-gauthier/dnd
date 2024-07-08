@@ -58,6 +58,6 @@ export class GameInitializationUseCase implements UseCase {
   private getDistinctAvailableEnemies({
     events,
   }: { events: GameEntity["events"] }): EnemyKind[] {
-    return unique(events.flatMap((event) => event?.enemies ?? []));
+    return unique(events.flatMap((event) => event?.monsters ?? []));
   }
 }

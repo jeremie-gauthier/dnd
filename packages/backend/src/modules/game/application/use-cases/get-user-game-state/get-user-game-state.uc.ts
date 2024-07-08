@@ -1,15 +1,19 @@
 import { GameEntity, GetUserGameStateOutput } from "@dnd/shared";
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/interfaces/use-case.interface";
-import { BackupService } from "../../../domain/backup/backup.service";
 import { PlayerStateService } from "../../../domain/player-state/player-state.service";
+import {
+  GAME_REPOSITORY,
+  GameRepository,
+} from "../../repositories/game-repository.interface";
 
 @Injectable()
 export class GetUserGameStateUseCase implements UseCase {
   constructor(
+    @Inject(GAME_REPOSITORY)
+    private readonly gameRepository: GameRepository,
     private readonly playerStateService: PlayerStateService,
-    private readonly backupService: BackupService,
   ) {}
 
   public async execute({
@@ -19,13 +23,13 @@ export class GetUserGameStateUseCase implements UseCase {
     userId: User["id"];
     gameId: GameEntity["id"];
   }): Promise<GetUserGameStateOutput> {
-    const game = await this.backupService.getGameOrThrow({ gameId });
+    const game = await this.gameRepository.getOneOrThrow({ gameId });
 
-    const playerGameState = this.playerStateService.getPlayerState({
-      game,
-      userId,
-    });
+    // const playerGameState = this.playerStateService.getPlayerState({
+    //   game,
+    //   userId,
+    // });
 
-    return playerGameState;
+    return {} as any;
   }
 }
