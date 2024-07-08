@@ -44,6 +44,7 @@ export class DatabaseConfiguration implements TypeOrmOptionsFactory {
         EnemyTemplate,
         Translation,
       ],
+      migrations: ["dist/src/database/migrations/*.js"],
       migrationsRun: true,
       namingStrategy: new SnakeNamingStrategy(),
     };
