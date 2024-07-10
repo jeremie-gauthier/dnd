@@ -1,4 +1,4 @@
-import { AttackRangeType, AttackTypeType } from "@dnd/shared";
+import { AttackRangeType, AttackTypeType, sum } from "@dnd/shared";
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { Dice } from "../dice/dice.vo";
@@ -24,7 +24,14 @@ export class Attack extends Entity<Data> {
   }
 
   public roll() {
-    return this._data.dices.map((dice) => ({ dice, result: dice.roll() }));
+    const dicesResults = this._data.dices.map((dice) => ({
+      dice,
+      result: dice.roll(),
+    }));
+    return {
+      dicesResults,
+      sumResult: sum(...dicesResults.map(({ result }) => result)),
+    };
   }
 
   public toPlain() {

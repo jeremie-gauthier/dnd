@@ -10,6 +10,10 @@ type Data = {
 
 export class Dice extends ValueObject<Data> {
   public equals(other: Dice): boolean {
+    if (this._data.name !== other._data.name) {
+      return false;
+    }
+
     for (let i = 0; i < this._data.values.length; i += 1) {
       if (this._data.values[i] !== other._data.values[i]) {
         return false;
