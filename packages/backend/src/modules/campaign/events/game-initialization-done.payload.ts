@@ -13,7 +13,7 @@ export class GameInitializationDonePayload
   public readonly campaignStageProgression: CampaignStageProgression;
   public readonly enemyTemplates: EnemyTemplate[];
   public readonly events: Array<GameEventDeserialized>;
-  public readonly lobby: Lobby;
+  public readonly lobby: ReturnType<Lobby["toPlain"]>;
   public readonly map: GameBoardDeserialized;
 
   constructor({

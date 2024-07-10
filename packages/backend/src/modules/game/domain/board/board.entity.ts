@@ -54,4 +54,23 @@ export class Board extends Entity<Data> {
 
     tile.removeEntity({ tileEntity });
   }
+
+  public addEntityAtCoord({
+    tileEntity,
+    coord,
+  }: { tileEntity: TileEntity; coord: Coord }) {
+    const coordIdx = coord.toIndex({
+      width: this._data.width,
+      height: this._data.height,
+    });
+    const tile = this._data.tiles[coordIdx];
+    if (!tile) {
+      throw new BoardError({
+        name: "OUT_OF_RANGE_COORD",
+        message: `No tile found at coord [${coord}]`,
+      });
+    }
+
+    tile.addEntity({ tileEntity });
+  }
 }

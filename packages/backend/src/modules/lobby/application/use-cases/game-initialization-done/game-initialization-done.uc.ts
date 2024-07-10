@@ -18,11 +18,16 @@ export class GameInitializationDoneUseCase implements UseCase {
   ) {}
 
   public async execute(payload: GameInitializationDonePayload) {
-    const { lobby } = payload;
+    const lobby = await this.lobbiesRepository.getOneOrThrow({
+      lobbyId: payload.lobby.id,
+    });
 
     lobby.gameInitializationDone();
     await this.lobbiesRepository.update({ lobby });
 
-    this.emitter.emitAsync(LobbyEvent.GameReady, new GameReadyPayload(payload));
+    this.emitter.emitAsync(
+      LobbyEvent.GameReady,
+      new GameReadyPayload({ game: payload.game, lobby: lobby.toPlain() }),
+    );
   }
 }

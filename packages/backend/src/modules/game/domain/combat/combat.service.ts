@@ -1,8 +1,8 @@
 import {
   AttackRangeType,
   Coord,
-  GameEntity,
   GameItem,
+  GameView,
   PlayableEntity,
   Tile,
   canAttackTarget,
@@ -10,10 +10,6 @@ import {
 } from "@dnd/shared";
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { EntityAttackedPayload } from "src/modules/shared/events/game/entity-attacked.payload";
-import { EntityDiedPayload } from "src/modules/shared/events/game/entity-died.payload";
-import { EntityTookDamagePayload } from "src/modules/shared/events/game/entity-took-damage.payload";
-import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { DiceService } from "../dice/dice.service";
 import { MapService } from "../map/map.service";
 
@@ -32,7 +28,7 @@ export class CombatService {
     attack,
     attackItem,
   }: {
-    game: GameEntity;
+    game: GameView;
     attackerPlayableEntity: PlayableEntity;
     targetPlayableEntity: PlayableEntity;
     attack: GameItem["attacks"][number];
@@ -49,18 +45,18 @@ export class CombatService {
         targetPlayableEntity.characteristic.armorClass,
     );
 
-    this.eventEmitter.emitAsync(
-      GameEvent.EntityAttacked,
-      new EntityAttackedPayload({
-        game,
-        attacker: attackerPlayableEntity,
-        target: targetPlayableEntity,
-        damageDone,
-        dicesResults,
-        attack,
-        attackItemUsed: attackItem,
-      }),
-    );
+    // this.eventEmitter.emitAsync(
+    //   GameEvent.EntityAttacked,
+    //   new EntityAttackedPayload({
+    //     game,
+    //     attacker: attackerPlayableEntity,
+    //     target: targetPlayableEntity,
+    //     damageDone,
+    //     dicesResults,
+    //     attack,
+    //     attackItemUsed: attackItem,
+    //   }),
+    // );
 
     if (damageDone > 0) {
       this.takeDamage({
@@ -75,13 +71,13 @@ export class CombatService {
     game,
     target,
     amount,
-  }: { game: GameEntity; target: PlayableEntity; amount: number }): void {
+  }: { game: GameView; target: PlayableEntity; amount: number }): void {
     target.characteristic.healthPoints -= amount;
 
-    this.eventEmitter.emitAsync(
-      GameEvent.EntityTookDamage,
-      new EntityTookDamagePayload({ game, target, amount }),
-    );
+    // this.eventEmitter.emitAsync(
+    //   GameEvent.EntityTookDamage,
+    //   new EntityTookDamagePayload({ game, target, amount }),
+    // );
 
     if (target.characteristic.healthPoints <= 0) {
       this.entityDeath({ game, target });
@@ -91,7 +87,7 @@ export class CombatService {
   public entityDeath({
     game,
     target,
-  }: { game: GameEntity; target: PlayableEntity }): void {
+  }: { game: GameView; target: PlayableEntity }): void {
     target.characteristic.healthPoints = 0;
     target.isBlocking = false;
 
@@ -99,16 +95,16 @@ export class CombatService {
       this.handleEnemyDeath({ game, target });
     }
 
-    this.eventEmitter.emitAsync(
-      GameEvent.EntityDied,
-      new EntityDiedPayload({ game, target }),
-    );
+    // this.eventEmitter.emitAsync(
+    //   GameEvent.EntityDied,
+    //   new EntityDiedPayload({ game, target }),
+    // );
   }
 
   private handleEnemyDeath({
     game,
     target,
-  }: { game: GameEntity; target: PlayableEntity }): void {
+  }: { game: GameView; target: PlayableEntity }): void {
     const playableEntities = Object.entries(game.playableEntities);
     const remainingEntities = playableEntities.filter(
       ([id]) => id !== target.id,
@@ -133,7 +129,7 @@ export class CombatService {
     targetCoord,
   }: {
     ally: PlayableEntity["type"];
-    game: GameEntity;
+    game: GameView;
     originTile: Tile;
     range: AttackRangeType;
     targetCoord: Coord;

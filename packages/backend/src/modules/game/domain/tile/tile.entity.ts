@@ -35,4 +35,8 @@ export class Tile extends Entity<Data> {
       (entity) => !entity.equals(tileEntity),
     );
   }
+
+  public addEntity({ tileEntity }: { tileEntity: TileEntity }) {
+    this._data.entities.push(tileEntity);
+  }
 }

@@ -1,18 +1,16 @@
-import {
-  Coord,
-  GameEntity,
-  PlayableEntity,
-  TileNonPlayableInteractiveEntity,
-} from "@dnd/shared";
 import { EventPayload } from "src/interfaces/event-payload.interface";
+import { Coord } from "src/modules/game/domain/coord/coord.vo";
+import { Game } from "src/modules/game/domain/game/game.aggregate";
+import { Playable } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.abstract";
+import { Door } from "src/modules/game/domain/tile-entity/interactive/door.entity";
 import { GameEvent } from "./game-event.enum";
 
 export class DoorOpenedPayload implements EventPayload<GameEvent.DoorOpened> {
   public readonly name = GameEvent.DoorOpened;
-  public readonly doorEntity: TileNonPlayableInteractiveEntity;
-  public readonly doorCoord: Coord;
-  public readonly entityThatOpenedTheDoor: PlayableEntity;
-  public readonly game: GameEntity;
+  public readonly doorEntity: ReturnType<Door["toPlain"]>;
+  public readonly doorCoord: ReturnType<Coord["toPlain"]>;
+  public readonly entityThatOpenedTheDoor: ReturnType<Playable["toPlain"]>;
+  public readonly game: ReturnType<Game["toPlain"]>;
 
   constructor({
     doorEntity,

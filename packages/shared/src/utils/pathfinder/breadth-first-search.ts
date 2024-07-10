@@ -1,4 +1,4 @@
-import { Coord, GameEntity, Tile } from "../../database";
+import { Coord, GameView, Tile } from "../../database";
 import { NonNegativeNumber } from "../../types";
 import { canMoveToRequestedPosition } from "./collision";
 import { coordToIndex } from "./coord";
@@ -18,7 +18,7 @@ export interface ChildTilePath {
 export type TilePath = OriginTilePath | ChildTilePath;
 
 type Params = {
-  game: GameEntity;
+  game: GameView;
   originCoord: Coord;
   maxRange: NonNegativeNumber<number>;
 };

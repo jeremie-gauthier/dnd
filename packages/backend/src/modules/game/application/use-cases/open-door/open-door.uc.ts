@@ -1,6 +1,6 @@
 import {
   Coord,
-  GameEntity,
+  GameView,
   OpenDoorInput,
   PlayableEntity,
   TileNonPlayableInteractiveEntity,
@@ -15,8 +15,6 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { PlayableEntityService } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.service";
-import { DoorOpenedPayload } from "src/modules/shared/events/game/door-opened.payload";
-import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { InitiativeService } from "../../../domain/initiative/initiative.service";
 import { MapService } from "../../../domain/map/map.service";
 import { SpawnService } from "../../../domain/spawn/spawn.service";
@@ -71,7 +69,7 @@ export class OpenDoorUseCase implements UseCase {
     userId,
     coordOfTileWithDoor,
   }: Pick<OpenDoorInput, "coordOfTileWithDoor"> & {
-    game: GameEntity;
+    game: GameView;
     userId: User["id"];
   }) {
     const playableEntities = Object.values(game.playableEntities);
@@ -113,7 +111,7 @@ export class OpenDoorUseCase implements UseCase {
     coordOfTileWithDoor,
   }: Pick<OpenDoorInput, "coordOfTileWithDoor"> & {
     userId: User["id"];
-    game: GameEntity;
+    game: GameView;
   }): { entityThatOpenedTheDoor: PlayableEntity } {
     const doorEntity = this.getDoor({
       coord: coordOfTileWithDoor,
@@ -131,15 +129,15 @@ export class OpenDoorUseCase implements UseCase {
 
     entityThatOpenedTheDoor.characteristic.actionPoints -= 1;
 
-    this.eventEmitter.emitAsync(
-      GameEvent.DoorOpened,
-      new DoorOpenedPayload({
-        doorEntity,
-        doorCoord: coordOfTileWithDoor,
-        entityThatOpenedTheDoor,
-        game,
-      }),
-    );
+    // this.eventEmitter.emitAsync(
+    //   GameEvent.DoorOpened,
+    //   new DoorOpenedPayload({
+    //     doorEntity,
+    //     doorCoord: coordOfTileWithDoor,
+    //     entityThatOpenedTheDoor,
+    //     game,
+    //   }),
+    // );
 
     return { entityThatOpenedTheDoor };
   }
@@ -147,13 +145,13 @@ export class OpenDoorUseCase implements UseCase {
   private getDoor({
     coord,
     game,
-  }: { coord: Coord; game: GameEntity }):
+  }: { coord: Coord; game: GameView }):
     | TileNonPlayableInteractiveEntity
     | undefined {
     const tileWithDoor = this.mapService.getTileOrThrow({ coord, game });
     const doorEntity = tileWithDoor.entities.find(
       (entity) =>
-        entity.type === "non-playable-interactive-entity" &&
+        entity.type === "interactive-entity" &&
         entity.kind === "door" &&
         entity.isBlocking &&
         entity.canInteract,

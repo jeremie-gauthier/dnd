@@ -1,5 +1,5 @@
-import { GameEntity } from "@dnd/shared";
+import { GameView } from "@dnd/shared";
 
-type GameBoard = GameEntity["map"];
+type GameBoard = GameView["map"];
 
 export interface GameBoardDeserialized extends GameBoard {}

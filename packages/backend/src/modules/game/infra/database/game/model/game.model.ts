@@ -10,7 +10,6 @@ export type GamePersistence = {
   board: Board;
   gameMaster: GameMaster;
   playableEntities: Record<PlayableEntity["id"], PlayableEntity>;
-  timeline: Array<PlayableEntity["id"]>;
   events: Array<GameEvent>;
   enemyTemplates: Array<MonsterTemplate>;
 };

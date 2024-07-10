@@ -1,4 +1,4 @@
-import { GameEntity } from "@dnd/shared";
+import { GameView } from "@dnd/shared";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test, TestingModule } from "@nestjs/testing";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
@@ -53,7 +53,7 @@ describe("InitiativeService", () => {
           },
         },
         timeline: [],
-      } as unknown as GameEntity;
+      } as unknown as GameView;
 
       const expected = {
         playableEntities: {

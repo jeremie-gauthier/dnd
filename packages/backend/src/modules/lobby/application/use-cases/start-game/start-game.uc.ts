@@ -31,7 +31,7 @@ export class StartGameUseCase implements UseCase {
 
     this.eventEmitter.emitAsync(
       LobbyEvent.HostRequestedGameStart,
-      new HostRequestedGameStartPayload({ userId, lobby }),
+      new HostRequestedGameStartPayload({ userId, lobby: lobby.toPlain() }),
     );
   }
 }

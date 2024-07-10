@@ -1,9 +1,9 @@
-import { GameEntity, PlayableEntity, Tile } from "../../database";
+import { GameView, PlayableEntity, Tile } from "../../database";
 
 export function canMoveToRequestedPosition({
   game,
   tile,
-}: { game: GameEntity; tile: Tile }) {
+}: { game: GameView; tile: Tile }) {
   return tile.entities.every(
     (entity) =>
       (entity.type !== "playable-entity" && !entity.isBlocking) ||
@@ -22,7 +22,7 @@ export function isBlockedByNonAllyEntity({
   game,
   tile,
   ally,
-}: { game: GameEntity; tile: Tile; ally: PlayableEntity["type"] }) {
+}: { game: GameView; tile: Tile; ally: PlayableEntity["type"] }) {
   return tile.entities.some(
     (entity) =>
       entity.type === "playable-entity" &&

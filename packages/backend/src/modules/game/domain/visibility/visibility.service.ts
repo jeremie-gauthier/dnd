@@ -1,6 +1,6 @@
 import {
   Coord,
-  GameEntity,
+  GameView,
   Tile,
   TileEntity,
   getNeighbourCoords,
@@ -12,7 +12,7 @@ import { MapService } from "../map/map.service";
 export class VisibilityService {
   constructor(private readonly mapService: MapService) {}
 
-  public getMapForHero({ game }: { game: GameEntity }): GameEntity {
+  public getMapForHero({ game }: { game: GameView }): GameView {
     const exploredTiles = this.getExploredTiles({ game });
     const metadata = {
       height: Math.max(0, ...exploredTiles.map(({ coord }) => coord.row + 1)),
@@ -44,17 +44,17 @@ export class VisibilityService {
   private canViewEntity({ entity }: { entity: TileEntity }): boolean {
     return (
       entity.type === "playable-entity" ||
-      ((entity.type === "non-playable-non-interactive-entity" ||
-        entity.type === "non-playable-interactive-entity") &&
+      ((entity.type === "non-interactive-entity" ||
+        entity.type === "interactive-entity") &&
         entity.isVisible)
     );
   }
 
-  public getMapForGameMaster({ game }: { game: GameEntity }): GameEntity {
+  public getMapForGameMaster({ game }: { game: GameView }): GameView {
     return game;
   }
 
-  private getExploredTiles({ game }: { game: GameEntity }): Tile[] {
+  private getExploredTiles({ game }: { game: GameView }): Tile[] {
     const heroesCoords = this.getHeroesCoords({ game });
     const startingCoords =
       heroesCoords.length > 0
@@ -81,13 +81,13 @@ export class VisibilityService {
     return Array.from(exploredTiles);
   }
 
-  private getHeroesCoords({ game }: { game: GameEntity }): Coord[] {
+  private getHeroesCoords({ game }: { game: GameView }): Coord[] {
     return Object.values(game.playableEntities)
       .filter((playableEntity) => playableEntity.type === "hero")
       .map((hero) => hero.coord);
   }
 
-  private getStartingTilesCoords({ game }: { game: GameEntity }): Coord[] {
+  private getStartingTilesCoords({ game }: { game: GameView }): Coord[] {
     return game.map.tiles
       .filter((tile) => tile.isStartingTile)
       .map((tile) => tile.coord);
@@ -96,7 +96,7 @@ export class VisibilityService {
   private floodFill({
     game,
     startingCoord,
-  }: { game: GameEntity; startingCoord: Coord }): Tile[] {
+  }: { game: GameView; startingCoord: Coord }): Tile[] {
     const startingTile = this.mapService.getTileOrThrow({
       game,
       coord: startingCoord,
@@ -134,8 +134,8 @@ export class VisibilityService {
     return tile.entities.every(
       (entity) =>
         entity.type === "playable-entity" ||
-        ((entity.type === "non-playable-interactive-entity" ||
-          entity.type === "non-playable-non-interactive-entity") &&
+        ((entity.type === "interactive-entity" ||
+          entity.type === "non-interactive-entity") &&
           entity.isBlocking === false),
     );
   }

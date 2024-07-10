@@ -1,8 +1,8 @@
-import type { GameEntity } from "@dnd/shared";
+import type { GameView } from "@dnd/shared";
 
 type Params = {
   context: CanvasRenderingContext2D;
-  map: GameEntity["map"];
+  map: GameView["map"];
   assetSize: number;
 };
 

@@ -1,4 +1,4 @@
-import { GameEntity, PlayableEntity, PlayerGamePhase, Tile } from "@dnd/shared";
+import { GameView, PlayableEntity, PlayerGamePhase, Tile } from "@dnd/shared";
 import { createContext } from "react";
 import { GameEventManager } from "../../../../game-engine/events";
 import { usePlayerState } from "../../../../game-engine/state-machine";
@@ -12,7 +12,7 @@ type GameContextParams = {
   };
   assetSize: number;
   gameEventManager: GameEventManager;
-  game: GameEntity;
+  game: GameView;
   playerState: ReturnType<typeof usePlayerState>;
   gameActions: ReturnType<typeof useGameActions>;
   phase: PlayerGamePhase;

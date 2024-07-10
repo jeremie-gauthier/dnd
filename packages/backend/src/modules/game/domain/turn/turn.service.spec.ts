@@ -1,4 +1,4 @@
-import { GameEntity } from "@dnd/shared";
+import { GameView } from "@dnd/shared";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test, TestingModule } from "@nestjs/testing";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -44,7 +44,7 @@ describe("TurnService", () => {
             characteristic: { healthPoints: 10 },
           },
         },
-      } as unknown as GameEntity;
+      } as unknown as GameView;
       const expected = {
         id: "fake-hero-id-3",
         currentPhase: "action",
@@ -80,7 +80,7 @@ describe("TurnService", () => {
             characteristic: { healthPoints: 10 },
           },
         },
-      } as unknown as GameEntity;
+      } as unknown as GameView;
       const expected = undefined;
 
       const result = service.getPlayingEntity({ game: GAME_MOCK });
@@ -120,7 +120,7 @@ describe("TurnService", () => {
           "fake-hero-id-3",
           "fake-hero-id-4",
         ],
-      } as unknown as GameEntity;
+      } as unknown as GameView;
       const expected = {
         id: "fake-hero-id-4",
         currentPhase: "idle",
@@ -162,7 +162,7 @@ describe("TurnService", () => {
           "fake-hero-id-3",
           "fake-hero-id-4",
         ],
-      } as unknown as GameEntity;
+      } as unknown as GameView;
       const expected = {
         id: "fake-hero-id-1",
         currentPhase: "idle",
@@ -199,7 +199,7 @@ describe("TurnService", () => {
           },
         },
         timeline: [],
-      } as unknown as GameEntity;
+      } as unknown as GameView;
       const expected = undefined;
 
       const result = service.getNextEntityToPlay({ game: GAME_MOCK });

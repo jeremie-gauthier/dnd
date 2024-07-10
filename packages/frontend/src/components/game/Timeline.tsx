@@ -1,8 +1,8 @@
-import { GameEntity } from "@dnd/shared";
+import { GameView } from "@dnd/shared";
 import { classNames } from "../../utils/class-names.util";
 
 type Props = {
-  game: GameEntity;
+  game: GameView;
 };
 
 export const Timeline = ({ game }: Props) => {

@@ -1,4 +1,4 @@
-import type { GameEntity } from "@dnd/shared";
+import type { GameView } from "@dnd/shared";
 import type { AssetsLoaded } from "../assets-loader/assets-loader";
 import type { assetCollection } from "../assets-loader/assets.config";
 
@@ -11,6 +11,6 @@ export type DrawerParams<
   config: {
     assets: AssetsLoaded<AssetCollection>;
     assetSize: number;
-    map: GameEntity["map"];
+    map: GameView["map"];
   };
 };

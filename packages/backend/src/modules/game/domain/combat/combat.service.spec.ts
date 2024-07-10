@@ -1,4 +1,4 @@
-import { GameEntity, PlayableEntity } from "@dnd/shared";
+import { GameView, PlayableEntity } from "@dnd/shared";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test, TestingModule } from "@nestjs/testing";
 import { EntityDiedPayload } from "src/modules/shared/events/game/entity-died.payload";
@@ -59,7 +59,7 @@ describe("CombatService", () => {
   describe("takeDamage", () => {
     it("should minus the target's HP value", () => {
       const payload = {
-        game: {} as unknown as GameEntity,
+        game: {} as unknown as GameView,
         target: { characteristic: { healthPoints: 10 } } as PlayableEntity,
         amount: 2,
       };
@@ -71,7 +71,7 @@ describe("CombatService", () => {
       expect(eventEmitterMock).toHaveBeenCalledWith(
         GameEvent.EntityTookDamage,
         new EntityTookDamagePayload({
-          game: {} as unknown as GameEntity,
+          game: {} as unknown as GameView,
           target: { characteristic: { healthPoints: 8 } } as PlayableEntity,
           amount: 2,
         }),
@@ -80,7 +80,7 @@ describe("CombatService", () => {
 
     it("should declare the target entity dead when HP is lte 0", () => {
       const payload = {
-        game: {} as unknown as GameEntity,
+        game: {} as unknown as GameView,
         target: {
           characteristic: { healthPoints: 10 },
           isBlocking: true,
@@ -95,7 +95,7 @@ describe("CombatService", () => {
       expect(eventEmitterMock).toHaveBeenCalledWith(
         GameEvent.EntityTookDamage,
         new EntityTookDamagePayload({
-          game: {} as unknown as GameEntity,
+          game: {} as unknown as GameView,
           target: {
             characteristic: { healthPoints: 0 },
             isBlocking: false,
@@ -106,7 +106,7 @@ describe("CombatService", () => {
       expect(eventEmitterMock).toHaveBeenCalledWith(
         GameEvent.EntityDied,
         new EntityDiedPayload({
-          game: {} as unknown as GameEntity,
+          game: {} as unknown as GameView,
           target: {
             characteristic: { healthPoints: 0 },
             isBlocking: false,
@@ -119,7 +119,7 @@ describe("CombatService", () => {
   describe("entityDeath", () => {
     it("should declare the target entity dead", () => {
       const payload = {
-        game: {} as unknown as GameEntity,
+        game: {} as unknown as GameView,
         target: {
           characteristic: { healthPoints: 10 },
           isBlocking: true,
@@ -133,7 +133,7 @@ describe("CombatService", () => {
       expect(eventEmitterMock).toHaveBeenCalledWith(
         GameEvent.EntityDied,
         new EntityDiedPayload({
-          game: {} as unknown as GameEntity,
+          game: {} as unknown as GameView,
           target: {
             characteristic: { healthPoints: 0 },
             isBlocking: false,

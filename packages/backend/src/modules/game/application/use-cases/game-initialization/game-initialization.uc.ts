@@ -83,10 +83,9 @@ export class GameInitializationUseCase implements UseCase {
       status: new GameStatus("BATTLE_ONGOING"),
       board,
       gameMaster: new GameMaster({
-        userId: payload.lobby
-          .toPlain()
-          .playableCharacters.find((pc) => pc.type === "game_master")
-          ?.pickedBy!,
+        userId: payload.lobby.playableCharacters.find(
+          (pc) => pc.type === "game_master",
+        )?.pickedBy!,
       }),
       events: payload.events.map((event) => GameEventFactory.create(event)),
       monsterTemplates,
@@ -173,14 +172,13 @@ export class GameInitializationUseCase implements UseCase {
     lobby,
     campaignStageProgression,
   }: {
-    lobby: Lobby;
+    lobby: ReturnType<Lobby["toPlain"]>;
     campaignStageProgression: Awaited<
       ReturnType<GameInitializationUseCase["getUserCampaignStageProgression"]>
     >;
   }) {
-    const plainLobby = lobby.toPlain();
     const heroPlayersMap = Object.fromEntries(
-      plainLobby.playableCharacters
+      lobby.playableCharacters
         .filter((pc) => pc.type === "hero")
         .map((hero) => [hero.id, hero.pickedBy]),
     );

@@ -15,6 +15,8 @@ import { TurnService } from "../domain/turn/turn.service";
 import { VisibilityService } from "../domain/visibility/visibility.service";
 import { DatabaseModule } from "../infra/database/database.module";
 import { GameListeners } from "./game.listeners";
+import { BoardService } from "./services/board.service";
+import { GameStateService } from "./services/game-state.service";
 import { DeleteGameUseCase } from "./use-cases/delete-game/delete-game.uc";
 import { EndPlayerTurnUseCase } from "./use-cases/end-player-turn/end-player-turn.uc";
 import { GameInitializationUseCase } from "./use-cases/game-initialization/game-initialization.uc";
@@ -48,6 +50,8 @@ import { PlayableEntityMoveUseCase } from "./use-cases/playable-entity-move/play
     TurnService,
     VisibilityService,
     PlayableEntityService,
+    BoardService,
+    GameStateService,
   ],
   exports: [
     GameListeners,

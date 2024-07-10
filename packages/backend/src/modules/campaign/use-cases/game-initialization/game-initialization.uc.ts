@@ -1,9 +1,10 @@
-import { EnemyKind, GameEntity, unique } from "@dnd/shared";
+import { EnemyKind, unique } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { EnemyTemplate } from "src/database/entities/enemy-template.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { HostRequestedGameStartPayload } from "src/modules/shared/events/lobby/host-requested-game-start.payload";
+import { GameEventDeserialized } from "src/modules/shared/interfaces/game-events-deserialized.interface";
 import { MapSerializerService } from "../../domain/map-serializer/map-serializer.service";
 import { CampaignEvent } from "../../events/campaign-event.enum";
 import { GameInitializationDonePayload } from "../../events/game-initialization-done.payload";
@@ -20,11 +21,10 @@ export class GameInitializationUseCase implements UseCase {
   public async execute({
     lobby,
   }: HostRequestedGameStartPayload): Promise<void> {
-    const plainLobby = lobby.toPlain();
     const campaignStageProgression =
       await this.repository.getUserCampaignStageProgression({
-        campaignStageId: plainLobby.config.campaign.stage.id,
-        userId: plainLobby.host.userId,
+        campaignStageId: lobby.config.campaign.stage.id,
+        userId: lobby.host.userId,
       });
 
     const { map, events } = this.mapSerializerService.deserialize(
@@ -47,7 +47,7 @@ export class GameInitializationUseCase implements UseCase {
 
   private async getEnemyTemplates({
     events,
-  }: { events: GameEntity["events"] }): Promise<EnemyTemplate[]> {
+  }: { events: GameEventDeserialized[] }): Promise<EnemyTemplate[]> {
     const enemiesName = this.getDistinctAvailableEnemies({ events });
     const enemyTemplates = await this.repository.getEnemiesByNames({
       enemiesName,
@@ -57,7 +57,7 @@ export class GameInitializationUseCase implements UseCase {
 
   private getDistinctAvailableEnemies({
     events,
-  }: { events: GameEntity["events"] }): EnemyKind[] {
+  }: { events: GameEventDeserialized[] }): EnemyKind[] {
     return unique(events.flatMap((event) => event?.monsters ?? []));
   }
 }

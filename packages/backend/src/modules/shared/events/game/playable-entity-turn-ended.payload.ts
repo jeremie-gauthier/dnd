@@ -7,8 +7,8 @@ export class PlayableEntityTurnEndedPayload
   implements EventPayload<GameEvent.PlayableEntityTurnEnded>
 {
   public readonly name = GameEvent.PlayableEntityTurnEnded;
-  public readonly game: Game;
-  public readonly playableEntity: Playable;
+  public readonly game: ReturnType<Game["toPlain"]>;
+  public readonly playableEntity: ReturnType<Playable["toPlain"]>;
 
   constructor({
     game,

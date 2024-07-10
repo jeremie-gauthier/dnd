@@ -1,4 +1,4 @@
-import { GameEntity, PlayableEntity } from "@dnd/shared";
+import { GameView, PlayableEntity } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 
@@ -8,7 +8,7 @@ export class TurnService {
 
   public getPlayingEntity({
     game,
-  }: { game: GameEntity }): PlayableEntity | undefined {
+  }: { game: GameView }): PlayableEntity | undefined {
     const playableEntities = Object.values(game.playableEntities);
     return playableEntities.find(
       ({ currentPhase }) => currentPhase === "action",
@@ -17,7 +17,7 @@ export class TurnService {
 
   public getNextEntityToPlay({
     game,
-  }: { game: GameEntity }): PlayableEntity | undefined {
+  }: { game: GameView }): PlayableEntity | undefined {
     const playableEntities = Object.values(game.playableEntities);
     if (this.isEveryoneDead({ playableEntities })) {
       return;
@@ -38,7 +38,7 @@ export class TurnService {
 
   private getRelativeTimeline({
     game,
-  }: { game: GameEntity }): GameEntity["timeline"] {
+  }: { game: GameView }): GameView["timeline"] {
     const playingEntity = this.getPlayingEntity({ game });
     if (!playingEntity) {
       return game.timeline;
@@ -65,9 +65,9 @@ export class TurnService {
   public endPlayableEntityTurn({
     game,
     playableEntity,
-  }: { game: GameEntity; playableEntity: PlayableEntity }): void {
+  }: { game: GameView; playableEntity: PlayableEntity }): void {
     playableEntity.currentPhase = "idle";
-    playableEntity.actionsDoneThisTurn = [];
+    // playableEntity.actionsDoneThisTurn = [];
 
     // this.eventEmitter.emitAsync(
     //   GameEvent.PlayableEntityTurnEnded,
@@ -78,7 +78,7 @@ export class TurnService {
   public startPlayableEntityTurn({
     game,
     playableEntity,
-  }: { game: GameEntity; playableEntity: PlayableEntity }): void {
+  }: { game: GameView; playableEntity: PlayableEntity }): void {
     playableEntity.currentPhase = "action";
     playableEntity.characteristic.actionPoints =
       playableEntity.characteristic.baseActionPoints;
@@ -92,7 +92,7 @@ export class TurnService {
     // );
   }
 
-  public restartTimeline({ game }: { game: GameEntity }) {
+  public restartTimeline({ game }: { game: GameView }) {
     const nextEntityToPlay = this.getNextEntityToPlay({ game });
     if (!nextEntityToPlay) {
       return;

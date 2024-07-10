@@ -84,9 +84,6 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
       ),
       board: plain.board as GamePersistence["board"],
       gameMaster: plain.gameMaster,
-      timeline: plain.playableEntities.values
-        .sort((a, b) => a.initiative - b.initiative)
-        .map((pc) => pc.id),
       enemyTemplates: plain.monsterTemplates,
       events: plain.events as GameEvent[],
     };

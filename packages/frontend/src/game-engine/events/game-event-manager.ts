@@ -1,4 +1,4 @@
-import { Coord, GameEntity, GameItem, PlayableEntity } from "@dnd/shared";
+import { Coord, GameItem, GameView, PlayableEntity } from "@dnd/shared";
 import { PreparingAttackEvent } from "./preparing-attack.event";
 import { TileClickedEvent } from "./tile-clicked.event";
 import { TileHoveredEvent } from "./tile-hovered.event";
@@ -53,7 +53,7 @@ export class GameEventManager extends EventTarget {
     item,
     attack,
   }: {
-    game: GameEntity;
+    game: GameView;
     heroPlaying: PlayableEntity;
     item: GameItem;
     attack: GameItem["attacks"][number];

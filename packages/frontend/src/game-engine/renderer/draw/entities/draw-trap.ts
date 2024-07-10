@@ -10,7 +10,7 @@ export function drawTrap({
   config,
   subject,
 }: EntityDrawerParams<RequiredAssets>) {
-  if (subject.entity.type !== "non-playable-interactive-entity") return;
+  if (subject.entity.type !== "interactive-entity") return;
 
   const isActive = subject.entity.canInteract;
   const trapAsset = isActive

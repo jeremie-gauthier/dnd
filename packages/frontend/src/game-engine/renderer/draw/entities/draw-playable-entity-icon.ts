@@ -39,6 +39,8 @@ function getPlayableEntityAsset({
       return getEnemyAsset({ enemyEntity: playableEntity, assets });
     case "hero":
       return getHeroAsset({ heroEntity: playableEntity, assets });
+    default:
+      return assets.unknown_icon;
   }
 }
 
@@ -50,7 +52,6 @@ function getHeroAsset({
   assets: EntityDrawerParams<RequiredAssets>["config"]["assets"];
 }): HTMLImageElement {
   switch (heroEntity.class) {
-    // TODO: add all supported classes
     case "WARRIOR":
       return assets.warrior_icon;
     case "SORCERER":

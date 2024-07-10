@@ -1,35 +1,53 @@
-import { GameEntity, GetUserGameStateOutput } from "@dnd/shared";
+import { GameView, PlayerGamePhase } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
-import { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/interfaces/use-case.interface";
-import { PlayerStateService } from "../../../domain/player-state/player-state.service";
 import {
   GAME_REPOSITORY,
   GameRepository,
 } from "../../repositories/game-repository.interface";
+import { GameStateService } from "../../services/game-state.service";
 
 @Injectable()
 export class GetUserGameStateUseCase implements UseCase {
   constructor(
     @Inject(GAME_REPOSITORY)
     private readonly gameRepository: GameRepository,
-    private readonly playerStateService: PlayerStateService,
+    private readonly gameStateService: GameStateService,
   ) {}
 
   public async execute({
     userId,
     gameId,
   }: {
-    userId: User["id"];
-    gameId: GameEntity["id"];
-  }): Promise<GetUserGameStateOutput> {
+    userId: string;
+    gameId: GameView["id"];
+  }) {
     const game = await this.gameRepository.getOneOrThrow({ gameId });
+    const plainGame = game.toPlain();
 
-    // const playerGameState = this.playerStateService.getPlayerState({
-    //   game,
-    //   userId,
-    // });
+    const playableEntityTurn = plainGame.playableEntities.values.find(
+      ({ status }) => status === "action",
+    );
+    if (!playableEntityTurn) {
+      throw new Error("No playable entity in 'action' phase found");
+    }
 
-    return {} as any;
+    const playerGameState =
+      this.gameStateService.getGameStateFromPlayerPerspective({
+        game: plainGame,
+        userId,
+      });
+    const playerCurrentlyPlaying = {
+      userId: playableEntityTurn.playedByUserId,
+      entityId: playableEntityTurn.id,
+    };
+    const userStatus: PlayerGamePhase =
+      userId === playerCurrentlyPlaying.userId ? "action" : "idle";
+
+    return {
+      game: playerGameState,
+      yourStatus: userStatus,
+      playerCurrentlyPlaying,
+    };
   }
 }

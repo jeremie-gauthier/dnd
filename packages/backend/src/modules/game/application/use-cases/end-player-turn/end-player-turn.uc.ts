@@ -3,10 +3,6 @@ import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
-import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
-import { GameUpdatedPayload } from "src/modules/shared/events/game/game-updated.payload";
-import { PlayableEntityTurnEndedPayload } from "src/modules/shared/events/game/playable-entity-turn-ended.payload";
-import { PlayableEntityTurnStartedPayload } from "src/modules/shared/events/game/playable-entity-turn-started.payload";
 import {
   GAME_REPOSITORY,
   GameRepository,
@@ -29,27 +25,27 @@ export class EndPlayerTurnUseCase implements UseCase {
     const { playingEntityWhoseTurnEnded, playingEntityWhoseTurnStarted } =
       game.endPlayerTurn({ userId });
 
-    this.eventEmitter.emitAsync(
-      GameEvent.PlayableEntityTurnEnded,
-      new PlayableEntityTurnEndedPayload({
-        game,
-        playableEntity: playingEntityWhoseTurnEnded,
-      }),
-    );
+    // this.eventEmitter.emitAsync(
+    //   GameEvent.PlayableEntityTurnEnded,
+    //   new PlayableEntityTurnEndedPayload({
+    //     game,
+    //     playableEntity: playingEntityWhoseTurnEnded,
+    //   }),
+    // );
     if (playingEntityWhoseTurnStarted) {
-      this.eventEmitter.emitAsync(
-        GameEvent.PlayableEntityTurnStarted,
-        new PlayableEntityTurnStartedPayload({
-          game,
-          playableEntity: playingEntityWhoseTurnStarted,
-        }),
-      );
+      // this.eventEmitter.emitAsync(
+      //   GameEvent.PlayableEntityTurnStarted,
+      //   new PlayableEntityTurnStartedPayload({
+      //     game,
+      //     playableEntity: playingEntityWhoseTurnStarted,
+      //   }),
+      // );
     }
 
     await this.gameRepository.update({ game });
-    this.eventEmitter.emitAsync(
-      GameEvent.GameUpdated,
-      new GameUpdatedPayload({ game }),
-    );
+    // this.eventEmitter.emitAsync(
+    //   GameEvent.GameUpdated,
+    //   new GameUpdatedPayload({ game }),
+    // );
   }
 }

@@ -1,7 +1,7 @@
 import {
   AttackRangeType,
   Coord,
-  GameEntity,
+  GameView,
   PlayableEntity,
   Tile,
 } from "../../database";
@@ -84,7 +84,7 @@ function canBeSeenRay({
   metadata,
 }: {
   ally: PlayableEntity["type"];
-  game: GameEntity;
+  game: GameView;
   originTile: Tile;
   destinationTile: Tile;
   metadata: { height: number; width: number };
@@ -119,7 +119,7 @@ function canBeSeenRay({
 
 function canAttackTile({ tile }: { tile: Tile }) {
   return tile.entities.every(
-    (entity) => entity.type !== "non-playable-non-interactive-entity",
+    (entity) => entity.type !== "non-interactive-entity",
   );
 }
 
@@ -129,7 +129,7 @@ function getTilesToTest({
   range,
   metadata,
 }: {
-  game: GameEntity;
+  game: GameView;
   originTile: Tile;
   range: AttackRangeType;
   metadata: { height: number; width: number };
@@ -164,7 +164,7 @@ export function getLineOfSight({
   range,
 }: {
   ally: PlayableEntity["type"];
-  game: GameEntity;
+  game: GameView;
   originTile: Tile;
   range: AttackRangeType;
 }) {
@@ -191,7 +191,7 @@ export function canAttackTarget({
   targetCoord,
 }: {
   ally: PlayableEntity["type"];
-  game: GameEntity;
+  game: GameView;
   originTile: Tile;
   range: AttackRangeType;
   targetCoord: Coord;

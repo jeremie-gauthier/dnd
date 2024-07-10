@@ -27,7 +27,7 @@ VALUES
     'Les bandits gobelins',
     'Le mal et les ténèbres se sont abattus sur le pays de Rallion et la région est devenue la proie des Monstres...',
     'Félicitations ! Vous avez vaincu les bandits gobelins...',
-    '{"height":12,"width":5,"startingPositions":[{"row":2,"column":2},{"row":2,"column":3},{"row":2,"column":4},{"row":3,"column":2},{"row":3,"column":3},{"row":3,"column":4}],"entities":[{"row":5,"column":0,"kind":"wall"},{"row":5,"column":1,"kind":"wall"},{"row":5,"column":2,"kind":"wall"},{"row":5,"column":3,"kind":"door"},{"row":5,"column":4,"kind":"wall"}],"events":[{"name":"on_door_opening","doorCoord":{"row":5,"column":3},"action":"spawn_monsters","enemies":["goblin"],"startingTiles":[{"row":6,"column":0},{"row":7,"column":1},{"row":8,"column":2},{"row":7,"column":3},{"row":6,"column":4}]}]}',
+    '{"height":12,"width":5,"startingPositions":[{"row":2,"column":2},{"row":2,"column":3},{"row":2,"column":4},{"row":3,"column":2},{"row":3,"column":3},{"row":3,"column":4}],"entities":[{"row":5,"column":0,"kind":"wall"},{"row":5,"column":1,"kind":"wall"},{"row":5,"column":2,"kind":"wall"},{"row":5,"column":3,"kind":"door"},{"row":5,"column":4,"kind":"wall"}],"events":[{"name":"on_door_opening","doorCoord":{"row":5,"column":3},"action":"spawn_monsters","monsters":["goblin"],"startingTiles":[{"row":6,"column":0},{"row":7,"column":1},{"row":8,"column":2},{"row":7,"column":3},{"row":6,"column":4}]}]}',
     'AVAILABLE'
   ),
   (

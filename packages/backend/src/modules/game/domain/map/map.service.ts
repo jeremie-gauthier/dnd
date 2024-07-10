@@ -1,4 +1,4 @@
-import { Coord, GameEntity, Tile } from "@dnd/shared";
+import { Coord, GameView, Tile } from "@dnd/shared";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { CoordService } from "../coord/coord.service";
 
@@ -13,8 +13,8 @@ export class MapService {
   }: {
     height: number;
     width: number;
-    partialMapTiles: GameEntity["map"]["tiles"];
-  }): GameEntity["map"]["tiles"] {
+    partialMapTiles: GameView["map"]["tiles"];
+  }): GameView["map"]["tiles"] {
     return Array.from({ length: width * height }).map((_, index) => {
       const tileCoord = this.coordService.indexToCoord({
         index,
@@ -30,7 +30,7 @@ export class MapService {
           coord: tileCoord,
           entities: [
             {
-              type: "non-playable-non-interactive-entity",
+              type: "non-interactive-entity",
               kind: "off-map",
               canInteract: false,
               isBlocking: true,
@@ -45,7 +45,7 @@ export class MapService {
   public getTile({
     coord,
     game,
-  }: { coord: Coord; game: GameEntity }): Tile | undefined {
+  }: { coord: Coord; game: GameView }): Tile | undefined {
     const metadata = this.getMetadata({ game });
     const tileIdx = this.coordService.coordToIndex({ coord, metadata });
     const tile = game.map.tiles[tileIdx];
@@ -55,7 +55,7 @@ export class MapService {
   public getTileOrThrow({
     coord,
     game,
-  }: { coord: Coord; game: GameEntity }): Tile {
+  }: { coord: Coord; game: GameView }): Tile {
     const tile = this.getTile({ coord, game });
     if (!tile) {
       throw new NotFoundException("No tile found at these coordinates");
@@ -63,7 +63,7 @@ export class MapService {
     return tile;
   }
 
-  public getMetadata({ game }: { game: GameEntity }): {
+  public getMetadata({ game }: { game: GameView }): {
     width: number;
     height: number;
   } {

@@ -2,10 +2,8 @@ import type { HeroClassType } from "../enums/hero-class.enum";
 import { StuffStorageCapacityJson } from "../json";
 import { Coord } from "./coord.interface";
 import type { EnemyKind } from "./enemy-kind.type";
-import { GameEvent } from "./game-event.type";
 import { GameItem } from "./game-item.type";
 import { DoorEntity, TrapEntity } from "./interactive-entities.type";
-import { PlayableEntityAction } from "./playable-entity-action.type";
 import type { PlayerGamePhase } from "./player-phase.type";
 
 type PlayableEntityInventory = {
@@ -46,7 +44,6 @@ type BasePlayableEntity = Player & {
     actionPoints: number;
   };
   inventory: PlayableEntityInventory;
-  actionsDoneThisTurn: PlayableEntityAction[];
 };
 
 export type PlayableEnemyEntity = BasePlayableEntity & {
@@ -70,7 +67,7 @@ export type TilePlayableEntity = {
 export type TileNonPlayableInteractiveEntity = DoorEntity | TrapEntity;
 
 export type TileNonPlayableNonInteractiveEntity = {
-  type: "non-playable-non-interactive-entity";
+  type: "non-interactive-entity";
   kind: "wall" | "pillar" | "tree" | "off-map";
   isVisible: true;
   isBlocking: true;
@@ -96,19 +93,7 @@ export type Map = {
 
 export type GameStatus = "prepare_for_battle" | "battle_ongoing";
 
-type EnemyTemplate = {
-  name: string;
-  characteristic: {
-    baseHealthPoints: number;
-    baseManaPoints: number;
-    baseArmorClass: number;
-    baseMovementPoints: number;
-    baseActionPoints: number;
-  };
-  inventory: PlayableEntityInventory;
-};
-
-export type GameEntity<TGameStatus extends GameStatus = GameStatus> = {
+export type GameView<TGameStatus extends GameStatus = GameStatus> = {
   id: string;
   status: TGameStatus;
   map: Map;
@@ -117,6 +102,4 @@ export type GameEntity<TGameStatus extends GameStatus = GameStatus> = {
   };
   playableEntities: Record<PlayableEntity["id"], PlayableEntity>;
   timeline: PlayableEntity["id"][];
-  events: GameEvent[];
-  enemyTemplates: Record<EnemyTemplate["name"], EnemyTemplate>;
 };

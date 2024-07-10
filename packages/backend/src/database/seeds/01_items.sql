@@ -2,7 +2,6 @@ INSERT INTO
   "item" (
     "name",
     "level",
-    "img_url",
     "mana_cost",
     "type"
   )
@@ -10,37 +9,56 @@ VALUES
   (
     'broadsword_1',
     1,
-    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/broadsword_1.webp',
     NULL,
     'Weapon'
   ),
   (
     'faith_crossbow_1',
     1,
-    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/faith_crossbow_1.webp',
     NULL,
     'Weapon'
   ),
   (
     'throwing_dagger_1',
     1,
-    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/throwing_dagger_1.webp',
     NULL,
     'Weapon'
   ),
   (
     'magic_shot_1',
     1,
-    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/magic_shot_1.webp',
     '{"SORCERER":2,"CLERIC":3}',
     'Spell'
   ),
   (
     'elders_shortbow_1',
     1,
-    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/elders_shortbow_1.webp',
     NULL,
     'Weapon'
+  );
+
+INSERT INTO
+  "item_ui" ("item_name", "img_url")
+VALUES
+  (
+    'broadsword_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/broadsword_1.webp'
+  ),
+  (
+    'faith_crossbow_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/faith_crossbow_1.webp'
+  ),
+  (
+    'throwing_dagger_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/throwing_dagger_1.webp'
+  ),
+  (
+    'magic_shot_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/magic_shot_1.webp'
+  ),
+  (
+    'elders_shortbow_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/elders_shortbow_1.webp'
   );
 
 INSERT INTO

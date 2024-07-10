@@ -1,6 +1,6 @@
 import {
   Coord,
-  GameEntity,
+  GameView,
   Tile,
   coordToIndex,
   getLineOfSight,
@@ -40,7 +40,7 @@ export const usePreviewLayer = ({ gameEventManager, canvasRef }: Params) => {
       map,
       coords,
     }: {
-      map: GameEntity["map"];
+      map: GameView["map"];
       coords: Coord[];
     }) => {
       if (!canvas || !context || !assets) return;

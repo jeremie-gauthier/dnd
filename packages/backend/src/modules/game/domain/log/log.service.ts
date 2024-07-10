@@ -17,7 +17,7 @@ export class LogService {
         return {
           type: GameEvent.PlayableEntityTurnEnded,
           createdAt: new Date(),
-          data: { entityName: payload.playableEntity.toPlain().name },
+          data: { entityName: payload.playableEntity.name },
         };
       case GameEvent.DoorOpened:
         return {
@@ -29,7 +29,7 @@ export class LogService {
         return {
           type: GameEvent.PlayableEntityTurnStarted,
           createdAt: new Date(),
-          data: { entityName: payload.playableEntity.toPlain().name },
+          data: { entityName: payload.playableEntity.name },
         };
       case GameEvent.InitiativesRerolled:
         return {
@@ -52,7 +52,9 @@ export class LogService {
             attackPower: payload.damageDone,
             diceRollResults: payload.dicesResults.map((diceResult) => ({
               name: diceResult.dice.name,
-              color: diceResult.dice.color,
+              // TODO: fix this
+              // color: diceResult.dice.color,
+              color: "#",
               result: diceResult.result,
             })),
             attackerEntityName: payload.attacker.name,

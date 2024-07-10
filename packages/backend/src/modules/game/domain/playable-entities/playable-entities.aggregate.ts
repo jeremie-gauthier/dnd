@@ -29,7 +29,7 @@ export class PlayableEntities extends Entity<Data> {
     values,
   }: { values: Data["values"] }): Data["values"] {
     const sortedValues = [...values].sort((a, b) =>
-      a.initiative.compare(b.initiative),
+      b.initiative.compare(a.initiative),
     );
 
     const playingEntityIdx = values.findIndex((pc) => pc.isPlaying());

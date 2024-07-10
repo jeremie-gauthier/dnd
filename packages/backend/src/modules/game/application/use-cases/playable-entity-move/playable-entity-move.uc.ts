@@ -1,6 +1,6 @@
 import {
   Coord,
-  GameEntity,
+  GameView,
   PlayableEntity,
   PlayableEntityMoveInput,
   Tile,
@@ -13,8 +13,6 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { PlayableEntityService } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.service";
-import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
-import { PlayableEntityMovedPayload } from "src/modules/shared/events/game/playable-entity-moved.payload";
 import { MapService } from "../../../domain/map/map.service";
 import { MoveService } from "../../../domain/move/move.service";
 import { TrapService } from "../../../domain/trap/trap.service";
@@ -57,7 +55,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
     playableEntityId,
     userId,
   }: {
-    game: GameEntity;
+    game: GameView;
     userId: User["id"];
     playableEntityId: PlayableEntity["id"];
   }) {
@@ -77,7 +75,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
     pathToTile,
     playableEntityId,
   }: {
-    game: GameEntity;
+    game: GameView;
     pathToTile: PlayableEntityMoveInput["pathToTile"];
     playableEntityId: PlayableEntityMoveInput["playableEntityId"];
   }): Tile[] {
@@ -124,12 +122,12 @@ export class PlayableEntityMoveUseCase implements UseCase {
     }
 
     playableEntity.characteristic.actionPoints -= 1;
-    playableEntity.actionsDoneThisTurn.push({ name: "move" });
+    // playableEntity.actionsDoneThisTurn.push({ name: "move" });
 
-    this.eventEmitter.emitAsync(
-      GameEvent.PlayableEntityMoved,
-      new PlayableEntityMovedPayload({ game, playableEntity }),
-    );
+    // this.eventEmitter.emitAsync(
+    //   GameEvent.PlayableEntityMoved,
+    //   new PlayableEntityMovedPayload({ game, playableEntity }),
+    // );
 
     return validTiles;
   }
@@ -139,7 +137,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
     playableEntity,
     tile,
   }: {
-    game: GameEntity;
+    game: GameView;
     playableEntity: PlayableEntity;
     tile: Tile;
   }): boolean {
@@ -182,7 +180,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
   private hasTriggerTrap({ tile }: { tile: Tile }): boolean {
     return tile.entities.some(
       (entity) =>
-        entity.type === "non-playable-interactive-entity" &&
+        entity.type === "interactive-entity" &&
         entity.kind === "trap" &&
         entity.canInteract,
     );
@@ -191,7 +189,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
   private getTrapEntityOnCoord({ tile }: { tile: Tile }): TrapEntity {
     const trapEntity = tile.entities.find(
       (entity) =>
-        entity.type === "non-playable-interactive-entity" &&
+        entity.type === "interactive-entity" &&
         entity.kind === "trap" &&
         entity.canInteract,
     ) as TrapEntity;

@@ -12,16 +12,19 @@ export class ItemService {
         type: "Weapon",
         name: item.name,
         level: item.level,
-        imgUrl: item.imgUrl,
+        imgUrl: "item.imgUrl",
         attacks: item.attacks.map((attack) => ({
           id: attack.id,
           range: attack.range,
           type: attack.type,
-          dices: attack.attackDices.map(({ dice }) => dice),
+          dices: attack.attackDices.map(({ dice }) => ({
+            ...dice,
+            color: "#",
+          })),
         })),
         perks: item.perks.map((perk) => ({
           name: perk.name,
-          iconUrl: perk.iconUrl,
+          iconUrl: "perk.iconUrl",
         })),
       };
     }
@@ -31,17 +34,20 @@ export class ItemService {
         type: "Spell",
         name: item.name,
         level: item.level,
-        imgUrl: item.imgUrl,
+        imgUrl: "item.imgUrl",
         manaCost: item.manaCost,
         attacks: item.attacks.map((attack) => ({
           id: attack.id,
           range: attack.range,
           type: attack.type,
-          dices: attack.attackDices.map(({ dice }) => dice),
+          dices: attack.attackDices.map(({ dice }) => ({
+            ...dice,
+            color: "#",
+          })),
         })),
         perks: item.perks.map((perk) => ({
           name: perk.name,
-          iconUrl: perk.iconUrl,
+          iconUrl: "perk.iconUrl",
         })),
       };
     }

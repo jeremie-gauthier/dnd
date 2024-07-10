@@ -13,9 +13,9 @@ export class TileEntityFactory {
     switch (data.type) {
       case "playable-entity":
         return new TilePlayableEntity(data);
-      case "non-playable-interactive-entity":
+      case "interactive-entity":
         return TileInteractiveEntityFactory.create(data);
-      case "non-playable-non-interactive-entity":
+      case "non-interactive-entity":
         return new TileNonInteractiveEntity({
           ...data,
           type: "non-interactive-entity",

@@ -5,7 +5,7 @@ import { LobbyEvent } from "./lobby-event.enum";
 
 export class GameReadyPayload implements EventPayload<LobbyEvent.GameReady> {
   public readonly name = LobbyEvent.GameReady;
-  public readonly lobby: Lobby;
+  public readonly lobby: ReturnType<Lobby["toPlain"]>;
   public readonly game: ReturnType<Game["toPlain"]>;
 
   constructor({ lobby, game }: Omit<GameReadyPayload, "name">) {

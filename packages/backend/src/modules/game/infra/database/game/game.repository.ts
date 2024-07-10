@@ -8,6 +8,7 @@ import { Game } from "src/modules/game/domain/game/game.aggregate";
 import { RedisService } from "src/redis/redis.service";
 import { GamesRepository } from "../games.repository";
 import { GameMapper } from "./mapper/game.mapper";
+import { GamePersistence } from "./model/game.model";
 
 @Injectable()
 export class RedisGameRepository
@@ -46,9 +47,10 @@ export class RedisGameRepository
   public async getOne({
     gameId,
   }: { gameId: Game["id"] }): Promise<Game | null> {
-    return (await this.client.json.get(GamesRepository.KEY, {
+    const gameRaw = (await this.client.json.get(GamesRepository.KEY, {
       path: gameId,
-    })) as Game | null;
+    })) as GamePersistence | null;
+    return gameRaw ? this.mapper.toDomain(gameRaw) : null;
   }
 
   public async getOneOrThrow({

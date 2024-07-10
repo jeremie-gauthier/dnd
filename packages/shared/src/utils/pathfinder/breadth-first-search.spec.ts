@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { GameEntity } from "../../database";
+import { GameView } from "../../database";
 import { getAllPathsFromTileWithinRange } from "./breadth-first-search";
 
 describe("pathfinder: breadth-first-search", () => {
@@ -211,12 +211,12 @@ describe("pathfinder: breadth-first-search", () => {
             entities: [],
           },
         ],
-      } as GameEntity["map"];
+      } as GameView["map"];
       const originCoord = { row: 2, column: 2 };
       const maxRange = 4;
 
       const result = getAllPathsFromTileWithinRange({
-        game: { map } as GameEntity,
+        game: { map } as GameView,
         originCoord,
         maxRange,
       });

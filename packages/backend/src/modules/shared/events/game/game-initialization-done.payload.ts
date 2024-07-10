@@ -7,7 +7,7 @@ export class GameInitializationDonePayload
   implements EventPayload<GameEvent.GameInitializationDone>
 {
   public readonly name = GameEvent.GameInitializationDone;
-  public readonly lobby: Lobby;
+  public readonly lobby: ReturnType<Lobby["toPlain"]>;
   public readonly game: ReturnType<Game["toPlain"]>;
 
   constructor({ lobby, game }: Omit<GameInitializationDonePayload, "name">) {

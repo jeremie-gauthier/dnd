@@ -1,4 +1,4 @@
-import type { GameEntity, PlayerGamePhase } from "@dnd/shared";
+import type { GameView, PlayerGamePhase } from "@dnd/shared";
 import { RefObject } from "react";
 import { GameEventManager } from "../events";
 import { useAssetsLoader } from "./assets-loader/assets-loader";
@@ -42,8 +42,8 @@ export const useMapRenderer = ({
   });
 
   const render = (
-    map: GameEntity["map"],
-    playableEntities: GameEntity["playableEntities"],
+    map: GameView["map"],
+    playableEntities: GameView["playableEntities"],
     gamePhase: PlayerGamePhase,
   ) => {
     // TODO: render non interactive layer only once

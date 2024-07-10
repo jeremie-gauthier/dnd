@@ -1,6 +1,6 @@
 import {
-  GameEntity,
   GameItem,
+  GameView,
   PlayableEntity,
   PlayableEntityAttackInput,
 } from "@dnd/shared";
@@ -57,7 +57,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
     attackerPlayableEntityId,
     targetPlayableEntityId,
     userId,
-  }: PlayableEntityAttackInput & { game: GameEntity; userId: User["id"] }) {
+  }: PlayableEntityAttackInput & { game: GameView; userId: User["id"] }) {
     const attackerPlayableEntity =
       this.playableEntityService.getPlayableEntityOrThrow({
         game,
@@ -78,16 +78,16 @@ export class PlayableEntityAttackUseCase implements UseCase {
       });
     this.playableEntityService.mustBeAlive(targetPlayableEntity);
 
-    if (
-      attackerPlayableEntity.type === "enemy" &&
-      attackerPlayableEntity.actionsDoneThisTurn.some(
-        (action) => action.name === "attack",
-      )
-    ) {
-      throw new ForbiddenException(
-        "An enemy entity can only attack once per turn",
-      );
-    }
+    // if (
+    //   attackerPlayableEntity.type === "enemy" &&
+    //   attackerPlayableEntity.actionsDoneThisTurn.some(
+    //     (action) => action.name === "attack",
+    //   )
+    // ) {
+    //   throw new ForbiddenException(
+    //     "An enemy entity can only attack once per turn",
+    //   );
+    // }
 
     const attackItem = this.playableEntityService.getAttackItemOrThrow({
       attackId,
@@ -139,7 +139,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
   }: Pick<
     PlayableEntityAttackInput,
     "attackId" | "attackerPlayableEntityId" | "targetPlayableEntityId"
-  > & { game: GameEntity }): void {
+  > & { game: GameView }): void {
     const attackerPlayableEntity = game.playableEntities[
       attackerPlayableEntityId
     ] as PlayableEntity;
@@ -152,7 +152,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
     const attack = attackItem.attacks.find((attack) => attack.id === attackId)!;
 
     attackerPlayableEntity.characteristic.actionPoints -= 1;
-    attackerPlayableEntity.actionsDoneThisTurn.push({ name: "attack" });
+    // attackerPlayableEntity.actionsDoneThisTurn.push({ name: "attack" });
     if (attackItem.type === "Spell" && attackerPlayableEntity.type === "hero") {
       attackerPlayableEntity.characteristic.manaPoints -=
         attackItem.manaCost[attackerPlayableEntity.class]!;

@@ -1,4 +1,4 @@
-import type { GameEntity } from "@dnd/shared";
+import type { GameView } from "@dnd/shared";
 import { entitiesAssetsCollection } from "../assets-loader/assets.config";
 import { drawDoor } from "./entities/draw-door";
 import { drawPillar } from "./entities/draw-pillar";
@@ -15,7 +15,7 @@ type Params = Pick<
     EntityDrawerParams["subject"],
     "coord2D" | "coordIsometric" | "entity"
   >;
-  playableEntities: GameEntity["playableEntities"];
+  playableEntities: GameView["playableEntities"];
 };
 
 type DrawFn = (_: EntityDrawerParams) => void;
@@ -48,11 +48,11 @@ export const drawEntity = ({
 const dummyDrawer = (_: EntityDrawerParams) => {};
 
 const ENTITY_MAP = {
-  "non-playable-interactive-entity": {
+  "interactive-entity": {
     door: drawDoor,
     trap: drawTrap,
   },
-  "non-playable-non-interactive-entity": {
+  "non-interactive-entity": {
     "off-map": dummyDrawer,
     pillar: drawPillar,
     tree: dummyDrawer,

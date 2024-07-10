@@ -1,5 +1,5 @@
 import {
-  GameEntity,
+  GameView,
   PlayableEntity,
   Tile,
   coordToIndex,
@@ -9,7 +9,7 @@ import {
 type Params = {
   isPlaying: boolean;
   heroPlaying: PlayableEntity | undefined;
-  game: GameEntity;
+  game: GameView;
 };
 
 export const useGetNeighbourTiles = ({

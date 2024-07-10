@@ -72,13 +72,15 @@ export class Game extends AggregateRoot<Data> {
       playableEntityId,
     });
 
+    const tileEntity = new TilePlayableEntity({ id: playableEntity.id });
     if (!playableEntity.coord.isUndefined()) {
       this._data.board.removeEntityAtCoord({
-        tileEntity: new TilePlayableEntity({ id: playableEntity.id }),
+        tileEntity,
         coord: playableEntity.coord,
       });
     }
 
+    this._data.board.addEntityAtCoord({ tileEntity, coord: destinationCoord });
     playableEntity.setCoord(destinationCoord);
   }
 

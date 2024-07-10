@@ -1,4 +1,4 @@
-import { Coord, GameEntity, canMoveToRequestedPosition } from "@dnd/shared";
+import { Coord, GameView, canMoveToRequestedPosition } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import type { Hero } from "src/database/entities/hero.entity";
 import { MapService } from "../map/map.service";
@@ -12,7 +12,7 @@ export class MoveService {
     heroId,
     requestedPosition,
   }: {
-    game: GameEntity;
+    game: GameView;
     heroId: Hero["id"];
     requestedPosition: Coord;
   }): void {
@@ -46,7 +46,7 @@ export class MoveService {
     game,
     requestedPosition,
   }: {
-    game: GameEntity;
+    game: GameView;
     requestedPosition: Coord;
   }): boolean {
     const tile = this.mapService.getTileOrThrow({

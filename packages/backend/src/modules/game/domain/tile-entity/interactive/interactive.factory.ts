@@ -5,7 +5,7 @@ import { GameBoardDeserialized } from "src/modules/shared/interfaces/game-board-
 
 type RawTileInteractiveEntity = Extract<
   GameBoardDeserialized["tiles"][number]["entities"][number],
-  { type: "non-playable-interactive-entity" }
+  { type: "interactive-entity" }
 >;
 
 export class TileInteractiveEntityFactory {

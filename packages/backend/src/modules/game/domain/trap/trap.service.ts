@@ -1,13 +1,11 @@
-import { GameEntity, PlayableEntity } from "@dnd/shared";
+import { GameView, PlayableEntity } from "@dnd/shared";
 import { TrapEntity } from "@dnd/shared/dist/database/game/interactive-entities.type";
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
-import { TrapTriggeredPayload } from "src/modules/shared/events/game/trap-triggered.payload";
 import { CombatService } from "../combat/combat.service";
 
 interface TrapTriggerParams {
-  game: GameEntity;
+  game: GameView;
   trapEntity: TrapEntity;
   subjectEntity: PlayableEntity;
 }
@@ -34,10 +32,10 @@ export class TrapService {
     trapEntity.canInteract = false;
     trapEntity.isVisible = true;
 
-    this.eventEmitter.emitAsync(
-      GameEvent.TrapTriggered,
-      new TrapTriggeredPayload({ game, trapEntity, subjectEntity }),
-    );
+    // this.eventEmitter.emitAsync(
+    //   GameEvent.TrapTriggered,
+    //   new TrapTriggeredPayload({ game, trapEntity, subjectEntity }),
+    // );
 
     trapTrigger({ game, trapEntity, subjectEntity });
   }

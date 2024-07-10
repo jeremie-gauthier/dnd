@@ -1,8 +1,8 @@
-import type { GameEntity } from "@dnd/shared";
+import type { GameView } from "@dnd/shared";
 import { Injectable, type OnApplicationBootstrap } from "@nestjs/common";
 import { RedisService } from "../../../../redis/redis.service";
 
-type GamesKey = Record<GameEntity["id"], GameEntity>;
+type GamesKey = Record<GameView["id"], GameView>;
 
 @Injectable()
 export class GamesRepository implements OnApplicationBootstrap {
@@ -24,23 +24,23 @@ export class GamesRepository implements OnApplicationBootstrap {
     }
   }
 
-  public async getMany(): Promise<GameEntity[]> {
+  public async getMany(): Promise<GameView[]> {
     const games = (await this.client.json.get(GamesRepository.KEY)) as GamesKey;
     return Object.values(games);
   }
 
-  public async getOne(path: string | string[]): Promise<GameEntity | null> {
+  public async getOne(path: string | string[]): Promise<GameView | null> {
     return (await this.client.json.get(GamesRepository.KEY, {
       path,
-    })) as GameEntity | null;
+    })) as GameView | null;
   }
 
-  public async set(game: GameEntity): Promise<GameEntity> {
+  public async set(game: GameView): Promise<GameView> {
     await this.client.json.set(GamesRepository.KEY, game.id, game);
     return game;
   }
 
-  public async update(updatedGame: GameEntity): Promise<void> {
+  public async update(updatedGame: GameView): Promise<void> {
     await this.client.json.set(
       GamesRepository.KEY,
       updatedGame.id,
@@ -48,7 +48,7 @@ export class GamesRepository implements OnApplicationBootstrap {
     );
   }
 
-  public async del(gameId: GameEntity["id"]): Promise<void> {
+  public async del(gameId: GameView["id"]): Promise<void> {
     await this.client.json.del(GamesRepository.KEY, gameId);
   }
 }

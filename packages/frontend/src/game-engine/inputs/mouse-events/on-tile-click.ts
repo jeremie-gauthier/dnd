@@ -1,4 +1,4 @@
-import { GameEntity, isInRange } from "@dnd/shared";
+import { GameView, isInRange } from "@dnd/shared";
 import { GameEventManager } from "../../events";
 import {
   type CanvasConfig,
@@ -11,8 +11,8 @@ export type HandleTileClickParams = {
   ev: MouseEvent;
   canvasConfig: CanvasConfig;
   mapMetadata: {
-    height: GameEntity["map"]["height"];
-    width: GameEntity["map"]["width"];
+    height: GameView["map"]["height"];
+    width: GameView["map"]["width"];
   };
   gameEventManager: GameEventManager;
 };

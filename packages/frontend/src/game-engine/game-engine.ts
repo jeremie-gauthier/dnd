@@ -1,5 +1,5 @@
 import {
-  type GameEntity,
+  type GameView,
   type PlayerGamePhase,
   getAllPathsFromTileWithinRange,
   getCoordsFromTilePaths,
@@ -20,7 +20,7 @@ export const useGameEngine = ({
   floorCanvasRef: RefObject<HTMLCanvasElement>;
   previewCanvasRef: RefObject<HTMLCanvasElement>;
   entitiesCanvasRef: RefObject<HTMLCanvasElement>;
-  gameEntity: GameEntity;
+  gameEntity: GameView;
   gamePhase: PlayerGamePhase;
 }) => {
   const gameEventManager = GameEventManager.getInstance();
