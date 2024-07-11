@@ -87,13 +87,15 @@ export class PlayableEntities extends Entity<Data> {
   public rollInitiatives() {
     for (const playableEntity of this._data.values) {
       playableEntity.rollInitiative();
-      playableEntity.setIdleStatus();
+      if (playableEntity.isPlaying()) {
+        playableEntity.endTurn();
+      }
     }
 
     this._data.values = this.toSortedValuesAsRelativeTimeline({
       values: this._data.values,
     });
 
-    this._data.values[0]?.setActionStatus();
+    this._data.values[0]?.startTurn();
   }
 }

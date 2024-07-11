@@ -15,7 +15,6 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { PlayableEntityService } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.service";
-import { InitiativeService } from "../../../domain/initiative/initiative.service";
 import { MapService } from "../../../domain/map/map.service";
 import { SpawnService } from "../../../domain/spawn/spawn.service";
 import { TurnService } from "../../../domain/turn/turn.service";
@@ -30,7 +29,7 @@ export class OpenDoorUseCase implements UseCase {
     @Inject(GAME_REPOSITORY)
     private readonly gameRepository: GameRepository,
     private readonly turnService: TurnService,
-    private readonly initiativeService: InitiativeService,
+    // private readonly initiativeService: InitiativeService,
     private readonly spawnService: SpawnService,
     private readonly eventEmitter: EventEmitter2,
     private readonly playableEntityService: PlayableEntityService,

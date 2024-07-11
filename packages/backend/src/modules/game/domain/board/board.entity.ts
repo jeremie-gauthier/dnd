@@ -1,7 +1,7 @@
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { Coord } from "../coord/coord.vo";
-import { TileEntity } from "../tile-entity/tile-entity.abstract";
+import { TileEntity } from "../tile/tile-entity/tile-entity.abstract";
 import { Tile } from "../tile/tile.entity";
 import { BoardError } from "./board.error";
 

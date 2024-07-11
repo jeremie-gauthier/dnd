@@ -1,6 +1,6 @@
-import { TileNonInteractiveEntity } from "src/modules/game/domain/tile-entity/non-interactive/non-interactive.abstract";
-import { TilePlayableEntity } from "src/modules/game/domain/tile-entity/playable/playable.entity";
-import { TileEntity } from "src/modules/game/domain/tile-entity/tile-entity.abstract";
+import { TileNonInteractiveEntity } from "src/modules/game/domain/tile/tile-entity/non-interactive/non-interactive.abstract";
+import { TilePlayableEntity } from "src/modules/game/domain/tile/tile-entity/playable/playable.entity";
+import { TileEntity } from "src/modules/game/domain/tile/tile-entity/tile-entity.abstract";
 import { Board } from "../model/board.type";
 import { TileInteractiveEntityFactory } from "./tile-interactive-entity.factory";
 

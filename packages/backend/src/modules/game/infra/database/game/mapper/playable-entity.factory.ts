@@ -1,9 +1,10 @@
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
-import { Initiative } from "src/modules/game/domain/initiative/initiative.vo";
-import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
 import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/hero.entity";
+import { Initiative } from "src/modules/game/domain/playable-entities/playable-entity/initiative/initiative.vo";
+import { Inventory } from "src/modules/game/domain/playable-entities/playable-entity/inventory/inventory.entity";
 import { Monster } from "src/modules/game/domain/playable-entities/playable-entity/monster.entity";
 import { Playable } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.abstract";
+import { PlayerStatus } from "src/modules/game/domain/playable-entities/playable-entity/player-status/player-status.vo";
 import { PlayableEntity } from "../model/playable-entity/playable.type";
 import { ItemFactory } from "./item.factory";
 
@@ -17,7 +18,11 @@ export class PlayableEntityFactory {
           ...data,
           coord: new Coord(data.coord),
           initiative: new Initiative(data.initiative),
-          status: data.currentPhase,
+          status: new PlayerStatus(
+            data.currentPhase.toUpperCase() as Uppercase<
+              PlayableEntity["currentPhase"]
+            >,
+          ),
           inventory: new Inventory({
             ...data.inventory,
             playableId: data.id,
@@ -32,7 +37,9 @@ export class PlayableEntityFactory {
           ...data,
           coord: new Coord(data.coord),
           initiative: new Initiative(data.initiative),
-          status: data.currentPhase,
+          status: new PlayerStatus(
+            data.currentPhase as Uppercase<PlayableEntity["currentPhase"]>,
+          ),
           inventory: new Inventory({
             ...data.inventory,
             playableId: data.id,

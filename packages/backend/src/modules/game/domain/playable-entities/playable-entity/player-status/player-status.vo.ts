@@ -1,17 +1,15 @@
 import { ValueObject } from "src/modules/shared/domain/value-object";
 import { PlayerStatusError } from "./player-status.error";
 
-type Data = {
-  currentPhase: "PREPARATION" | "IDLE" | "ACTION";
-};
+type Data = "PREPARATION" | "IDLE" | "ACTION";
 
 export class PlayerStatus extends ValueObject<Data> {
   private static STATE_MACHINE: Readonly<
     Record<
-      Data["currentPhase"],
+      Data,
       {
-        advanceTo: Data["currentPhase"][];
-        rollbackFrom: Data["currentPhase"][];
+        advanceTo: Array<Data>;
+        rollbackFrom: Array<Data>;
       }
     >
   > = {
@@ -30,29 +28,23 @@ export class PlayerStatus extends ValueObject<Data> {
   };
 
   public equals(other: PlayerStatus): boolean {
-    return this._data.currentPhase === other._data.currentPhase;
+    return this._data === other._data;
   }
 
   public toPlain() {
-    return {
-      currentPhase: this._data.currentPhase,
-    };
+    return this._data;
   }
 
   public get current() {
-    return this._data.currentPhase;
+    return this._data;
   }
 
-  public advanceTo({
-    currentPhase,
-  }: { currentPhase: Data["currentPhase"] }): PlayerStatus {
+  public advanceTo({ currentPhase }: { currentPhase: Data }): PlayerStatus {
     this.mustBeAbleToAdvanceTo({ currentPhase });
-    return new PlayerStatus({ currentPhase });
+    return new PlayerStatus(currentPhase);
   }
 
-  private mustBeAbleToAdvanceTo({
-    currentPhase,
-  }: { currentPhase: Data["currentPhase"] }) {
+  private mustBeAbleToAdvanceTo({ currentPhase }: { currentPhase: Data }) {
     const canAdvanceTo =
       PlayerStatus.STATE_MACHINE[this.current].advanceTo.includes(currentPhase);
     if (!canAdvanceTo) {

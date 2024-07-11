@@ -1,6 +1,6 @@
-import { Door } from "src/modules/game/domain/tile-entity/interactive/door.entity";
-import { TileInteractiveEntity } from "src/modules/game/domain/tile-entity/interactive/interactive.abstract";
-import { Trap } from "src/modules/game/domain/tile-entity/interactive/trap.entity";
+import { Door } from "src/modules/game/domain/tile/tile-entity/interactive/door.entity";
+import { TileInteractiveEntity } from "src/modules/game/domain/tile/tile-entity/interactive/interactive.abstract";
+import { Trap } from "src/modules/game/domain/tile/tile-entity/interactive/trap.entity";
 import { GameBoardDeserialized } from "src/modules/shared/interfaces/game-board-deserialized.interface";
 
 type RawTileInteractiveEntity = Extract<

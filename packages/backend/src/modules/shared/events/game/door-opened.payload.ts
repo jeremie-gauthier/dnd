@@ -2,7 +2,7 @@ import { EventPayload } from "src/interfaces/event-payload.interface";
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
 import { Game } from "src/modules/game/domain/game/game.aggregate";
 import { Playable } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.abstract";
-import { Door } from "src/modules/game/domain/tile-entity/interactive/door.entity";
+import { Door } from "src/modules/game/domain/tile/tile-entity/interactive/door.entity";
 import { GameEvent } from "./game-event.enum";
 
 export class DoorOpenedPayload implements EventPayload<GameEvent.DoorOpened> {

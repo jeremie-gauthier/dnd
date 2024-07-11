@@ -1,8 +1,9 @@
 import { AttackRangeType, AttackTypeType, HeroClassType } from "@dnd/shared";
 import { Coord } from "../../coord/coord.vo";
-import { Initiative } from "../../initiative/initiative.vo";
-import { Inventory } from "../../inventory/inventory.entity";
+import { Initiative } from "./initiative/initiative.vo";
+import { Inventory } from "./inventory/inventory.entity";
 import { BehaviourMove, Playable } from "./playable-entity.abstract";
+import { PlayerStatus } from "./player-status/player-status.vo";
 
 type Data = {
   readonly id: string;
@@ -12,7 +13,7 @@ type Data = {
   coord: Coord;
   isBlocking: boolean;
 
-  status: "preparation" | "idle" | "action";
+  status: PlayerStatus;
   playedByUserId: string;
 
   initiative: Initiative;
@@ -68,7 +69,7 @@ export class Hero extends Playable<Data> {
       isBlocking: this._data.isBlocking,
       initiative: this._data.initiative.toPlain(),
       playedByUserId: this._data.playedByUserId,
-      status: this._data.status,
+      status: this._data.status.toPlain(),
       characteristic: {
         baseHealthPoints: this._data.characteristic.baseHealthPoints,
         healthPoints: this._data.characteristic.healthPoints,

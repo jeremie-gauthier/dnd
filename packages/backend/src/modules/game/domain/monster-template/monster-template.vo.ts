@@ -1,7 +1,7 @@
 import { EnemyKind } from "@dnd/shared";
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
-import { Inventory } from "../inventory/inventory.entity";
+import { Inventory } from "../playable-entities/playable-entity/inventory/inventory.entity";
 
 type Data = {
   readonly kind: EnemyKind;

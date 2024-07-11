@@ -8,7 +8,7 @@ import { GameStatus } from "../game-status/game-status.vo";
 import { MonsterTemplate } from "../monster-template/monster-template.vo";
 import { PlayableEntities } from "../playable-entities/playable-entities.aggregate";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
-import { TilePlayableEntity } from "../tile-entity/playable/playable.entity";
+import { TilePlayableEntity } from "../tile/tile-entity/playable/playable.entity";
 
 type Data = {
   readonly id: string;

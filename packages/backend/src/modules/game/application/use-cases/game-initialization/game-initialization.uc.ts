@@ -13,12 +13,13 @@ import { GameEventFactory } from "src/modules/game/domain/game-event/game-event.
 import { GameMaster } from "src/modules/game/domain/game-master/game-master.entity";
 import { GameStatus } from "src/modules/game/domain/game-status/game-status.vo";
 import { Game } from "src/modules/game/domain/game/game.aggregate";
-import { Initiative } from "src/modules/game/domain/initiative/initiative.vo";
-import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
 import { MonsterTemplate } from "src/modules/game/domain/monster-template/monster-template.vo";
 import { PlayableEntities } from "src/modules/game/domain/playable-entities/playable-entities.aggregate";
 import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/hero.entity";
-import { TileEntityFactory } from "src/modules/game/domain/tile-entity/tile-entity.factory";
+import { Initiative } from "src/modules/game/domain/playable-entities/playable-entity/initiative/initiative.vo";
+import { Inventory } from "src/modules/game/domain/playable-entities/playable-entity/inventory/inventory.entity";
+import { PlayerStatus } from "src/modules/game/domain/playable-entities/playable-entity/player-status/player-status.vo";
+import { TileEntityFactory } from "src/modules/game/domain/tile/tile-entity/tile-entity.factory";
 import { Tile } from "src/modules/game/domain/tile/tile.entity";
 import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
@@ -190,7 +191,7 @@ export class GameInitializationUseCase implements UseCase {
           new Hero({
             id: hero.id,
             type: "hero",
-            status: "preparation",
+            status: new PlayerStatus("PREPARATION"),
             playedByUserId: heroPlayersMap[hero.id]!,
             name: hero.name,
             class: hero.class,
@@ -214,15 +215,11 @@ export class GameInitializationUseCase implements UseCase {
               storageCapacity: hero.inventory.storageCapacity,
               gear: hero.inventory.stuff
                 .filter((stuff) => stuff.storageSpace === StorageSpace.GEAR)
-                // .map(({ item }) => this.itemService.itemEntityToGameItem(item))
-                // .filter((item): item is GameItem => item !== undefined)
                 .map((stuff) =>
                   ItemFactory.create(stuff.item as unknown as GameItem),
                 ),
               backpack: hero.inventory.stuff
                 .filter((stuff) => stuff.storageSpace === StorageSpace.BACKPACK)
-                // .map(({ item }) => this.itemService.itemEntityToGameItem(item))
-                // .filter((item): item is GameItem => item !== undefined)
                 .map((stuff) =>
                   ItemFactory.create(stuff.item as unknown as GameItem),
                 ),

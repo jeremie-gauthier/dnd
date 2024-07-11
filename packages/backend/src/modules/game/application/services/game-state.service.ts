@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Coord } from "../../domain/coord/coord.vo";
 import { Game } from "../../domain/game/game.aggregate";
-import { TileEntity } from "../../domain/tile-entity/tile-entity.abstract";
+import { TileEntity } from "../../domain/tile/tile-entity/tile-entity.abstract";
 import { Tile } from "../../domain/tile/tile.entity";
 import { BoardService } from "./board.service";
 

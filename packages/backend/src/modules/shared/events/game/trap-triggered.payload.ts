@@ -1,7 +1,7 @@
 import { EventPayload } from "src/interfaces/event-payload.interface";
 import { Game } from "src/modules/game/domain/game/game.aggregate";
 import { Playable } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.abstract";
-import { Trap } from "src/modules/game/domain/tile-entity/interactive/trap.entity";
+import { Trap } from "src/modules/game/domain/tile/tile-entity/interactive/trap.entity";
 import { GameEvent } from "./game-event.enum";
 
 export class TrapTriggeredPayload

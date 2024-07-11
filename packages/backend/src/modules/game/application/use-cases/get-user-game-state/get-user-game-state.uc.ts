@@ -26,7 +26,7 @@ export class GetUserGameStateUseCase implements UseCase {
     const plainGame = game.toPlain();
 
     const playableEntityTurn = plainGame.playableEntities.values.find(
-      ({ status }) => status === "action",
+      ({ status }) => status === "ACTION",
     );
     if (!playableEntityTurn) {
       throw new Error("No playable entity in 'action' phase found");

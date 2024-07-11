@@ -1,4 +1,4 @@
-import { GameDomainError } from "../game-domain.error";
+import { GameDomainError } from "../../../game-domain.error";
 
 type ErrorName = "NEGATIVE_INITIATIVE";
 

@@ -38,4 +38,14 @@ describe("Initiative VO", () => {
       expect(result.equals(new Initiative(86))).toBe(true);
     });
   });
+
+  describe("compare method", () => {
+    it("should compare values", () => {
+      const alpha = new Initiative(50);
+      const beta = new Initiative(8);
+
+      expect(alpha.compare(beta)).toEqual(42);
+      expect(beta.compare(alpha)).toEqual(-42);
+    });
+  });
 });

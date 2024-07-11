@@ -1,15 +1,16 @@
-import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
+import { Playable } from "../../../playable-entities/playable-entity/playable-entity.abstract";
 import { TileInteractiveEntity } from "./interactive.abstract";
 
 type Data = {
+  readonly name: "pit";
   readonly type: "interactive-entity";
-  readonly kind: "door";
+  readonly kind: "trap";
   isBlocking: boolean;
   isVisible: boolean;
   canInteract: boolean;
 };
 
-export class Door extends TileInteractiveEntity<Data> {
+export class Trap extends TileInteractiveEntity<Data> {
   get canInteract(): boolean {
     return this._data.canInteract;
   }
@@ -29,6 +30,7 @@ export class Door extends TileInteractiveEntity<Data> {
       canInteract: this._data.canInteract,
       isBlocking: this._data.isBlocking,
       isVisible: this._data.isVisible,
+      name: this._data.name,
       type: this._data.type,
       kind: this._data.kind,
     };

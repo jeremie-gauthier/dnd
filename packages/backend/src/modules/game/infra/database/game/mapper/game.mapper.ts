@@ -3,11 +3,12 @@ import { Coord } from "src/modules/game/domain/coord/coord.vo";
 import { GameMaster } from "src/modules/game/domain/game-master/game-master.entity";
 import { GameStatus } from "src/modules/game/domain/game-status/game-status.vo";
 import { Game as GameDomain } from "src/modules/game/domain/game/game.aggregate";
-import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
 import { MonsterTemplate } from "src/modules/game/domain/monster-template/monster-template.vo";
 import { PlayableEntities } from "src/modules/game/domain/playable-entities/playable-entities.aggregate";
 import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/hero.entity";
+import { Inventory } from "src/modules/game/domain/playable-entities/playable-entity/inventory/inventory.entity";
 import { Monster } from "src/modules/game/domain/playable-entities/playable-entity/monster.entity";
+import { PlayerStatus } from "src/modules/game/domain/playable-entities/playable-entity/player-status/player-status.vo";
 import { Tile } from "src/modules/game/domain/tile/tile.entity";
 import { Mapper } from "src/modules/shared/infra/mapper";
 import { GameEvent } from "../model/game-event.type";
@@ -92,7 +93,9 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
   private getHero({ hero }: { hero: ReturnType<Hero["toPlain"]> }) {
     return {
       ...hero,
-      currentPhase: hero.status,
+      currentPhase: hero.status.toLowerCase() as Lowercase<
+        ReturnType<PlayerStatus["toPlain"]>
+      >,
       actionsDoneThisTurn: [],
     };
   }
@@ -100,7 +103,9 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
   private getMonster({ monster }: { monster: ReturnType<Monster["toPlain"]> }) {
     return {
       ...monster,
-      currentPhase: monster.status,
+      currentPhase: monster.status.toLowerCase() as Lowercase<
+        ReturnType<PlayerStatus["toPlain"]>
+      >,
       actionsDoneThisTurn: [],
     };
   }
