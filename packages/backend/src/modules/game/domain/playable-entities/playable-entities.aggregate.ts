@@ -32,7 +32,7 @@ export class PlayableEntities extends Entity<Data> {
       b.initiative.compare(a.initiative),
     );
 
-    const playingEntityIdx = values.findIndex((pc) => pc.isPlaying());
+    const playingEntityIdx = sortedValues.findIndex((pc) => pc.isPlaying());
     if (playingEntityIdx < 0) {
       return sortedValues;
     }
