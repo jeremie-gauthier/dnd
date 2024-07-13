@@ -57,10 +57,10 @@ export class GamePublisherGateway {
       });
       const gameView = await this.presenter.toView(game);
 
-      return {
+      this.server.to(userId).emit(ServerGameEvent.GameChangesDetected, {
         ...playerGameState,
         game: gameView,
-      };
+      });
     }
   }
 }
