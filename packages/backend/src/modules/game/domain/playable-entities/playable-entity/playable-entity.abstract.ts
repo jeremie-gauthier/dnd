@@ -117,11 +117,11 @@ export abstract class Playable<
   }
 
   public endTurn() {
-    this._data.status = this._data.status.advanceTo({ currentPhase: "IDLE" });
+    this._data.status = this._data.status.advanceTo("IDLE");
   }
 
   public startTurn() {
-    this._data.status = this._data.status.advanceTo({ currentPhase: "ACTION" });
+    this._data.status = this._data.status.advanceTo("ACTION");
     this._data.characteristic.actionPoints =
       this._data.characteristic.baseActionPoints;
   }

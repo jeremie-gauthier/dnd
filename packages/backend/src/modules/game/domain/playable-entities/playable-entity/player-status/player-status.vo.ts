@@ -39,18 +39,18 @@ export class PlayerStatus extends ValueObject<Data> {
     return this._data;
   }
 
-  public advanceTo({ currentPhase }: { currentPhase: Data }): PlayerStatus {
-    this.mustBeAbleToAdvanceTo({ currentPhase });
-    return new PlayerStatus(currentPhase);
+  public advanceTo(status: Data): PlayerStatus {
+    this.mustBeAbleToAdvanceTo(status);
+    return new PlayerStatus(status);
   }
 
-  private mustBeAbleToAdvanceTo({ currentPhase }: { currentPhase: Data }) {
+  private mustBeAbleToAdvanceTo(status: Data) {
     const canAdvanceTo =
-      PlayerStatus.STATE_MACHINE[this.current].advanceTo.includes(currentPhase);
+      PlayerStatus.STATE_MACHINE[this.current].advanceTo.includes(status);
     if (!canAdvanceTo) {
       throw new PlayerStatusError({
         name: "ILLEGAL_STATUS_EDIT",
-        message: `Player status cannot advance to '${currentPhase}' (current: '${this.current}')`,
+        message: `Player status cannot advance to '${status}' (current: '${this.current}')`,
       });
     }
   }
