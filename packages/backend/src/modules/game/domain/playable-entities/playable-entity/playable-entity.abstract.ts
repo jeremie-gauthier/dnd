@@ -49,6 +49,8 @@ export abstract class Playable<
     attack: GameItem["attacks"][number];
     target: Playable;
   }): void;
+  public abstract act(): void;
+
   public abstract toPlain(): PlainData<ChildData>;
 
   constructor(rawData: ChildData) {
@@ -77,9 +79,11 @@ export abstract class Playable<
 
   protected mustBeAlive() {
     if (this.isDead) {
-      throw new Error(
-        "Playable Entity must be alive in order to perform this action",
-      );
+      throw new PlayableEntityError({
+        name: "NOT_ALIVE",
+        message:
+          "Playable Entity must be alive in order to perform this action",
+      });
     }
   }
 
@@ -132,5 +136,14 @@ export abstract class Playable<
 
   public rollInitiative() {
     this._data.initiative = this.initiative.roll();
+  }
+
+  protected mustHaveActionPoints() {
+    if (this._data.characteristic.actionPoints < 1) {
+      throw new PlayableEntityError({
+        name: "NOT_ENOUGH_ACTION_POINTS",
+        message: `Playable Entity ${this.id} cannot act`,
+      });
+    }
   }
 }

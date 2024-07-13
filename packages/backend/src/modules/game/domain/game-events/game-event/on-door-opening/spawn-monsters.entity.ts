@@ -1,6 +1,6 @@
 import { EnemyKind } from "@dnd/shared";
-import { Coord } from "../../coord/coord.vo";
-import { GameEvent } from "../game-event.abstract";
+import { Coord } from "../../../coord/coord.vo";
+import { DoorOpeningEvent } from "./door-opening-event.abstract";
 
 type Data = {
   readonly name: "on_door_opening";
@@ -10,7 +10,15 @@ type Data = {
   readonly startingTiles: Array<Coord>;
 };
 
-export class OnDoorOpeningSpawnMonsters extends GameEvent<Data> {
+export class OnDoorOpeningSpawnMonsters extends DoorOpeningEvent<Data> {
+  public get monsters() {
+    return this._data.monsters;
+  }
+
+  public get startingTiles() {
+    return this._data.startingTiles;
+  }
+
   public toPlain() {
     return {
       action: this._data.action,

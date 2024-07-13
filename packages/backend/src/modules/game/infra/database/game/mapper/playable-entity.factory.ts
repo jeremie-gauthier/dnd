@@ -38,7 +38,9 @@ export class PlayableEntityFactory {
           coord: new Coord(data.coord),
           initiative: new Initiative(data.initiative),
           status: new PlayerStatus(
-            data.currentPhase as Uppercase<PlayableEntity["currentPhase"]>,
+            data.currentPhase.toUpperCase() as Uppercase<
+              PlayableEntity["currentPhase"]
+            >,
           ),
           inventory: new Inventory({
             ...data.inventory,

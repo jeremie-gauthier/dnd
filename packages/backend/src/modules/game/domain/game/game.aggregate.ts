@@ -1,12 +1,14 @@
+import { zip } from "@dnd/shared";
 import { AggregateRoot } from "src/modules/shared/domain/aggregate-root";
 import { z } from "zod";
 import { Board } from "../board/board.entity";
 import { Coord } from "../coord/coord.vo";
-import { GameEvent } from "../game-event/game-event.abstract";
+import { GameEvents } from "../game-events/game-events.aggregate";
 import { GameMaster } from "../game-master/game-master.entity";
 import { GameStatus } from "../game-status/game-status.vo";
-import { MonsterTemplate } from "../monster-template/monster-template.vo";
+import { MonsterTemplates } from "../monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "../playable-entities/playable-entities.aggregate";
+import { Monster } from "../playable-entities/playable-entity/monster.entity";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
 import { TilePlayableEntity } from "../tile/tile-entity/playable/playable.entity";
 
@@ -16,8 +18,8 @@ type Data = {
   board: Board;
   playableEntities: PlayableEntities;
   gameMaster: GameMaster;
-  monsterTemplates: Array<MonsterTemplate>;
-  events: Array<GameEvent>;
+  monsterTemplates: MonsterTemplates;
+  events: GameEvents;
 };
 
 export class Game extends AggregateRoot<Data> {
@@ -27,8 +29,8 @@ export class Game extends AggregateRoot<Data> {
     board: z.instanceof(Board),
     playableEntities: z.instanceof(PlayableEntities),
     gameMaster: z.instanceof(GameMaster),
-    monsterTemplates: z.array(z.instanceof(MonsterTemplate)),
-    events: z.array(z.instanceof(GameEvent)),
+    monsterTemplates: z.instanceof(MonsterTemplates),
+    events: z.instanceof(GameEvents),
   });
 
   constructor(rawData: Data) {
@@ -43,10 +45,8 @@ export class Game extends AggregateRoot<Data> {
       board: this._data.board.toPlain(),
       playableEntities: this._data.playableEntities.toPlain(),
       gameMaster: this._data.gameMaster.toPlain(),
-      monsterTemplates: this._data.monsterTemplates.map((monsterTemplate) =>
-        monsterTemplate.toPlain(),
-      ),
-      events: this._data.events.map((event) => event.toPlain()),
+      monsterTemplates: this._data.monsterTemplates.toPlain(),
+      events: this._data.events.toPlain(),
     };
   }
 
@@ -86,5 +86,59 @@ export class Game extends AggregateRoot<Data> {
 
   public rollInitiatives() {
     this._data.playableEntities.rollInitiatives();
+  }
+
+  public openDoor({
+    userId,
+    coordOfTileWithDoor,
+  }: { userId: string; coordOfTileWithDoor: Coord }) {
+    const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
+    playingEntity.mustBePlayedBy({ userId });
+    playingEntity.act();
+
+    const tile = this._data.board.getTileOrThrow({
+      coord: coordOfTileWithDoor,
+    });
+    tile.openDoor({ playableEntity: playingEntity });
+
+    // ! GAME EVENTS (refacto this)
+    const monstersSpawned: Monster[] = [];
+    const doorOpeningEvents = this._data.events.getRelatedDoorOpeningEvents({
+      doorCoord: coordOfTileWithDoor,
+    });
+    for (const doorOpeningEvent of doorOpeningEvents) {
+      if (doorOpeningEvent.isSpawnMonsterAction()) {
+        const monsterKindWithStartingCoord = zip(
+          doorOpeningEvent.monsters,
+          doorOpeningEvent.startingTiles,
+        );
+        for (const [kind, startingCoord] of monsterKindWithStartingCoord) {
+          const monsterTemplate =
+            this._data.monsterTemplates.getMonsterTemplateOrThrow({ kind });
+          const monster = monsterTemplate.create({
+            gameMasterUserId: this._data.gameMaster.id,
+          });
+          this._data.playableEntities.addPlayableEntity({
+            playableEntity: monster,
+          });
+          this.movePlayableEntity({
+            destinationCoord: startingCoord,
+            playableEntityId: monster.id,
+          });
+
+          monstersSpawned.push(monster);
+        }
+      }
+    }
+    // ! -- GAME EVENTS (refacto this)
+
+    this.rollInitiatives();
+
+    return {
+      entityThatOpenedTheDoor: playingEntity,
+      playingEntityWhoseTurnStarted:
+        this._data.playableEntities.getPlayingEntityOrThrow(),
+      monstersSpawned,
+    };
   }
 }

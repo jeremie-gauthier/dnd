@@ -1,9 +1,12 @@
 import { PlainData } from "src/modules/shared/domain/entity";
 import { Playable } from "../../../playable-entities/playable-entity/playable-entity.abstract";
 import { TileEntity } from "../tile-entity.abstract";
+import { Door } from "./door.entity";
+import { TileInteractiveEntityError } from "./interactive.error";
 
 type Data = {
   readonly type: "interactive-entity";
+  readonly kind: "door" | "trap";
   isBlocking: boolean;
   isVisible: boolean;
   canInteract: boolean;
@@ -22,7 +25,14 @@ export abstract class TileInteractiveEntity<
 
   protected mustBeInteractive() {
     if (!this.canInteract) {
-      throw new Error("Impossible d'interagir avec cette entité");
+      throw new TileInteractiveEntityError({
+        name: "CANNOT_INTERACT",
+        message: "Impossible d'interagir avec cette entité",
+      });
     }
+  }
+
+  public isDoor(): this is Door {
+    return this._data.kind === "door";
   }
 }

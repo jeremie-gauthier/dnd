@@ -1,4 +1,3 @@
-import { Playable } from "../../../playable-entities/playable-entity/playable-entity.abstract";
 import { TileInteractiveEntity } from "./interactive.abstract";
 
 type Data = {
@@ -14,10 +13,7 @@ export class Door extends TileInteractiveEntity<Data> {
     return this._data.canInteract;
   }
 
-  public onInteraction({ playableEntity }: { playableEntity: Playable }): void {
-    // ! uniquement les regles metiers de Interactive
-    // ! on cherche pas a savoir si le playable a des PA pour faire cette action
-    // ? car si on peut ouvrir la porte par un moyen qui ne consomme pas de PA, alors on pourra reutiliser la methode telle quelle
+  public onInteraction(): void {
     this.mustBeInteractive();
 
     this._data.isBlocking = false;

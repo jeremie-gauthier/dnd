@@ -98,4 +98,8 @@ export class PlayableEntities extends Entity<Data> {
 
     this._data.values[0]?.startTurn();
   }
+
+  public addPlayableEntity({ playableEntity }: { playableEntity: Playable }) {
+    this._data.values.push(playableEntity);
+  }
 }

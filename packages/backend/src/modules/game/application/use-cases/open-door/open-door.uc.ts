@@ -1,20 +1,16 @@
-import {
-  Coord,
-  GameView,
-  OpenDoorInput,
-  PlayableEntity,
-  TileNonPlayableInteractiveEntity,
-} from "@dnd/shared";
-import {
-  ForbiddenException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { OpenDoorInput } from "@dnd/shared";
+import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
+import { Coord } from "src/modules/game/domain/coord/coord.vo";
 import { PlayableEntityService } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.service";
+import { DoorOpenedPayload } from "src/modules/shared/events/game/door-opened.payload";
+import { MonstersSpawnedPayload } from "src/modules/shared/events/game/enemies-spawned.payload";
+import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
+import { GameUpdatedPayload } from "src/modules/shared/events/game/game-updated.payload";
+import { PlayableEntityTurnEndedPayload } from "src/modules/shared/events/game/playable-entity-turn-ended.payload";
+import { PlayableEntityTurnStartedPayload } from "src/modules/shared/events/game/playable-entity-turn-started.payload";
 import { MapService } from "../../../domain/map/map.service";
 import { SpawnService } from "../../../domain/spawn/spawn.service";
 import { TurnService } from "../../../domain/turn/turn.service";
@@ -45,116 +41,54 @@ export class OpenDoorUseCase implements UseCase {
   }): Promise<void> {
     const game = await this.gameRepository.getOneOrThrow({ gameId });
 
-    // this.mustExecute({ game, userId, coordOfTileWithDoor });
+    const {
+      entityThatOpenedTheDoor,
+      playingEntityWhoseTurnStarted,
+      monstersSpawned,
+    } = game.openDoor({
+      userId,
+      coordOfTileWithDoor: new Coord(coordOfTileWithDoor),
+    });
+    await this.gameRepository.update({ game });
 
-    // const { entityThatOpenedTheDoor } = this.openDoor({
-    //   coordOfTileWithDoor,
-    //   game,
-    //   userId,
-    // });
-    // this.turnService.endPlayableEntityTurn({
-    //   game,
-    //   playableEntity: entityThatOpenedTheDoor,
-    // });
-    // this.spawnService.spawnEnemies({ game, doorCoord: coordOfTileWithDoor });
-    // this.initiativeService.rollPlayableEntitiesInitiative({ game });
-    // this.turnService.restartTimeline({ game });
-
-    // this.backupService.updateGame({ game });
-  }
-
-  private mustExecute({
-    game,
-    userId,
-    coordOfTileWithDoor,
-  }: Pick<OpenDoorInput, "coordOfTileWithDoor"> & {
-    game: GameView;
-    userId: User["id"];
-  }) {
-    const playableEntities = Object.values(game.playableEntities);
-    if (
-      playableEntities.every(({ playedByUserId }) => playedByUserId !== userId)
-    ) {
-      throw new ForbiddenException("User does not play in this lobby");
-    }
-
-    const playingEntity = playableEntities.find(
-      ({ currentPhase, playedByUserId }) =>
-        currentPhase === "action" && playedByUserId === userId,
+    const plainGame = game.toPlain();
+    this.eventEmitter.emitAsync(
+      GameEvent.GameUpdated,
+      new GameUpdatedPayload({ game: plainGame }),
     );
-    if (!playingEntity) {
-      throw new ForbiddenException(
-        "User has no playable entity in action phase",
+
+    const plainEntityThatOpenedTheDoor = entityThatOpenedTheDoor.toPlain();
+    this.eventEmitter.emitAsync(
+      GameEvent.DoorOpened,
+      new DoorOpenedPayload({
+        game: plainGame,
+        entityThatOpenedTheDoor: plainEntityThatOpenedTheDoor,
+      }),
+    );
+
+    this.eventEmitter.emitAsync(
+      GameEvent.MonstersSpawned,
+      new MonstersSpawnedPayload({
+        game: plainGame,
+        monsters: monstersSpawned.map((monster) => monster.toPlain()),
+      }),
+    );
+
+    this.eventEmitter.emitAsync(
+      GameEvent.PlayableEntityTurnEnded,
+      new PlayableEntityTurnEndedPayload({
+        game: plainGame,
+        playableEntity: plainEntityThatOpenedTheDoor,
+      }),
+    );
+    if (playingEntityWhoseTurnStarted) {
+      this.eventEmitter.emitAsync(
+        GameEvent.PlayableEntityTurnStarted,
+        new PlayableEntityTurnStartedPayload({
+          game: plainGame,
+          playableEntity: playingEntityWhoseTurnStarted.toPlain(),
+        }),
       );
     }
-
-    const tileWithDoor = this.getDoor({
-      coord: coordOfTileWithDoor,
-      game,
-    });
-    if (!tileWithDoor) {
-      throw new NotFoundException("No closed door found at these coordinates");
-    }
-
-    this.playableEntityService.mustBeAdjacent({
-      adjacencyCoord: coordOfTileWithDoor,
-      playableEntity: playingEntity,
-    });
-    this.playableEntityService.mustBeAbleToAct(playingEntity);
-    this.playableEntityService.mustBeAlive(playingEntity);
-  }
-
-  private openDoor({
-    userId,
-    game,
-    coordOfTileWithDoor,
-  }: Pick<OpenDoorInput, "coordOfTileWithDoor"> & {
-    userId: User["id"];
-    game: GameView;
-  }): { entityThatOpenedTheDoor: PlayableEntity } {
-    const doorEntity = this.getDoor({
-      coord: coordOfTileWithDoor,
-      game,
-    }) as TileNonPlayableInteractiveEntity;
-
-    doorEntity.isBlocking = false;
-    doorEntity.canInteract = false;
-
-    const playableEntities = Object.values(game.playableEntities);
-    const entityThatOpenedTheDoor = playableEntities.find(
-      ({ currentPhase, playedByUserId }) =>
-        currentPhase === "action" && playedByUserId === userId,
-    ) as PlayableEntity;
-
-    entityThatOpenedTheDoor.characteristic.actionPoints -= 1;
-
-    // this.eventEmitter.emitAsync(
-    //   GameEvent.DoorOpened,
-    //   new DoorOpenedPayload({
-    //     doorEntity,
-    //     doorCoord: coordOfTileWithDoor,
-    //     entityThatOpenedTheDoor,
-    //     game,
-    //   }),
-    // );
-
-    return { entityThatOpenedTheDoor };
-  }
-
-  private getDoor({
-    coord,
-    game,
-  }: { coord: Coord; game: GameView }):
-    | TileNonPlayableInteractiveEntity
-    | undefined {
-    const tileWithDoor = this.mapService.getTileOrThrow({ coord, game });
-    const doorEntity = tileWithDoor.entities.find(
-      (entity) =>
-        entity.type === "interactive-entity" &&
-        entity.kind === "door" &&
-        entity.isBlocking &&
-        entity.canInteract,
-    ) as TileNonPlayableInteractiveEntity | undefined;
-    return doorEntity;
   }
 }

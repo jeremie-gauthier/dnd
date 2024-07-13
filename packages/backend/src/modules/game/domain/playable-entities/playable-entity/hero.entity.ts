@@ -40,6 +40,12 @@ type Data = {
 export class Hero extends Playable<Data> {
   readonly behaviourMove: BehaviourMove;
 
+  public act(): void {
+    this.mustBeAlive();
+    this.mustHaveActionPoints();
+    this._data.characteristic.actionPoints -= 1;
+  }
+
   public attack(_: {
     attack: {
       id: string;

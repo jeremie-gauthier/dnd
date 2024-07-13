@@ -1,4 +1,5 @@
 import { Entity, type PlainData } from "src/modules/shared/domain/entity";
+import { TileInteractiveEntity } from "./interactive/interactive.abstract";
 
 type Data = {
   readonly type:
@@ -23,5 +24,9 @@ export abstract class TileEntity<
 
   get isTraversible() {
     return !this._data.isBlocking;
+  }
+
+  public isInteractive(): this is TileInteractiveEntity {
+    return this._data.type === "interactive-entity";
   }
 }

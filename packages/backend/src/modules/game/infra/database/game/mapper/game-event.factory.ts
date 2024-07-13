@@ -1,6 +1,6 @@
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
-import { GameEvent } from "src/modules/game/domain/game-event/game-event.abstract";
-import { OnDoorOpeningSpawnMonsters } from "src/modules/game/domain/game-event/on-door-opening/spawn-monsters.entity";
+import { GameEvent } from "src/modules/game/domain/game-events/game-event/game-event.abstract";
+import { OnDoorOpeningSpawnMonsters } from "src/modules/game/domain/game-events/game-event/on-door-opening/spawn-monsters.entity";
 import { GamePersistence } from "../model/game.model";
 
 export class GameEventFactory {

@@ -1,10 +1,12 @@
 import { Board } from "src/modules/game/domain/board/board.entity";
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
+import { GameEvents } from "src/modules/game/domain/game-events/game-events.aggregate";
 import { GameMaster } from "src/modules/game/domain/game-master/game-master.entity";
 import { GameStatus } from "src/modules/game/domain/game-status/game-status.vo";
 import { Game as GameDomain } from "src/modules/game/domain/game/game.aggregate";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
-import { MonsterTemplate } from "src/modules/game/domain/monster-template/monster-template.vo";
+import { MonsterTemplate } from "src/modules/game/domain/monster-templates/monster-template/monster-template.vo";
+import { MonsterTemplates } from "src/modules/game/domain/monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "src/modules/game/domain/playable-entities/playable-entities.aggregate";
 import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/hero.entity";
 import { Monster } from "src/modules/game/domain/playable-entities/playable-entity/monster.entity";
@@ -37,24 +39,30 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
             }),
         ),
       }),
-      events: persistence.events.map((event) => GameEventFactory.create(event)),
+      events: new GameEvents({
+        values: persistence.events.map((event) =>
+          GameEventFactory.create(event),
+        ),
+      }),
       gameMaster: new GameMaster({ userId: persistence.gameMaster.userId }),
-      monsterTemplates: persistence.enemyTemplates.map(
-        (enemyTemplate) =>
-          new MonsterTemplate({
-            ...enemyTemplate,
-            inventory: new Inventory({
-              ...enemyTemplate.inventory,
-              playableId: enemyTemplate.kind,
-              backpack: enemyTemplate.inventory.backpack.map((item) =>
-                ItemFactory.create(item),
-              ),
-              gear: enemyTemplate.inventory.gear.map((item) =>
-                ItemFactory.create(item),
-              ),
+      monsterTemplates: new MonsterTemplates({
+        values: persistence.enemyTemplates.map(
+          (enemyTemplate) =>
+            new MonsterTemplate({
+              ...enemyTemplate,
+              inventory: new Inventory({
+                ...enemyTemplate.inventory,
+                playableId: enemyTemplate.kind,
+                backpack: enemyTemplate.inventory.backpack.map((item) =>
+                  ItemFactory.create(item),
+                ),
+                gear: enemyTemplate.inventory.gear.map((item) =>
+                  ItemFactory.create(item),
+                ),
+              }),
             }),
-          }),
-      ),
+        ),
+      }),
       playableEntities: new PlayableEntities({
         values: Object.values(persistence.playableEntities).map(
           (playableEntity) => PlayableEntityFactory.create(playableEntity),
@@ -85,8 +93,8 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
       ),
       board: plain.board as GamePersistence["board"],
       gameMaster: plain.gameMaster,
-      enemyTemplates: plain.monsterTemplates,
-      events: plain.events as GameEvent[],
+      enemyTemplates: plain.monsterTemplates.values,
+      events: plain.events.values as GameEvent[],
     };
   }
 

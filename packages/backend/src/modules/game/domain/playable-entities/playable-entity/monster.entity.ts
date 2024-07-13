@@ -40,6 +40,13 @@ type Data = {
 export class Monster extends Playable<Data> {
   public readonly behaviourMove: BehaviourMove;
 
+  public act(): void {
+    this.mustBeAlive();
+    this.mustHaveActionPoints();
+    // TODO: ne peut pas attaquer 2 fois durant le meme tour
+    this._data.characteristic.actionPoints -= 1;
+  }
+
   public attack(_: {
     attack: {
       id: string;

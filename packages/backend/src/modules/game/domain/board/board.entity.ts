@@ -40,18 +40,7 @@ export class Board extends Entity<Data> {
     tileEntity,
     coord,
   }: { tileEntity: TileEntity; coord: Coord }) {
-    const coordIdx = coord.toIndex({
-      width: this._data.width,
-      height: this._data.height,
-    });
-    const tile = this._data.tiles[coordIdx];
-    if (!tile) {
-      throw new BoardError({
-        name: "OUT_OF_RANGE_COORD",
-        message: `No tile found at coord [${coord}]`,
-      });
-    }
-
+    const tile = this.getTileOrThrow({ coord });
     tile.removeEntity({ tileEntity });
   }
 
@@ -59,6 +48,11 @@ export class Board extends Entity<Data> {
     tileEntity,
     coord,
   }: { tileEntity: TileEntity; coord: Coord }) {
+    const tile = this.getTileOrThrow({ coord });
+    tile.addEntity({ tileEntity });
+  }
+
+  public getTileOrThrow({ coord }: { coord: Coord }) {
     const coordIdx = coord.toIndex({
       width: this._data.width,
       height: this._data.height,
@@ -70,7 +64,6 @@ export class Board extends Entity<Data> {
         message: `No tile found at coord [${coord}]`,
       });
     }
-
-    tile.addEntity({ tileEntity });
+    return tile;
   }
 }

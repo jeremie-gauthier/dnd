@@ -81,11 +81,9 @@ export class SpawnService {
   private getBoundEvent({
     game,
     doorCoord,
-  }: Pick<DoorOpenedPayload, "game" | "doorCoord">):
-    | OnDoorOpeningGameEvent
-    | undefined {
+  }: any): OnDoorOpeningGameEvent | undefined {
     const spawnEnemiesEvent = game.events.find(
-      (event) =>
+      (event: any) =>
         event.name === "on_door_opening" &&
         event.action === "spawn_monsters" &&
         event.doorCoord.column === doorCoord.column &&

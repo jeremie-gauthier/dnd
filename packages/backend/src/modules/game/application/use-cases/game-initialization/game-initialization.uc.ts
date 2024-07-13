@@ -8,12 +8,14 @@ import { UseCase } from "src/interfaces/use-case.interface";
 import { GameInitializationDonePayload as CampaignGameInitializationDonePayload } from "src/modules/campaign/events/game-initialization-done.payload";
 import { Board } from "src/modules/game/domain/board/board.entity";
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
-import { GameEventFactory } from "src/modules/game/domain/game-event/game-event.factory";
+import { GameEventFactory } from "src/modules/game/domain/game-events/game-event/game-event.factory";
+import { GameEvents } from "src/modules/game/domain/game-events/game-events.aggregate";
 import { GameMaster } from "src/modules/game/domain/game-master/game-master.entity";
 import { GameStatus } from "src/modules/game/domain/game-status/game-status.vo";
 import { Game } from "src/modules/game/domain/game/game.aggregate";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
-import { MonsterTemplate } from "src/modules/game/domain/monster-template/monster-template.vo";
+import { MonsterTemplate } from "src/modules/game/domain/monster-templates/monster-template/monster-template.vo";
+import { MonsterTemplates } from "src/modules/game/domain/monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "src/modules/game/domain/playable-entities/playable-entities.aggregate";
 import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/hero.entity";
 import { Initiative } from "src/modules/game/domain/playable-entities/playable-entity/initiative/initiative.vo";
@@ -81,7 +83,9 @@ export class GameInitializationUseCase implements UseCase {
           (pc) => pc.type === "game_master",
         )?.pickedBy!,
       }),
-      events: payload.events.map((event) => GameEventFactory.create(event)),
+      events: new GameEvents({
+        values: payload.events.map((event) => GameEventFactory.create(event)),
+      }),
       monsterTemplates,
       playableEntities,
     });
@@ -224,19 +228,22 @@ export class GameInitializationUseCase implements UseCase {
 
   private async getMonsterTemplates({
     enemyTemplates,
-  }: { enemyTemplates: EnemyTemplate[] }): Promise<Array<MonsterTemplate>> {
-    return Promise.all(
-      enemyTemplates.map(
-        async (enemyTemplate) =>
-          new MonsterTemplate({
-            ...enemyTemplate,
-            kind: enemyTemplate.name,
-            inventory: await this.getPlayableEntityInventoryFromEnemyInventory({
-              enemyInventory: enemyTemplate.inventory,
+  }: { enemyTemplates: EnemyTemplate[] }): Promise<MonsterTemplates> {
+    return new MonsterTemplates({
+      values: await Promise.all(
+        enemyTemplates.map(
+          async (enemyTemplate) =>
+            new MonsterTemplate({
+              ...enemyTemplate,
+              kind: enemyTemplate.name,
+              inventory:
+                await this.getPlayableEntityInventoryFromEnemyInventory({
+                  enemyInventory: enemyTemplate.inventory,
+                }),
             }),
-          }),
+        ),
       ),
-    );
+    });
   }
 
   private async getPlayableEntityInventoryFromEnemyInventory({
