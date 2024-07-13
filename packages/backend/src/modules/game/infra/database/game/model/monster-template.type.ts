@@ -1,5 +1,5 @@
-import { Inventory } from "../inventory.type";
-import { MonsterEntity } from "./monster.type";
+import { Inventory } from "./inventory.type";
+import { MonsterEntity } from "./playable-entity/monster.type";
 
 export type MonsterTemplate = {
   kind: MonsterEntity["kind"];

@@ -1,8 +1,8 @@
 import { GameItem, TilePath } from "@dnd/shared";
 import { Entity, PlainData } from "src/modules/shared/domain/entity";
 import { Coord } from "../../coord/coord.vo";
+import { Inventory } from "../../inventory/inventory.entity";
 import { Initiative } from "./initiative/initiative.vo";
-import { Inventory } from "./inventory/inventory.entity";
 import { PlayableEntityError } from "./playable-entity.error";
 import { PlayerStatus } from "./player-status/player-status.vo";
 

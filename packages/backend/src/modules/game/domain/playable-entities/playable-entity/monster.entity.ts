@@ -1,7 +1,7 @@
 import { AttackRangeType, AttackTypeType, EnemyKind } from "@dnd/shared";
 import { Coord } from "../../coord/coord.vo";
+import { Inventory } from "../../inventory/inventory.entity";
 import { Initiative } from "./initiative/initiative.vo";
-import { Inventory } from "./inventory/inventory.entity";
 import { BehaviourMove, Playable } from "./playable-entity.abstract";
 import { PlayerStatus } from "./player-status/player-status.vo";
 

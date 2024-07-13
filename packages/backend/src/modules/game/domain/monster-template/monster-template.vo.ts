@@ -1,7 +1,7 @@
 import { EnemyKind } from "@dnd/shared";
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
-import { Inventory } from "../playable-entities/playable-entity/inventory/inventory.entity";
+import { Inventory } from "../inventory/inventory.entity";
 
 type Data = {
   readonly kind: EnemyKind;
@@ -12,7 +12,6 @@ type Data = {
     readonly baseMovementPoints: number;
     readonly baseActionPoints: number;
   };
-  // TODO: utiliser un fake "Inventory" ? bare minimum dans le cadre du template
   readonly inventory: Inventory;
 };
 

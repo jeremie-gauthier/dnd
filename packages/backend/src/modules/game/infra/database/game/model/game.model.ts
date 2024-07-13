@@ -1,7 +1,7 @@
 import { Board } from "./board.type";
 import { GameEvent } from "./game-event.type";
 import { GameMaster } from "./game-master.type";
-import { MonsterTemplate } from "./playable-entity/monster-template.type";
+import { MonsterTemplate } from "./monster-template.type";
 import { PlayableEntity } from "./playable-entity/playable.type";
 
 export type GamePersistence = {

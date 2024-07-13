@@ -1,9 +1,9 @@
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
-import { Item } from "../../../item/item.abstract";
-import { Spell } from "../../../item/spell/spell.entity";
-import { Weapon } from "../../../item/weapon/weapon.entity";
-import { Playable } from "../playable-entity.abstract";
+import { Item } from "../item/item.abstract";
+import { Spell } from "../item/spell/spell.entity";
+import { Weapon } from "../item/weapon/weapon.entity";
+import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
 
 type Data = {
   readonly playableId: Playable["id"];

@@ -1,5 +1,5 @@
 import { Coord } from "./coord.type";
-import { MonsterTemplate } from "./playable-entity/monster-template.type";
+import { MonsterTemplate } from "./monster-template.type";
 
 type OnDoorOpeningGameEvent = {
   readonly name: "on_door_opening";

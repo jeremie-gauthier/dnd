@@ -2,9 +2,9 @@ import { Map as GameMap, GameView, sum } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { Dice } from "src/modules/game/domain/dice/dice.vo";
 import { Game as GameDomain } from "src/modules/game/domain/game/game.aggregate";
+import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
 import { Spell } from "src/modules/game/domain/item/spell/spell.entity";
 import { Weapon } from "src/modules/game/domain/item/weapon/weapon.entity";
-import { Inventory } from "src/modules/game/domain/playable-entities/playable-entity/inventory/inventory.entity";
 import { PostgresDiceUIRepository } from "../../database/dice-ui/dice-ui.repository";
 import { PostgresItemUIRepository } from "../../database/item-ui/item-ui.repository";
 
@@ -30,7 +30,7 @@ export class GamePresenter {
               playableEntity.id,
               {
                 ...playableEntity,
-                currentPhase: playableEntity.status,
+                currentPhase: playableEntity.status.toLowerCase(),
                 inventory: await this.getInventory({
                   inventory: playableEntity.inventory,
                 }),

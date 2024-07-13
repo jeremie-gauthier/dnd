@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common";
 import { CombatService } from "../domain/combat/combat.service";
 import { CoordService } from "../domain/coord/coord.service";
-import { DiceService } from "../domain/dice/dice.service";
 import { ItemService } from "../domain/item/item.service";
 import { LogService } from "../domain/log/log.service";
 import { MapService } from "../domain/map/map.service";
@@ -38,7 +37,6 @@ import { PlayableEntityMoveUseCase } from "./use-cases/playable-entity-move/play
     PlayableEntityMoveUseCase,
     CombatService,
     CoordService,
-    DiceService,
     InitiativeService,
     ItemService,
     LogService,
@@ -64,7 +62,6 @@ import { PlayableEntityMoveUseCase } from "./use-cases/playable-entity-move/play
     PlayableEntityMoveUseCase,
     CombatService,
     CoordService,
-    DiceService,
     InitiativeService,
     ItemService,
     LogService,

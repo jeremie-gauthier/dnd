@@ -6,18 +6,16 @@ import {
   PlayableEntity,
   Tile,
   canAttackTarget,
-  sum,
 } from "@dnd/shared";
 import { ForbiddenException, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { DiceService } from "../dice/dice.service";
 import { MapService } from "../map/map.service";
 
 @Injectable()
 export class CombatService {
   constructor(
     private readonly eventEmitter: EventEmitter2,
-    private readonly diceService: DiceService,
+    // private readonly diceService: DiceService,
     private readonly mapService: MapService,
   ) {}
 
@@ -35,16 +33,14 @@ export class CombatService {
     attackItem: GameItem;
   }): void {
     // TODO: will need to implement hero bonus check for potential attack bonuses
-    const dicesResults = attack.dices.map((dice) =>
-      this.diceService.roll({ dice }),
-    );
-
-    const damageDone = Math.max(
-      0,
-      sum(...dicesResults.map(({ result }) => result)) -
-        targetPlayableEntity.characteristic.armorClass,
-    );
-
+    // const dicesResults = attack.dices.map((dice) =>
+    //   this.diceService.roll({ dice }),
+    // );
+    // const damageDone = Math.max(
+    //   0,
+    //   sum(...dicesResults.map(({ result }) => result)) -
+    //     targetPlayableEntity.characteristic.armorClass,
+    // );
     // this.eventEmitter.emitAsync(
     //   GameEvent.EntityAttacked,
     //   new EntityAttackedPayload({
@@ -57,14 +53,13 @@ export class CombatService {
     //     attackItemUsed: attackItem,
     //   }),
     // );
-
-    if (damageDone > 0) {
-      this.takeDamage({
-        game,
-        target: targetPlayableEntity,
-        amount: damageDone,
-      });
-    }
+    // if (damageDone > 0) {
+    //   this.takeDamage({
+    //     game,
+    //     target: targetPlayableEntity,
+    //     amount: damageDone,
+    //   });
+    // }
   }
 
   public takeDamage({

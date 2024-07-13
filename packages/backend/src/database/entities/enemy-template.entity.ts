@@ -1,4 +1,4 @@
-import { EnemyInventoryJson, EnemyKind } from "@dnd/shared";
+import { EnemyKind, InventoryJson } from "@dnd/shared";
 import { Column, Entity, PrimaryColumn } from "typeorm";
 import { Characteristic } from "./characteristic";
 
@@ -11,5 +11,5 @@ export class EnemyTemplate {
   readonly characteristic: Characteristic;
 
   @Column({ type: "json" })
-  readonly inventory: EnemyInventoryJson;
+  readonly inventory: InventoryJson;
 }

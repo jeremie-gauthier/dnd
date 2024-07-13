@@ -35,6 +35,12 @@ VALUES
     1,
     NULL,
     'Weapon'
+  ),
+  (
+    'goblin_scimitar_1',
+    1,
+    NULL,
+    'Weapon'
   );
 
 INSERT INTO
@@ -59,6 +65,10 @@ VALUES
   (
     'elders_shortbow_1',
     'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/elders_shortbow_1.webp'
+  ),
+  (
+    'goblin_scimitar_1',
+    'https://www.aidedd.org/dnd/images/goblin.jpg'
   );
 
 INSERT INTO
@@ -99,6 +109,12 @@ VALUES
     'long',
     'regular',
     'elders_shortbow_1'
+  ),
+  (
+    'd94e7f57-bb5e-4bac-92a0-c1defce8b7a3',
+    'melee',
+    'regular',
+    'goblin_scimitar_1'
   );
 
 INSERT INTO
@@ -183,4 +199,19 @@ VALUES
     '9eb44ec6-a07b-4984-87cb-9d21e83e9de9',
     '14931b0b-1c4c-4f3f-919b-62d91d2a35c4',
     'special'
+  ),
+  (
+    '36e10fc1-da0f-4c90-89aa-02c7fb59d52e',
+    'd94e7f57-bb5e-4bac-92a0-c1defce8b7a3',
+    'yellow'
+  ),
+  (
+    '9e555227-dc9c-46f7-a6ad-a1bc4e2fed2a',
+    'd94e7f57-bb5e-4bac-92a0-c1defce8b7a3',
+    'yellow'
+  ),
+  (
+    '3f64d089-d5f9-41b2-9051-5ff788429d76',
+    'd94e7f57-bb5e-4bac-92a0-c1defce8b7a3',
+    'orange'
   );

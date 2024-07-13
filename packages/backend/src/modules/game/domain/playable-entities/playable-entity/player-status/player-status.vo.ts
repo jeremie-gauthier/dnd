@@ -50,7 +50,7 @@ export class PlayerStatus extends ValueObject<Data> {
     if (!canAdvanceTo) {
       throw new PlayerStatusError({
         name: "ILLEGAL_STATUS_EDIT",
-        message: `Lobby status cannot advance to '${currentPhase}' (current: '${this.current}')`,
+        message: `Player status cannot advance to '${currentPhase}' (current: '${this.current}')`,
       });
     }
   }
