@@ -86,7 +86,7 @@ export class CombatService {
     target.characteristic.healthPoints = 0;
     target.isBlocking = false;
 
-    if (target.type === "enemy") {
+    if (target.type === "monster") {
       this.handleEnemyDeath({ game, target });
     }
 

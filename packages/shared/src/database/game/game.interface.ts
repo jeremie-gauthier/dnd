@@ -47,7 +47,7 @@ type BasePlayableEntity = Player & {
 };
 
 export type PlayableEnemyEntity = BasePlayableEntity & {
-  type: "enemy";
+  type: "monster";
   kind: EnemyKind;
 };
 

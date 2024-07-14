@@ -35,7 +35,7 @@ function getPlayableEntityAsset({
     Pick<EntityDrawerParams<RequiredAssets>["config"], "assets">
 >): HTMLImageElement {
   switch (playableEntity.type) {
-    case "enemy":
+    case "monster":
       return getEnemyAsset({ enemyEntity: playableEntity, assets });
     case "hero":
       return getHeroAsset({ heroEntity: playableEntity, assets });
