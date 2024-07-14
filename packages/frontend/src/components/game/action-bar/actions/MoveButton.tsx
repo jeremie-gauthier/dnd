@@ -43,7 +43,6 @@ export const MoveButton = () => {
       gameActions.move({
         gameId: game.id,
         pathToTile: selectedPath,
-        playableEntityId: heroPlaying.id,
       });
 
       playerState.toggleTo("idle");
@@ -63,7 +62,6 @@ export const MoveButton = () => {
     gameActions.move,
     gameEventManager.addEventListener,
     gameEventManager.removeEventListener,
-    heroPlaying.id,
     heroPlaying.characteristic.movementPoints,
     heroPlaying.coord,
     playerState.toggleTo,

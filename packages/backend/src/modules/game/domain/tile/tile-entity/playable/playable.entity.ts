@@ -1,14 +1,10 @@
-import { TilePath } from "@dnd/shared";
 import { PlayableEntity } from "src/modules/game/infra/database/game/model/playable-entity/playable.type";
 import { TileEntity } from "../tile-entity.abstract";
-
-export interface BehaviourMove {
-  move(_: { path: TilePath }): void;
-}
 
 type Data = {
   readonly type: "playable-entity";
   readonly id: PlayableEntity["id"];
+  readonly isBlocking: boolean;
 };
 
 export class TilePlayableEntity extends TileEntity<Data> {
@@ -20,6 +16,7 @@ export class TilePlayableEntity extends TileEntity<Data> {
     return {
       id: this._data.id,
       type: this._data.type,
+      isBlocking: this._data.isBlocking,
     };
   }
 }

@@ -17,6 +17,7 @@ import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
 import { MonsterTemplate } from "src/modules/game/domain/monster-templates/monster-template/monster-template.vo";
 import { MonsterTemplates } from "src/modules/game/domain/monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "src/modules/game/domain/playable-entities/playable-entities.aggregate";
+import { BehaviourMoveHero } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-move/behaviour-move-hero";
 import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/hero.entity";
 import { Initiative } from "src/modules/game/domain/playable-entities/playable-entity/initiative/initiative.vo";
 import { PlayerStatus } from "src/modules/game/domain/playable-entities/playable-entity/player-status/player-status.vo";
@@ -57,6 +58,10 @@ export class GameInitializationUseCase implements UseCase {
       ]);
 
     // 2. Creation de l'aggregate-root Game
+    const playableEntities = this.getPlayableEntities({
+      lobby: payload.lobby,
+      campaignStageProgression: campaignStageProgressionFormatted,
+    });
     const board = new Board({
       ...payload.map,
       tiles: payload.map.tiles.map(
@@ -64,15 +69,19 @@ export class GameInitializationUseCase implements UseCase {
           new Tile({
             coord: new Coord(tile.coord),
             entities: tile.entities.map((tileEntity) =>
-              TileEntityFactory.create(tileEntity),
+              TileEntityFactory.create({
+                tileEntity,
+                playableEntityRef:
+                  tileEntity.type === "playable-entity"
+                    ? playableEntities.getOneOrThrow({
+                        playableEntityId: tileEntity.id,
+                      })
+                    : undefined,
+              }),
             ),
             isStartingTile: tile.isStartingTile,
           }),
       ),
-    });
-    const playableEntities = this.getPlayableEntities({
-      lobby: payload.lobby,
-      campaignStageProgression: campaignStageProgressionFormatted,
     });
     const game = new Game({
       id: payload.lobby.id,
@@ -183,45 +192,43 @@ export class GameInitializationUseCase implements UseCase {
 
     const heroes = campaignStageProgression.campaignProgression.heroes;
     return new PlayableEntities({
-      values: heroes.map(
-        (hero) =>
-          new Hero({
-            id: hero.id,
-            type: "hero",
-            status: new PlayerStatus("IDLE"),
-            playedByUserId: heroPlayersMap[hero.id]!,
-            name: hero.name,
-            class: hero.class,
-            initiative: new Initiative(Number.NaN),
-            coord: new Coord({
-              row: Number.NaN,
-              column: Number.NaN,
-            }),
-            isBlocking: true,
-
-            characteristic: {
-              ...hero.characteristic,
-              healthPoints: hero.characteristic.baseHealthPoints,
-              manaPoints: hero.characteristic.baseManaPoints,
-              armorClass: hero.characteristic.baseArmorClass,
-              movementPoints: hero.characteristic.baseMovementPoints,
-              actionPoints: hero.characteristic.baseActionPoints,
-            },
-            inventory: new Inventory({
-              playableId: hero.id,
-              storageCapacity: hero.inventory.storageCapacity,
-              gear: hero.inventory.stuff
-                .filter((stuff) => stuff.storageSpace === StorageSpace.GEAR)
-                .map((stuff) =>
-                  ItemFactory.create(stuff.item as unknown as GameItem),
-                ),
-              backpack: hero.inventory.stuff
-                .filter((stuff) => stuff.storageSpace === StorageSpace.BACKPACK)
-                .map((stuff) =>
-                  ItemFactory.create(stuff.item as unknown as GameItem),
-                ),
-            }),
+      values: heroes.map((hero) =>
+        new Hero({
+          id: hero.id,
+          status: new PlayerStatus("IDLE"),
+          playedByUserId: heroPlayersMap[hero.id]!,
+          name: hero.name,
+          class: hero.class,
+          initiative: new Initiative(Number.NaN),
+          coord: new Coord({
+            row: Number.NaN,
+            column: Number.NaN,
           }),
+          isBlocking: true,
+
+          characteristic: {
+            ...hero.characteristic,
+            healthPoints: hero.characteristic.baseHealthPoints,
+            manaPoints: hero.characteristic.baseManaPoints,
+            armorClass: hero.characteristic.baseArmorClass,
+            movementPoints: hero.characteristic.baseMovementPoints,
+            actionPoints: hero.characteristic.baseActionPoints,
+          },
+          inventory: new Inventory({
+            playableId: hero.id,
+            storageCapacity: hero.inventory.storageCapacity,
+            gear: hero.inventory.stuff
+              .filter((stuff) => stuff.storageSpace === StorageSpace.GEAR)
+              .map((stuff) =>
+                ItemFactory.create(stuff.item as unknown as GameItem),
+              ),
+            backpack: hero.inventory.stuff
+              .filter((stuff) => stuff.storageSpace === StorageSpace.BACKPACK)
+              .map((stuff) =>
+                ItemFactory.create(stuff.item as unknown as GameItem),
+              ),
+          }),
+        }).buildBehaviourMove(new BehaviourMoveHero()),
       ),
     });
   }

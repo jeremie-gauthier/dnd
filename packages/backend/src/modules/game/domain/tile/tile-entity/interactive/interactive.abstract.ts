@@ -3,6 +3,7 @@ import { Playable } from "../../../playable-entities/playable-entity/playable-en
 import { TileEntity } from "../tile-entity.abstract";
 import { Door } from "./door.entity";
 import { TileInteractiveEntityError } from "./interactive.error";
+import { Trap } from "./trap.entity";
 
 type Data = {
   readonly type: "interactive-entity";
@@ -34,5 +35,9 @@ export abstract class TileInteractiveEntity<
 
   public isDoor(): this is Door {
     return this._data.kind === "door";
+  }
+
+  public isTrap(): this is Trap {
+    return this._data.kind === "trap";
   }
 }

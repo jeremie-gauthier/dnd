@@ -1,14 +1,12 @@
-import { GameItem, TilePath } from "@dnd/shared";
+import { GameItem } from "@dnd/shared";
 import { Entity, PlainData } from "src/modules/shared/domain/entity";
 import { Coord } from "../../coord/coord.vo";
 import { Inventory } from "../../inventory/inventory.entity";
+import { Tile } from "../../tile/tile.entity";
+import { BehaviourMove } from "./behaviour-move/behaviour-move.interface";
 import { Initiative } from "./initiative/initiative.vo";
 import { PlayableEntityError } from "./playable-entity.error";
 import { PlayerStatus } from "./player-status/player-status.vo";
-
-export interface BehaviourMove {
-  move(_: { path: TilePath }): void;
-}
 
 type Data = {
   readonly id: string;
@@ -75,6 +73,10 @@ export abstract class Playable<
 
   get coord() {
     return this._data.coord;
+  }
+
+  get isBlocking() {
+    return this._data.isBlocking;
   }
 
   protected mustBeAlive() {
@@ -145,5 +147,13 @@ export abstract class Playable<
         message: `Playable Entity ${this.id} cannot act`,
       });
     }
+  }
+
+  public getMovePath({ path }: { path: Array<Tile> }) {
+    return this.behaviourMove.getMovePath({
+      availableMovementPoints: this._data.characteristic.movementPoints,
+      path,
+      startingCoord: this.coord,
+    });
   }
 }

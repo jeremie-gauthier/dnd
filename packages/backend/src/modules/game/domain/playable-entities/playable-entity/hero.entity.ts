@@ -1,8 +1,10 @@
 import { AttackRangeType, AttackTypeType, HeroClassType } from "@dnd/shared";
+import { z } from "zod";
 import { Coord } from "../../coord/coord.vo";
 import { Inventory } from "../../inventory/inventory.entity";
+import { BehaviourMove } from "./behaviour-move/behaviour-move.interface";
 import { Initiative } from "./initiative/initiative.vo";
-import { BehaviourMove, Playable } from "./playable-entity.abstract";
+import { Playable } from "./playable-entity.abstract";
 import { PlayerStatus } from "./player-status/player-status.vo";
 
 type Data = {
@@ -38,7 +40,42 @@ type Data = {
 };
 
 export class Hero extends Playable<Data> {
-  readonly behaviourMove: BehaviourMove;
+  private static schema = z.object({
+    id: z.string().uuid(),
+    name: z.string(),
+    type: z.literal("hero").default("hero"),
+    class: z.enum(["WARRIOR", "CLERIC", "SORCERER", "THIEF"]),
+    coord: z.instanceof(Coord),
+    isBlocking: z.boolean(),
+    status: z.instanceof(PlayerStatus),
+    playedByUserId: z.string(),
+    initiative: z.instanceof(Initiative),
+    characteristic: z.object({
+      baseHealthPoints: z.number().min(1),
+      healthPoints: z.number().min(0),
+      baseManaPoints: z.number().min(0),
+      manaPoints: z.number().min(0),
+      baseArmorClass: z.number().min(0),
+      armorClass: z.number().min(0),
+      baseMovementPoints: z.number().min(1),
+      movementPoints: z.number().min(0),
+      baseActionPoints: z.number().min(1),
+      actionPoints: z.number().min(0),
+    }),
+    inventory: z.instanceof(Inventory),
+  });
+
+  behaviourMove: BehaviourMove;
+
+  constructor(rawData: Omit<Data, "type">) {
+    const data = Hero.schema.parse(rawData);
+    super(data);
+  }
+
+  public buildBehaviourMove(behaviourMove: BehaviourMove) {
+    this.behaviourMove = behaviourMove;
+    return this;
+  }
 
   public act(): void {
     this.mustBeAlive();

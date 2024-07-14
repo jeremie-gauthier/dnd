@@ -9,7 +9,7 @@ export const OpenDoorButton = () => {
   const neighbourDoorCoord = neighbourTiles?.find((tile) =>
     tile.entities.some(
       (entity) =>
-        entity.type === "non-playable-interactive-entity" &&
+        entity.type === "interactive-entity" &&
         entity.kind === "door" &&
         entity.isBlocking &&
         entity.canInteract,

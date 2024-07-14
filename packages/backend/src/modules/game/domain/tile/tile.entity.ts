@@ -25,6 +25,14 @@ export class Tile extends Entity<Data> {
     super(data);
   }
 
+  public get coord() {
+    return this._data.coord;
+  }
+
+  public get entities() {
+    return this._data.entities;
+  }
+
   public toPlain() {
     return {
       coord: this._data.coord.toPlain(),

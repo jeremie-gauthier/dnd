@@ -1,4 +1,4 @@
-import { zip } from "@dnd/shared";
+import { PlayableEntityMoveInput, unfoldTilePath, zip } from "@dnd/shared";
 import { AggregateRoot } from "src/modules/shared/domain/aggregate-root";
 import { z } from "zod";
 import { Board } from "../board/board.entity";
@@ -72,7 +72,10 @@ export class Game extends AggregateRoot<Data> {
       playableEntityId,
     });
 
-    const tileEntity = new TilePlayableEntity({ id: playableEntity.id });
+    const tileEntity = new TilePlayableEntity({
+      id: playableEntity.id,
+      isBlocking: true,
+    });
     if (!playableEntity.coord.isUndefined()) {
       this._data.board.removeEntityAtCoord({
         tileEntity,
@@ -140,5 +143,36 @@ export class Game extends AggregateRoot<Data> {
         this._data.playableEntities.getPlayingEntityOrThrow(),
       monstersSpawned,
     };
+  }
+
+  public playerMove({
+    userId,
+    pathToTile,
+  }: Pick<PlayableEntityMoveInput, "pathToTile"> & { userId: string }) {
+    const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
+    playingEntity.mustBePlayedBy({ userId });
+    playingEntity.act();
+
+    const path = unfoldTilePath(pathToTile)
+      .slice(1)
+      .map((tile) =>
+        this._data.board.getTileOrThrow({ coord: new Coord(tile.coord) }),
+      );
+    const { validatedPath, hasWalkedOnATrap } = playingEntity.getMovePath({
+      path,
+    });
+    const destinationTile = validatedPath.at(-1);
+    if (destinationTile) {
+      this.movePlayableEntity({
+        playableEntityId: playingEntity.id,
+        destinationCoord: destinationTile.coord,
+      });
+    }
+
+    if (hasWalkedOnATrap) {
+      // TODO: trigger the trap
+    }
+
+    return { playingEntity };
   }
 }

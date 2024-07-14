@@ -34,7 +34,13 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
               ...tile,
               coord: new Coord(tile.coord),
               entities: tile.entities.map((tileEntity) =>
-                TileEntityFactory.create(tileEntity),
+                TileEntityFactory.create({
+                  tileEntity,
+                  playableEntityRef:
+                    tileEntity.type === "playable-entity"
+                      ? persistence.playableEntities[tileEntity.id]
+                      : undefined,
+                }),
               ),
             }),
         ),
