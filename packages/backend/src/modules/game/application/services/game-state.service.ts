@@ -109,7 +109,7 @@ export class GameStateService {
     game,
   }: { game: ReturnType<Game["toPlain"]> }): Array<Coord> {
     return game.playableEntities.values
-      .filter((playableEntity) => playableEntity.type === "hero")
+      .filter((playableEntity) => playableEntity.faction === "hero")
       .map((hero) => new Coord(hero.coord));
   }
 

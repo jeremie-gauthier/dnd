@@ -14,7 +14,7 @@ export class PlayableEntityFactory {
   private constructor() {}
 
   public static create(data: PlayableEntity): Playable {
-    switch (data.type) {
+    switch (data.faction) {
       case "hero":
         return new Hero({
           ...data,

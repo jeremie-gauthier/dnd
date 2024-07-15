@@ -10,7 +10,7 @@ import { PlayerStatus } from "./player-status/player-status.vo";
 type Data = {
   readonly id: string;
   readonly name: string;
-  readonly type: "hero";
+  readonly faction: "hero";
   readonly class: HeroClassType;
   coord: Coord;
   isBlocking: boolean;
@@ -43,7 +43,7 @@ export class Hero extends Playable<Data> {
   private static schema = z.object({
     id: z.string().uuid(),
     name: z.string(),
-    type: z.literal("hero").default("hero"),
+    faction: z.literal("hero").default("hero"),
     class: z.enum(["WARRIOR", "CLERIC", "SORCERER", "THIEF"]),
     coord: z.instanceof(Coord),
     isBlocking: z.boolean(),
@@ -67,7 +67,7 @@ export class Hero extends Playable<Data> {
 
   behaviourMove: BehaviourMove;
 
-  constructor(rawData: Omit<Data, "type">) {
+  constructor(rawData: Omit<Data, "faction">) {
     const data = Hero.schema.parse(rawData);
     super(data);
   }
@@ -106,7 +106,7 @@ export class Hero extends Playable<Data> {
     return {
       id: this._data.id,
       name: this._data.name,
-      type: this._data.type,
+      faction: this._data.faction,
       class: this._data.class,
       coord: this._data.coord.toPlain(),
       isBlocking: this._data.isBlocking,

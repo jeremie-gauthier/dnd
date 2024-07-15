@@ -22,11 +22,11 @@ export function isBlockedByNonAllyEntity({
   game,
   tile,
   ally,
-}: { game: GameView; tile: Tile; ally: PlayableEntity["type"] }) {
+}: { game: GameView; tile: Tile; ally: PlayableEntity["faction"] }) {
   return tile.entities.some(
     (entity) =>
       entity.type === "playable-entity" &&
-      game.playableEntities[entity.id]?.type !== ally &&
+      game.playableEntities[entity.id]?.faction !== ally &&
       game.playableEntities[entity.id]?.isBlocking,
   );
 }

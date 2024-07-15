@@ -86,7 +86,7 @@ export class CombatService {
     target.characteristic.healthPoints = 0;
     target.isBlocking = false;
 
-    if (target.type === "monster") {
+    if (target.faction === "monster") {
       this.handleEnemyDeath({ game, target });
     }
 
@@ -123,7 +123,7 @@ export class CombatService {
     range,
     targetCoord,
   }: {
-    ally: PlayableEntity["type"];
+    ally: PlayableEntity["faction"];
     game: GameView;
     originTile: Tile;
     range: AttackRangeType;

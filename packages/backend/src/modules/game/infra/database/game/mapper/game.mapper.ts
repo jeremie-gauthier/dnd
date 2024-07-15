@@ -87,7 +87,7 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
         plain.playableEntities.values.map((playableEntity) => {
           return [
             playableEntity.id,
-            playableEntity.type === "hero"
+            playableEntity.faction === "hero"
               ? this.getHero({
                   hero: playableEntity as ReturnType<Hero["toPlain"]>,
                 })
@@ -107,6 +107,7 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
   private getHero({ hero }: { hero: ReturnType<Hero["toPlain"]> }) {
     return {
       ...hero,
+      type: hero.faction,
       currentPhase: hero.status.toLowerCase() as Lowercase<
         ReturnType<PlayerStatus["toPlain"]>
       >,
@@ -117,6 +118,7 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
   private getMonster({ monster }: { monster: ReturnType<Monster["toPlain"]> }) {
     return {
       ...monster,
+      type: monster.faction,
       currentPhase: monster.status.toLowerCase() as Lowercase<
         ReturnType<PlayerStatus["toPlain"]>
       >,

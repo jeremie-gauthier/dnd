@@ -26,7 +26,7 @@ export class TileEntityFactory {
         return new TilePlayableEntity({
           ...tileEntity,
           isBlocking: playableEntityRef.isBlocking,
-          faction: playableEntityRef.type,
+          faction: playableEntityRef.faction,
         });
       }
       case "interactive-entity":

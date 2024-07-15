@@ -1,6 +1,6 @@
 import { BasePlayableEntity } from "./base-playable.type";
 
 export type MonsterEntity = BasePlayableEntity & {
-  type: "monster";
+  faction: "monster";
   kind: "goblin";
 };

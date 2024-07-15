@@ -83,7 +83,7 @@ export class VisibilityService {
 
   private getHeroesCoords({ game }: { game: GameView }): Coord[] {
     return Object.values(game.playableEntities)
-      .filter((playableEntity) => playableEntity.type === "hero")
+      .filter((playableEntity) => playableEntity.faction === "hero")
       .map((hero) => hero.coord);
   }
 

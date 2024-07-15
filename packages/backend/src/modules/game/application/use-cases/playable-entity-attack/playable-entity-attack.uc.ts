@@ -79,7 +79,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
     this.playableEntityService.mustBeAlive(targetPlayableEntity);
 
     // if (
-    //   attackerPlayableEntity.type === "enemy" &&
+    //   attackerPlayableEntity.faction === "enemy" &&
     //   attackerPlayableEntity.actionsDoneThisTurn.some(
     //     (action) => action.name === "attack",
     //   )
@@ -100,7 +100,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
 
     if (
       attackItem.type === "Spell" &&
-      attackerPlayableEntity.type === "hero" &&
+      attackerPlayableEntity.faction === "hero" &&
       attackItem.manaCost[attackerPlayableEntity.class] === undefined
     ) {
       throw new ForbiddenException(
@@ -110,7 +110,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
 
     if (
       attackItem.type === "Spell" &&
-      attackerPlayableEntity.type === "hero" &&
+      attackerPlayableEntity.faction === "hero" &&
       attackerPlayableEntity.characteristic.manaPoints <
         attackItem.manaCost[attackerPlayableEntity.class]!
     ) {
@@ -123,7 +123,7 @@ export class PlayableEntityAttackUseCase implements UseCase {
       game,
     });
     this.combatService.mustHaveTargetInRange({
-      ally: attackerPlayableEntity.type,
+      ally: attackerPlayableEntity.faction,
       game,
       originTile,
       range: attack.range,
@@ -153,7 +153,10 @@ export class PlayableEntityAttackUseCase implements UseCase {
 
     attackerPlayableEntity.characteristic.actionPoints -= 1;
     // attackerPlayableEntity.actionsDoneThisTurn.push({ name: "attack" });
-    if (attackItem.type === "Spell" && attackerPlayableEntity.type === "hero") {
+    if (
+      attackItem.type === "Spell" &&
+      attackerPlayableEntity.faction === "hero"
+    ) {
       attackerPlayableEntity.characteristic.manaPoints -=
         attackItem.manaCost[attackerPlayableEntity.class]!;
     }

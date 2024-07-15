@@ -83,7 +83,7 @@ function canBeSeenRay({
   destinationTile,
   metadata,
 }: {
-  ally: PlayableEntity["type"];
+  ally: PlayableEntity["faction"];
   game: GameView;
   originTile: Tile;
   destinationTile: Tile;
@@ -163,7 +163,7 @@ export function getLineOfSight({
   originTile,
   range,
 }: {
-  ally: PlayableEntity["type"];
+  ally: PlayableEntity["faction"];
   game: GameView;
   originTile: Tile;
   range: AttackRangeType;
@@ -190,7 +190,7 @@ export function canAttackTarget({
   range,
   targetCoord,
 }: {
-  ally: PlayableEntity["type"];
+  ally: PlayableEntity["faction"];
   game: GameView;
   originTile: Tile;
   range: AttackRangeType;

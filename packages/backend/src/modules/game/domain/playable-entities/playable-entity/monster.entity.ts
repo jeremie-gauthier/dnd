@@ -1,4 +1,5 @@
 import { AttackRangeType, AttackTypeType, EnemyKind } from "@dnd/shared";
+import { z } from "zod";
 import { Coord } from "../../coord/coord.vo";
 import { Inventory } from "../../inventory/inventory.entity";
 import { BehaviourMove } from "./behaviour-move/behaviour-move.interface";
@@ -9,7 +10,7 @@ import { PlayerStatus } from "./player-status/player-status.vo";
 type Data = {
   readonly id: string;
   readonly name: string;
-  readonly type: "monster";
+  readonly faction: "monster";
   readonly kind: EnemyKind;
   coord: Coord;
   isBlocking: boolean;
@@ -39,7 +40,37 @@ type Data = {
 };
 
 export class Monster extends Playable<Data> {
+  private static schema = z.object({
+    id: z.string(),
+    name: z.string(),
+    faction: z.literal("monster").default("monster"),
+    kind: z.enum(["goblin"]),
+    coord: z.instanceof(Coord),
+    isBlocking: z.boolean(),
+    status: z.instanceof(PlayerStatus),
+    playedByUserId: z.string(),
+    initiative: z.instanceof(Initiative),
+    characteristic: z.object({
+      baseHealthPoints: z.number().min(1),
+      healthPoints: z.number().min(0),
+      baseManaPoints: z.number().min(0),
+      manaPoints: z.number().min(0),
+      baseArmorClass: z.number().min(0),
+      armorClass: z.number().min(0),
+      baseMovementPoints: z.number().min(1),
+      movementPoints: z.number().min(0),
+      baseActionPoints: z.number().min(1),
+      actionPoints: z.number().min(0),
+    }),
+    inventory: z.instanceof(Inventory),
+  });
+
   behaviourMove: BehaviourMove;
+
+  constructor(rawData: Omit<Data, "faction">) {
+    const data = Monster.schema.parse(rawData);
+    super(data);
+  }
 
   public buildBehaviourMove(behaviourMove: BehaviourMove) {
     this.behaviourMove = behaviourMove;
@@ -76,7 +107,7 @@ export class Monster extends Playable<Data> {
     return {
       id: this._data.id,
       name: this._data.name,
-      type: this._data.type,
+      faction: this._data.faction,
       kind: this._data.kind,
       coord: this._data.coord.toPlain(),
       isBlocking: this._data.isBlocking,

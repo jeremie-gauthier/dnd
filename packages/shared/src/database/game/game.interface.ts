@@ -47,12 +47,12 @@ type BasePlayableEntity = Player & {
 };
 
 export type PlayableEnemyEntity = BasePlayableEntity & {
-  type: "monster";
+  faction: "monster";
   kind: EnemyKind;
 };
 
 export type PlayableHeroEntity = BasePlayableEntity & {
-  type: "hero";
+  faction: "hero";
   class: HeroClassType;
   level: number;
 };

@@ -11,7 +11,7 @@ import { PlayerStatus } from "./player-status/player-status.vo";
 type Data = {
   readonly id: string;
   readonly name: string;
-  readonly type: "hero" | "monster";
+  readonly faction: "hero" | "monster";
   coord: Coord;
   isBlocking: boolean;
 
@@ -76,8 +76,8 @@ export abstract class Playable<
     return this._data.coord;
   }
 
-  get type() {
-    return this._data.type;
+  get faction() {
+    return this._data.faction;
   }
 
   get isBlocking() {
