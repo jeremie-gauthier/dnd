@@ -43,7 +43,7 @@ export abstract class Playable<
   ChildData extends Data = Data,
 > extends Entity<ChildData> {
   abstract readonly behaviourMove: BehaviourMove;
-  abstract buildBehaviourMove(behaviourMove: BehaviourMove): Playable;
+  abstract buildBehaviourMove(behaviourMove: BehaviourMove): void;
   abstract attack(_: {
     attack: GameItem["attacks"][number];
     target: Playable;
@@ -84,6 +84,10 @@ export abstract class Playable<
     return this._data.isBlocking;
   }
 
+  public get isPlaying() {
+    return this._data.status.current === "ACTION";
+  }
+
   protected mustBeAlive() {
     if (this.isDead) {
       throw new PlayableEntityError({
@@ -121,10 +125,6 @@ export abstract class Playable<
         message: `Playable entity does not belongs to user '${userId}'`,
       });
     }
-  }
-
-  public isPlaying() {
-    return this._data.status.current === "ACTION";
   }
 
   public endTurn() {

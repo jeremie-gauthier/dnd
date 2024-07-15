@@ -32,7 +32,7 @@ export class PlayableEntities extends Entity<Data> {
       b.initiative.compare(a.initiative),
     );
 
-    const playingEntityIdx = sortedValues.findIndex((pc) => pc.isPlaying());
+    const playingEntityIdx = sortedValues.findIndex((pc) => pc.isPlaying);
     if (playingEntityIdx < 0) {
       return sortedValues;
     }
@@ -67,8 +67,8 @@ export class PlayableEntities extends Entity<Data> {
   }
 
   public getPlayingEntityOrThrow(): Playable {
-    const playingEntity = this._data.values.find((playableEntity) =>
-      playableEntity.isPlaying(),
+    const playingEntity = this._data.values.find(
+      (playableEntity) => playableEntity.isPlaying,
     );
     if (!playingEntity) {
       throw new PlayableEntityError({
@@ -87,7 +87,7 @@ export class PlayableEntities extends Entity<Data> {
   public rollInitiatives() {
     for (const playableEntity of this._data.values) {
       playableEntity.rollInitiative();
-      if (playableEntity.isPlaying()) {
+      if (playableEntity.isPlaying) {
         playableEntity.endTurn();
       }
     }
