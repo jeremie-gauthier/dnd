@@ -1,6 +1,7 @@
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
 import { BehaviourMoveHero } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-move/behaviour-move-hero";
+import { BehaviourMoveMonster } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-move/behaviour-move-monster";
 import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/hero.entity";
 import { Initiative } from "src/modules/game/domain/playable-entities/playable-entity/initiative/initiative.vo";
 import { Monster } from "src/modules/game/domain/playable-entities/playable-entity/monster.entity";
@@ -51,7 +52,7 @@ export class PlayableEntityFactory {
             ),
             gear: data.inventory.gear.map((item) => ItemFactory.create(item)),
           }),
-        });
+        }).buildBehaviourMove(new BehaviourMoveMonster());
     }
   }
 }

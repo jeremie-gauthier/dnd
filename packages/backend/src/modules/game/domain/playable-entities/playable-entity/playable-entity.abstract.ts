@@ -43,6 +43,7 @@ export abstract class Playable<
   ChildData extends Data = Data,
 > extends Entity<ChildData> {
   abstract readonly behaviourMove: BehaviourMove;
+  abstract buildBehaviourMove(behaviourMove: BehaviourMove): Playable;
   abstract attack(_: {
     attack: GameItem["attacks"][number];
     target: Playable;

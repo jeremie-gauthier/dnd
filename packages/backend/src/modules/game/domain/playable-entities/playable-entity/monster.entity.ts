@@ -39,7 +39,12 @@ type Data = {
 };
 
 export class Monster extends Playable<Data> {
-  public readonly behaviourMove: BehaviourMove;
+  behaviourMove: BehaviourMove;
+
+  public buildBehaviourMove(behaviourMove: BehaviourMove) {
+    this.behaviourMove = behaviourMove;
+    return this;
+  }
 
   public act(): void {
     this.mustBeAlive();
