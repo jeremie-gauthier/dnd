@@ -41,6 +41,12 @@ VALUES
     1,
     NULL,
     'Weapon'
+  ),
+  (
+    'bugbear_mace_1',
+    1,
+    NULL,
+    'Weapon'
   );
 
 INSERT INTO
@@ -69,6 +75,10 @@ VALUES
   (
     'goblin_scimitar_1',
     'https://www.aidedd.org/dnd/images/goblin.jpg'
+  ),
+  (
+    'bugbear_mace_1',
+    'https://www.aidedd.org/dnd/images/bugbear.jpg'
   );
 
 INSERT INTO
@@ -115,6 +125,12 @@ VALUES
     'melee',
     'regular',
     'goblin_scimitar_1'
+  ),
+  (
+    '71ff36ed-8714-48be-9122-9a052a25d37c',
+    'melee',
+    'regular',
+    'bugbear_mace_1'
   );
 
 INSERT INTO
@@ -214,4 +230,19 @@ VALUES
     '3f64d089-d5f9-41b2-9051-5ff788429d76',
     'd94e7f57-bb5e-4bac-92a0-c1defce8b7a3',
     'orange'
+  ),
+  (
+    'e6e9f8df-489f-419d-9eb9-c9462b84cef6',
+    '71ff36ed-8714-48be-9122-9a052a25d37c',
+    'yellow'
+  ),
+  (
+    'f9b2c85a-a766-4250-8874-c90906a34659',
+    '71ff36ed-8714-48be-9122-9a052a25d37c',
+    'yellow'
+  ),
+  (
+    '5274c998-8d7f-48d0-b379-1bd384027185',
+    '71ff36ed-8714-48be-9122-9a052a25d37c',
+    'red'
   );
