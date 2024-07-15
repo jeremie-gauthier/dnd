@@ -75,6 +75,7 @@ export class Game extends AggregateRoot<Data> {
     const tileEntity = new TilePlayableEntity({
       id: playableEntity.id,
       isBlocking: true,
+      faction: playableEntity.type,
     });
     if (!playableEntity.coord.isUndefined()) {
       this._data.board.removeEntityAtCoord({

@@ -25,7 +25,14 @@ export class BehaviourMoveHero implements BehaviourMove {
       if (!previousCoord.isAdjacentTo(tile.coord)) {
         break;
       }
-      if (tile.entities.some((tileEntity) => tileEntity.isBlocking)) {
+      if (
+        tile.entities
+          .filter(
+            (tileEntity) =>
+              !(tileEntity.isPlayable() && tileEntity.faction === "hero"),
+          )
+          .some((tileEntity) => tileEntity.isBlocking)
+      ) {
         break;
       }
 

@@ -75,6 +75,10 @@ export abstract class Playable<
     return this._data.coord;
   }
 
+  get type() {
+    return this._data.type;
+  }
+
   get isBlocking() {
     return this._data.isBlocking;
   }

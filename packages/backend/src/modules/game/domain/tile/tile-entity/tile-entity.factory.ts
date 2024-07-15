@@ -18,11 +18,17 @@ export class TileEntityFactory {
     playableEntityRef?: Playable;
   }): TileEntity {
     switch (tileEntity.type) {
-      case "playable-entity":
+      case "playable-entity": {
+        if (!playableEntityRef) {
+          throw new Error("No playable entity ref found");
+        }
+
         return new TilePlayableEntity({
           ...tileEntity,
-          isBlocking: playableEntityRef?.isBlocking ?? true,
+          isBlocking: playableEntityRef.isBlocking,
+          faction: playableEntityRef.type,
         });
+      }
       case "interactive-entity":
         return TileInteractiveEntityFactory.create(tileEntity);
       case "non-interactive-entity":

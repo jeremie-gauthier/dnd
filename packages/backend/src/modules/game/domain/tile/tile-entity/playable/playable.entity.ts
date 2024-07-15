@@ -5,6 +5,7 @@ type Data = {
   readonly type: "playable-entity";
   readonly id: PlayableEntity["id"];
   readonly isBlocking: boolean;
+  readonly faction: "hero" | "monster";
 };
 
 export class TilePlayableEntity extends TileEntity<Data> {
@@ -12,11 +13,16 @@ export class TilePlayableEntity extends TileEntity<Data> {
     super({ ...rawData, type: "playable-entity" });
   }
 
+  public get faction() {
+    return this._data.faction;
+  }
+
   public toPlain() {
     return {
       id: this._data.id,
       type: this._data.type,
       isBlocking: this._data.isBlocking,
+      faction: this._data.faction,
     };
   }
 }
