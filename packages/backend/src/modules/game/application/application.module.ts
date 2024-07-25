@@ -1,17 +1,5 @@
 import { Module } from "@nestjs/common";
-import { CombatService } from "../domain/combat/combat.service";
-import { CoordService } from "../domain/coord/coord.service";
-import { ItemService } from "../domain/item/item.service";
 import { LogService } from "../domain/log/log.service";
-import { MapService } from "../domain/map/map.service";
-import { MoveService } from "../domain/move/move.service";
-import { InitiativeService } from "../domain/playable-entities/playable-entity/initiative/initiative.service";
-import { PlayableEntityService } from "../domain/playable-entities/playable-entity/playable-entity.service";
-import { PlayerStateService } from "../domain/player-state/player-state.service";
-import { SpawnService } from "../domain/spawn/spawn.service";
-import { TrapService } from "../domain/trap/trap.service";
-import { TurnService } from "../domain/turn/turn.service";
-import { VisibilityService } from "../domain/visibility/visibility.service";
 import { DatabaseModule } from "../infra/database/database.module";
 import { GameListeners } from "./game.listeners";
 import { BoardService } from "./services/board.service";
@@ -35,19 +23,7 @@ import { PlayableEntityMoveUseCase } from "./use-cases/playable-entity-move/play
     OpenDoorUseCase,
     PlayableEntityAttackUseCase,
     PlayableEntityMoveUseCase,
-    CombatService,
-    CoordService,
-    InitiativeService,
-    ItemService,
     LogService,
-    MapService,
-    MoveService,
-    PlayerStateService,
-    SpawnService,
-    TrapService,
-    TurnService,
-    VisibilityService,
-    PlayableEntityService,
     BoardService,
     GameStateService,
   ],
@@ -60,19 +36,7 @@ import { PlayableEntityMoveUseCase } from "./use-cases/playable-entity-move/play
     OpenDoorUseCase,
     PlayableEntityAttackUseCase,
     PlayableEntityMoveUseCase,
-    CombatService,
-    CoordService,
-    InitiativeService,
-    ItemService,
     LogService,
-    MapService,
-    MoveService,
-    PlayerStateService,
-    SpawnService,
-    TrapService,
-    TurnService,
-    VisibilityService,
-    PlayableEntityService,
   ],
 })
 export class ApplicationModule {}
