@@ -1,9 +1,11 @@
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
+import { Attack } from "../attack/attack.entity";
 import { Item } from "../item/item.abstract";
 import { Spell } from "../item/spell/spell.entity";
 import { Weapon } from "../item/weapon/weapon.entity";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
+import { InventoryError } from "./inventory.error";
 
 type Data = {
   readonly playableId: Playable["id"];
@@ -33,6 +35,20 @@ export class Inventory extends Entity<Data> {
   constructor(rawData: Data) {
     const data = Inventory.schema.parse(rawData);
     super(data, data.playableId);
+  }
+
+  public getAttackItemInGearOrThrow({ attackId }: { attackId: Attack["id"] }) {
+    const attackItem = this._data.gear.find(
+      (item): item is Spell | Weapon =>
+        (item.isWeapon() || item.isSpell()) && item.hasAttack({ attackId }),
+    );
+    if (!attackItem) {
+      throw new InventoryError({
+        name: "ITEM_NOT_FOUND_IN_GEAR_STUFF",
+        message: "Item not found in gear stuff",
+      });
+    }
+    return attackItem;
   }
 
   public toPlain() {

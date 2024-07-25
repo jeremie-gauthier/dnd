@@ -46,7 +46,6 @@ export const AttackItem = ({ item, attack }: Props) => {
       gameActions.attack({
         gameId: game.id,
         attackId: attack.id,
-        attackerPlayableEntityId: heroPlaying.id,
         targetPlayableEntityId,
       });
 
@@ -101,30 +100,31 @@ export const AttackItem = ({ item, attack }: Props) => {
         10,
     ) / 10;
 
-  // const canBeCast =
-  //   item.type !== "Spell" ||
-  //   (item.type === "Spell" &&
-  //     heroPlaying.type === "hero" &&
-  //     item.manaCost[heroPlaying.class] &&
-  //     heroPlaying.characteristic.manaPoints >=
-  //       item.manaCost[heroPlaying.class]!);
+  const canBeCast =
+    item.type !== "Spell" ||
+    (item.type === "Spell" &&
+      heroPlaying.faction === "hero" &&
+      item.manaCost[heroPlaying.class] &&
+      heroPlaying.characteristic.manaPoints >=
+        item.manaCost[heroPlaying.class]!);
 
-  // const canAttack =
-  //   heroPlaying &&
-  //   heroPlaying.characteristic.actionPoints > 0 &&
-  //   (heroPlaying.type === "hero" ||
-  //     (heroPlaying.type === "enemy" &&
-  //       !heroPlaying.actionsDoneThisTurn.some(
-  //         ({ name }) => name === "attack",
-  //       ))) &&
-  //   canBeCast;
+  const canAttack =
+    heroPlaying &&
+    heroPlaying.characteristic.actionPoints > 0 &&
+    // TODO: re-enable this
+    // (heroPlaying.faction === "hero" ||
+    //   (heroPlaying.faction === "monster" &&
+    //     !heroPlaying.actionsDoneThisTurn.some(
+    //       ({ name }) => name === "attack",
+    //     ))) &&
+    canBeCast;
 
   return (
     <>
       <button
         type="button"
         onClick={handleUseAttackItem}
-        // disabled={!canAttack}
+        disabled={!canAttack}
         className="disabled:grayscale"
       >
         <img

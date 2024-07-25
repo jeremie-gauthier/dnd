@@ -1,15 +1,13 @@
-import {
-  GameItem,
-  GameView,
-  PlayableEntity,
-  PlayableEntityAttackInput,
-} from "@dnd/shared";
-import { ForbiddenException, Inject, Injectable } from "@nestjs/common";
+import { PlayableEntityAttackInput } from "@dnd/shared";
+import { Inject, Injectable } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
-import { PlayableEntityService } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.service";
-import { CombatService } from "../../../domain/combat/combat.service";
-import { MapService } from "../../../domain/map/map.service";
+import { EntityAttackedPayload } from "src/modules/shared/events/game/entity-attacked.payload";
+import { EntityDiedPayload } from "src/modules/shared/events/game/entity-died.payload";
+import { EntityTookDamagePayload } from "src/modules/shared/events/game/entity-took-damage.payload";
+import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
+import { GameUpdatedPayload } from "src/modules/shared/events/game/game-updated.payload";
 import {
   GAME_REPOSITORY,
   GameRepository,
@@ -20,153 +18,61 @@ export class PlayableEntityAttackUseCase implements UseCase {
   constructor(
     @Inject(GAME_REPOSITORY)
     private readonly gameRepository: GameRepository,
-    private readonly combatService: CombatService,
-    private readonly playableEntityService: PlayableEntityService,
-    private readonly mapService: MapService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   public async execute({
     gameId,
     attackId,
-    attackerPlayableEntityId,
     targetPlayableEntityId,
     userId,
   }: PlayableEntityAttackInput & { userId: User["id"] }): Promise<void> {
     const game = await this.gameRepository.getOneOrThrow({ gameId });
-    // this.mustExecute({
-    //   game,
-    //   gameId,
-    //   attackId,
-    //   attackerPlayableEntityId,
-    //   targetPlayableEntityId,
-    //   userId,
-    // });
 
-    // this.attackTarget({
-    //   game,
-    //   attackId,
-    //   attackerPlayableEntityId,
-    //   targetPlayableEntityId,
-    // });
-    // await this.backupService.updateGame({ game });
-  }
-
-  private mustExecute({
-    game,
-    attackId,
-    attackerPlayableEntityId,
-    targetPlayableEntityId,
-    userId,
-  }: PlayableEntityAttackInput & { game: GameView; userId: User["id"] }) {
-    const attackerPlayableEntity =
-      this.playableEntityService.getPlayableEntityOrThrow({
-        game,
-        playableEntityId: attackerPlayableEntityId,
+    const { attack, attacker, attackItem, attackResult, damageDone, target } =
+      game.playerAttack({
+        attackId,
+        targetPlayableEntityId,
+        userId,
       });
-    this.playableEntityService.mustBePlayedByUserId({
-      playableEntity: attackerPlayableEntity,
-      userId,
-    });
-    this.playableEntityService.mustBeInActionPhase(attackerPlayableEntity);
-    this.playableEntityService.mustBeAlive(attackerPlayableEntity);
-    this.playableEntityService.mustBeAbleToAct(attackerPlayableEntity);
 
-    const targetPlayableEntity =
-      this.playableEntityService.getPlayableEntityOrThrow({
-        game,
-        playableEntityId: targetPlayableEntityId,
-      });
-    this.playableEntityService.mustBeAlive(targetPlayableEntity);
+    await this.gameRepository.update({ game });
 
-    // if (
-    //   attackerPlayableEntity.faction === "enemy" &&
-    //   attackerPlayableEntity.actionsDoneThisTurn.some(
-    //     (action) => action.name === "attack",
-    //   )
-    // ) {
-    //   throw new ForbiddenException(
-    //     "An enemy entity can only attack once per turn",
-    //   );
-    // }
+    const plainGame = game.toPlain();
+    const plainTarget = target.toPlain();
 
-    const attackItem = this.playableEntityService.getAttackItemOrThrow({
-      attackId,
-      playableEntity: attackerPlayableEntity,
-    });
-    this.playableEntityService.mustHaveItemInGear({
-      item: attackItem,
-      playableEntity: attackerPlayableEntity,
-    });
+    await this.eventEmitter.emitAsync(
+      GameEvent.GameUpdated,
+      new GameUpdatedPayload({ game: plainGame }),
+    );
 
-    if (
-      attackItem.type === "Spell" &&
-      attackerPlayableEntity.faction === "hero" &&
-      attackItem.manaCost[attackerPlayableEntity.class] === undefined
-    ) {
-      throw new ForbiddenException(
-        "This class is not allowed to cast this spell",
+    await this.eventEmitter.emitAsync(
+      GameEvent.EntityAttacked,
+      new EntityAttackedPayload({
+        game: plainGame,
+        attacker: attacker.toPlain(),
+        target: plainTarget,
+        damageDone: attackResult.attackResult.sumResult,
+        dicesResults: attackResult.attackResult.dicesResults,
+        attack: attack.toPlain(),
+        attackItemUsed: attackItem.toPlain(),
+      }),
+    );
+
+    await this.eventEmitter.emitAsync(
+      GameEvent.EntityTookDamage,
+      new EntityTookDamagePayload({
+        game: plainGame,
+        target: plainTarget,
+        amount: damageDone,
+      }),
+    );
+
+    if (target.isDead) {
+      await this.eventEmitter.emitAsync(
+        GameEvent.EntityDied,
+        new EntityDiedPayload({ game: plainGame, target: plainTarget }),
       );
     }
-
-    if (
-      attackItem.type === "Spell" &&
-      attackerPlayableEntity.faction === "hero" &&
-      attackerPlayableEntity.characteristic.manaPoints <
-        attackItem.manaCost[attackerPlayableEntity.class]!
-    ) {
-      throw new ForbiddenException("Not enough mana to cast this spell");
-    }
-
-    const attack = attackItem.attacks.find((attack) => attack.id === attackId)!;
-    const originTile = this.mapService.getTileOrThrow({
-      coord: attackerPlayableEntity.coord,
-      game,
-    });
-    this.combatService.mustHaveTargetInRange({
-      ally: attackerPlayableEntity.faction,
-      game,
-      originTile,
-      range: attack.range,
-      targetCoord: targetPlayableEntity.coord,
-    });
-  }
-
-  private attackTarget({
-    game,
-    attackId,
-    attackerPlayableEntityId,
-    targetPlayableEntityId,
-  }: Pick<
-    PlayableEntityAttackInput,
-    "attackId" | "attackerPlayableEntityId" | "targetPlayableEntityId"
-  > & { game: GameView }): void {
-    const attackerPlayableEntity = game.playableEntities[
-      attackerPlayableEntityId
-    ] as PlayableEntity;
-    const targetPlayableEntity = game.playableEntities[
-      targetPlayableEntityId
-    ] as PlayableEntity;
-    const attackItem = attackerPlayableEntity.inventory.gear.find((gearItem) =>
-      gearItem.attacks.some((attack) => attack.id === attackId),
-    ) as GameItem;
-    const attack = attackItem.attacks.find((attack) => attack.id === attackId)!;
-
-    attackerPlayableEntity.characteristic.actionPoints -= 1;
-    // attackerPlayableEntity.actionsDoneThisTurn.push({ name: "attack" });
-    if (
-      attackItem.type === "Spell" &&
-      attackerPlayableEntity.faction === "hero"
-    ) {
-      attackerPlayableEntity.characteristic.manaPoints -=
-        attackItem.manaCost[attackerPlayableEntity.class]!;
-    }
-
-    this.combatService.attack({
-      game,
-      attackerPlayableEntity,
-      targetPlayableEntity,
-      attack,
-      attackItem,
-    });
   }
 }

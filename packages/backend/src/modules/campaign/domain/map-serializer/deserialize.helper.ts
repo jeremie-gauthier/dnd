@@ -210,6 +210,8 @@ function parseTileEntity(entityCompiled?: string): TileEntity {
   } else if (isPlayableTileEntity(kind)) {
     return {
       type: "playable-entity",
+      faction: "hero",
+      isBlocking: true,
       ...parsePlayableEntityAttributes(extras),
     };
   } else {

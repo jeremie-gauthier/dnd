@@ -5,9 +5,8 @@ import {
   GameView,
   PlayableEntity,
   Tile,
-  canAttackTarget,
 } from "@dnd/shared";
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { MapService } from "../map/map.service";
 
@@ -129,8 +128,8 @@ export class CombatService {
     range: AttackRangeType;
     targetCoord: Coord;
   }) {
-    if (!canAttackTarget({ ally, game, originTile, range, targetCoord })) {
-      throw new ForbiddenException("Target playable entity is out of range");
-    }
+    // if (!canAttackTarget({ ally, game, originTile, range, targetCoord })) {
+    //   throw new ForbiddenException("Target playable entity is out of range");
+    // }
   }
 }

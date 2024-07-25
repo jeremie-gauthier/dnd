@@ -33,7 +33,7 @@ export class Dice extends ValueObject<Data> {
   public roll(): number {
     const randIndex = Math.trunc(Math.random() * this._data.values.length);
     const result = this._data.values[randIndex];
-    if (!result) {
+    if (result === undefined) {
       throw new DiceError({
         name: "BAD_ROLL_DICE",
         message: "Fail to roll dice",

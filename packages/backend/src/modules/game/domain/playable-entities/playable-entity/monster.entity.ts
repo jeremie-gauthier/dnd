@@ -1,7 +1,9 @@
-import { AttackRangeType, AttackTypeType, EnemyKind } from "@dnd/shared";
+import { EnemyKind } from "@dnd/shared";
 import { z } from "zod";
 import { Coord } from "../../coord/coord.vo";
 import { Inventory } from "../../inventory/inventory.entity";
+import { BehaviourAttack } from "./behaviour-attack/behaviour-attack.interface";
+import { BehaviourDefender } from "./behaviour-defender/behaviour-defender.interface";
 import { BehaviourMove } from "./behaviour-move/behaviour-move.interface";
 import { Initiative } from "./initiative/initiative.vo";
 import { Playable } from "./playable-entity.abstract";
@@ -65,7 +67,9 @@ export class Monster extends Playable<Data> {
     inventory: z.instanceof(Inventory),
   });
 
-  behaviourMove: BehaviourMove;
+  public behaviourMove: BehaviourMove;
+  public behaviourAttack: BehaviourAttack;
+  public behaviourDefender: BehaviourDefender;
 
   constructor(rawData: Omit<Data, "faction">) {
     const data = Monster.schema.parse(rawData);
@@ -77,30 +81,21 @@ export class Monster extends Playable<Data> {
     return this;
   }
 
+  public buildBehaviourAttack(behaviourAttack: BehaviourAttack) {
+    this.behaviourAttack = behaviourAttack;
+    return this;
+  }
+
+  public buildBehaviourDefender(behaviourDefender: BehaviourDefender) {
+    this.behaviourDefender = behaviourDefender;
+    return this;
+  }
+
   public act(): void {
     this.mustBeAlive();
     this.mustHaveActionPoints();
     // TODO: ne peut pas attaquer 2 fois durant le meme tour
     this._data.characteristic.actionPoints -= 1;
-  }
-
-  public attack(_: {
-    attack: {
-      id: string;
-      range: AttackRangeType;
-      type: AttackTypeType;
-      dices: {
-        name: string;
-        color: `#${string}`;
-        values: [number, number, number, number, number, number];
-        minValue: number;
-        maxValue: number;
-        meanValue: number;
-      }[];
-    };
-    target: Playable;
-  }): void {
-    throw new Error("Method not implemented.");
   }
 
   public toPlain() {

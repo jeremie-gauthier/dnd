@@ -28,7 +28,7 @@ export class BehaviourMoveMonster implements BehaviourMove {
         tile.entities
           .filter(
             (tileEntity) =>
-              !(tileEntity.isPlayable() && tileEntity.faction === "monster"),
+              !(tileEntity.isPlayable() && tileEntity.isMonster()),
           )
           .some((tileEntity) => tileEntity.isBlocking)
       ) {

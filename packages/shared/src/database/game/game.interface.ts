@@ -62,6 +62,8 @@ export type PlayableEntity = PlayableEnemyEntity | PlayableHeroEntity;
 export type TilePlayableEntity = {
   type: "playable-entity";
   id: PlayableEntity["id"];
+  faction: "hero" | "monster";
+  isBlocking: boolean;
 };
 
 export type TileNonPlayableInteractiveEntity = DoorEntity | TrapEntity;

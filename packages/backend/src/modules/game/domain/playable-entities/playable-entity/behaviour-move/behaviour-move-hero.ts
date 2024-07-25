@@ -28,8 +28,7 @@ export class BehaviourMoveHero implements BehaviourMove {
       if (
         tile.entities
           .filter(
-            (tileEntity) =>
-              !(tileEntity.isPlayable() && tileEntity.faction === "hero"),
+            (tileEntity) => !(tileEntity.isPlayable() && tileEntity.isHero()),
           )
           .some((tileEntity) => tileEntity.isBlocking)
       ) {

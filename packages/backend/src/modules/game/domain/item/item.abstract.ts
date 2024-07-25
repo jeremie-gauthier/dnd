@@ -1,4 +1,6 @@
 import { Entity, PlainData } from "src/modules/shared/domain/entity";
+import { Spell } from "./spell/spell.entity";
+import { Weapon } from "./weapon/weapon.entity";
 
 type Data = {
   readonly type: "Weapon" | "Spell";
@@ -19,5 +21,17 @@ export abstract class Item<
 
   get type() {
     return this._data.type;
+  }
+
+  public isSpell(): this is Spell {
+    return this._data.type === "Spell";
+  }
+
+  public isWeapon(): this is Weapon {
+    return this._data.type === "Weapon";
+  }
+
+  public toString() {
+    return `${this._data.name} (${this._data.type} lv. ${this._data.level})`;
   }
 }

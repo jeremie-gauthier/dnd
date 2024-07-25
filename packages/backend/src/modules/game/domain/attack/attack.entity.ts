@@ -4,10 +4,10 @@ import { z } from "zod";
 import { Dice } from "../dice/dice.vo";
 
 type Data = {
-  id: string;
-  range: AttackRangeType;
-  type: AttackTypeType;
-  dices: Array<Dice>;
+  readonly id: string;
+  readonly range: AttackRangeType;
+  readonly type: AttackTypeType;
+  readonly dices: Array<Dice>;
 };
 
 export class Attack extends Entity<Data> {
@@ -21,6 +21,14 @@ export class Attack extends Entity<Data> {
   constructor(rawData: Data) {
     const data = Attack.schema.parse(rawData);
     super(data, data.id);
+  }
+
+  public get range() {
+    return this._data.range;
+  }
+
+  public get type() {
+    return this._data.type;
   }
 
   public roll() {

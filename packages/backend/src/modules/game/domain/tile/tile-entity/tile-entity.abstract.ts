@@ -7,6 +7,7 @@ type Data = {
     | "playable-entity"
     | "interactive-entity"
     | "non-interactive-entity";
+  isBlocking: boolean;
   [x: string]: any;
 };
 

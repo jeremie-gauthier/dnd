@@ -1,5 +1,9 @@
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
+import { BehaviourAttackHero } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-attack/behaviour-attack-hero";
+import { BehaviourAttackMonster } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-attack/behaviour-attack-monster";
+import { BehaviourDefenderHero } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-defender/behaviour-defender-hero";
+import { BehaviourDefenderMonster } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-defender/behaviour-defender-monster";
 import { BehaviourMoveHero } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-move/behaviour-move-hero";
 import { BehaviourMoveMonster } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-move/behaviour-move-monster";
 import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/hero.entity";
@@ -33,7 +37,10 @@ export class PlayableEntityFactory {
             ),
             gear: data.inventory.gear.map((item) => ItemFactory.create(item)),
           }),
-        }).buildBehaviourMove(new BehaviourMoveHero());
+        })
+          .buildBehaviourMove(new BehaviourMoveHero())
+          .buildBehaviourDefender(new BehaviourDefenderHero())
+          .buildBehaviourAttack(new BehaviourAttackHero());
       case "monster":
         return new Monster({
           ...data,
@@ -52,7 +59,10 @@ export class PlayableEntityFactory {
             ),
             gear: data.inventory.gear.map((item) => ItemFactory.create(item)),
           }),
-        }).buildBehaviourMove(new BehaviourMoveMonster());
+        })
+          .buildBehaviourMove(new BehaviourMoveMonster())
+          .buildBehaviourDefender(new BehaviourDefenderMonster())
+          .buildBehaviourAttack(new BehaviourAttackMonster());
     }
   }
 }

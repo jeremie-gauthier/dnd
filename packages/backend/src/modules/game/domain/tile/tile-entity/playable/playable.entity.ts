@@ -17,6 +17,14 @@ export class TilePlayableEntity extends TileEntity<Data> {
     return this._data.faction;
   }
 
+  public isMonster() {
+    return this._data.faction === "monster";
+  }
+
+  public isHero() {
+    return this._data.faction === "hero";
+  }
+
   public toPlain() {
     return {
       id: this._data.id,

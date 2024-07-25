@@ -1,10 +1,16 @@
-import { GameItem } from "@dnd/shared";
 import { Entity, PlainData } from "src/modules/shared/domain/entity";
+import { Attack } from "../../attack/attack.entity";
 import { Coord } from "../../coord/coord.vo";
 import { Inventory } from "../../inventory/inventory.entity";
+import { Spell } from "../../item/spell/spell.entity";
+import { Weapon } from "../../item/weapon/weapon.entity";
 import { Tile } from "../../tile/tile.entity";
+import { BehaviourAttack } from "./behaviour-attack/behaviour-attack.interface";
+import { BehaviourDefender } from "./behaviour-defender/behaviour-defender.interface";
 import { BehaviourMove } from "./behaviour-move/behaviour-move.interface";
+import { Hero } from "./hero.entity";
 import { Initiative } from "./initiative/initiative.vo";
+import { Monster } from "./monster.entity";
 import { PlayableEntityError } from "./playable-entity.error";
 import { PlayerStatus } from "./player-status/player-status.vo";
 
@@ -42,14 +48,18 @@ type Data = {
 export abstract class Playable<
   ChildData extends Data = Data,
 > extends Entity<ChildData> {
-  abstract readonly behaviourMove: BehaviourMove;
-  abstract buildBehaviourMove(behaviourMove: BehaviourMove): void;
-  abstract attack(_: {
-    attack: GameItem["attacks"][number];
-    target: Playable;
-  }): void;
-  public abstract act(): void;
+  public abstract behaviourMove: BehaviourMove;
+  public abstract buildBehaviourMove(behaviourMove: BehaviourMove): void;
 
+  public abstract behaviourAttack: BehaviourAttack;
+  public abstract buildBehaviourAttack(behaviourAttack: BehaviourAttack): void;
+
+  public abstract behaviourDefender: BehaviourDefender;
+  public abstract buildBehaviourDefender(
+    behaviourDefender: BehaviourDefender,
+  ): void;
+
+  public abstract act(): void;
   public abstract toPlain(): PlainData<ChildData>;
 
   constructor(rawData: ChildData) {
@@ -84,11 +94,23 @@ export abstract class Playable<
     return this._data.isBlocking;
   }
 
+  get inventory() {
+    return this._data.inventory;
+  }
+
   public get isPlaying() {
     return this._data.status.current === "ACTION";
   }
 
-  protected mustBeAlive() {
+  public isHero(): this is Hero {
+    return this._data.faction === "hero";
+  }
+
+  public isMonster(): this is Monster {
+    return this._data.faction === "monster";
+  }
+
+  public mustBeAlive() {
     if (this.isDead) {
       throw new PlayableEntityError({
         name: "NOT_ALIVE",
@@ -101,10 +123,10 @@ export abstract class Playable<
   public takeDamage({ amount }: { amount: number }): number {
     this.mustBeAlive();
 
-    const damageTaken = amount - this._data.characteristic.armorClass;
-    if (damageTaken <= 0) {
-      return 0;
-    }
+    const { damageTaken } = this.behaviourDefender.getDamagesInflictedResult({
+      rawDamages: amount,
+      characteristic: this._data.characteristic,
+    });
 
     this._data.characteristic.healthPoints -= damageTaken;
     if (this.healthPoints <= 0) {
@@ -145,11 +167,28 @@ export abstract class Playable<
     this._data.initiative = this.initiative.roll();
   }
 
+  public consumeMana({ amount }: { amount: number }) {
+    if (amount > this._data.characteristic.manaPoints) {
+      this._data.characteristic.manaPoints = 0;
+    } else {
+      this._data.characteristic.manaPoints -= amount;
+    }
+  }
+
   protected mustHaveActionPoints() {
     if (this._data.characteristic.actionPoints < 1) {
       throw new PlayableEntityError({
         name: "NOT_ENOUGH_ACTION_POINTS",
         message: `Playable Entity ${this.id} cannot act`,
+      });
+    }
+  }
+
+  protected mustHaveEnoughManaPoints({ required }: { required: number }) {
+    if (required > this._data.characteristic.manaPoints) {
+      throw new PlayableEntityError({
+        name: "NOT_ENOUGH_MANA_POINTS",
+        message: `Playable Entity ${this.id} cannot cast a spell (not enough mana)`,
       });
     }
   }
@@ -160,5 +199,48 @@ export abstract class Playable<
       path,
       startingCoord: this.coord,
     });
+  }
+
+  public getAttackResult({
+    attackId,
+    attackItem,
+  }: {
+    attackId: Attack["id"];
+    attackItem: Weapon | Spell;
+  }) {
+    if (attackItem.isSpell()) {
+      return this.getSpellAttackResult({ attackId, spell: attackItem });
+    } else if (attackItem.isWeapon()) {
+      return this.getWeaponAttackResult({ attackId, weapon: attackItem });
+    } else {
+      throw new PlayableEntityError({
+        name: "CANNOT_ATTACK_WITH_A_NON_ATTACK_ITEM",
+        message: `Cannot attack with such item (${attackItem})`,
+      });
+    }
+  }
+
+  private getSpellAttackResult({
+    attackId,
+    spell,
+  }: { attackId: Attack["id"]; spell: Spell }) {
+    const manaCost = spell.getManaCost({ playableEntity: this });
+    this.mustHaveEnoughManaPoints({ required: manaCost });
+    const attackResult = this.behaviourAttack.getSpellAttackResult({
+      spell,
+      attackId,
+    });
+    return { type: spell.type, attackResult, manaCost };
+  }
+
+  private getWeaponAttackResult({
+    attackId,
+    weapon,
+  }: { attackId: Attack["id"]; weapon: Weapon }) {
+    const attackResult = this.behaviourAttack.getWeaponAttackResult({
+      weapon,
+      attackId,
+    });
+    return { type: weapon.type, attackResult };
   }
 }

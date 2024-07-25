@@ -1,4 +1,4 @@
-import { Coord, GameView, canMoveToRequestedPosition } from "@dnd/shared";
+import { Coord, GameView } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import type { Hero } from "src/database/entities/hero.entity";
 import { MapService } from "../map/map.service";
@@ -33,10 +33,10 @@ export class MoveService {
       coord: requestedPosition,
       game,
     });
-    requestedTile.entities.push({
-      type: "playable-entity",
-      id: hero.id,
-    });
+    // requestedTile.entities.push({
+    //   type: "playable-entity",
+    //   id: hero.id,
+    // });
 
     // update hero coords
     hero.coord = requestedPosition;
@@ -53,6 +53,7 @@ export class MoveService {
       coord: requestedPosition,
       game,
     });
-    return canMoveToRequestedPosition({ game, tile });
+    // return canMoveToRequestedPosition({ game, tile });
+    return false;
   }
 }

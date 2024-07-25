@@ -102,4 +102,12 @@ export class PlayableEntities extends Entity<Data> {
   public addPlayableEntity({ playableEntity }: { playableEntity: Playable }) {
     this._data.values.push(playableEntity);
   }
+
+  public removePlayableEntity({
+    playableEntity,
+  }: { playableEntity: Playable }) {
+    this._data.values = this._data.values.filter(
+      ({ id }) => id !== playableEntity.id,
+    );
+  }
 }

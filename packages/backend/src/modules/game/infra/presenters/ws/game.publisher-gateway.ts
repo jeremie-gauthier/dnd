@@ -8,13 +8,15 @@ import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { LogService } from "../../../domain/log/log.service";
 import { LoggableAction } from "../../../domain/log/loggable-action.interface";
 import { GamePresenter } from "../services/game.presenter";
+import { LogPresenter } from "../services/log.presenter";
 
 @WebSocketGateway()
 export class GamePublisherGateway {
   constructor(
     private readonly logService: LogService,
     private readonly getUserGameStateUseCase: GetUserGameStateUseCase,
-    private readonly presenter: GamePresenter,
+    private readonly gamePresenter: GamePresenter,
+    private readonly logPresenter: LogPresenter,
   ) {}
 
   @WebSocketServer()
@@ -35,7 +37,11 @@ export class GamePublisherGateway {
       return;
     }
 
-    this.server.to(payload.game.id).emit(ServerGameEvent.GameLogCreated, log);
+    const formattedLog = await this.logPresenter.toView(log);
+
+    this.server
+      .to(payload.game.id)
+      .emit(ServerGameEvent.GameLogCreated, formattedLog);
   }
 
   @OnEvent(GameEvent.GameInitializationDone)
@@ -55,7 +61,7 @@ export class GamePublisherGateway {
         gameId: game.id,
         userId,
       });
-      const gameView = await this.presenter.toView(game);
+      const gameView = await this.gamePresenter.toView(game);
 
       this.server.to(userId).emit(ServerGameEvent.GameChangesDetected, {
         ...playerGameState,

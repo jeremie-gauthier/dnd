@@ -1,6 +1,14 @@
-import { PlayableEntityMoveInput, unfoldTilePath, zip } from "@dnd/shared";
+import {
+  AttackRangeType,
+  PlayableEntityAttackInput,
+  PlayableEntityMoveInput,
+  canAttackTarget,
+  unfoldTilePath,
+  zip,
+} from "@dnd/shared";
 import { AggregateRoot } from "src/modules/shared/domain/aggregate-root";
 import { z } from "zod";
+import { AttackError } from "../attack/attack.error";
 import { Board } from "../board/board.entity";
 import { Coord } from "../coord/coord.vo";
 import { GameEvents } from "../game-events/game-events.aggregate";
@@ -175,5 +183,95 @@ export class Game extends AggregateRoot<Data> {
     }
 
     return { playingEntity };
+  }
+
+  public playerAttack({
+    attackId,
+    targetPlayableEntityId,
+    userId,
+  }: Pick<PlayableEntityAttackInput, "targetPlayableEntityId" | "attackId"> & {
+    userId: string;
+  }) {
+    const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
+    playingEntity.mustBePlayedBy({ userId });
+    playingEntity.act();
+
+    const targetPlayableEntity = this._data.playableEntities.getOneOrThrow({
+      playableEntityId: targetPlayableEntityId,
+    });
+    targetPlayableEntity.mustBeAlive();
+
+    const attackItem = playingEntity.inventory.getAttackItemInGearOrThrow({
+      attackId,
+    });
+
+    const attack = attackItem.getAttackOrThrow({ attackId });
+    this.mustHaveTargetInRange({
+      attacker: playingEntity,
+      range: attack.range,
+      targetCoord: targetPlayableEntity.coord,
+    });
+
+    const attackResult = playingEntity.getAttackResult({
+      attackId,
+      attackItem,
+    });
+    if (attackResult.type === "Spell") {
+      playingEntity.consumeMana({ amount: attackResult.manaCost });
+    }
+
+    const damageDone = targetPlayableEntity.takeDamage({
+      amount: attackResult.attackResult.sumResult,
+    });
+
+    if (targetPlayableEntity.isDead && targetPlayableEntity.isMonster()) {
+      this._data.board.removeEntityAtCoord({
+        tileEntity: new TilePlayableEntity({
+          faction: targetPlayableEntity.faction,
+          id: targetPlayableEntity.id,
+          isBlocking: false,
+        }),
+        coord: targetPlayableEntity.coord,
+      });
+      this._data.playableEntities.removePlayableEntity({
+        playableEntity: targetPlayableEntity,
+      });
+    }
+
+    return {
+      attack,
+      attacker: playingEntity,
+      attackItem,
+      attackResult,
+      damageDone,
+      target: targetPlayableEntity,
+    };
+  }
+
+  private mustHaveTargetInRange({
+    attacker,
+    range,
+    targetCoord,
+  }: {
+    attacker: Playable;
+    range: AttackRangeType;
+    targetCoord: Coord;
+  }) {
+    const plainBoard = this._data.board.toPlain();
+
+    if (
+      !canAttackTarget({
+        ally: attacker.faction,
+        gameBoard: plainBoard as any,
+        attackerCoord: attacker.coord.toPlain(),
+        range,
+        targetCoord,
+      })
+    ) {
+      throw new AttackError({
+        name: "TARGET_OUT_OF_RANGE",
+        message: "Target is out of range",
+      });
+    }
   }
 }

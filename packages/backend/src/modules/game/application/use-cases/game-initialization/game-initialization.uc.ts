@@ -17,6 +17,8 @@ import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
 import { MonsterTemplate } from "src/modules/game/domain/monster-templates/monster-template/monster-template.vo";
 import { MonsterTemplates } from "src/modules/game/domain/monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "src/modules/game/domain/playable-entities/playable-entities.aggregate";
+import { BehaviourAttackHero } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-attack/behaviour-attack-hero";
+import { BehaviourDefenderHero } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-defender/behaviour-defender-hero";
 import { BehaviourMoveHero } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-move/behaviour-move-hero";
 import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/hero.entity";
 import { Initiative } from "src/modules/game/domain/playable-entities/playable-entity/initiative/initiative.vo";
@@ -228,7 +230,10 @@ export class GameInitializationUseCase implements UseCase {
                 ItemFactory.create(stuff.item as unknown as GameItem),
               ),
           }),
-        }).buildBehaviourMove(new BehaviourMoveHero()),
+        })
+          .buildBehaviourMove(new BehaviourMoveHero())
+          .buildBehaviourDefender(new BehaviourDefenderHero())
+          .buildBehaviourAttack(new BehaviourAttackHero()),
       ),
     });
   }

@@ -22,6 +22,14 @@ export class Weapon extends Item<Data> {
     super(data);
   }
 
+  get type() {
+    return this._data.type;
+  }
+
+  public hasAttack({ attackId }: { attackId: Attack["id"] }) {
+    return this._data.attacks.some((attack) => attack.id === attackId);
+  }
+
   public use({
     attackId,
   }: { attackId: Attack["id"] }): ReturnType<Attack["roll"]> {
@@ -29,7 +37,7 @@ export class Weapon extends Item<Data> {
     return attack.roll();
   }
 
-  private getAttackOrThrow({ attackId }: { attackId: Attack["id"] }) {
+  public getAttackOrThrow({ attackId }: { attackId: Attack["id"] }) {
     const attack = this._data.attacks.find(({ id }) => id === attackId);
     if (!attack) {
       throw new Error("Attack does not exists on this Weapon");
