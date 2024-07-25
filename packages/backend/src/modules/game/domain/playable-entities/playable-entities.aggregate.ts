@@ -1,3 +1,4 @@
+import { zip } from "@dnd/shared";
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { Playable } from "./playable-entity/playable-entity.abstract";
@@ -85,8 +86,14 @@ export class PlayableEntities extends Entity<Data> {
   }
 
   public rollInitiatives() {
-    for (const playableEntity of this._data.values) {
-      playableEntity.rollInitiative();
+    const initiatives = Array.from({ length: this._data.values.length })
+      .map((_, idx) => idx + 1)
+      .sort(() => Math.random() - Math.random());
+    for (const [playableEntity, initiativeScore] of zip(
+      this._data.values,
+      initiatives,
+    )) {
+      playableEntity.setInitiative(initiativeScore);
       if (playableEntity.isPlaying) {
         playableEntity.endTurn();
       }

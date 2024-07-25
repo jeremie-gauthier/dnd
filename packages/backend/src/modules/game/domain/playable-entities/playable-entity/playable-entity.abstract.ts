@@ -163,8 +163,8 @@ export abstract class Playable<
     this._data.coord = coord;
   }
 
-  public rollInitiative() {
-    this._data.initiative = this.initiative.roll();
+  public setInitiative(value: number) {
+    this._data.initiative = new Initiative(value);
   }
 
   public consumeMana({ amount }: { amount: number }) {

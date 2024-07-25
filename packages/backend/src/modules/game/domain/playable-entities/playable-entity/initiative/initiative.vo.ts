@@ -22,11 +22,6 @@ export class Initiative extends ValueObject<Data> {
     return this._data - other._data;
   }
 
-  public roll(): Initiative {
-    const newInitiativeScore = Math.round(Math.random() * 100);
-    return new Initiative(newInitiativeScore);
-  }
-
   public toPlain() {
     return this._data;
   }
