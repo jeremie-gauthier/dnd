@@ -138,10 +138,18 @@ export class GameStateService {
     const tilesVisited = new Set([startingTile]);
     const tilesToVisit = new Coord(startingCoord)
       .getNeighbours()
-      .map((coord) => game.board.tiles[coord.toIndex(metadata)])
+      .map((coord) => {
+        try {
+          return coord.toIndex(metadata);
+        } catch (error) {
+          return null;
+        }
+      })
+      .filter((coordIdx) => coordIdx !== null)
+      .map((coordIdx) => game.board.tiles[coordIdx])
       .filter(
         (tile): tile is ReturnType<Tile["toPlain"]> =>
-          tile !== undefined && tilesVisited.has(tile),
+          tile !== undefined && !tilesVisited.has(tile),
       );
 
     let currentTile = tilesToVisit.shift();
@@ -149,10 +157,18 @@ export class GameStateService {
       if (this.isVisitableTile({ tile: currentTile })) {
         const validNeighbouringTiles = new Coord(currentTile.coord)
           .getNeighbours()
-          .map((coord) => game.board.tiles[coord.toIndex(metadata)])
+          .map((coord) => {
+            try {
+              return coord.toIndex(metadata);
+            } catch (error) {
+              return null;
+            }
+          })
+          .filter((coordIdx) => coordIdx !== null)
+          .map((coordIdx) => game.board.tiles[coordIdx])
           .filter(
             (tile): tile is ReturnType<Tile["toPlain"]> =>
-              tile !== undefined && tilesVisited.has(tile),
+              tile !== undefined && !tilesVisited.has(tile),
           );
         tilesToVisit.push(...validNeighbouringTiles);
       }

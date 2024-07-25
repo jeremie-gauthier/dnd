@@ -9,7 +9,6 @@ import {
   LOBBIES_REPOSITORY,
   LobbiesRepository,
 } from "../../repositories/lobbies-repository.interface";
-import { USERS_REPOSITORY } from "../../repositories/users-repository.interface";
 import { LeaveLobbyUseCase } from "../leave-lobby/leave-lobby.uc";
 
 @Injectable()
@@ -17,7 +16,6 @@ export class JoinLobbyUseCase implements UseCase {
   constructor(
     @Inject(LOBBIES_REPOSITORY)
     private readonly lobbiesRepository: LobbiesRepository,
-    @Inject(USERS_REPOSITORY)
     private readonly eventEmitter: EventEmitter2,
     private readonly leaveLobbyUseCase: LeaveLobbyUseCase,
   ) {}

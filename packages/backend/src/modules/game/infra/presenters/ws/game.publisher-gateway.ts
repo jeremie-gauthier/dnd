@@ -61,7 +61,10 @@ export class GamePublisherGateway {
         gameId: game.id,
         userId,
       });
-      const gameView = await this.gamePresenter.toView(game);
+      const gameView = await this.gamePresenter.toView({
+        ...game,
+        board: playerGameState.game.board,
+      });
 
       this.server.to(userId).emit(ServerGameEvent.GameChangesDetected, {
         ...playerGameState,
