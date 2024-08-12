@@ -33,6 +33,8 @@ VALUES
   "broadsword_1": "Épée large",
   "faith_crossbow_1": "Arbalète de la foi",
   "throwing_dagger_1": "Dague de lancer équilibrée",
-  "elders_shortbow_1": "Arc court des anciens"
+  "elders_shortbow_1": "Arc court des anciens",
+  "goblin_scimitar_1": "Cimeterre gobelin",
+  "bugbear_mace_1": "Masse de gobelours"
 }'
   );
