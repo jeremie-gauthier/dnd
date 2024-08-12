@@ -61,5 +61,11 @@ export class LobbyPublisherGateway {
       clientSocket.join(lobby.id);
       this.server.to(userId).emit(ServerLobbyEvent.LobbyCreated, { lobby });
     }
+    this.server.to(LOBBIES_ROOM).emit(ServerLobbyEvent.LobbiesChangesDetected, {
+      lobby: {
+        ...lobby,
+        nbPlayers: lobby.players.length,
+      },
+    });
   }
 }
