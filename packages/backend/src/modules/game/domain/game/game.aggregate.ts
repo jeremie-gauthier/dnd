@@ -76,6 +76,8 @@ export class Game extends AggregateRoot<Data> {
     playableEntityId,
     destinationCoord,
   }: { playableEntityId: Playable["id"]; destinationCoord: Coord }) {
+    this._data.board.mustBeAnAccessibleTile({ coord: destinationCoord });
+
     const playableEntity = this._data.playableEntities.getOneOrThrow({
       playableEntityId,
     });

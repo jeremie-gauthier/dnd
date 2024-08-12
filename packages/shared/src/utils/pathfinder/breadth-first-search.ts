@@ -1,4 +1,4 @@
-import { Coord } from "../../database";
+import { Coord, PlayableEntity } from "../../database";
 import { NonNegativeNumber } from "../../types";
 import { canMoveToRequestedPosition } from "./collision";
 import { coordToIndex } from "./coord";
@@ -19,12 +19,14 @@ export interface ChildTilePath {
 export type TilePath = OriginTilePath | ChildTilePath;
 
 type Params = {
+  ally: PlayableEntity["faction"];
   gameBoard: GameBoard;
   originCoord: Coord;
   maxRange: NonNegativeNumber<number>;
 };
 
 export function getAllPathsFromTileWithinRange({
+  ally,
   gameBoard,
   originCoord,
   maxRange,
@@ -48,7 +50,10 @@ export function getAllPathsFromTileWithinRange({
     const tilePath = queue.shift()!;
 
     // save tile as part of a possible path
-    if (tilePath.range > 0) {
+    if (
+      tilePath.range > 0 &&
+      tilePath.tile.entities.every((entity) => !entity.isBlocking)
+    ) {
       paths.push(tilePath);
     }
 
@@ -78,7 +83,7 @@ export function getAllPathsFromTileWithinRange({
       }
 
       // skip blocked tiles
-      if (!canMoveToRequestedPosition({ tile: neighbourTile })) {
+      if (!canMoveToRequestedPosition({ ally, tile: neighbourTile })) {
         continue;
       }
 
@@ -112,7 +117,9 @@ export function getCoordsFromTilePaths(tilePaths: TilePath[]): Coord[] {
   const uniqCoords: Coord[] = [];
 
   for (const tilePath of tilePaths) {
-    const coords = unfoldTilePath(tilePath).map((tile) => tile.coord);
+    const coords = unfoldTilePath(tilePath)
+      .filter((tile) => tile.entities.every((entity) => !entity.isBlocking))
+      .map((tile) => tile.coord);
     for (const coord of coords) {
       const isNewCoord = uniqCoords.every(
         (existingCoord) =>

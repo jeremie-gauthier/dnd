@@ -29,6 +29,7 @@ export const MoveButton = () => {
       const { isometricCoord } = e as TileClickedEvent;
 
       const tilePaths = getAllPathsFromTileWithinRange({
+        ally: heroPlaying.faction,
         gameBoard: game.map,
         originCoord: heroPlaying.coord,
         maxRange: heroPlaying.characteristic.movementPoints,
@@ -62,6 +63,7 @@ export const MoveButton = () => {
     gameActions.move,
     gameEventManager.addEventListener,
     gameEventManager.removeEventListener,
+    heroPlaying.faction,
     heroPlaying.characteristic.movementPoints,
     heroPlaying.coord,
     playerState.toggleTo,

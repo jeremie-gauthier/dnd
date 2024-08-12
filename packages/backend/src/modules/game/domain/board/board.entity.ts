@@ -66,4 +66,14 @@ export class Board extends Entity<Data> {
     }
     return tile;
   }
+
+  public mustBeAnAccessibleTile({ coord }: { coord: Coord }) {
+    const tile = this.getTileOrThrow({ coord });
+    if (tile.entities.some((entity) => entity.isBlocking)) {
+      throw new BoardError({
+        name: "TILE_NOT_ACCESSIBLE",
+        message: "Destination tile is blocked by an entity",
+      });
+    }
+  }
 }
