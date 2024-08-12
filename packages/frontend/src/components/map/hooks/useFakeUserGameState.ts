@@ -1,6 +1,6 @@
-import type { GameEntity, PlayerGameState } from "@dnd/shared";
+import type { GameView, PlayerGameState } from "@dnd/shared";
 
-const MOCK_MAP: GameEntity["map"] = {
+const MOCK_MAP: GameView["map"] = {
   width: 5,
   height: 10,
   tiles: [
@@ -534,7 +534,7 @@ const MOCK_MAP: GameEntity["map"] = {
   ],
 };
 
-const MOCK_PLAYABLE_ENTITIES: GameEntity["playableEntities"] = {
+const MOCK_PLAYABLE_ENTITIES: GameView["playableEntities"] = {
   "4d66d84f-bc8d-40b1-9799-7b8c73df00f7": {
     id: "4d66d84f-bc8d-40b1-9799-7b8c73df00f7",
     playedByUserId: "oauth2|discord|282196886662807553",
@@ -549,16 +549,28 @@ const MOCK_PLAYABLE_ENTITIES: GameEntity["playableEntities"] = {
       column: 0,
     },
     isBlocking: true,
-    baseHealthPoints: 8,
-    healthPoints: 8,
-    baseManaPoints: 0,
-    manaPoints: 0,
-    baseArmorClass: 2,
-    armorClass: 2,
-    baseMovementPoints: 4,
-    movementPoints: 4,
-    baseActionPoints: 1,
-    actionPoints: 1,
+    characteristic: {
+      baseHealthPoints: 8,
+      healthPoints: 8,
+      baseManaPoints: 0,
+      manaPoints: 0,
+      baseArmorClass: 2,
+      armorClass: 2,
+      baseMovementPoints: 4,
+      movementPoints: 4,
+      baseActionPoints: 1,
+      actionPoints: 1,
+    },
+    inventory: {
+      backpack: [],
+      gear: [],
+      storageCapacity: {
+        nbArtifactSlots: 1,
+        nbBackpackSlots: 2,
+        nbSpellSlots: 2,
+        nbWeaponSlots: 1,
+      },
+    },
   },
   "b03ecb32-82b1-4d40-9b7d-db7ae9030388": {
     id: "b03ecb32-82b1-4d40-9b7d-db7ae9030388",
@@ -574,16 +586,28 @@ const MOCK_PLAYABLE_ENTITIES: GameEntity["playableEntities"] = {
       column: 1,
     },
     isBlocking: true,
-    baseHealthPoints: 5,
-    healthPoints: 5,
-    baseManaPoints: 0,
-    manaPoints: 0,
-    baseArmorClass: 2,
-    armorClass: 2,
-    baseMovementPoints: 6,
-    movementPoints: 6,
-    baseActionPoints: 1,
-    actionPoints: 1,
+    characteristic: {
+      baseHealthPoints: 5,
+      healthPoints: 5,
+      baseManaPoints: 0,
+      manaPoints: 0,
+      baseArmorClass: 2,
+      armorClass: 2,
+      baseMovementPoints: 6,
+      movementPoints: 6,
+      baseActionPoints: 1,
+      actionPoints: 1,
+    },
+    inventory: {
+      backpack: [],
+      gear: [],
+      storageCapacity: {
+        nbArtifactSlots: 1,
+        nbBackpackSlots: 2,
+        nbSpellSlots: 2,
+        nbWeaponSlots: 1,
+      },
+    },
   },
   "acdf39ff-95ad-4370-b640-178eafc9e1a0": {
     id: "acdf39ff-95ad-4370-b640-178eafc9e1a0",
@@ -599,16 +623,28 @@ const MOCK_PLAYABLE_ENTITIES: GameEntity["playableEntities"] = {
       column: 2,
     },
     isBlocking: true,
-    baseHealthPoints: 5,
-    healthPoints: 5,
-    baseManaPoints: 5,
-    manaPoints: 5,
-    baseArmorClass: 2,
-    armorClass: 2,
-    baseMovementPoints: 5,
-    movementPoints: 5,
-    baseActionPoints: 1,
-    actionPoints: 1,
+    characteristic: {
+      baseHealthPoints: 5,
+      healthPoints: 5,
+      baseManaPoints: 5,
+      manaPoints: 5,
+      baseArmorClass: 2,
+      armorClass: 2,
+      baseMovementPoints: 5,
+      movementPoints: 5,
+      baseActionPoints: 1,
+      actionPoints: 1,
+    },
+    inventory: {
+      backpack: [],
+      gear: [],
+      storageCapacity: {
+        nbArtifactSlots: 1,
+        nbBackpackSlots: 2,
+        nbSpellSlots: 2,
+        nbWeaponSlots: 1,
+      },
+    },
   },
   "f95b77cc-d934-4e82-aa7d-373493db4a43": {
     id: "f95b77cc-d934-4e82-aa7d-373493db4a43",
@@ -624,16 +660,28 @@ const MOCK_PLAYABLE_ENTITIES: GameEntity["playableEntities"] = {
       column: 3,
     },
     isBlocking: true,
-    baseHealthPoints: 5,
-    healthPoints: 5,
-    baseManaPoints: 5,
-    manaPoints: 5,
-    baseArmorClass: 2,
-    armorClass: 2,
-    baseMovementPoints: 5,
-    movementPoints: 5,
-    baseActionPoints: 1,
-    actionPoints: 1,
+    characteristic: {
+      baseHealthPoints: 5,
+      healthPoints: 5,
+      baseManaPoints: 5,
+      manaPoints: 5,
+      baseArmorClass: 2,
+      armorClass: 2,
+      baseMovementPoints: 5,
+      movementPoints: 5,
+      baseActionPoints: 1,
+      actionPoints: 1,
+    },
+    inventory: {
+      backpack: [],
+      gear: [],
+      storageCapacity: {
+        nbArtifactSlots: 1,
+        nbBackpackSlots: 2,
+        nbSpellSlots: 2,
+        nbWeaponSlots: 1,
+      },
+    },
   },
 };
 
@@ -641,13 +689,18 @@ export const useFakeUserGameState = (): PlayerGameState => {
   return {
     game: {
       id: "fake-game-id",
+      gameMaster: {
+        userId: "oauth2|discord|282196886662807553",
+      },
       map: MOCK_MAP,
       playableEntities: MOCK_PLAYABLE_ENTITIES,
       status: "battle_ongoing",
       timeline: [],
     },
-    playerPhase: "action",
-    entityIdTurn: "4d66d84f-bc8d-40b1-9799-7b8c73df00f7",
-    userIdTurn: "oauth2|discord|282196886662807553",
+    yourStatus: "action",
+    playerCurrentlyPlaying: {
+      entityId: "4d66d84f-bc8d-40b1-9799-7b8c73df00f7",
+      userId: "oauth2|discord|282196886662807553",
+    },
   };
 };

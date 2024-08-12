@@ -1,16 +1,17 @@
-import { Coord, GameEntity, Tile } from "../../database";
+import { Coord } from "../../database";
 import { NonNegativeNumber } from "../../types";
 import { canMoveToRequestedPosition } from "./collision";
 import { coordToIndex } from "./coord";
 import { getNeighbourCoords } from "./get-neighbours-coords";
+import { GameBoard, GameBoardTile } from "./pathfinder.interface";
 
 export interface OriginTilePath {
-  tile: Tile;
+  tile: GameBoardTile;
   range: 0;
 }
 
 export interface ChildTilePath {
-  tile: Tile;
+  tile: GameBoardTile;
   range: number;
   fromTile: TilePath;
 }
@@ -18,26 +19,26 @@ export interface ChildTilePath {
 export type TilePath = OriginTilePath | ChildTilePath;
 
 type Params = {
-  game: GameEntity;
+  gameBoard: GameBoard;
   originCoord: Coord;
   maxRange: NonNegativeNumber<number>;
 };
 
 export function getAllPathsFromTileWithinRange({
-  game,
+  gameBoard,
   originCoord,
   maxRange,
 }: Params): TilePath[] {
-  const metadata = { width: game.map.width, height: game.map.height };
+  const metadata = { width: gameBoard.width, height: gameBoard.height };
 
   const originTileIdx = coordToIndex({ coord: originCoord, metadata });
-  const originTile = game.map.tiles[originTileIdx];
+  const originTile = gameBoard.tiles[originTileIdx];
   if (!originTile) {
     return [];
   }
 
   const queue: TilePath[] = [];
-  const explored: Tile[] = [];
+  const explored: GameBoardTile[] = [];
   const paths: TilePath[] = [];
 
   queue.push({ tile: originTile, range: 0 });
@@ -64,7 +65,7 @@ export function getAllPathsFromTileWithinRange({
         coord: neighbourCoord,
         metadata,
       });
-      const neighbourTile = game.map.tiles[neighbourTileIdx];
+      const neighbourTile = gameBoard.tiles[neighbourTileIdx];
 
       // skip invalid tiles
       if (!neighbourTile) {
@@ -77,7 +78,7 @@ export function getAllPathsFromTileWithinRange({
       }
 
       // skip blocked tiles
-      if (!canMoveToRequestedPosition({ game, tile: neighbourTile })) {
+      if (!canMoveToRequestedPosition({ tile: neighbourTile })) {
         continue;
       }
 
@@ -97,7 +98,7 @@ function hasAncestor(tilePath: TilePath): tilePath is ChildTilePath {
   return tilePath.range > 0;
 }
 
-export function unfoldTilePath(tilePath: TilePath): Tile[] {
+export function unfoldTilePath(tilePath: TilePath): GameBoardTile[] {
   const tilePaths: [TilePath] & TilePath[] = [tilePath];
 
   while (hasAncestor(tilePaths[0])) {

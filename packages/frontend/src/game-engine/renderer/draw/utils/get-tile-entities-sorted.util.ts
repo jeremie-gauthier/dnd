@@ -1,8 +1,8 @@
 import type { TileEntity } from "@dnd/shared";
 
 const orderingMap: Readonly<Record<TileEntity["type"], number>> = {
-  "non-playable-non-interactive-entity": 1,
-  "non-playable-interactive-entity": 2,
+  "non-interactive-entity": 1,
+  "interactive-entity": 2,
   "playable-entity": 3,
 };
 

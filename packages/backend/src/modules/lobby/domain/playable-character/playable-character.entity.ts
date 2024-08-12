@@ -1,16 +1,23 @@
 import { Entity } from "src/modules/shared/domain/entity";
-import { UniqueId } from "src/modules/shared/domain/unique-id";
+import { z } from "zod";
 import { User } from "../user/user.entity";
 import { PlayableCharacterError } from "./playable-character.error";
 
 type Data = {
-  id: UniqueId;
+  id: string;
   type: "hero" | "game_master";
   pickedBy?: User["id"];
 };
 
 export class PlayableCharacter extends Entity<Data> {
-  constructor(data: Data) {
+  private static schema = z.object({
+    id: z.string().uuid(),
+    type: z.enum(["hero", "game_master"]),
+    pickedBy: z.string().optional(),
+  });
+
+  constructor(rawData: Data) {
+    const data = PlayableCharacter.schema.parse(rawData);
     super(data, data.id);
   }
 
@@ -20,6 +27,14 @@ export class PlayableCharacter extends Entity<Data> {
 
   public get pickedBy() {
     return this._data.pickedBy;
+  }
+
+  public toPlain() {
+    return {
+      id: this._data.id,
+      type: this._data.type,
+      pickedBy: this._data.pickedBy,
+    };
   }
 
   public setOwner({ user }: { user: User }) {
@@ -46,7 +61,7 @@ export class PlayableCharacter extends Entity<Data> {
   }
 
   private mustBeOwnBy({ user }: { user: User }) {
-    if (!this.pickedBy?.equals(user.id)) {
+    if (this.pickedBy !== user.id) {
       throw new PlayableCharacterError({
         name: "BAD_OWNER",
         message: `User ${user.id} does not own Hero ${this.id}`,

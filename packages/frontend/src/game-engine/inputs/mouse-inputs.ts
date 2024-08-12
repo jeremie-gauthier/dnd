@@ -1,4 +1,4 @@
-import { GameEntity } from "@dnd/shared";
+import { GameView } from "@dnd/shared";
 import type { RefObject } from "react";
 import { GameEventManager } from "../events";
 import type { CanvasConfig } from "../utils/coords-conversion.util";
@@ -14,8 +14,8 @@ export const useMouseInputs = ({
   canvasRef: RefObject<HTMLCanvasElement>;
   canvasConfig: CanvasConfig;
   mapMetadata: {
-    height: GameEntity["map"]["height"];
-    width: GameEntity["map"]["width"];
+    height: GameView["map"]["height"];
+    width: GameView["map"]["width"];
   };
   gameEventManager: GameEventManager;
 }) => {

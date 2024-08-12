@@ -34,11 +34,13 @@ function getPlayableEntityAsset({
   Pick<EntityDrawerParams["subject"], "playableEntity"> &
     Pick<EntityDrawerParams<RequiredAssets>["config"], "assets">
 >): HTMLImageElement {
-  switch (playableEntity.type) {
-    case "enemy":
+  switch (playableEntity.faction) {
+    case "monster":
       return getEnemyAsset({ enemyEntity: playableEntity, assets });
     case "hero":
       return getHeroAsset({ heroEntity: playableEntity, assets });
+    default:
+      return assets.unknown_icon;
   }
 }
 
@@ -50,7 +52,6 @@ function getHeroAsset({
   assets: EntityDrawerParams<RequiredAssets>["config"]["assets"];
 }): HTMLImageElement {
   switch (heroEntity.class) {
-    // TODO: add all supported classes
     case "WARRIOR":
       return assets.warrior_icon;
     case "SORCERER":

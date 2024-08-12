@@ -7,9 +7,6 @@ export class Dice {
   @PrimaryColumn({ unique: true })
   readonly name: string;
 
-  @Column({ type: "character varying", length: 9 })
-  readonly color: `#${string}`;
-
   @Column({ type: "json", update: false })
   readonly values: D6;
 

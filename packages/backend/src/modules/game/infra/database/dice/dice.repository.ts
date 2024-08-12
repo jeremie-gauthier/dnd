@@ -1,0 +1,34 @@
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Dice as DicePersistence } from "src/database/entities/dice.entity";
+import { DiceRepository } from "src/modules/game/application/repositories/dice-repository.interface";
+import { Dice as DiceDomain } from "src/modules/game/domain/dice/dice.vo";
+import { Repository } from "typeorm";
+import { DiceMapper } from "./dice.mapper";
+
+@Injectable()
+export class PostgresDiceRepository implements DiceRepository {
+  constructor(
+    @InjectRepository(DicePersistence)
+    private readonly repository: Repository<DicePersistence>,
+    private readonly mapper: DiceMapper,
+  ) {}
+
+  public async getOneOrThrow({ name }: { name: string }): Promise<DiceDomain> {
+    const dice = await this.repository.findOne({
+      select: {
+        name: true,
+        values: true,
+      },
+      where: {
+        name,
+      },
+    });
+
+    if (!dice) {
+      throw new NotFoundException("Dice not found");
+    }
+
+    return this.mapper.toDomain(dice);
+  }
+}

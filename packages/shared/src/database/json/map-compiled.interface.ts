@@ -1,4 +1,5 @@
-import { Coord, GameEvent, TileEntity } from "../game";
+import { Coord, TileEntity } from "../game";
+import { GameEvent } from "../game/game-event.type";
 
 type Entity = Coord &
   Pick<

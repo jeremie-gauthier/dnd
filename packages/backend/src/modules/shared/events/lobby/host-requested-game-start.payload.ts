@@ -8,7 +8,7 @@ export class HostRequestedGameStartPayload
 {
   public readonly name = LobbyEvent.HostRequestedGameStart;
   public readonly userId: User["id"];
-  public readonly lobby: Lobby;
+  public readonly lobby: ReturnType<Lobby["toPlain"]>;
 
   constructor({ userId, lobby }: Omit<HostRequestedGameStartPayload, "name">) {
     this.userId = userId;

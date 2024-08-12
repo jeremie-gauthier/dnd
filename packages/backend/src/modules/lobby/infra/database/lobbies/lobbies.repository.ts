@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import type { LobbyView } from "@dnd/shared";
 import {
   Injectable,
@@ -5,7 +6,6 @@ import {
   type OnApplicationBootstrap,
 } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { randomUUID } from "node:crypto";
 import { Hero } from "src/database/entities/hero.entity";
 import { User } from "src/database/entities/user.entity";
 import { LobbyUpdatedPayload } from "src/modules/shared/events/lobby/lobby-changed.payload";
@@ -14,9 +14,9 @@ import { RedisService } from "../../../../../redis/redis.service";
 import { LobbiesRepository } from "../../../application/repositories/lobbies-repository.interface";
 import { Lobby } from "../../../domain/lobby/lobby.aggregate";
 import { LobbiesMapper } from "./lobbies.mapper";
-import { ILobbyPersistence, LobbyPersistence } from "./lobby.model";
+import { LobbyPersistence } from "./lobby.model";
 
-type LobbiesKey = Record<ILobbyPersistence["id"], ILobbyPersistence>;
+type LobbiesKey = Record<LobbyPersistence["id"], LobbyPersistence>;
 
 @Injectable()
 export class RedisLobbiesRepository
@@ -52,8 +52,8 @@ export class RedisLobbiesRepository
     config: LobbyView["config"];
     heroes: Array<Hero>;
     hostUserId: User["id"];
-  }): Promise<LobbyPersistence> {
-    const lobby: ILobbyPersistence = {
+  }): Promise<Lobby> {
+    const lobby: LobbyPersistence = {
       id: randomUUID(),
       config,
       playableCharacters: [
@@ -71,36 +71,34 @@ export class RedisLobbiesRepository
       status: "OPENED",
     };
     await this.client.json.set(RedisLobbiesRepository.KEY, lobby.id, lobby);
-    return new LobbyPersistence(lobby, this.mapper);
+    return this.mapper.toDomain(lobby);
   }
 
   public async getOne({
     lobbyId,
-  }: { lobbyId: Lobby["id"] }): Promise<LobbyPersistence | null> {
+  }: { lobbyId: Lobby["id"] }): Promise<Lobby | null> {
     const lobbyRaw = (await this.client.json.get(RedisLobbiesRepository.KEY, {
-      path: lobbyId.id,
-    })) as ILobbyPersistence | null;
-    return lobbyRaw ? new LobbyPersistence(lobbyRaw, this.mapper) : null;
+      path: lobbyId,
+    })) as LobbyPersistence | null;
+    return lobbyRaw ? this.mapper.toDomain(lobbyRaw) : null;
   }
 
   public async getOneOrThrow({
     lobbyId,
-  }: { lobbyId: Lobby["id"] }): Promise<LobbyPersistence> {
-    const lobbyRaw = (await this.client.json.get(RedisLobbiesRepository.KEY, {
-      path: lobbyId.id,
-    })) as ILobbyPersistence | null;
-    if (!lobbyRaw) {
+  }: { lobbyId: Lobby["id"] }): Promise<Lobby> {
+    const lobby = await this.getOne({ lobbyId });
+    if (!lobby) {
       throw new NotFoundException("Lobby not found");
     }
-    return new LobbyPersistence(lobbyRaw, this.mapper);
+    return lobby;
   }
 
-  public async getMany(): Promise<LobbyPersistence[]> {
+  public async getMany(): Promise<Lobby[]> {
     const lobbiesRaw = (await this.client.json.get(
       RedisLobbiesRepository.KEY,
     )) as LobbiesKey;
-    return Object.values(lobbiesRaw).map(
-      (lobbyRaw) => new LobbyPersistence(lobbyRaw, this.mapper),
+    return Object.values(lobbiesRaw).map((lobbyRaw) =>
+      this.mapper.toDomain(lobbyRaw),
     );
   }
 
@@ -113,13 +111,26 @@ export class RedisLobbiesRepository
       lobbyRaw,
     );
 
+    const plainLobby = lobby.toPlain();
     this.eventEmitter.emitAsync(
       LobbyEvent.LobbyUpdated,
-      new LobbyUpdatedPayload({ lobby: this.mapper.toView(lobbyRaw) }),
+      new LobbyUpdatedPayload({
+        lobby: {
+          ...plainLobby,
+          players: plainLobby.players.map(({ status, ...player }) => ({
+            ...player,
+            isReady: status,
+            heroesSelected: plainLobby.playableCharacters
+              .filter((pc) => pc.pickedBy === player.userId)
+              .map((pc) => pc.id),
+          })),
+          status: plainLobby.status,
+        },
+      }),
     );
   }
 
   public async del({ lobbyId }: { lobbyId: Lobby["id"] }): Promise<void> {
-    await this.client.json.del(RedisLobbiesRepository.KEY, lobbyId.id);
+    await this.client.json.del(RedisLobbiesRepository.KEY, lobbyId);
   }
 }

@@ -1,6 +1,6 @@
 import { GameLog } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
-import { GameEvent } from "src/modules/game/events/game-event.enum";
+import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { LoggableAction } from "./loggable-action.interface";
 
 @Injectable()
@@ -37,9 +37,9 @@ export class LogService {
           createdAt: new Date(),
           data: {},
         };
-      case GameEvent.EnemiesSpawned:
+      case GameEvent.MonstersSpawned:
         return {
-          type: GameEvent.EnemiesSpawned,
+          type: GameEvent.MonstersSpawned,
           createdAt: new Date(),
           data: {},
         };
@@ -52,7 +52,7 @@ export class LogService {
             attackPower: payload.damageDone,
             diceRollResults: payload.dicesResults.map((diceResult) => ({
               name: diceResult.dice.name,
-              color: diceResult.dice.color,
+              color: "#fff",
               result: diceResult.result,
             })),
             attackerEntityName: payload.attacker.name,

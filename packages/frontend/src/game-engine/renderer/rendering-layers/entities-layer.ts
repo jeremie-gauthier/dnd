@@ -1,4 +1,4 @@
-import { GameEntity } from "@dnd/shared";
+import { GameView } from "@dnd/shared";
 import { RefObject } from "react";
 import { translate2DToIsometricCoord } from "../../utils/coords-conversion.util";
 import { useAssetsLoader } from "../assets-loader/assets-loader";
@@ -19,8 +19,8 @@ export const useEntitiesLayer = ({ canvasRef }: Params) => {
     map,
     playableEntities,
   }: {
-    map: GameEntity["map"];
-    playableEntities: GameEntity["playableEntities"];
+    map: GameView["map"];
+    playableEntities: GameView["playableEntities"];
   }) => {
     if (!canvas || !context || !assets) return;
 

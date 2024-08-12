@@ -17,11 +17,11 @@ export class GetLobbiesUseCase implements UseCase {
     const lobbies = await this.lobbiesRepository.getMany();
 
     return lobbies.map((lobby) => {
-      const lobbyView = lobby.toView();
+      const plainLobby = lobby.toPlain();
 
       return {
-        ...lobbyView,
-        nbPlayers: lobbyView.players.length,
+        ...plainLobby,
+        nbPlayers: plainLobby.players.length,
       };
     });
   }

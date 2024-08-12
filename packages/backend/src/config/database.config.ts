@@ -7,11 +7,14 @@ import { CampaignProgression } from "../database/entities/campaign-progression.e
 import { CampaignStageProgression } from "../database/entities/campaign-stage-progression.entity";
 import { CampaignStage } from "../database/entities/campaign-stage.entity";
 import { Campaign } from "../database/entities/campaign.entity";
+import { DiceUI } from "../database/entities/dice-ui.entity";
 import { Dice } from "../database/entities/dice.entity";
 import { EnemyTemplate } from "../database/entities/enemy-template.entity";
 import { HeroTemplate } from "../database/entities/hero-template.entity";
 import { Hero } from "../database/entities/hero.entity";
+import { ItemUI } from "../database/entities/item-ui.entity";
 import { Item } from "../database/entities/item.entity";
+import { PerkUI } from "../database/entities/perk-ui.entity";
 import { Perk } from "../database/entities/perk.entity";
 import { Spell } from "../database/entities/spell.entity";
 import { Stuff } from "../database/entities/stuff.entity";
@@ -33,10 +36,13 @@ export class DatabaseConfiguration implements TypeOrmOptionsFactory {
         Hero,
         HeroTemplate,
         Perk,
+        PerkUI,
         Dice,
+        DiceUI,
         Attack,
         AttackDice,
         Item,
+        ItemUI,
         AttackItem,
         Weapon,
         Spell,
@@ -44,6 +50,7 @@ export class DatabaseConfiguration implements TypeOrmOptionsFactory {
         EnemyTemplate,
         Translation,
       ],
+      migrations: ["dist/src/database/migrations/*.js"],
       migrationsRun: true,
       namingStrategy: new SnakeNamingStrategy(),
     };

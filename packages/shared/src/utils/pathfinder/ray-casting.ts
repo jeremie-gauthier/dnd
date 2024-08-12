@@ -1,16 +1,11 @@
-import {
-  AttackRangeType,
-  Coord,
-  GameEntity,
-  PlayableEntity,
-  Tile,
-} from "../../database";
+import { AttackRangeType, Coord, PlayableEntity } from "../../database";
 import {
   isBlockedByNonAllyEntity,
   isBlockedByNonPlayableEntity,
 } from "./collision";
 import { coordToIndex } from "./coord";
 import { getNeighbourCoords } from "./get-neighbours-coords";
+import { GameBoard, GameBoardTile } from "./pathfinder.interface";
 
 function almostEqual(a: number, b: number) {
   return Math.abs(a - b) < 0.000_001;
@@ -78,15 +73,15 @@ function makeRay(xStart: number, yStart: number, xEnd: number, yEnd: number) {
 
 function canBeSeenRay({
   ally,
-  game,
-  originTile,
+  gameBoard,
+  originCoord,
   destinationTile,
   metadata,
 }: {
-  ally: PlayableEntity["type"];
-  game: GameEntity;
-  originTile: Tile;
-  destinationTile: Tile;
+  ally: PlayableEntity["faction"];
+  gameBoard: GameBoard;
+  originCoord: Coord;
+  destinationTile: GameBoardTile;
   metadata: { height: number; width: number };
 }) {
   if (isBlockedByNonPlayableEntity({ tile: destinationTile })) {
@@ -94,21 +89,21 @@ function canBeSeenRay({
   }
 
   const ray = makeRay(
-    originTile.coord.column + 0.5,
-    originTile.coord.row + 0.5,
+    originCoord.column + 0.5,
+    originCoord.row + 0.5,
     destinationTile.coord.column + 0.5,
     destinationTile.coord.row + 0.5,
   );
   while (ray.hasNext()) {
     const nextCoord = ray.next();
     const tileIdx = coordToIndex({ coord: nextCoord, metadata });
-    const tile = game.map.tiles[tileIdx];
+    const tile = gameBoard.tiles[tileIdx];
 
     if (!tile || isBlockedByNonPlayableEntity({ tile })) {
       return false;
     }
 
-    if (isBlockedByNonAllyEntity({ game, tile, ally })) {
+    if (isBlockedByNonAllyEntity({ tile, ally })) {
       // stop line of sight the first "non-ally" encountered
       return !ray.hasNext();
     }
@@ -117,37 +112,40 @@ function canBeSeenRay({
   return true;
 }
 
-function canAttackTile({ tile }: { tile: Tile }) {
+function canAttackTile({ tile }: { tile: GameBoardTile }) {
   return tile.entities.every(
-    (entity) => entity.type !== "non-playable-non-interactive-entity",
+    (entity) => entity.type !== "non-interactive-entity",
   );
 }
 
 function getTilesToTest({
-  game,
-  originTile,
+  gameBoard,
+  originCoord,
   range,
   metadata,
 }: {
-  game: GameEntity;
-  originTile: Tile;
+  gameBoard: GameBoard;
+  originCoord: Coord;
   range: AttackRangeType;
   metadata: { height: number; width: number };
 }) {
-  const meleeCoords = getNeighbourCoords({ coord: originTile.coord });
+  const meleeCoords = getNeighbourCoords({ coord: originCoord });
   const meleeTiles = meleeCoords
     .map((meleeCoord) => {
       const tileIdx = coordToIndex({ coord: meleeCoord, metadata });
-      return game.map.tiles[tileIdx];
+      return gameBoard.tiles[tileIdx];
     })
-    .filter((tile): tile is Tile => tile !== undefined);
+    .filter((tile) => tile !== undefined);
 
   if (range === "melee") {
     return meleeTiles.filter((meleeTile) => canAttackTile({ tile: meleeTile }));
   }
 
-  const tilesToTest = game.map.tiles.filter(
-    (tile) => tile !== originTile && canAttackTile({ tile }),
+  const tilesToTest = gameBoard.tiles.filter(
+    (tile) =>
+      (tile.coord.row !== originCoord.row ||
+        tile.coord.column !== originCoord.column) &&
+      canAttackTile({ tile }),
   );
 
   if (range === "long") {
@@ -159,22 +157,33 @@ function getTilesToTest({
 
 export function getLineOfSight({
   ally,
-  game,
-  originTile,
+  gameBoard,
+  originCoord,
   range,
 }: {
-  ally: PlayableEntity["type"];
-  game: GameEntity;
-  originTile: Tile;
+  ally: PlayableEntity["faction"];
+  gameBoard: GameBoard;
+  originCoord: Coord;
   range: AttackRangeType;
 }) {
-  const metadata = { height: game.map.height, width: game.map.width };
-  const tilesToTest = getTilesToTest({ game, originTile, range, metadata });
+  const metadata = { height: gameBoard.height, width: gameBoard.width };
+  const tilesToTest = getTilesToTest({
+    gameBoard,
+    originCoord,
+    range,
+    metadata,
+  });
 
-  const tilesInSight: Tile[] = [];
+  const tilesInSight: GameBoardTile[] = [];
   for (const tile of tilesToTest) {
     if (
-      canBeSeenRay({ ally, game, originTile, destinationTile: tile, metadata })
+      canBeSeenRay({
+        ally,
+        gameBoard,
+        originCoord,
+        destinationTile: tile,
+        metadata,
+      })
     ) {
       tilesInSight.push(tile);
     }
@@ -185,20 +194,20 @@ export function getLineOfSight({
 
 export function canAttackTarget({
   ally,
-  game,
-  originTile,
+  gameBoard,
+  attackerCoord,
   range,
   targetCoord,
 }: {
-  ally: PlayableEntity["type"];
-  game: GameEntity;
-  originTile: Tile;
+  ally: PlayableEntity["faction"];
+  gameBoard: GameBoard;
+  attackerCoord: Coord;
   range: AttackRangeType;
   targetCoord: Coord;
 }): boolean {
   if (
     range === "melee" &&
-    getNeighbourCoords({ coord: originTile.coord }).every(
+    getNeighbourCoords({ coord: attackerCoord }).every(
       (coord) =>
         coord.row !== targetCoord.row && coord.column !== targetCoord.column,
     )
@@ -208,7 +217,7 @@ export function canAttackTarget({
 
   if (
     range === "long" &&
-    getNeighbourCoords({ coord: originTile.coord }).some(
+    getNeighbourCoords({ coord: attackerCoord }).some(
       (coord) =>
         coord.row === targetCoord.row && coord.column === targetCoord.column,
     )
@@ -216,13 +225,19 @@ export function canAttackTarget({
     return false;
   }
 
-  const metadata = { height: game.map.height, width: game.map.width };
+  const metadata = { height: gameBoard.height, width: gameBoard.width };
 
   const destinationTileIdx = coordToIndex({ coord: targetCoord, metadata });
-  const destinationTile = game.map.tiles[destinationTileIdx];
+  const destinationTile = gameBoard.tiles[destinationTileIdx];
   if (!destinationTile) {
     return false;
   }
 
-  return canBeSeenRay({ ally, game, originTile, destinationTile, metadata });
+  return canBeSeenRay({
+    ally,
+    gameBoard,
+    originCoord: attackerCoord,
+    destinationTile,
+    metadata,
+  });
 }

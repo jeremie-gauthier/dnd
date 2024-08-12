@@ -11,7 +11,7 @@ export function drawDoor({
   config,
   subject,
 }: EntityDrawerParams<RequiredAssets>) {
-  if (subject.entity.type !== "non-playable-interactive-entity") return;
+  if (subject.entity.type !== "interactive-entity") return;
 
   const isClosed = subject.entity.isBlocking;
   // TODO: tmp for better visualization during testing

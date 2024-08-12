@@ -1,32 +1,26 @@
-import { GameEntity, PlayableEntity, Tile } from "../../database";
+import { PlayableEntity } from "../../database";
+import { GameBoardTile } from "./pathfinder.interface";
 
-export function canMoveToRequestedPosition({
-  game,
-  tile,
-}: { game: GameEntity; tile: Tile }) {
-  return tile.entities.every(
-    (entity) =>
-      (entity.type !== "playable-entity" && !entity.isBlocking) ||
-      (entity.type === "playable-entity" &&
-        !game.playableEntities[entity.id]!.isBlocking),
-  );
+export function canMoveToRequestedPosition({ tile }: { tile: GameBoardTile }) {
+  return tile.entities.every((entity) => !entity.isBlocking);
 }
 
-export function isBlockedByNonPlayableEntity({ tile }: { tile: Tile }) {
+export function isBlockedByNonPlayableEntity({
+  tile,
+}: { tile: GameBoardTile }) {
   return tile.entities.some(
     (entity) => entity.type !== "playable-entity" && entity.isBlocking,
   );
 }
 
 export function isBlockedByNonAllyEntity({
-  game,
   tile,
   ally,
-}: { game: GameEntity; tile: Tile; ally: PlayableEntity["type"] }) {
+}: { tile: GameBoardTile; ally: PlayableEntity["faction"] }) {
   return tile.entities.some(
     (entity) =>
       entity.type === "playable-entity" &&
-      game.playableEntities[entity.id]?.type !== ally &&
-      game.playableEntities[entity.id]?.isBlocking,
+      entity.faction !== ally &&
+      entity.isBlocking,
   );
 }

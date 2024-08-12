@@ -1,10 +1,4 @@
-import {
-  Coord,
-  GameEntity,
-  Tile,
-  coordToIndex,
-  getLineOfSight,
-} from "@dnd/shared";
+import { Coord, GameView, Tile, getLineOfSight } from "@dnd/shared";
 import { RefObject, useEffect } from "react";
 import { GameEventManager } from "../../events";
 import { PreparingAttackEvent } from "../../events/preparing-attack.event";
@@ -40,7 +34,7 @@ export const usePreviewLayer = ({ gameEventManager, canvasRef }: Params) => {
       map,
       coords,
     }: {
-      map: GameEntity["map"];
+      map: GameView["map"];
       coords: Coord[];
     }) => {
       if (!canvas || !context || !assets) return;
@@ -83,16 +77,10 @@ export const usePreviewLayer = ({ gameEventManager, canvasRef }: Params) => {
     const handlePreparingAttackEvent: EventListener = (e) => {
       const { game, heroPlaying, attack } = e as PreparingAttackEvent;
 
-      const originTileIdx = coordToIndex({
-        coord: heroPlaying.coord,
-        metadata: { height: game.map.height, width: game.map.width },
-      });
-      const originTile = game.map.tiles[originTileIdx];
-
       const tilesInSight = getLineOfSight({
-        ally: heroPlaying.type,
-        game,
-        originTile,
+        ally: heroPlaying.faction,
+        gameBoard: game.map,
+        originCoord: heroPlaying.coord,
         range: attack.range,
       });
       const coordsInSight = tilesInSight.map(

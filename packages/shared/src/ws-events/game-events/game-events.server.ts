@@ -1,8 +1,4 @@
-import type {
-  GameEntity,
-  PlayableEntity,
-  PlayerGamePhase,
-} from "../../database";
+import type { GameView, PlayableEntity, PlayerGamePhase } from "../../database";
 
 export const ServerGameEvent = {
   GameStart: "server.game.start",
@@ -10,14 +6,11 @@ export const ServerGameEvent = {
   GameLogCreated: "server.game.log_created",
 } as const;
 
-export type PlayerGameState =
-  | {
-      game: GameEntity<"prepare_for_battle">;
-      playerPhase: "preparation";
-    }
-  | {
-      game: GameEntity<"battle_ongoing">;
-      playerPhase: Exclude<PlayerGamePhase, "preparation">;
-      userIdTurn: string;
-      entityIdTurn: PlayableEntity["id"];
-    };
+export type PlayerGameState = {
+  game: GameView;
+  yourStatus: PlayerGamePhase;
+  playerCurrentlyPlaying: {
+    userId: string;
+    entityId: PlayableEntity["id"];
+  };
+};

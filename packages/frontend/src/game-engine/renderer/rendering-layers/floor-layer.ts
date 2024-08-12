@@ -1,4 +1,4 @@
-import type { GameEntity, Tile, TileEntity } from "@dnd/shared";
+import type { GameView, Tile, TileEntity } from "@dnd/shared";
 import { RefObject } from "react";
 import { translate2DToIsometricCoord } from "../../utils/coords-conversion.util";
 import { useAssetsLoader } from "../assets-loader/assets-loader";
@@ -16,7 +16,7 @@ export const useFloorLayer = ({ canvasRef }: Params) => {
   const context = canvas?.getContext("2d");
   const { assets, assetSize } = useAssetsLoader(floorAssetCollection);
 
-  const render = ({ map }: { map: GameEntity["map"] }) => {
+  const render = ({ map }: { map: GameView["map"] }) => {
     if (!canvas || !context || !assets) return;
 
     const config = { assets, assetSize, map };

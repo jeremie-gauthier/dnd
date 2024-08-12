@@ -1,16 +1,11 @@
 import { ValueObject } from "src/modules/shared/domain/value-object";
 import { LobbyStatusError } from "./lobby-status.error";
 
-type Data = {
-  status: "OPENED" | "GAME_INITIALIZING" | "GAME_STARTED";
-};
+type Data = "OPENED" | "GAME_INITIALIZING" | "GAME_STARTED";
 
 export class LobbyStatus extends ValueObject<Data> {
   private static STATE_MACHINE: Readonly<
-    Record<
-      Data["status"],
-      { advanceTo: Data["status"][]; rollbackFrom: Data["status"][] }
-    >
+    Record<Data, { advanceTo: Data[]; rollbackFrom: Data[] }>
   > = {
     OPENED: {
       advanceTo: ["GAME_INITIALIZING"],
@@ -27,11 +22,15 @@ export class LobbyStatus extends ValueObject<Data> {
   };
 
   public get current() {
-    return this._data.status;
+    return this._data;
+  }
+
+  public toPlain() {
+    return this._data;
   }
 
   public equals(other: LobbyStatus): boolean {
-    return this._data.status === other._data.status;
+    return this._data === other._data;
   }
 
   public mustBeOpened() {
@@ -43,12 +42,12 @@ export class LobbyStatus extends ValueObject<Data> {
     }
   }
 
-  public advanceTo({ status }: { status: Data["status"] }): LobbyStatus {
+  public advanceTo(status: Data): LobbyStatus {
     this.mustBeAbleToAdvanceTo({ status });
-    return new LobbyStatus({ status });
+    return new LobbyStatus(status);
   }
 
-  private mustBeAbleToAdvanceTo({ status }: { status: Data["status"] }) {
+  private mustBeAbleToAdvanceTo({ status }: { status: Data }) {
     const canAdvanceTo =
       LobbyStatus.STATE_MACHINE[this.current].advanceTo.includes(status);
     if (!canAdvanceTo) {

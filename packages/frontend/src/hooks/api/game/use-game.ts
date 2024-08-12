@@ -1,5 +1,5 @@
 import {
-  GameEntity,
+  GameView,
   PlayerGamePhase,
   ServerGameEvent,
   ServerToClientEvents,
@@ -18,7 +18,7 @@ export const useGame = ({
   socket,
 }: {
   socket: ClientSocket;
-  gameId: GameEntity["id"];
+  gameId: GameView["id"];
   queryClient: QueryClient;
 }) => {
   const { data: playerGameState, isLoading } = useGetPlayerGameState(gameId);
@@ -47,6 +47,6 @@ export const useGame = ({
     : {
         game: playerGameState.game,
         isLoading,
-        phase: playerGameState.playerPhase,
+        phase: playerGameState.yourStatus,
       };
 };

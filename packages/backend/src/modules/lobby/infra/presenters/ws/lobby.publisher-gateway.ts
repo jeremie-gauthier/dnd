@@ -1,4 +1,4 @@
-import { GameEntity, LobbyView, ServerLobbyEvent } from "@dnd/shared";
+import { GameView, LobbyView, ServerLobbyEvent } from "@dnd/shared";
 import { OnEvent } from "@nestjs/event-emitter";
 import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { User } from "src/database/entities/user.entity";
@@ -42,9 +42,9 @@ export class LobbyPublisherGateway {
   protected gameReadyHandler({
     lobby,
     game,
-  }: { lobby: Lobby; game: GameEntity }) {
+  }: { lobby: Lobby; game: GameView }) {
     this.server
-      .to(lobby.id.toString())
+      .to(lobby.id)
       .emit(ServerLobbyEvent.GameInitializationDone, { game });
   }
 
@@ -61,5 +61,11 @@ export class LobbyPublisherGateway {
       clientSocket.join(lobby.id);
       this.server.to(userId).emit(ServerLobbyEvent.LobbyCreated, { lobby });
     }
+    this.server.to(LOBBIES_ROOM).emit(ServerLobbyEvent.LobbiesChangesDetected, {
+      lobby: {
+        ...lobby,
+        nbPlayers: lobby.players.length,
+      },
+    });
   }
 }

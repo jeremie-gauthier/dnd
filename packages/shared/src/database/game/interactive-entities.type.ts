@@ -1,5 +1,5 @@
 type DoorOpenedEntity = {
-  type: "non-playable-interactive-entity";
+  type: "interactive-entity";
   kind: "door";
   isVisible: true;
   isBlocking: false;
@@ -7,7 +7,7 @@ type DoorOpenedEntity = {
 };
 
 type DoorClosedEntity = {
-  type: "non-playable-interactive-entity";
+  type: "interactive-entity";
   kind: "door";
   isVisible: true;
   isBlocking: true;
@@ -17,7 +17,7 @@ type DoorClosedEntity = {
 export type DoorEntity = DoorClosedEntity | DoorOpenedEntity;
 
 type TrapPitActiveEntity = {
-  type: "non-playable-interactive-entity";
+  type: "interactive-entity";
   kind: "trap";
   name: "pit";
   isVisible: false;
@@ -26,7 +26,7 @@ type TrapPitActiveEntity = {
 };
 
 type TrapPitInactiveEntity = {
-  type: "non-playable-interactive-entity";
+  type: "interactive-entity";
   kind: "trap";
   name: "pit";
   isVisible: true;

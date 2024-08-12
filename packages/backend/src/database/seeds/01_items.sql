@@ -2,7 +2,6 @@ INSERT INTO
   "item" (
     "name",
     "level",
-    "img_url",
     "mana_cost",
     "type"
   )
@@ -10,37 +9,76 @@ VALUES
   (
     'broadsword_1',
     1,
-    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/broadsword_1.webp',
     NULL,
     'Weapon'
   ),
   (
     'faith_crossbow_1',
     1,
-    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/faith_crossbow_1.webp',
     NULL,
     'Weapon'
   ),
   (
     'throwing_dagger_1',
     1,
-    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/throwing_dagger_1.webp',
     NULL,
     'Weapon'
   ),
   (
     'magic_shot_1',
     1,
-    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/magic_shot_1.webp',
     '{"SORCERER":2,"CLERIC":3}',
     'Spell'
   ),
   (
     'elders_shortbow_1',
     1,
-    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/elders_shortbow_1.webp',
     NULL,
     'Weapon'
+  ),
+  (
+    'goblin_scimitar_1',
+    1,
+    NULL,
+    'Weapon'
+  ),
+  (
+    'bugbear_mace_1',
+    1,
+    NULL,
+    'Weapon'
+  );
+
+INSERT INTO
+  "item_ui" ("item_name", "img_url")
+VALUES
+  (
+    'broadsword_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/broadsword_1.webp'
+  ),
+  (
+    'faith_crossbow_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/faith_crossbow_1.webp'
+  ),
+  (
+    'throwing_dagger_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/throwing_dagger_1.webp'
+  ),
+  (
+    'magic_shot_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/magic_shot_1.webp'
+  ),
+  (
+    'elders_shortbow_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/elders_shortbow_1.webp'
+  ),
+  (
+    'goblin_scimitar_1',
+    'https://www.aidedd.org/dnd/images/goblin.jpg'
+  ),
+  (
+    'bugbear_mace_1',
+    'https://www.aidedd.org/dnd/images/bugbear.jpg'
   );
 
 INSERT INTO
@@ -81,6 +119,18 @@ VALUES
     'long',
     'regular',
     'elders_shortbow_1'
+  ),
+  (
+    'd94e7f57-bb5e-4bac-92a0-c1defce8b7a3',
+    'melee',
+    'regular',
+    'goblin_scimitar_1'
+  ),
+  (
+    '71ff36ed-8714-48be-9122-9a052a25d37c',
+    'melee',
+    'regular',
+    'bugbear_mace_1'
   );
 
 INSERT INTO
@@ -165,4 +215,34 @@ VALUES
     '9eb44ec6-a07b-4984-87cb-9d21e83e9de9',
     '14931b0b-1c4c-4f3f-919b-62d91d2a35c4',
     'special'
+  ),
+  (
+    '36e10fc1-da0f-4c90-89aa-02c7fb59d52e',
+    'd94e7f57-bb5e-4bac-92a0-c1defce8b7a3',
+    'yellow'
+  ),
+  (
+    '9e555227-dc9c-46f7-a6ad-a1bc4e2fed2a',
+    'd94e7f57-bb5e-4bac-92a0-c1defce8b7a3',
+    'yellow'
+  ),
+  (
+    '3f64d089-d5f9-41b2-9051-5ff788429d76',
+    'd94e7f57-bb5e-4bac-92a0-c1defce8b7a3',
+    'orange'
+  ),
+  (
+    'e6e9f8df-489f-419d-9eb9-c9462b84cef6',
+    '71ff36ed-8714-48be-9122-9a052a25d37c',
+    'yellow'
+  ),
+  (
+    'f9b2c85a-a766-4250-8874-c90906a34659',
+    '71ff36ed-8714-48be-9122-9a052a25d37c',
+    'yellow'
+  ),
+  (
+    '5274c998-8d7f-48d0-b379-1bd384027185',
+    '71ff36ed-8714-48be-9122-9a052a25d37c',
+    'red'
   );

@@ -1,21 +1,23 @@
-import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { describe, expect, it } from "vitest";
 import { UserStatus } from "../user-status/user-status.vo";
 import { User } from "../user/user.entity";
-import { FAKE_USER } from "../user/user.fixtures";
+import { getFakeUserData } from "../user/user.fixtures";
 import { PlayableCharacter } from "./playable-character.entity";
-import { FAKE_HERO } from "./playable-character.fixtures";
+import {
+  FAKE_GAME_MASTER_ID,
+  getFakeHero,
+} from "./playable-character.fixtures";
 
 describe("PlayableCharacter Entity", () => {
   it("should create a PlayableCharacter and access its data", () => {
-    const playableCharacter = new PlayableCharacter(FAKE_HERO);
+    const playableCharacter = new PlayableCharacter(getFakeHero());
     expect(playableCharacter.type).toEqual("hero");
   });
 
   describe("setOwner method", () => {
     it("should set new owner", () => {
-      const playableCharacter = new PlayableCharacter(FAKE_HERO);
-      const user = new User(FAKE_USER);
+      const playableCharacter = new PlayableCharacter(getFakeHero());
+      const user = new User(getFakeUserData());
 
       expect(playableCharacter.pickedBy).toBeUndefined();
       playableCharacter.setOwner({ user });
@@ -24,17 +26,20 @@ describe("PlayableCharacter Entity", () => {
 
     it("should fail to set new owner when already picked", () => {
       const playableCharacter = new PlayableCharacter({
-        ...FAKE_HERO,
-        pickedBy: new UniqueId(),
+        ...getFakeHero(),
+        pickedBy: FAKE_GAME_MASTER_ID,
       });
-      const user = new User(FAKE_USER);
+      const user = new User(getFakeUserData());
 
       expect(() => playableCharacter.setOwner({ user })).toThrow();
     });
 
     it("should fail to set new owner when user is ready", () => {
-      const playableCharacter = new PlayableCharacter(FAKE_HERO);
-      const user = new User({ ...FAKE_USER, status: new UserStatus(true) });
+      const playableCharacter = new PlayableCharacter(getFakeHero());
+      const user = new User({
+        ...getFakeUserData(),
+        status: new UserStatus(true),
+      });
 
       expect(() => playableCharacter.setOwner({ user })).toThrow();
     });
@@ -42,9 +47,9 @@ describe("PlayableCharacter Entity", () => {
 
   describe("unsetOwner method", () => {
     it("should unset owner", () => {
-      const user = new User(FAKE_USER);
+      const user = new User(getFakeUserData());
       const playableCharacter = new PlayableCharacter({
-        ...FAKE_HERO,
+        ...getFakeHero(),
         pickedBy: user.id,
       });
 
@@ -55,18 +60,21 @@ describe("PlayableCharacter Entity", () => {
 
     it("should fail to unset new owner when he does not own it", () => {
       const playableCharacter = new PlayableCharacter({
-        ...FAKE_HERO,
-        pickedBy: new UniqueId(),
+        ...getFakeHero(),
+        pickedBy: FAKE_GAME_MASTER_ID,
       });
-      const user = new User(FAKE_USER);
+      const user = new User(getFakeUserData());
 
       expect(() => playableCharacter.unsetOwner({ user })).toThrow();
     });
 
     it("should fail to unset new owner when user is ready", () => {
-      const user = new User({ ...FAKE_USER, status: new UserStatus(true) });
+      const user = new User({
+        ...getFakeUserData(),
+        status: new UserStatus(true),
+      });
       const playableCharacter = new PlayableCharacter({
-        ...FAKE_HERO,
+        ...getFakeHero(),
         pickedBy: user.id,
       });
 

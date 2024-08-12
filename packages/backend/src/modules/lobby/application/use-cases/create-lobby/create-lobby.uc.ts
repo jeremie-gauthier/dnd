@@ -29,7 +29,18 @@ export class CreateLobbyUseCase implements UseCase {
   ): Promise<LobbyView> {
     await this.leaveLobbyUseCase.execute({ userId: payload.userId });
     const lobby = await this.createLobby(payload);
-    return lobby.toView();
+    const plainLobby = lobby.toPlain();
+    return {
+      ...plainLobby,
+      players: plainLobby.players.map(({ status, ...player }) => ({
+        ...player,
+        isReady: status,
+        heroesSelected: plainLobby.playableCharacters
+          .filter((pc) => pc.pickedBy === player.userId)
+          .map((pc) => pc.id),
+      })),
+      status: plainLobby.status,
+    };
   }
 
   private async createLobby({

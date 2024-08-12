@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { GameEntity } from "../../database";
 import { getAllPathsFromTileWithinRange } from "./breadth-first-search";
+import { GameBoard } from "./pathfinder.interface";
 
 describe("pathfinder: breadth-first-search", () => {
   describe("getAllPathsFromTileWithinRange", () => {
@@ -102,9 +102,10 @@ describe("pathfinder: breadth-first-search", () => {
               {
                 type: "playable-entity",
                 id: "regdar",
+                faction: "hero",
+                isBlocking: true,
               },
             ],
-            isStartingTile: true,
           },
           {
             coord: {
@@ -115,9 +116,10 @@ describe("pathfinder: breadth-first-search", () => {
               {
                 type: "playable-entity",
                 id: "lidda",
+                faction: "hero",
+                isBlocking: true,
               },
             ],
-            isStartingTile: true,
           },
           {
             coord: {
@@ -128,9 +130,10 @@ describe("pathfinder: breadth-first-search", () => {
               {
                 type: "playable-entity",
                 id: "mialye",
+                faction: "hero",
+                isBlocking: true,
               },
             ],
-            isStartingTile: true,
           },
           {
             coord: {
@@ -155,9 +158,10 @@ describe("pathfinder: breadth-first-search", () => {
               {
                 type: "playable-entity",
                 id: "jozan",
+                faction: "hero",
+                isBlocking: true,
               },
             ],
-            isStartingTile: true,
           },
           {
             coord: {
@@ -165,7 +169,6 @@ describe("pathfinder: breadth-first-search", () => {
               column: 3,
             },
             entities: [],
-            isStartingTile: true,
           },
           {
             coord: {
@@ -173,7 +176,6 @@ describe("pathfinder: breadth-first-search", () => {
               column: 4,
             },
             entities: [],
-            isStartingTile: true,
           },
           {
             coord: {
@@ -211,12 +213,12 @@ describe("pathfinder: breadth-first-search", () => {
             entities: [],
           },
         ],
-      } as GameEntity["map"];
+      } satisfies GameBoard;
       const originCoord = { row: 2, column: 2 };
       const maxRange = 4;
 
       const result = getAllPathsFromTileWithinRange({
-        game: { map } as GameEntity,
+        gameBoard: map,
         originCoord,
         maxRange,
       });
@@ -241,9 +243,10 @@ describe("pathfinder: breadth-first-search", () => {
                 {
                   type: "playable-entity",
                   id: "regdar",
+                  faction: "hero",
+                  isBlocking: true,
                 },
               ],
-              isStartingTile: true,
             },
             range: 0,
           },
@@ -267,9 +270,10 @@ describe("pathfinder: breadth-first-search", () => {
                 {
                   type: "playable-entity",
                   id: "regdar",
+                  faction: "hero",
+                  isBlocking: true,
                 },
               ],
-              isStartingTile: true,
             },
             range: 0,
           },
@@ -302,9 +306,10 @@ describe("pathfinder: breadth-first-search", () => {
                   {
                     type: "playable-entity",
                     id: "regdar",
+                    faction: "hero",
+                    isBlocking: true,
                   },
                 ],
-                isStartingTile: true,
               },
               range: 0,
             },
@@ -338,9 +343,10 @@ describe("pathfinder: breadth-first-search", () => {
                   {
                     type: "playable-entity",
                     id: "regdar",
+                    faction: "hero",
+                    isBlocking: true,
                   },
                 ],
-                isStartingTile: true,
               },
               range: 0,
             },
@@ -374,9 +380,10 @@ describe("pathfinder: breadth-first-search", () => {
                   {
                     type: "playable-entity",
                     id: "regdar",
+                    faction: "hero",
+                    isBlocking: true,
                   },
                 ],
-                isStartingTile: true,
               },
               range: 0,
             },
@@ -410,9 +417,10 @@ describe("pathfinder: breadth-first-search", () => {
                   {
                     type: "playable-entity",
                     id: "regdar",
+                    faction: "hero",
+                    isBlocking: true,
                   },
                 ],
-                isStartingTile: true,
               },
               range: 0,
             },
@@ -446,9 +454,10 @@ describe("pathfinder: breadth-first-search", () => {
                   {
                     type: "playable-entity",
                     id: "regdar",
+                    faction: "hero",
+                    isBlocking: true,
                   },
                 ],
-                isStartingTile: true,
               },
               range: 0,
             },
@@ -491,9 +500,10 @@ describe("pathfinder: breadth-first-search", () => {
                     {
                       type: "playable-entity",
                       id: "regdar",
+                      faction: "hero",
+                      isBlocking: true,
                     },
                   ],
-                  isStartingTile: true,
                 },
                 range: 0,
               },
@@ -537,9 +547,10 @@ describe("pathfinder: breadth-first-search", () => {
                     {
                       type: "playable-entity",
                       id: "regdar",
+                      faction: "hero",
+                      isBlocking: true,
                     },
                   ],
-                  isStartingTile: true,
                 },
                 range: 0,
               },
@@ -583,9 +594,10 @@ describe("pathfinder: breadth-first-search", () => {
                     {
                       type: "playable-entity",
                       id: "regdar",
+                      faction: "hero",
+                      isBlocking: true,
                     },
                   ],
-                  isStartingTile: true,
                 },
                 range: 0,
               },
@@ -629,9 +641,10 @@ describe("pathfinder: breadth-first-search", () => {
                     {
                       type: "playable-entity",
                       id: "regdar",
+                      faction: "hero",
+                      isBlocking: true,
                     },
                   ],
-                  isStartingTile: true,
                 },
                 range: 0,
               },
@@ -675,9 +688,10 @@ describe("pathfinder: breadth-first-search", () => {
                     {
                       type: "playable-entity",
                       id: "regdar",
+                      faction: "hero",
+                      isBlocking: true,
                     },
                   ],
-                  isStartingTile: true,
                 },
                 range: 0,
               },
@@ -721,9 +735,10 @@ describe("pathfinder: breadth-first-search", () => {
                     {
                       type: "playable-entity",
                       id: "regdar",
+                      faction: "hero",
+                      isBlocking: true,
                     },
                   ],
-                  isStartingTile: true,
                 },
                 range: 0,
               },
@@ -776,9 +791,10 @@ describe("pathfinder: breadth-first-search", () => {
                       {
                         type: "playable-entity",
                         id: "regdar",
+                        faction: "hero",
+                        isBlocking: true,
                       },
                     ],
-                    isStartingTile: true,
                   },
                   range: 0,
                 },
@@ -832,9 +848,10 @@ describe("pathfinder: breadth-first-search", () => {
                       {
                         type: "playable-entity",
                         id: "regdar",
+                        faction: "hero",
+                        isBlocking: true,
                       },
                     ],
-                    isStartingTile: true,
                   },
                   range: 0,
                 },
@@ -888,9 +905,10 @@ describe("pathfinder: breadth-first-search", () => {
                       {
                         type: "playable-entity",
                         id: "regdar",
+                        faction: "hero",
+                        isBlocking: true,
                       },
                     ],
-                    isStartingTile: true,
                   },
                   range: 0,
                 },
@@ -944,9 +962,10 @@ describe("pathfinder: breadth-first-search", () => {
                       {
                         type: "playable-entity",
                         id: "regdar",
+                        faction: "hero",
+                        isBlocking: true,
                       },
                     ],
-                    isStartingTile: true,
                   },
                   range: 0,
                 },

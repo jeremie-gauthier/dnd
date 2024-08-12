@@ -1,11 +1,9 @@
 import { LobbyView } from "@dnd/shared";
-import { List } from "src/modules/shared/domain/list";
-import { UniqueId } from "src/modules/shared/domain/unique-id";
 import { Host } from "../host/host.entity";
-import { FAKE_HOST } from "../host/host.fixtures";
+import { getFakeHost } from "../host/host.fixtures";
 import { LobbyStatus } from "../lobby-status/lobby-status.vo";
 import { PlayableCharacter } from "../playable-character/playable-character.entity";
-import { FAKE_HERO } from "../playable-character/playable-character.fixtures";
+import { getFakeHero } from "../playable-character/playable-character.fixtures";
 import { UserStatus } from "../user-status/user-status.vo";
 import { User } from "../user/user.entity";
 
@@ -14,9 +12,9 @@ export const FAKE_CAMPAIGN_ID = "00000000-0000-0000-0000-000000000010";
 export const FAKE_CAMPAIGN_STAGE_ID = "00000000-0000-0000-0000-000000000010";
 
 export const getFakeLobbyData = (): Pick<LobbyView, "config"> & {
-  id: UniqueId;
-  players: List<User>;
-  playableCharacters: List<PlayableCharacter>;
+  id: string;
+  players: Array<User>;
+  playableCharacters: Array<PlayableCharacter>;
   host: Host;
   status: LobbyStatus;
 } => {
@@ -36,29 +34,29 @@ export const getFakeLobbyData = (): Pick<LobbyView, "config"> & {
       },
       nbPlayersMax: 5,
     },
-    playableCharacters: new List([
+    playableCharacters: [
       new PlayableCharacter({
-        ...FAKE_HERO,
-        id: new UniqueId("00000000-0000-0000-0000-000000000011"),
+        ...getFakeHero(),
+        id: "00000000-0000-0000-0000-000000000011",
       }),
       new PlayableCharacter({
-        ...FAKE_HERO,
-        id: new UniqueId("00000000-0000-0000-0000-000000000012"),
+        ...getFakeHero(),
+        id: "00000000-0000-0000-0000-000000000012",
       }),
       new PlayableCharacter({
-        ...FAKE_HERO,
-        id: new UniqueId("00000000-0000-0000-0000-000000000013"),
+        ...getFakeHero(),
+        id: "00000000-0000-0000-0000-000000000013",
       }),
       new PlayableCharacter({
-        ...FAKE_HERO,
-        id: new UniqueId("00000000-0000-0000-0000-000000000014"),
+        ...getFakeHero(),
+        id: "00000000-0000-0000-0000-000000000014",
       }),
-    ]),
-    host: new Host(FAKE_HOST),
-    id: new UniqueId(FAKE_LOBBY_ID),
-    players: new List([
-      new User({ userId: FAKE_HOST.userId, status: new UserStatus(false) }),
-    ]),
-    status: new LobbyStatus({ status: "OPENED" }),
+    ],
+    host: new Host(getFakeHost()),
+    id: FAKE_LOBBY_ID,
+    players: [
+      new User({ userId: getFakeHost().userId, status: new UserStatus(false) }),
+    ],
+    status: new LobbyStatus("OPENED"),
   };
 };

@@ -2,7 +2,6 @@ import type { TogglePlayerReadyStateInput } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import type { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/interfaces/use-case.interface";
-import { UniqueId } from "src/modules/shared/domain/unique-id";
 import {
   LOBBIES_REPOSITORY,
   LobbiesRepository,
@@ -21,13 +20,9 @@ export class TogglePlayerReadyStateUseCase implements UseCase {
   }: TogglePlayerReadyStateInput & {
     userId: User["id"];
   }): Promise<void> {
-    const lobby = (
-      await this.lobbiesRepository.getOneOrThrow({
-        lobbyId: new UniqueId(lobbyId),
-      })
-    ).toDomain();
+    const lobby = await this.lobbiesRepository.getOneOrThrow({ lobbyId });
 
-    lobby.toggleUserStatus({ userId: new UniqueId(userId) });
+    lobby.toggleUserStatus({ userId });
     await this.lobbiesRepository.update({ lobby });
   }
 }

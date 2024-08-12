@@ -1,9 +1,12 @@
-export abstract class ValueObject<Data> {
-  protected readonly _data: Data;
+import { Plainable } from "src/interfaces/plainable.interface";
 
-  constructor(data: Data) {
+export abstract class ValueObject<TData> implements Plainable<TData> {
+  protected readonly _data: TData;
+
+  constructor(data: TData) {
     this._data = data;
   }
 
-  public abstract equals(other: ValueObject<Data>): boolean;
+  public abstract equals(other: ValueObject<TData>): boolean;
+  public abstract toPlain(): TData;
 }

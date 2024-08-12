@@ -1,12 +1,12 @@
+import { Coord } from "./coord.interface";
 import { EnemyKind } from "./enemy-kind.type";
-import { Coord } from "./game.interface";
 
 export type OnDoorOpeningGameEvent = {
-  name: "on_door_opening";
-  doorCoord: Coord;
-  action: "spawn_enemies";
-  enemies: EnemyKind[];
-  startingTiles: Coord[];
+  readonly name: "on_door_opening";
+  readonly action: "spawn_monsters";
+  readonly doorCoord: Coord;
+  readonly monsters: Array<EnemyKind>;
+  readonly startingTiles: Array<Coord>;
 };
 
 export type GameEvent = OnDoorOpeningGameEvent;

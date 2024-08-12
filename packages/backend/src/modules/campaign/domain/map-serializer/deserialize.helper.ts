@@ -93,7 +93,7 @@ export function inferOffMapTileEntities({
     if (reachableTiles.has(tileIndex) || tile.entities.length > 0) continue;
 
     tile.entities.push({
-      type: "non-playable-non-interactive-entity",
+      type: "non-interactive-entity",
       kind: "off-map",
       isVisible: true,
       isBlocking: true,
@@ -196,7 +196,7 @@ function parseTileEntity(entityCompiled?: string): TileEntity {
 
   if (isNonPlayableNonInteractiveTileEntity(kind)) {
     return {
-      type: "non-playable-non-interactive-entity",
+      type: "non-interactive-entity",
       kind,
       isVisible: true,
       isBlocking: true,
@@ -204,12 +204,14 @@ function parseTileEntity(entityCompiled?: string): TileEntity {
     };
   } else if (isNonPlayableInteractiveTileEntity(kind)) {
     return {
-      type: "non-playable-interactive-entity",
+      type: "interactive-entity",
       ...getNonPlayableInteractiveEntityAttributes(kind),
     } as TileNonPlayableInteractiveEntity;
   } else if (isPlayableTileEntity(kind)) {
     return {
       type: "playable-entity",
+      faction: "hero",
+      isBlocking: true,
       ...parsePlayableEntityAttributes(extras),
     };
   } else {

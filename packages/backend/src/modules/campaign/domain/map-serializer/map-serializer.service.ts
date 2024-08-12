@@ -1,8 +1,7 @@
 import type {
   Coord,
-  GameEntity,
+  GameView,
   MapCompiledJson,
-  OnDoorOpeningGameEvent,
   Tile,
   TileEntity,
   TileNonPlayableInteractiveEntity,
@@ -13,6 +12,11 @@ import {
   TrapEntity,
 } from "@dnd/shared/dist/database/game/interactive-entities.type";
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { GameBoardDeserialized } from "src/modules/shared/interfaces/game-board-deserialized.interface";
+import {
+  GameEventDeserialized,
+  OnDoorOpeningGameEvent,
+} from "src/modules/shared/interfaces/game-events-deserialized.interface";
 import { CoordService } from "../coord/coord.service";
 
 @Injectable()
@@ -27,14 +31,15 @@ export class MapSerializerService {
 
   constructor(private readonly coordService: CoordService) {}
 
-  public serialize(map: GameEntity["map"]): string {
+  public serialize(map: GameView["map"]): string {
     void map;
     throw new Error("Not implemented");
   }
 
-  public deserialize(
-    mapCompiled: MapCompiledJson,
-  ): Pick<GameEntity, "map" | "events"> {
+  public deserialize(mapCompiled: MapCompiledJson): {
+    map: GameBoardDeserialized;
+    events: GameEventDeserialized[];
+  } {
     const metadata = {
       width: mapCompiled.width,
       height: mapCompiled.height,
@@ -89,16 +94,14 @@ export class MapSerializerService {
     Extract<
       TileEntity,
       {
-        type:
-          | "non-playable-non-interactive-entity"
-          | "non-playable-interactive-entity";
+        type: "non-interactive-entity" | "interactive-entity";
       }
     >,
     "kind"
   >): TileEntity {
     if (this.isNonPlayableNonInteractiveTileEntity(kind)) {
       return {
-        type: "non-playable-non-interactive-entity",
+        type: "non-interactive-entity",
         kind,
         isVisible: true,
         isBlocking: true,
@@ -106,7 +109,7 @@ export class MapSerializerService {
       };
     } else if (this.isNonPlayableInteractiveTileEntity(kind)) {
       return {
-        type: "non-playable-interactive-entity",
+        type: "interactive-entity",
         ...this.getNonPlayableInteractiveEntityAttributes(kind),
       } as TileNonPlayableInteractiveEntity;
     } else {
@@ -228,8 +231,7 @@ export class MapSerializerService {
     if (
       !tile.entities.some(
         (entity) =>
-          entity.type === "non-playable-interactive-entity" &&
-          entity.kind === "door",
+          entity.type === "interactive-entity" && entity.kind === "door",
       )
     ) {
       throw new InternalServerErrorException(
@@ -238,8 +240,8 @@ export class MapSerializerService {
     }
 
     if (
-      event.action === "spawn_enemies" &&
-      event.startingTiles.length < event.enemies.length
+      event.action === "spawn_monsters" &&
+      event.startingTiles.length < event.monsters.length
     ) {
       throw new InternalServerErrorException(
         "Not enough starting tiles defined",
@@ -247,7 +249,7 @@ export class MapSerializerService {
     }
 
     if (
-      event.action === "spawn_enemies" &&
+      event.action === "spawn_monsters" &&
       event.startingTiles.some((startingTile) => {
         const startingTileIdx = this.coordService.coordToIndex({
           coord: startingTile,
@@ -352,7 +354,7 @@ export class MapSerializerService {
       if (reachableTiles.has(tileIndex) || tile.entities.length > 0) continue;
 
       tile.entities.push({
-        type: "non-playable-non-interactive-entity",
+        type: "non-interactive-entity",
         kind: "off-map",
         isVisible: true,
         isBlocking: true,
