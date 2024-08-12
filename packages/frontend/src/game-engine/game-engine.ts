@@ -88,6 +88,7 @@ export const useGameEngine = ({
     const originCoord = activeHero.coord;
 
     const tilePaths = getAllPathsFromTileWithinRange({
+      ally: activeHero.faction,
       gameBoard: gameEntity.map,
       originCoord,
       maxRange: activeHero.characteristic.movementPoints,

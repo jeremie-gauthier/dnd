@@ -218,6 +218,7 @@ describe("pathfinder: breadth-first-search", () => {
       const maxRange = 4;
 
       const result = getAllPathsFromTileWithinRange({
+        ally: "monster",
         gameBoard: map,
         originCoord,
         maxRange,
