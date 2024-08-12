@@ -1,3 +1,4 @@
+import { ItemFactory } from "src/modules/game/application/factories/item.factory";
 import { Board } from "src/modules/game/domain/board/board.entity";
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
 import { GameEvents } from "src/modules/game/domain/game-events/game-events.aggregate";
@@ -16,7 +17,6 @@ import { Mapper } from "src/modules/shared/infra/mapper";
 import { GameEvent } from "../model/game-event.type";
 import { GamePersistence } from "../model/game.model";
 import { GameEventFactory } from "./game-event.factory";
-import { ItemFactory } from "./item.factory";
 import { PlayableEntityFactory } from "./playable-entity.factory";
 import { TileEntityFactory } from "./tile-entity.factory";
 

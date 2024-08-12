@@ -1,3 +1,4 @@
+import { ItemFactory } from "src/modules/game/application/factories/item.factory";
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
 import { BehaviourAttackHero } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-attack/behaviour-attack-hero";
@@ -12,7 +13,6 @@ import { Monster } from "src/modules/game/domain/playable-entities/playable-enti
 import { Playable } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.abstract";
 import { PlayerStatus } from "src/modules/game/domain/playable-entities/playable-entity/player-status/player-status.vo";
 import { PlayableEntity } from "../model/playable-entity/playable.type";
-import { ItemFactory } from "./item.factory";
 
 export class PlayableEntityFactory {
   private constructor() {}
