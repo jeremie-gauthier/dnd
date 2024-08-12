@@ -40,7 +40,6 @@ export class LeaveLobbyUseCase implements UseCase {
       return;
     }
 
-    // const plainLobby = lobby.toPlain();
     const userThatLeave = lobby.findUser({ userId });
     if (!userThatLeave) {
       return;
