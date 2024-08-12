@@ -6,7 +6,6 @@ import {
 import { GameRepository } from "src/modules/game/application/repositories/game-repository.interface";
 import { Game } from "src/modules/game/domain/game/game.aggregate";
 import { RedisService } from "src/redis/redis.service";
-import { GamesRepository } from "../games.repository";
 import { GameMapper } from "./mapper/game.mapper";
 import { GamePersistence } from "./model/game.model";
 
@@ -25,10 +24,10 @@ export class RedisGameRepository
   }
 
   public async onApplicationBootstrap() {
-    const games = await this.client.json.get(GamesRepository.KEY);
+    const games = await this.client.json.get(RedisGameRepository.KEY);
     if (games === null) {
       await this.client.json.set(
-        GamesRepository.KEY,
+        RedisGameRepository.KEY,
         RedisService.JSON_ROOT,
         {},
       );
@@ -37,7 +36,7 @@ export class RedisGameRepository
 
   public async create({ game }: { game: Game }): Promise<Game> {
     await this.client.json.set(
-      GamesRepository.KEY,
+      RedisGameRepository.KEY,
       game.id,
       this.mapper.toPersistence(game),
     );
@@ -47,7 +46,7 @@ export class RedisGameRepository
   public async getOne({
     gameId,
   }: { gameId: Game["id"] }): Promise<Game | null> {
-    const gameRaw = (await this.client.json.get(GamesRepository.KEY, {
+    const gameRaw = (await this.client.json.get(RedisGameRepository.KEY, {
       path: gameId,
     })) as GamePersistence | null;
     return gameRaw ? this.mapper.toDomain(gameRaw) : null;
@@ -65,13 +64,13 @@ export class RedisGameRepository
 
   public async update({ game }: { game: Game }): Promise<void> {
     await this.client.json.set(
-      GamesRepository.KEY,
+      RedisGameRepository.KEY,
       game.id,
       this.mapper.toPersistence(game),
     );
   }
 
   public async del({ gameId }: { gameId: Game["id"] }): Promise<void> {
-    await this.client.json.del(GamesRepository.KEY, gameId);
+    await this.client.json.del(RedisGameRepository.KEY, gameId);
   }
 }
