@@ -216,6 +216,7 @@ export class GameInitializationUseCase implements UseCase {
             movementPoints: hero.characteristic.baseMovementPoints,
             actionPoints: hero.characteristic.baseActionPoints,
           },
+          actionsDoneThisTurn: [],
           inventory: new Inventory({
             playableId: hero.id,
             storageCapacity: hero.inventory.storageCapacity,

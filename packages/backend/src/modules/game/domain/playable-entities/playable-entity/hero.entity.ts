@@ -2,6 +2,7 @@ import { HeroClassType } from "@dnd/shared";
 import { z } from "zod";
 import { Coord } from "../../coord/coord.vo";
 import { Inventory } from "../../inventory/inventory.entity";
+import { ActionHistory } from "./actions-history.interface";
 import { BehaviourAttack } from "./behaviour-attack/behaviour-attack.interface";
 import { BehaviourDefender } from "./behaviour-defender/behaviour-defender.interface";
 import { BehaviourMove } from "./behaviour-move/behaviour-move.interface";
@@ -39,6 +40,7 @@ type Data = {
   };
 
   inventory: Inventory;
+  actionsDoneThisTurn: Array<ActionHistory>;
 };
 
 export class Hero extends Playable<Data> {
@@ -65,6 +67,11 @@ export class Hero extends Playable<Data> {
       actionPoints: z.number().min(0),
     }),
     inventory: z.instanceof(Inventory),
+    actionsDoneThisTurn: z.array(
+      z.object({
+        name: z.enum(["attack", "move", "open_door"]),
+      }),
+    ),
   });
 
   public behaviourMove: BehaviourMove;
@@ -95,9 +102,11 @@ export class Hero extends Playable<Data> {
     return this;
   }
 
-  public act(): void {
+  public act({ action }: { action: ActionHistory["name"] }): void {
     this.mustBeAlive();
     this.mustHaveActionPoints();
+
+    this._data.actionsDoneThisTurn.push({ name: action });
     this._data.characteristic.actionPoints -= 1;
   }
 
@@ -125,6 +134,7 @@ export class Hero extends Playable<Data> {
         actionPoints: this._data.characteristic.actionPoints,
       },
       inventory: this._data.inventory.toPlain(),
+      actionsDoneThisTurn: this._data.actionsDoneThisTurn,
     };
   }
 }
