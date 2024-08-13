@@ -36,9 +36,10 @@ export const AttackItem = ({ item, attack }: Props) => {
 
       const playableEntities = Object.values(game.playableEntities);
       const targetPlayableEntityId = playableEntities.find(
-        ({ coord }) =>
+        ({ coord, characteristic }) =>
           coord.row === isometricCoord.row &&
-          coord.column === isometricCoord.column,
+          coord.column === isometricCoord.column &&
+          characteristic.healthPoints > 0,
       )?.id;
 
       if (!targetPlayableEntityId) return;
