@@ -108,7 +108,7 @@ export class Game extends AggregateRoot<Data> {
   }: { userId: string; coordOfTileWithDoor: Coord }) {
     const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
     playingEntity.mustBePlayedBy({ userId });
-    playingEntity.act();
+    playingEntity.act({ action: "open_door" });
 
     const tile = this._data.board.getTileOrThrow({
       coord: coordOfTileWithDoor,
@@ -162,7 +162,7 @@ export class Game extends AggregateRoot<Data> {
   }: Pick<PlayableEntityMoveInput, "pathToTile"> & { userId: string }) {
     const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
     playingEntity.mustBePlayedBy({ userId });
-    playingEntity.act();
+    playingEntity.act({ action: "move" });
 
     const path = unfoldTilePath(pathToTile)
       .slice(1)
@@ -196,7 +196,7 @@ export class Game extends AggregateRoot<Data> {
   }) {
     const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
     playingEntity.mustBePlayedBy({ userId });
-    playingEntity.act();
+    playingEntity.act({ action: "attack" });
 
     const targetPlayableEntity = this._data.playableEntities.getOneOrThrow({
       playableEntityId: targetPlayableEntityId,

@@ -111,7 +111,6 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
       currentPhase: hero.status.toLowerCase() as Lowercase<
         ReturnType<PlayerStatus["toPlain"]>
       >,
-      actionsDoneThisTurn: [],
     };
   }
 
@@ -122,7 +121,6 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
       currentPhase: monster.status.toLowerCase() as Lowercase<
         ReturnType<PlayerStatus["toPlain"]>
       >,
-      actionsDoneThisTurn: [],
     };
   }
 }

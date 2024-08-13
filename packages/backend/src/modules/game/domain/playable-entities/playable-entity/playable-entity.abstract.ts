@@ -5,6 +5,7 @@ import { Inventory } from "../../inventory/inventory.entity";
 import { Spell } from "../../item/spell/spell.entity";
 import { Weapon } from "../../item/weapon/weapon.entity";
 import { Tile } from "../../tile/tile.entity";
+import { ActionHistory } from "./actions-history.interface";
 import { BehaviourAttack } from "./behaviour-attack/behaviour-attack.interface";
 import { BehaviourDefender } from "./behaviour-defender/behaviour-defender.interface";
 import { BehaviourMove } from "./behaviour-move/behaviour-move.interface";
@@ -43,6 +44,7 @@ type Data = {
   };
 
   inventory: Inventory;
+  actionsDoneThisTurn: Array<ActionHistory>;
 };
 
 export abstract class Playable<
@@ -59,7 +61,7 @@ export abstract class Playable<
     behaviourDefender: BehaviourDefender,
   ): void;
 
-  public abstract act(): void;
+  public abstract act(_: { action: ActionHistory["name"] }): void;
   public abstract toPlain(): PlainData<ChildData>;
 
   constructor(rawData: ChildData) {
@@ -157,6 +159,7 @@ export abstract class Playable<
     this._data.status = this._data.status.advanceTo("ACTION");
     this._data.characteristic.actionPoints =
       this._data.characteristic.baseActionPoints;
+    this._data.actionsDoneThisTurn = [];
   }
 
   public setCoord(coord: Coord) {

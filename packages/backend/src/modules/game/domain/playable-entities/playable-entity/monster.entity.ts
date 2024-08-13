@@ -2,11 +2,13 @@ import { EnemyKind } from "@dnd/shared";
 import { z } from "zod";
 import { Coord } from "../../coord/coord.vo";
 import { Inventory } from "../../inventory/inventory.entity";
+import { ActionHistory } from "./actions-history.interface";
 import { BehaviourAttack } from "./behaviour-attack/behaviour-attack.interface";
 import { BehaviourDefender } from "./behaviour-defender/behaviour-defender.interface";
 import { BehaviourMove } from "./behaviour-move/behaviour-move.interface";
 import { Initiative } from "./initiative/initiative.vo";
 import { Playable } from "./playable-entity.abstract";
+import { PlayableEntityError } from "./playable-entity.error";
 import { PlayerStatus } from "./player-status/player-status.vo";
 
 type Data = {
@@ -39,6 +41,7 @@ type Data = {
   };
 
   inventory: Inventory;
+  actionsDoneThisTurn: Array<ActionHistory>;
 };
 
 export class Monster extends Playable<Data> {
@@ -65,6 +68,11 @@ export class Monster extends Playable<Data> {
       actionPoints: z.number().min(0),
     }),
     inventory: z.instanceof(Inventory),
+    actionsDoneThisTurn: z.array(
+      z.object({
+        name: z.enum(["attack", "move"]),
+      }),
+    ),
   });
 
   public behaviourMove: BehaviourMove;
@@ -91,10 +99,36 @@ export class Monster extends Playable<Data> {
     return this;
   }
 
-  public act(): void {
+  private mustNotHaveAttackedThisTurn() {
+    if (
+      this._data.actionsDoneThisTurn.some((action) => action.name === "attack")
+    ) {
+      throw new PlayableEntityError({
+        name: "MONSTER_CANNOT_ATTACK_MORE_THAN_ONCE_PER_TURN",
+        message: `${this._data.name} has already attacked this turn`,
+      });
+    }
+  }
+
+  private mustBeAValidAction({ action }: { action: ActionHistory["name"] }) {
+    if (!["attack", "move"].includes(action)) {
+      throw new PlayableEntityError({
+        name: "FORBIDDEN_ACTION",
+        message: `Monster is not allowed to perform '${action}' action`,
+      });
+    }
+  }
+
+  public act({ action }: { action: ActionHistory["name"] }): void {
     this.mustBeAlive();
     this.mustHaveActionPoints();
-    // TODO: ne peut pas attaquer 2 fois durant le meme tour
+    this.mustBeAValidAction({ action });
+
+    if (action === "attack") {
+      this.mustNotHaveAttackedThisTurn();
+    }
+
+    this._data.actionsDoneThisTurn.push({ name: action });
     this._data.characteristic.actionPoints -= 1;
   }
 
@@ -122,6 +156,7 @@ export class Monster extends Playable<Data> {
         actionPoints: this._data.characteristic.actionPoints,
       },
       inventory: this._data.inventory.toPlain(),
+      actionsDoneThisTurn: this._data.actionsDoneThisTurn,
     };
   }
 }

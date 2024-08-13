@@ -91,6 +91,7 @@ export class MonsterTemplate extends Entity<Data> {
       kind: this._data.kind,
       name: this._data.kind,
       status: new PlayerStatus("IDLE"),
+      actionsDoneThisTurn: [],
     });
   }
 }
