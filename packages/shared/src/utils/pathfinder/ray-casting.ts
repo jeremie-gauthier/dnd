@@ -209,7 +209,7 @@ export function canAttackTarget({
     range === "melee" &&
     getNeighbourCoords({ coord: attackerCoord }).every(
       (coord) =>
-        coord.row !== targetCoord.row && coord.column !== targetCoord.column,
+        !(coord.row === targetCoord.row && coord.column === targetCoord.column),
     )
   ) {
     return false;
@@ -217,7 +217,7 @@ export function canAttackTarget({
 
   if (
     range === "long" &&
-    getNeighbourCoords({ coord: attackerCoord }).some(
+    [attackerCoord, ...getNeighbourCoords({ coord: attackerCoord })].some(
       (coord) =>
         coord.row === targetCoord.row && coord.column === targetCoord.column,
     )
