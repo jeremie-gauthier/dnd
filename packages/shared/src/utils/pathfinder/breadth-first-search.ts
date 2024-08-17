@@ -19,7 +19,7 @@ export interface ChildTilePath {
 export type TilePath = OriginTilePath | ChildTilePath;
 
 type Params = {
-  ally: PlayableEntity["faction"];
+  ally: PlayableEntity["faction"] | "ignoring";
   gameBoard: GameBoard;
   originCoord: Coord;
   maxRange: NonNegativeNumber<number>;

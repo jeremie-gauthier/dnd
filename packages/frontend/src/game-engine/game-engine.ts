@@ -87,8 +87,9 @@ export const useGameEngine = ({
     if (!activeHero) return;
     const originCoord = activeHero.coord;
 
+    const isLiddaMoving = activeHero.name.toLowerCase() === "lidda";
     const tilePaths = getAllPathsFromTileWithinRange({
-      ally: activeHero.faction,
+      ally: isLiddaMoving ? "ignoring" : activeHero.faction,
       gameBoard: gameEntity.map,
       originCoord,
       maxRange: activeHero.characteristic.movementPoints,

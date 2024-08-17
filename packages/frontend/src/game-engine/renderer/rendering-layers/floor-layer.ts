@@ -67,7 +67,6 @@ export const useFloorLayer = ({ canvasRef }: Params) => {
 const shouldSkipTileRendering = ({ tile }: { tile: Tile }): boolean => {
   return tile.entities.some(
     (entity) =>
-      entity.type === "non-playable-non-interactive-entity" &&
-      entity.kind === "off-map",
+      entity.type === "non-interactive-entity" && entity.kind === "off-map",
   );
 };
