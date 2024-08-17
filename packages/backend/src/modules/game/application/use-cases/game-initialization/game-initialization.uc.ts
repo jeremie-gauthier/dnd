@@ -17,10 +17,6 @@ import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
 import { MonsterTemplate } from "src/modules/game/domain/monster-templates/monster-template/monster-template.vo";
 import { MonsterTemplates } from "src/modules/game/domain/monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "src/modules/game/domain/playable-entities/playable-entities.aggregate";
-import { BehaviourAttackHero } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-attack/behaviour-attack-hero";
-import { BehaviourDefenderHero } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-defender/behaviour-defender-hero";
-import { BehaviourMoveHero } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-move/behaviour-move-hero";
-import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/hero.entity";
 import { Initiative } from "src/modules/game/domain/playable-entities/playable-entity/initiative/initiative.vo";
 import { PlayerStatus } from "src/modules/game/domain/playable-entities/playable-entity/player-status/player-status.vo";
 import { TileEntityFactory } from "src/modules/game/domain/tile/tile-entity/tile-entity.factory";
@@ -28,6 +24,7 @@ import { Tile } from "src/modules/game/domain/tile/tile.entity";
 import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { GameInitializationDonePayload } from "src/modules/shared/events/game/game-initialization-done.payload";
+import { HeroFactory } from "../../factories/hero.factory";
 import { ItemFactory } from "../../factories/item.factory";
 import { GameItem } from "../../factories/item.interface";
 import {
@@ -194,8 +191,9 @@ export class GameInitializationUseCase implements UseCase {
 
     const heroes = campaignStageProgression.campaignProgression.heroes;
     return new PlayableEntities({
-      values: heroes.map((hero) =>
-        new Hero({
+      values: heroes.map((hero) => {
+        const HeroClass = HeroFactory.getHeroClass(hero.name);
+        return new HeroClass({
           id: hero.id,
           status: new PlayerStatus("IDLE"),
           playedByUserId: heroPlayersMap[hero.id]!,
@@ -231,11 +229,8 @@ export class GameInitializationUseCase implements UseCase {
                 ItemFactory.create(stuff.item as unknown as GameItem),
               ),
           }),
-        })
-          .buildBehaviourMove(new BehaviourMoveHero())
-          .buildBehaviourDefender(new BehaviourDefenderHero())
-          .buildBehaviourAttack(new BehaviourAttackHero()),
-      ),
+        });
+      }),
     });
   }
 

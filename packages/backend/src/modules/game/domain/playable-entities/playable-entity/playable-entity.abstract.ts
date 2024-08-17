@@ -6,10 +6,7 @@ import { Spell } from "../../item/spell/spell.entity";
 import { Weapon } from "../../item/weapon/weapon.entity";
 import { Tile } from "../../tile/tile.entity";
 import { ActionHistory } from "./actions-history.interface";
-import { BehaviourAttack } from "./behaviour-attack/behaviour-attack.interface";
-import { BehaviourDefender } from "./behaviour-defender/behaviour-defender.interface";
-import { BehaviourMove } from "./behaviour-move/behaviour-move.interface";
-import { Hero } from "./hero.entity";
+import { Hero } from "./heroes/hero.abstract";
 import { Initiative } from "./initiative/initiative.vo";
 import { Monster } from "./monster.entity";
 import { PlayableEntityError } from "./playable-entity.error";
@@ -50,17 +47,22 @@ type Data = {
 export abstract class Playable<
   ChildData extends Data = Data,
 > extends Entity<ChildData> {
-  public abstract behaviourMove: BehaviourMove;
-  public abstract buildBehaviourMove(behaviourMove: BehaviourMove): void;
-
-  public abstract behaviourAttack: BehaviourAttack;
-  public abstract buildBehaviourAttack(behaviourAttack: BehaviourAttack): void;
-
-  public abstract behaviourDefender: BehaviourDefender;
-  public abstract buildBehaviourDefender(
-    behaviourDefender: BehaviourDefender,
-  ): void;
-
+  public abstract getMovePath(_: { path: Array<Tile> }): {
+    validatedPath: Tile[];
+    movementPointsUsed: number;
+    hasWalkedOnATrap: boolean;
+  };
+  public abstract getWeaponAttackResult(_: {
+    weapon: Weapon;
+    attackId: Attack["id"];
+  }): ReturnType<Attack["roll"]>;
+  public abstract getSpellAttackResult(_: {
+    spell: Spell;
+    attackId: Attack["id"];
+  }): ReturnType<Attack["roll"]>;
+  public abstract getDamagesTakenResult(_: { rawDamages: number }): {
+    damageTaken: number;
+  };
   public abstract act(_: { action: ActionHistory["name"] }): void;
   public abstract toPlain(): PlainData<ChildData>;
 
@@ -125,10 +127,7 @@ export abstract class Playable<
   public takeDamage({ amount }: { amount: number }): number {
     this.mustBeAlive();
 
-    const { damageTaken } = this.behaviourDefender.getDamagesInflictedResult({
-      rawDamages: amount,
-      characteristic: this._data.characteristic,
-    });
+    const { damageTaken } = this.getDamagesTakenResult({ rawDamages: amount });
 
     this._data.characteristic.healthPoints -= damageTaken;
     if (this.healthPoints <= 0) {
@@ -196,14 +195,6 @@ export abstract class Playable<
     }
   }
 
-  public getMovePath({ path }: { path: Array<Tile> }) {
-    return this.behaviourMove.getMovePath({
-      availableMovementPoints: this._data.characteristic.movementPoints,
-      path,
-      startingCoord: this.coord,
-    });
-  }
-
   public getAttackResult({
     attackId,
     attackItem,
@@ -212,38 +203,29 @@ export abstract class Playable<
     attackItem: Weapon | Spell;
   }) {
     if (attackItem.isSpell()) {
-      return this.getSpellAttackResult({ attackId, spell: attackItem });
+      const manaCost = attackItem.getManaCost({ playableEntity: this });
+      this.mustHaveEnoughManaPoints({ required: manaCost });
+      return {
+        type: attackItem.type,
+        attackResult: this.getSpellAttackResult({
+          attackId,
+          spell: attackItem,
+        }),
+        manaCost,
+      };
     } else if (attackItem.isWeapon()) {
-      return this.getWeaponAttackResult({ attackId, weapon: attackItem });
+      return {
+        type: attackItem.type,
+        attackResult: this.getWeaponAttackResult({
+          attackId,
+          weapon: attackItem,
+        }),
+      };
     } else {
       throw new PlayableEntityError({
         name: "CANNOT_ATTACK_WITH_A_NON_ATTACK_ITEM",
         message: `Cannot attack with such item (${attackItem})`,
       });
     }
-  }
-
-  private getSpellAttackResult({
-    attackId,
-    spell,
-  }: { attackId: Attack["id"]; spell: Spell }) {
-    const manaCost = spell.getManaCost({ playableEntity: this });
-    this.mustHaveEnoughManaPoints({ required: manaCost });
-    const attackResult = this.behaviourAttack.getSpellAttackResult({
-      spell,
-      attackId,
-    });
-    return { type: spell.type, attackResult, manaCost };
-  }
-
-  private getWeaponAttackResult({
-    attackId,
-    weapon,
-  }: { attackId: Attack["id"]; weapon: Weapon }) {
-    const attackResult = this.behaviourAttack.getWeaponAttackResult({
-      weapon,
-      attackId,
-    });
-    return { type: weapon.type, attackResult };
   }
 }

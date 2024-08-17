@@ -1,14 +1,15 @@
 import { HeroClassType } from "@dnd/shared";
 import { z } from "zod";
-import { Coord } from "../../coord/coord.vo";
-import { Inventory } from "../../inventory/inventory.entity";
-import { ActionHistory } from "./actions-history.interface";
-import { BehaviourAttack } from "./behaviour-attack/behaviour-attack.interface";
-import { BehaviourDefender } from "./behaviour-defender/behaviour-defender.interface";
-import { BehaviourMove } from "./behaviour-move/behaviour-move.interface";
-import { Initiative } from "./initiative/initiative.vo";
-import { Playable } from "./playable-entity.abstract";
-import { PlayerStatus } from "./player-status/player-status.vo";
+import { Attack } from "../../../attack/attack.entity";
+import { Coord } from "../../../coord/coord.vo";
+import { Inventory } from "../../../inventory/inventory.entity";
+import { Spell } from "../../../item/spell/spell.entity";
+import { Weapon } from "../../../item/weapon/weapon.entity";
+import { Tile } from "../../../tile/tile.entity";
+import { ActionHistory } from "../actions-history.interface";
+import { Initiative } from "../initiative/initiative.vo";
+import { Playable } from "../playable-entity.abstract";
+import { PlayerStatus } from "../player-status/player-status.vo";
 
 type Data = {
   readonly id: string;
@@ -43,7 +44,7 @@ type Data = {
   actionsDoneThisTurn: Array<ActionHistory>;
 };
 
-export class Hero extends Playable<Data> {
+export abstract class Hero extends Playable<Data> {
   private static schema = z.object({
     id: z.string().uuid(),
     name: z.string(),
@@ -74,10 +75,6 @@ export class Hero extends Playable<Data> {
     ),
   });
 
-  public behaviourMove: BehaviourMove;
-  public behaviourAttack: BehaviourAttack;
-  public behaviourDefender: BehaviourDefender;
-
   constructor(rawData: Omit<Data, "faction">) {
     const data = Hero.schema.parse(rawData);
     super(data);
@@ -87,19 +84,70 @@ export class Hero extends Playable<Data> {
     return this._data.class;
   }
 
-  public buildBehaviourMove(behaviourMove: BehaviourMove) {
-    this.behaviourMove = behaviourMove;
-    return this;
+  public getMovePath({ path }: { path: Array<Tile> }) {
+    const validatedPath: Tile[] = [];
+    let hasWalkedOnATrap = false;
+
+    let previousCoord = this.coord;
+    let movementPointsUsed = 0;
+
+    for (const tile of path) {
+      if (movementPointsUsed >= this._data.characteristic.movementPoints) {
+        break;
+      }
+      if (!previousCoord.isAdjacentTo(tile.coord)) {
+        break;
+      }
+      if (
+        tile.entities
+          .filter(
+            (tileEntity) => !(tileEntity.isPlayable() && tileEntity.isHero()),
+          )
+          .some((tileEntity) => tileEntity.isBlocking)
+      ) {
+        break;
+      }
+
+      previousCoord = tile.coord;
+      movementPointsUsed += 1;
+      validatedPath.push(tile);
+
+      const trap = tile.entities.find(
+        (tileEntity) => tileEntity.isInteractive() && tileEntity.isTrap(),
+      );
+      if (trap) {
+        hasWalkedOnATrap = true;
+        break;
+      }
+    }
+
+    return { validatedPath, movementPointsUsed, hasWalkedOnATrap };
   }
 
-  public buildBehaviourAttack(behaviourAttack: BehaviourAttack) {
-    this.behaviourAttack = behaviourAttack;
-    return this;
+  public getSpellAttackResult({
+    attackId,
+    spell,
+  }: { spell: Spell; attackId: Attack["id"] }) {
+    const result = spell.use({ attackId });
+    return result;
   }
 
-  public buildBehaviourDefender(behaviourDefender: BehaviourDefender) {
-    this.behaviourDefender = behaviourDefender;
-    return this;
+  public getWeaponAttackResult({
+    attackId,
+    weapon,
+  }: { weapon: Weapon; attackId: Attack["id"] }) {
+    const result = weapon.use({ attackId });
+    return result;
+  }
+
+  public getDamagesTakenResult({ rawDamages }: { rawDamages: number }): {
+    damageTaken: number;
+  } {
+    const damageTaken = Math.max(
+      0,
+      rawDamages - this._data.characteristic.armorClass,
+    );
+    return { damageTaken };
   }
 
   public act({ action }: { action: ActionHistory["name"] }): void {

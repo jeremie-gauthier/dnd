@@ -1,4 +1,4 @@
-import { GameLog } from "@dnd/shared";
+import { GameLog, sum } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { LoggableAction } from "./loggable-action.interface";
@@ -55,6 +55,10 @@ export class LogService {
               color: "#fff",
               result: diceResult.result,
             })),
+            bonusScore:
+              payload.damageDone -
+              sum(...payload.dicesResults.map(({ result }) => result)),
+            diceScore: sum(...payload.dicesResults.map(({ result }) => result)),
             attackerEntityName: payload.attacker.name,
             targetEntityName: payload.target.name,
           },
