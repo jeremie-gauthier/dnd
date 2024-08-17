@@ -1,13 +1,7 @@
+import { HeroFactory } from "src/modules/game/application/factories/hero.factory";
 import { ItemFactory } from "src/modules/game/application/factories/item.factory";
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
-import { BehaviourAttackHero } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-attack/behaviour-attack-hero";
-import { BehaviourAttackMonster } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-attack/behaviour-attack-monster";
-import { BehaviourDefenderHero } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-defender/behaviour-defender-hero";
-import { BehaviourDefenderMonster } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-defender/behaviour-defender-monster";
-import { BehaviourMoveHero } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-move/behaviour-move-hero";
-import { BehaviourMoveMonster } from "src/modules/game/domain/playable-entities/playable-entity/behaviour-move/behaviour-move-monster";
-import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/hero.entity";
 import { Initiative } from "src/modules/game/domain/playable-entities/playable-entity/initiative/initiative.vo";
 import { Monster } from "src/modules/game/domain/playable-entities/playable-entity/monster.entity";
 import { Playable } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.abstract";
@@ -19,8 +13,9 @@ export class PlayableEntityFactory {
 
   public static create(data: PlayableEntity): Playable {
     switch (data.faction) {
-      case "hero":
-        return new Hero({
+      case "hero": {
+        const HeroClass = HeroFactory.getHeroClass(data.name);
+        return new HeroClass({
           ...data,
           coord: new Coord(data.coord),
           initiative: new Initiative(data.initiative),
@@ -37,10 +32,8 @@ export class PlayableEntityFactory {
             ),
             gear: data.inventory.gear.map((item) => ItemFactory.create(item)),
           }),
-        })
-          .buildBehaviourMove(new BehaviourMoveHero())
-          .buildBehaviourDefender(new BehaviourDefenderHero())
-          .buildBehaviourAttack(new BehaviourAttackHero());
+        });
+      }
       case "monster":
         return new Monster({
           ...data,
@@ -59,10 +52,7 @@ export class PlayableEntityFactory {
             ),
             gear: data.inventory.gear.map((item) => ItemFactory.create(item)),
           }),
-        })
-          .buildBehaviourMove(new BehaviourMoveMonster())
-          .buildBehaviourDefender(new BehaviourDefenderMonster())
-          .buildBehaviourAttack(new BehaviourAttackMonster());
+        });
     }
   }
 }

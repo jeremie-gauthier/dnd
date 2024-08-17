@@ -4,13 +4,13 @@ import { GameBoardTile } from "./pathfinder.interface";
 export function canMoveToRequestedPosition({
   ally,
   tile,
-}: { ally: PlayableEntity["faction"]; tile: GameBoardTile }) {
+}: { ally: PlayableEntity["faction"] | "ignoring"; tile: GameBoardTile }) {
   return tile.entities.every(
     (entity) =>
       !entity.isBlocking ||
       (entity.isBlocking &&
         entity.type === "playable-entity" &&
-        entity.faction === ally),
+        (entity.faction === ally || ally === "ignoring")),
   );
 }
 

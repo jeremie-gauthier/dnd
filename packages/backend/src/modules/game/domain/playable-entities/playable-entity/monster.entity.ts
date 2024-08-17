@@ -1,11 +1,12 @@
 import { EnemyKind } from "@dnd/shared";
 import { z } from "zod";
+import { Attack } from "../../attack/attack.entity";
 import { Coord } from "../../coord/coord.vo";
 import { Inventory } from "../../inventory/inventory.entity";
+import { Spell } from "../../item/spell/spell.entity";
+import { Weapon } from "../../item/weapon/weapon.entity";
+import { Tile } from "../../tile/tile.entity";
 import { ActionHistory } from "./actions-history.interface";
-import { BehaviourAttack } from "./behaviour-attack/behaviour-attack.interface";
-import { BehaviourDefender } from "./behaviour-defender/behaviour-defender.interface";
-import { BehaviourMove } from "./behaviour-move/behaviour-move.interface";
 import { Initiative } from "./initiative/initiative.vo";
 import { Playable } from "./playable-entity.abstract";
 import { PlayableEntityError } from "./playable-entity.error";
@@ -75,28 +76,67 @@ export class Monster extends Playable<Data> {
     ),
   });
 
-  public behaviourMove: BehaviourMove;
-  public behaviourAttack: BehaviourAttack;
-  public behaviourDefender: BehaviourDefender;
-
   constructor(rawData: Omit<Data, "faction">) {
     const data = Monster.schema.parse(rawData);
     super(data);
   }
 
-  public buildBehaviourMove(behaviourMove: BehaviourMove) {
-    this.behaviourMove = behaviourMove;
-    return this;
+  public getMovePath({ path }: { path: Array<Tile> }) {
+    const validatedPath: Tile[] = [];
+
+    let previousCoord = this._data.coord;
+    let movementPointsUsed = 0;
+
+    for (const tile of path) {
+      if (movementPointsUsed >= this._data.characteristic.movementPoints) {
+        break;
+      }
+      if (!previousCoord.isAdjacentTo(tile.coord)) {
+        break;
+      }
+      if (
+        tile.entities
+          .filter(
+            (tileEntity) =>
+              !(tileEntity.isPlayable() && tileEntity.isMonster()),
+          )
+          .some((tileEntity) => tileEntity.isBlocking)
+      ) {
+        break;
+      }
+
+      previousCoord = tile.coord;
+      movementPointsUsed += 1;
+      validatedPath.push(tile);
+    }
+
+    return { validatedPath, movementPointsUsed, hasWalkedOnATrap: false };
   }
 
-  public buildBehaviourAttack(behaviourAttack: BehaviourAttack) {
-    this.behaviourAttack = behaviourAttack;
-    return this;
+  public getSpellAttackResult({
+    attackId,
+    spell,
+  }: { spell: Spell; attackId: Attack["id"] }) {
+    const result = spell.use({ attackId });
+    return result;
   }
 
-  public buildBehaviourDefender(behaviourDefender: BehaviourDefender) {
-    this.behaviourDefender = behaviourDefender;
-    return this;
+  public getWeaponAttackResult({
+    attackId,
+    weapon,
+  }: { weapon: Weapon; attackId: Attack["id"] }) {
+    const result = weapon.use({ attackId });
+    return result;
+  }
+
+  public getDamagesTakenResult({ rawDamages }: { rawDamages: number }): {
+    damageTaken: number;
+  } {
+    const damageTaken = Math.max(
+      0,
+      rawDamages - this._data.characteristic.armorClass,
+    );
+    return { damageTaken };
   }
 
   private mustNotHaveAttackedThisTurn() {

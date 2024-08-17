@@ -9,7 +9,7 @@ import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
 import { MonsterTemplate } from "src/modules/game/domain/monster-templates/monster-template/monster-template.vo";
 import { MonsterTemplates } from "src/modules/game/domain/monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "src/modules/game/domain/playable-entities/playable-entities.aggregate";
-import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/hero.entity";
+import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/heroes/hero.abstract";
 import { Monster } from "src/modules/game/domain/playable-entities/playable-entity/monster.entity";
 import { PlayerStatus } from "src/modules/game/domain/playable-entities/playable-entity/player-status/player-status.vo";
 import { Tile } from "src/modules/game/domain/tile/tile.entity";
