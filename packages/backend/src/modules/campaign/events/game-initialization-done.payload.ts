@@ -4,6 +4,7 @@ import { EventPayload } from "src/interfaces/event-payload.interface";
 import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
 import { GameBoardDeserialized } from "src/modules/shared/interfaces/game-board-deserialized.interface";
 import { GameEventDeserialized } from "src/modules/shared/interfaces/game-events-deserialized.interface";
+import { GameWinConditionsDeserialized } from "src/modules/shared/interfaces/game-win-conditions-deserialized.interface";
 import { CampaignEvent } from "./campaign-event.enum";
 
 export class GameInitializationDonePayload
@@ -15,6 +16,7 @@ export class GameInitializationDonePayload
   public readonly events: Array<GameEventDeserialized>;
   public readonly lobby: ReturnType<Lobby["toPlain"]>;
   public readonly map: GameBoardDeserialized;
+  public readonly winConditions: GameWinConditionsDeserialized;
 
   constructor({
     campaignStageProgression,
@@ -22,11 +24,13 @@ export class GameInitializationDonePayload
     events,
     lobby,
     map,
+    winConditions,
   }: Omit<GameInitializationDonePayload, "name">) {
     this.campaignStageProgression = campaignStageProgression;
     this.enemyTemplates = enemyTemplates;
     this.lobby = lobby;
     this.events = events;
     this.map = map;
+    this.winConditions = winConditions;
   }
 }

@@ -7,7 +7,7 @@ import { Trap } from "./trap.entity";
 
 type Data = {
   readonly type: "interactive-entity";
-  readonly kind: "door" | "trap";
+  readonly kind: "chest" | "door" | "trap";
   isBlocking: boolean;
   isVisible: boolean;
   canInteract: boolean;

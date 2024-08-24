@@ -1,6 +1,7 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Game } from "../../components/game/Game";
+import { GameEnded } from "../../components/game/GameEnded";
 import { ActionsLog } from "../../components/game/action-log/ActionsLog";
 import { GameContextProvider } from "../../components/game/context/GameContext/GameContextProvider";
 import { useGame } from "../../hooks/api/game/use-game";
@@ -17,6 +18,7 @@ export function GameRouteComponent() {
     game,
     isLoading: isGameLoading,
     phase,
+    gameConditionsStatus,
   } = useGame({ gameId, queryClient, socket });
   useServerLobbyError(socket);
 
@@ -27,10 +29,14 @@ export function GameRouteComponent() {
 
   return (
     <GameContextProvider game={game} phase={phase} socket={socket}>
-      <div className="flex flex-col gap-12 items-center">
-        <Game />
-        <ActionsLog socket={socket} />
-      </div>
+      {gameConditionsStatus === "ongoing" ? (
+        <div className="flex flex-col gap-12 items-center">
+          <Game />
+          <ActionsLog socket={socket} />
+        </div>
+      ) : (
+        <GameEnded gameConditionsStatus={gameConditionsStatus} />
+      )}
     </GameContextProvider>
   );
 }

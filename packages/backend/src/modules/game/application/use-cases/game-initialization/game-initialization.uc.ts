@@ -21,12 +21,14 @@ import { Initiative } from "src/modules/game/domain/playable-entities/playable-e
 import { PlayerStatus } from "src/modules/game/domain/playable-entities/playable-entity/player-status/player-status.vo";
 import { TileEntityFactory } from "src/modules/game/domain/tile/tile-entity/tile-entity.factory";
 import { Tile } from "src/modules/game/domain/tile/tile.entity";
+import { WinConditions } from "src/modules/game/domain/win-conditions/win-conditions.aggregate";
 import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { GameInitializationDonePayload } from "src/modules/shared/events/game/game-initialization-done.payload";
 import { HeroFactory } from "../../factories/hero.factory";
 import { ItemFactory } from "../../factories/item.factory";
 import { GameItem } from "../../factories/item.interface";
+import { WinConditionFactory } from "../../factories/win-condition.factory";
 import {
   GAME_REPOSITORY,
   GameRepository,
@@ -96,6 +98,11 @@ export class GameInitializationUseCase implements UseCase {
       }),
       monsterTemplates,
       playableEntities,
+      winConditions: new WinConditions({
+        values: payload.winConditions.map((winCondition) =>
+          WinConditionFactory.create(winCondition),
+        ),
+      }),
     });
 
     // 3. Attribution d'une position de depart aux heros

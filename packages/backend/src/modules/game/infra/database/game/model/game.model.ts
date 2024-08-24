@@ -1,3 +1,4 @@
+import { GameWinConditionsDeserialized } from "src/modules/shared/interfaces/game-win-conditions-deserialized.interface";
 import { Board } from "./board.type";
 import { GameEvent } from "./game-event.type";
 import { GameMaster } from "./game-master.type";
@@ -12,4 +13,5 @@ export type GamePersistence = {
   playableEntities: Record<PlayableEntity["id"], PlayableEntity>;
   events: Array<GameEvent>;
   enemyTemplates: Array<MonsterTemplate>;
+  winConditions: GameWinConditionsDeserialized;
 };

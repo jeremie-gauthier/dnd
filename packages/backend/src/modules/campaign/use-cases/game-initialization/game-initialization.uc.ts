@@ -27,9 +27,10 @@ export class GameInitializationUseCase implements UseCase {
         userId: lobby.host.userId,
       });
 
-    const { map, events } = this.mapSerializerService.deserialize(
-      campaignStageProgression.stage.mapCompiled,
-    );
+    const { map, events, winConditions } =
+      this.mapSerializerService.deserialize(
+        campaignStageProgression.stage.mapCompiled,
+      );
 
     const enemyTemplates = await this.getEnemyTemplates({ events });
 
@@ -41,6 +42,7 @@ export class GameInitializationUseCase implements UseCase {
         events,
         lobby,
         map,
+        winConditions,
       }),
     );
   }

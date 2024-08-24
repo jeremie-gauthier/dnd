@@ -1,16 +1,16 @@
 import type {
+  ChestEntity,
   Coord,
+  DoorEntity,
   GameView,
   MapCompiledJson,
   Tile,
   TileEntity,
   TileNonPlayableInteractiveEntity,
   TileNonPlayableNonInteractiveEntity,
-} from "@dnd/shared";
-import {
-  DoorEntity,
   TrapEntity,
-} from "@dnd/shared/dist/database/game/interactive-entities.type";
+  WinCondition,
+} from "@dnd/shared";
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { GameBoardDeserialized } from "src/modules/shared/interfaces/game-board-deserialized.interface";
 import {
@@ -27,7 +27,11 @@ export class MapSerializerService {
     "tree",
     "off-map",
   ];
-  private static NON_PLAYABLE_INTERACTIVE_TILE_ENTITY = ["door", "trap"];
+  private static NON_PLAYABLE_INTERACTIVE_TILE_ENTITY = [
+    "door",
+    "trap",
+    "chest",
+  ];
 
   constructor(private readonly coordService: CoordService) {}
 
@@ -39,6 +43,7 @@ export class MapSerializerService {
   public deserialize(mapCompiled: MapCompiledJson): {
     map: GameBoardDeserialized;
     events: GameEventDeserialized[];
+    winConditions: WinCondition[];
   } {
     const metadata = {
       width: mapCompiled.width,
@@ -81,11 +86,30 @@ export class MapSerializerService {
     });
 
     this.assertsValidEvents({ tiles, events: mapCompiled.events, metadata });
+    this.assertsValidWinConditions({
+      winConditions: mapCompiled.winConditions,
+    });
 
     return {
       map: { ...metadata, tiles },
       events: mapCompiled.events,
+      winConditions: mapCompiled.winConditions,
     };
+  }
+
+  private assertsValidWinConditions({
+    winConditions,
+  }: { winConditions: MapCompiledJson["winConditions"] }) {
+    for (const winCondition of winConditions) {
+      if (
+        winCondition.name === "defeat_all_monsters" &&
+        winCondition.nbMonstersRemaining <= 0
+      ) {
+        throw new InternalServerErrorException(
+          `Invalid win condition detected. The 'defeat_all_monsters' objective must have a positive number of monsters remaining declared. Found ${winCondition.nbMonstersRemaining}.`,
+        );
+      }
+    }
   }
 
   private createTileEntity({
@@ -114,7 +138,7 @@ export class MapSerializerService {
       } as TileNonPlayableInteractiveEntity;
     } else {
       throw new InternalServerErrorException(
-        "Error while parsing tile entity kind (unknown)",
+        `Error while parsing tile entity kind (${kind})`,
       );
     }
   }
@@ -138,6 +162,13 @@ export class MapSerializerService {
           isVisible: false,
           name: "pit",
         } as Omit<TrapEntity, "type">;
+      case "chest":
+        return {
+          kind: "chest",
+          canInteract: true,
+          isBlocking: false,
+          isVisible: true,
+        } as Omit<ChestEntity, "type">;
     }
   }
 

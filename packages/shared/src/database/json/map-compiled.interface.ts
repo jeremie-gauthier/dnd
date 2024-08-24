@@ -1,5 +1,6 @@
 import { Coord, TileEntity } from "../game";
 import { GameEvent } from "../game/game-event.type";
+import { WinCondition } from "../game/win-condition.type";
 
 type Entity = Coord &
   Pick<
@@ -20,4 +21,5 @@ export type MapCompiledJson = {
   startingPositions: Coord[];
   entities: Entity[];
   events: GameEvent[];
+  winConditions: WinCondition[];
 };

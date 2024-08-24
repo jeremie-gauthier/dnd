@@ -3,6 +3,7 @@ import {
   EntityAttackedActionLog,
   EntityDiedActionLog,
   EntityTookDamageActionLog,
+  GameWonActionLog,
 } from "./action-log";
 import { InitiativesRerolledActionLog } from "./action-log/initiatives-rerolled-log.interface";
 import { MonstersSpawnedActionLog } from "./action-log/monsters-spawned-log.interface";
@@ -19,4 +20,5 @@ export type GameLog =
   | MonstersSpawnedActionLog
   | EntityAttackedActionLog
   | EntityDiedActionLog
-  | EntityTookDamageActionLog;
+  | EntityTookDamageActionLog
+  | GameWonActionLog;

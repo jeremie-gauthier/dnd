@@ -79,6 +79,12 @@ export class LogService {
           createdAt: new Date(),
           data: { entityName: payload.target.name },
         };
+      case GameEvent.GameWon:
+        return {
+          type: GameEvent.GameWon,
+          createdAt: new Date(),
+          data: {},
+        };
     }
   }
 }

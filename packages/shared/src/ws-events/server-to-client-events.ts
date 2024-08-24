@@ -35,6 +35,9 @@ interface ServerToClientEventsAndPayloads
   [ServerLobbyEvent.LobbyCreated]: (payload: {
     lobby: z.infer<typeof createLobbyOutputSchema>;
   }) => void;
+  [ServerGameEvent.GameEnds]: (payload: {
+    gameConditionsStatus: "victory" | "defeat";
+  }) => void;
 }
 
 export type ServerToClientEvents =

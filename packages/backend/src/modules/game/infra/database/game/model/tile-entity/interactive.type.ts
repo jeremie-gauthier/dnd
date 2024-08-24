@@ -14,4 +14,8 @@ type TrapEntity = BaseInteractiveEntity & {
   name: "pit";
 };
 
-export type TileInteractiveEntity = DoorEntity | TrapEntity;
+type ChestEntity = BaseInteractiveEntity & {
+  kind: "chest";
+};
+
+export type TileInteractiveEntity = ChestEntity | DoorEntity | TrapEntity;

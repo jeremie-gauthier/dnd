@@ -35,6 +35,8 @@ export const assetCollection = {
   ref_red,
   trap_active,
   trap_inactive,
+  chest_closed: unknown_icon,
+  chest_opened: unknown_icon,
 } as const;
 
 export const floorAssetCollection = {
@@ -57,6 +59,8 @@ export const entitiesAssetsCollection = {
   goblin_icon,
   trap_active,
   trap_inactive,
+  chest_closed: unknown_icon,
+  chest_opened: unknown_icon,
 } as const;
 
 export const previewsAssetsCollection = {

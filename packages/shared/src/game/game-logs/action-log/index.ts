@@ -7,3 +7,4 @@ export * from "./initiatives-rerolled-log.interface";
 export * from "./move-log.interface";
 export * from "./open-door-log.interface";
 export * from "./start-turn-log.interface";
+export * from "./game-won-log.interface";
