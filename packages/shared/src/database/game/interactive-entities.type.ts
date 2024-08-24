@@ -35,3 +35,11 @@ type TrapPitInactiveEntity = {
 };
 
 export type TrapEntity = TrapPitActiveEntity | TrapPitInactiveEntity;
+
+export type ChestEntity = {
+  type: "interactive-entity";
+  kind: "chest";
+  isVisible: true;
+  isBlocking: false;
+  canInteract: true;
+};

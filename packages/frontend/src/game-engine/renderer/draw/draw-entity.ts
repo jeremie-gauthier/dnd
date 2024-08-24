@@ -1,5 +1,6 @@
 import type { GameView } from "@dnd/shared";
 import { entitiesAssetsCollection } from "../assets-loader/assets.config";
+import { drawChest } from "./entities/draw-chest";
 import { drawDoor } from "./entities/draw-door";
 import { drawPillar } from "./entities/draw-pillar";
 import { drawPlayableEntityIcon } from "./entities/draw-playable-entity-icon";
@@ -51,6 +52,7 @@ const ENTITY_MAP = {
   "interactive-entity": {
     door: drawDoor,
     trap: drawTrap,
+    chest: drawChest,
   },
   "non-interactive-entity": {
     "off-map": dummyDrawer,

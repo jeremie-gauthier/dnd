@@ -1,17 +1,16 @@
 import type {
+  ChestEntity,
   Coord,
+  DoorEntity,
   GameView,
   MapCompiledJson,
   Tile,
   TileEntity,
   TileNonPlayableInteractiveEntity,
   TileNonPlayableNonInteractiveEntity,
+  TrapEntity,
   WinCondition,
 } from "@dnd/shared";
-import {
-  DoorEntity,
-  TrapEntity,
-} from "@dnd/shared/dist/database/game/interactive-entities.type";
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { GameBoardDeserialized } from "src/modules/shared/interfaces/game-board-deserialized.interface";
 import {
@@ -28,7 +27,11 @@ export class MapSerializerService {
     "tree",
     "off-map",
   ];
-  private static NON_PLAYABLE_INTERACTIVE_TILE_ENTITY = ["door", "trap"];
+  private static NON_PLAYABLE_INTERACTIVE_TILE_ENTITY = [
+    "door",
+    "trap",
+    "chest",
+  ];
 
   constructor(private readonly coordService: CoordService) {}
 
@@ -135,7 +138,7 @@ export class MapSerializerService {
       } as TileNonPlayableInteractiveEntity;
     } else {
       throw new InternalServerErrorException(
-        "Error while parsing tile entity kind (unknown)",
+        `Error while parsing tile entity kind (${kind})`,
       );
     }
   }
@@ -159,6 +162,13 @@ export class MapSerializerService {
           isVisible: false,
           name: "pit",
         } as Omit<TrapEntity, "type">;
+      case "chest":
+        return {
+          kind: "chest",
+          canInteract: true,
+          isBlocking: false,
+          isVisible: true,
+        } as Omit<ChestEntity, "type">;
     }
   }
 

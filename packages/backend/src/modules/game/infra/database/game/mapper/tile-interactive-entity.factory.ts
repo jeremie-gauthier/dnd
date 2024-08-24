@@ -1,3 +1,4 @@
+import { Chest } from "src/modules/game/domain/tile/tile-entity/interactive/chest.entity";
 import { Door } from "src/modules/game/domain/tile/tile-entity/interactive/door.entity";
 import { TileInteractiveEntity } from "src/modules/game/domain/tile/tile-entity/interactive/interactive.abstract";
 import { Trap } from "src/modules/game/domain/tile/tile-entity/interactive/trap.entity";
@@ -14,6 +15,8 @@ export class TileInteractiveEntityFactory {
         return new Door(data);
       case "trap":
         return new Trap(data);
+      case "chest":
+        return new Chest(data);
     }
   }
 }

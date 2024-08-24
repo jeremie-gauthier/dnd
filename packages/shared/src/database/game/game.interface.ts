@@ -3,7 +3,11 @@ import { StuffStorageCapacityJson } from "../json";
 import { Coord } from "./coord.interface";
 import type { EnemyKind } from "./enemy-kind.type";
 import { GameItem } from "./game-item.type";
-import { DoorEntity, TrapEntity } from "./interactive-entities.type";
+import {
+  ChestEntity,
+  DoorEntity,
+  TrapEntity,
+} from "./interactive-entities.type";
 import type { PlayerGamePhase } from "./player-phase.type";
 
 type PlayableEntityInventory = {
@@ -66,7 +70,10 @@ export type TilePlayableEntity = {
   isBlocking: boolean;
 };
 
-export type TileNonPlayableInteractiveEntity = DoorEntity | TrapEntity;
+export type TileNonPlayableInteractiveEntity =
+  | DoorEntity
+  | TrapEntity
+  | ChestEntity;
 
 export type TileNonPlayableNonInteractiveEntity = {
   type: "non-interactive-entity";
