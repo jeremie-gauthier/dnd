@@ -6,6 +6,7 @@ import type {
   TileEntity,
   TileNonPlayableInteractiveEntity,
   TileNonPlayableNonInteractiveEntity,
+  WinCondition,
 } from "@dnd/shared";
 import {
   DoorEntity,
@@ -39,6 +40,7 @@ export class MapSerializerService {
   public deserialize(mapCompiled: MapCompiledJson): {
     map: GameBoardDeserialized;
     events: GameEventDeserialized[];
+    winConditions: WinCondition[];
   } {
     const metadata = {
       width: mapCompiled.width,
@@ -81,11 +83,30 @@ export class MapSerializerService {
     });
 
     this.assertsValidEvents({ tiles, events: mapCompiled.events, metadata });
+    this.assertsValidWinConditions({
+      winConditions: mapCompiled.winConditions,
+    });
 
     return {
       map: { ...metadata, tiles },
       events: mapCompiled.events,
+      winConditions: mapCompiled.winConditions,
     };
+  }
+
+  private assertsValidWinConditions({
+    winConditions,
+  }: { winConditions: MapCompiledJson["winConditions"] }) {
+    for (const winCondition of winConditions) {
+      if (
+        winCondition.name === "defeat_all_monsters" &&
+        winCondition.nbMonstersRemaining <= 0
+      ) {
+        throw new InternalServerErrorException(
+          `Invalid win condition detected. The 'defeat_all_monsters' objective must have a positive number of monsters remaining declared. Found ${winCondition.nbMonstersRemaining}.`,
+        );
+      }
+    }
   }
 
   private createTileEntity({

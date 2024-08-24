@@ -5,6 +5,7 @@ import type { WsServer } from "src/interfaces/socket.interface";
 import { GetUserGameStateUseCase } from "src/modules/game/application/use-cases/get-user-game-state/get-user-game-state.uc";
 import { Game } from "src/modules/game/domain/game/game.aggregate";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
+import { GameWonPayload } from "src/modules/shared/events/game/game-won.payload";
 import { LogService } from "../../../domain/log/log.service";
 import { LoggableAction } from "../../../domain/log/loggable-action.interface";
 import { GamePresenter } from "../services/game.presenter";
@@ -31,6 +32,7 @@ export class GamePublisherGateway {
   @OnEvent(GameEvent.EntityAttacked)
   @OnEvent(GameEvent.EntityTookDamage)
   @OnEvent(GameEvent.EntityDied)
+  @OnEvent(GameEvent.GameWon)
   protected async gameLogHandler(payload: LoggableAction) {
     const log = this.logService.createLog(payload);
     if (!log) {
@@ -70,6 +72,24 @@ export class GamePublisherGateway {
         ...playerGameState,
         game: gameView,
       });
+    }
+  }
+
+  @OnEvent(GameEvent.GameWon)
+  protected async gameEnds({ name, game }: GameWonPayload) {
+    const userIds = new Set([
+      game.gameMaster.userId,
+      ...game.playableEntities.values.map(
+        (playableEntity) => playableEntity.playedByUserId,
+      ),
+    ]);
+
+    const gameConditionsStatus =
+      name === GameEvent.GameWon ? "victory" : "defeat";
+    for (const userId of userIds) {
+      this.server
+        .to(userId)
+        .emit(ServerGameEvent.GameEnds, { gameConditionsStatus });
     }
   }
 }

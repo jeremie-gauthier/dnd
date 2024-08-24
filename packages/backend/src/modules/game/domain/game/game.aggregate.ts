@@ -19,6 +19,7 @@ import { PlayableEntities } from "../playable-entities/playable-entities.aggrega
 import { Monster } from "../playable-entities/playable-entity/monster.entity";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
 import { TilePlayableEntity } from "../tile/tile-entity/playable/playable.entity";
+import { WinConditions } from "../win-conditions/win-conditions.aggregate";
 
 type Data = {
   readonly id: string;
@@ -28,6 +29,7 @@ type Data = {
   gameMaster: GameMaster;
   monsterTemplates: MonsterTemplates;
   events: GameEvents;
+  winConditions: WinConditions;
 };
 
 export class Game extends AggregateRoot<Data> {
@@ -39,6 +41,7 @@ export class Game extends AggregateRoot<Data> {
     gameMaster: z.instanceof(GameMaster),
     monsterTemplates: z.instanceof(MonsterTemplates),
     events: z.instanceof(GameEvents),
+    winConditions: z.instanceof(WinConditions),
   });
 
   constructor(rawData: Data) {
@@ -55,7 +58,12 @@ export class Game extends AggregateRoot<Data> {
       gameMaster: this._data.gameMaster.toPlain(),
       monsterTemplates: this._data.monsterTemplates.toPlain(),
       events: this._data.events.toPlain(),
+      winConditions: this._data.winConditions.toPlain(),
     };
+  }
+
+  public isWin() {
+    return this._data.winConditions.areWin();
   }
 
   public endPlayerTurn({ userId }: { userId: string }) {
@@ -238,6 +246,7 @@ export class Game extends AggregateRoot<Data> {
       this._data.playableEntities.removePlayableEntity({
         playableEntity: targetPlayableEntity,
       });
+      this._data.winConditions.updateWinConditions({ eventName: "enemy_died" });
     }
 
     return {

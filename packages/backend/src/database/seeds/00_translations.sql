@@ -19,7 +19,8 @@ VALUES
   "game.update.initiatives_rerolled": "Les jets d''initiative ont été relancés.",
   "game.update.playable_entity_died": "{{entityName}} est mort.",
   "game.update.playable_entity_attacked": "{{attackerEntityName}} attaque {{targetEntityName}} avec $t(items:{{attackItemUsedName}}) et inflige {{attackPower}} ({{diceScore}} + {{bonusScore}}) point(s) de dégât.",
-  "game.update.playable_entity_took_damage": "{{entityName}} subit {{damageDone}} point(s) de dégât. {{entityHpLeft}} pv restant(s)."
+  "game.update.playable_entity_took_damage": "{{entityName}} subit {{damageDone}} point(s) de dégât. {{entityHpLeft}} pv restant(s).",
+  "game.status.win": "Victoire des héros !"
 }
 '
   ),

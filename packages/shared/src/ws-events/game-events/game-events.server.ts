@@ -4,6 +4,7 @@ export const ServerGameEvent = {
   GameStart: "server.game.start",
   GameChangesDetected: "server.game.changes_detected",
   GameLogCreated: "server.game.log_created",
+  GameEnds: "server.game.ended",
 } as const;
 
 export type PlayerGameState = {

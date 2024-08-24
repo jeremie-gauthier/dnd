@@ -8,6 +8,7 @@ import { EntityDiedPayload } from "src/modules/shared/events/game/entity-died.pa
 import { EntityTookDamagePayload } from "src/modules/shared/events/game/entity-took-damage.payload";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { GameUpdatedPayload } from "src/modules/shared/events/game/game-updated.payload";
+import { GameWonPayload } from "src/modules/shared/events/game/game-won.payload";
 import {
   GAME_REPOSITORY,
   GameRepository,
@@ -72,6 +73,13 @@ export class PlayableEntityAttackUseCase implements UseCase {
       await this.eventEmitter.emitAsync(
         GameEvent.EntityDied,
         new EntityDiedPayload({ game: plainGame, target: plainTarget }),
+      );
+    }
+
+    if (game.isWin()) {
+      await this.eventEmitter.emitAsync(
+        GameEvent.GameWon,
+        new GameWonPayload({ game: plainGame }),
       );
     }
   }

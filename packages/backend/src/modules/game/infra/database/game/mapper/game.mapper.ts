@@ -1,4 +1,5 @@
 import { ItemFactory } from "src/modules/game/application/factories/item.factory";
+import { WinConditionFactory } from "src/modules/game/application/factories/win-condition.factory";
 import { Board } from "src/modules/game/domain/board/board.entity";
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
 import { GameEvents } from "src/modules/game/domain/game-events/game-events.aggregate";
@@ -13,7 +14,9 @@ import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/
 import { Monster } from "src/modules/game/domain/playable-entities/playable-entity/monster.entity";
 import { PlayerStatus } from "src/modules/game/domain/playable-entities/playable-entity/player-status/player-status.vo";
 import { Tile } from "src/modules/game/domain/tile/tile.entity";
+import { WinConditions } from "src/modules/game/domain/win-conditions/win-conditions.aggregate";
 import { Mapper } from "src/modules/shared/infra/mapper";
+import { GameWinConditionsDeserialized } from "src/modules/shared/interfaces/game-win-conditions-deserialized.interface";
 import { GameEvent } from "../model/game-event.type";
 import { GamePersistence } from "../model/game.model";
 import { GameEventFactory } from "./game-event.factory";
@@ -74,6 +77,11 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
           (playableEntity) => PlayableEntityFactory.create(playableEntity),
         ),
       }),
+      winConditions: new WinConditions({
+        values: persistence.winConditions.map((winCondition) =>
+          WinConditionFactory.create(winCondition),
+        ),
+      }),
     });
   }
 
@@ -101,6 +109,8 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
       gameMaster: plain.gameMaster,
       enemyTemplates: plain.monsterTemplates.values,
       events: plain.events.values as GameEvent[],
+      winConditions: plain.winConditions
+        .values as GameWinConditionsDeserialized,
     };
   }
 
