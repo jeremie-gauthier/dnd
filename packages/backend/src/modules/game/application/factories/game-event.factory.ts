@@ -1,12 +1,12 @@
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
-import { GameEvent } from "src/modules/game/domain/game-events/game-event/game-event.abstract";
-import { OnDoorOpeningSpawnMonsters } from "src/modules/game/domain/game-events/game-event/on-door-opening/spawn-monsters.entity";
-import { GamePersistence } from "../model/game.model";
+import { GameEventDeserialized } from "src/modules/shared/interfaces/game-events-deserialized.interface";
+import { GameEvent } from "../../domain/game-events/game-event/game-event.abstract";
+import { OnDoorOpeningSpawnMonsters } from "../../domain/game-events/game-event/on-door-opening/spawn-monsters.entity";
 
 export class GameEventFactory {
   private constructor() {}
 
-  public static create(event: GamePersistence["events"][number]): GameEvent {
+  public static create(event: GameEventDeserialized): GameEvent {
     switch (event.name) {
       case "on_door_opening":
         return GameEventFactory.createDoorOpeningEvent(event);
@@ -14,10 +14,7 @@ export class GameEventFactory {
   }
 
   private static createDoorOpeningEvent(
-    event: Extract<
-      GamePersistence["events"][number],
-      { name: "on_door_opening" }
-    >,
+    event: Extract<GameEventDeserialized, { name: "on_door_opening" }>,
   ): GameEvent {
     switch (event.action) {
       case "spawn_monsters":

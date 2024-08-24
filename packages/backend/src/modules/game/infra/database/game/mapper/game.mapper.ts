@@ -1,4 +1,6 @@
+import { GameEventFactory } from "src/modules/game/application/factories/game-event.factory";
 import { ItemFactory } from "src/modules/game/application/factories/item.factory";
+import { TileEntityFactory } from "src/modules/game/application/factories/tile-entity.factory";
 import { WinConditionFactory } from "src/modules/game/application/factories/win-condition.factory";
 import { Board } from "src/modules/game/domain/board/board.entity";
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
@@ -19,9 +21,7 @@ import { Mapper } from "src/modules/shared/infra/mapper";
 import { GameWinConditionsDeserialized } from "src/modules/shared/interfaces/game-win-conditions-deserialized.interface";
 import { GameEvent } from "../model/game-event.type";
 import { GamePersistence } from "../model/game.model";
-import { GameEventFactory } from "./game-event.factory";
 import { PlayableEntityFactory } from "./playable-entity.factory";
-import { TileEntityFactory } from "./tile-entity.factory";
 
 export class GameMapper extends Mapper<GamePersistence, GameDomain> {
   public toDomain(persistence: GamePersistence): GameDomain {
@@ -41,7 +41,9 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
                   tileEntity,
                   playableEntityRef:
                     tileEntity.type === "playable-entity"
-                      ? persistence.playableEntities[tileEntity.id]
+                      ? PlayableEntityFactory.create(
+                          persistence.playableEntities[tileEntity.id]!,
+                        )
                       : undefined,
                 }),
               ),
