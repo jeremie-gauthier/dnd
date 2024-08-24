@@ -1,45 +1,19 @@
-type DoorOpenedEntity = {
+type BaseInteractiveEntity = {
   type: "interactive-entity";
-  kind: "door";
-  isVisible: true;
-  isBlocking: false;
-  canInteract: false;
+  isVisible: boolean;
+  isBlocking: boolean;
+  canInteract: boolean;
 };
 
-type DoorClosedEntity = {
-  type: "interactive-entity";
+export type DoorEntity = BaseInteractiveEntity & {
   kind: "door";
-  isVisible: true;
-  isBlocking: true;
-  canInteract: true;
 };
 
-export type DoorEntity = DoorClosedEntity | DoorOpenedEntity;
-
-type TrapPitActiveEntity = {
-  type: "interactive-entity";
+export type TrapEntity = BaseInteractiveEntity & {
   kind: "trap";
   name: "pit";
-  isVisible: false;
-  isBlocking: false;
-  canInteract: true;
 };
 
-type TrapPitInactiveEntity = {
-  type: "interactive-entity";
-  kind: "trap";
-  name: "pit";
-  isVisible: true;
-  isBlocking: false;
-  canInteract: false;
-};
-
-export type TrapEntity = TrapPitActiveEntity | TrapPitInactiveEntity;
-
-export type ChestEntity = {
-  type: "interactive-entity";
+export type ChestEntity = BaseInteractiveEntity & {
   kind: "chest";
-  isVisible: true;
-  isBlocking: false;
-  canInteract: true;
 };

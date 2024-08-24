@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { TileInteractiveEntity } from "./interactive.abstract";
 
 type Data = {
@@ -9,6 +10,19 @@ type Data = {
 };
 
 export class Chest extends TileInteractiveEntity<Data> {
+  private static schema = z.object({
+    type: z.literal("interactive-entity").default("interactive-entity"),
+    kind: z.literal("chest").default("chest"),
+    isBlocking: z.boolean(),
+    isVisible: z.boolean(),
+    canInteract: z.boolean(),
+  });
+
+  constructor(rawData: Omit<Data, "type" | "kind">) {
+    const data = Chest.schema.parse(rawData);
+    super(data);
+  }
+
   get canInteract(): boolean {
     return this._data.canInteract;
   }

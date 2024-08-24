@@ -8,7 +8,6 @@ import { UseCase } from "src/interfaces/use-case.interface";
 import { GameInitializationDonePayload as CampaignGameInitializationDonePayload } from "src/modules/campaign/events/game-initialization-done.payload";
 import { Board } from "src/modules/game/domain/board/board.entity";
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
-import { GameEventFactory } from "src/modules/game/domain/game-events/game-event/game-event.factory";
 import { GameEvents } from "src/modules/game/domain/game-events/game-events.aggregate";
 import { GameMaster } from "src/modules/game/domain/game-master/game-master.entity";
 import { GameStatus } from "src/modules/game/domain/game-status/game-status.vo";
@@ -19,15 +18,16 @@ import { MonsterTemplates } from "src/modules/game/domain/monster-templates/mons
 import { PlayableEntities } from "src/modules/game/domain/playable-entities/playable-entities.aggregate";
 import { Initiative } from "src/modules/game/domain/playable-entities/playable-entity/initiative/initiative.vo";
 import { PlayerStatus } from "src/modules/game/domain/playable-entities/playable-entity/player-status/player-status.vo";
-import { TileEntityFactory } from "src/modules/game/domain/tile/tile-entity/tile-entity.factory";
 import { Tile } from "src/modules/game/domain/tile/tile.entity";
 import { WinConditions } from "src/modules/game/domain/win-conditions/win-conditions.aggregate";
 import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { GameInitializationDonePayload } from "src/modules/shared/events/game/game-initialization-done.payload";
+import { GameEventFactory } from "../../factories/game-event.factory";
 import { HeroFactory } from "../../factories/hero.factory";
 import { ItemFactory } from "../../factories/item.factory";
 import { GameItem } from "../../factories/item.interface";
+import { TileEntityFactory } from "../../factories/tile-entity.factory";
 import { WinConditionFactory } from "../../factories/win-condition.factory";
 import {
   GAME_REPOSITORY,

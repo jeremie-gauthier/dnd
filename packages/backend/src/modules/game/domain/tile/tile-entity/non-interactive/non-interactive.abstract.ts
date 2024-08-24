@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { TileEntity } from "../tile-entity.abstract";
 
 type Data = {
@@ -8,6 +9,18 @@ type Data = {
 };
 
 export class TileNonInteractiveEntity extends TileEntity<Data> {
+  private static schema = z.object({
+    type: z.literal("non-interactive-entity").default("non-interactive-entity"),
+    kind: z.enum(["off-map", "pillar", "tree", "wall"]),
+    isBlocking: z.boolean(),
+    isVisible: z.boolean(),
+  });
+
+  constructor(rawData: Omit<Data, "type">) {
+    const data = TileNonInteractiveEntity.schema.parse(rawData);
+    super(data);
+  }
+
   public toPlain() {
     return {
       type: this._data.type,
