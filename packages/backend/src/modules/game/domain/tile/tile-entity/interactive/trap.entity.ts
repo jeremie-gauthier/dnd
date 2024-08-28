@@ -31,13 +31,12 @@ export class Trap extends TileInteractiveEntity<Data> {
   }
 
   public onInteraction({ playableEntity }: { playableEntity: Playable }): void {
-    // ! uniquement les regles metiers de Interactive
-    // ! on cherche pas a savoir si le playable a des PA pour faire cette action
-    // ? car si on peut ouvrir la porte par un moyen qui ne consomme pas de PA, alors on pourra reutiliser la methode telle quelle
     this.mustBeInteractive();
 
     this._data.isBlocking = false;
     this._data.canInteract = false;
+    this._data.isVisible = true;
+    playableEntity.takeDirectDamage({ amount: 1 });
   }
 
   public toPlain() {

@@ -177,7 +177,7 @@ export class Game extends AggregateRoot<Data> {
       .map((tile) =>
         this._data.board.getTileOrThrow({ coord: new Coord(tile.coord) }),
       );
-    const { validatedPath, hasWalkedOnATrap } = playingEntity.getMovePath({
+    const { validatedPath, trapTriggered } = playingEntity.getMovePath({
       path,
     });
     const destinationTile = validatedPath.at(-1);
@@ -188,8 +188,8 @@ export class Game extends AggregateRoot<Data> {
       });
     }
 
-    if (hasWalkedOnATrap) {
-      // TODO: trigger the trap
+    if (trapTriggered) {
+      trapTriggered.onInteraction({ playableEntity: playingEntity });
     }
 
     return { playingEntity };

@@ -4,7 +4,7 @@ import { Hero } from "./hero.abstract";
 export class Lidda extends Hero {
   public getMovePath({ path }: { path: Array<Tile> }) {
     const validatedPath: Tile[] = [];
-    let hasWalkedOnATrap = false;
+    let trapTriggered = undefined;
 
     let previousCoord = this.coord;
     let movementPointsUsed = 0;
@@ -21,15 +21,12 @@ export class Lidda extends Hero {
       movementPointsUsed += 1;
       validatedPath.push(tile);
 
-      const trap = tile.entities.find(
-        (tileEntity) => tileEntity.isInteractive() && tileEntity.isTrap(),
-      );
-      if (trap) {
-        hasWalkedOnATrap = true;
+      trapTriggered = tile.getActiveTrap();
+      if (trapTriggered) {
         break;
       }
     }
 
-    return { validatedPath, movementPointsUsed, hasWalkedOnATrap };
+    return { validatedPath, movementPointsUsed, trapTriggered };
   }
 }
