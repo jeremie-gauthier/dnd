@@ -3,6 +3,7 @@ import { z } from "zod";
 import { Coord } from "../coord/coord.vo";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
 import { TileInteractiveEntityError } from "./tile-entity/interactive/interactive.error";
+import { Trap } from "./tile-entity/interactive/trap.entity";
 import { TileEntity } from "./tile-entity/tile-entity.abstract";
 import { TileError } from "./tile-entity/tile.error";
 
@@ -70,5 +71,14 @@ export class Tile extends Entity<Data> {
     }
 
     doorEntity.onInteraction();
+  }
+
+  public getActiveTrap() {
+    return this.entities.find(
+      (tileEntity) =>
+        tileEntity.isInteractive() &&
+        tileEntity.isTrap() &&
+        tileEntity.canInteract,
+    ) as Trap | undefined;
   }
 }

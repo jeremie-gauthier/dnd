@@ -4,6 +4,7 @@ import { Coord } from "../../coord/coord.vo";
 import { Inventory } from "../../inventory/inventory.entity";
 import { Spell } from "../../item/spell/spell.entity";
 import { Weapon } from "../../item/weapon/weapon.entity";
+import { Trap } from "../../tile/tile-entity/interactive/trap.entity";
 import { Tile } from "../../tile/tile.entity";
 import { ActionHistory } from "./actions-history.interface";
 import { Hero } from "./heroes/hero.abstract";
@@ -50,7 +51,7 @@ export abstract class Playable<
   public abstract getMovePath(_: { path: Array<Tile> }): {
     validatedPath: Tile[];
     movementPointsUsed: number;
-    hasWalkedOnATrap: boolean;
+    trapTriggered: Trap | undefined;
   };
   public abstract getWeaponAttackResult(_: {
     weapon: Weapon;
@@ -134,6 +135,16 @@ export abstract class Playable<
       this.death();
     }
     return damageTaken;
+  }
+
+  public takeDirectDamage({ amount }: { amount: number }): number {
+    this.mustBeAlive();
+
+    this._data.characteristic.healthPoints -= amount;
+    if (this.healthPoints <= 0) {
+      this.death();
+    }
+    return amount;
   }
 
   protected death(): void {

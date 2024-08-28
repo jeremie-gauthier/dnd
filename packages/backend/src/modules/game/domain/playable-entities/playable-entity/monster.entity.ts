@@ -110,7 +110,7 @@ export class Monster extends Playable<Data> {
       validatedPath.push(tile);
     }
 
-    return { validatedPath, movementPointsUsed, hasWalkedOnATrap: false };
+    return { validatedPath, movementPointsUsed, trapTriggered: undefined };
   }
 
   public getSpellAttackResult({

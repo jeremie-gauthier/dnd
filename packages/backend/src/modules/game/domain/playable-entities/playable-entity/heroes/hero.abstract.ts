@@ -5,6 +5,7 @@ import { Coord } from "../../../coord/coord.vo";
 import { Inventory } from "../../../inventory/inventory.entity";
 import { Spell } from "../../../item/spell/spell.entity";
 import { Weapon } from "../../../item/weapon/weapon.entity";
+import { Trap } from "../../../tile/tile-entity/interactive/trap.entity";
 import { Tile } from "../../../tile/tile.entity";
 import { ActionHistory } from "../actions-history.interface";
 import { Initiative } from "../initiative/initiative.vo";
@@ -86,7 +87,7 @@ export abstract class Hero extends Playable<Data> {
 
   public getMovePath({ path }: { path: Array<Tile> }) {
     const validatedPath: Tile[] = [];
-    let hasWalkedOnATrap = false;
+    let trapTriggered: Trap | undefined = undefined;
 
     let previousCoord = this.coord;
     let movementPointsUsed = 0;
@@ -112,16 +113,13 @@ export abstract class Hero extends Playable<Data> {
       movementPointsUsed += 1;
       validatedPath.push(tile);
 
-      const trap = tile.entities.find(
-        (tileEntity) => tileEntity.isInteractive() && tileEntity.isTrap(),
-      );
-      if (trap) {
-        hasWalkedOnATrap = true;
+      trapTriggered = tile.getActiveTrap();
+      if (trapTriggered) {
         break;
       }
     }
 
-    return { validatedPath, movementPointsUsed, hasWalkedOnATrap };
+    return { validatedPath, movementPointsUsed, trapTriggered };
   }
 
   public getSpellAttackResult({
