@@ -2,7 +2,6 @@ import { Module } from "@nestjs/common";
 import { LogService } from "../domain/log/log.service";
 import { DatabaseModule } from "../infra/database/database.module";
 import { GameListeners } from "./game.listeners";
-import { BoardService } from "./services/board.service";
 import { GameStateService } from "./services/game-state.service";
 import { DeleteGameUseCase } from "./use-cases/delete-game/delete-game.uc";
 import { EndPlayerTurnUseCase } from "./use-cases/end-player-turn/end-player-turn.uc";
@@ -24,7 +23,6 @@ import { PlayableEntityMoveUseCase } from "./use-cases/playable-entity-move/play
     PlayableEntityAttackUseCase,
     PlayableEntityMoveUseCase,
     LogService,
-    BoardService,
     GameStateService,
   ],
   exports: [
