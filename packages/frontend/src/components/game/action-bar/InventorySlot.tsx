@@ -20,7 +20,7 @@ export const InventorySlot = ({ type, children }: Props) => {
 };
 
 const slotTypeColor: Record<Props["type"], string> = {
-  spell: "border-blue-500",
-  weapon: "border-red-500",
+  Spell: "border-blue-500",
+  Weapon: "border-red-500",
   backpackAnyItem: "border-grey-500",
 };
