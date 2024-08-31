@@ -1,5 +1,6 @@
 import { GameItem, StuffStorageCapacityJson } from "@dnd/shared";
 import { InventorySlot } from "./InventorySlot";
+import { DeleteItem } from "./actions/DeleteItem";
 import { InventoryItem } from "./actions/InventoryItem";
 
 type Props = {
@@ -32,14 +33,14 @@ export const GearInventory = ({ gear, storageCapacity }: Props) => {
     }).fill({ item: undefined, type: "Spell" }),
   ];
 
-  return (
-    <>
-      {gearInventorySlots.map(({ item, type }, idx) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: no stable unique id exploitable
-        <InventorySlot key={idx} type={type}>
-          {item ? <InventoryItem item={item} /> : null}
-        </InventorySlot>
-      ))}
-    </>
-  );
+  return gearInventorySlots.map(({ item, type }, idx) => (
+    // biome-ignore lint/suspicious/noArrayIndexKey: no stable unique id exploitable
+    <div key={idx} className="flex flex-col items-center">
+      <InventorySlot type={type}>
+        {item ? <InventoryItem item={item} /> : null}
+      </InventorySlot>
+
+      {item ? <DeleteItem item={item} /> : null}
+    </div>
+  ));
 };

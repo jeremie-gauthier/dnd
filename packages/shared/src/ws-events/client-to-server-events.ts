@@ -3,6 +3,7 @@ import {
   EndPlayerTurnInput,
   OpenDoorInput,
   PlayableEntityAttackInput,
+  PlayableEntityDeleteItemInput,
   PlayableEntityMoveInput,
 } from "../game";
 import { ClientGameEvent } from "./game-events/game-events.client";
@@ -43,6 +44,9 @@ interface ClientToServerEventsAndPayloads
   [ClientGameEvent.PlayableEntityOpenDoor]: (payload: OpenDoorInput) => void;
   [ClientGameEvent.PlayableEntityAttacks]: (
     payload: PlayableEntityAttackInput,
+  ) => void;
+  [ClientGameEvent.PlayableEntityDeleteItem]: (
+    payload: PlayableEntityDeleteItemInput,
   ) => void;
 }
 

@@ -6,7 +6,11 @@ VALUES
     'profile',
     '{"title": "Bienvenu sur la page profil"}'
   ),
-  ('fr-FR', 'common', '{"cancel": "Annuler"}'),
+  (
+    'fr-FR',
+    'common',
+    '{"cancel": "Annuler", "confirm": "Confirmer"}'
+  ),
   (
     'fr-FR',
     'action-log',
@@ -37,5 +41,13 @@ VALUES
   "elders_shortbow_1": "Arc court des anciens",
   "goblin_scimitar_1": "Cimeterre gobelin",
   "bugbear_mace_1": "Masse de gobelours"
+}'
+  ),
+  (
+    'fr-FR',
+    'inventory',
+    '{
+  "confirm_deletion_title": "Suppression d''objet",
+  "confirm_deletion_description": "Confirmer la suppression définitive de {{itemName}} ? (1PA)"
 }'
   );
