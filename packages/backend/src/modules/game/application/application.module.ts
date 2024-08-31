@@ -9,6 +9,7 @@ import { GameInitializationUseCase } from "./use-cases/game-initialization/game-
 import { GetUserGameStateUseCase } from "./use-cases/get-user-game-state/get-user-game-state.uc";
 import { OpenDoorUseCase } from "./use-cases/open-door/open-door.uc";
 import { PlayableEntityAttackUseCase } from "./use-cases/playable-entity-attack/playable-entity-attack.uc";
+import { PlayableEntityDeleteItemUseCase } from "./use-cases/playable-entity-delete-item/playable-entity-delete-item.uc";
 import { PlayableEntityMoveUseCase } from "./use-cases/playable-entity-move/playable-entity-move.uc";
 
 @Module({
@@ -24,6 +25,7 @@ import { PlayableEntityMoveUseCase } from "./use-cases/playable-entity-move/play
     PlayableEntityMoveUseCase,
     LogService,
     GameStateService,
+    PlayableEntityDeleteItemUseCase,
   ],
   exports: [
     GameListeners,
@@ -35,6 +37,7 @@ import { PlayableEntityMoveUseCase } from "./use-cases/playable-entity-move/play
     PlayableEntityAttackUseCase,
     PlayableEntityMoveUseCase,
     LogService,
+    PlayableEntityDeleteItemUseCase,
   ],
 })
 export class ApplicationModule {}

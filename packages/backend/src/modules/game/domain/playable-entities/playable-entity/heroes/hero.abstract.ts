@@ -71,7 +71,7 @@ export abstract class Hero extends Playable<Data> {
     inventory: z.instanceof(Inventory),
     actionsDoneThisTurn: z.array(
       z.object({
-        name: z.enum(["attack", "move", "open_door"]),
+        name: z.enum(["attack", "move", "open_door", "delete_item"]),
       }),
     ),
   });

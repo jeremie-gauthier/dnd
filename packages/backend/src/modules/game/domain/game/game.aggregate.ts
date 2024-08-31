@@ -14,6 +14,7 @@ import { Coord } from "../coord/coord.vo";
 import { GameEvents } from "../game-events/game-events.aggregate";
 import { GameMaster } from "../game-master/game-master.entity";
 import { GameStatus } from "../game-status/game-status.vo";
+import { Item } from "../item/item.abstract";
 import { MonsterTemplates } from "../monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "../playable-entities/playable-entities.aggregate";
 import { Monster } from "../playable-entities/playable-entity/monster.entity";
@@ -284,5 +285,17 @@ export class Game extends AggregateRoot<Data> {
         message: "Target is out of range",
       });
     }
+  }
+
+  public playerDeleteItem({
+    userId,
+    itemId,
+  }: { userId: string; itemId: Item["id"] }) {
+    const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
+    playingEntity.mustBePlayedBy({ userId });
+    const item = playingEntity.inventory.getItemInInventoryOrThrow({ itemId });
+    playingEntity.act({ action: "delete_item" });
+
+    playingEntity.inventory.removeItemFromInventory({ item });
   }
 }

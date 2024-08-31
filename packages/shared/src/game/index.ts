@@ -11,3 +11,5 @@ export * from "./playable-entity-attack/playable-entity-attack-input.schema";
 export * from "./playable-entity-attack/playable-entity-attack-output.schema";
 export * from "./playable-entity-move/playable-entity-move-input.schema";
 export * from "./playable-entity-move/playable-entity-move-output.schema";
+export * from "./playable-entity-delete-item/playable-entity-delete-item-input.schema";
+export * from "./playable-entity-delete-item/playable-entity-delete-item-output.schema";
