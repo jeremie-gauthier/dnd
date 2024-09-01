@@ -17,6 +17,8 @@ type Data = {
   readonly name: string;
   readonly faction: "hero";
   readonly class: HeroClassType;
+  readonly level: number;
+
   coord: Coord;
   isBlocking: boolean;
 
@@ -51,6 +53,7 @@ export abstract class Hero extends Playable<Data> {
     name: z.string(),
     faction: z.literal("hero").default("hero"),
     class: z.enum(["WARRIOR", "CLERIC", "SORCERER", "THIEF"]),
+    level: z.number().min(1).max(3),
     coord: z.instanceof(Coord),
     isBlocking: z.boolean(),
     status: z.instanceof(PlayerStatus),
@@ -162,6 +165,7 @@ export abstract class Hero extends Playable<Data> {
       name: this._data.name,
       faction: this._data.faction,
       class: this._data.class,
+      level: this._data.level,
       coord: this._data.coord.toPlain(),
       isBlocking: this._data.isBlocking,
       initiative: this._data.initiative.toPlain(),
