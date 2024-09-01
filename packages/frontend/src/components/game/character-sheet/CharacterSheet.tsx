@@ -29,12 +29,12 @@ export const CharacterSheet = (props: Props) => {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { over, active } = event;
-    if (!over?.data.current?.action || !active.data.current?.itemId) return;
+    if (!over?.data.current?.action || !active.data.current?.item.name) return;
 
     if (over.data.current.action === "delete_item") {
       gameActions.deleteItem({
         gameId: game.id,
-        itemId: active.data.current.itemId,
+        itemId: active.data.current.item.name,
       });
     } else if (over.data.current.action === "swap_item") {
       const destinationStorageSpace = over.data.current.storageSpace as
@@ -42,15 +42,15 @@ export const CharacterSheet = (props: Props) => {
         | "backpack";
       const isMovingItemsInSameStorageSpace = heroPlaying?.inventory[
         destinationStorageSpace
-      ].some((item) => item.name === active.data.current?.itemId);
+      ].some((item) => item.name === active.data.current?.item.name);
       if (isMovingItemsInSameStorageSpace) {
         return;
       }
 
       const [gearItemId, backpackItemId] =
         destinationStorageSpace === "gear"
-          ? [over.data.current.hostedItem?.name, active.data.current.itemId]
-          : [active.data.current.itemId, over.data.current.hostedItem?.name];
+          ? [over.data.current.hostedItem?.name, active.data.current.item.name]
+          : [active.data.current.item.name, over.data.current.hostedItem?.name];
       gameActions.swapItems({ gameId: game.id, gearItemId, backpackItemId });
     }
   };

@@ -11,7 +11,7 @@ export const InventoryItem = ({ item }: Props) => {
   const { t } = useTranslation(["items"]);
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: `draggable-item-${item.name}`,
-    data: { itemId: item.name },
+    data: { item },
   });
 
   const regularAttack = item.attacks.find(
