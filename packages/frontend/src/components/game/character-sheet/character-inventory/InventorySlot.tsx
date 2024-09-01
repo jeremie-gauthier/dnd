@@ -6,7 +6,7 @@ import { classNames } from "../../../../utils/class-names.util";
 type Props = PropsWithChildren<{
   type: GameItem["type"] | "backpackAnyItem";
   droppableId: string;
-  hostedItemId?: string;
+  hostedItem?: GameItem;
   storageSpace: "gear" | "backpack";
 }>;
 
@@ -14,12 +14,12 @@ export const InventorySlot = ({
   type,
   children,
   droppableId,
-  hostedItemId,
+  hostedItem,
   storageSpace,
 }: Props) => {
   const { isOver, setNodeRef } = useDroppable({
     id: droppableId,
-    data: { action: "swap_item", hostedItemId, storageSpace },
+    data: { action: "swap_item", hostedItem, storageSpace },
   });
 
   return (

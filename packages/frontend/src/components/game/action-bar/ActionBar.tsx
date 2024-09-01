@@ -49,6 +49,7 @@ export const ActionBar = () => {
                 type={type}
                 droppableId={`droppable-action-slot-${idx}`}
                 storageSpace={"gear"}
+                hostedItem={item}
               >
                 <AttackItem
                   key={`${item.name}-${attack.type}`}

@@ -29,6 +29,7 @@ export const BackpackInventory = ({ backpack, storageCapacity }: Props) => {
           type={type}
           droppableId={`droppable-backpack-slot-${idx}`}
           storageSpace="backpack"
+          hostedItem={item}
         >
           {item ? <InventoryItem item={item} /> : null}
         </InventorySlot>

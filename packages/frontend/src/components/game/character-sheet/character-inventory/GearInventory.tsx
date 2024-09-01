@@ -38,7 +38,7 @@ export const GearInventory = ({ gear, storageCapacity }: Props) => {
       <InventorySlot
         type={type}
         droppableId={`droppable-gear-slot-${idx}`}
-        hostedItemId={item?.name}
+        hostedItem={item}
         storageSpace="gear"
       >
         {item ? <InventoryItem item={item} /> : null}

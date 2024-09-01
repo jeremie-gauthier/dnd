@@ -49,8 +49,8 @@ export const CharacterSheet = (props: Props) => {
 
       const [gearItemId, backpackItemId] =
         destinationStorageSpace === "gear"
-          ? [over.data.current.hostedItemId, active.data.current.itemId]
-          : [active.data.current.itemId, over.data.current.hostedItemId];
+          ? [over.data.current.hostedItem?.name, active.data.current.itemId]
+          : [active.data.current.itemId, over.data.current.hostedItem?.name];
       gameActions.swapItems({ gameId: game.id, gearItemId, backpackItemId });
     }
   };
