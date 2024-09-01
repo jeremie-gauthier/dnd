@@ -304,6 +304,10 @@ export class Game extends AggregateRoot<Data> {
     gearItemId,
     backpackItemId,
   }: { userId: string; gearItemId?: Item["id"]; backpackItemId?: Item["id"] }) {
+    if (!gearItemId && !backpackItemId) {
+      return;
+    }
+
     const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
     playingEntity.mustBePlayedBy({ userId });
     playingEntity.act({ action: "swap_items" });

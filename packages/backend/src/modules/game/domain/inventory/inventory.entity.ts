@@ -101,10 +101,6 @@ export class Inventory extends Entity<Data> {
     backpackItem?: Item;
     gearItem?: Item;
   }) {
-    if (!backpackItem && !gearItem) {
-      return;
-    }
-
     if (backpackItem) {
       this.mustHaveItemInStorageSpace({
         item: backpackItem,
