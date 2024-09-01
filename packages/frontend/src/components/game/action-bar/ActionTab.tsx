@@ -39,30 +39,36 @@ export const ActionTab = ({ gear, storageCapacity }: Props) => {
 
   return (
     <ActionTabContextProvider>
-      {gearInventorySlots.map(({ item, type }, idx) =>
-        item?.attacks.map((attack) => (
-          // TODO: create new component for action bar only
-          <InventorySlot
-            key={`${item.name}-${attack.type}`}
-            type={type}
-            droppableId={`droppable-action-slot-${idx}`}
-            storageSpace={"gear"}
-          >
-            <AttackItem
-              key={`${item.name}-${attack.type}`}
-              item={item}
-              attack={attack}
-            />
-          </InventorySlot>
-        )),
-      )}
-      <div className="flex flex-row justify-around py-1 gap-2">
-        <div className="flex flex-col justify-between">
-          <MoveButton />
-          <OpenDoorButton />
-        </div>
-        <div className="flex flex-col">
-          <OpenInventoryButton />
+      <div className="flex flex-col items-center justify-between h-42 min-w-96">
+        <div className="flex flex-row gap-2">
+          {gearInventorySlots.map(({ item, type }, idx) =>
+            item?.attacks.map((attack) => (
+              // TODO: create new component for action bar only
+              <InventorySlot
+                key={`${item.name}-${attack.type}`}
+                type={type}
+                droppableId={`droppable-action-slot-${idx}`}
+                storageSpace={"gear"}
+              >
+                <AttackItem
+                  key={`${item.name}-${attack.type}`}
+                  item={item}
+                  attack={attack}
+                />
+              </InventorySlot>
+            )),
+          )}
+
+          <div className="flex flex-row justify-around py-1 gap-2">
+            <div className="flex flex-col justify-between">
+              <MoveButton />
+              <OpenDoorButton />
+            </div>
+
+            <div className="flex flex-col">
+              <OpenInventoryButton />
+            </div>
+          </div>
         </div>
       </div>
     </ActionTabContextProvider>
