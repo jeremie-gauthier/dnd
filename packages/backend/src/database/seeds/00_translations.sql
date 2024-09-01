@@ -46,7 +46,8 @@ VALUES
   (
     'fr-FR',
     'inventory',
-    '{
+    '{ 
+  "inventory_title": "Feuille de personnage",
   "confirm_deletion_title": "Suppression d''objet",
   "confirm_deletion_description": "Confirmer la suppression définitive de {{itemName}} ? (1PA)"
 }'
