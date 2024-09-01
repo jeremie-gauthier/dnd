@@ -1,6 +1,11 @@
+import { classNames } from "../../utils/class-names.util";
 import { useGameContext } from "./context/GameContext/useGameContext";
 
-export const HealthPoints = () => {
+type Props = {
+  size?: "small" | "medium" | "large";
+};
+
+export const HealthPoints = ({ size = "medium" }: Props) => {
   const { isPlaying, heroPlaying } = useGameContext();
 
   if (!isPlaying || !heroPlaying) {
@@ -13,13 +18,23 @@ export const HealthPoints = () => {
       heroPlaying.characteristic.baseHealthPoints) *
       100,
   );
+  const svgSize = classNames(
+    size === "small" ? "h-12 w-12" : "",
+    size === "medium" ? "h-20 w-20" : "",
+    size === "large" ? "h-32 w-32" : "",
+  );
+  const fontSize = classNames(
+    size === "small" ? "text-xs" : "",
+    size === "medium" ? "text-lg" : "",
+    size === "large" ? "text-2xl" : "",
+  );
 
   return (
     <div className="relative flex items-center justify-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512"
-        className="h-32 w-32 stroke-red-800 stroke-[1rem]"
+        className={classNames("stroke-red-800 stroke-[1rem]", svgSize)}
         focusable={false}
         style={{ flexShrink: 0 }}
         fill="currentColor"
@@ -30,7 +45,10 @@ export const HealthPoints = () => {
           id="lifeRemainingGradient"
           gradientTransform="rotate(90)"
         >
-          <stop offset={`${healthPointsMissingPercentage}%`} stopColor="#fff" />
+          <stop
+            offset={`${healthPointsMissingPercentage}%`}
+            stopColor="#fca5a5"
+          />
           <stop
             offset={`${healthPointsMissingPercentage}%`}
             stopColor="#dc2626"
@@ -45,7 +63,7 @@ export const HealthPoints = () => {
         </g>
       </svg>
 
-      <span className="absolute text-2xl font-bold">
+      <span className={classNames("absolute font-bold", fontSize)}>
         {heroPlaying.characteristic.healthPoints} /{" "}
         {heroPlaying.characteristic.baseHealthPoints}
       </span>

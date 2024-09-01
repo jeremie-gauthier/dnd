@@ -4,6 +4,7 @@ import { InventorySlot } from "./InventorySlot";
 import { AttackItem } from "./actions/AttackItem";
 import { MoveButton } from "./actions/MoveButton";
 import { OpenDoorButton } from "./actions/OpenDoorButton";
+import { OpenInventoryButton } from "./actions/OpenInventoryButton";
 
 type Props = {
   gear: GameItem[];
@@ -48,9 +49,14 @@ export const ActionTab = ({ gear, storageCapacity }: Props) => {
           </InventorySlot>
         )),
       )}
-      <div className="flex flex-col justify-around">
-        <MoveButton />
-        <OpenDoorButton />
+      <div className="flex flex-row justify-around py-1 gap-2">
+        <div className="flex flex-col justify-between">
+          <MoveButton />
+          <OpenDoorButton />
+        </div>
+        <div className="flex flex-col">
+          <OpenInventoryButton />
+        </div>
       </div>
     </ActionTabContextProvider>
   );
