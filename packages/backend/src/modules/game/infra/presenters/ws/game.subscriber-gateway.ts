@@ -12,6 +12,8 @@ import { AuthGuard } from "src/guards/auth.guard";
 import type { ServerSocket } from "src/interfaces/socket.interface";
 import { PlayableEntityDeleteItemInputDto } from "src/modules/game/application/use-cases/playable-entity-delete-item/playable-entity-delete-item.dto";
 import { PlayableEntityDeleteItemUseCase } from "src/modules/game/application/use-cases/playable-entity-delete-item/playable-entity-delete-item.uc";
+import { PlayableEntitySwapItemsInputDto } from "src/modules/game/application/use-cases/playable-entity-swap-items/playable-entity-swap-items.dto";
+import { PlayableEntitySwapItemsUseCase } from "src/modules/game/application/use-cases/playable-entity-swap-items/playable-entity-swap-items.uc";
 import { EndPlayerTurnInputDto } from "../../../application/use-cases/end-player-turn/end-player-turn.dto";
 import { EndPlayerTurnUseCase } from "../../../application/use-cases/end-player-turn/end-player-turn.uc";
 import { OpenDoorInputDto } from "../../../application/use-cases/open-door/open-door.dto";
@@ -36,6 +38,7 @@ export class GameSubscriberGateway {
     private readonly openDoorUseCase: OpenDoorUseCase,
     private readonly playableEntityAttackUseCase: PlayableEntityAttackUseCase,
     private readonly playableEntityDeleteItemUseCase: PlayableEntityDeleteItemUseCase,
+    private readonly playableEntitySwapItemsUseCase: PlayableEntitySwapItemsUseCase,
   ) {}
 
   @SubscribeMessage(ClientGameEvent.PlayableEntityTurnEnds)
@@ -90,6 +93,18 @@ export class GameSubscriberGateway {
   ): Promise<void> {
     await this.playableEntityDeleteItemUseCase.execute({
       ...playableEntityDeleteItemInputDto,
+      userId: client.data.userId,
+    });
+  }
+
+  @SubscribeMessage(ClientGameEvent.PlayableEntitySwapItems)
+  public async playableEntitySwapItems(
+    @MessageBody()
+    playableEntitySwapItemsInputDto: PlayableEntitySwapItemsInputDto,
+    @ConnectedSocket() client: ServerSocket,
+  ): Promise<void> {
+    await this.playableEntitySwapItemsUseCase.execute({
+      ...playableEntitySwapItemsInputDto,
       userId: client.data.userId,
     });
   }

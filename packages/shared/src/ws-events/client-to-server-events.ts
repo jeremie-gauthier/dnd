@@ -5,6 +5,7 @@ import {
   PlayableEntityAttackInput,
   PlayableEntityDeleteItemInput,
   PlayableEntityMoveInput,
+  PlayableEntitySwapItemsInput,
 } from "../game";
 import { ClientGameEvent } from "./game-events/game-events.client";
 import { ClientLobbyEvent } from "./lobby-events/lobby-events.client";
@@ -47,6 +48,9 @@ interface ClientToServerEventsAndPayloads
   ) => void;
   [ClientGameEvent.PlayableEntityDeleteItem]: (
     payload: PlayableEntityDeleteItemInput,
+  ) => void;
+  [ClientGameEvent.PlayableEntitySwapItems]: (
+    payload: PlayableEntitySwapItemsInput,
   ) => void;
 }
 

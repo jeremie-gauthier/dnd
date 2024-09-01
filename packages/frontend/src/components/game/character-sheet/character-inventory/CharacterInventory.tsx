@@ -1,6 +1,6 @@
 import { PlayableEntity } from "@dnd/shared";
-import { BackpackInventory } from "../action-bar/BackpackInventory";
-import { GearInventory } from "../action-bar/GearInventory";
+import { BackpackInventory } from "./BackpackInventory";
+import { GearInventory } from "./GearInventory";
 
 type Props = {
   character: PlayableEntity;

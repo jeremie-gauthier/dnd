@@ -1,7 +1,6 @@
 import { GameItem, StuffStorageCapacityJson } from "@dnd/shared";
+import { InventoryItem } from "./InventoryItem";
 import { InventorySlot } from "./InventorySlot";
-import { DeleteItem } from "./actions/DeleteItem";
-import { InventoryItem } from "./actions/InventoryItem";
 
 type Props = {
   gear: GameItem[];
@@ -36,11 +35,14 @@ export const GearInventory = ({ gear, storageCapacity }: Props) => {
   return gearInventorySlots.map(({ item, type }, idx) => (
     // biome-ignore lint/suspicious/noArrayIndexKey: no stable unique id exploitable
     <div key={idx} className="flex flex-col items-center">
-      <InventorySlot type={type}>
+      <InventorySlot
+        type={type}
+        droppableId={`droppable-gear-slot-${idx}`}
+        hostedItemId={item?.name}
+        storageSpace="gear"
+      >
         {item ? <InventoryItem item={item} /> : null}
       </InventorySlot>
-
-      {item ? <DeleteItem item={item} /> : null}
     </div>
   ));
 };

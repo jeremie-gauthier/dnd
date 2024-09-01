@@ -13,3 +13,5 @@ export * from "./playable-entity-move/playable-entity-move-input.schema";
 export * from "./playable-entity-move/playable-entity-move-output.schema";
 export * from "./playable-entity-delete-item/playable-entity-delete-item-input.schema";
 export * from "./playable-entity-delete-item/playable-entity-delete-item-output.schema";
+export * from "./playable-entity-swap-items/playable-entity-swap-items-input.schema";
+export * from "./playable-entity-swap-items/playable-entity-swap-items-output.schema";

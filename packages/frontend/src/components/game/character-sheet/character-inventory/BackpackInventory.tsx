@@ -1,6 +1,6 @@
 import { GameItem, StuffStorageCapacityJson } from "@dnd/shared";
+import { InventoryItem } from "./InventoryItem";
 import { InventorySlot } from "./InventorySlot";
-import { InventoryItem } from "./actions/InventoryItem";
 
 type Props = {
   backpack: GameItem[];
@@ -23,8 +23,13 @@ export const BackpackInventory = ({ backpack, storageCapacity }: Props) => {
   return (
     <>
       {backpackInventorySlots.map(({ item, type }, idx) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-        <InventorySlot key={idx} type={type}>
+        <InventorySlot
+          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+          key={idx}
+          type={type}
+          droppableId={`droppable-backpack-slot-${idx}`}
+          storageSpace="backpack"
+        >
           {item ? <InventoryItem item={item} /> : null}
         </InventorySlot>
       ))}

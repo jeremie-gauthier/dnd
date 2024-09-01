@@ -31,11 +31,17 @@ export const useGameActions = ({ socket }: Params) => {
       socket.emit(ClientGameEvent.PlayableEntityDeleteItem, payload);
     };
 
+  const swapItemsHandler: ClientToServerEvents["client.game.player_requests_playable_entity_swap_items"] =
+    (payload) => {
+      socket.emit(ClientGameEvent.PlayableEntitySwapItems, payload);
+    };
+
   return {
     move: moveHandler,
     endTurn: endTurnHandler,
     openDoor: openDoorHandler,
     attack: attackHandler,
     deleteItem: deleteItemHandler,
+    swapItems: swapItemsHandler,
   };
 };

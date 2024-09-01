@@ -82,7 +82,6 @@ export class Inventory extends Entity<Data> {
     item,
     storageSpace,
   }: { item: Item; storageSpace: StorageSpace }) {
-    this.mustHaveSpaceLeftInStorageSpace({ itemType: item.type, storageSpace });
     this._data[storageSpace] = this._data[storageSpace].filter(
       (storageItem) => !storageItem.equals(item),
     );

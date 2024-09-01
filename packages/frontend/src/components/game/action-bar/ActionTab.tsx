@@ -1,6 +1,7 @@
 import { GameItem, StuffStorageCapacityJson } from "@dnd/shared";
+// TODO: create new component for InventorySlot
+import { InventorySlot } from "../character-sheet/character-inventory/InventorySlot";
 import { ActionTabContextProvider } from "../context/ActionTab/ActionTabContextProvider";
-import { InventorySlot } from "./InventorySlot";
 import { AttackItem } from "./actions/AttackItem";
 import { MoveButton } from "./actions/MoveButton";
 import { OpenDoorButton } from "./actions/OpenDoorButton";
@@ -38,9 +39,15 @@ export const ActionTab = ({ gear, storageCapacity }: Props) => {
 
   return (
     <ActionTabContextProvider>
-      {gearInventorySlots.map(({ item, type }) =>
+      {gearInventorySlots.map(({ item, type }, idx) =>
         item?.attacks.map((attack) => (
-          <InventorySlot key={`${item.name}-${attack.type}`} type={type}>
+          // TODO: create new component for action bar only
+          <InventorySlot
+            key={`${item.name}-${attack.type}`}
+            type={type}
+            droppableId={`droppable-action-slot-${idx}`}
+            storageSpace={"gear"}
+          >
             <AttackItem
               key={`${item.name}-${attack.type}`}
               item={item}

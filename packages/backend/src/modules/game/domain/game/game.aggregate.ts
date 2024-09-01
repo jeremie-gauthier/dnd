@@ -298,4 +298,29 @@ export class Game extends AggregateRoot<Data> {
 
     playingEntity.inventory.removeItemFromInventory({ item });
   }
+
+  public playerSwapItems({
+    userId,
+    gearItemId,
+    backpackItemId,
+  }: { userId: string; gearItemId?: Item["id"]; backpackItemId?: Item["id"] }) {
+    const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
+    playingEntity.mustBePlayedBy({ userId });
+    playingEntity.act({ action: "swap_items" });
+
+    const backpackItem = backpackItemId
+      ? playingEntity.inventory.getItemInInventoryOrThrow({
+          itemId: backpackItemId,
+        })
+      : undefined;
+    const gearItem = gearItemId
+      ? playingEntity.inventory.getItemInInventoryOrThrow({
+          itemId: gearItemId,
+        })
+      : undefined;
+    playingEntity.inventory.swapItemsFromStorageSpaces({
+      backpackItem,
+      gearItem,
+    });
+  }
 }
