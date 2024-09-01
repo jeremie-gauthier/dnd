@@ -66,7 +66,7 @@ export const ActionBar = () => {
             </div>
 
             <div className="flex flex-col">
-              <OpenInventoryButton />
+              {heroPlaying.faction === "hero" ? <OpenInventoryButton /> : null}
             </div>
           </div>
         </div>
