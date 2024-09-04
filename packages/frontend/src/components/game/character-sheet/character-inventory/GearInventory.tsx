@@ -1,6 +1,7 @@
 import { GameItem, StuffStorageCapacityJson } from "@dnd/shared";
-import { InventoryItem } from "./InventoryItem";
-import { InventorySlot } from "./InventorySlot";
+import { IconHand } from "../../../icon/icons/IconHand";
+import { InventoryItem } from "./common/InventoryItem";
+import { InventorySlot } from "./common/InventorySlot";
 
 type Props = {
   gear: GameItem[];
@@ -41,7 +42,11 @@ export const GearInventory = ({ gear, storageCapacity }: Props) => {
         hostedItem={item}
         storageSpace="gear"
       >
-        {item ? <InventoryItem item={item} /> : null}
+        {item ? (
+          <InventoryItem item={item} />
+        ) : (
+          <IconHand className="fill-primary-600" />
+        )}
       </InventorySlot>
     </div>
   ));

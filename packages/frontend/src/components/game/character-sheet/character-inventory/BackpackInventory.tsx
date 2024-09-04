@@ -1,6 +1,7 @@
 import { GameItem, StuffStorageCapacityJson } from "@dnd/shared";
-import { InventoryItem } from "./InventoryItem";
-import { InventorySlot } from "./InventorySlot";
+import { IconKnapsack } from "../../../icon/icons/IconKnapsack";
+import { InventoryItem } from "./common/InventoryItem";
+import { InventorySlot } from "./common/InventorySlot";
 
 type Props = {
   backpack: GameItem[];
@@ -31,7 +32,11 @@ export const BackpackInventory = ({ backpack, storageCapacity }: Props) => {
           storageSpace="backpack"
           hostedItem={item}
         >
-          {item ? <InventoryItem item={item} /> : null}
+          {item ? (
+            <InventoryItem item={item} />
+          ) : (
+            <IconKnapsack className="fill-primary-600" />
+          )}
         </InventorySlot>
       ))}
     </>

@@ -1,6 +1,8 @@
 import { IconBattleGear } from "./icons/IconBattleGear";
 import { IconBrain } from "./icons/IconBrain";
+import { IconHand } from "./icons/IconHand";
 import { IconHeart } from "./icons/IconHeart";
+import { IconKnapsack } from "./icons/IconKnapsack";
 import { IconMeleeAttack } from "./icons/IconMeleeAttack";
 import { IconOpenGate } from "./icons/IconOpenGate";
 import { IconRangeAttack } from "./icons/IconRangeAttack";
@@ -24,4 +26,6 @@ export const iconMapping = {
   battleGear: IconBattleGear,
   wizardStaff: IconWizardStaff,
   shield: IconShield,
+  knapsack: IconKnapsack,
+  hand: IconHand,
 } as const;

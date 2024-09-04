@@ -71,7 +71,6 @@ export const CharacterSheet = (props: Props) => {
 };
 
 const InnerCharacterSheet = ({ isOpen, close }: Props) => {
-  // TODO: add missing translations
   const { t } = useTranslation(["inventory"]);
   const { heroPlaying, playerState } = useGameContext();
   const { isOver, setNodeRef } = useDroppable({
@@ -110,12 +109,13 @@ const InnerCharacterSheet = ({ isOpen, close }: Props) => {
       >
         {isOver ? (
           <div
-            className="fixed z-[9999] rounded-md p-2 bg-red-400 font-semibold"
+            className="fixed z-[9999] rounded-md p-2 bg-red-400 font-semibold flex flex-col"
             style={tooltipPosition}
           >
-            Supprimer cet objet ? (1PA)
-            <br />
-            <span className="font-normal italic">Relâchez pour confirmer</span>
+            <span>{t("confirm_deletion_prompt")}</span>
+            <span className="font-normal italic">
+              {t("confirm_deletion_instructions")}
+            </span>
           </div>
         ) : null}
         <div className="flex min-h-full items-center justify-center p-4">
@@ -125,7 +125,7 @@ const InnerCharacterSheet = ({ isOpen, close }: Props) => {
           >
             <DialogTitle
               as="h3"
-              className="text-base/7 font-medium text-white text-center bg-[#3B3D58] bg-opacity-[95%] rounded-t-md"
+              className="text-base/7 font-medium text-white text-center t bg-primary-600 bg-opacity-[95%] rounded-t-md"
             >
               {t("inventory_title", { ns: "inventory" })}
             </DialogTitle>
@@ -139,12 +139,12 @@ const InnerCharacterSheet = ({ isOpen, close }: Props) => {
             ) : null}
 
             <div className="flex flex-row rounded-xl">
-              <div className="flex flex-col pt-20 px-1 pb-4 bg-[#3B3D58] rounded-bl-md gap-4">
+              <div className="flex flex-col pt-20 px-1 pb-4 bg-primary-600 rounded-bl-md gap-4">
                 <CharacterStats character={heroPlaying} />
               </div>
 
-              <div className="flex flex-col bg-[#1B1D31] rounded-br-md">
-                <div className="flex flex-row bg-[#3B3D58] pl-4 py-2">
+              <div className="flex flex-col bg-primary-900 rounded-br-md">
+                <div className="flex flex-row bg-primary-600 pl-4 py-2">
                   <CharacterIdentity character={heroPlaying} />
                 </div>
                 <div className="flex flex-col p-4 gap-8">

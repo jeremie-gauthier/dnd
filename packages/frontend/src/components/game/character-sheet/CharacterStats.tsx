@@ -9,7 +9,7 @@ type Props = {
   character: PlayableEntity;
 };
 
-export const CharacterStats = ({ character }: Props) => {
+export const CharacterStats = (_: Props) => {
   return (
     <>
       <HealthPoints size="medium" />

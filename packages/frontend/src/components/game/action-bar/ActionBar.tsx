@@ -1,5 +1,5 @@
 import { GameItem } from "@dnd/shared";
-import { InventorySlot } from "../character-sheet/character-inventory/InventorySlot";
+import { InventorySlot } from "../character-sheet/character-inventory/common/InventorySlot";
 import { ActionTabContextProvider } from "../context/ActionTab/ActionTabContextProvider";
 import { useGameContext } from "../context/GameContext/useGameContext";
 import { AttackItem } from "./actions/AttackItem";

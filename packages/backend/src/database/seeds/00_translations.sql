@@ -45,10 +45,26 @@ VALUES
   ),
   (
     'fr-FR',
+    'heroes',
+    '{
+  "SORCERER": "MAGICIENNE",
+  "CLERIC": "CLERC",
+  "WARRIOR": "GUERRIER",
+  "THIEF": "ROUBLARDE"
+}'
+  ),
+  (
+    'fr-FR',
     'inventory',
     '{ 
   "inventory_title": "Feuille de personnage",
-  "confirm_deletion_title": "Suppression d''objet",
-  "confirm_deletion_description": "Confirmer la suppression définitive de {{itemName}} ? (1PA)"
+  "confirm_deletion_prompt": "Supprimer cet objet ? (1PA)",
+  "confirm_deletion_instructions": "Relâchez pour confirmer",
+  "confirm_swap_prompt": "Déplacer cet objet ? (1PA)",
+  "confirm_swap_instructions": "Relâchez pour confirmer",
+  "gear": "Équipement",
+  "backpack": "Sac à dos",
+  "heroIdentity": "{{class}} NIVEAU {{level}}",
+  "monsterIdentity": "{{kind}}"
 }'
   );
