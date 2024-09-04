@@ -17,17 +17,24 @@ export const InventorySlot = ({
   hostedItem,
   storageSpace,
 }: Props) => {
-  const { isOver, setNodeRef } = useDroppable({
+  const { isOver, setNodeRef, active } = useDroppable({
     id: droppableId,
     data: { action: "swap_item", hostedItem, storageSpace },
   });
+
+  const isDragging = active !== null;
+  const isDraggingCompatibleItem =
+    type === "backpackAnyItem" || active?.data.current?.item.type === type;
 
   return (
     <div
       ref={setNodeRef}
       className={classNames(
         "relative h-32 w-28 border-2 rounded flex flex-col items-center justify-center group",
-        isOver ? "border-green-600" : slotTypeColor[type],
+        isOver && isDraggingCompatibleItem
+          ? "border-green-600"
+          : slotTypeColor[type],
+        isDragging && !isDraggingCompatibleItem ? "grayscale" : "",
       )}
     >
       {children}
