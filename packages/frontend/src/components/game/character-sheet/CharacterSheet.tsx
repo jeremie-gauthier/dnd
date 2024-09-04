@@ -1,15 +1,21 @@
 import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
 import { HeroClassType } from "@dnd/shared";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { MouseEventHandler, useState } from "react";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import cleric from "../../../assets/classes/cleric.webp";
 import sorcerer from "../../../assets/classes/sorcerer.webp";
 import thief from "../../../assets/classes/thief.webp";
 import warrior from "../../../assets/classes/warrior.webp";
+import { IconX } from "../../icon/icons/IconX";
 import { useGameContext } from "../context/GameContext/useGameContext";
 import { CharacterIdentity } from "./CharacterIdentity";
+import {
+  CharacterSheetContextProvider,
+  useCharacterSheetContext,
+} from "./CharacterSheetContext";
 import { CharacterStats } from "./CharacterStats";
+import { Tooltip } from "./Tooltip";
 import { CharacterInventory } from "./character-inventory/CharacterInventory";
 
 const CLASS_TO_IMG: Readonly<Record<HeroClassType, string>> = {
@@ -65,7 +71,9 @@ export const CharacterSheet = (props: Props) => {
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      <InnerCharacterSheet {...props} />
+      <CharacterSheetContextProvider>
+        <InnerCharacterSheet {...props} />
+      </CharacterSheetContextProvider>
     </DndContext>
   );
 };
@@ -73,23 +81,20 @@ export const CharacterSheet = (props: Props) => {
 const InnerCharacterSheet = ({ isOpen, close }: Props) => {
   const { t } = useTranslation(["inventory"]);
   const { heroPlaying, playerState } = useGameContext();
-  const { isOver, setNodeRef } = useDroppable({
-    id: "droppable-garbage-slot",
-    data: { action: "delete_item" },
-  });
+  const { isOver: isOverGarbageArea, setNodeRef: setGarbageAreaNodeRed } =
+    useDroppable({
+      id: "droppable-garbage-slot",
+      data: { action: "delete_item" },
+    });
   const { setNodeRef: setSafeAreaNodeRef } = useDroppable({
     id: "droppable-safe-area",
   });
+  const { updateCursorPosition, setTooltipType } = useCharacterSheetContext();
 
-  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
-  const updateTooltipPosition: MouseEventHandler<HTMLDivElement> = (event) => {
-    if (isOver) {
-      setTooltipPosition({
-        top: event.clientY + 20,
-        left: event.clientX + 20,
-      });
-    }
-  };
+  // biome-ignore lint/correctness/useExhaustiveDependencies: setTooltipType is a react hook
+  useEffect(() => {
+    setTooltipType(isOverGarbageArea ? "confirm_delete" : null);
+  }, [isOverGarbageArea]);
 
   if (!heroPlaying || !playerState.canAct) {
     return null;
@@ -101,23 +106,13 @@ const InnerCharacterSheet = ({ isOpen, close }: Props) => {
       as="div"
       className="relative z-20 focus:outline-none"
       onClose={close}
+      onMouseMove={updateCursorPosition}
     >
       <div
-        onMouseMove={updateTooltipPosition}
-        ref={setNodeRef}
+        ref={setGarbageAreaNodeRed}
         className="fixed inset-0 z-20 w-screen overflow-y-auto"
       >
-        {isOver ? (
-          <div
-            className="fixed z-[9999] rounded-md p-2 bg-red-400 font-semibold flex flex-col"
-            style={tooltipPosition}
-          >
-            <span>{t("confirm_deletion_prompt")}</span>
-            <span className="font-normal italic">
-              {t("confirm_deletion_instructions")}
-            </span>
-          </div>
-        ) : null}
+        <Tooltip />
         <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel
             className="relative w-full max-w-max rounded-xl"
@@ -125,9 +120,17 @@ const InnerCharacterSheet = ({ isOpen, close }: Props) => {
           >
             <DialogTitle
               as="h3"
-              className="text-base/7 font-medium text-white text-center t bg-primary-600 bg-opacity-[95%] rounded-t-md"
+              className="relative text-base/7 font-medium text-white text-center t bg-primary-600 bg-opacity-[95%] rounded-t-md"
             >
               {t("inventory_title", { ns: "inventory" })}
+
+              <button
+                type="button"
+                className="absolute right-1 top-0"
+                onClick={close}
+              >
+                <IconX className="stroke-white h-6 w-6" />
+              </button>
             </DialogTitle>
 
             {heroPlaying.faction === "hero" ? (

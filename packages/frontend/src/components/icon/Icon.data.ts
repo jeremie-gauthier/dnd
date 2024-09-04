@@ -12,6 +12,7 @@ import { IconTrashCan } from "./icons/IconTrashCan";
 import { IconVersatileAttack } from "./icons/IconVersatileAttack";
 import { IconWalkingBoot } from "./icons/IconWalkingBoot";
 import { IconWizardStaff } from "./icons/IconWizardStaff";
+import { IconX } from "./icons/IconX";
 
 export const iconMapping = {
   meleeAttack: IconMeleeAttack,
@@ -28,4 +29,5 @@ export const iconMapping = {
   shield: IconShield,
   knapsack: IconKnapsack,
   hand: IconHand,
+  x: IconX,
 } as const;
