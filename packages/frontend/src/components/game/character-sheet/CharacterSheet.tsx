@@ -47,11 +47,19 @@ export const CharacterSheet = (props: Props) => {
         return;
       }
 
-      const [gearItemId, backpackItemId] =
+      const [gearItem, backpackItem] =
         destinationStorageSpace === "gear"
-          ? [over.data.current.hostedItem?.name, active.data.current.item.name]
-          : [active.data.current.item.name, over.data.current.hostedItem?.name];
-      gameActions.swapItems({ gameId: game.id, gearItemId, backpackItemId });
+          ? [over.data.current.hostedItem, active.data.current.item]
+          : [active.data.current.item, over.data.current.hostedItem];
+      if (gearItem && backpackItem && gearItem.type !== backpackItem.type) {
+        return;
+      }
+
+      gameActions.swapItems({
+        gameId: game.id,
+        gearItemId: gearItem?.name,
+        backpackItemId: backpackItem?.name,
+      });
     }
   };
 
