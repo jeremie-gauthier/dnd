@@ -78,6 +78,10 @@ const InnerCharacterSheet = ({ isOpen, close }: Props) => {
     id: "droppable-garbage-slot",
     data: { action: "delete_item" },
   });
+  const { setNodeRef: setSafeAreaNodeRef } = useDroppable({
+    id: "droppable-safe-area",
+  });
+
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
   const updateTooltipPosition: MouseEventHandler<HTMLDivElement> = (event) => {
     if (isOver) {
@@ -116,8 +120,8 @@ const InnerCharacterSheet = ({ isOpen, close }: Props) => {
         ) : null}
         <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel
-            transition
             className="relative w-full max-w-max rounded-xl"
+            ref={setSafeAreaNodeRef}
           >
             <DialogTitle
               as="h3"
