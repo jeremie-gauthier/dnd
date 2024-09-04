@@ -86,15 +86,22 @@ const InnerCharacterSheet = ({ isOpen, close }: Props) => {
       id: "droppable-garbage-slot",
       data: { action: "delete_item" },
     });
-  const { setNodeRef: setSafeAreaNodeRef } = useDroppable({
-    id: "droppable-safe-area",
-  });
+  const { isOver: isOverSafeArea, setNodeRef: setSafeAreaNodeRef } =
+    useDroppable({
+      id: "droppable-safe-area",
+    });
   const { updateCursorPosition, setTooltipType } = useCharacterSheetContext();
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: setTooltipType is a react hook
   useEffect(() => {
-    setTooltipType(isOverGarbageArea ? "confirm_delete" : null);
-  }, [isOverGarbageArea]);
+    if (isOverSafeArea) {
+      setTooltipType(null);
+    }
+
+    if (isOverGarbageArea) {
+      setTooltipType("confirm_delete");
+    }
+  }, [isOverGarbageArea, isOverSafeArea]);
 
   if (!heroPlaying || !playerState.canAct) {
     return null;

@@ -31,16 +31,16 @@ export const InventorySlot = ({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: setTooltipType is a react hook
   useEffect(() => {
-    if (isOver) {
-      if (hostedItem) {
-        const isSwappable =
-          isDraggingCompatibleItem && active?.data.current?.item !== hostedItem;
-        setTooltipType(isSwappable ? "confirm_swap" : null);
-      } else {
-        setTooltipType("confirm_move");
+    if (!isOver) return;
+
+    if (hostedItem) {
+      const isSwappable =
+        isDraggingCompatibleItem && active?.data.current?.item !== hostedItem;
+      if (isSwappable) {
+        setTooltipType("confirm_swap");
       }
     } else {
-      setTooltipType(null);
+      setTooltipType("confirm_move");
     }
   }, [
     isDraggingCompatibleItem,
