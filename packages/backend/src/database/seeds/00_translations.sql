@@ -6,7 +6,11 @@ VALUES
     'profile',
     '{"title": "Bienvenu sur la page profil"}'
   ),
-  ('fr-FR', 'common', '{"cancel": "Annuler"}'),
+  (
+    'fr-FR',
+    'common',
+    '{"cancel": "Annuler", "confirm": "Confirmer"}'
+  ),
   (
     'fr-FR',
     'action-log',
@@ -37,5 +41,32 @@ VALUES
   "elders_shortbow_1": "Arc court des anciens",
   "goblin_scimitar_1": "Cimeterre gobelin",
   "bugbear_mace_1": "Masse de gobelours"
+}'
+  ),
+  (
+    'fr-FR',
+    'heroes',
+    '{
+  "SORCERER": "MAGICIENNE",
+  "CLERIC": "CLERC",
+  "WARRIOR": "GUERRIER",
+  "THIEF": "ROUBLARDE"
+}'
+  ),
+  (
+    'fr-FR',
+    'inventory',
+    '{ 
+  "inventory_title": "Feuille de personnage",
+  "confirm_deletion_prompt": "Supprimer cet objet ? (1PA)",
+  "confirm_deletion_instructions": "Relâchez pour confirmer",
+  "confirm_swap_prompt": "Échanger ces objets de place ? (1PA)",
+  "confirm_swap_instructions": "Relâchez pour confirmer",
+  "confirm_move_prompt": "Déplacer cet objet ? (1PA)",
+  "confirm_move_instructions": "Relâchez pour confirmer",
+  "gear": "Équipement",
+  "backpack": "Sac à dos",
+  "heroIdentity": "{{class}} NIVEAU {{level}}",
+  "monsterIdentity": "{{kind}}"
 }'
   );

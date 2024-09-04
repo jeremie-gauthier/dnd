@@ -206,6 +206,7 @@ export class GameInitializationUseCase implements UseCase {
           playedByUserId: heroPlayersMap[hero.id]!,
           name: hero.name,
           class: hero.class,
+          level: hero.level,
           initiative: new Initiative(Number.NaN),
           coord: new Coord({
             row: Number.NaN,

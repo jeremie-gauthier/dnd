@@ -1,6 +1,7 @@
 import { GameItem, StuffStorageCapacityJson } from "@dnd/shared";
-import { InventorySlot } from "./InventorySlot";
-import { InventoryItem } from "./actions/InventoryItem";
+import { IconHand } from "../../../icon/icons/IconHand";
+import { InventoryItem } from "./common/InventoryItem";
+import { InventorySlot } from "./common/InventorySlot";
 
 type Props = {
   gear: GameItem[];
@@ -32,14 +33,21 @@ export const GearInventory = ({ gear, storageCapacity }: Props) => {
     }).fill({ item: undefined, type: "Spell" }),
   ];
 
-  return (
-    <>
-      {gearInventorySlots.map(({ item, type }, idx) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: no stable unique id exploitable
-        <InventorySlot key={idx} type={type}>
-          {item ? <InventoryItem item={item} /> : null}
-        </InventorySlot>
-      ))}
-    </>
-  );
+  return gearInventorySlots.map(({ item, type }, idx) => (
+    // biome-ignore lint/suspicious/noArrayIndexKey: no stable unique id exploitable
+    <div key={idx} className="flex flex-col items-center">
+      <InventorySlot
+        type={type}
+        droppableId={`droppable-gear-slot-${idx}`}
+        hostedItem={item}
+        storageSpace="gear"
+      >
+        {item ? (
+          <InventoryItem item={item} />
+        ) : (
+          <IconHand className="fill-primary-600" />
+        )}
+      </InventorySlot>
+    </div>
+  ));
 };

@@ -29,7 +29,7 @@ export const Game = () => {
         {isPlaying && heroPlaying ? (
           <>
             <div className="flex flex-col items-center">
-              <HealthPoints />
+              <HealthPoints size="large" />
               <div className="flex flex-row gap-1">
                 <ManaPoints />
                 <ActionPoints />

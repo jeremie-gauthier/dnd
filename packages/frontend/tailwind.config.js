@@ -9,7 +9,14 @@ export default {
     ],
   },
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: {
+          600: "#3B3D58",
+          900: "#1B1D31",
+        },
+      },
+    },
   },
   plugins: [],
 };

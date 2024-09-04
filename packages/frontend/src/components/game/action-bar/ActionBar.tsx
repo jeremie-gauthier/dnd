@@ -1,77 +1,77 @@
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import { useState } from "react";
-import { classNames } from "../../../utils/class-names.util";
+import { GameItem } from "@dnd/shared";
+import { InventorySlot } from "../character-sheet/character-inventory/common/InventorySlot";
+import { ActionTabContextProvider } from "../context/ActionTab/ActionTabContextProvider";
 import { useGameContext } from "../context/GameContext/useGameContext";
-import { ActionTab } from "./ActionTab";
-import { BackpackInventory } from "./BackpackInventory";
-import { GearInventory } from "./GearInventory";
+import { AttackItem } from "./actions/AttackItem";
+import { MoveButton } from "./actions/MoveButton";
+import { OpenDoorButton } from "./actions/OpenDoorButton";
+import { OpenInventoryButton } from "./actions/OpenInventoryButton";
 
 export const ActionBar = () => {
   const { isPlaying, heroPlaying } = useGameContext();
-  const [selectedIndex, setSelectedIndex] = useState(0);
 
   if (!isPlaying || !heroPlaying) return null;
+  const { gear, storageCapacity } = heroPlaying.inventory;
+
+  const gearWeapons = gear
+    .filter((item) => item.type === "Weapon")
+    .map<{ item: GameItem; type: "Weapon" }>((item) => ({
+      item,
+      type: "Weapon",
+    }));
+  const gearSpell = gear
+    .filter((item) => item.type === "Spell")
+    .map<{ item: GameItem; type: "Spell" }>((item) => ({
+      item,
+      type: "Spell",
+    }));
+
+  const gearInventorySlots = [
+    ...gearWeapons,
+    ...Array.from<{ item: undefined; type: "Weapon" }>({
+      length: storageCapacity.nbWeaponSlots - gearWeapons.length,
+    }).fill({ item: undefined, type: "Weapon" }),
+    ...gearSpell,
+    ...Array.from<{ item: undefined; type: "Spell" }>({
+      length: storageCapacity.nbSpellSlots - gearSpell.length,
+    }).fill({ item: undefined, type: "Spell" }),
+  ];
 
   return (
-    <TabGroup
-      className="flex flex-col items-center justify-between h-42 min-w-96"
-      defaultIndex={0}
-      selectedIndex={selectedIndex}
-      onChange={setSelectedIndex}
-    >
-      <TabPanels>
-        <TabPanel className="flex flex-row gap-2">
-          <ActionTab
-            gear={heroPlaying.inventory.gear}
-            storageCapacity={heroPlaying.inventory.storageCapacity}
-          />
-        </TabPanel>
-        <TabPanel className="flex flex-row gap-2">
-          <GearInventory
-            gear={heroPlaying.inventory.gear}
-            storageCapacity={heroPlaying.inventory.storageCapacity}
-          />
-        </TabPanel>
-        <TabPanel className="flex flex-row gap-2">
-          <BackpackInventory
-            backpack={heroPlaying.inventory.backpack}
-            storageCapacity={heroPlaying.inventory.storageCapacity}
-          />
-        </TabPanel>
-      </TabPanels>
+    <ActionTabContextProvider>
+      <div className="flex flex-col items-center justify-between h-42 min-w-96">
+        <div className="flex flex-row gap-2">
+          {gearInventorySlots.map(({ item, type }, idx) =>
+            item?.attacks.map((attack) => (
+              // TODO: create new component for action bar only
+              <InventorySlot
+                key={`${item.name}-${attack.type}`}
+                type={type}
+                droppableId={`droppable-action-slot-${idx}`}
+                storageSpace={"gear"}
+                hostedItem={item}
+              >
+                <AttackItem
+                  key={`${item.name}-${attack.type}`}
+                  item={item}
+                  attack={attack}
+                />
+              </InventorySlot>
+            )),
+          )}
 
-      <TabList className="flex flex-row">
-        <Tab
-          className={classNames(
-            "py-1 rounded-l w-28 text-sm font-semibold",
-            selectedIndex === 0
-              ? "bg-amber-800 text-white"
-              : "border border-amber-800 text-amber-800",
-          )}
-        >
-          Actions
-        </Tab>
-        <Tab
-          className={classNames(
-            "py-1 w-28 text-sm font-semibold",
-            selectedIndex === 1
-              ? "bg-amber-800 text-white"
-              : "border-y border-amber-800 text-amber-800",
-          )}
-        >
-          Gear
-        </Tab>
-        <Tab
-          className={classNames(
-            "py-1 rounded-r w-28 text-sm font-semibold",
-            selectedIndex === 2
-              ? "bg-amber-800 text-white"
-              : "border border-amber-800 text-amber-800",
-          )}
-        >
-          Backpack
-        </Tab>
-      </TabList>
-    </TabGroup>
+          <div className="flex flex-row justify-around py-1 gap-2">
+            <div className="flex flex-col justify-between">
+              <MoveButton />
+              <OpenDoorButton />
+            </div>
+
+            <div className="flex flex-col">
+              {heroPlaying.faction === "hero" ? <OpenInventoryButton /> : null}
+            </div>
+          </div>
+        </div>
+      </div>
+    </ActionTabContextProvider>
   );
 };

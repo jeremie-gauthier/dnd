@@ -31,6 +31,6 @@ export type BasePlayableEntity = {
   };
   inventory: Inventory;
   actionsDoneThisTurn: Array<{
-    name: "attack" | "move" | "open_door";
+    name: "attack" | "move" | "open_door" | "delete_item" | "swap_items";
   }>;
 };

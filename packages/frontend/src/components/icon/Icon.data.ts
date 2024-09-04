@@ -1,11 +1,18 @@
+import { IconBattleGear } from "./icons/IconBattleGear";
 import { IconBrain } from "./icons/IconBrain";
+import { IconHand } from "./icons/IconHand";
 import { IconHeart } from "./icons/IconHeart";
+import { IconKnapsack } from "./icons/IconKnapsack";
 import { IconMeleeAttack } from "./icons/IconMeleeAttack";
 import { IconOpenGate } from "./icons/IconOpenGate";
 import { IconRangeAttack } from "./icons/IconRangeAttack";
 import { IconRoundStar } from "./icons/IconRoundStar";
+import { IconShield } from "./icons/IconShield";
+import { IconTrashCan } from "./icons/IconTrashCan";
 import { IconVersatileAttack } from "./icons/IconVersatileAttack";
 import { IconWalkingBoot } from "./icons/IconWalkingBoot";
+import { IconWizardStaff } from "./icons/IconWizardStaff";
+import { IconX } from "./icons/IconX";
 
 export const iconMapping = {
   meleeAttack: IconMeleeAttack,
@@ -16,4 +23,11 @@ export const iconMapping = {
   heart: IconHeart,
   roundStar: IconRoundStar,
   brain: IconBrain,
+  trashCan: IconTrashCan,
+  battleGear: IconBattleGear,
+  wizardStaff: IconWizardStaff,
+  shield: IconShield,
+  knapsack: IconKnapsack,
+  hand: IconHand,
+  x: IconX,
 } as const;

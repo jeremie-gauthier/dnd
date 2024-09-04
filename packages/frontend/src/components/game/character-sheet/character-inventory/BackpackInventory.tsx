@@ -1,6 +1,7 @@
 import { GameItem, StuffStorageCapacityJson } from "@dnd/shared";
-import { InventorySlot } from "./InventorySlot";
-import { InventoryItem } from "./actions/InventoryItem";
+import { IconKnapsack } from "../../../icon/icons/IconKnapsack";
+import { InventoryItem } from "./common/InventoryItem";
+import { InventorySlot } from "./common/InventorySlot";
 
 type Props = {
   backpack: GameItem[];
@@ -23,9 +24,19 @@ export const BackpackInventory = ({ backpack, storageCapacity }: Props) => {
   return (
     <>
       {backpackInventorySlots.map(({ item, type }, idx) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-        <InventorySlot key={idx} type={type}>
-          {item ? <InventoryItem item={item} /> : null}
+        <InventorySlot
+          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+          key={idx}
+          type={type}
+          droppableId={`droppable-backpack-slot-${idx}`}
+          storageSpace="backpack"
+          hostedItem={item}
+        >
+          {item ? (
+            <InventoryItem item={item} />
+          ) : (
+            <IconKnapsack className="fill-primary-600" />
+          )}
         </InventorySlot>
       ))}
     </>
