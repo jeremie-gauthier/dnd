@@ -84,6 +84,7 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
           WinConditionFactory.create(winCondition),
         ),
       }),
+      maxLevelLoot: persistence.maxLevelLoot,
     });
   }
 
@@ -113,6 +114,7 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
       events: plain.events.values as GameEvent[],
       winConditions: plain.winConditions
         .values as GameWinConditionsDeserialized,
+      maxLevelLoot: plain.maxLevelLoot,
     };
   }
 

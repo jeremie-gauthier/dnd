@@ -2,6 +2,7 @@ import { GameWinConditionsDeserialized } from "src/modules/shared/interfaces/gam
 import { Board } from "./board.type";
 import { GameEvent } from "./game-event.type";
 import { GameMaster } from "./game-master.type";
+import { Item } from "./item.type";
 import { MonsterTemplate } from "./monster-template.type";
 import { PlayableEntity } from "./playable-entity/playable.type";
 
@@ -14,4 +15,5 @@ export type GamePersistence = {
   events: Array<GameEvent>;
   enemyTemplates: Array<MonsterTemplate>;
   winConditions: GameWinConditionsDeserialized;
+  maxLevelLoot: Item["level"];
 };

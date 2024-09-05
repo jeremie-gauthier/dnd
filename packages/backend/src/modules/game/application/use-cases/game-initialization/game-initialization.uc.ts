@@ -103,6 +103,7 @@ export class GameInitializationUseCase implements UseCase {
           WinConditionFactory.create(winCondition),
         ),
       }),
+      maxLevelLoot: payload.campaignStageProgression.stage.maxLevelLoot,
     });
 
     // 3. Attribution d'une position de depart aux heros

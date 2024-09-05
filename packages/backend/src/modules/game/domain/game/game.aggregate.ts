@@ -31,6 +31,7 @@ type Data = {
   monsterTemplates: MonsterTemplates;
   events: GameEvents;
   winConditions: WinConditions;
+  readonly maxLevelLoot: number;
 };
 
 export class Game extends AggregateRoot<Data> {
@@ -43,6 +44,7 @@ export class Game extends AggregateRoot<Data> {
     monsterTemplates: z.instanceof(MonsterTemplates),
     events: z.instanceof(GameEvents),
     winConditions: z.instanceof(WinConditions),
+    maxLevelLoot: z.number().min(1),
   });
 
   constructor(rawData: Data) {
@@ -60,6 +62,7 @@ export class Game extends AggregateRoot<Data> {
       monsterTemplates: this._data.monsterTemplates.toPlain(),
       events: this._data.events.toPlain(),
       winConditions: this._data.winConditions.toPlain(),
+      maxLevelLoot: this._data.maxLevelLoot,
     };
   }
 
