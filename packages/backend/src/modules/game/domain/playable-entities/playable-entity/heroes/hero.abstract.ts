@@ -80,6 +80,7 @@ export abstract class Hero extends Playable<Data> {
           "open_door",
           "delete_item",
           "swap_items",
+          "open_chest",
         ]),
       }),
     ),

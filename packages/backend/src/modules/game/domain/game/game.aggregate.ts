@@ -338,4 +338,24 @@ export class Game extends AggregateRoot<Data> {
       gearItem,
     });
   }
+
+  public playerOpenChest({
+    userId,
+    coordOfTileWithChest,
+  }: { userId: string; coordOfTileWithChest: Coord }) {
+    const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
+    playingEntity.mustBePlayedBy({ userId });
+    playingEntity.act({ action: "open_chest" });
+
+    const tile = this._data.board.getTileOrThrow({
+      coord: coordOfTileWithChest,
+    });
+    tile.openChest({ playableEntity: playingEntity });
+
+    return {
+      maxLevelLoot: this._data.maxLevelLoot,
+      itemsLooted: this._data.itemsLooted,
+      hostUserId: this._data.host.userId,
+    };
+  }
 }
