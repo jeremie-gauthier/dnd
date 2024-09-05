@@ -104,6 +104,7 @@ export class GameInitializationUseCase implements UseCase {
         ),
       }),
       maxLevelLoot: payload.campaignStageProgression.stage.maxLevelLoot,
+      itemsLooted: [],
     });
 
     // 3. Attribution d'une position de depart aux heros

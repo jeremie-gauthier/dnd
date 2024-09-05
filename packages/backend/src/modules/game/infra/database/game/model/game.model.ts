@@ -16,4 +16,5 @@ export type GamePersistence = {
   enemyTemplates: Array<MonsterTemplate>;
   winConditions: GameWinConditionsDeserialized;
   maxLevelLoot: Item["level"];
+  itemsLooted: Array<Item["name"]>;
 };

@@ -32,6 +32,7 @@ type Data = {
   events: GameEvents;
   winConditions: WinConditions;
   readonly maxLevelLoot: number;
+  itemsLooted: Array<Item["id"]>;
 };
 
 export class Game extends AggregateRoot<Data> {
@@ -45,6 +46,7 @@ export class Game extends AggregateRoot<Data> {
     events: z.instanceof(GameEvents),
     winConditions: z.instanceof(WinConditions),
     maxLevelLoot: z.number().min(1),
+    itemsLooted: z.array(z.string()),
   });
 
   constructor(rawData: Data) {
@@ -63,6 +65,7 @@ export class Game extends AggregateRoot<Data> {
       events: this._data.events.toPlain(),
       winConditions: this._data.winConditions.toPlain(),
       maxLevelLoot: this._data.maxLevelLoot,
+      itemsLooted: this._data.itemsLooted,
     };
   }
 

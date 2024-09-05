@@ -85,6 +85,7 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
         ),
       }),
       maxLevelLoot: persistence.maxLevelLoot,
+      itemsLooted: persistence.itemsLooted,
     });
   }
 
@@ -115,6 +116,7 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
       winConditions: plain.winConditions
         .values as GameWinConditionsDeserialized,
       maxLevelLoot: plain.maxLevelLoot,
+      itemsLooted: plain.itemsLooted,
     };
   }
 
