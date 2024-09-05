@@ -11,4 +11,7 @@ export class Item {
 
   @Column({ update: false })
   readonly level: number;
+
+  @Column({ update: false })
+  readonly isLootableInChest: boolean;
 }

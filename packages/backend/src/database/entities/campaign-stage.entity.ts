@@ -50,6 +50,9 @@ export class CampaignStage {
   @Column({ type: "json" })
   readonly mapCompiled: MapCompiledJson;
 
+  @Column()
+  readonly maxLevelLoot: number;
+
   @Column({ type: "enum", enum: CampaignStageStatusValues })
   status: CampaignStageStatusType;
 }

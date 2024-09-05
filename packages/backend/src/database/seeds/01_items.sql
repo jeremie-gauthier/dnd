@@ -2,6 +2,7 @@ INSERT INTO
   "item" (
     "name",
     "level",
+    "is_lootable_in_chest",
     "mana_cost",
     "type"
   )
@@ -9,42 +10,49 @@ VALUES
   (
     'broadsword_1',
     1,
+    false,
     NULL,
     'Weapon'
   ),
   (
     'faith_crossbow_1',
     1,
+    false,
     NULL,
     'Weapon'
   ),
   (
     'throwing_dagger_1',
     1,
+    false,
     NULL,
     'Weapon'
   ),
   (
     'magic_shot_1',
     1,
+    false,
     '{"SORCERER":2,"CLERIC":3}',
     'Spell'
   ),
   (
     'elders_shortbow_1',
     1,
+    false,
     NULL,
     'Weapon'
   ),
   (
     'goblin_scimitar_1',
     1,
+    false,
     NULL,
     'Weapon'
   ),
   (
     'bugbear_mace_1',
     1,
+    false,
     NULL,
     'Weapon'
   );

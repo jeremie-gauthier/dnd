@@ -2,6 +2,8 @@ import {
   Column,
   Entity,
   Index,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -15,6 +17,7 @@ import {
 import { CampaignStageProgression } from "./campaign-stage-progression.entity";
 import { Campaign } from "./campaign.entity";
 import { Hero } from "./hero.entity";
+import { Item } from "./item.entity";
 import { User } from "./user.entity";
 
 @Entity()
@@ -55,6 +58,10 @@ export class CampaignProgression {
     { cascade: true },
   )
   readonly heroes: Relation<Hero[]>;
+
+  @ManyToMany(() => Item, { cascade: true })
+  @JoinTable()
+  readonly itemsLooted: Relation<Item[]>;
 
   @Column({ type: "enum", enum: CampaignProgressionStatusValues })
   status: CampaignProgressionStatusType;
