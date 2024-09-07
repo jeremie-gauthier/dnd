@@ -27,6 +27,7 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
   public toDomain(persistence: GamePersistence): GameDomain {
     return new GameDomain({
       id: persistence.id,
+      host: persistence.host,
       status: new GameStatus(persistence.status),
       board: new Board({
         height: persistence.board.height,
@@ -94,6 +95,7 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
 
     return {
       id: plain.id,
+      host: plain.host,
       status: plain.status,
       playableEntities: Object.fromEntries(
         plain.playableEntities.values.map((playableEntity) => {

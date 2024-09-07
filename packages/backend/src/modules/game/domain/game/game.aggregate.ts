@@ -24,6 +24,9 @@ import { WinConditions } from "../win-conditions/win-conditions.aggregate";
 
 type Data = {
   readonly id: string;
+  host: {
+    userId: string;
+  };
   status: GameStatus;
   board: Board;
   playableEntities: PlayableEntities;
@@ -38,6 +41,7 @@ type Data = {
 export class Game extends AggregateRoot<Data> {
   private static schema = z.object({
     id: z.string().uuid(),
+    host: z.object({ userId: z.string() }),
     status: z.instanceof(GameStatus),
     board: z.instanceof(Board),
     playableEntities: z.instanceof(PlayableEntities),
@@ -57,6 +61,7 @@ export class Game extends AggregateRoot<Data> {
   public toPlain() {
     return {
       id: this._data.id,
+      host: this._data.host,
       status: this._data.status.toPlain(),
       board: this._data.board.toPlain(),
       playableEntities: this._data.playableEntities.toPlain(),

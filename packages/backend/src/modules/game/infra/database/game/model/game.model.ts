@@ -8,6 +8,9 @@ import { PlayableEntity } from "./playable-entity/playable.type";
 
 export type GamePersistence = {
   id: string;
+  host: {
+    userId: string;
+  };
   status: "PREPARE_FOR_BATTLE" | "BATTLE_ONGOING";
   board: Board;
   gameMaster: GameMaster;

@@ -86,6 +86,7 @@ export class GameInitializationUseCase implements UseCase {
     });
     const game = new Game({
       id: payload.lobby.id,
+      host: payload.lobby.host,
       status: new GameStatus("BATTLE_ONGOING"),
       board,
       gameMaster: new GameMaster({
