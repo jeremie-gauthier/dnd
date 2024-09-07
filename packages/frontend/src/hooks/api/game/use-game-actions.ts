@@ -1,4 +1,9 @@
-import { ClientGameEvent, ClientToServerEvents } from "@dnd/shared";
+import {
+  ClientGameEvent,
+  ClientToServerEvents,
+  PlayableEntityOpenChestInput,
+  PlayableEntityOpenChestOutput,
+} from "@dnd/shared";
 import { ClientSocket } from "../../../types/socket.type";
 
 type Params = {
@@ -36,6 +41,12 @@ export const useGameActions = ({ socket }: Params) => {
       socket.emit(ClientGameEvent.PlayableEntitySwapItems, payload);
     };
 
+  const openChestHandler = (
+    payload: PlayableEntityOpenChestInput,
+  ): Promise<PlayableEntityOpenChestOutput> => {
+    return socket.emitWithAck(ClientGameEvent.PlayableEntityOpenChest, payload);
+  };
+
   return {
     move: moveHandler,
     endTurn: endTurnHandler,
@@ -43,5 +54,6 @@ export const useGameActions = ({ socket }: Params) => {
     attack: attackHandler,
     deleteItem: deleteItemHandler,
     swapItems: swapItemsHandler,
+    openChest: openChestHandler,
   };
 };
