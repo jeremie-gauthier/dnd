@@ -24,7 +24,7 @@ export class PostgresItemRepository implements ItemRepository {
 
   public async getOneOrThrow({ name }: { name: string }): Promise<ItemDomain> {
     const item = await this.itemRepository.findOneOrFail({
-      select: { type: true },
+      select: { name: true, type: true },
       where: { name },
     });
 
