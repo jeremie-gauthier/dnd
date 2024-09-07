@@ -358,4 +358,8 @@ export class Game extends AggregateRoot<Data> {
       hostUserId: this._data.host.userId,
     };
   }
+
+  public markItemAsLooted({ item }: { item: Item }) {
+    this._data.itemsLooted.push(item.toPlain().name);
+  }
 }

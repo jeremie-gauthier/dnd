@@ -5,6 +5,8 @@ import {
   PlayableEntityAttackInput,
   PlayableEntityDeleteItemInput,
   PlayableEntityMoveInput,
+  PlayableEntityOpenChestInput,
+  PlayableEntityOpenChestOutput,
   PlayableEntitySwapItemsInput,
 } from "../game";
 import { ClientGameEvent } from "./game-events/game-events.client";
@@ -52,6 +54,9 @@ interface ClientToServerEventsAndPayloads
   [ClientGameEvent.PlayableEntitySwapItems]: (
     payload: PlayableEntitySwapItemsInput,
   ) => void;
+  [ClientGameEvent.PlayableEntityOpenChest]: (
+    payload: PlayableEntityOpenChestInput,
+  ) => PlayableEntityOpenChestOutput;
 }
 
 export type ClientToServerEvents =
