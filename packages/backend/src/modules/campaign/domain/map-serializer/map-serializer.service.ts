@@ -166,7 +166,7 @@ export class MapSerializerService {
         return {
           kind: "chest",
           canInteract: true,
-          isBlocking: false,
+          isBlocking: true,
           isVisible: true,
         } as Omit<ChestEntity, "type">;
     }
