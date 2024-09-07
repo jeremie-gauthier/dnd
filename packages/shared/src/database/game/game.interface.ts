@@ -2,7 +2,7 @@ import type { HeroClassType } from "../enums/hero-class.enum";
 import { StuffStorageCapacityJson } from "../json";
 import { Coord } from "./coord.interface";
 import type { EnemyKind } from "./enemy-kind.type";
-import { GameItem } from "./game-item.type";
+import { GameItem } from "./game-item";
 import {
   ChestEntity,
   DoorEntity,
