@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { classNames } from "../../../utils/class-names.util";
-import { useCharacterSheetContext } from "./CharacterSheetContext";
+import { useEditCharacterInventoryContext } from "./EditCharacterInventoryContext";
 
 const translationsKeys = {
   confirm_delete: {
@@ -17,9 +17,10 @@ const translationsKeys = {
   },
 };
 
-export const Tooltip = () => {
+export const EditCharacterInventoryTooltip = () => {
   const { t } = useTranslation(["inventory"]);
-  const { cursorPositionWithOffset, tooltipType } = useCharacterSheetContext();
+  const { cursorPositionWithOffset, tooltipType } =
+    useEditCharacterInventoryContext();
 
   if (!tooltipType) {
     return null;

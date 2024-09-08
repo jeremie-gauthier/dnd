@@ -1,41 +1,33 @@
 import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
-import { HeroClassType } from "@dnd/shared";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import cleric from "../../../assets/classes/cleric.webp";
-import sorcerer from "../../../assets/classes/sorcerer.webp";
-import thief from "../../../assets/classes/thief.webp";
-import warrior from "../../../assets/classes/warrior.webp";
 import { IconX } from "../../icon/icons/IconX";
+import { CharacterSheet } from "../common/character-sheet/CharacterSheet";
 import { useGameContext } from "../context/GameContext/useGameContext";
-import { CharacterIdentity } from "./CharacterIdentity";
+import { BackpackSlot } from "./BackpackSlot";
 import {
-  CharacterSheetContextProvider,
-  useCharacterSheetContext,
-} from "./CharacterSheetContext";
-import { CharacterStats } from "./CharacterStats";
-import { Tooltip } from "./Tooltip";
-import { CharacterInventory } from "./character-inventory/CharacterInventory";
-
-const CLASS_TO_IMG: Readonly<Record<HeroClassType, string>> = {
-  CLERIC: cleric,
-  WARRIOR: warrior,
-  SORCERER: sorcerer,
-  THIEF: thief,
-} as const;
+  EditCharacterInventoryContextProvider,
+  useEditCharacterInventoryContext,
+} from "./EditCharacterInventoryContext";
+import { EditCharacterInventoryTooltip } from "./EditCharacterInventoryTooltip";
+import { GearSlot } from "./GearSlot";
 
 type Props = {
   isOpen: boolean;
   close: () => void;
 };
 
-export const CharacterSheet = (props: Props) => {
+export const EditCharacterInventory = (props: Props) => {
   const { game, heroPlaying, gameActions } = useGameContext();
+  const { setTooltipType } = useEditCharacterInventoryContext();
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { over, active } = event;
-    if (!over?.data.current?.action || !active.data.current?.item.name) return;
+    if (!over?.data.current?.action || !active.data.current?.item.name) {
+      setTooltipType(null);
+      return;
+    }
 
     if (over.data.current.action === "delete_item") {
       gameActions.deleteItem({
@@ -50,6 +42,7 @@ export const CharacterSheet = (props: Props) => {
         destinationStorageSpace
       ].some((item) => item.name === active.data.current?.item.name);
       if (isMovingItemsInSameStorageSpace) {
+        setTooltipType(null);
         return;
       }
 
@@ -58,6 +51,7 @@ export const CharacterSheet = (props: Props) => {
           ? [over.data.current.hostedItem, active.data.current.item]
           : [active.data.current.item, over.data.current.hostedItem];
       if (gearItem && backpackItem && gearItem.type !== backpackItem.type) {
+        setTooltipType(null);
         return;
       }
 
@@ -71,14 +65,14 @@ export const CharacterSheet = (props: Props) => {
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      <CharacterSheetContextProvider>
-        <InnerCharacterSheet {...props} />
-      </CharacterSheetContextProvider>
+      <EditCharacterInventoryContextProvider>
+        <InnerEditCharacterInventory {...props} />
+      </EditCharacterInventoryContextProvider>
     </DndContext>
   );
 };
 
-const InnerCharacterSheet = ({ isOpen, close }: Props) => {
+const InnerEditCharacterInventory = ({ isOpen, close }: Props) => {
   const { t } = useTranslation(["inventory"]);
   const { heroPlaying, playerState } = useGameContext();
   const { isOver: isOverGarbageArea, setNodeRef: setGarbageAreaNodeRed } =
@@ -90,7 +84,8 @@ const InnerCharacterSheet = ({ isOpen, close }: Props) => {
     useDroppable({
       id: "droppable-safe-area",
     });
-  const { updateCursorPosition, setTooltipType } = useCharacterSheetContext();
+  const { updateCursorPosition, setTooltipType } =
+    useEditCharacterInventoryContext();
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: setTooltipType is a react hook
   useEffect(() => {
@@ -119,7 +114,7 @@ const InnerCharacterSheet = ({ isOpen, close }: Props) => {
         ref={setGarbageAreaNodeRed}
         className="fixed inset-0 z-20 w-screen overflow-y-auto"
       >
-        <Tooltip />
+        <EditCharacterInventoryTooltip />
         <div className="flex min-h-full items-center justify-center p-4">
           <DialogPanel
             className="relative w-full max-w-max rounded-xl"
@@ -140,28 +135,11 @@ const InnerCharacterSheet = ({ isOpen, close }: Props) => {
               </button>
             </DialogTitle>
 
-            {heroPlaying.faction === "hero" ? (
-              <img
-                src={CLASS_TO_IMG[heroPlaying.class]}
-                alt=""
-                className="absolute top-3 left-4 h-20 shadow-xl"
-              />
-            ) : null}
-
-            <div className="flex flex-row rounded-xl">
-              <div className="flex flex-col pt-20 px-1 pb-4 bg-primary-600 rounded-bl-md gap-4">
-                <CharacterStats character={heroPlaying} />
-              </div>
-
-              <div className="flex flex-col bg-primary-900 rounded-br-md">
-                <div className="flex flex-row bg-primary-600 pl-4 py-2">
-                  <CharacterIdentity character={heroPlaying} />
-                </div>
-                <div className="flex flex-col p-4 gap-8">
-                  <CharacterInventory character={heroPlaying} />
-                </div>
-              </div>
-            </div>
+            <CharacterSheet
+              character={heroPlaying}
+              renderBackpackSlot={BackpackSlot}
+              renderGearSlot={GearSlot}
+            />
           </DialogPanel>
         </div>
       </div>

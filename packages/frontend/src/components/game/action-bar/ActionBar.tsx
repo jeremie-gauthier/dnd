@@ -1,9 +1,10 @@
 import { GameItem } from "@dnd/shared";
-import { InventorySlot } from "../character-sheet/character-inventory/common/InventorySlot";
 import { ActionTabContextProvider } from "../context/ActionTab/ActionTabContextProvider";
 import { useGameContext } from "../context/GameContext/useGameContext";
+import { InventorySlot } from "../edit-character-inventory/common/InventorySlot";
 import { AttackItem } from "./actions/AttackItem";
 import { MoveButton } from "./actions/MoveButton";
+import { OpenChestButton } from "./actions/OpenChestButton";
 import { OpenDoorButton } from "./actions/OpenDoorButton";
 import { OpenInventoryButton } from "./actions/OpenInventoryButton";
 
@@ -66,9 +67,12 @@ export const ActionBar = () => {
               <OpenDoorButton />
             </div>
 
-            <div className="flex flex-col">
-              {heroPlaying.faction === "hero" ? <OpenInventoryButton /> : null}
-            </div>
+            {heroPlaying.faction === "hero" ? (
+              <div className="flex flex-col justify-between">
+                <OpenInventoryButton />
+                <OpenChestButton />
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

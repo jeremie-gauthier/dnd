@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 
-type CharacterSheetContextValue = {
+type EditCharacterInventoryContextValue = {
   cursorPositionWithOffset: { x: number; y: number };
   updateCursorPosition: MouseEventHandler<HTMLDivElement>;
   tooltipType: "confirm_delete" | "confirm_swap" | "confirm_move" | null;
@@ -17,24 +17,25 @@ type CharacterSheetContextValue = {
   >;
 };
 
-const CharacterSheetContext = createContext<CharacterSheetContextValue>({
-  cursorPositionWithOffset: { x: 0, y: 0 },
-  updateCursorPosition: () => undefined,
-  tooltipType: null,
-  setTooltipType: () => undefined,
-});
+const EditCharacterInventoryContext =
+  createContext<EditCharacterInventoryContextValue>({
+    cursorPositionWithOffset: { x: 0, y: 0 },
+    updateCursorPosition: () => undefined,
+    tooltipType: null,
+    setTooltipType: () => undefined,
+  });
 
-export const useCharacterSheetContext = () => {
-  const context = useContext(CharacterSheetContext);
+export const useEditCharacterInventoryContext = () => {
+  const context = useContext(EditCharacterInventoryContext);
   if (!context) {
-    throw new Error("CharacterSheetContext.Provider is missing");
+    throw new Error("EditCharacterInventoryContext.Provider is missing");
   }
   return context;
 };
 
 type Props = PropsWithChildren;
 
-export const CharacterSheetContextProvider = ({ children }: Props) => {
+export const EditCharacterInventoryContextProvider = ({ children }: Props) => {
   const [cursorPositionWithOffset, setCursorPositionWithOffset] = useState({
     x: 0,
     y: 0,
@@ -51,7 +52,7 @@ export const CharacterSheetContextProvider = ({ children }: Props) => {
   >(null);
 
   return (
-    <CharacterSheetContext.Provider
+    <EditCharacterInventoryContext.Provider
       value={{
         cursorPositionWithOffset,
         updateCursorPosition,
@@ -60,6 +61,6 @@ export const CharacterSheetContextProvider = ({ children }: Props) => {
       }}
     >
       {children}
-    </CharacterSheetContext.Provider>
+    </EditCharacterInventoryContext.Provider>
   );
 };

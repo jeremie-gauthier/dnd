@@ -1,8 +1,8 @@
 import { useDroppable } from "@dnd-kit/core";
 import { GameItem } from "@dnd/shared";
 import { PropsWithChildren, useEffect } from "react";
-import { classNames } from "../../../../../utils/class-names.util";
-import { useCharacterSheetContext } from "../../CharacterSheetContext";
+import { classNames } from "../../../../utils/class-names.util";
+import { useEditCharacterInventoryContext } from "../EditCharacterInventoryContext";
 
 type Props = PropsWithChildren<{
   type: GameItem["type"] | "backpackAnyItem";
@@ -27,7 +27,7 @@ export const InventorySlot = ({
   const isDraggingCompatibleItem =
     type === "backpackAnyItem" || active?.data.current?.item.type === type;
 
-  const { setTooltipType } = useCharacterSheetContext();
+  const { setTooltipType } = useEditCharacterInventoryContext();
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: setTooltipType is a react hook
   useEffect(() => {
@@ -36,11 +36,9 @@ export const InventorySlot = ({
     if (hostedItem) {
       const isSwappable =
         isDraggingCompatibleItem && active?.data.current?.item !== hostedItem;
-      if (isSwappable) {
-        setTooltipType("confirm_swap");
-      }
+      setTooltipType(isSwappable ? "confirm_swap" : null);
     } else {
-      setTooltipType("confirm_move");
+      setTooltipType(isDraggingCompatibleItem ? "confirm_move" : null);
     }
   }, [
     isDraggingCompatibleItem,
