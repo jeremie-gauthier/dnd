@@ -14,4 +14,6 @@ export const ClientGameEvent = {
     "client.game.player_requests_playable_entity_swap_items",
   PlayableEntityOpenChest:
     "client.game.player_requests_playable_entity_open_chest",
+  PlayableEntityLootItem:
+    "client.game.player_requests_playable_entity_loot_item",
 } as const;

@@ -10,6 +10,7 @@ import { GetUserGameStateUseCase } from "./use-cases/get-user-game-state/get-use
 import { OpenDoorUseCase } from "./use-cases/open-door/open-door.uc";
 import { PlayableEntityAttackUseCase } from "./use-cases/playable-entity-attack/playable-entity-attack.uc";
 import { PlayableEntityDeleteItemUseCase } from "./use-cases/playable-entity-delete-item/playable-entity-delete-item.uc";
+import { PlayableEntityLootItemUseCase } from "./use-cases/playable-entity-loot-item/playable-entity-loot-item.uc";
 import { PlayableEntityMoveUseCase } from "./use-cases/playable-entity-move/playable-entity-move.uc";
 import { PlayableEntityOpenChestUseCase } from "./use-cases/playable-entity-open-chest/playable-entity-open-chest.uc";
 import { PlayableEntitySwapItemsUseCase } from "./use-cases/playable-entity-swap-items/playable-entity-swap-items.uc";
@@ -30,6 +31,7 @@ import { PlayableEntitySwapItemsUseCase } from "./use-cases/playable-entity-swap
     PlayableEntityDeleteItemUseCase,
     PlayableEntitySwapItemsUseCase,
     PlayableEntityOpenChestUseCase,
+    PlayableEntityLootItemUseCase,
   ],
   exports: [
     GameListeners,
@@ -44,6 +46,7 @@ import { PlayableEntitySwapItemsUseCase } from "./use-cases/playable-entity-swap
     PlayableEntityDeleteItemUseCase,
     PlayableEntitySwapItemsUseCase,
     PlayableEntityOpenChestUseCase,
+    PlayableEntityLootItemUseCase,
   ],
 })
 export class ApplicationModule {}

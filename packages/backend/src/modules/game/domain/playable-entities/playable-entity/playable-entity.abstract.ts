@@ -206,6 +206,15 @@ export abstract class Playable<
     }
   }
 
+  public mustBeLooting() {
+    if (this._data.actionsDoneThisTurn.at(-1)?.name !== "open_chest") {
+      throw new PlayableEntityError({
+        name: "FORBIDDEN_ACTION",
+        message: `Playable entity ${this.id} is not looting anything`,
+      });
+    }
+  }
+
   public getAttackResult({
     attackId,
     attackItem,

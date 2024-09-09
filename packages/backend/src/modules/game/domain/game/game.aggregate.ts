@@ -14,6 +14,7 @@ import { Coord } from "../coord/coord.vo";
 import { GameEvents } from "../game-events/game-events.aggregate";
 import { GameMaster } from "../game-master/game-master.entity";
 import { GameStatus } from "../game-status/game-status.vo";
+import { StorageSpace } from "../inventory/inventory.entity";
 import { Item } from "../item/item.abstract";
 import { MonsterTemplates } from "../monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "../playable-entities/playable-entities.aggregate";
@@ -21,6 +22,7 @@ import { Monster } from "../playable-entities/playable-entity/monster.entity";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
 import { TilePlayableEntity } from "../tile/tile-entity/playable/playable.entity";
 import { WinConditions } from "../win-conditions/win-conditions.aggregate";
+import { GameError } from "./game.error";
 
 type Data = {
   readonly id: string;
@@ -296,6 +298,44 @@ export class Game extends AggregateRoot<Data> {
         message: "Target is out of range",
       });
     }
+  }
+
+  public playerLootItem({
+    userId,
+    item,
+    replacedItemId,
+    storageSpace,
+  }: {
+    userId: string;
+    item: Item;
+    replacedItemId?: Item["id"];
+    storageSpace: StorageSpace;
+  }) {
+    const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
+    playingEntity.mustBePlayedBy({ userId });
+    playingEntity.mustBeLooting();
+
+    const isExpectedItemId = this._data.itemsLooted.at(-1) === item.id;
+    if (!isExpectedItemId) {
+      throw new GameError({
+        name: "UNEXPECTED_LOOT_ITEM",
+        message: "Player tried to loot an invalid item",
+      });
+    }
+
+    if (replacedItemId) {
+      const replacedItem = playingEntity.inventory.getItemInInventoryOrThrow({
+        itemId: replacedItemId,
+      });
+      playingEntity.inventory.mustHaveItemInStorageSpace({
+        item: replacedItem,
+        storageSpace,
+      });
+
+      playingEntity.inventory.removeItemFromInventory({ item: replacedItem });
+    }
+
+    playingEntity.inventory.addItemInStorageSpace({ item, storageSpace });
   }
 
   public playerDeleteItem({

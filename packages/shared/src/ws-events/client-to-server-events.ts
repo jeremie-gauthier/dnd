@@ -4,6 +4,7 @@ import {
   OpenDoorInput,
   PlayableEntityAttackInput,
   PlayableEntityDeleteItemInput,
+  PlayableEntityLootItemInput,
   PlayableEntityMoveInput,
   PlayableEntityOpenChestInput,
   PlayableEntityOpenChestOutput,
@@ -57,6 +58,9 @@ interface ClientToServerEventsAndPayloads
   [ClientGameEvent.PlayableEntityOpenChest]: (
     payload: PlayableEntityOpenChestInput,
   ) => PlayableEntityOpenChestOutput;
+  [ClientGameEvent.PlayableEntityLootItem]: (
+    payload: PlayableEntityLootItemInput,
+  ) => void;
 }
 
 export type ClientToServerEvents =

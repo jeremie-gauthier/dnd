@@ -12,6 +12,8 @@ import { AuthGuard } from "src/guards/auth.guard";
 import type { ServerSocket } from "src/interfaces/socket.interface";
 import { PlayableEntityDeleteItemInputDto } from "src/modules/game/application/use-cases/playable-entity-delete-item/playable-entity-delete-item.dto";
 import { PlayableEntityDeleteItemUseCase } from "src/modules/game/application/use-cases/playable-entity-delete-item/playable-entity-delete-item.uc";
+import { PlayableEntityLootItemInputDto } from "src/modules/game/application/use-cases/playable-entity-loot-item/playable-entity-loot-item.dto";
+import { PlayableEntityLootItemUseCase } from "src/modules/game/application/use-cases/playable-entity-loot-item/playable-entity-loot-item.uc";
 import {
   PlayableEntityOpenChestInputDto,
   PlayableEntityOpenChestOutputDto,
@@ -49,6 +51,7 @@ export class GameSubscriberGateway {
     private readonly playableEntityDeleteItemUseCase: PlayableEntityDeleteItemUseCase,
     private readonly playableEntitySwapItemsUseCase: PlayableEntitySwapItemsUseCase,
     private readonly playableEntityOpenChestUseCase: PlayableEntityOpenChestUseCase,
+    private readonly playableEntityLootItemUseCase: PlayableEntityLootItemUseCase,
   ) {}
 
   @SubscribeMessage(ClientGameEvent.PlayableEntityTurnEnds)
@@ -135,5 +138,17 @@ export class GameSubscriberGateway {
     });
 
     return { itemFound: itemView };
+  }
+
+  @SubscribeMessage(ClientGameEvent.PlayableEntityLootItem)
+  public async playableEntityLootItem(
+    @MessageBody()
+    playableEntityLootItemInputDto: PlayableEntityLootItemInputDto,
+    @ConnectedSocket() client: ServerSocket,
+  ): Promise<void> {
+    await this.playableEntityLootItemUseCase.execute({
+      ...playableEntityLootItemInputDto,
+      userId: client.data.userId,
+    });
   }
 }
