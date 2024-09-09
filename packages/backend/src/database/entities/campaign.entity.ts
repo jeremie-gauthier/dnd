@@ -45,9 +45,7 @@ export class Campaign {
   @ManyToMany(
     () => HeroTemplate,
     (heroTemplate) => heroTemplate.playableInCampaigns,
-    {
-      cascade: true,
-    },
+    { cascade: true },
   )
   @JoinTable()
   readonly playableHeroes: Relation<HeroTemplate[]>;

@@ -40,7 +40,10 @@ VALUES
   "throwing_dagger_1": "Dague de lancer équilibrée",
   "elders_shortbow_1": "Arc court des anciens",
   "goblin_scimitar_1": "Cimeterre gobelin",
-  "bugbear_mace_1": "Masse de gobelours"
+  "bugbear_mace_1": "Masse de gobelours",
+  "faith_mace_1": "Masse d''arme de la foi",
+  "flash_bombs_1": "Bombes flash",
+  "master_axe_1": "Hache du maître"
 }'
   ),
   (
@@ -56,7 +59,10 @@ VALUES
   (
     'fr-FR',
     'inventory',
-    '{ 
+    '{
+  "chest": "Coffre",
+  "chest_loot_title": "Butin obtenu",
+  "refuse_loot": "Abandonner le butin",
   "inventory_title": "Feuille de personnage",
   "confirm_deletion_prompt": "Supprimer cet objet ? (1PA)",
   "confirm_deletion_instructions": "Relâchez pour confirmer",
@@ -64,6 +70,8 @@ VALUES
   "confirm_swap_instructions": "Relâchez pour confirmer",
   "confirm_move_prompt": "Déplacer cet objet ? (1PA)",
   "confirm_move_instructions": "Relâchez pour confirmer",
+  "confirm_loot_swap_prompt": "Remplacer cet objet par le butin ?",
+  "confirm_loot_swap_instructions": "Relâchez pour confirmer",
   "gear": "Équipement",
   "backpack": "Sac à dos",
   "heroIdentity": "{{class}} NIVEAU {{level}}",

@@ -4,7 +4,10 @@ import {
   OpenDoorInput,
   PlayableEntityAttackInput,
   PlayableEntityDeleteItemInput,
+  PlayableEntityLootItemInput,
   PlayableEntityMoveInput,
+  PlayableEntityOpenChestInput,
+  PlayableEntityOpenChestOutput,
   PlayableEntitySwapItemsInput,
 } from "../game";
 import { ClientGameEvent } from "./game-events/game-events.client";
@@ -51,6 +54,12 @@ interface ClientToServerEventsAndPayloads
   ) => void;
   [ClientGameEvent.PlayableEntitySwapItems]: (
     payload: PlayableEntitySwapItemsInput,
+  ) => void;
+  [ClientGameEvent.PlayableEntityOpenChest]: (
+    payload: PlayableEntityOpenChestInput,
+  ) => PlayableEntityOpenChestOutput;
+  [ClientGameEvent.PlayableEntityLootItem]: (
+    payload: PlayableEntityLootItemInput,
   ) => void;
 }
 

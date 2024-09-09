@@ -73,6 +73,27 @@ export class Tile extends Entity<Data> {
     doorEntity.onInteraction();
   }
 
+  public openChest({ playableEntity }: { playableEntity: Playable }) {
+    const chestEntity = this._data.entities.find(
+      (entity) => entity.isInteractive() && entity.isChest(),
+    );
+    if (!chestEntity) {
+      throw new TileError({
+        name: "TILE_ENTITY_NOT_FOUND",
+        message: `No Chest entity found at coord ${this._data.coord}`,
+      });
+    }
+
+    if (!playableEntity.coord.isAdjacentTo(this._data.coord)) {
+      throw new TileInteractiveEntityError({
+        name: "CANNOT_INTERACT",
+        message: `Playable Entity ${playableEntity.id} [${playableEntity.coord}] cannot open the chest [${this._data.coord}] as it is not adjacent to it`,
+      });
+    }
+
+    chestEntity.onInteraction();
+  }
+
   public getActiveTrap() {
     return this.entities.find(
       (tileEntity) =>

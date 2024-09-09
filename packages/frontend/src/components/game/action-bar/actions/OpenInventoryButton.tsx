@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Icon } from "../../../icon/Icon";
 import { Button } from "../../../shared/button/Button";
-import { CharacterSheet } from "../../character-sheet/CharacterSheet";
+import { EditCharacterInventory } from "../../edit-character-inventory/EditCharacterInventory";
 
 export const OpenInventoryButton = () => {
   const [isInventoryOpen, setIsInventoryOpen] = useState(false);
@@ -20,7 +20,7 @@ export const OpenInventoryButton = () => {
         <Icon icon="battleGear" className="fill-white h-10 w-10" />
       </Button>
 
-      <CharacterSheet isOpen={isInventoryOpen} close={close} />
+      <EditCharacterInventory isOpen={isInventoryOpen} close={close} />
     </>
   );
 };

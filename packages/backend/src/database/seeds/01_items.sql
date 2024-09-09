@@ -2,6 +2,7 @@ INSERT INTO
   "item" (
     "name",
     "level",
+    "is_lootable_in_chest",
     "mana_cost",
     "type"
   )
@@ -9,42 +10,70 @@ VALUES
   (
     'broadsword_1',
     1,
+    false,
     NULL,
     'Weapon'
   ),
   (
     'faith_crossbow_1',
     1,
+    false,
     NULL,
     'Weapon'
   ),
   (
     'throwing_dagger_1',
     1,
+    false,
     NULL,
     'Weapon'
   ),
   (
     'magic_shot_1',
     1,
+    false,
     '{"SORCERER":2,"CLERIC":3}',
     'Spell'
   ),
   (
     'elders_shortbow_1',
     1,
+    false,
     NULL,
     'Weapon'
   ),
   (
     'goblin_scimitar_1',
     1,
+    false,
     NULL,
     'Weapon'
   ),
   (
     'bugbear_mace_1',
     1,
+    false,
+    NULL,
+    'Weapon'
+  ),
+  (
+    'faith_mace_1',
+    1,
+    TRUE,
+    NULL,
+    'Weapon'
+  ),
+  (
+    'master_axe_1',
+    1,
+    TRUE,
+    NULL,
+    'Weapon'
+  ),
+  (
+    'flash_bombs_1',
+    1,
+    TRUE,
     NULL,
     'Weapon'
   );
@@ -79,6 +108,18 @@ VALUES
   (
     'bugbear_mace_1',
     'https://www.aidedd.org/dnd/images/bugbear.jpg'
+  ),
+  (
+    'faith_mace_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/faith_mace_1.webp'
+  ),
+  (
+    'master_axe_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/master_axe_1.webp'
+  ),
+  (
+    'flash_bombs_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/flash_bombs_1.webp'
   );
 
 INSERT INTO
@@ -131,118 +172,180 @@ VALUES
     'melee',
     'regular',
     'bugbear_mace_1'
+  ),
+  (
+    'c121e3e7-f8f0-4ed9-b577-a50eb2216f2c',
+    'melee',
+    'regular',
+    'faith_mace_1'
+  ),
+  (
+    'bb9b990b-b09b-4918-922b-8b9d363be855',
+    'melee',
+    'regular',
+    'master_axe_1'
+  ),
+  (
+    '675d0f5e-3a92-4a1f-8a63-a97ab8f46cad',
+    'melee',
+    'super',
+    'master_axe_1'
+  ),
+  (
+    '76fee024-70f8-497b-924f-287971559a53',
+    'long',
+    'regular',
+    'flash_bombs_1'
   );
 
 INSERT INTO
-  "attack_dice" ("id", "attack_id", "dice_name")
+  "attack_dice" ("attack_id", "dice_name")
 VALUES
+  -- broadsword_1 regular atk
   (
-    '41bf1485-fcd5-4aaa-90be-e3acf01f071e',
     'd6935dcd-0a9e-4e8e-9e17-d1d7242ccd68',
     'yellow'
   ),
   (
-    '39e8c2b4-513a-4a92-a2c4-43bc8460ca1a',
     'd6935dcd-0a9e-4e8e-9e17-d1d7242ccd68',
     'yellow'
   ),
   (
-    '72e710d5-8146-4d21-9c7b-cd8bd6cfa006',
     'd6935dcd-0a9e-4e8e-9e17-d1d7242ccd68',
     'orange'
   ),
+  -- faith_crossbow_1 regular atk
   (
-    '0e03f19a-1b47-4c24-97da-7476ff0641b8',
     'caf774ee-71cf-400d-af29-e91ffb1aa9e2',
     'yellow'
   ),
   (
-    '7e3fad54-1c0e-4725-912d-9e875e039368',
     'caf774ee-71cf-400d-af29-e91ffb1aa9e2',
     'yellow'
   ),
   (
-    'e495ebd9-0b15-46fa-a56d-f45680e2e26a',
     'caf774ee-71cf-400d-af29-e91ffb1aa9e2',
     'special'
   ),
+  -- throwing_dagger_1 super atk
   (
-    '3963b982-b7c7-47fe-85c9-a7076c488b25',
     '3f0624db-76e3-4492-883a-feca67e2add6',
     'orange'
   ),
   (
-    'cfeebb10-284e-47f1-a537-428531e1c552',
     '3f0624db-76e3-4492-883a-feca67e2add6',
     'orange'
   ),
   (
-    '282429ae-5a74-46d4-9802-6bd2138d5250',
     '3f0624db-76e3-4492-883a-feca67e2add6',
     'special'
   ),
+  -- throwing_dagger_1 regular atk
   (
-    '2634a9c7-4637-489d-9cb5-46fdbdb1a076',
     '843694db-6235-4d88-81a2-d463954690de',
     'yellow'
   ),
   (
-    '8cfc2a02-4ee7-4ed2-ad58-960aba940fd1',
     '843694db-6235-4d88-81a2-d463954690de',
     'yellow'
   ),
+  -- magic_shot_1 regular atk
   (
-    '0b3c2c22-668a-4b44-80f2-f075a850e5ca',
     'fdb9c3a8-9ec2-457a-90b3-bbbab68b1236',
     'yellow'
   ),
   (
-    'f5154e19-2633-4c8f-b5ff-18a31a1925d5',
     'fdb9c3a8-9ec2-457a-90b3-bbbab68b1236',
     'red'
   ),
+  -- elders_shortbow_1 regular atk
   (
-    '3623d279-deee-4b25-84bb-ce0124b4683c',
     '14931b0b-1c4c-4f3f-919b-62d91d2a35c4',
     'yellow'
   ),
   (
-    '09d69081-cc37-48e8-b2df-72390dc8f75f',
     '14931b0b-1c4c-4f3f-919b-62d91d2a35c4',
     'yellow'
   ),
   (
-    '9eb44ec6-a07b-4984-87cb-9d21e83e9de9',
     '14931b0b-1c4c-4f3f-919b-62d91d2a35c4',
     'special'
   ),
+  -- goblin_scimitar_1 regular atk
   (
-    '36e10fc1-da0f-4c90-89aa-02c7fb59d52e',
     'd94e7f57-bb5e-4bac-92a0-c1defce8b7a3',
     'yellow'
   ),
   (
-    '9e555227-dc9c-46f7-a6ad-a1bc4e2fed2a',
     'd94e7f57-bb5e-4bac-92a0-c1defce8b7a3',
     'yellow'
   ),
   (
-    '3f64d089-d5f9-41b2-9051-5ff788429d76',
     'd94e7f57-bb5e-4bac-92a0-c1defce8b7a3',
     'orange'
   ),
+  -- bugbear_mace_1 regular atk
   (
-    'e6e9f8df-489f-419d-9eb9-c9462b84cef6',
     '71ff36ed-8714-48be-9122-9a052a25d37c',
     'yellow'
   ),
   (
-    'f9b2c85a-a766-4250-8874-c90906a34659',
     '71ff36ed-8714-48be-9122-9a052a25d37c',
     'yellow'
   ),
   (
-    '5274c998-8d7f-48d0-b379-1bd384027185',
     '71ff36ed-8714-48be-9122-9a052a25d37c',
     'red'
+  ),
+  -- faith_mace_1 regular atk
+  (
+    'c121e3e7-f8f0-4ed9-b577-a50eb2216f2c',
+    'yellow'
+  ),
+  (
+    'c121e3e7-f8f0-4ed9-b577-a50eb2216f2c',
+    'orange'
+  ),
+  (
+    'c121e3e7-f8f0-4ed9-b577-a50eb2216f2c',
+    'special'
+  ),
+  -- master_axe_1 regular atk
+  (
+    'bb9b990b-b09b-4918-922b-8b9d363be855',
+    'yellow'
+  ),
+  (
+    'bb9b990b-b09b-4918-922b-8b9d363be855',
+    'orange'
+  ),
+  -- master_axe_1 super atk
+  (
+    '675d0f5e-3a92-4a1f-8a63-a97ab8f46cad',
+    'yellow'
+  ),
+  (
+    '675d0f5e-3a92-4a1f-8a63-a97ab8f46cad',
+    'orange'
+  ),
+  (
+    '675d0f5e-3a92-4a1f-8a63-a97ab8f46cad',
+    'orange'
+  ),
+  (
+    '675d0f5e-3a92-4a1f-8a63-a97ab8f46cad',
+    'special'
+  ),
+  -- flash_bombs_1 regular atk
+  (
+    '76fee024-70f8-497b-924f-287971559a53',
+    'yellow'
+  ),
+  (
+    '76fee024-70f8-497b-924f-287971559a53',
+    'yellow'
+  ),
+  (
+    '76fee024-70f8-497b-924f-287971559a53',
+    'special'
   );

@@ -4,6 +4,7 @@ import { IconHand } from "./icons/IconHand";
 import { IconHeart } from "./icons/IconHeart";
 import { IconKnapsack } from "./icons/IconKnapsack";
 import { IconMeleeAttack } from "./icons/IconMeleeAttack";
+import { IconOpenChest } from "./icons/IconOpenChest";
 import { IconOpenGate } from "./icons/IconOpenGate";
 import { IconRangeAttack } from "./icons/IconRangeAttack";
 import { IconRoundStar } from "./icons/IconRoundStar";
@@ -30,4 +31,5 @@ export const iconMapping = {
   knapsack: IconKnapsack,
   hand: IconHand,
   x: IconX,
+  openChest: IconOpenChest,
 } as const;

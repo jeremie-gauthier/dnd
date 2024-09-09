@@ -14,6 +14,7 @@ import { Coord } from "../coord/coord.vo";
 import { GameEvents } from "../game-events/game-events.aggregate";
 import { GameMaster } from "../game-master/game-master.entity";
 import { GameStatus } from "../game-status/game-status.vo";
+import { StorageSpace } from "../inventory/inventory.entity";
 import { Item } from "../item/item.abstract";
 import { MonsterTemplates } from "../monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "../playable-entities/playable-entities.aggregate";
@@ -21,9 +22,13 @@ import { Monster } from "../playable-entities/playable-entity/monster.entity";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
 import { TilePlayableEntity } from "../tile/tile-entity/playable/playable.entity";
 import { WinConditions } from "../win-conditions/win-conditions.aggregate";
+import { GameError } from "./game.error";
 
 type Data = {
   readonly id: string;
+  host: {
+    userId: string;
+  };
   status: GameStatus;
   board: Board;
   playableEntities: PlayableEntities;
@@ -31,11 +36,14 @@ type Data = {
   monsterTemplates: MonsterTemplates;
   events: GameEvents;
   winConditions: WinConditions;
+  readonly maxLevelLoot: number;
+  itemsLooted: Array<Item["id"]>;
 };
 
 export class Game extends AggregateRoot<Data> {
   private static schema = z.object({
     id: z.string().uuid(),
+    host: z.object({ userId: z.string() }),
     status: z.instanceof(GameStatus),
     board: z.instanceof(Board),
     playableEntities: z.instanceof(PlayableEntities),
@@ -43,6 +51,8 @@ export class Game extends AggregateRoot<Data> {
     monsterTemplates: z.instanceof(MonsterTemplates),
     events: z.instanceof(GameEvents),
     winConditions: z.instanceof(WinConditions),
+    maxLevelLoot: z.number().min(1),
+    itemsLooted: z.array(z.string()),
   });
 
   constructor(rawData: Data) {
@@ -53,6 +63,7 @@ export class Game extends AggregateRoot<Data> {
   public toPlain() {
     return {
       id: this._data.id,
+      host: this._data.host,
       status: this._data.status.toPlain(),
       board: this._data.board.toPlain(),
       playableEntities: this._data.playableEntities.toPlain(),
@@ -60,6 +71,8 @@ export class Game extends AggregateRoot<Data> {
       monsterTemplates: this._data.monsterTemplates.toPlain(),
       events: this._data.events.toPlain(),
       winConditions: this._data.winConditions.toPlain(),
+      maxLevelLoot: this._data.maxLevelLoot,
+      itemsLooted: this._data.itemsLooted,
     };
   }
 
@@ -287,6 +300,44 @@ export class Game extends AggregateRoot<Data> {
     }
   }
 
+  public playerLootItem({
+    userId,
+    item,
+    replacedItemId,
+    storageSpace,
+  }: {
+    userId: string;
+    item: Item;
+    replacedItemId?: Item["id"];
+    storageSpace: StorageSpace;
+  }) {
+    const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
+    playingEntity.mustBePlayedBy({ userId });
+    playingEntity.mustBeLooting();
+
+    const isExpectedItemId = this._data.itemsLooted.at(-1) === item.id;
+    if (!isExpectedItemId) {
+      throw new GameError({
+        name: "UNEXPECTED_LOOT_ITEM",
+        message: "Player tried to loot an invalid item",
+      });
+    }
+
+    if (replacedItemId) {
+      const replacedItem = playingEntity.inventory.getItemInInventoryOrThrow({
+        itemId: replacedItemId,
+      });
+      playingEntity.inventory.mustHaveItemInStorageSpace({
+        item: replacedItem,
+        storageSpace,
+      });
+
+      playingEntity.inventory.removeItemFromInventory({ item: replacedItem });
+    }
+
+    playingEntity.inventory.addItemInStorageSpace({ item, storageSpace });
+  }
+
   public playerDeleteItem({
     userId,
     itemId,
@@ -326,5 +377,29 @@ export class Game extends AggregateRoot<Data> {
       backpackItem,
       gearItem,
     });
+  }
+
+  public playerOpenChest({
+    userId,
+    coordOfTileWithChest,
+  }: { userId: string; coordOfTileWithChest: Coord }) {
+    const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
+    playingEntity.mustBePlayedBy({ userId });
+    playingEntity.act({ action: "open_chest" });
+
+    const tile = this._data.board.getTileOrThrow({
+      coord: coordOfTileWithChest,
+    });
+    tile.openChest({ playableEntity: playingEntity });
+
+    return {
+      maxLevelLoot: this._data.maxLevelLoot,
+      itemsLooted: this._data.itemsLooted,
+      hostUserId: this._data.host.userId,
+    };
+  }
+
+  public markItemAsLooted({ item }: { item: Item }) {
+    this._data.itemsLooted.push(item.toPlain().name);
   }
 }

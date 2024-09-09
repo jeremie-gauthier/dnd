@@ -86,6 +86,7 @@ export class GameInitializationUseCase implements UseCase {
     });
     const game = new Game({
       id: payload.lobby.id,
+      host: payload.lobby.host,
       status: new GameStatus("BATTLE_ONGOING"),
       board,
       gameMaster: new GameMaster({
@@ -103,6 +104,8 @@ export class GameInitializationUseCase implements UseCase {
           WinConditionFactory.create(winCondition),
         ),
       }),
+      maxLevelLoot: payload.campaignStageProgression.stage.maxLevelLoot,
+      itemsLooted: [],
     });
 
     // 3. Attribution d'une position de depart aux heros

@@ -6,6 +6,8 @@ import warrior_icon from "../../../assets/classes/warrior_icon.png";
 import attack_layer from "../../../assets/layers/attack_layer.png";
 import move_layer from "../../../assets/layers/move_layer.png";
 import goblin_icon from "../../../assets/monsters/goblin_icon.png";
+import chest_close from "../../../assets/tiles/chests/chest_close.png";
+import chest_open from "../../../assets/tiles/chests/chest_open.png";
 import door_close from "../../../assets/tiles/doors/door_close.png";
 import door_open from "../../../assets/tiles/doors/door_open.png";
 import floor_dark from "../../../assets/tiles/floors/floor_dark.png";
@@ -35,8 +37,8 @@ export const assetCollection = {
   ref_red,
   trap_active,
   trap_inactive,
-  chest_closed: unknown_icon,
-  chest_opened: unknown_icon,
+  chest_close,
+  chest_open,
 } as const;
 
 export const floorAssetCollection = {
@@ -59,8 +61,8 @@ export const entitiesAssetsCollection = {
   goblin_icon,
   trap_active,
   trap_inactive,
-  chest_closed: unknown_icon,
-  chest_opened: unknown_icon,
+  chest_close,
+  chest_open,
 } as const;
 
 export const previewsAssetsCollection = {

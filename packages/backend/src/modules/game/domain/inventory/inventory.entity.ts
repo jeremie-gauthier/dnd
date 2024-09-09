@@ -7,7 +7,7 @@ import { Weapon } from "../item/weapon/weapon.entity";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
 import { InventoryError } from "./inventory.error";
 
-type StorageSpace = "gear" | "backpack";
+export type StorageSpace = "gear" | "backpack";
 
 type Data = {
   readonly playableId: Playable["id"];
@@ -150,7 +150,7 @@ export class Inventory extends Entity<Data> {
     });
   }
 
-  private mustHaveItemInStorageSpace({
+  public mustHaveItemInStorageSpace({
     item,
     storageSpace,
   }: { item: Item; storageSpace: StorageSpace }) {

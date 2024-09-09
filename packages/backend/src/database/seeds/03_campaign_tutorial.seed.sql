@@ -11,7 +11,8 @@ INSERT INTO
     intro,
     outro,
     map_compiled,
-    STATUS
+    STATUS,
+    max_level_loot
   )
 VALUES
   (
@@ -28,7 +29,8 @@ VALUES
     'Apprenez à vous déplacer dans DnD',
     'Félicitations !',
     '{}',
-    'AVAILABLE'
+    'AVAILABLE',
+    1
   );
 
 INSERT INTO

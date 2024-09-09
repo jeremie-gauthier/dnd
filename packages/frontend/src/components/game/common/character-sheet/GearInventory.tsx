@@ -1,14 +1,20 @@
 import { GameItem, StuffStorageCapacityJson } from "@dnd/shared";
-import { IconHand } from "../../../icon/icons/IconHand";
-import { InventoryItem } from "./common/InventoryItem";
-import { InventorySlot } from "./common/InventorySlot";
 
 type Props = {
   gear: GameItem[];
   storageCapacity: StuffStorageCapacityJson;
+  renderGearSlot: React.FC<{
+    item?: GameItem;
+    type: "Weapon" | "Spell" | "backpackAnyItem";
+    idx: number;
+  }>;
 };
 
-export const GearInventory = ({ gear, storageCapacity }: Props) => {
+export const GearInventory = ({
+  gear,
+  storageCapacity,
+  renderGearSlot,
+}: Props) => {
   const gearWeapons = gear
     .filter((item) => item.type === "Weapon")
     .map<{ item: GameItem; type: "Weapon" }>((item) => ({
@@ -33,21 +39,7 @@ export const GearInventory = ({ gear, storageCapacity }: Props) => {
     }).fill({ item: undefined, type: "Spell" }),
   ];
 
-  return gearInventorySlots.map(({ item, type }, idx) => (
-    // biome-ignore lint/suspicious/noArrayIndexKey: no stable unique id exploitable
-    <div key={idx} className="flex flex-col items-center">
-      <InventorySlot
-        type={type}
-        droppableId={`droppable-gear-slot-${idx}`}
-        hostedItem={item}
-        storageSpace="gear"
-      >
-        {item ? (
-          <InventoryItem item={item} />
-        ) : (
-          <IconHand className="fill-primary-600" />
-        )}
-      </InventorySlot>
-    </div>
-  ));
+  return gearInventorySlots.map(({ item, type }, idx) =>
+    renderGearSlot({ item, type, idx }),
+  );
 };
