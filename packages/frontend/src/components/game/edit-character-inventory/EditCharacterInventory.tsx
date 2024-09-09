@@ -20,12 +20,10 @@ type Props = {
 
 export const EditCharacterInventory = (props: Props) => {
   const { game, heroPlaying, gameActions } = useGameContext();
-  const { setTooltipType } = useEditCharacterInventoryContext();
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { over, active } = event;
     if (!over?.data.current?.action || !active.data.current?.item.name) {
-      setTooltipType(null);
       return;
     }
 
@@ -42,7 +40,6 @@ export const EditCharacterInventory = (props: Props) => {
         destinationStorageSpace
       ].some((item) => item.name === active.data.current?.item.name);
       if (isMovingItemsInSameStorageSpace) {
-        setTooltipType(null);
         return;
       }
 
@@ -51,7 +48,6 @@ export const EditCharacterInventory = (props: Props) => {
           ? [over.data.current.hostedItem, active.data.current.item]
           : [active.data.current.item, over.data.current.hostedItem];
       if (gearItem && backpackItem && gearItem.type !== backpackItem.type) {
-        setTooltipType(null);
         return;
       }
 

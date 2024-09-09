@@ -47,6 +47,11 @@ export const useGameActions = ({ socket }: Params) => {
     return socket.emitWithAck(ClientGameEvent.PlayableEntityOpenChest, payload);
   };
 
+  const lootItemHandler: ClientToServerEvents["client.game.player_requests_playable_entity_loot_item"] =
+    (payload) => {
+      socket.emit(ClientGameEvent.PlayableEntityLootItem, payload);
+    };
+
   return {
     move: moveHandler,
     endTurn: endTurnHandler,
@@ -55,5 +60,6 @@ export const useGameActions = ({ socket }: Params) => {
     deleteItem: deleteItemHandler,
     swapItems: swapItemsHandler,
     openChest: openChestHandler,
+    lootItem: lootItemHandler,
   };
 };
