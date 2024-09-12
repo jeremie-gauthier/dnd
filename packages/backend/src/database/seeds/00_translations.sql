@@ -43,7 +43,13 @@ VALUES
   "bugbear_mace_1": "Masse de gobelours",
   "faith_mace_1": "Masse d''arme de la foi",
   "flash_bombs_1": "Bombes flash",
-  "master_axe_1": "Hache du maître"
+  "master_axe_1": "Hache du maître",
+  "poisoned_blowpipe_1": "Sarbacane empoisonnée",
+  "sword_of_outcast_kings_1": "Lame des rois proscrits",
+  "tormented_sword_of_slavery_1": "Épée tourmentée d''esclavage",
+  "bow_of_freedom_1": "Arc de liberté",
+  "elves_blessed_bow_1": "Arc béni des elfes",
+  "trusty_dwarven_forging_axe_1": "Fidèle hache de forge naine"
 }'
   ),
   (

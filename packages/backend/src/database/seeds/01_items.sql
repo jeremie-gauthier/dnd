@@ -76,6 +76,48 @@ VALUES
     TRUE,
     NULL,
     'Weapon'
+  ),
+  (
+    'poisoned_blowpipe_1',
+    1,
+    TRUE,
+    NULL,
+    'Weapon'
+  ),
+  (
+    'sword_of_outcast_kings_1',
+    1,
+    TRUE,
+    NULL,
+    'Weapon'
+  ),
+  (
+    'tormented_sword_of_slavery_1',
+    1,
+    TRUE,
+    NULL,
+    'Weapon'
+  ),
+  (
+    'bow_of_freedom_1',
+    1,
+    TRUE,
+    NULL,
+    'Weapon'
+  ),
+  (
+    'elves_blessed_bow_1',
+    1,
+    TRUE,
+    NULL,
+    'Weapon'
+  ),
+  (
+    'trusty_dwarven_forging_axe_1',
+    1,
+    TRUE,
+    NULL,
+    'Weapon'
   );
 
 INSERT INTO
@@ -120,6 +162,30 @@ VALUES
   (
     'flash_bombs_1',
     'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/flash_bombs_1.webp'
+  ),
+  (
+    'poisoned_blowpipe_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/poisoned_blowpipe_1.webp'
+  ),
+  (
+    'sword_of_outcast_kings_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/sword_of_outcast_kings_1.webp'
+  ),
+  (
+    'tormented_sword_of_slavery_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/tormented_sword_of_slavery_1.webp'
+  ),
+  (
+    'bow_of_freedom_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/bow_of_freedom_1.webp'
+  ),
+  (
+    'elves_blessed_bow_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/elves_blessed_bow_1.webp'
+  ),
+  (
+    'trusty_dwarven_forging_axe_1',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/trusty_dwarven_forging_axe_1.webp'
   );
 
 INSERT INTO
@@ -196,6 +262,42 @@ VALUES
     'long',
     'regular',
     'flash_bombs_1'
+  ),
+  (
+    'a25756b8-99b3-4e5e-9862-ca912d5ea633',
+    'long',
+    'regular',
+    'poisoned_blowpipe_1'
+  ),
+  (
+    'a69381d8-b447-4098-86e9-a1dbd028a2a4',
+    'melee',
+    'regular',
+    'sword_of_outcast_kings_1'
+  ),
+  (
+    '2688c50c-b4e3-4781-ad1d-8839392b9b01',
+    'melee',
+    'regular',
+    'tormented_sword_of_slavery_1'
+  ),
+  (
+    '80b60cd2-f835-4762-bf24-e9d967e09d97',
+    'long',
+    'regular',
+    'bow_of_freedom_1'
+  ),
+  (
+    'fe3e0d2f-318d-4865-b04a-7cf0a14f6b9d',
+    'long',
+    'regular',
+    'elves_blessed_bow_1'
+  ),
+  (
+    'ff30c6db-df5e-4ce2-b8f9-4522fb0ce54f',
+    'melee',
+    'regular',
+    'trusty_dwarven_forging_axe_1'
   );
 
 INSERT INTO
@@ -348,4 +450,75 @@ VALUES
   (
     '76fee024-70f8-497b-924f-287971559a53',
     'special'
+  ) -- poisoned_blowpipe_1 regular atk
+  (
+    'a25756b8-99b3-4e5e-9862-ca912d5ea633',
+    'yellow'
+  ),
+  (
+    'a25756b8-99b3-4e5e-9862-ca912d5ea633',
+    'orange'
+  ) -- sword_of_outcast_kings_1 regular atk
+  (
+    'a69381d8-b447-4098-86e9-a1dbd028a2a4',
+    'orange'
+  ),
+  (
+    'a69381d8-b447-4098-86e9-a1dbd028a2a4',
+    'special'
+  ),
+  -- tormented_sword_of_slavery_1 regular atk
+  (
+    '2688c50c-b4e3-4781-ad1d-8839392b9b01',
+    'yellow'
+  ),
+  (
+    '2688c50c-b4e3-4781-ad1d-8839392b9b01',
+    'orange'
+  ),
+  (
+    '2688c50c-b4e3-4781-ad1d-8839392b9b01',
+    'orange'
+  ),
+  (
+    '2688c50c-b4e3-4781-ad1d-8839392b9b01',
+    'special'
+  ),
+  -- bow_of_freedom_1 regular atk
+  (
+    '80b60cd2-f835-4762-bf24-e9d967e09d97',
+    'yellow'
+  ),
+  (
+    '80b60cd2-f835-4762-bf24-e9d967e09d97',
+    'orange'
+  ),
+  -- elves_blessed_bow_1 regular atk 
+  (
+    'fe3e0d2f-318d-4865-b04a-7cf0a14f6b9d',
+    'yellow'
+  ),
+  (
+    'fe3e0d2f-318d-4865-b04a-7cf0a14f6b9d',
+    'orange'
+  ),
+  (
+    'fe3e0d2f-318d-4865-b04a-7cf0a14f6b9d',
+    'special'
+  ) -- trusty_dwarven_forging_axe_1 regular atk
+  (
+    'ff30c6db-df5e-4ce2-b8f9-4522fb0ce54f',
+    'yellow'
+  ),
+  (
+    'ff30c6db-df5e-4ce2-b8f9-4522fb0ce54f',
+    'red'
   );
+
+INSERT INTO
+  "item_perks_perk" ("item_name", "perk_name")
+VALUES
+  ('poisoned_blowpipe_1', 'reroll_dices'),
+  ('bow_of_freedom_1', 'reroll_dices'),
+  ('elves_blessed_bow_1', 'reroll_dices'),
+  ('trusty_dwarven_forging_axe_1', 'reroll_dices');
