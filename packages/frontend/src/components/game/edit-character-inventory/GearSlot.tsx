@@ -19,7 +19,7 @@ export const GearSlot = ({ item, type, idx }: Props) => {
       hostedItem={item}
     >
       {item ? (
-        <InventoryItem item={item} />
+        <InventoryItem item={item} storageSpace="gear" />
       ) : (
         <IconHand className="fill-primary-600" />
       )}

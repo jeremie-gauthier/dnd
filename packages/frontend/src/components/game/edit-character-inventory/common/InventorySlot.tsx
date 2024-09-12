@@ -26,6 +26,10 @@ export const InventorySlot = ({
   const isDragging = active !== null;
   const isDraggingCompatibleItem =
     type === "backpackAnyItem" || active?.data.current?.item.type === type;
+  const isDraggingItemFromSameStorageSpace =
+    active?.data.current?.storageSpace === storageSpace;
+  const isDraggingHostedItem =
+    active?.data.current?.item.name === hostedItem?.name;
 
   const { setTooltipType } = useEditCharacterInventoryContext();
 
@@ -36,7 +40,11 @@ export const InventorySlot = ({
     if (hostedItem) {
       const isSwappable =
         isDraggingCompatibleItem && active?.data.current?.item !== hostedItem;
-      setTooltipType(isSwappable ? "confirm_swap" : null);
+      setTooltipType(
+        isSwappable && !isDraggingItemFromSameStorageSpace
+          ? "confirm_swap"
+          : null,
+      );
     } else {
       setTooltipType(isDraggingCompatibleItem ? "confirm_move" : null);
     }
@@ -45,6 +53,7 @@ export const InventorySlot = ({
     hostedItem,
     isOver,
     active?.data.current?.item,
+    isDraggingItemFromSameStorageSpace,
   ]);
 
   return (
@@ -52,10 +61,17 @@ export const InventorySlot = ({
       ref={setNodeRef}
       className={classNames(
         "relative h-32 w-28 border-2 rounded flex flex-col items-center justify-center group",
-        isOver && isDraggingCompatibleItem
+        isOver &&
+          isDraggingCompatibleItem &&
+          (!isDraggingItemFromSameStorageSpace || isDraggingHostedItem)
           ? "border-white"
           : slotTypeColor[type],
         isDragging && !isDraggingCompatibleItem ? "grayscale" : "",
+        isDragging &&
+          isDraggingItemFromSameStorageSpace &&
+          !isDraggingHostedItem
+          ? "grayscale"
+          : "",
       )}
     >
       {children}

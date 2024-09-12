@@ -5,13 +5,14 @@ import { useTranslation } from "react-i18next";
 
 type Props = {
   item: GameItem;
+  storageSpace: "gear" | "backpack";
 };
 
-export const InventoryItem = ({ item }: Props) => {
+export const InventoryItem = ({ item, storageSpace }: Props) => {
   const { t } = useTranslation(["items"]);
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: `draggable-item-${item.name}`,
-    data: { item },
+    data: { item, storageSpace },
   });
 
   const regularAttack = item.attacks.find(
