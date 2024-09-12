@@ -76,10 +76,13 @@ const InnerEditCharacterInventory = ({ isOpen, close }: Props) => {
       id: "droppable-garbage-slot",
       data: { action: "delete_item" },
     });
-  const { isOver: isOverSafeArea, setNodeRef: setSafeAreaNodeRef } =
-    useDroppable({
-      id: "droppable-safe-area",
-    });
+  const {
+    isOver: isOverSafeArea,
+    setNodeRef: setSafeAreaNodeRef,
+    active,
+  } = useDroppable({
+    id: "droppable-safe-area",
+  });
   const { updateCursorPosition, setTooltipType } =
     useEditCharacterInventoryContext();
 
@@ -93,6 +96,13 @@ const InnerEditCharacterInventory = ({ isOpen, close }: Props) => {
       setTooltipType("confirm_delete");
     }
   }, [isOverGarbageArea, isOverSafeArea]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: setTooltipType is a react hook
+  useEffect(() => {
+    if (!active) {
+      setTooltipType(null);
+    }
+  }, [active]);
 
   if (!heroPlaying || !playerState.canAct) {
     return null;
