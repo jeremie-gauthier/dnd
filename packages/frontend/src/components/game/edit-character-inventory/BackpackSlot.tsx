@@ -19,7 +19,7 @@ export const BackpackSlot = ({ item, type, idx }: Props) => {
       hostedItem={item}
     >
       {item ? (
-        <InventoryItem item={item} />
+        <InventoryItem item={item} storageSpace="backpack" />
       ) : (
         <IconKnapsack className="fill-primary-600" />
       )}
