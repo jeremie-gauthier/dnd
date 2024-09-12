@@ -6,16 +6,16 @@ type Props = {
 };
 
 export const HealthPoints = ({ size = "medium" }: Props) => {
-  const { isPlaying, heroPlaying } = useGameContext();
+  const { isPlaying, entityPlaying } = useGameContext();
 
-  if (!isPlaying || !heroPlaying) {
+  if (!isPlaying || !entityPlaying) {
     return null;
   }
 
   const healthPointsMissingPercentage = Math.round(
-    ((heroPlaying.characteristic.baseHealthPoints -
-      heroPlaying.characteristic.healthPoints) /
-      heroPlaying.characteristic.baseHealthPoints) *
+    ((entityPlaying.characteristic.baseHealthPoints -
+      entityPlaying.characteristic.healthPoints) /
+      entityPlaying.characteristic.baseHealthPoints) *
       100,
   );
   const svgSize = classNames(
@@ -64,8 +64,8 @@ export const HealthPoints = ({ size = "medium" }: Props) => {
       </svg>
 
       <span className={classNames("absolute font-bold", fontSize)}>
-        {heroPlaying.characteristic.healthPoints} /{" "}
-        {heroPlaying.characteristic.baseHealthPoints}
+        {entityPlaying.characteristic.healthPoints} /{" "}
+        {entityPlaying.characteristic.baseHealthPoints}
       </span>
     </div>
   );

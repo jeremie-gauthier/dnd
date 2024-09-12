@@ -2,9 +2,9 @@ import { Icon } from "../icon/Icon";
 import { useGameContext } from "./context/GameContext/useGameContext";
 
 export const ActionPoints = () => {
-  const { isPlaying, heroPlaying } = useGameContext();
+  const { isPlaying, entityPlaying } = useGameContext();
 
-  if (!isPlaying || !heroPlaying) {
+  if (!isPlaying || !entityPlaying) {
     return null;
   }
 
@@ -17,7 +17,7 @@ export const ActionPoints = () => {
         />
       </div>
       <span className="absolute text-2xl font-bold">
-        {heroPlaying.characteristic.actionPoints}
+        {entityPlaying.characteristic.actionPoints}
       </span>
     </div>
   );

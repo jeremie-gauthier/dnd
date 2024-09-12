@@ -9,7 +9,7 @@ import { ActionBar } from "./action-bar/ActionBar";
 import { useGameContext } from "./context/GameContext/useGameContext";
 
 export const Game = () => {
-  const { game, isPlaying, heroPlaying } = useGameContext();
+  const { game, isPlaying, entityPlaying } = useGameContext();
 
   return (
     <div className="flex flex-col w-full gap-4">
@@ -26,7 +26,7 @@ export const Game = () => {
       </div>
 
       <div className="flex flex-row justify-center w-full gap-16">
-        {isPlaying && heroPlaying ? (
+        {isPlaying && entityPlaying ? (
           <>
             <div className="flex flex-col items-center">
               <HealthPoints size="large" />

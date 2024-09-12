@@ -3,7 +3,7 @@ import { Button } from "../../../shared/button/Button";
 import { useGameContext } from "../../context/GameContext/useGameContext";
 
 export const OpenDoorButton = () => {
-  const { neighbourTiles, heroPlaying, playerState, gameActions, game } =
+  const { neighbourTiles, entityPlaying, playerState, gameActions, game } =
     useGameContext();
 
   const neighbourDoorCoord = neighbourTiles?.find((tile) =>
@@ -18,8 +18,8 @@ export const OpenDoorButton = () => {
 
   const canOpenDoor =
     neighbourDoorCoord !== undefined &&
-    heroPlaying !== undefined &&
-    heroPlaying.characteristic.actionPoints > 0;
+    entityPlaying !== undefined &&
+    entityPlaying.characteristic.actionPoints > 0;
 
   const handleClick = () => {
     if (!canOpenDoor) return;

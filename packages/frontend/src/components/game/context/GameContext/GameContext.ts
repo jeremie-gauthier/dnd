@@ -18,7 +18,7 @@ type GameContextParams = {
   phase: PlayerGamePhase;
   neighbourTiles: Tile[] | undefined;
   isPlaying: boolean;
-  heroPlaying: PlayableEntity | undefined;
+  entityPlaying: PlayableEntity | undefined;
 };
 
 export const GameContext = createContext<GameContextParams>({

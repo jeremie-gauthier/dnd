@@ -49,17 +49,17 @@ export class GameEventManager extends EventTarget {
 
   public emitPreparingAttack({
     game,
-    heroPlaying,
+    entityPlaying,
     item,
     attack,
   }: {
     game: GameView;
-    heroPlaying: PlayableEntity;
+    entityPlaying: PlayableEntity;
     item: GameItem;
     attack: GameItem["attacks"][number];
   }) {
     this.dispatchEvent(
-      new PreparingAttackEvent(game, heroPlaying, item, attack),
+      new PreparingAttackEvent(game, entityPlaying, item, attack),
     );
   }
 }

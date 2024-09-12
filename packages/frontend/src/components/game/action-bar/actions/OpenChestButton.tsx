@@ -6,7 +6,7 @@ import { useGameContext } from "../../context/GameContext/useGameContext";
 import { GetChestLoot } from "../../get-chest-loot/GetChestLoot";
 
 export const OpenChestButton = () => {
-  const { neighbourTiles, heroPlaying, playerState, gameActions, game } =
+  const { neighbourTiles, entityPlaying, playerState, gameActions, game } =
     useGameContext();
   const [itemFoundInChest, setItemFoundInChest] = useState<GameItem | null>(
     null,
@@ -28,8 +28,8 @@ export const OpenChestButton = () => {
 
   const canOpenChest =
     neighbourChestCoord !== undefined &&
-    heroPlaying !== undefined &&
-    heroPlaying.characteristic.actionPoints > 0;
+    entityPlaying !== undefined &&
+    entityPlaying.characteristic.actionPoints > 0;
 
   const handleClick = async () => {
     if (!canOpenChest) return;

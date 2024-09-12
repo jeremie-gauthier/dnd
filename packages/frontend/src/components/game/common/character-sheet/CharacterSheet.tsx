@@ -34,17 +34,17 @@ export const CharacterSheet = ({
   renderGearSlot,
 }: Props) => {
   const { t } = useTranslation(["inventory"]);
-  const { heroPlaying, playerState } = useGameContext();
+  const { entityPlaying, playerState } = useGameContext();
 
-  if (!heroPlaying || !playerState.canAct) {
+  if (!entityPlaying || !playerState.canAct) {
     return null;
   }
 
   return (
     <>
-      {heroPlaying.faction === "hero" ? (
+      {entityPlaying.faction === "hero" ? (
         <img
-          src={CLASS_TO_IMG[heroPlaying.class]}
+          src={CLASS_TO_IMG[entityPlaying.class]}
           alt=""
           className="absolute top-3 left-4 h-20 shadow-xl"
         />
@@ -61,7 +61,7 @@ export const CharacterSheet = ({
 
         <div className="flex flex-col bg-primary-900 rounded-br-md">
           <div className="flex flex-row bg-primary-600 pl-4 py-2">
-            <CharacterIdentity character={heroPlaying} />
+            <CharacterIdentity character={entityPlaying} />
           </div>
           <div className="flex flex-col p-4 gap-8">
             <div className="flex flex-col">

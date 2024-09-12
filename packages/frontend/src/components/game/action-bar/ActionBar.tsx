@@ -9,10 +9,10 @@ import { OpenDoorButton } from "./actions/OpenDoorButton";
 import { OpenInventoryButton } from "./actions/OpenInventoryButton";
 
 export const ActionBar = () => {
-  const { isPlaying, heroPlaying } = useGameContext();
+  const { isPlaying, entityPlaying } = useGameContext();
 
-  if (!isPlaying || !heroPlaying) return null;
-  const { gear, storageCapacity } = heroPlaying.inventory;
+  if (!isPlaying || !entityPlaying) return null;
+  const { gear, storageCapacity } = entityPlaying.inventory;
 
   const gearWeapons = gear
     .filter((item) => item.type === "Weapon")
@@ -67,7 +67,7 @@ export const ActionBar = () => {
               <OpenDoorButton />
             </div>
 
-            {heroPlaying.faction === "hero" ? (
+            {entityPlaying.faction === "hero" ? (
               <div className="flex flex-col justify-between">
                 <OpenInventoryButton />
                 <OpenChestButton />

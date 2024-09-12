@@ -2,9 +2,9 @@ import { Icon } from "../icon/Icon";
 import { useGameContext } from "./context/GameContext/useGameContext";
 
 export const ManaPoints = () => {
-  const { isPlaying, heroPlaying } = useGameContext();
+  const { isPlaying, entityPlaying } = useGameContext();
 
-  if (!isPlaying || !heroPlaying) {
+  if (!isPlaying || !entityPlaying) {
     return null;
   }
 
@@ -17,9 +17,9 @@ export const ManaPoints = () => {
         />
       </div>
       <span className="absolute text-2xl font-bold">
-        {heroPlaying.characteristic.manaPoints}
+        {entityPlaying.characteristic.manaPoints}
         <span className="text-sm font-bold">
-          / {heroPlaying.characteristic.baseManaPoints}
+          / {entityPlaying.characteristic.baseManaPoints}
         </span>
       </span>
     </div>

@@ -10,17 +10,17 @@ export const MoveButton = () => {
     playerState,
     game,
     isPlaying,
-    heroPlaying,
+    entityPlaying,
     gameEventManager,
     gameActions,
   } = useGameContext();
 
-  if (!isPlaying || !heroPlaying) return null;
+  if (!isPlaying || !entityPlaying) return null;
 
   const isMoving = playerState.currentAction === "move";
   const canMove =
-    heroPlaying.characteristic.movementPoints > 0 &&
-    heroPlaying.characteristic.actionPoints > 0;
+    entityPlaying.characteristic.movementPoints > 0 &&
+    entityPlaying.characteristic.actionPoints > 0;
 
   useEffect(() => {
     const handleClick: EventListener = async (e) => {
@@ -28,12 +28,12 @@ export const MoveButton = () => {
 
       const { isometricCoord } = e as TileClickedEvent;
 
-      const isLiddaMoving = heroPlaying.name.toLowerCase() === "lidda";
+      const isLiddaMoving = entityPlaying.name.toLowerCase() === "lidda";
       const tilePaths = getAllPathsFromTileWithinRange({
-        ally: isLiddaMoving ? "ignoring" : heroPlaying.faction,
+        ally: isLiddaMoving ? "ignoring" : entityPlaying.faction,
         gameBoard: game.map,
-        originCoord: heroPlaying.coord,
-        maxRange: heroPlaying.characteristic.movementPoints,
+        originCoord: entityPlaying.coord,
+        maxRange: entityPlaying.characteristic.movementPoints,
       });
       const selectedPath = tilePaths.find(
         ({ tile }) =>
@@ -64,10 +64,10 @@ export const MoveButton = () => {
     gameActions.move,
     gameEventManager.addEventListener,
     gameEventManager.removeEventListener,
-    heroPlaying.name,
-    heroPlaying.faction,
-    heroPlaying.characteristic.movementPoints,
-    heroPlaying.coord,
+    entityPlaying.name,
+    entityPlaying.faction,
+    entityPlaying.characteristic.movementPoints,
+    entityPlaying.coord,
     playerState.toggleTo,
   ]);
 
