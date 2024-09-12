@@ -2,18 +2,18 @@ import { Button } from "../shared/button/Button";
 import { useGameContext } from "./context/GameContext/useGameContext";
 
 export const EndTurnButton = () => {
-  const { game, playerState, heroPlaying, gameActions } = useGameContext();
+  const { game, playerState, entityPlaying, gameActions } = useGameContext();
 
   const handleClick = () => {
     playerState.toggleTo("idle");
     gameActions.endTurn({ gameId: game.id });
   };
 
-  if (!heroPlaying) {
+  if (!entityPlaying) {
     return null;
   }
 
-  const hasActionPointsLeft = heroPlaying.characteristic.actionPoints > 0;
+  const hasActionPointsLeft = entityPlaying.characteristic.actionPoints > 0;
 
   return (
     <Button

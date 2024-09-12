@@ -15,7 +15,7 @@ type Props = {
 
 export const AttackItem = ({ item, attack }: Props) => {
   const { t } = useTranslation(["items"]);
-  const { game, playerState, gameEventManager, heroPlaying, gameActions } =
+  const { game, playerState, gameEventManager, entityPlaying, gameActions } =
     useGameContext();
 
   const { selectedAttack, clearSelectedAttack, selectAttack } =
@@ -27,7 +27,7 @@ export const AttackItem = ({ item, attack }: Props) => {
       if (
         // !canAttack ||
         !isUsedToAttack ||
-        !heroPlaying ||
+        !entityPlaying ||
         playerState.currentAction !== "attack"
       )
         return;
@@ -70,13 +70,13 @@ export const AttackItem = ({ item, attack }: Props) => {
     gameActions.attack,
     gameEventManager.addEventListener,
     gameEventManager.removeEventListener,
-    heroPlaying,
+    entityPlaying,
     playerState.toggleTo,
     playerState.currentAction,
   ]);
 
   const handleUseAttackItem = () => {
-    if (!heroPlaying) return;
+    if (!entityPlaying) return;
 
     if (isUsedToAttack) {
       playerState.toggleTo("idle");
@@ -84,11 +84,16 @@ export const AttackItem = ({ item, attack }: Props) => {
     } else {
       playerState.toggleTo("attack");
       selectAttack(attack);
-      gameEventManager.emitPreparingAttack({ game, heroPlaying, item, attack });
+      gameEventManager.emitPreparingAttack({
+        game,
+        entityPlaying,
+        item,
+        attack,
+      });
     }
   };
 
-  if (!heroPlaying) {
+  if (!entityPlaying) {
     return null;
   }
 
@@ -104,18 +109,18 @@ export const AttackItem = ({ item, attack }: Props) => {
   const canBeCast =
     item.type !== "Spell" ||
     (item.type === "Spell" &&
-      heroPlaying.faction === "hero" &&
-      item.manaCost[heroPlaying.class] &&
-      heroPlaying.characteristic.manaPoints >=
-        item.manaCost[heroPlaying.class]!);
+      entityPlaying.faction === "hero" &&
+      item.manaCost[entityPlaying.class] &&
+      entityPlaying.characteristic.manaPoints >=
+        item.manaCost[entityPlaying.class]!);
 
   const canAttack =
-    heroPlaying &&
-    heroPlaying.characteristic.actionPoints > 0 &&
+    entityPlaying &&
+    entityPlaying.characteristic.actionPoints > 0 &&
     // TODO: re-enable this
-    // (heroPlaying.faction === "hero" ||
-    //   (heroPlaying.faction === "monster" &&
-    //     !heroPlaying.actionsDoneThisTurn.some(
+    // (entityPlaying.faction === "hero" ||
+    //   (entityPlaying.faction === "monster" &&
+    //     !entityPlaying.actionsDoneThisTurn.some(
     //       ({ name }) => name === "attack",
     //     ))) &&
     canBeCast;

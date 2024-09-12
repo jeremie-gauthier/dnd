@@ -75,12 +75,12 @@ export const usePreviewLayer = ({ gameEventManager, canvasRef }: Params) => {
 
   useEffect(() => {
     const handlePreparingAttackEvent: EventListener = (e) => {
-      const { game, heroPlaying, attack } = e as PreparingAttackEvent;
+      const { game, entityPlaying, attack } = e as PreparingAttackEvent;
 
       const tilesInSight = getLineOfSight({
-        ally: heroPlaying.faction,
+        ally: entityPlaying.faction,
         gameBoard: game.map,
-        originCoord: heroPlaying.coord,
+        originCoord: entityPlaying.coord,
         range: attack.range,
       });
       const coordsInSight = tilesInSight.map(

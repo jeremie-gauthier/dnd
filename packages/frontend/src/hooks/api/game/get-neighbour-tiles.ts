@@ -8,19 +8,19 @@ import {
 
 type Params = {
   isPlaying: boolean;
-  heroPlaying: PlayableEntity | undefined;
+  entityPlaying: PlayableEntity | undefined;
   game: GameView;
 };
 
 export const useGetNeighbourTiles = ({
   isPlaying,
-  heroPlaying,
+  entityPlaying,
   game,
 }: Params): Tile[] | undefined => {
-  if (!isPlaying || !heroPlaying) return;
+  if (!isPlaying || !entityPlaying) return;
   const metadata = { width: game.map.width, height: game.map.height };
 
-  const neighbourCoords = getNeighbourCoords({ coord: heroPlaying.coord });
+  const neighbourCoords = getNeighbourCoords({ coord: entityPlaying.coord });
   const neighbourTiles = neighbourCoords
     .map((coord) => {
       const tileIdx = coordToIndex({ coord, metadata });

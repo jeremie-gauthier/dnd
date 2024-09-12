@@ -5,7 +5,7 @@ export class PreparingAttackEvent extends Event {
 
   constructor(
     public readonly game: GameView,
-    public readonly heroPlaying: PlayableEntity,
+    public readonly entityPlaying: PlayableEntity,
     public readonly item: GameItem,
     public readonly attack: GameItem["attacks"][number],
   ) {

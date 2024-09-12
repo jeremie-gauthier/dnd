@@ -19,7 +19,7 @@ type Props = {
 };
 
 export const EditCharacterInventory = (props: Props) => {
-  const { game, heroPlaying, gameActions } = useGameContext();
+  const { game, entityPlaying, gameActions } = useGameContext();
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { over, active } = event;
@@ -36,7 +36,7 @@ export const EditCharacterInventory = (props: Props) => {
       const destinationStorageSpace = over.data.current.storageSpace as
         | "gear"
         | "backpack";
-      const isMovingItemsInSameStorageSpace = heroPlaying?.inventory[
+      const isMovingItemsInSameStorageSpace = entityPlaying?.inventory[
         destinationStorageSpace
       ].some((item) => item.name === active.data.current?.item.name);
       if (isMovingItemsInSameStorageSpace) {
@@ -70,7 +70,7 @@ export const EditCharacterInventory = (props: Props) => {
 
 const InnerEditCharacterInventory = ({ isOpen, close }: Props) => {
   const { t } = useTranslation(["inventory"]);
-  const { heroPlaying, playerState } = useGameContext();
+  const { entityPlaying, playerState } = useGameContext();
   const { isOver: isOverGarbageArea, setNodeRef: setGarbageAreaNodeRed } =
     useDroppable({
       id: "droppable-garbage-slot",
@@ -104,7 +104,7 @@ const InnerEditCharacterInventory = ({ isOpen, close }: Props) => {
     }
   }, [active]);
 
-  if (!heroPlaying || !playerState.canAct) {
+  if (!entityPlaying || !playerState.canAct) {
     return null;
   }
 
@@ -142,7 +142,7 @@ const InnerEditCharacterInventory = ({ isOpen, close }: Props) => {
             </DialogTitle>
 
             <CharacterSheet
-              character={heroPlaying}
+              character={entityPlaying}
               renderBackpackSlot={BackpackSlot}
               renderGearSlot={GearSlot}
             />

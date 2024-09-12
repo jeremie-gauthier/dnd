@@ -32,11 +32,15 @@ export const GameContextProvider = ({
   });
 
   const isPlaying = phase === "action";
-  const heroPlaying = Object.values(game.playableEntities).find(
+  const entityPlaying = Object.values(game.playableEntities).find(
     ({ currentPhase }) => currentPhase === "action",
   );
 
-  const neighbourTiles = useGetNeighbourTiles({ isPlaying, heroPlaying, game });
+  const neighbourTiles = useGetNeighbourTiles({
+    isPlaying,
+    entityPlaying,
+    game,
+  });
 
   return (
     <GameContext.Provider
@@ -54,7 +58,7 @@ export const GameContextProvider = ({
         gameActions,
         neighbourTiles,
         isPlaying,
-        heroPlaying,
+        entityPlaying,
       }}
     >
       {children}

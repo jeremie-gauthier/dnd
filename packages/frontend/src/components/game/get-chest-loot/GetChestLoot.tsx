@@ -60,7 +60,7 @@ const InnerGetChestLoot = ({
   itemFoundInChest,
 }: Pick<Props, "close" | "isOpen" | "itemFoundInChest">) => {
   const { t } = useTranslation(["inventory"]);
-  const { heroPlaying } = useGameContext();
+  const { entityPlaying } = useGameContext();
   const { updateCursorPosition } = useGetChestLootContext();
 
   const noOp = () => {};
@@ -68,7 +68,7 @@ const InnerGetChestLoot = ({
     close();
   };
 
-  if (!heroPlaying || !itemFoundInChest) {
+  if (!entityPlaying || !itemFoundInChest) {
     return null;
   }
 
@@ -108,7 +108,7 @@ const InnerGetChestLoot = ({
               </DialogTitle>
 
               <CharacterSheet
-                character={heroPlaying}
+                character={entityPlaying}
                 renderBackpackSlot={BackpackSlot}
                 renderGearSlot={GearSlot}
               />
