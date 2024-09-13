@@ -1,6 +1,7 @@
 import { BloodPrice } from "../../domain/perk/blood-price.perk";
 import { Breakable } from "../../domain/perk/breakable.perk";
 import { CriticalFailure } from "../../domain/perk/critical-failure.perk";
+import { DoubleDamage } from "../../domain/perk/double-damage.perk";
 import { GreaterHealing } from "../../domain/perk/greater-healing.perk";
 import { ManaLeech } from "../../domain/perk/mana-leech.perk";
 import { Perk } from "../../domain/perk/perk.abstract";
@@ -23,6 +24,8 @@ export class PerkFactory {
         return new GreaterHealing(data);
       case "blood_price":
         return new BloodPrice(data);
+      case "double_damage":
+        return new DoubleDamage(data);
       default:
         throw new Error(`No "${data.name}" perk found`);
     }
