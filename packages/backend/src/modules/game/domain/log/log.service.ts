@@ -57,8 +57,16 @@ export class LogService {
             })),
             bonusScore:
               payload.damageDone -
-              sum(...payload.dicesResults.map(({ result }) => result)),
-            diceScore: sum(...payload.dicesResults.map(({ result }) => result)),
+              sum(
+                ...payload.dicesResults
+                  .filter(({ dice }) => dice.name !== "special")
+                  .map(({ result }) => result),
+              ),
+            diceScore: sum(
+              ...payload.dicesResults
+                .filter(({ dice }) => dice.name !== "special")
+                .map(({ result }) => result),
+            ),
             attackerEntityName: payload.attacker.name,
             targetEntityName: payload.target.name,
           },

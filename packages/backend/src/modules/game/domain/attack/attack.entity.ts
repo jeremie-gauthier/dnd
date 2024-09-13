@@ -38,7 +38,11 @@ export class Attack extends Entity<Data> {
     }));
     return {
       dicesResults,
-      sumResult: sum(...dicesResults.map(({ result }) => result)),
+      sumResult: sum(
+        ...dicesResults
+          .filter(({ dice }) => dice.name !== "special")
+          .map(({ result }) => result),
+      ),
     };
   }
 
