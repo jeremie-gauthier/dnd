@@ -33,7 +33,6 @@ export class ItemPresenter {
       ...item,
       ...itemUI,
       attacks,
-      perks: [],
     };
   }
 

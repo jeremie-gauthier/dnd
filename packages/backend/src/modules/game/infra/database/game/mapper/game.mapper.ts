@@ -1,5 +1,6 @@
 import { GameEventFactory } from "src/modules/game/application/factories/game-event.factory";
 import { ItemFactory } from "src/modules/game/application/factories/item.factory";
+import { GameItem } from "src/modules/game/application/factories/item.interface";
 import { TileEntityFactory } from "src/modules/game/application/factories/tile-entity.factory";
 import { WinConditionFactory } from "src/modules/game/application/factories/win-condition.factory";
 import { Board } from "src/modules/game/domain/board/board.entity";
@@ -66,10 +67,10 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
                 ...enemyTemplate.inventory,
                 playableId: enemyTemplate.kind,
                 backpack: enemyTemplate.inventory.backpack.map((item) =>
-                  ItemFactory.create(item),
+                  ItemFactory.create(item as unknown as GameItem),
                 ),
                 gear: enemyTemplate.inventory.gear.map((item) =>
-                  ItemFactory.create(item),
+                  ItemFactory.create(item as unknown as GameItem),
                 ),
               }),
             }),

@@ -244,6 +244,13 @@ export class Game extends AggregateRoot<Data> {
       playingEntity.consumeMana({ amount: attackResult.manaCost });
     }
 
+    attack.applyPerksToDicesResults({
+      attacker: playingEntity,
+      defender: targetPlayableEntity,
+      dicesResults: attackResult.attackResult,
+      itemUsed: attackItem,
+    });
+
     const damageDone = targetPlayableEntity.takeDamage({
       amount: attackResult.attackResult.sumResult,
     });

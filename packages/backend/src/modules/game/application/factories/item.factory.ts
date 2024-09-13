@@ -4,6 +4,7 @@ import { Item } from "../../domain/item/item.abstract";
 import { Spell } from "../../domain/item/spell/spell.entity";
 import { Weapon } from "../../domain/item/weapon/weapon.entity";
 import { GameItem } from "./item.interface";
+import { PerkFactory } from "./perk.factory";
 
 export class ItemFactory {
   private constructor() {}
@@ -18,6 +19,7 @@ export class ItemFactory {
               new Attack({
                 ...attack,
                 dices: attack.dices.map((dice) => new Dice(dice)),
+                perks: attack.perks.map((perk) => PerkFactory.create(perk)),
               }),
           ),
         });
@@ -29,6 +31,7 @@ export class ItemFactory {
               new Attack({
                 ...attack,
                 dices: attack.dices.map((dice) => new Dice(dice)),
+                perks: attack.perks.map((perk) => PerkFactory.create(perk)),
               }),
           ),
         });

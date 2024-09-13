@@ -1,5 +1,6 @@
 import { HeroFactory } from "src/modules/game/application/factories/hero.factory";
 import { ItemFactory } from "src/modules/game/application/factories/item.factory";
+import { GameItem } from "src/modules/game/application/factories/item.interface";
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
 import { Initiative } from "src/modules/game/domain/playable-entities/playable-entity/initiative/initiative.vo";
@@ -28,9 +29,11 @@ export class PlayableEntityFactory {
             ...data.inventory,
             playableId: data.id,
             backpack: data.inventory.backpack.map((item) =>
-              ItemFactory.create(item),
+              ItemFactory.create(item as unknown as GameItem),
             ),
-            gear: data.inventory.gear.map((item) => ItemFactory.create(item)),
+            gear: data.inventory.gear.map((item) =>
+              ItemFactory.create(item as unknown as GameItem),
+            ),
           }),
         });
       }
@@ -48,9 +51,11 @@ export class PlayableEntityFactory {
             ...data.inventory,
             playableId: data.id,
             backpack: data.inventory.backpack.map((item) =>
-              ItemFactory.create(item),
+              ItemFactory.create(item as any),
             ),
-            gear: data.inventory.gear.map((item) => ItemFactory.create(item)),
+            gear: data.inventory.gear.map((item) =>
+              ItemFactory.create(item as any),
+            ),
           }),
         });
     }
