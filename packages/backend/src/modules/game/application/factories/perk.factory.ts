@@ -1,3 +1,4 @@
+import { BloodPrice } from "../../domain/perk/blood-price.perk";
 import { Breakable } from "../../domain/perk/breakable.perk";
 import { CriticalFailure } from "../../domain/perk/critical-failure.perk";
 import { GreaterHealing } from "../../domain/perk/greater-healing.perk";
@@ -20,6 +21,8 @@ export class PerkFactory {
         return new CriticalFailure(data);
       case "greater_healing":
         return new GreaterHealing(data);
+      case "blood_price":
+        return new BloodPrice(data);
       default:
         throw new Error(`No "${data.name}" perk found`);
     }
