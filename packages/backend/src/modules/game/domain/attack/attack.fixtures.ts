@@ -15,6 +15,7 @@ export const attackFactory = {
       ],
       range: "melee",
       type: "regular",
+      perks: [],
     });
   },
 };

@@ -43,7 +43,13 @@ export class LogService {
           createdAt: new Date(),
           data: {},
         };
-      case GameEvent.EntityAttacked:
+      case GameEvent.EntityAttacked: {
+        const diceScore = sum(
+          ...payload.dicesResults
+            .filter(({ dice }) => dice.name !== "special")
+            .map(({ result }) => result),
+        );
+
         return {
           type: GameEvent.EntityAttacked,
           createdAt: new Date(),
@@ -55,14 +61,13 @@ export class LogService {
               color: "#fff",
               result: diceResult.result,
             })),
-            bonusScore:
-              payload.damageDone -
-              sum(...payload.dicesResults.map(({ result }) => result)),
-            diceScore: sum(...payload.dicesResults.map(({ result }) => result)),
+            bonusScore: payload.damageDone - diceScore,
+            diceScore,
             attackerEntityName: payload.attacker.name,
             targetEntityName: payload.target.name,
           },
         };
+      }
       case GameEvent.EntityTookDamage:
         return {
           type: GameEvent.EntityTookDamage,

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { attackPerkSchema } from "./attack-perk.interface";
 import { baseItemSchema } from "./base-item.interface";
 import { diceSchema } from "./dice.interface";
 
@@ -11,10 +12,10 @@ export const attackItemSchema = baseItemSchema.merge(
           range: z.enum(["melee", "long", "versatile"]),
           type: z.enum(["regular", "super"]),
           dices: z.array(diceSchema),
+          perks: z.array(attackPerkSchema),
         }),
       )
       .min(1),
-    perks: z.array(z.never()),
   }),
 );
 export type AttackItem = z.infer<typeof attackItemSchema>;

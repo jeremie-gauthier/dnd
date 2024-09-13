@@ -1,4 +1,10 @@
-import { AttackRangeType, AttackTypeType, ItemManaCostJson } from "@dnd/shared";
+import {
+  AttackRangeType,
+  AttackTypeType,
+  ItemManaCostJson,
+  PerkNameType,
+  PerkTriggerType,
+} from "@dnd/shared";
 
 type BaseItem = {
   type: "Weapon" | "Spell";
@@ -11,12 +17,18 @@ type Dice = {
   values: [number, number, number, number, number, number];
 };
 
+type AttackPerk = {
+  name: PerkNameType;
+  trigger: PerkTriggerType;
+};
+
 type AttackItem = BaseItem & {
   attacks: Array<{
     id: string;
     range: AttackRangeType;
     type: AttackTypeType;
     dices: Dice[];
+    perks: Array<AttackPerk>;
   }>;
 };
 

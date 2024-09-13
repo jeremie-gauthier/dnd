@@ -188,6 +188,13 @@ export abstract class Playable<
     }
   }
 
+  public regenMana({ amount }: { amount: number }) {
+    this._data.characteristic.manaPoints = Math.min(
+      this._data.characteristic.manaPoints + amount,
+      this._data.characteristic.baseManaPoints,
+    );
+  }
+
   protected mustHaveActionPoints() {
     if (this._data.characteristic.actionPoints < 1) {
       throw new PlayableEntityError({
