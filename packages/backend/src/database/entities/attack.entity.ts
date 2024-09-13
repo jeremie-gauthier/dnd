@@ -7,6 +7,8 @@ import {
 import {
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -14,6 +16,7 @@ import {
 } from "typeorm";
 import { AttackDice } from "./attack-dice.entity";
 import { AttackItem } from "./attack-item.entity";
+import { Perk } from "./perk.entity";
 
 @Entity()
 export class Attack {
@@ -39,4 +42,8 @@ export class Attack {
     { cascade: true },
   )
   readonly attackDices: Relation<AttackDice[]>;
+
+  @ManyToMany(() => Perk)
+  @JoinTable()
+  readonly perks: Relation<Perk[]>;
 }

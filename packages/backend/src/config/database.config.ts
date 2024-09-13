@@ -14,7 +14,6 @@ import { HeroTemplate } from "../database/entities/hero-template.entity";
 import { Hero } from "../database/entities/hero.entity";
 import { ItemUI } from "../database/entities/item-ui.entity";
 import { Item } from "../database/entities/item.entity";
-import { PerkUI } from "../database/entities/perk-ui.entity";
 import { Perk } from "../database/entities/perk.entity";
 import { Spell } from "../database/entities/spell.entity";
 import { Stuff } from "../database/entities/stuff.entity";
@@ -36,7 +35,6 @@ export class DatabaseConfiguration implements TypeOrmOptionsFactory {
         Hero,
         HeroTemplate,
         Perk,
-        PerkUI,
         Dice,
         DiceUI,
         Attack,

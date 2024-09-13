@@ -70,14 +70,14 @@ export class PostgresItemRepository implements ItemRepository {
       case "Weapon": {
         const weapon = await this.weaponRepository.findOneOrFail({
           where: { name: item.name },
-          relations: { attacks: { attackDices: { dice: true } }, perks: true },
+          relations: { attacks: { attackDices: { dice: true }, perks: true } },
         });
         return this.mapper.toDomain(weapon);
       }
       case "Spell": {
         const spell = await this.spellRepository.findOneOrFail({
           where: { name: item.name },
-          relations: { attacks: { attackDices: { dice: true } }, perks: true },
+          relations: { attacks: { attackDices: { dice: true }, perks: true } },
         });
         return this.mapper.toDomain(spell);
       }

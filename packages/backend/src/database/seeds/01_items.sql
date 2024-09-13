@@ -450,7 +450,8 @@ VALUES
   (
     '76fee024-70f8-497b-924f-287971559a53',
     'special'
-  ) -- poisoned_blowpipe_1 regular atk
+  ),
+  -- poisoned_blowpipe_1 regular atk
   (
     'a25756b8-99b3-4e5e-9862-ca912d5ea633',
     'yellow'
@@ -458,7 +459,8 @@ VALUES
   (
     'a25756b8-99b3-4e5e-9862-ca912d5ea633',
     'orange'
-  ) -- sword_of_outcast_kings_1 regular atk
+  ),
+  -- sword_of_outcast_kings_1 regular atk
   (
     'a69381d8-b447-4098-86e9-a1dbd028a2a4',
     'orange'
@@ -505,7 +507,8 @@ VALUES
   (
     'fe3e0d2f-318d-4865-b04a-7cf0a14f6b9d',
     'special'
-  ) -- trusty_dwarven_forging_axe_1 regular atk
+  ),
+  -- trusty_dwarven_forging_axe_1 regular atk
   (
     'ff30c6db-df5e-4ce2-b8f9-4522fb0ce54f',
     'yellow'
@@ -516,9 +519,57 @@ VALUES
   );
 
 INSERT INTO
-  "item_perks_perk" ("item_name", "perk_name")
+  "attack_perks_perk" ("attack_id", "perk_name")
 VALUES
-  ('poisoned_blowpipe_1', 'reroll_dices'),
-  ('bow_of_freedom_1', 'reroll_dices'),
-  ('elves_blessed_bow_1', 'reroll_dices'),
-  ('trusty_dwarven_forging_axe_1', 'reroll_dices');
+  (
+    '14931b0b-1c4c-4f3f-919b-62d91d2a35c4',
+    'mana_leech'
+  ),
+  (
+    '3f0624db-76e3-4492-883a-feca67e2add6',
+    'breakable'
+  ),
+  (
+    'c121e3e7-f8f0-4ed9-b577-a50eb2216f2c',
+    'mana_leech'
+  ),
+  (
+    'caf774ee-71cf-400d-af29-e91ffb1aa9e2',
+    'mana_leech'
+  ),
+  (
+    '675d0f5e-3a92-4a1f-8a63-a97ab8f46cad',
+    'breakable'
+  ),
+  (
+    '76fee024-70f8-497b-924f-287971559a53',
+    'stop'
+  ),
+  (
+    'a25756b8-99b3-4e5e-9862-ca912d5ea633',
+    'reroll_one_dice'
+  ),
+  (
+    '80b60cd2-f835-4762-bf24-e9d967e09d97',
+    'reroll_one_dice'
+  ),
+  (
+    '2688c50c-b4e3-4781-ad1d-8839392b9b01',
+    'ignore_armor_class'
+  ),
+  (
+    '2688c50c-b4e3-4781-ad1d-8839392b9b01',
+    'blood_price'
+  ),
+  (
+    'fe3e0d2f-318d-4865-b04a-7cf0a14f6b9d',
+    'reroll_one_dice'
+  ),
+  (
+    'fe3e0d2f-318d-4865-b04a-7cf0a14f6b9d',
+    'mana_leech'
+  ),
+  (
+    'ff30c6db-df5e-4ce2-b8f9-4522fb0ce54f',
+    'reroll_one_dice'
+  );
