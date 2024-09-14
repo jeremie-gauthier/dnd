@@ -8,6 +8,9 @@ export default defineConfig({
   optimizeDeps: {
     include: ["@dnd/shared"],
   },
+  resolve: {
+    preserveSymlinks: true,
+  },
   build: {
     commonjsOptions: {
       include: [/@dnd\/shared/, /node_modules/],
