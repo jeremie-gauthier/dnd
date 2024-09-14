@@ -270,6 +270,10 @@ export class Game extends AggregateRoot<Data> {
       this._data.winConditions.updateWinConditions({ eventName: "enemy_died" });
     }
 
+    const turnEnded = playingEntity.isDead
+      ? this.endPlayerTurn({ userId })
+      : undefined;
+
     return {
       attack,
       attacker: playingEntity,
@@ -277,6 +281,7 @@ export class Game extends AggregateRoot<Data> {
       attackResult,
       damageDone,
       target: targetPlayableEntity,
+      turnEnded,
     };
   }
 
