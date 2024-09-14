@@ -6,6 +6,8 @@ import { UseCase } from "src/interfaces/use-case.interface";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { GameUpdatedPayload } from "src/modules/shared/events/game/game-updated.payload";
 import { PlayableEntityMovedPayload } from "src/modules/shared/events/game/playable-entity-moved.payload";
+import { PlayableEntityTurnEndedPayload } from "src/modules/shared/events/game/playable-entity-turn-ended.payload";
+import { PlayableEntityTurnStartedPayload } from "src/modules/shared/events/game/playable-entity-turn-started.payload";
 import {
   GAME_REPOSITORY,
   GameRepository,
@@ -28,7 +30,10 @@ export class PlayableEntityMoveUseCase implements UseCase {
   }): Promise<void> {
     const game = await this.gameRepository.getOneOrThrow({ gameId });
 
-    const { playingEntity } = game.playerMove({ userId, pathToTile });
+    const { playingEntity, turnEnded } = game.playerMove({
+      userId,
+      pathToTile,
+    });
 
     await this.gameRepository.update({ game });
 
@@ -45,5 +50,25 @@ export class PlayableEntityMoveUseCase implements UseCase {
         playableEntity: playingEntity.toPlain(),
       }),
     );
+
+    if (turnEnded) {
+      this.eventEmitter.emitAsync(
+        GameEvent.PlayableEntityTurnEnded,
+        new PlayableEntityTurnEndedPayload({
+          game: plainGame,
+          playableEntity: turnEnded.playingEntityWhoseTurnEnded.toPlain(),
+        }),
+      );
+
+      if (turnEnded.playingEntityWhoseTurnStarted) {
+        this.eventEmitter.emitAsync(
+          GameEvent.PlayableEntityTurnStarted,
+          new PlayableEntityTurnStartedPayload({
+            game: plainGame,
+            playableEntity: turnEnded.playingEntityWhoseTurnStarted.toPlain(),
+          }),
+        );
+      }
+    }
   }
 }
