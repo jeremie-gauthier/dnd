@@ -1,10 +1,8 @@
 import { useAuth0 } from "@auth0/auth0-react";
+import { LoginButton, LogoutButton, useConnection } from "@features/auth";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import * as React from "react";
 import { z } from "zod";
-import LoginButton from "../../components/auth/LoginButton";
-import LogoutButton from "../../components/auth/LogoutButton";
-import { useConnection } from "../../hooks/api/auth/connection";
 
 export const Route = createFileRoute("/login")({
   validateSearch: z.object({

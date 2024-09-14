@@ -45,6 +45,16 @@
           }
         }
       }
+    },
+    {
+      "include": ["frontend/src/features/**"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "noBarrelFile": "off"
+          }
+        }
+      }
     }
   ]
 }

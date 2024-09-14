@@ -1,10 +1,10 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Game } from "../../components/game/Game";
-import { GameEnded } from "../../components/game/GameEnded";
-import { ActionsLog } from "../../components/game/action-log/ActionsLog";
-import { GameContextProvider } from "../../components/game/context/GameContext/GameContextProvider";
-import { useGame } from "../../hooks/api/game/use-game";
+import { Game } from "../../features/game/Game";
+import { GameEnded } from "../../features/game/GameEnded";
+import { ActionsLog } from "../../features/game/action-log/ActionsLog";
+import { GameContextProvider } from "../../features/game/context/GameContext/GameContextProvider";
+import { useGame } from "../../features/game/use-game/use-game";
 import { useServerLobbyError } from "../../hooks/api/lobby/use-server-lobby-error";
 
 export const Route = createFileRoute("/_ws/game/$gameId")({

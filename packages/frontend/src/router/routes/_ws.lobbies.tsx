@@ -4,14 +4,14 @@ import {
   type LobbyView,
   ServerLobbyEvent,
 } from "@dnd/shared";
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { LobbiesMenu } from "../../components/lobbies/lobbies-menu/LobbiesMenu";
+import { LobbiesList } from "@features/lobbies";
 import {
   GET_LOBBIES_QUERY_KEY,
   type GetLobbiesResponse,
   useGetLobbies,
-} from "../../hooks/api/lobby/get-lobbies";
+} from "@features/lobbies";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/_ws/lobbies")({
   beforeLoad: async ({ context }) => {
@@ -79,5 +79,5 @@ export function LobbiesRouteComponent() {
     return <div>Lobby data is loading</div>;
   }
 
-  return <LobbiesMenu lobbies={lobbies} socket={socket} />;
+  return <LobbiesList lobbies={lobbies} socket={socket} />;
 }

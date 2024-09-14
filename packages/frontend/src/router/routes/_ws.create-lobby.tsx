@@ -1,12 +1,9 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
 import { ServerLobbyEvent } from "@dnd/shared";
+import { CreateLobbyForm } from "@features/lobby";
+import { type GetCampaignsResponse, useGetCampaigns } from "@features/lobby";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { CreateLobbyForm } from "../../components/lobbies/create-lobby-form/CreateLobbyForm";
-import {
-  GetCampaignsResponse,
-  useGetCampaigns,
-} from "../../hooks/api/campaign/get-campaigns";
 
 export const Route = createFileRoute("/_ws/create-lobby")({
   component: withAuthenticationRequired(CreateLobbyRouteComponent),

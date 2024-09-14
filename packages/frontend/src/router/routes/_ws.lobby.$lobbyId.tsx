@@ -3,15 +3,15 @@ import {
   useAuth0,
   withAuthenticationRequired,
 } from "@auth0/auth0-react";
-import { GameEntity, type LobbyView, ServerLobbyEvent } from "@dnd/shared";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { Lobby } from "../../components/lobbies/Lobby";
+import { GameView, type LobbyView, ServerLobbyEvent } from "@dnd/shared";
+import { LobbyForm } from "@features/lobby";
 import {
   GET_LOBBY_QUERY_KEY,
   type GetLobbyResponse,
   useGetLobby,
-} from "../../hooks/api/lobby/get-lobby";
+} from "@features/lobby";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { useServerLobbyError } from "../../hooks/api/lobby/use-server-lobby-error";
 
 export const Route = createFileRoute("/_ws/lobby/$lobbyId")({
@@ -30,7 +30,7 @@ export function MenuRouteComponent() {
     // TODO: useGameInitializationDone hook ?
     const gameInitializationDoneHandler = async ({
       game,
-    }: { game: GameEntity }) => {
+    }: { game: GameView }) => {
       navigate({
         to: "/game/$gameId",
         params: { gameId: game.id },
@@ -71,5 +71,5 @@ export function MenuRouteComponent() {
     return <div>Lobby data is loading</div>;
   }
 
-  return <Lobby user={user} lobby={lobby} socket={socket} />;
+  return <LobbyForm user={user} lobby={lobby} socket={socket} />;
 }

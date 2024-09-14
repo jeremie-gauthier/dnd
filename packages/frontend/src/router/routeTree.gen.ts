@@ -12,9 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as ProfileImport } from './routes/profile'
-import { Route as MenuImport } from './routes/menu'
 import { Route as LoginImport } from './routes/login'
-import { Route as GameTestImport } from './routes/game-test'
 import { Route as WsImport } from './routes/_ws'
 import { Route as WsMenuMultiplayerImport } from './routes/_ws.menu-multiplayer'
 import { Route as WsLobbiesImport } from './routes/_ws.lobbies'
@@ -29,18 +27,8 @@ const ProfileRoute = ProfileImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const MenuRoute = MenuImport.update({
-  path: '/menu',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const LoginRoute = LoginImport.update({
   path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const GameTestRoute = GameTestImport.update({
-  path: '/game-test',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -85,25 +73,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WsImport
       parentRoute: typeof rootRoute
     }
-    '/game-test': {
-      id: '/game-test'
-      path: '/game-test'
-      fullPath: '/game-test'
-      preLoaderRoute: typeof GameTestImport
-      parentRoute: typeof rootRoute
-    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
-    '/menu': {
-      id: '/menu'
-      path: '/menu'
-      fullPath: '/menu'
-      preLoaderRoute: typeof MenuImport
       parentRoute: typeof rootRoute
     }
     '/profile': {
@@ -153,19 +127,107 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({
-  WsRoute: WsRoute.addChildren({
-    WsCreateLobbyRoute,
-    WsLobbiesRoute,
-    WsMenuMultiplayerRoute,
-    WsGameGameIdRoute,
-    WsLobbyLobbyIdRoute,
-  }),
-  GameTestRoute,
-  LoginRoute,
-  MenuRoute,
-  ProfileRoute,
-})
+interface WsRouteChildren {
+  WsCreateLobbyRoute: typeof WsCreateLobbyRoute
+  WsLobbiesRoute: typeof WsLobbiesRoute
+  WsMenuMultiplayerRoute: typeof WsMenuMultiplayerRoute
+  WsGameGameIdRoute: typeof WsGameGameIdRoute
+  WsLobbyLobbyIdRoute: typeof WsLobbyLobbyIdRoute
+}
+
+const WsRouteChildren: WsRouteChildren = {
+  WsCreateLobbyRoute: WsCreateLobbyRoute,
+  WsLobbiesRoute: WsLobbiesRoute,
+  WsMenuMultiplayerRoute: WsMenuMultiplayerRoute,
+  WsGameGameIdRoute: WsGameGameIdRoute,
+  WsLobbyLobbyIdRoute: WsLobbyLobbyIdRoute,
+}
+
+const WsRouteWithChildren = WsRoute._addFileChildren(WsRouteChildren)
+
+export interface FileRoutesByFullPath {
+  '': typeof WsRouteWithChildren
+  '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
+  '/create-lobby': typeof WsCreateLobbyRoute
+  '/lobbies': typeof WsLobbiesRoute
+  '/menu-multiplayer': typeof WsMenuMultiplayerRoute
+  '/game/$gameId': typeof WsGameGameIdRoute
+  '/lobby/$lobbyId': typeof WsLobbyLobbyIdRoute
+}
+
+export interface FileRoutesByTo {
+  '': typeof WsRouteWithChildren
+  '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
+  '/create-lobby': typeof WsCreateLobbyRoute
+  '/lobbies': typeof WsLobbiesRoute
+  '/menu-multiplayer': typeof WsMenuMultiplayerRoute
+  '/game/$gameId': typeof WsGameGameIdRoute
+  '/lobby/$lobbyId': typeof WsLobbyLobbyIdRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/_ws': typeof WsRouteWithChildren
+  '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
+  '/_ws/create-lobby': typeof WsCreateLobbyRoute
+  '/_ws/lobbies': typeof WsLobbiesRoute
+  '/_ws/menu-multiplayer': typeof WsMenuMultiplayerRoute
+  '/_ws/game/$gameId': typeof WsGameGameIdRoute
+  '/_ws/lobby/$lobbyId': typeof WsLobbyLobbyIdRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | ''
+    | '/login'
+    | '/profile'
+    | '/create-lobby'
+    | '/lobbies'
+    | '/menu-multiplayer'
+    | '/game/$gameId'
+    | '/lobby/$lobbyId'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | ''
+    | '/login'
+    | '/profile'
+    | '/create-lobby'
+    | '/lobbies'
+    | '/menu-multiplayer'
+    | '/game/$gameId'
+    | '/lobby/$lobbyId'
+  id:
+    | '__root__'
+    | '/_ws'
+    | '/login'
+    | '/profile'
+    | '/_ws/create-lobby'
+    | '/_ws/lobbies'
+    | '/_ws/menu-multiplayer'
+    | '/_ws/game/$gameId'
+    | '/_ws/lobby/$lobbyId'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  WsRoute: typeof WsRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  ProfileRoute: typeof ProfileRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  WsRoute: WsRouteWithChildren,
+  LoginRoute: LoginRoute,
+  ProfileRoute: ProfileRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 
@@ -176,9 +238,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/_ws",
-        "/game-test",
         "/login",
-        "/menu",
         "/profile"
       ]
     },
@@ -192,14 +252,8 @@ export const routeTree = rootRoute.addChildren({
         "/_ws/lobby/$lobbyId"
       ]
     },
-    "/game-test": {
-      "filePath": "game-test.tsx"
-    },
     "/login": {
       "filePath": "login.tsx"
-    },
-    "/menu": {
-      "filePath": "menu.tsx"
     },
     "/profile": {
       "filePath": "profile.tsx"
