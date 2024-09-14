@@ -4,7 +4,7 @@ import {
   PlayableEntityOpenChestInput,
   PlayableEntityOpenChestOutput,
 } from "@dnd/shared";
-import { ClientSocket } from "src/types/socket.type";
+import { ClientSocket } from "../../../../types/socket.type";
 
 type Params = {
   socket: ClientSocket;

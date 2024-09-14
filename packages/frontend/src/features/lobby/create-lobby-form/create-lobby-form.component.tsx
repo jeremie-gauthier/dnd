@@ -4,8 +4,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { useEffect } from "react";
 import type { ClientSocket } from "../../../types/socket.type";
-import { useCreateLobbyForm } from "./use-create-lobby-form.hook";
-import { GetCampaignsResponse } from "./use-get-campaigns.hook";
+import { useCreateLobbyForm } from "./use-create-lobby-form";
+import { type GetCampaignsResponse } from "./use-get-campaigns";
 
 type Props = {
   campaigns: GetCampaignsResponse;

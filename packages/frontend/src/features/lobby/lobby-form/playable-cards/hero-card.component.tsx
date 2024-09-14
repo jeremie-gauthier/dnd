@@ -10,7 +10,7 @@ import {
   SparklesIcon,
   StarIcon,
 } from "@heroicons/react/20/solid";
-import { useGetHeroDetails } from "./use-get-hero-details.hook";
+import { useGetHeroDetails } from "./use-get-hero-details";
 
 const CLASS_TO_IMG: Readonly<Record<HeroClassType, string>> = {
   CLERIC: cleric,

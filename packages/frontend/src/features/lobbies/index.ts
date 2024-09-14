@@ -3,4 +3,4 @@ export {
   type GetLobbiesResponse,
   GET_LOBBIES_QUERY_KEY,
   useGetLobbies,
-} from "./lobbies-list/use-get-lobbies.hook";
+} from "./lobbies-list/use-get-lobbies";

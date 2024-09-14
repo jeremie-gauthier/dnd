@@ -3,8 +3,8 @@ import { PropsWithChildren, useRef } from "react";
 import { ClientSocket } from "../../../../types/socket.type";
 import { useGameEngine } from "../../game-engine";
 import { GameContext } from "./GameContext";
-import { useGameActions } from "./use-game-actions.hook";
-import { useGetNeighbourTiles } from "./use-get-neighbour-tiles.hook";
+import { useGameActions } from "./use-game-actions";
+import { useGetNeighbourTiles } from "./use-get-neighbour-tiles";
 
 type Props = PropsWithChildren<{
   game: GameView;

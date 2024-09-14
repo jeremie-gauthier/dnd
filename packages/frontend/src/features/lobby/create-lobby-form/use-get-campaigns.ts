@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
+import { fetcherWithAuth } from "@config/fetcher";
 import { useQuery } from "@tanstack/react-query";
-import { fetcherWithAuth } from "../../../config/fetcher";
 
 export type GetCampaignsResponse = {
   id: string;
