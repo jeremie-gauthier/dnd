@@ -20,7 +20,7 @@ VALUES
     2,
     0,
     8,
-    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 0, "nbWeaponSlots": 2, "nbBackpackSlots": 4}, "items": [{"storageSpace": "GEAR", "itemName": "broadsword_1"}]}'
+    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 0, "nbWeaponSlots": 2, "nbBackpackSlots": 1}, "items": [{"storageSpace": "GEAR", "itemName": "broadsword_1"}]}'
   ),
   (
     'Regdar',
@@ -31,7 +31,7 @@ VALUES
     2,
     0,
     12,
-    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 0, "nbWeaponSlots": 2, "nbBackpackSlots": 4}, "items": []}'
+    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 0, "nbWeaponSlots": 2, "nbBackpackSlots": 1}, "items": []}'
   ),
   (
     'Regdar',
@@ -42,7 +42,7 @@ VALUES
     2,
     0,
     15,
-    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 0, "nbWeaponSlots": 2, "nbBackpackSlots": 4}, "items": []}'
+    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 0, "nbWeaponSlots": 2, "nbBackpackSlots": 1}, "items": []}'
   ),
   (
     'Lidda',
@@ -53,7 +53,7 @@ VALUES
     2,
     0,
     5,
-    '{"storageCapacity": {"nbArtifactSlots": 2, "nbSpellSlots": 0, "nbWeaponSlots": 1, "nbBackpackSlots": 4}, "items": [{"storageSpace": "GEAR", "itemName": "throwing_dagger_1"}]}'
+    '{"storageCapacity": {"nbArtifactSlots": 2, "nbSpellSlots": 0, "nbWeaponSlots": 1, "nbBackpackSlots": 1}, "items": [{"storageSpace": "GEAR", "itemName": "throwing_dagger_1"}]}'
   ),
   (
     'Lidda',
@@ -64,7 +64,7 @@ VALUES
     2,
     0,
     7,
-    '{"storageCapacity": {"nbArtifactSlots": 2, "nbSpellSlots": 0, "nbWeaponSlots": 1, "nbBackpackSlots": 4}, "items": []}'
+    '{"storageCapacity": {"nbArtifactSlots": 2, "nbSpellSlots": 0, "nbWeaponSlots": 1, "nbBackpackSlots": 1}, "items": []}'
   ),
   (
     'Lidda',
@@ -75,7 +75,7 @@ VALUES
     2,
     0,
     9,
-    '{"storageCapacity": {"nbArtifactSlots": 2, "nbSpellSlots": 0, "nbWeaponSlots": 1, "nbBackpackSlots": 4}, "items": []}'
+    '{"storageCapacity": {"nbArtifactSlots": 2, "nbSpellSlots": 0, "nbWeaponSlots": 1, "nbBackpackSlots": 1}, "items": []}'
   ),
   (
     'Mialyë',
@@ -86,7 +86,7 @@ VALUES
     2,
     5,
     5,
-    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 1, "nbWeaponSlots": 1, "nbBackpackSlots": 5}, "items": [{"storageSpace": "GEAR", "itemName": "magic_shot_1"}, {"storageSpace": "GEAR", "itemName": "elders_shortbow_1"}]}'
+    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 1, "nbWeaponSlots": 1, "nbBackpackSlots": 2}, "items": [{"storageSpace": "GEAR", "itemName": "magic_shot_1"}, {"storageSpace": "GEAR", "itemName": "elders_shortbow_1"}]}'
   ),
   (
     'Mialyë',
@@ -97,7 +97,7 @@ VALUES
     2,
     7,
     7,
-    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 1, "nbWeaponSlots": 1, "nbBackpackSlots": 5}, "items": []}'
+    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 1, "nbWeaponSlots": 1, "nbBackpackSlots": 2}, "items": []}'
   ),
   (
     'Mialyë',
@@ -108,7 +108,7 @@ VALUES
     2,
     9,
     9,
-    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 1, "nbWeaponSlots": 1, "nbBackpackSlots": 5}, "items": []}'
+    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 1, "nbWeaponSlots": 1, "nbBackpackSlots": 2}, "items": []}'
   ),
   (
     'Jozan',
@@ -119,7 +119,7 @@ VALUES
     2,
     5,
     5,
-    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 1, "nbWeaponSlots": 1, "nbBackpackSlots": 5}, "items": [{"storageSpace": "GEAR", "itemName": "faith_crossbow_1"}]}'
+    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 1, "nbWeaponSlots": 1, "nbBackpackSlots": 2}, "items": [{"storageSpace": "GEAR", "itemName": "faith_crossbow_1"}]}'
   ),
   (
     'Jozan',
@@ -130,7 +130,7 @@ VALUES
     2,
     5,
     7,
-    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 1, "nbWeaponSlots": 1, "nbBackpackSlots": 5}, "items": []}'
+    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 1, "nbWeaponSlots": 1, "nbBackpackSlots": 2}, "items": []}'
   ),
   (
     'Jozan',
@@ -141,5 +141,5 @@ VALUES
     2,
     5,
     9,
-    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 1, "nbWeaponSlots": 1, "nbBackpackSlots": 5}, "items": []}'
+    '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 1, "nbWeaponSlots": 1, "nbBackpackSlots": 2}, "items": []}'
   );
