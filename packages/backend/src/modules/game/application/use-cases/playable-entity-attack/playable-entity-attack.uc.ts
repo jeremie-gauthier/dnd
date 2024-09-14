@@ -9,6 +9,8 @@ import { EntityTookDamagePayload } from "src/modules/shared/events/game/entity-t
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { GameUpdatedPayload } from "src/modules/shared/events/game/game-updated.payload";
 import { GameWonPayload } from "src/modules/shared/events/game/game-won.payload";
+import { PlayableEntityTurnEndedPayload } from "src/modules/shared/events/game/playable-entity-turn-ended.payload";
+import { PlayableEntityTurnStartedPayload } from "src/modules/shared/events/game/playable-entity-turn-started.payload";
 import {
   GAME_REPOSITORY,
   GameRepository,
@@ -30,17 +32,25 @@ export class PlayableEntityAttackUseCase implements UseCase {
   }: PlayableEntityAttackInput & { userId: User["id"] }): Promise<void> {
     const game = await this.gameRepository.getOneOrThrow({ gameId });
 
-    const { attack, attacker, attackItem, attackResult, damageDone, target } =
-      game.playerAttack({
-        attackId,
-        targetPlayableEntityId,
-        userId,
-      });
+    const {
+      attack,
+      attacker,
+      attackItem,
+      attackResult,
+      damageDone,
+      target,
+      turnEnded,
+    } = game.playerAttack({
+      attackId,
+      targetPlayableEntityId,
+      userId,
+    });
 
     await this.gameRepository.update({ game });
 
     const plainGame = game.toPlain();
     const plainTarget = target.toPlain();
+    const plainAttacker = attacker.toPlain();
 
     await this.eventEmitter.emitAsync(
       GameEvent.GameUpdated,
@@ -74,6 +84,33 @@ export class PlayableEntityAttackUseCase implements UseCase {
         GameEvent.EntityDied,
         new EntityDiedPayload({ game: plainGame, target: plainTarget }),
       );
+    }
+
+    if (attacker.isDead) {
+      await this.eventEmitter.emitAsync(
+        GameEvent.EntityDied,
+        new EntityDiedPayload({ game: plainGame, target: plainAttacker }),
+      );
+    }
+
+    if (turnEnded) {
+      this.eventEmitter.emitAsync(
+        GameEvent.PlayableEntityTurnEnded,
+        new PlayableEntityTurnEndedPayload({
+          game: plainGame,
+          playableEntity: turnEnded.playingEntityWhoseTurnEnded.toPlain(),
+        }),
+      );
+
+      if (turnEnded.playingEntityWhoseTurnStarted) {
+        this.eventEmitter.emitAsync(
+          GameEvent.PlayableEntityTurnStarted,
+          new PlayableEntityTurnStartedPayload({
+            game: plainGame,
+            playableEntity: turnEnded.playingEntityWhoseTurnStarted.toPlain(),
+          }),
+        );
+      }
     }
 
     if (game.isWin()) {

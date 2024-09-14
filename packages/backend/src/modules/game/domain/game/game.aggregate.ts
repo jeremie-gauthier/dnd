@@ -206,7 +206,11 @@ export class Game extends AggregateRoot<Data> {
       trapTriggered.onInteraction({ playableEntity: playingEntity });
     }
 
-    return { playingEntity };
+    const turnEnded = playingEntity.isDead
+      ? this.endPlayerTurn({ userId })
+      : undefined;
+
+    return { playingEntity, turnEnded };
   }
 
   public playerAttack({
@@ -270,6 +274,10 @@ export class Game extends AggregateRoot<Data> {
       this._data.winConditions.updateWinConditions({ eventName: "enemy_died" });
     }
 
+    const turnEnded = playingEntity.isDead
+      ? this.endPlayerTurn({ userId })
+      : undefined;
+
     return {
       attack,
       attacker: playingEntity,
@@ -277,6 +285,7 @@ export class Game extends AggregateRoot<Data> {
       attackResult,
       damageDone,
       target: targetPlayableEntity,
+      turnEnded,
     };
   }
 
