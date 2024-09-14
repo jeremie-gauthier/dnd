@@ -4,10 +4,10 @@ import {
   type LobbyView,
   ServerLobbyEvent,
 } from "@dnd/shared";
-import { LobbiesList } from "@features/lobbies";
 import {
   GET_LOBBIES_QUERY_KEY,
   type GetLobbiesResponse,
+  LobbiesList,
   useGetLobbies,
 } from "@features/lobbies";
 import { createFileRoute } from "@tanstack/react-router";

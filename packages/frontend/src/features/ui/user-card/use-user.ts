@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
+import { fetcherWithAuth } from "@config/fetcher";
 import { GetUserOutput } from "@dnd/shared";
 import { useQuery } from "@tanstack/react-query";
-import { fetcherWithAuth } from "../../../config/fetcher";
 
 export const useUser = (userId: string) => {
   const { getAccessTokenSilently } = useAuth0();
@@ -13,7 +13,5 @@ export const useUser = (userId: string) => {
         `http://localhost:3000/user/private/get-user/${userId}`,
         getAccessTokenSilently,
       ),
-    // refetchOnWindowFocus: false,
-    // refetchOnMount: false
   });
 };

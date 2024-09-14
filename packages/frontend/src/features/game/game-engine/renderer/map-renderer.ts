@@ -44,7 +44,7 @@ export const useMapRenderer = ({
   const render = (
     map: GameView["map"],
     playableEntities: GameView["playableEntities"],
-    gamePhase: PlayerGamePhase,
+    _: PlayerGamePhase,
   ) => {
     // TODO: render non interactive layer only once
     renderFloorLayer({ map });

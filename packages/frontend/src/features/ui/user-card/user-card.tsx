@@ -1,4 +1,4 @@
-import { useUser } from "../../../hooks/api/user/use-user";
+import { useUser } from "./use-user";
 
 type Props = {
   userId: string;

@@ -1,6 +1,6 @@
 import { ServerLobbyEvent } from "@dnd/shared";
 import { useEffect } from "react";
-import type { ClientSocket } from "../../../types/socket.type";
+import type { ClientSocket } from "../../types/socket.type";
 
 export const useServerLobbyError = (socket: ClientSocket) => {
   useEffect(() => {

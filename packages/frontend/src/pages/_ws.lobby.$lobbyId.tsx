@@ -4,15 +4,15 @@ import {
   withAuthenticationRequired,
 } from "@auth0/auth0-react";
 import { GameView, type LobbyView, ServerLobbyEvent } from "@dnd/shared";
-import { LobbyForm } from "@features/lobby";
 import {
   GET_LOBBY_QUERY_KEY,
   type GetLobbyResponse,
+  LobbyForm,
   useGetLobby,
-} from "@features/lobby";
+  useServerLobbyError,
+} from "@features/lobbies";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { useServerLobbyError } from "../hooks/api/lobby/use-server-lobby-error";
 
 export const Route = createFileRoute("/_ws/lobby/$lobbyId")({
   component: withAuthenticationRequired(MenuRouteComponent),

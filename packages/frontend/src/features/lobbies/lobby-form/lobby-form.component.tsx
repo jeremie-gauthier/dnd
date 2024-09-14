@@ -4,7 +4,7 @@ import { Button, UserCard } from "@features/ui";
 import type { ClientSocket } from "../../../types/socket.type";
 import { GameMasterCard } from "./playable-cards/game-master-card.component";
 import { HeroCard } from "./playable-cards/hero-card.component";
-import type { GetLobbyResponse } from "./use-get-lobby.hook";
+import type { GetLobbyResponse } from "./use-get-lobby";
 
 type Props = {
   user: User;
