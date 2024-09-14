@@ -1,5 +1,5 @@
 import { GameItem } from "@dnd/shared";
-import { IconHand } from "../../ui/icon/icons/IconHand";
+import { Icon } from "@features/ui";
 import { InventoryItem } from "./common/InventoryItem";
 import { InventorySlot } from "./common/InventorySlot";
 
@@ -21,7 +21,7 @@ export const GearSlot = ({ item, type, idx }: Props) => {
       {item ? (
         <InventoryItem item={item} storageSpace="gear" />
       ) : (
-        <IconHand className="fill-primary-600" />
+        <Icon icon="hand" className="fill-primary-600 h-28 w-28" />
       )}
     </InventorySlot>
   );

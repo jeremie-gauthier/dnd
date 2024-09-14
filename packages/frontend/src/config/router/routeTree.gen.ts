@@ -10,15 +10,15 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as ProfileImport } from './routes/profile'
-import { Route as LoginImport } from './routes/login'
-import { Route as WsImport } from './routes/_ws'
-import { Route as WsMenuMultiplayerImport } from './routes/_ws.menu-multiplayer'
-import { Route as WsLobbiesImport } from './routes/_ws.lobbies'
-import { Route as WsCreateLobbyImport } from './routes/_ws.create-lobby'
-import { Route as WsLobbyLobbyIdImport } from './routes/_ws.lobby.$lobbyId'
-import { Route as WsGameGameIdImport } from './routes/_ws.game.$gameId'
+import { Route as rootRoute } from './../../pages/__root'
+import { Route as ProfileImport } from './../../pages/profile'
+import { Route as LoginImport } from './../../pages/login'
+import { Route as WsImport } from './../../pages/_ws'
+import { Route as WsMenuMultiplayerImport } from './../../pages/_ws.menu-multiplayer'
+import { Route as WsLobbiesImport } from './../../pages/_ws.lobbies'
+import { Route as WsCreateLobbyImport } from './../../pages/_ws.create-lobby'
+import { Route as WsLobbyLobbyIdImport } from './../../pages/_ws.lobby.$lobbyId'
+import { Route as WsGameGameIdImport } from './../../pages/_ws.game.$gameId'
 
 // Create/Update Routes
 

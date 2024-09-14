@@ -6,7 +6,7 @@ import {
   useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import type { ClientSocket } from "../../types/socket.type";
+import { ClientSocket } from "../types/socket.type";
 
 function RouterLoader() {
   const isLoading = useRouterState({ select: (s) => s.status === "pending" });

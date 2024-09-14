@@ -1,10 +1,10 @@
+import { queryClient } from "@config/fetcher";
+import { socket } from "@config/socket";
 import {
   ErrorComponent,
   RouterProvider,
   createRouter,
 } from "@tanstack/react-router";
-import { queryClient } from "../config/fetcher";
-import { socket } from "../config/socket";
 import { routeTree } from "./routeTree.gen";
 
 const router = createRouter({

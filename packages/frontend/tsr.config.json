@@ -1,5 +1,5 @@
 {
   "rootDirectory": ".",
-  "routesDirectory": "./src/router/routes",
-  "generatedRouteTree": "./src/router/routeTree.gen.ts"
+  "routesDirectory": "./src/pages",
+  "generatedRouteTree": "./src/config/router/routeTree.gen.ts"
 }

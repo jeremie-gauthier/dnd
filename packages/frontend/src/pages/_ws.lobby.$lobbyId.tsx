@@ -12,7 +12,7 @@ import {
 } from "@features/lobby";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { useServerLobbyError } from "../../hooks/api/lobby/use-server-lobby-error";
+import { useServerLobbyError } from "../hooks/api/lobby/use-server-lobby-error";
 
 export const Route = createFileRoute("/_ws/lobby/$lobbyId")({
   component: withAuthenticationRequired(MenuRouteComponent),
