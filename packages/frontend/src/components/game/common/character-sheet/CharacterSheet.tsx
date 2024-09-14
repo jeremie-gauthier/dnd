@@ -76,7 +76,7 @@ export const CharacterSheet = ({
             </div>
             <div className="flex flex-col">
               <h4 className="text-white text-lg">{t("backpack")}</h4>
-              <div className="flex flex-row gap-4">
+              <div className="flex flex-row gap-4 min-w-[26rem]">
                 <BackpackInventory
                   backpack={character.inventory.backpack}
                   storageCapacity={character.inventory.storageCapacity}
