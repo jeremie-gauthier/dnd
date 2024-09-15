@@ -22,7 +22,7 @@
     "new-emitter": "node ./scripts/new-emitter"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.7.3",
+    "@biomejs/biome": "^1.9.0",
     "@inquirer/prompts": "^5.0.4",
     "dedent": "^1.5.3",
     "inquirer-directory": "^2.2.0",
