@@ -1,5 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { LoginButton, LogoutButton, useConnection } from "@features/users";
+import { LoginButton } from "@features/users/login/login-button.component";
+import { useConnection } from "@features/users/login/use-connection";
+import { LogoutButton } from "@features/users/logout/logout-button.component";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import * as React from "react";
 import { z } from "zod";

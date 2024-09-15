@@ -1,5 +1,5 @@
 import { useGameContext } from "@features/game/context/use-game-context";
-import { Button } from "@features/ui";
+import { Button } from "@features/ui/button/button";
 
 export const EndTurnButton = () => {
   const { game, playerState, entityPlaying, gameActions } = useGameContext();

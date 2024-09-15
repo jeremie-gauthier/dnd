@@ -1,4 +1,5 @@
-import { Button, Icon } from "@features/ui";
+import { Button } from "@features/ui/button/button";
+import { Icon } from "@features/ui/icon/Icon";
 import { useState } from "react";
 import { EditCharacterInventory } from "./edit-character-inventory/edit-character-inventory.component";
 

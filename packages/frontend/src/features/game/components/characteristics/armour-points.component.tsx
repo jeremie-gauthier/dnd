@@ -1,4 +1,4 @@
-import { Icon } from "@features/ui";
+import { Icon } from "@features/ui/icon/Icon";
 
 type Props = {
   armorClass: number;

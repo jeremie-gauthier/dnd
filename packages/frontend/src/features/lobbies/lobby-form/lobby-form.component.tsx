@@ -1,6 +1,7 @@
 import { type User } from "@auth0/auth0-react";
 import { ClientLobbyEvent } from "@dnd/shared";
-import { Button, UserCard } from "@features/ui";
+import { Button } from "@features/ui/button/button";
+import { UserCard } from "@features/ui/user-card/user-card";
 import type { ClientSocket } from "../../../types/socket.type";
 import { GameMasterCard } from "./playable-cards/game-master-card.component";
 import { HeroCard } from "./playable-cards/hero-card.component";

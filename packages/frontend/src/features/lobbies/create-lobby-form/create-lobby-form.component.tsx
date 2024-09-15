@@ -1,5 +1,7 @@
 import { ServerLobbyEvent, ServerToClientEvents } from "@dnd/shared";
-import { Button, MinMaxRange, Select } from "@features/ui";
+import { Button } from "@features/ui/button/button";
+import { MinMaxRange } from "@features/ui/range/min-max-range";
+import { Select } from "@features/ui/select/select";
 import { useNavigate } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { useEffect } from "react";

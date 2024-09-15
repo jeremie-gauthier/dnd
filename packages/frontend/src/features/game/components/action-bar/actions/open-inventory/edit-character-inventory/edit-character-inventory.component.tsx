@@ -1,5 +1,5 @@
 import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
-import { Icon } from "@features/ui";
+import { Icon } from "@features/ui/icon/Icon";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";

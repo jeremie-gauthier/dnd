@@ -4,12 +4,12 @@ import {
   type LobbyView,
   ServerLobbyEvent,
 } from "@dnd/shared";
+import { LobbiesList } from "@features/lobbies/lobbies-list/lobbies-list.component";
 import {
   GET_LOBBIES_QUERY_KEY,
   type GetLobbiesResponse,
-  LobbiesList,
   useGetLobbies,
-} from "@features/lobbies";
+} from "@features/lobbies/lobbies-list/use-get-lobbies";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 
@@ -33,7 +33,9 @@ export function LobbiesRouteComponent() {
 
     const handleLobbiesChanges = ({
       lobby,
-    }: { lobby: { id: string } & Partial<LobbyView> }) => {
+    }: {
+      lobby: { id: string } & Partial<LobbyView>;
+    }) => {
       queryClient.setQueryData(
         GET_LOBBIES_QUERY_KEY,
         (oldLobbies: GetLobbiesResponse) => {

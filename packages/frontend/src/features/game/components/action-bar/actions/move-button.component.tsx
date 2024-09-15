@@ -1,6 +1,7 @@
 import { getAllPathsFromTileWithinRange } from "@dnd/shared";
 import { useGameContext } from "@features/game/context/use-game-context";
-import { Button, Icon } from "@features/ui";
+import { Button } from "@features/ui/button/button";
+import { Icon } from "@features/ui/icon/Icon";
 import { useEffect } from "react";
 import { TileClickedEvent } from "../../../game-engine/events/tile-clicked.event";
 

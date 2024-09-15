@@ -1,6 +1,7 @@
 import { GameItem } from "@dnd/shared";
 import { useGameContext } from "@features/game/context/use-game-context";
-import { Button, Icon } from "@features/ui";
+import { Button } from "@features/ui/button/button";
+import { Icon } from "@features/ui/icon/Icon";
 import { useState } from "react";
 import { GetChestLoot } from "./get-chest-loot/get-chest-loot.component";
 

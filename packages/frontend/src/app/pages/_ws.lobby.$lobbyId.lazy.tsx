@@ -4,17 +4,17 @@ import {
   withAuthenticationRequired,
 } from "@auth0/auth0-react";
 import { GameView, type LobbyView, ServerLobbyEvent } from "@dnd/shared";
+import { LobbyForm } from "@features/lobbies/lobby-form/lobby-form.component";
 import {
   GET_LOBBY_QUERY_KEY,
   type GetLobbyResponse,
-  LobbyForm,
   useGetLobby,
-  useServerLobbyError,
-} from "@features/lobbies";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+} from "@features/lobbies/lobby-form/use-get-lobby";
+import { useServerLobbyError } from "@features/lobbies/use-server-lobby-error";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-export const Route = createFileRoute("/_ws/lobby/$lobbyId")({
+export const Route = createLazyFileRoute("/_ws/lobby/$lobbyId")({
   component: withAuthenticationRequired(MenuRouteComponent),
 });
 
@@ -30,7 +30,9 @@ export function MenuRouteComponent() {
     // TODO: useGameInitializationDone hook ?
     const gameInitializationDoneHandler = async ({
       game,
-    }: { game: GameView }) => {
+    }: {
+      game: GameView;
+    }) => {
       navigate({
         to: "/game/$gameId",
         params: { gameId: game.id },

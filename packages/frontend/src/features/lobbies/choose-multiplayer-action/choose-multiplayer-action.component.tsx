@@ -1,4 +1,4 @@
-import { LinkButton } from "@features/ui";
+import { LinkButton } from "@features/ui/button/link-button";
 
 export const ChooseMultiplayerAction = () => {
   return (

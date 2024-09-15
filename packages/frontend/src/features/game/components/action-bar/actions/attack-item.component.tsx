@@ -1,6 +1,6 @@
 import { AttackRangeType, GameItem, sum } from "@dnd/shared";
 import { useGameContext } from "@features/game/context/use-game-context";
-import { Icon } from "@features/ui";
+import { Icon } from "@features/ui/icon/Icon";
 import { classNames } from "@utils/class-names.util";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";

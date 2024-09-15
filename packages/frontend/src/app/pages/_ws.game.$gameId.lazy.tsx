@@ -4,10 +4,10 @@ import { ActionsLog } from "@features/game/components/action-log/action-log-list
 import { GameContextProvider } from "@features/game/context/game.context";
 import { Game } from "@features/game/game.component";
 import { useGame } from "@features/game/use-game/use-game";
-import { useServerLobbyError } from "@features/lobbies";
-import { createFileRoute } from "@tanstack/react-router";
+import { useServerLobbyError } from "@features/lobbies/use-server-lobby-error";
+import { createLazyFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_ws/game/$gameId")({
+export const Route = createLazyFileRoute("/_ws/game/$gameId")({
   component: withAuthenticationRequired(GameRouteComponent),
 });
 

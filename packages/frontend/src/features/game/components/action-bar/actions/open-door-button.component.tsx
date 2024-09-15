@@ -1,5 +1,6 @@
 import { useGameContext } from "@features/game/context/use-game-context";
-import { Button, Icon } from "@features/ui";
+import { Button } from "@features/ui/button/button";
+import { Icon } from "@features/ui/icon/Icon";
 
 export const OpenDoorButton = () => {
   const { neighbourTiles, entityPlaying, playerState, gameActions, game } =

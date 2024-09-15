@@ -1,5 +1,6 @@
 import { ClientLobbyEvent } from "@dnd/shared";
-import { Button, UserCard } from "@features/ui";
+import { Button } from "@features/ui/button/button";
+import { UserCard } from "@features/ui/user-card/user-card";
 import { useNavigate } from "@tanstack/react-router";
 import type { ClientSocket } from "../../../types/socket.type";
 import type { GetLobbiesResponse } from "./use-get-lobbies";

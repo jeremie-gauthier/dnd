@@ -1,8 +1,8 @@
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { GameItem, sum } from "@dnd/shared";
-import { Button } from "@features/ui";
-import { Icon } from "@features/ui";
+import { Button } from "@features/ui/button/button";
+import { Icon } from "@features/ui/icon/Icon";
 import { classNames } from "@utils/class-names.util";
 import { useTranslation } from "react-i18next";
 

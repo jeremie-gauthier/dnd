@@ -3,10 +3,10 @@ import {
   useAuth0,
   withAuthenticationRequired,
 } from "@auth0/auth0-react";
-import { Profile } from "@features/users";
-import { createFileRoute } from "@tanstack/react-router";
+import { Profile } from "@features/users/profile/profile.component";
+import { createLazyFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/profile")({
+export const Route = createLazyFileRoute("/profile")({
   component: withAuthenticationRequired(ProfileRouteComponent),
 });
 
