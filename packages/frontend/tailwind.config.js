@@ -4,7 +4,7 @@ export default {
     relative: true,
     files: [
       "./src/router/**/*.{jsx,tsx}",
-      "./src/components/**/*.{jsx,tsx}",
+      "./src/features/**/*.{jsx,tsx}",
       "./index.html",
     ],
   },
