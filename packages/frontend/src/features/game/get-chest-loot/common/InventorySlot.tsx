@@ -1,7 +1,7 @@
 import { useDroppable } from "@dnd-kit/core";
 import { GameItem } from "@dnd/shared";
+import { classNames } from "@utils/class-names.util";
 import { PropsWithChildren, useEffect } from "react";
-import { classNames } from "../../../../utils/class-names.util";
 import { useGetChestLootContext } from "../GetChestLootContext";
 
 type Props = PropsWithChildren<{

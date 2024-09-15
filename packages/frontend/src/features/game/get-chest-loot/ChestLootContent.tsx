@@ -3,8 +3,8 @@ import { CSS } from "@dnd-kit/utilities";
 import { GameItem, sum } from "@dnd/shared";
 import { Button } from "@features/ui";
 import { Icon } from "@features/ui";
+import { classNames } from "@utils/class-names.util";
 import { useTranslation } from "react-i18next";
-import { classNames } from "../../../utils/class-names.util";
 
 type Props = {
   item: GameItem;

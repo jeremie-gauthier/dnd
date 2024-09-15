@@ -1,16 +1,16 @@
-import { queryClient } from "@config/fetcher";
 import { socket } from "@config/socket";
+import { queryClient } from "@lib/react-query";
 import {
   ErrorComponent,
   RouterProvider,
   createRouter,
 } from "@tanstack/react-router";
-import { routeTree } from "./routeTree.gen";
+import { routeTree } from "./route-tree.gen";
 
 const router = createRouter({
   routeTree,
   defaultPendingComponent: () => (
-    <div className={"p-2 text-2xl"}>Route is loading</div>
+    <div className="p-2 text-2xl">Route is loading</div>
   ),
   defaultErrorComponent: ({ error }) => <ErrorComponent error={error} />,
   context: {
@@ -22,6 +22,6 @@ const router = createRouter({
   defaultPreloadStaleTime: 0,
 });
 
-export function AppRouter() {
+export const AppRouter = () => {
   return <RouterProvider router={router} context={{}} />;
-}
+};

@@ -22,7 +22,10 @@
     "baseUrl": ".",
     "paths": {
       "@features/*": ["./src/features/*"],
-      "@config/*": ["./src/config/*"]
+      "@config/*": ["./src/config/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@lib/*": ["./src/lib/*"]
     }
   },
   "include": ["src"],

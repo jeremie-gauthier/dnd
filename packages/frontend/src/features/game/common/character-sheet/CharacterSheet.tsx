@@ -1,8 +1,8 @@
+import cleric from "@assets/classes/cleric.webp";
+import sorcerer from "@assets/classes/sorcerer.webp";
+import thief from "@assets/classes/thief.webp";
+import warrior from "@assets/classes/warrior.webp";
 import { GameItem, HeroClassType, PlayableEntity } from "@dnd/shared";
-import cleric from "@features/ui/assets/classes/cleric.webp";
-import sorcerer from "@features/ui/assets/classes/sorcerer.webp";
-import thief from "@features/ui/assets/classes/thief.webp";
-import warrior from "@features/ui/assets/classes/warrior.webp";
 import { useTranslation } from "react-i18next";
 import { ActionPoints } from "../../ActionPoints";
 import { ArmourPoints } from "../../ArmourPoints";

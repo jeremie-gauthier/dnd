@@ -1,5 +1,5 @@
+import { classNames } from "@utils/class-names.util";
 import { useTranslation } from "react-i18next";
-import { classNames } from "../../../utils/class-names.util";
 import { useEditCharacterInventoryContext } from "./EditCharacterInventoryContext";
 
 const translationsKeys = {

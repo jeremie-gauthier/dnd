@@ -7,8 +7,8 @@ import {
   Transition,
 } from "@headlessui/react";
 import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { classNames } from "@utils/class-names.util";
 import { Fragment, ReactNode } from "react";
-import { classNames } from "../../../utils/class-names.util";
 
 type Props<Element, List extends Element[]> = {
   label: ReactNode;

@@ -1,24 +1,8 @@
-import { Auth0Provider } from "@auth0/auth0-react";
-import { queryClient } from "@config/fetcher";
-import "@config/i18n";
-import { AppRouter } from "@config/router/AppRouter";
-import { QueryClientProvider } from "@tanstack/react-query";
-import ReactDOM from "react-dom/client";
+import { createRoot } from "react-dom/client";
+import { App } from "./app";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <Auth0Provider
-    domain={import.meta.env.VITE_AUTH0_DOMAIN}
-    clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
-    useRefreshTokens={true}
-    cacheLocation="localstorage"
-    authorizationParams={{
-      redirect_uri: window.location.origin,
-      audience: "http://localhost:3000/",
-      scope: "profile email read:current_user offline_access",
-    }}
-  >
-    <QueryClientProvider client={queryClient}>
-      <AppRouter />
-    </QueryClientProvider>
-  </Auth0Provider>,
-);
+const root = document.getElementById("root");
+if (!root) {
+  throw new Error("No root element found");
+}
+createRoot(root).render(<App />);

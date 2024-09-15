@@ -1,8 +1,8 @@
 import { AttackRangeType, GameItem, sum } from "@dnd/shared";
 import { Icon } from "@features/ui";
+import { classNames } from "@utils/class-names.util";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { classNames } from "../../../../utils/class-names.util";
 import { useActionTabContext } from "../../context/ActionTab/useActionTabContext";
 import { useGameContext } from "../../context/GameContext/useGameContext";
 import { TileClickedEvent } from "../../game-engine/events/tile-clicked.event";

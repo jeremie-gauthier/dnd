@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { GameView, GetUserGameStateOutput } from "@dnd/shared";
+import { fetcherWithAuth } from "@lib/react-query";
 import { useQuery } from "@tanstack/react-query";
-import { fetcherWithAuth } from "../../../config/fetcher";
 
 export const GET_PLAYER_GAME_STATE_QUERY_KEY = (gameId: GameView["id"]) => [
   "game",

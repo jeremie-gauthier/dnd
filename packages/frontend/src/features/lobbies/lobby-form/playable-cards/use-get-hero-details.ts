@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { fetcherWithAuth } from "@config/fetcher";
 import { GetHeroDetailsOutput } from "@dnd/shared";
+import { fetcherWithAuth } from "@lib/react-query";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetHeroDetails = ({ heroId }: { heroId: string }) => {

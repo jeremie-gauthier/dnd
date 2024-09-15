@@ -1,4 +1,4 @@
-import { classNames } from "../../utils/class-names.util";
+import { classNames } from "@utils/class-names.util";
 import { useGameContext } from "./context/GameContext/useGameContext";
 
 type Props = {

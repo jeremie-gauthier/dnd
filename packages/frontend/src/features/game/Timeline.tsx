@@ -1,5 +1,5 @@
 import { GameView } from "@dnd/shared";
-import { classNames } from "../../utils/class-names.util";
+import { classNames } from "@utils/class-names.util";
 
 type Props = {
   game: GameView;

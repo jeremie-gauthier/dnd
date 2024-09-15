@@ -1,4 +1,4 @@
-import gameMaster from "@features/ui/assets/classes/game_master.webp";
+import gameMaster from "@assets/classes/game_master.webp";
 
 export const GameMasterCard = () => {
   return (
