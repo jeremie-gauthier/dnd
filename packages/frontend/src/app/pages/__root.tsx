@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { ClientSocket } from "../../types/socket.type";
+import { Auth0ContextInterface, User } from "@auth0/auth0-react";
 
 function RouterLoader() {
   const isLoading = useRouterState({ select: (s) => s.status === "pending" });
@@ -21,6 +22,7 @@ function RouterLoader() {
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
   socket: ClientSocket;
+  auth?: Auth0ContextInterface<User>;
 }>()({
   component: RootComponent,
 });

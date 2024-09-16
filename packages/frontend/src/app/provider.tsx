@@ -14,7 +14,7 @@ export const AppProvider = ({ children }: Props) => {
       useRefreshTokens={true}
       cacheLocation="localstorage"
       authorizationParams={{
-        redirect_uri: window.location.origin,
+        redirect_uri: import.meta.env.VITE_AUTH0_LOGIN_REDIRECT_URI,
         audience: "http://localhost:3000/",
         scope: "profile email read:current_user offline_access",
       }}

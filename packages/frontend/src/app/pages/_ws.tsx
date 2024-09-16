@@ -1,32 +1,47 @@
-import { withAuthenticationRequired } from "@auth0/auth0-react";
-import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_ws")({
-  beforeLoad: ({ context }) => {
-    return new Promise((resolve, reject) => {
-      if (context.socket.connected) {
-        resolve({});
-      } else {
+  beforeLoad: async ({ context, location }) => {
+    if (!context.auth?.isAuthenticated) {
+      throw redirect({
+        to: "/login",
+        search: {
+          redirect: location.pathname,
+        },
+      });
+    }
+
+    if (context.socket.connected) {
+      return context;
+    }
+
+    try {
+      await new Promise((resolve, reject) => {
         context.socket.on("connect", () => {
-          resolve({});
+          resolve(context);
         });
 
         context.socket.on("connect_error", (err) => {
-          // TODO: l'erreur thrown dans l'option auth(cb) n'est pas recu ici
-          // ? comment handle l'erreur pour redirect to login page
           console.error("connect_error", err);
           reject(err);
         });
 
         context.socket.connect();
-      }
-    });
+      });
+    } catch (error) {
+      throw redirect({
+        to: "/login",
+        search: {
+          redirect: location.pathname,
+        },
+      });
+    }
   },
   onLeave: ({ context }) => {
     const { socket } = context;
     socket.disconnect();
   },
-  component: withAuthenticationRequired(WsRouteComponent),
+  component: WsRouteComponent,
 });
 
 export function WsRouteComponent() {
