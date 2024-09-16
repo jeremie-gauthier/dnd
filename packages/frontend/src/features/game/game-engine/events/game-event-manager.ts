@@ -2,6 +2,8 @@ import { Coord, GameItem, GameView, PlayableEntity } from "@dnd/shared";
 import { PreparingAttackEvent } from "./preparing-attack.event";
 import { TileClickedEvent } from "./tile-clicked.event";
 import { TileHoveredEvent } from "./tile-hovered.event";
+import { TileReleasedEvent } from "./tile-released.event";
+import { TilePressedEvent } from "./tile-pressed.event";
 
 export class GameEventManager extends EventTarget {
   private static instance?: GameEventManager;
@@ -45,6 +47,20 @@ export class GameEventManager extends EventTarget {
     isometricCoord: Coord,
   ) {
     this.dispatchEvent(new TileClickedEvent(mouseCoord, isometricCoord));
+  }
+
+  public emitTilePressed(
+    mouseCoord: { x: number; y: number },
+    isometricCoord: Coord,
+  ) {
+    this.dispatchEvent(new TilePressedEvent(mouseCoord, isometricCoord));
+  }
+
+  public emitTileReleased(
+    mouseCoord: { x: number; y: number },
+    isometricCoord: Coord,
+  ) {
+    this.dispatchEvent(new TileReleasedEvent(mouseCoord, isometricCoord));
   }
 
   public emitPreparingAttack({

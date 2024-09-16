@@ -52,6 +52,7 @@ export const GameContextProvider = ({
     floorCanvasRef,
     previewCanvasRef,
     entitiesCanvasRef,
+    gameActions,
     gameEntity: game,
     gamePhase: phase,
   });
