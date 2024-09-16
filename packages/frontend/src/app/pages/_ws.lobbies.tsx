@@ -1,4 +1,3 @@
-import { withAuthenticationRequired } from "@auth0/auth0-react";
 import {
   ClientLobbyEvent,
   type LobbyView,
@@ -18,7 +17,7 @@ export const Route = createFileRoute("/_ws/lobbies")({
     const { socket } = context;
     await socket.emitWithAck(ClientLobbyEvent.ListenLobbiesChanges);
   },
-  component: withAuthenticationRequired(LobbiesRouteComponent),
+  component: LobbiesRouteComponent,
 });
 
 export function LobbiesRouteComponent() {

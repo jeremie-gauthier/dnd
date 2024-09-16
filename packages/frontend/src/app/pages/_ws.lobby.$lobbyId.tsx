@@ -1,8 +1,4 @@
-import {
-  type User,
-  useAuth0,
-  withAuthenticationRequired,
-} from "@auth0/auth0-react";
+import { type User, useAuth0 } from "@auth0/auth0-react";
 import { GameView, type LobbyView, ServerLobbyEvent } from "@dnd/shared";
 import { LobbyForm } from "@features/lobbies/lobby-form/lobby-form.component";
 import {
@@ -11,11 +7,11 @@ import {
   useGetLobby,
 } from "@features/lobbies/lobby-form/use-get-lobby";
 import { useServerLobbyError } from "@features/lobbies/use-server-lobby-error";
-import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-export const Route = createLazyFileRoute("/_ws/lobby/$lobbyId")({
-  component: withAuthenticationRequired(MenuRouteComponent),
+export const Route = createFileRoute("/_ws/lobby/$lobbyId")({
+  component: MenuRouteComponent,
 });
 
 export function MenuRouteComponent() {

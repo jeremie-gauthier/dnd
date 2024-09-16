@@ -1,5 +1,5 @@
 import { ClientLobbyEvent } from "@dnd/shared";
-import { UseFilters, UseGuards, UsePipes } from "@nestjs/common";
+import { UseFilters, UsePipes } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import {
   ConnectedSocket,
@@ -11,7 +11,6 @@ import {
 } from "@nestjs/websockets";
 import { ZodValidationPipe } from "nestjs-zod";
 import { WsExceptionFilter } from "src/errors/ws-exception-filter";
-import { AuthGuard } from "src/guards/auth.guard";
 import type { ServerSocket } from "src/interfaces/socket.interface";
 import { DiscardPlayableCharacterInputDto } from "src/modules/lobby/application/use-cases/discard-playable-character/discard-playable-character.dto";
 import { DiscardPlayableCharacterUseCase } from "src/modules/lobby/application/use-cases/discard-playable-character/discard-playable-character.uc";
@@ -38,7 +37,6 @@ import { StartGameUseCase } from "../../../application/use-cases/start-game/star
 import type { TogglePlayerReadyStateInputDto } from "../../../application/use-cases/toggle-player-ready-state/toggle-player-ready-state.dto";
 import { TogglePlayerReadyStateUseCase } from "../../../application/use-cases/toggle-player-ready-state/toggle-player-ready-state.uc";
 
-@UseGuards(AuthGuard)
 @UsePipes(ZodValidationPipe)
 @UseFilters(WsExceptionFilter)
 @WebSocketGateway({

@@ -1,4 +1,3 @@
-import { withAuthenticationRequired } from "@auth0/auth0-react";
 import { GameEnded } from "@features/game-ended/game-ended.component";
 import { ActionsLog } from "@features/game/components/action-log/action-log-list.component";
 import { GameContextProvider } from "@features/game/context/game.context";
@@ -8,7 +7,7 @@ import { useServerLobbyError } from "@features/lobbies/use-server-lobby-error";
 import { createLazyFileRoute } from "@tanstack/react-router";
 
 export const Route = createLazyFileRoute("/_ws/game/$gameId")({
-  component: withAuthenticationRequired(GameRouteComponent),
+  component: GameRouteComponent,
 });
 
 export function GameRouteComponent() {

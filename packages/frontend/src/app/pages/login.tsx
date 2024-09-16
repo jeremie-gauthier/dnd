@@ -1,4 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
+import { LinkButton } from "@features/ui/button/link-button";
 import { LoginButton } from "@features/users/login/login-button.component";
 import { useConnection } from "@features/users/login/use-connection";
 import { LogoutButton } from "@features/users/logout/logout-button.component";
@@ -23,7 +24,6 @@ function LoginComponent() {
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   React.useLayoutEffect(() => {
     if (isAuthenticated && user) {
-      console.log("useLayoutEffect", isAuthenticated, user);
       router.invalidate();
       connection({
         avatarUrl: user.picture ?? "",
@@ -34,7 +34,7 @@ function LoginComponent() {
         router.history.push(search.redirect);
       }
     }
-  }, [isAuthenticated, user, search.redirect]);
+  }, [isAuthenticated]);
 
   return isAuthenticated && user ? (
     <div>
@@ -48,6 +48,9 @@ function LoginComponent() {
           router.invalidate();
         }}
       />
+
+      <LinkButton to="/menu-multiplayer">Menu multiplayer</LinkButton>
+      <LinkButton to="/profile">Mon profil</LinkButton>
     </div>
   ) : (
     <div>
