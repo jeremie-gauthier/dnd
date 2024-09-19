@@ -2,7 +2,7 @@ import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { GameItem } from "@dnd/shared";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useTranslation } from "react-i18next";
-import { useGameContext } from "../../../../../context/use-game-context";
+import { useGameContext } from "../../../../../context/game.context";
 import { CharacterSheet } from "../../../../character-sheet/CharacterSheet";
 import { BackpackSlot } from "./backpack-slot.component";
 import { ChestLootContent } from "./chest-loot-content.component";

@@ -3,7 +3,7 @@ import { Icon } from "@features/ui/icon/Icon";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useGameContext } from "../../../../../../game/context/use-game-context";
+import { useGameContext } from "../../../../../../game/context/game.context";
 import { CharacterSheet } from "../../../../character-sheet/CharacterSheet";
 import { BackpackSlot } from "./backpack-slot.component";
 import { EditCharacterInventoryTooltip } from "./edit-character-inventory-tooltip.component";

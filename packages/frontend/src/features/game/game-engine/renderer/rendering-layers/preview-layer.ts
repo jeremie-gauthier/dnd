@@ -155,5 +155,9 @@ export const usePreviewLayer = ({ gameEventManager, canvasRef }: Params) => {
     renderAttackPreview,
   ]);
 
-  return { renderMovePreview, renderAttackPreview, clear };
+  return {
+    renderMovePreview,
+    renderAttackPreview,
+    clear,
+  };
 };

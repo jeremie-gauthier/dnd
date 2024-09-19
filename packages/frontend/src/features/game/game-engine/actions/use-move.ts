@@ -1,8 +1,9 @@
 import {
+  Coord,
   coordToIndex,
   GameView,
   getAllPathsFromTileWithinRange,
-  getCoordsFromTilePaths,
+  getNeighbourCoords,
   PlayableEntity,
   TilePath,
 } from "@dnd/shared";
@@ -14,6 +15,7 @@ import { useMapRenderer } from "../renderer";
 import { usePlayerState } from "../state-machine";
 import { GameEventManager, TileHoveredEvent } from "../events";
 import { useGameActions } from "@features/game/context/use-game-actions";
+import { getAllCoordsFromTilePaths } from "./move-utils";
 
 export const useMove = ({
   entityPlaying,
@@ -23,6 +25,8 @@ export const useMove = ({
   isPlaying,
   playerState,
   renderMovePreview,
+  renderMoveForbiddenTooltip,
+  clearTooltipLayer,
 }: {
   entityPlaying?: PlayableEntity;
   game: GameView;
@@ -31,6 +35,10 @@ export const useMove = ({
   isPlaying: boolean;
   playerState: ReturnType<typeof usePlayerState>;
   renderMovePreview: ReturnType<typeof useMapRenderer>["renderMovePreview"];
+  renderMoveForbiddenTooltip: ReturnType<
+    typeof useMapRenderer
+  >["renderMoveForbiddenTooltip"];
+  clearTooltipLayer: ReturnType<typeof useMapRenderer>["clearTooltipLayer"];
 }) => {
   const isMoving = isPlaying && playerState.currentAction === "move";
   const canMove =
@@ -38,13 +46,37 @@ export const useMove = ({
     entityPlaying &&
     entityPlaying.characteristic.movementPoints > 0 &&
     entityPlaying.characteristic.actionPoints > 0;
-  const [tilePath, setTilePath] = useState<TilePath | null>(null);
+  const [tilePathCoords, setTilePathCoords] = useState<Coord[]>([]);
+  const [availableTilesToMoveOn, setAvailableTilesToMoveOn] = useState<Coord[]>(
+    [],
+  );
+  const [tilePaths, setTilePaths] = useState<TilePath[]>([]);
+
+  useEffect(() => {
+    if (!entityPlaying) return;
+
+    const originCoord = entityPlaying.coord;
+    const isLiddaMoving = entityPlaying.name.toLowerCase() === "lidda";
+    const pathsFromTile = getAllPathsFromTileWithinRange({
+      ally: isLiddaMoving ? "ignoring" : entityPlaying.faction,
+      gameBoard: game.map,
+      originCoord,
+      maxRange: entityPlaying.characteristic.movementPoints,
+    });
+    const moveLimitCoords = getAllCoordsFromTilePaths(pathsFromTile).filter(
+      (coord) =>
+        !(coord.column === originCoord.column && coord.row === originCoord.row),
+    );
+
+    setTilePaths(pathsFromTile);
+    setAvailableTilesToMoveOn(moveLimitCoords);
+  }, [game.map, entityPlaying]);
 
   useEffect(() => {
     const handleMouseDown: EventListener = async (e) => {
       if (!canMove) return;
 
-      setTilePath(null);
+      setTilePathCoords([entityPlaying.coord]);
 
       const { isometricCoord } = e as TileClickedEvent;
       const idx = coordToIndex({
@@ -66,33 +98,80 @@ export const useMove = ({
     const handleMouseMove: EventListener = async (e) => {
       if (!entityPlaying || !isMoving) return;
 
-      const { isometricCoord } = e as TileClickedEvent;
+      const { isometricCoord } = e as TileHoveredEvent;
 
-      const isLiddaMoving = entityPlaying.name.toLowerCase() === "lidda";
-      const tilePaths = getAllPathsFromTileWithinRange({
-        ally: isLiddaMoving ? "ignoring" : entityPlaying.faction,
-        gameBoard: game.map,
-        originCoord: entityPlaying.coord,
-        maxRange: entityPlaying.characteristic.movementPoints,
+      // if it's a non accessible coord
+      const isHoveredCoordAccessibleForEntityPlaying =
+        availableTilesToMoveOn.some(
+          ({ row, column }) =>
+            row === isometricCoord.row && column === isometricCoord.column,
+        );
+      if (!isHoveredCoordAccessibleForEntityPlaying) {
+        setTilePathCoords((coords) => coords.slice(0, 1));
+        return;
+      }
+
+      // if it's a coord that has already been hovered
+      const hoveredCoordTilePathIdx = tilePathCoords.findIndex(
+        ({ row, column }) =>
+          row === isometricCoord.row && column === isometricCoord.column,
+      );
+      const isHoveredCoordAlreadyInTilePath = hoveredCoordTilePathIdx >= 0;
+      if (isHoveredCoordAlreadyInTilePath) {
+        setTilePathCoords((coords) => [
+          ...coords.slice(0, hoveredCoordTilePathIdx + 1),
+        ]);
+        return;
+      }
+
+      // if it's in entity move range
+      const lastCoordHovered = tilePathCoords[tilePathCoords.length - 1];
+      const lastCoordHoveredNeighbours = getNeighbourCoords({
+        coord: lastCoordHovered,
       });
+      const isInMoveRange =
+        tilePathCoords.length <= entityPlaying.characteristic.movementPoints;
+      if (isInMoveRange) {
+        // if it's a new coord adjacent to the last one
+        const isHoveredCoordAdjacentToLastOne = lastCoordHoveredNeighbours.some(
+          ({ row, column }) =>
+            row === isometricCoord.row && column === isometricCoord.column,
+        );
+        if (isHoveredCoordAdjacentToLastOne) {
+          setTilePathCoords((coords) => [...coords, isometricCoord]);
+          return;
+        }
+      }
+
+      // if it's a new coord non-adjacent to the last one
       const selectedPath = tilePaths.find(
         ({ tile }) =>
           tile.coord.row === isometricCoord.row &&
           tile.coord.column === isometricCoord.column,
       );
-
-      setTilePath(selectedPath ?? null);
+      const newTilePathCoords = getAllCoordsFromTilePaths(
+        selectedPath ? [selectedPath] : [],
+      );
+      setTilePathCoords(() => newTilePathCoords);
     };
 
     const handleMouseUp: EventListener = async (e) => {
       if (!canMove || !isMoving) return;
 
-      playerState.toggleTo("idle");
+      const { isometricCoord } = e as TileReleasedEvent;
 
-      if (tilePath) {
+      playerState.toggleTo("idle");
+      clearTooltipLayer();
+
+      const tilePathCoordsToMoveOn = tilePathCoords.slice(1);
+      const canCommitMove = tilePathCoordsToMoveOn.some(
+        ({ row, column }) =>
+          row === isometricCoord.row && column === isometricCoord.column,
+      );
+      if (canCommitMove) {
         gameActions.move({
           gameId: game.id,
-          pathToTile: tilePath,
+          pathToTile: tilePathCoordsToMoveOn,
         });
       }
     };
@@ -112,7 +191,7 @@ export const useMove = ({
 
     return () => {
       gameEventManager.removeEventListener(
-        TileClickedEvent.EventName,
+        TilePressedEvent.EventName,
         handleMouseDown,
       );
       gameEventManager.removeEventListener(
@@ -127,38 +206,56 @@ export const useMove = ({
   }, [
     isMoving,
     canMove,
-    tilePath,
+    tilePathCoords,
     game,
     gameActions.move,
     gameEventManager.addEventListener,
     gameEventManager.removeEventListener,
     entityPlaying,
     playerState.toggleTo,
+    tilePaths,
+    availableTilesToMoveOn,
+    clearTooltipLayer,
   ]);
 
   useEffect(() => {
     if (!entityPlaying || !isMoving) return;
 
-    const originCoord = entityPlaying.coord;
+    const moveSimulationCoords = tilePathCoords.slice(1);
 
-    const isLiddaMoving = entityPlaying.name.toLowerCase() === "lidda";
-    const tilePaths = getAllPathsFromTileWithinRange({
-      ally: isLiddaMoving ? "ignoring" : entityPlaying.faction,
-      gameBoard: game.map,
-      originCoord,
-      maxRange: entityPlaying.characteristic.movementPoints,
+    renderMovePreview({
+      map: game.map,
+      moveLimitCoords: availableTilesToMoveOn,
+      moveSimulationCoords,
     });
-    const moveLimitCoords = getCoordsFromTilePaths(tilePaths).filter(
-      (coord) =>
-        !(coord.column === originCoord.column && coord.row === originCoord.row),
-    );
-    const moveSimulationCoords = getCoordsFromTilePaths(
-      tilePath ? [tilePath] : [],
-    ).filter(
-      (coord) =>
-        !(coord.column === originCoord.column && coord.row === originCoord.row),
-    );
 
-    renderMovePreview({ map: game.map, moveLimitCoords, moveSimulationCoords });
-  }, [isMoving, game, entityPlaying, tilePath, renderMovePreview]);
+    const coordHovered = tilePathCoords[tilePathCoords.length - 1];
+    if (!coordHovered) return;
+
+    const isPlayingEntityPosition =
+      coordHovered.column === entityPlaying.coord.column &&
+      coordHovered.row === entityPlaying.coord.row;
+    const tileIdx = coordToIndex({
+      coord: coordHovered,
+      metadata: { width: game.map.width, height: game.map.height },
+    });
+    const tile = game.map.tiles[tileIdx];
+    if (!tile) return;
+
+    const isAccessible = tile.entities.every((entity) => !entity.isBlocking);
+    if (!isAccessible && !isPlayingEntityPosition) {
+      renderMoveForbiddenTooltip({ map: game.map, coord2D: coordHovered });
+    } else {
+      clearTooltipLayer();
+    }
+  }, [
+    isMoving,
+    game.map,
+    entityPlaying,
+    tilePathCoords,
+    availableTilesToMoveOn,
+    renderMovePreview,
+    renderMoveForbiddenTooltip,
+    clearTooltipLayer,
+  ]);
 };

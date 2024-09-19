@@ -4,7 +4,7 @@ import { ActionPoints } from "./components/characteristics/action-points.compone
 import { HealthPoints } from "./components/characteristics/health-points.component";
 import { ManaPoints } from "./components/characteristics/mana-points.component";
 import { MovementPoints } from "./components/characteristics/movement-points.component";
-import { useGameContext } from "./context/use-game-context";
+import { useGameContext } from "./context/game.context";
 import { Timeline } from "./timeline/timeline.component";
 
 export const Game = () => {

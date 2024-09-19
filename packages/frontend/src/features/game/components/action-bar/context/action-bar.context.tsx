@@ -1,6 +1,6 @@
 import { GameItem } from "@dnd/shared";
 import { PropsWithChildren, createContext, useEffect, useState } from "react";
-import { useGameContext } from "../../../context/use-game-context";
+import { useGameContext } from "../../../context/game.context";
 
 type ActionBarContextParams = {
   selectedAttack: GameItem["attacks"][number] | null;

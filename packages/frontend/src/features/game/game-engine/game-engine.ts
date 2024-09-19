@@ -11,6 +11,7 @@ export const useGameEngine = ({
   floorCanvasRef,
   previewCanvasRef,
   entitiesCanvasRef,
+  tooltipsCanvasRef,
   gameActions,
   gameEntity,
   gamePhase,
@@ -18,6 +19,7 @@ export const useGameEngine = ({
   floorCanvasRef: RefObject<HTMLCanvasElement>;
   previewCanvasRef: RefObject<HTMLCanvasElement>;
   entitiesCanvasRef: RefObject<HTMLCanvasElement>;
+  tooltipsCanvasRef: RefObject<HTMLCanvasElement>;
   gameActions: ReturnType<typeof useGameActions>;
   gameEntity: GameView;
   gamePhase: PlayerGamePhase;
@@ -32,13 +34,20 @@ export const useGameEngine = ({
     playerPhase: gamePhase,
   });
 
-  const { render, renderMovePreview, clearPreviewLayer, assetSize } =
-    useMapRenderer({
-      gameEventManager,
-      floorCanvasRef,
-      previewCanvasRef,
-      entitiesCanvasRef,
-    });
+  const {
+    render,
+    renderMovePreview,
+    clearPreviewLayer,
+    renderMoveForbiddenTooltip,
+    clearTooltipLayer,
+    assetSize,
+  } = useMapRenderer({
+    gameEventManager,
+    floorCanvasRef,
+    previewCanvasRef,
+    entitiesCanvasRef,
+    tooltipsCanvasRef,
+  });
 
   const {
     addTileClickEvent,
@@ -47,7 +56,7 @@ export const useGameEngine = ({
     addHoverEvent,
     clearMouseEvents,
   } = useMouseInputs({
-    canvasRef: entitiesCanvasRef,
+    canvasRef: tooltipsCanvasRef,
     canvasConfig: {
       assetSize,
       map: {
@@ -70,6 +79,8 @@ export const useGameEngine = ({
     isPlaying: gamePhase === "action",
     playerState,
     renderMovePreview,
+    renderMoveForbiddenTooltip,
+    clearTooltipLayer,
   });
 
   useEffect(() => {
@@ -79,7 +90,7 @@ export const useGameEngine = ({
   }, [gameEntity.map, gameEntity.playableEntities, gamePhase, render]);
 
   useEffect(() => {
-    if (!entitiesCanvasRef.current) return;
+    if (!tooltipsCanvasRef.current) return;
 
     addTileClickEvent();
     addHoverEvent();
@@ -88,19 +99,13 @@ export const useGameEngine = ({
 
     return clearMouseEvents;
   }, [
-    entitiesCanvasRef.current,
+    tooltipsCanvasRef.current,
     addTileClickEvent,
     addTilePressedEvent,
     addTileReleasedEvent,
     addHoverEvent,
     clearMouseEvents,
   ]);
-
-  // useEffect(() => {
-  //   if (playerState.currentAction !== "attack") {
-  //     return;
-  //   }
-  // }, [playerState.currentAction]);
 
   useEffect(() => {
     if (playerState.currentAction !== "idle") {

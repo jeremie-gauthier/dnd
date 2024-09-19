@@ -1,9 +1,7 @@
 import {
   AttackRangeType,
   PlayableEntityAttackInput,
-  PlayableEntityMoveInput,
   canAttackTarget,
-  unfoldTilePath,
   zip,
 } from "@dnd/shared";
 import { AggregateRoot } from "src/modules/shared/domain/aggregate-root";
@@ -181,16 +179,14 @@ export class Game extends AggregateRoot<Data> {
   public playerMove({
     userId,
     pathToTile,
-  }: Pick<PlayableEntityMoveInput, "pathToTile"> & { userId: string }) {
+  }: { pathToTile: Array<Coord>; userId: string }) {
     const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
     playingEntity.mustBePlayedBy({ userId });
     playingEntity.act({ action: "move" });
 
-    const path = unfoldTilePath(pathToTile)
-      .slice(1)
-      .map((tile) =>
-        this._data.board.getTileOrThrow({ coord: new Coord(tile.coord) }),
-      );
+    const path = pathToTile.map((coord) =>
+      this._data.board.getTileOrThrow({ coord }),
+    );
     const { validatedPath, trapTriggered } = playingEntity.getMovePath({
       path,
     });

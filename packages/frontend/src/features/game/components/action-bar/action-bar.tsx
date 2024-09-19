@@ -1,5 +1,5 @@
 import { GameItem } from "@dnd/shared";
-import { useGameContext } from "../../context/use-game-context";
+import { useGameContext } from "../../context/game.context";
 import { AttackItem } from "./actions/attack-item.component";
 import { EndTurnButton } from "./actions/end-turn-button.component";
 import { OpenChestButton } from "./actions/open-chest/open-chest-button.component";
