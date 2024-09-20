@@ -73,9 +73,9 @@ export const useMove = ({
   }, [game.map, entityPlaying]);
 
   useEffect(() => {
-    const handleMouseDown: EventListener = (e) => {
-      if (!canMove) return;
+    if (!canMove) return;
 
+    const handleMouseDown: EventListener = (e) => {
       setTilePathCoords([entityPlaying.coord]);
 
       const { isometricCoord } = e as TileClickedEvent;
@@ -95,8 +95,32 @@ export const useMove = ({
       }
     };
 
+    gameEventManager.addEventListener(
+      TilePressedEvent.EventName,
+      handleMouseDown,
+    );
+
+    return () => {
+      gameEventManager.removeEventListener(
+        TilePressedEvent.EventName,
+        handleMouseDown,
+      );
+    };
+  }, [
+    canMove,
+    entityPlaying,
+    game,
+    playerState,
+    gameEventManager.addEventListener,
+    gameEventManager.removeEventListener,
+  ]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: stable fns
+  useEffect(() => {
+    if (!isMoving) return;
+
     const handleMouseMove: EventListener = (e) => {
-      if (!entityPlaying || !isMoving) return;
+      if (!entityPlaying) return;
 
       const { isometricCoord } = e as TileHoveredEvent;
 
@@ -155,9 +179,30 @@ export const useMove = ({
       setTilePathCoords(() => newTilePathCoords);
     };
 
-    const handleMouseUp: EventListener = (e) => {
-      if (!canMove || !isMoving) return;
+    gameEventManager.addEventListener(
+      TileHoveredEvent.EventName,
+      handleMouseMove,
+    );
 
+    return () => {
+      gameEventManager.removeEventListener(
+        TileHoveredEvent.EventName,
+        handleMouseMove,
+      );
+    };
+  }, [
+    tilePathCoords,
+    isMoving,
+    entityPlaying,
+    gameEventManager.addEventListener,
+    gameEventManager.removeEventListener,
+  ]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: stable game.id
+  useEffect(() => {
+    if (!canMove || !isMoving) return;
+
+    const handleMouseUp: EventListener = (e) => {
       const { isometricCoord } = e as TileReleasedEvent;
 
       playerState.toggleTo("idle");
@@ -177,45 +222,25 @@ export const useMove = ({
     };
 
     gameEventManager.addEventListener(
-      TilePressedEvent.EventName,
-      handleMouseDown,
-    );
-    gameEventManager.addEventListener(
-      TileHoveredEvent.EventName,
-      handleMouseMove,
-    );
-    gameEventManager.addEventListener(
       TileReleasedEvent.EventName,
       handleMouseUp,
     );
 
     return () => {
       gameEventManager.removeEventListener(
-        TilePressedEvent.EventName,
-        handleMouseDown,
-      );
-      gameEventManager.removeEventListener(
-        TileHoveredEvent.EventName,
-        handleMouseMove,
-      );
-      gameEventManager.removeEventListener(
         TileReleasedEvent.EventName,
         handleMouseUp,
       );
     };
   }, [
+    tilePathCoords,
     isMoving,
     canMove,
-    tilePathCoords,
-    game,
-    gameActions.move,
     gameEventManager.addEventListener,
     gameEventManager.removeEventListener,
-    entityPlaying,
-    playerState.toggleTo,
-    tilePaths,
-    availableTilesToMoveOn,
     clearTooltipLayer,
+    playerState.toggleTo,
+    gameActions.move,
   ]);
 
   useEffect(() => {
