@@ -73,7 +73,7 @@ export const useMove = ({
   }, [game.map, entityPlaying]);
 
   useEffect(() => {
-    const handleMouseDown: EventListener = async (e) => {
+    const handleMouseDown: EventListener = (e) => {
       if (!canMove) return;
 
       setTilePathCoords([entityPlaying.coord]);
@@ -95,7 +95,7 @@ export const useMove = ({
       }
     };
 
-    const handleMouseMove: EventListener = async (e) => {
+    const handleMouseMove: EventListener = (e) => {
       if (!entityPlaying || !isMoving) return;
 
       const { isometricCoord } = e as TileHoveredEvent;
@@ -155,7 +155,7 @@ export const useMove = ({
       setTilePathCoords(() => newTilePathCoords);
     };
 
-    const handleMouseUp: EventListener = async (e) => {
+    const handleMouseUp: EventListener = (e) => {
       if (!canMove || !isMoving) return;
 
       const { isometricCoord } = e as TileReleasedEvent;
