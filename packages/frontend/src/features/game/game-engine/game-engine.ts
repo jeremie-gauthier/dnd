@@ -90,7 +90,7 @@ export const useGameEngine = ({
   }, [gameEntity.map, gameEntity.playableEntities, gamePhase, render]);
 
   useEffect(() => {
-    if (!tooltipsCanvasRef.current) return;
+    if (!tooltipsCanvasRef.current || !render) return;
 
     addTileClickEvent();
     addHoverEvent();
@@ -105,6 +105,7 @@ export const useGameEngine = ({
     addTileReleasedEvent,
     addHoverEvent,
     clearMouseEvents,
+    render,
   ]);
 
   useEffect(() => {
