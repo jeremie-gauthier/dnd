@@ -112,13 +112,13 @@ const InnerEditCharacterInventory = ({ isOpen, close }: Props) => {
     <Dialog
       open={isOpen}
       as="div"
-      className="relative z-20 focus:outline-none"
+      className="relative z-40 focus:outline-none"
       onClose={close}
       onMouseMove={updateCursorPosition}
     >
       <div
         ref={setGarbageAreaNodeRed}
-        className="fixed inset-0 z-20 w-screen overflow-y-auto"
+        className="fixed inset-0 z-40 w-screen overflow-y-auto"
       >
         <EditCharacterInventoryTooltip />
         <div className="flex min-h-full items-center justify-center p-4">

@@ -76,11 +76,11 @@ const InnerGetChestLoot = ({
     <Dialog
       open={isOpen}
       as="div"
-      className="relative z-20 focus:outline-none"
+      className="relative z-40 focus:outline-none"
       onClose={noOp}
       onMouseMove={updateCursorPosition}
     >
-      <div className="fixed inset-0 z-20 w-screen overflow-y-auto">
+      <div className="fixed inset-0 z-40 w-screen overflow-y-auto">
         <GetChestLootTooltip />
 
         <div className="flex min-h-full items-center justify-center p-4 gap-8">
