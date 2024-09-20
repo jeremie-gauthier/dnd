@@ -1,8 +1,7 @@
 import { GameItem } from "@dnd/shared";
-import { useGameContext } from "../../context/use-game-context";
+import { useGameContext } from "../../context/game.context";
 import { AttackItem } from "./actions/attack-item.component";
 import { EndTurnButton } from "./actions/end-turn-button.component";
-import { MoveButton } from "./actions/move-button.component";
 import { OpenChestButton } from "./actions/open-chest/open-chest-button.component";
 import { OpenDoorButton } from "./actions/open-door-button.component";
 import { InventorySlot } from "./actions/open-inventory/edit-character-inventory/common/invnetory-slot.component";
@@ -63,7 +62,6 @@ export const ActionBar = () => {
 
         <div className="flex flex-row justify-around gap-2">
           <div className="flex flex-col justify-between">
-            <MoveButton />
             <OpenDoorButton />
           </div>
 

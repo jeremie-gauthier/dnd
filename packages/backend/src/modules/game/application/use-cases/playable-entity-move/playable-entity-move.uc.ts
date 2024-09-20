@@ -12,6 +12,7 @@ import {
   GAME_REPOSITORY,
   GameRepository,
 } from "../../repositories/game-repository.interface";
+import { Coord } from "src/modules/game/domain/coord/coord.vo";
 
 @Injectable()
 export class PlayableEntityMoveUseCase implements UseCase {
@@ -30,9 +31,10 @@ export class PlayableEntityMoveUseCase implements UseCase {
   }): Promise<void> {
     const game = await this.gameRepository.getOneOrThrow({ gameId });
 
+    const pathToTileDomain = pathToTile.map((coord) => new Coord(coord));
     const { playingEntity, turnEnded } = game.playerMove({
       userId,
-      pathToTile,
+      pathToTile: pathToTileDomain,
     });
 
     await this.gameRepository.update({ game });

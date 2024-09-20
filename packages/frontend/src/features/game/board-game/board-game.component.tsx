@@ -1,4 +1,4 @@
-import { useGameContext } from "../context/use-game-context";
+import { useGameContext } from "../context/game.context";
 import { Canvas } from "./canvas.component";
 import { useCanvasSize } from "./use-canvas-size";
 
@@ -29,6 +29,12 @@ export const BoardGameCanvas = () => {
         height={height}
         width={width}
         className="absolute z-20"
+      />
+      <Canvas
+        ref={canvasRef.tooltips}
+        height={height}
+        width={width}
+        className="absolute z-30"
       />
     </div>
   );

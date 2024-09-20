@@ -1,5 +1,5 @@
 import { GameItem } from "@dnd/shared";
-import { useGameContext } from "@features/game/context/use-game-context";
+import { useGameContext } from "@features/game/context/game.context";
 import { Button } from "@features/ui/button/button";
 import { Icon } from "@features/ui/icon/Icon";
 import { useState } from "react";

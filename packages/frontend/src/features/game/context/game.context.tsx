@@ -1,5 +1,5 @@
 import { GameView, PlayableEntity, PlayerGamePhase, Tile } from "@dnd/shared";
-import { PropsWithChildren, useRef } from "react";
+import { PropsWithChildren, useContext, useRef } from "react";
 import { createContext } from "react";
 import { ClientSocket } from "../../../types/socket.type";
 import { useGameEngine } from "../game-engine";
@@ -13,6 +13,7 @@ type GameContextParams = {
     floor: React.RefObject<HTMLCanvasElement>;
     preview: React.RefObject<HTMLCanvasElement>;
     entities: React.RefObject<HTMLCanvasElement>;
+    tooltips: React.RefObject<HTMLCanvasElement>;
   };
   assetSize: number;
   gameEventManager: GameEventManager;
@@ -47,13 +48,16 @@ export const GameContextProvider = ({
   const floorCanvasRef = useRef<HTMLCanvasElement>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
   const entitiesCanvasRef = useRef<HTMLCanvasElement>(null);
+  const tooltipsCanvasRef = useRef<HTMLCanvasElement>(null);
 
   const { assetSize, gameEventManager, playerState } = useGameEngine({
     floorCanvasRef,
     previewCanvasRef,
     entitiesCanvasRef,
+    gameActions,
     gameEntity: game,
     gamePhase: phase,
+    tooltipsCanvasRef,
   });
 
   const isPlaying = phase === "action";
@@ -74,6 +78,7 @@ export const GameContextProvider = ({
           floor: floorCanvasRef,
           preview: previewCanvasRef,
           entities: entitiesCanvasRef,
+          tooltips: tooltipsCanvasRef,
         },
         game,
         phase,
@@ -89,4 +94,8 @@ export const GameContextProvider = ({
       {children}
     </GameContext.Provider>
   );
+};
+
+export const useGameContext = () => {
+  return useContext(GameContext);
 };

@@ -6,9 +6,9 @@ import { translate2DToIsometricCoord } from "../../utils/coords-conversion.util"
 import { useAssetsLoader } from "../assets-loader/assets-loader";
 import { previewsAssetsCollection } from "../assets-loader/assets.config";
 import { drawAttackPreview } from "../draw/layers/draw-attack-preview";
-import { drawMovePreview } from "../draw/layers/draw-move-preview";
 import { LayerDrawerParams } from "../draw/layers/layer-drawer-params.interface";
 import { centerIsometricDrawing } from "../draw/utils/center-isometric-drawing.util";
+import { drawMovePreview } from "../draw/layers/draw-move-preview";
 
 type Params = {
   gameEventManager: GameEventManager;
@@ -69,9 +69,61 @@ export const usePreviewLayer = ({ gameEventManager, canvasRef }: Params) => {
 
       context.restore();
     };
-
-  const renderMovePreview = renderPreview(drawMovePreview);
   const renderAttackPreview = renderPreview(drawAttackPreview);
+
+  const renderMovePreview = ({
+    map,
+    moveLimitCoords,
+    moveSimulationCoords,
+  }: {
+    map: GameView["map"];
+    moveLimitCoords: Coord[];
+    moveSimulationCoords: Coord[];
+  }) => {
+    if (!canvas || !context || !assets) return;
+
+    const config = { assets, assetSize, map };
+
+    clear();
+
+    context.save();
+
+    centerIsometricDrawing({ context, map, assetSize });
+
+    context.globalAlpha = 0.75;
+    for (const coord2D of moveLimitCoords) {
+      const coordIsometric = translate2DToIsometricCoord(coord2D, config);
+
+      drawMovePreview({
+        context,
+        config,
+        subject: { coord2D, coordIsometric, tile: {} as Tile },
+      });
+    }
+    context.globalAlpha = 1;
+    const moveSimulationCoordsWithRangeIndexes: [Coord, number][] =
+      moveSimulationCoords.map((coord, idx) => [coord, idx + 1]);
+
+    context.textRendering = "optimizeSpeed";
+    context.font = "bold 0.825rem Courier";
+    for (const [coord2D, moveIndex] of moveSimulationCoordsWithRangeIndexes) {
+      const coordIsometric = translate2DToIsometricCoord(coord2D, config);
+
+      drawMovePreview({
+        context,
+        config,
+        subject: { coord2D, coordIsometric, tile: {} as Tile },
+      });
+
+      context.fillText(
+        `${moveIndex}`,
+        coordIsometric.column + assetSize / 2.25,
+        coordIsometric.row + assetSize / 3.5,
+      );
+    }
+
+    context.restore();
+  };
 
   useEffect(() => {
     const handlePreparingAttackEvent: EventListener = (e) => {
@@ -106,5 +158,9 @@ export const usePreviewLayer = ({ gameEventManager, canvasRef }: Params) => {
     renderAttackPreview,
   ]);
 
-  return { renderMovePreview, renderAttackPreview, clear };
+  return {
+    renderMovePreview,
+    renderAttackPreview,
+    clear,
+  };
 };

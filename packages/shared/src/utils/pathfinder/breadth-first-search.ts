@@ -52,7 +52,7 @@ export function getAllPathsFromTileWithinRange({
     // save tile as part of a possible path
     if (
       tilePath.range > 0 &&
-      tilePath.tile.entities.every((entity) => !entity.isBlocking)
+      canMoveToRequestedPosition({ ally, tile: tilePath.tile })
     ) {
       paths.push(tilePath);
     }
@@ -97,42 +97,4 @@ export function getAllPathsFromTileWithinRange({
   }
 
   return paths;
-}
-
-function hasAncestor(tilePath: TilePath): tilePath is ChildTilePath {
-  return tilePath.range > 0;
-}
-
-export function unfoldTilePath(tilePath: TilePath): GameBoardTile[] {
-  const tilePaths: [TilePath] & TilePath[] = [tilePath];
-
-  while (hasAncestor(tilePaths[0])) {
-    tilePaths.unshift(tilePaths[0].fromTile);
-  }
-
-  return tilePaths.map((tilePath) => tilePath.tile);
-}
-
-export function getCoordsFromTilePaths(tilePaths: TilePath[]): Coord[] {
-  const uniqCoords: Coord[] = [];
-
-  for (const tilePath of tilePaths) {
-    const coords = unfoldTilePath(tilePath)
-      .filter((tile) => tile.entities.every((entity) => !entity.isBlocking))
-      .map((tile) => tile.coord);
-    for (const coord of coords) {
-      const isNewCoord = uniqCoords.every(
-        (existingCoord) =>
-          !(
-            existingCoord.column === coord.column &&
-            existingCoord.row === coord.row
-          ),
-      );
-      if (isNewCoord) {
-        uniqCoords.push(coord);
-      }
-    }
-  }
-
-  return uniqCoords;
 }

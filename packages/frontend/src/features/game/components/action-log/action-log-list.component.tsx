@@ -27,9 +27,9 @@ export const ActionsLog = ({ socket }: Props) => {
 
   return (
     <ul className="flex flex-col-reverse h-32 w-96 overflow-y-scroll border rounded-sm px-1">
-      {actionsLogs.map((actionLog) => (
+      {actionsLogs.map((actionLog, idx) => (
         <ActionLogItem
-          key={`${actionLog.type}:${actionLog.createdAt}`}
+          key={`${actionLog.type}:${actionLog.createdAt.valueOf()}:${idx}`}
           {...actionLog}
         />
       ))}

@@ -2,7 +2,7 @@ import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { GameItem } from "@dnd/shared";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useTranslation } from "react-i18next";
-import { useGameContext } from "../../../../../context/use-game-context";
+import { useGameContext } from "../../../../../context/game.context";
 import { CharacterSheet } from "../../../../character-sheet/CharacterSheet";
 import { BackpackSlot } from "./backpack-slot.component";
 import { ChestLootContent } from "./chest-loot-content.component";
@@ -76,11 +76,11 @@ const InnerGetChestLoot = ({
     <Dialog
       open={isOpen}
       as="div"
-      className="relative z-20 focus:outline-none"
+      className="relative z-40 focus:outline-none"
       onClose={noOp}
       onMouseMove={updateCursorPosition}
     >
-      <div className="fixed inset-0 z-20 w-screen overflow-y-auto">
+      <div className="fixed inset-0 z-40 w-screen overflow-y-auto">
         <GetChestLootTooltip />
 
         <div className="flex min-h-full items-center justify-center p-4 gap-8">
