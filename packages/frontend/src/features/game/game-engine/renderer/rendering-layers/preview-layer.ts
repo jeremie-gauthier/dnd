@@ -82,30 +82,7 @@ export const usePreviewLayer = ({ gameEventManager, canvasRef }: Params) => {
   }) => {
     if (!canvas || !context || !assets) return;
 
-    const drawPreviewOnCoords = ({
-      previewCoords,
-    }: {
-      previewCoords: Coord[];
-    }) => {
-      const config = { assets, assetSize, map };
-      for (const coord2D of previewCoords) {
-        const coordIsometric = translate2DToIsometricCoord(coord2D, {
-          assetSize,
-          // Beware of the offset, it may shift everything being computed here.
-          // We really want to have the tiles next to the borders of the canvas.
-          map: {
-            height: map.height * assetSize,
-            width: map.width * assetSize,
-          },
-        });
-
-        drawMovePreview({
-          context,
-          config,
-          subject: { coord2D, coordIsometric, tile: {} as Tile },
-        });
-      }
-    };
+    const config = { assets, assetSize, map };
 
     clear();
 
@@ -114,10 +91,36 @@ export const usePreviewLayer = ({ gameEventManager, canvasRef }: Params) => {
     centerIsometricDrawing({ context, map, assetSize });
 
     context.globalAlpha = 0.75;
-    drawPreviewOnCoords({ previewCoords: moveLimitCoords });
+    for (const coord2D of moveLimitCoords) {
+      const coordIsometric = translate2DToIsometricCoord(coord2D, config);
 
+      drawMovePreview({
+        context,
+        config,
+        subject: { coord2D, coordIsometric, tile: {} as Tile },
+      });
+    }
     context.globalAlpha = 1;
-    drawPreviewOnCoords({ previewCoords: moveSimulationCoords });
+    const moveSimulationCoordsWithRangeIndexes: [Coord, number][] =
+      moveSimulationCoords.map((coord, idx) => [coord, idx + 1]);
+
+    context.textRendering = "optimizeSpeed";
+    context.font = "bold 0.825rem Courier";
+    for (const [coord2D, moveIndex] of moveSimulationCoordsWithRangeIndexes) {
+      const coordIsometric = translate2DToIsometricCoord(coord2D, config);
+
+      drawMovePreview({
+        context,
+        config,
+        subject: { coord2D, coordIsometric, tile: {} as Tile },
+      });
+
+      context.fillText(
+        `${moveIndex}`,
+        coordIsometric.column + assetSize / 2.25,
+        coordIsometric.row + assetSize / 3.5,
+      );
+    }
 
     context.restore();
   };
