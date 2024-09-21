@@ -10,12 +10,18 @@ import {
   LobbiesRepository,
 } from "../../repositories/lobbies-repository.interface";
 import { LeaveLobbyUseCase } from "../leave-lobby/leave-lobby.uc";
+import {
+  USERS_REPOSITORY,
+  UsersRepository,
+} from "../../repositories/users-repository.interface";
 
 @Injectable()
 export class JoinLobbyUseCase implements UseCase {
   constructor(
     @Inject(LOBBIES_REPOSITORY)
     private readonly lobbiesRepository: LobbiesRepository,
+    @Inject(USERS_REPOSITORY)
+    protected readonly usersRepository: UsersRepository,
     private readonly eventEmitter: EventEmitter2,
     private readonly leaveLobbyUseCase: LeaveLobbyUseCase,
   ) {}
@@ -30,6 +36,7 @@ export class JoinLobbyUseCase implements UseCase {
 
     lobby.join({ userId });
     await this.lobbiesRepository.update({ lobby });
+    await this.usersRepository.upsert({ userId, lobbyId });
 
     const plainLobby = lobby.toPlain();
 
