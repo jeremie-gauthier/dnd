@@ -29,6 +29,11 @@ export class CreateLobbyUseCase implements UseCase {
   ): Promise<LobbyView> {
     await this.leaveLobbyUseCase.execute({ userId: payload.userId });
     const lobby = await this.createLobby(payload);
+    await this.usersRepository.upsert({
+      userId: payload.userId,
+      lobbyId: lobby.id,
+    });
+
     const plainLobby = lobby.toPlain();
     return {
       ...plainLobby,

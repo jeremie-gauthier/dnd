@@ -103,6 +103,11 @@ export class LeaveLobbyUseCase implements UseCase {
     }
 
     await this.lobbiesRepository.del({ lobbyId: lobby.id });
+    await Promise.all(
+      plainLobby.players.map(({ userId }) =>
+        this.usersRepository.del({ userId }),
+      ),
+    );
 
     this.eventEmitter.emitAsync(
       LobbyEvent.LobbyDeleted,
