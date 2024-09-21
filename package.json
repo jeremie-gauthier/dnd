@@ -6,6 +6,7 @@
     "packages": ["packages/*"]
   },
   "scripts": {
+    "biome:migrate": "biome migrate --write",
     "format": "biome format scripts/ --write",
     "check": "biome check scripts/",
     "check:fix": "biome check scripts/ --write",
@@ -22,7 +23,7 @@
     "new-emitter": "node ./scripts/new-emitter"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.0",
+    "@biomejs/biome": "^1.9.2",
     "@inquirer/prompts": "^5.0.4",
     "dedent": "^1.5.3",
     "inquirer-directory": "^2.2.0",
