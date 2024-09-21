@@ -1,11 +1,11 @@
 import { type GameView, type PlayerGamePhase } from "@dnd/shared";
 import { RefObject, useEffect } from "react";
+import { useGameActions } from "../context/use-game-actions";
+import { useMove } from "./actions/use-move";
 import { GameEventManager } from "./events";
 import { useMouseInputs } from "./inputs";
 import { useMapRenderer } from "./renderer";
 import { usePlayerState } from "./state-machine";
-import { useMove } from "./actions/use-move";
-import { useGameActions } from "../context/use-game-actions";
 
 export const useGameEngine = ({
   floorCanvasRef,

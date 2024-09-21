@@ -1,36 +1,10 @@
-import { GameView, PlayableEntity, PlayerGamePhase, Tile } from "@dnd/shared";
-import { PropsWithChildren, useContext, useRef } from "react";
-import { createContext } from "react";
+import { GameView, PlayerGamePhase } from "@dnd/shared";
+import { PropsWithChildren, useRef } from "react";
 import { ClientSocket } from "../../../types/socket.type";
 import { useGameEngine } from "../game-engine";
-import { GameEventManager } from "../game-engine/events";
-import { usePlayerState } from "../game-engine/state-machine";
+import { GameContext } from "./game.context";
 import { useGameActions } from "./use-game-actions";
 import { useGetNeighbourTiles } from "./use-get-neighbour-tiles";
-
-type GameContextParams = {
-  canvasRef: {
-    floor: React.RefObject<HTMLCanvasElement>;
-    preview: React.RefObject<HTMLCanvasElement>;
-    entities: React.RefObject<HTMLCanvasElement>;
-    tooltips: React.RefObject<HTMLCanvasElement>;
-  };
-  assetSize: number;
-  gameEventManager: GameEventManager;
-  game: GameView;
-  playerState: ReturnType<typeof usePlayerState>;
-  gameActions: ReturnType<typeof useGameActions>;
-  phase: PlayerGamePhase;
-  neighbourTiles: Tile[] | undefined;
-  isPlaying: boolean;
-  entityPlaying: PlayableEntity | undefined;
-};
-
-export const GameContext = createContext<GameContextParams>({
-  game: {},
-  phase: "idle",
-  gameActions: {},
-} as GameContextParams);
 
 type Props = PropsWithChildren<{
   game: GameView;
@@ -94,8 +68,4 @@ export const GameContextProvider = ({
       {children}
     </GameContext.Provider>
   );
-};
-
-export const useGameContext = () => {
-  return useContext(GameContext);
 };

@@ -4,7 +4,7 @@ import thief from "@assets/classes/thief.webp";
 import warrior from "@assets/classes/warrior.webp";
 import { GameItem, HeroClassType, PlayableEntity } from "@dnd/shared";
 import { useTranslation } from "react-i18next";
-import { useGameContext } from "../../context/game.context";
+import { useGameContext } from "../../context/use-game-context";
 import { ActionPoints } from "../characteristics/action-points.component";
 import { ArmourPoints } from "../characteristics/armour-points.component";
 import { HealthPoints } from "../characteristics/health-points.component";

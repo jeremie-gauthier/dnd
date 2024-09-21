@@ -1,6 +1,6 @@
 import { GameEnded } from "@features/game-ended/game-ended.component";
 import { ActionsLog } from "@features/game/components/action-log/action-log-list.component";
-import { GameContextProvider } from "@features/game/context/game.context";
+import { GameContextProvider } from "@features/game/context/game-context-provider";
 import { Game } from "@features/game/game.component";
 import { useGame } from "@features/game/use-game/use-game";
 import { useServerLobbyError } from "@features/lobbies/use-server-lobby-error";

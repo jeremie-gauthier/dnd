@@ -1,16 +1,7 @@
 import { GameItem } from "@dnd/shared";
-import { PropsWithChildren, createContext, useEffect, useState } from "react";
-import { useGameContext } from "../../../context/game.context";
-
-type ActionBarContextParams = {
-  selectedAttack: GameItem["attacks"][number] | null;
-  clearSelectedAttack: () => void;
-  selectAttack: (attack: GameItem["attacks"][number]) => void;
-};
-
-export const ActionBarContext = createContext<ActionBarContextParams>({
-  selectedAttack: null,
-} as ActionBarContextParams);
+import { PropsWithChildren, useEffect, useState } from "react";
+import { useGameContext } from "../../../context/use-game-context";
+import { ActionBarContext } from "./action-bar.context";
 
 type Props = PropsWithChildren;
 
