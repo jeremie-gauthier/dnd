@@ -3,6 +3,7 @@ import { LogService } from "../domain/log/log.service";
 import { DatabaseModule } from "../infra/database/database.module";
 import { GameListeners } from "./game.listeners";
 import { GameStateService } from "./services/game-state.service";
+import { CreateItemsFromCsvUseCase } from "./use-cases/create-items-from-csv/create-items-from-csv.uc";
 import { DeleteGameUseCase } from "./use-cases/delete-game/delete-game.uc";
 import { EndPlayerTurnUseCase } from "./use-cases/end-player-turn/end-player-turn.uc";
 import { GameInitializationUseCase } from "./use-cases/game-initialization/game-initialization.uc";
@@ -32,6 +33,7 @@ import { PlayableEntitySwapItemsUseCase } from "./use-cases/playable-entity-swap
     PlayableEntitySwapItemsUseCase,
     PlayableEntityOpenChestUseCase,
     PlayableEntityLootItemUseCase,
+    CreateItemsFromCsvUseCase,
   ],
   exports: [
     GameListeners,
@@ -47,6 +49,7 @@ import { PlayableEntitySwapItemsUseCase } from "./use-cases/playable-entity-swap
     PlayableEntitySwapItemsUseCase,
     PlayableEntityOpenChestUseCase,
     PlayableEntityLootItemUseCase,
+    CreateItemsFromCsvUseCase,
   ],
 })
 export class ApplicationModule {}
