@@ -7,7 +7,7 @@ import {
 } from "@dnd/shared";
 
 type BaseItem = {
-  type: "Weapon" | "Spell" | "ChestTrap";
+  type: "Weapon" | "Spell" | "ChestTrap" | "Potion";
   name: string;
   level: number;
 };
@@ -43,5 +43,8 @@ export type SpellItem = AttackItem & {
 export type ChestTrapItem = BaseItem & {
   type: "ChestTrap";
 };
+export type PotionItem = BaseItem & {
+  type: "Potion";
+};
 
-export type GameItem = WeaponItem | SpellItem | ChestTrapItem;
+export type GameItem = WeaponItem | SpellItem | ChestTrapItem | PotionItem;

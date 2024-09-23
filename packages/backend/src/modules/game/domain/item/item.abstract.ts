@@ -3,7 +3,7 @@ import { Spell } from "./spell/spell.entity";
 import { Weapon } from "./weapon/weapon.entity";
 
 type Data = {
-  readonly type: "Weapon" | "Spell" | "ChestTrap";
+  readonly type: "Weapon" | "Spell" | "ChestTrap" | "Potion";
   readonly name: string;
   readonly level: number;
   [x: string]: unknown;

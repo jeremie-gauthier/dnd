@@ -6,6 +6,7 @@ import { Weapon } from "../../domain/item/weapon/weapon.entity";
 import { ChestTrapFactory } from "./chest-trap.factory";
 import { GameItem } from "./item.interface";
 import { PerkFactory } from "./perk.factory";
+import { PotionFactory } from "./potion.factory";
 
 export class ItemFactory {
   private constructor() {}
@@ -42,6 +43,8 @@ export class ItemFactory {
         });
       case "ChestTrap":
         return ChestTrapFactory.create(data.name);
+      case "Potion":
+        return PotionFactory.create(data.name);
     }
   }
 }
