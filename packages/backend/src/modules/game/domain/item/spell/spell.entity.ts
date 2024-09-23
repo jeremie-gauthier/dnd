@@ -15,7 +15,7 @@ type Data = {
 
 export class Spell extends Item<Data> {
   private static schema = z.object({
-    type: z.literal("Spell"),
+    type: z.literal("Spell").optional().default("Spell"),
     name: z.string(),
     level: z.number().min(0).max(3),
     attacks: z.array(z.instanceof(Attack)),
@@ -25,7 +25,7 @@ export class Spell extends Item<Data> {
     }),
   });
 
-  constructor(rawData: Data) {
+  constructor(rawData: Omit<Data, "type">) {
     const data = Spell.schema.parse(rawData);
     super(data);
   }
