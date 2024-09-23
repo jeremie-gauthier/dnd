@@ -85,4 +85,13 @@ export class PostgresItemRepository implements ItemRepository {
         throw new Error(`Item '${item.name}' not found`);
     }
   }
+
+  public async createMany({
+    items,
+  }: { items: Array<ItemDomain> }): Promise<void> {
+    const persistenceItems = items.map((item) =>
+      this.mapper.toPersistence(item),
+    );
+    await this.itemRepository.save(persistenceItems);
+  }
 }

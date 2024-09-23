@@ -9,6 +9,7 @@ export interface ItemRepository {
     maxLevelLoot: GameItem["level"];
     hostUserId: User["id"];
   }): Promise<Item>;
+  createMany(data: { items: Array<Item> }): Promise<void>;
 }
 
 export const ITEM_REPOSITORY = Symbol("ItemRepository");
