@@ -3,6 +3,7 @@ import { Dice } from "../../domain/dice/dice.vo";
 import { Item } from "../../domain/item/item.abstract";
 import { Spell } from "../../domain/item/spell/spell.entity";
 import { Weapon } from "../../domain/item/weapon/weapon.entity";
+import { ArtifactFactory } from "./artifact.factory";
 import { ChestTrapFactory } from "./chest-trap.factory";
 import { GameItem } from "./item.interface";
 import { PerkFactory } from "./perk.factory";
@@ -45,6 +46,8 @@ export class ItemFactory {
         return ChestTrapFactory.create(data.name);
       case "Potion":
         return PotionFactory.create(data.name);
+      case "Artifact":
+        return ArtifactFactory.create(data.name);
     }
   }
 }

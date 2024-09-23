@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Artifact as ArtifactPersistence } from "src/database/entities/artifact.entity";
 import { AttackDice } from "src/database/entities/attack-dice.entity";
 import { ChestTrap as ChestTrapPersistence } from "src/database/entities/chest-trap.entity";
 import { Item as ItemPersistence } from "src/database/entities/item.entity";
@@ -26,7 +27,8 @@ export class ItemMapper extends Mapper<ItemPersistence, ItemDomain> {
       | WeaponPersistence
       | SpellPersistence
       | ChestTrapPersistence
-      | PotionPersistence,
+      | PotionPersistence
+      | ArtifactPersistence,
   ): ItemDomain {
     return ItemFactory.create({
       ...persistence,
