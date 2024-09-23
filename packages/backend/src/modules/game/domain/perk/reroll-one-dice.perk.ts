@@ -4,6 +4,10 @@ import { Playable } from "../playable-entities/playable-entity/playable-entity.a
 import { Perk } from "./perk.abstract";
 
 export class RerollOneDice extends Perk {
+  constructor() {
+    super({ name: "reroll_one_dice", trigger: "once_per_attack" });
+  }
+
   public apply(_: {
     dicesResults: ReturnType<Attack["roll"]>;
     itemUsed: Item;

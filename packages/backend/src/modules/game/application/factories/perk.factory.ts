@@ -17,35 +17,35 @@ export class PerkFactory {
   private constructor() {}
 
   public static create(
-    data: GameItem["attacks"][number]["perks"][number],
+    perkName: GameItem["attacks"][number]["perks"][number]["name"],
   ): Perk {
-    switch (data.name) {
+    switch (perkName) {
       case "mana_leech":
-        return new ManaLeech(data);
+        return new ManaLeech();
       case "breakable":
-        return new Breakable(data);
+        return new Breakable();
       case "critical_failure":
-        return new CriticalFailure(data);
+        return new CriticalFailure();
       case "greater_healing":
-        return new GreaterHealing(data);
+        return new GreaterHealing();
       case "blood_price":
-        return new BloodPrice(data);
+        return new BloodPrice();
       case "double_damage":
-        return new DoubleDamage(data);
+        return new DoubleDamage();
       case "frozen":
-        return new Frozen(data);
+        return new Frozen();
       case "ignore_armor_class":
-        return new IgnoreArmorClass(data);
+        return new IgnoreArmorClass();
       case "reroll_all_dices":
-        return new RerollAllDices(data);
+        return new RerollAllDices();
       case "reroll_one_dice":
-        return new RerollOneDice(data);
+        return new RerollOneDice();
       case "stop":
-        return new Stop(data);
+        return new Stop();
       case "turn_undead":
-        return new TurnUndead(data);
+        return new TurnUndead();
       default:
-        throw new Error(`No "${data.name}" perk found`);
+        throw new Error(`No "${perkName}" perk found`);
     }
   }
 }

@@ -4,6 +4,10 @@ import { Playable } from "../playable-entities/playable-entity/playable-entity.a
 import { Perk } from "./perk.abstract";
 
 export class Frozen extends Perk {
+  constructor() {
+    super({ name: "frozen", trigger: "special_dice" });
+  }
+
   public apply(_: {
     dicesResults: ReturnType<Attack["roll"]>;
     itemUsed: Item;

@@ -19,7 +19,9 @@ export class ItemFactory {
               new Attack({
                 ...attack,
                 dices: attack.dices.map((dice) => new Dice(dice)),
-                perks: attack.perks.map((perk) => PerkFactory.create(perk)),
+                perks: attack.perks.map((perk) =>
+                  PerkFactory.create(perk.name),
+                ),
               }),
           ),
         });
@@ -31,7 +33,9 @@ export class ItemFactory {
               new Attack({
                 ...attack,
                 dices: attack.dices.map((dice) => new Dice(dice)),
-                perks: attack.perks.map((perk) => PerkFactory.create(perk)),
+                perks: attack.perks.map((perk) =>
+                  PerkFactory.create(perk.name),
+                ),
               }),
           ),
         });
