@@ -7,7 +7,7 @@ import {
 } from "@dnd/shared";
 
 type BaseItem = {
-  type: "Weapon" | "Spell";
+  type: "Weapon" | "Spell" | "ChestTrap";
   name: string;
   level: number;
 };
@@ -22,7 +22,8 @@ type AttackPerk = {
   trigger: PerkTriggerType;
 };
 
-type AttackItem = BaseItem & {
+export type AttackItem = BaseItem & {
+  type: "Weapon" | "Spell";
   attacks: Array<{
     id: string;
     range: AttackRangeType;
@@ -39,5 +40,8 @@ export type SpellItem = AttackItem & {
   type: "Spell";
   manaCost: ItemManaCostJson;
 };
+export type ChestTrapItem = BaseItem & {
+  type: "ChestTrap";
+};
 
-export type GameItem = WeaponItem | SpellItem;
+export type GameItem = WeaponItem | SpellItem | ChestTrapItem;

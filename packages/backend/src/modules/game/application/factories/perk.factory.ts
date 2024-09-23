@@ -11,13 +11,13 @@ import { RerollAllDices } from "../../domain/perk/reroll-all-dices.perk";
 import { RerollOneDice } from "../../domain/perk/reroll-one-dice.perk";
 import { Stop } from "../../domain/perk/stop.perk";
 import { TurnUndead } from "../../domain/perk/turn-undead.perk";
-import { GameItem } from "./item.interface";
+import { AttackItem } from "./item.interface";
 
 export class PerkFactory {
   private constructor() {}
 
   public static create(
-    perkName: GameItem["attacks"][number]["perks"][number]["name"],
+    perkName: AttackItem["attacks"][number]["perks"][number]["name"],
   ): Perk {
     switch (perkName) {
       case "mana_leech":
