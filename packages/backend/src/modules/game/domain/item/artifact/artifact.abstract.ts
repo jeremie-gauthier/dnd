@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { Board } from "../../board/board.entity";
 import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
 import { Item } from "../item.abstract";
@@ -10,8 +11,16 @@ type Data = {
 };
 
 export abstract class Artifact extends Item<Data> {
-  constructor(data: Omit<Data, "type">) {
-    super({ ...data, type: "Artifact" });
+  private static schema = z.object({
+    type: z.literal("Artifact").optional().default("Artifact"),
+    name: z.string(),
+    level: z.number().min(0).max(3),
+    hasSavingThrow: z.boolean(),
+  });
+
+  constructor(rawData: Omit<Data, "type">) {
+    const data = Artifact.schema.parse(rawData);
+    super(data);
   }
 
   public abstract use(_: {
