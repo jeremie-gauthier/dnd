@@ -25,16 +25,22 @@ import {
   DiceRepository,
 } from "../../repositories/dice-repository.interface";
 import {
-  ITEM_REPOSITORY,
-  ItemRepository,
-} from "../../repositories/item-repository.interface";
+  ITEM_DEV_REPOSITORY,
+  ItemDevRepository,
+} from "../../repositories/item-dev-repository.interface";
+import {
+  ITEM_UI_REPOSITORY,
+  ItemUIRepository,
+} from "../../repositories/item-ui-repository.interface";
 import { CsvItemRecord } from "./csv-item-record.interface";
 
 @Injectable()
 export class CreateItemsFromCsvUseCase implements UseCase {
   constructor(
-    @Inject(ITEM_REPOSITORY)
-    private readonly itemRepository: ItemRepository,
+    @Inject(ITEM_DEV_REPOSITORY)
+    private readonly itemDevRepository: ItemDevRepository,
+    @Inject(ITEM_UI_REPOSITORY)
+    private readonly itemUIRepository: ItemUIRepository,
     @Inject(DICE_REPOSITORY)
     private readonly diceRepository: DiceRepository,
   ) {}
@@ -45,27 +51,18 @@ export class CreateItemsFromCsvUseCase implements UseCase {
       skipEmptyLines: true,
       cast: true,
     });
-    // console.debug(records);
     const dices = await this.diceRepository.getAll();
 
-    const items = records.map((record) => {
-      try {
-        return this.createItemFromCsvRecord({ record, dices });
-      } catch (error) {
-        console.error(error);
-        return null;
-      }
-    });
-    // console.debug(items);
-    // 1. insert item ("name", "level", "is_lootable_in_chest", "mana_cost", "type")
-    // 2. insert item_ui ("item_name", "img_url")
-    // 3. insert attack ("id", "range", "type", "item_name")
-    // 4. insert attack_dice ("attack_id", "dice_name")
-    // 5. insert attack_perks_perk ("attack_id", "perk_name")
-    // 6. update translation ("locale", "namespace", "translations")
-    //    -> WHERE namespace = "items"
+    const items = records.map((record) =>
+      this.createItemFromCsvRecord({ record, dices }),
+    );
+    const itemsUI = items.map(({ record }) => ({
+      itemName: record.item_id,
+      imgUrl: `https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/${record.item_id}.webp`,
+    }));
 
-    // await this.itemRepository.createMany({ items });
+    await this.itemDevRepository.createMany({ items });
+    await this.itemUIRepository.createMany({ items: itemsUI });
   }
 
   private createItemFromCsvRecord({
