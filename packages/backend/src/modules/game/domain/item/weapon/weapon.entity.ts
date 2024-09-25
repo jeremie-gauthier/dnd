@@ -51,7 +51,6 @@ export class Weapon extends Item<Data> {
       name: this._data.name,
       level: this._data.level,
       attacks: this._data.attacks.map((attack) => attack.toPlain()),
-      perks: [],
     };
   }
 }

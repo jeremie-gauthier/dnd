@@ -80,7 +80,6 @@ export class Spell extends Item<Data> {
       level: this._data.level,
       attacks: this._data.attacks.map((attack) => attack.toPlain()),
       manaCost: this._data.manaCost,
-      perks: [],
     };
   }
 }
