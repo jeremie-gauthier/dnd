@@ -4,6 +4,10 @@ import { Playable } from "../playable-entities/playable-entity/playable-entity.a
 import { Perk } from "./perk.abstract";
 
 export class Stop extends Perk {
+  constructor() {
+    super({ name: "stop", trigger: "special_dice" });
+  }
+
   public apply(_: {
     dicesResults: ReturnType<Attack["roll"]>;
     itemUsed: Item;

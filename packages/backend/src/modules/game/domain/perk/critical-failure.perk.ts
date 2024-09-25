@@ -4,6 +4,10 @@ import { Playable } from "../playable-entities/playable-entity/playable-entity.a
 import { Perk } from "./perk.abstract";
 
 export class CriticalFailure extends Perk {
+  constructor() {
+    super({ name: "critical_failure", trigger: "special_dice" });
+  }
+
   public apply({
     dicesResults,
   }: {

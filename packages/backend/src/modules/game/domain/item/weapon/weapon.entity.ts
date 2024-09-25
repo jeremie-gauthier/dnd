@@ -11,13 +11,13 @@ type Data = {
 
 export class Weapon extends Item<Data> {
   private static schema = z.object({
-    type: z.literal("Weapon"),
+    type: z.literal("Weapon").optional().default("Weapon"),
     name: z.string(),
     level: z.number().min(0).max(3),
     attacks: z.array(z.instanceof(Attack)),
   });
 
-  constructor(rawData: Data) {
+  constructor(rawData: Omit<Data, "type">) {
     const data = Weapon.schema.parse(rawData);
     super(data);
   }
@@ -51,7 +51,6 @@ export class Weapon extends Item<Data> {
       name: this._data.name,
       level: this._data.level,
       attacks: this._data.attacks.map((attack) => attack.toPlain()),
-      perks: [],
     };
   }
 }

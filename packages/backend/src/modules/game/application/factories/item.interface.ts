@@ -7,7 +7,7 @@ import {
 } from "@dnd/shared";
 
 type BaseItem = {
-  type: "Weapon" | "Spell";
+  type: "Weapon" | "Spell" | "ChestTrap" | "Potion" | "Artifact";
   name: string;
   level: number;
 };
@@ -17,18 +17,19 @@ type Dice = {
   values: [number, number, number, number, number, number];
 };
 
-type AttackPerk = {
+type Perk = {
   name: PerkNameType;
   trigger: PerkTriggerType;
 };
 
-type AttackItem = BaseItem & {
+export type AttackItem = BaseItem & {
+  type: "Weapon" | "Spell";
   attacks: Array<{
     id: string;
     range: AttackRangeType;
     type: AttackTypeType;
     dices: Dice[];
-    perks: Array<AttackPerk>;
+    perks: Array<Perk>;
   }>;
 };
 
@@ -39,5 +40,20 @@ export type SpellItem = AttackItem & {
   type: "Spell";
   manaCost: ItemManaCostJson;
 };
+export type ChestTrapItem = BaseItem & {
+  type: "ChestTrap";
+};
+export type PotionItem = BaseItem & {
+  type: "Potion";
+};
+export type ArtifactItem = BaseItem & {
+  type: "Artifact";
+  hasSavingThrow: boolean;
+};
 
-export type GameItem = WeaponItem | SpellItem;
+export type GameItem =
+  | WeaponItem
+  | SpellItem
+  | ChestTrapItem
+  | PotionItem
+  | ArtifactItem;

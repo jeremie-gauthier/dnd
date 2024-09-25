@@ -4,6 +4,10 @@ import { Playable } from "../playable-entities/playable-entity/playable-entity.a
 import { Perk } from "./perk.abstract";
 
 export class Breakable extends Perk {
+  constructor() {
+    super({ name: "breakable", trigger: "special_dice" });
+  }
+
   public apply({
     attacker,
     itemUsed,

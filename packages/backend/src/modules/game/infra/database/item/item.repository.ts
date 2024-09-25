@@ -1,6 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Artifact } from "src/database/entities/artifact.entity";
+import { ChestTrap } from "src/database/entities/chest-trap.entity";
 import { Item as ItemPersistence } from "src/database/entities/item.entity";
+import { Potion } from "src/database/entities/potion.entity";
 import { Spell } from "src/database/entities/spell.entity";
 import { User } from "src/database/entities/user.entity";
 import { Weapon } from "src/database/entities/weapon.entity";
@@ -19,6 +22,12 @@ export class PostgresItemRepository implements ItemRepository {
     private readonly weaponRepository: Repository<Weapon>,
     @InjectRepository(Spell)
     private readonly spellRepository: Repository<Spell>,
+    @InjectRepository(ChestTrap)
+    private readonly chestTrapRepository: Repository<ChestTrap>,
+    @InjectRepository(Potion)
+    private readonly potionRepository: Repository<Potion>,
+    @InjectRepository(Artifact)
+    private readonly artifactRepository: Repository<Artifact>,
     private readonly mapper: ItemMapper,
   ) {}
 
@@ -80,6 +89,24 @@ export class PostgresItemRepository implements ItemRepository {
           relations: { attacks: { attackDices: { dice: true }, perks: true } },
         });
         return this.mapper.toDomain(spell);
+      }
+      case "ChestTrap": {
+        const chestTrap = await this.chestTrapRepository.findOneOrFail({
+          where: { name: item.name },
+        });
+        return this.mapper.toDomain(chestTrap);
+      }
+      case "Potion": {
+        const potion = await this.potionRepository.findOneOrFail({
+          where: { name: item.name },
+        });
+        return this.mapper.toDomain(potion);
+      }
+      case "Artifact": {
+        const artifact = await this.artifactRepository.findOneOrFail({
+          where: { name: item.name },
+        });
+        return this.mapper.toDomain(artifact);
       }
       default:
         throw new Error(`Item '${item.name}' not found`);

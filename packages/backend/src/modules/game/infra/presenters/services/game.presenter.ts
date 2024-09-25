@@ -1,5 +1,6 @@
 import { Map as GameMap, GameView, sum } from "@dnd/shared";
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
+import { ITEM_UI_REPOSITORY } from "src/modules/game/application/repositories/item-ui-repository.interface";
 import { Dice } from "src/modules/game/domain/dice/dice.vo";
 import { Game as GameDomain } from "src/modules/game/domain/game/game.aggregate";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
@@ -12,6 +13,7 @@ import { PostgresItemUIRepository } from "../../database/item-ui/item-ui.reposit
 export class GamePresenter {
   constructor(
     private readonly diceUIRepository: PostgresDiceUIRepository,
+    @Inject(ITEM_UI_REPOSITORY)
     private readonly itemUIRepository: PostgresItemUIRepository,
   ) {}
 

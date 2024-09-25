@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { ApplicationModule } from "../../application/application.module";
 import { DatabaseModule } from "../database/database.module";
+import { GameDevController } from "./http/game.dev-controller";
 import { GamePrivateController } from "./http/game.private-controller";
 import { GamePresenter } from "./services/game.presenter";
 import { ItemPresenter } from "./services/item.presenter";
@@ -10,7 +11,7 @@ import { GameSubscriberGateway } from "./ws/game.subscriber-gateway";
 
 @Module({
   imports: [ApplicationModule, DatabaseModule],
-  controllers: [GamePrivateController],
+  controllers: [GamePrivateController, GameDevController],
   providers: [
     GameSubscriberGateway,
     GamePublisherGateway,
