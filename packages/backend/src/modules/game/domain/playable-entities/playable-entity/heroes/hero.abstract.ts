@@ -8,6 +8,7 @@ import { Weapon } from "../../../item/weapon/weapon.entity";
 import { Trap } from "../../../tile/tile-entity/interactive/trap.entity";
 import { Tile } from "../../../tile/tile.entity";
 import { ActionHistory } from "../actions-history.interface";
+import { Conditions } from "../conditions/conditions.aggregate";
 import { Initiative } from "../initiative/initiative.vo";
 import { Playable } from "../playable-entity.abstract";
 import { PlayerStatus } from "../player-status/player-status.vo";
@@ -45,6 +46,7 @@ type Data = {
 
   inventory: Inventory;
   actionsDoneThisTurn: Array<ActionHistory>;
+  conditions: Conditions;
 };
 
 export abstract class Hero extends Playable<Data> {
@@ -84,6 +86,7 @@ export abstract class Hero extends Playable<Data> {
         ]),
       }),
     ),
+    conditions: z.instanceof(Conditions),
   });
 
   constructor(rawData: Omit<Data, "faction">) {
@@ -192,6 +195,7 @@ export abstract class Hero extends Playable<Data> {
       },
       inventory: this._data.inventory.toPlain(),
       actionsDoneThisTurn: this._data.actionsDoneThisTurn,
+      conditions: this._data.conditions.toPlain(),
     };
   }
 }

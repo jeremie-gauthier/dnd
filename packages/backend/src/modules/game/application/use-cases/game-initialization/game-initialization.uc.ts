@@ -16,6 +16,7 @@ import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
 import { MonsterTemplate } from "src/modules/game/domain/monster-templates/monster-template/monster-template.vo";
 import { MonsterTemplates } from "src/modules/game/domain/monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "src/modules/game/domain/playable-entities/playable-entities.aggregate";
+import { Conditions } from "src/modules/game/domain/playable-entities/playable-entity/conditions/conditions.aggregate";
 import { Initiative } from "src/modules/game/domain/playable-entities/playable-entity/initiative/initiative.vo";
 import { PlayerStatus } from "src/modules/game/domain/playable-entities/playable-entity/player-status/player-status.vo";
 import { Tile } from "src/modules/game/domain/tile/tile.entity";
@@ -240,6 +241,7 @@ export class GameInitializationUseCase implements UseCase {
                 ItemFactory.create(stuff.item as unknown as GameItem),
               ),
           }),
+          conditions: new Conditions({ values: [] }),
         });
       }),
     });
