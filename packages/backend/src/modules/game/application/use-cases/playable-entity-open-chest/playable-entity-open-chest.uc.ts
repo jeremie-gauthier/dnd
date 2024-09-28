@@ -8,8 +8,6 @@ import { Item } from "src/modules/game/domain/item/item.abstract";
 import { ChestTrapTriggeredPayload } from "src/modules/shared/events/game/chest-trap-triggered.payload";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { GameUpdatedPayload } from "src/modules/shared/events/game/game-updated.payload";
-import { PlayableEntityTurnEndedPayload } from "src/modules/shared/events/game/playable-entity-turn-ended.payload";
-import { PlayableEntityTurnStartedPayload } from "src/modules/shared/events/game/playable-entity-turn-started.payload";
 import {
   GAME_REPOSITORY,
   GameRepository,
@@ -18,6 +16,7 @@ import {
   ITEM_REPOSITORY,
   ItemRepository,
 } from "../../repositories/item-repository.interface";
+import { TurnService } from "../../services/turn.service";
 
 @Injectable()
 export class PlayableEntityOpenChestUseCase implements UseCase {
@@ -27,6 +26,7 @@ export class PlayableEntityOpenChestUseCase implements UseCase {
     @Inject(ITEM_REPOSITORY)
     private readonly itemRepository: ItemRepository,
     private readonly eventEmitter: EventEmitter2,
+    private readonly turnService: TurnService,
   ) {}
 
   public async execute({
@@ -60,45 +60,20 @@ export class PlayableEntityOpenChestUseCase implements UseCase {
         chestTrap: itemFound,
       });
 
-      const plainGame = game.toPlain();
-
       this.eventEmitter.emitAsync(
         GameEvent.ChestTrapTriggered,
         new ChestTrapTriggeredPayload({
           chestTrapItem: itemFound.toPlain(),
-          game: plainGame,
+          game: game.toPlain(),
           subjectEntity: entityThatTriggeredTheChestTrap.toPlain(),
         }),
       );
 
-      const lengthMax = Math.max(
-        playingEntitiesWhoseTurnStarted.length,
-        playingEntitiesWhoseTurnEnded.length,
-      );
-      for (let idx = 0; idx < lengthMax; idx += 1) {
-        const playingEntityWhoseTurnEnded = playingEntitiesWhoseTurnEnded[idx];
-        if (playingEntityWhoseTurnEnded) {
-          this.eventEmitter.emitAsync(
-            GameEvent.PlayableEntityTurnEnded,
-            new PlayableEntityTurnEndedPayload({
-              game: plainGame,
-              playableEntity: playingEntityWhoseTurnEnded.toPlain(),
-            }),
-          );
-        }
-
-        const playingEntityWhoseTurnStarted =
-          playingEntitiesWhoseTurnStarted[idx];
-        if (playingEntityWhoseTurnStarted) {
-          this.eventEmitter.emitAsync(
-            GameEvent.PlayableEntityTurnStarted,
-            new PlayableEntityTurnStartedPayload({
-              game: plainGame,
-              playableEntity: playingEntityWhoseTurnStarted.toPlain(),
-            }),
-          );
-        }
-      }
+      this.turnService.emitAsyncTurnEvents({
+        game,
+        playingEntitiesWhoseTurnEnded,
+        playingEntitiesWhoseTurnStarted,
+      });
     }
 
     await this.gameRepository.update({ game });
