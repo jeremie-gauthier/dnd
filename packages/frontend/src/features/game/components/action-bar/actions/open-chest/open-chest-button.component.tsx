@@ -40,7 +40,9 @@ export const OpenChestButton = () => {
       coordOfTileWithChest: neighbourChestCoord,
     });
 
-    setItemFoundInChest(openChestResult.itemFound);
+    if (openChestResult.itemFound.type !== "ChestTrap") {
+      setItemFoundInChest(openChestResult.itemFound);
+    }
   };
 
   return (
