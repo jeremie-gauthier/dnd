@@ -20,6 +20,9 @@ import {
 import { PlayableEntityOpenChestUseCase } from "src/modules/game/application/use-cases/playable-entity-open-chest/playable-entity-open-chest.uc";
 import { PlayableEntitySwapItemsInputDto } from "src/modules/game/application/use-cases/playable-entity-swap-items/playable-entity-swap-items.dto";
 import { PlayableEntitySwapItemsUseCase } from "src/modules/game/application/use-cases/playable-entity-swap-items/playable-entity-swap-items.uc";
+import { Artifact } from "src/modules/game/domain/item/artifact/artifact.abstract";
+import { ChestTrap } from "src/modules/game/domain/item/chest-trap/chest-trap.abstract";
+import { Potion } from "src/modules/game/domain/item/potion/potion.abstract";
 import { Spell } from "src/modules/game/domain/item/spell/spell.entity";
 import { Weapon } from "src/modules/game/domain/item/weapon/weapon.entity";
 import { EndPlayerTurnInputDto } from "../../../application/use-cases/end-player-turn/end-player-turn.dto";
@@ -132,7 +135,9 @@ export class GameSubscriberGateway {
     });
 
     const itemView = await this.itemPresenter.toView({
-      item: itemFound as ReturnType<(Weapon | Spell)["toPlain"]>,
+      item: itemFound as ReturnType<
+        (Weapon | Spell | ChestTrap | Potion | Artifact)["toPlain"]
+      >,
     });
 
     return { itemFound: itemView };

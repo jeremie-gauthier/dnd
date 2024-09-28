@@ -1,5 +1,6 @@
 import { Coord } from "../coord.type";
 import { Inventory } from "../inventory.type";
+import { PlayableEntityCondition } from "./condition.type";
 
 export type BasePlayableEntity = {
   id: string;
@@ -39,4 +40,5 @@ export type BasePlayableEntity = {
       | "swap_items"
       | "open_chest";
   }>;
+  conditions: Array<PlayableEntityCondition>;
 };

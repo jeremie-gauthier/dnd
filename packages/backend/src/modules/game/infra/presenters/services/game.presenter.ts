@@ -1,4 +1,4 @@
-import { Map as GameMap, GameView, sum } from "@dnd/shared";
+import { GameItem, Map as GameMap, GameView, sum } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { ITEM_UI_REPOSITORY } from "src/modules/game/application/repositories/item-ui-repository.interface";
 import { Dice } from "src/modules/game/domain/dice/dice.vo";
@@ -95,9 +95,10 @@ export class GamePresenter {
   private async getDice({
     dice,
   }: { dice: ReturnType<Dice["toPlain"]> }): Promise<
-    GameView["playableEntities"][string]["inventory"][
-      | "backpack"
-      | "gear"][number]["attacks"][number]["dices"][number]
+    Extract<
+      GameItem,
+      { type: "Spell" | "Weapon" }
+    >["attacks"][number]["dices"][number]
   > {
     const diceUI = await this.diceUIRepository.getOneOrThrow({
       name: dice.name,

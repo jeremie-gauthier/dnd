@@ -44,6 +44,13 @@ export class PlayableEntities extends Entity<Data> {
     ];
   }
 
+  public incrementTimeline() {
+    this._data.values = [
+      ...this._data.values.slice(1),
+      ...this._data.values.slice(0, 1),
+    ];
+  }
+
   public toPlain() {
     return {
       values: this._data.values.map((playableEntity) =>

@@ -41,8 +41,12 @@ export const ActionBar = () => {
   return (
     <ActionBarContextProvider>
       <div className="flex flex-row gap-2 h-32">
-        {gearInventorySlots.map(({ item, type }, idx) =>
-          item?.attacks.map((attack) => (
+        {gearInventorySlots.map(({ item, type }, idx) => {
+          if (!item || (item.type !== "Weapon" && item.type !== "Spell")) {
+            return null;
+          }
+
+          return item.attacks.map((attack) => (
             // TODO: create new component for action bar only
             <InventorySlot
               key={`${item.name}-${attack.type}`}
@@ -57,8 +61,8 @@ export const ActionBar = () => {
                 attack={attack}
               />
             </InventorySlot>
-          )),
-        )}
+          ));
+        })}
 
         <div className="flex flex-row justify-around gap-2">
           <div className="flex flex-col justify-between">

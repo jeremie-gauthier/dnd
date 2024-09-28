@@ -24,7 +24,8 @@ VALUES
   "game.update.playable_entity_died": "{{entityName}} est mort.",
   "game.update.playable_entity_attacked": "{{attackerEntityName}} attaque {{targetEntityName}} avec $t(items:{{attackItemUsedName}}) et inflige {{attackPower}} ({{diceScore}} + {{bonusScore}}) point(s) de dégât.",
   "game.update.playable_entity_took_damage": "{{entityName}} subit {{damageDone}} point(s) de dégât. {{entityHpLeft}} pv restant(s).",
-  "game.status.win": "Victoire des héros !"
+  "game.status.win": "Victoire des héros !",
+  "game.update.chest_trap_triggered": "{{subjectEntityName}} a déclenché un piège ! ($t(items:{{chestTrapName}}))"
 }
 '
   ),

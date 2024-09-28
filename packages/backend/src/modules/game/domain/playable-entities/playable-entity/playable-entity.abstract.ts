@@ -7,6 +7,7 @@ import { Weapon } from "../../item/weapon/weapon.entity";
 import { Trap } from "../../tile/tile-entity/interactive/trap.entity";
 import { Tile } from "../../tile/tile.entity";
 import { ActionHistory } from "./actions-history.interface";
+import { Conditions } from "./conditions/conditions.aggregate";
 import { Hero } from "./heroes/hero.abstract";
 import { Initiative } from "./initiative/initiative.vo";
 import { Monster } from "./monster.entity";
@@ -43,6 +44,7 @@ type Data = {
 
   inventory: Inventory;
   actionsDoneThisTurn: Array<ActionHistory>;
+  conditions: Conditions;
 };
 
 export abstract class Playable<
@@ -107,6 +109,10 @@ export abstract class Playable<
     return this._data.status.current === "ACTION";
   }
 
+  public get conditions() {
+    return this._data.conditions;
+  }
+
   public isHero(): this is Hero {
     return this._data.faction === "hero";
   }
@@ -162,6 +168,7 @@ export abstract class Playable<
   }
 
   public endTurn() {
+    this.conditions.applyAllEndTurnConditions({ playableEntityAffected: this });
     this._data.status = this._data.status.advanceTo("IDLE");
   }
 
@@ -170,6 +177,9 @@ export abstract class Playable<
     this._data.characteristic.actionPoints =
       this._data.characteristic.baseActionPoints;
     this._data.actionsDoneThisTurn = [];
+    this.conditions.applyAllStartTurnConditions({
+      playableEntityAffected: this,
+    });
   }
 
   public setCoord(coord: Coord) {

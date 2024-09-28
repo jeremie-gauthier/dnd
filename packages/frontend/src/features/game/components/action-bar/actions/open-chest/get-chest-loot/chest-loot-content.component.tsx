@@ -1,6 +1,6 @@
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { GameItem, sum } from "@dnd/shared";
+import { GameItem } from "@dnd/shared";
 import { Button } from "@features/ui/button/button";
 import { Icon } from "@features/ui/icon/Icon";
 import { classNames } from "@utils/class-names.util";
@@ -18,20 +18,20 @@ export const ChestLootContent = ({ item, onRefuseLoot }: Props) => {
     data: { item },
   });
 
-  const regularAttack = item.attacks.find(
-    (attack) => attack.type === "regular",
-  );
+  // const isAttackItem = item.type === "Weapon" || item.type === "Spell";
 
-  if (!regularAttack) return null;
+  // const regularAttack = isAttackItem
+  //   ? item.attacks.find((attack) => attack.type === "regular")
+  //   : [];
 
-  const minDamage = sum(...regularAttack.dices.map(({ minValue }) => minValue));
-  const maxDamage = sum(...regularAttack.dices.map(({ maxValue }) => maxValue));
-  const mean =
-    Math.round(
-      (sum(...regularAttack.dices.map(({ values }) => sum(...values))) /
-        (regularAttack.dices.length * 6)) *
-        10,
-    ) / 10;
+  // const minDamage = sum(...regularAttack.dices.map(({ minValue }) => minValue));
+  // const maxDamage = sum(...regularAttack.dices.map(({ maxValue }) => maxValue));
+  // const mean =
+  //   Math.round(
+  //     (sum(...regularAttack.dices.map(({ values }) => sum(...values))) /
+  //       (regularAttack.dices.length * 6)) *
+  //       10,
+  //   ) / 10;
 
   return (
     <div className="flex flex-col items-center bg-primary-900 gap-8 rounded-b-md">
@@ -61,9 +61,9 @@ export const ChestLootContent = ({ item, onRefuseLoot }: Props) => {
             <img src={item.imgUrl} alt={item.name} className="rounded" />
             <div className="absolute hidden inset-0 bg-black bg-opacity-35 text-white text-sm group-hover:flex flex-col p-1">
               <p>{t(item.name, { ns: "items" })}</p>
-              <p>
+              {/* <p>
                 {minDamage}-{maxDamage}(~{mean}) dmg
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
@@ -79,4 +79,7 @@ export const ChestLootContent = ({ item, onRefuseLoot }: Props) => {
 const slotTypeColor: Record<Props["item"]["type"], string> = {
   Spell: "border-blue-500",
   Weapon: "border-red-500",
+  Artifact: "border-amber-400",
+  ChestTrap: "border-red-700",
+  Potion: "border-emerald-500",
 };

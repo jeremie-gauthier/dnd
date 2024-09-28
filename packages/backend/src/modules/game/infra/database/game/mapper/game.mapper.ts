@@ -22,6 +22,7 @@ import { Mapper } from "src/modules/shared/infra/mapper";
 import { GameWinConditionsDeserialized } from "src/modules/shared/interfaces/game-win-conditions-deserialized.interface";
 import { GameEvent } from "../model/game-event.type";
 import { GamePersistence } from "../model/game.model";
+import { PlayableEntityCondition } from "../model/playable-entity/condition.type";
 import { PlayableEntityFactory } from "./playable-entity.factory";
 
 export class GameMapper extends Mapper<GamePersistence, GameDomain> {
@@ -130,6 +131,12 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
       currentPhase: hero.status.toLowerCase() as Lowercase<
         ReturnType<PlayerStatus["toPlain"]>
       >,
+      conditions: (hero.conditions.values as PlayableEntityCondition[]).map(
+        (condition) => ({
+          name: condition.name,
+          remainingTurns: condition.remainingTurns,
+        }),
+      ),
     };
   }
 
@@ -140,6 +147,12 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
       currentPhase: monster.status.toLowerCase() as Lowercase<
         ReturnType<PlayerStatus["toPlain"]>
       >,
+      conditions: (monster.conditions.values as PlayableEntityCondition[]).map(
+        (condition) => ({
+          name: condition.name,
+          remainingTurns: condition.remainingTurns,
+        }),
+      ),
     };
   }
 }

@@ -1,4 +1,4 @@
-import { Board } from "../../board/board.entity";
+import { Stopped } from "../../playable-entities/playable-entity/conditions/condition/stopped.condition";
 import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
 import { ChestTrap } from "./chest-trap.abstract";
 
@@ -7,10 +7,12 @@ export class DazzlingLight extends ChestTrap {
     super({ level: 1, name: "dazzling_light_1" });
   }
 
-  public use(_: {
+  public use({
+    entityThatOpenedTheChest,
+  }: {
     entityThatOpenedTheChest: Playable;
-    board: Board;
   }): void {
-    throw new Error("Method not implemented.");
+    const condition = new Stopped({ remainingTurns: 1 });
+    entityThatOpenedTheChest.conditions.add({ condition });
   }
 }

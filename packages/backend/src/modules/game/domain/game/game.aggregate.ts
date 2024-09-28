@@ -13,6 +13,7 @@ import { GameEvents } from "../game-events/game-events.aggregate";
 import { GameMaster } from "../game-master/game-master.entity";
 import { GameStatus } from "../game-status/game-status.vo";
 import { StorageSpace } from "../inventory/inventory.entity";
+import { ChestTrap } from "../item/chest-trap/chest-trap.abstract";
 import { Item } from "../item/item.abstract";
 import { MonsterTemplates } from "../monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "../playable-entities/playable-entities.aggregate";
@@ -81,14 +82,34 @@ export class Game extends AggregateRoot<Data> {
   public endPlayerTurn({ userId }: { userId: string }) {
     const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
     playingEntity.mustBePlayedBy({ userId });
-    const nextEntityToPlay = this._data.playableEntities.getNextEntityToPlay();
-
     playingEntity.endTurn();
-    nextEntityToPlay?.startTurn();
+
+    const playingEntitiesWhoseTurnEnded: Playable[] = [playingEntity];
+    const playingEntitiesWhoseTurnStarted: Playable[] = [];
+
+    let hasFoundNextEntityAbleToPlay = false;
+    while (!hasFoundNextEntityAbleToPlay) {
+      const nextEntityToPlay =
+        this._data.playableEntities.getNextEntityToPlay();
+      if (!nextEntityToPlay) {
+        break;
+      }
+
+      nextEntityToPlay.startTurn();
+      playingEntitiesWhoseTurnStarted.push(nextEntityToPlay);
+
+      if (nextEntityToPlay.isPlaying) {
+        hasFoundNextEntityAbleToPlay = true;
+      } else {
+        playingEntitiesWhoseTurnEnded.push(nextEntityToPlay);
+      }
+
+      this._data.playableEntities.incrementTimeline();
+    }
 
     return {
-      playingEntityWhoseTurnEnded: playingEntity,
-      playingEntityWhoseTurnStarted: nextEntityToPlay,
+      playingEntitiesWhoseTurnEnded,
+      playingEntitiesWhoseTurnStarted,
     };
   }
 
@@ -348,6 +369,32 @@ export class Game extends AggregateRoot<Data> {
     }
 
     playingEntity.inventory.addItemInStorageSpace({ item, storageSpace });
+  }
+
+  public playerTriggeredAChestTrap({
+    userId,
+    chestTrap,
+  }: { userId: string; chestTrap: ChestTrap }) {
+    const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
+    playingEntity.mustBePlayedBy({ userId });
+    playingEntity.mustBeLooting();
+
+    const isExpectedItemId = this._data.itemsLooted.at(-1) === chestTrap.id;
+    if (!isExpectedItemId) {
+      throw new GameError({
+        name: "UNEXPECTED_LOOT_ITEM",
+        message: "Player tried to loot an invalid item",
+      });
+    }
+
+    chestTrap.use({
+      entityThatOpenedTheChest: playingEntity,
+      board: this._data.board,
+    });
+
+    const turnEnded = this.endPlayerTurn({ userId });
+
+    return { ...turnEnded, entityThatTriggeredTheChestTrap: playingEntity };
   }
 
   public playerDeleteItem({
