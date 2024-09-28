@@ -394,7 +394,7 @@ export class Game extends AggregateRoot<Data> {
 
     const turnEnded = this.endPlayerTurn({ userId });
 
-    return turnEnded;
+    return { ...turnEnded, entityThatTriggeredTheChestTrap: playingEntity };
   }
 
   public playerDeleteItem({

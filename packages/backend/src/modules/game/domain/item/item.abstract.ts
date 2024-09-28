@@ -1,4 +1,5 @@
 import { Entity, PlainData } from "src/modules/shared/domain/entity";
+import { ChestTrap } from "./chest-trap/chest-trap.abstract";
 import { Spell } from "./spell/spell.entity";
 import { Weapon } from "./weapon/weapon.entity";
 
@@ -29,6 +30,10 @@ export abstract class Item<
 
   public isWeapon(): this is Weapon {
     return this._data.type === "Weapon";
+  }
+
+  public isChestTrap(): this is ChestTrap {
+    return this._data.type === "ChestTrap";
   }
 
   public toString() {
