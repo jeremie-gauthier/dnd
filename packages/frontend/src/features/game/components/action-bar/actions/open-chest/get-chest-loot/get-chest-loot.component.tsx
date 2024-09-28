@@ -28,6 +28,15 @@ export const GetChestLoot = (props: Props) => {
       return;
     }
 
+    const lootedItemType = active.data.current.item.type;
+    const destinationSlotType = over.data.current.slotType;
+    if (
+      destinationSlotType !== "backpackAnyItem" &&
+      lootedItemType !== destinationSlotType
+    ) {
+      return;
+    }
+
     const lootedItemId = active.data.current.item.name;
     const replacedItemId = over.data.current.hostedItem?.name;
 

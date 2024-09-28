@@ -24,6 +24,7 @@ export const InventorySlot = ({
       action: hostedItem ? "swap_item" : "add_item",
       hostedItem,
       storageSpace,
+      slotType: type,
     },
   });
 
