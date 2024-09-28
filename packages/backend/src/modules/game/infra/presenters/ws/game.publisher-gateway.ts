@@ -33,6 +33,7 @@ export class GamePublisherGateway {
   @OnEvent(GameEvent.EntityTookDamage)
   @OnEvent(GameEvent.EntityDied)
   @OnEvent(GameEvent.GameWon)
+  @OnEvent(GameEvent.ChestTrapTriggered)
   protected async gameLogHandler(payload: LoggableAction) {
     const log = this.logService.createLog(payload);
     if (!log) {

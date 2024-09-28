@@ -1,3 +1,4 @@
+import { ChestTrapTriggeredPayload } from "src/modules/shared/events/game/chest-trap-triggered.payload";
 import { DoorOpenedPayload } from "src/modules/shared/events/game/door-opened.payload";
 import { MonstersSpawnedPayload } from "src/modules/shared/events/game/enemies-spawned.payload";
 import { EntityAttackedPayload } from "src/modules/shared/events/game/entity-attacked.payload";
@@ -19,4 +20,5 @@ export type LoggableAction =
   | EntityAttackedPayload
   | EntityDiedPayload
   | EntityTookDamagePayload
-  | GameWonPayload;
+  | GameWonPayload
+  | ChestTrapTriggeredPayload;

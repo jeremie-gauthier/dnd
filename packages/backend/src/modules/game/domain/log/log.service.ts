@@ -90,6 +90,15 @@ export class LogService {
           createdAt: new Date(),
           data: {},
         };
+      case GameEvent.ChestTrapTriggered:
+        return {
+          type: GameEvent.ChestTrapTriggered,
+          createdAt: new Date(),
+          data: {
+            chestTrapName: payload.chestTrapItem.name,
+            subjectEntityName: payload.subjectEntity.name,
+          },
+        };
     }
   }
 }
