@@ -51,6 +51,15 @@ export const EditCharacterInventory = (props: Props) => {
         return;
       }
 
+      const destinationSlotType = over.data.current.slotType;
+      const activeItemType = active.data.current.item.type;
+      if (
+        destinationSlotType !== "backpackAnyItem" &&
+        activeItemType !== destinationSlotType
+      ) {
+        return;
+      }
+
       gameActions.swapItems({
         gameId: game.id,
         gearItemId: gearItem?.name,
