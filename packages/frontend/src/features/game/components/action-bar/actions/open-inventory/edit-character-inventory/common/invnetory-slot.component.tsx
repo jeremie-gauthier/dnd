@@ -20,7 +20,7 @@ export const InventorySlot = ({
 }: Props) => {
   const { isOver, setNodeRef, active } = useDroppable({
     id: droppableId,
-    data: { action: "swap_item", hostedItem, storageSpace },
+    data: { action: "swap_item", hostedItem, storageSpace, slotType: type },
   });
 
   const isDragging = active !== null;
