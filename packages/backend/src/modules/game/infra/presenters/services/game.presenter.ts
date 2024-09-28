@@ -1,21 +1,12 @@
-import { GameItem, Map as GameMap, GameView, sum } from "@dnd/shared";
-import { Inject, Injectable } from "@nestjs/common";
-import { ITEM_UI_REPOSITORY } from "src/modules/game/application/repositories/item-ui-repository.interface";
-import { Dice } from "src/modules/game/domain/dice/dice.vo";
+import { Map as GameMap, GameView } from "@dnd/shared";
+import { Injectable } from "@nestjs/common";
 import { Game as GameDomain } from "src/modules/game/domain/game/game.aggregate";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
-import { Spell } from "src/modules/game/domain/item/spell/spell.entity";
-import { Weapon } from "src/modules/game/domain/item/weapon/weapon.entity";
-import { PostgresDiceUIRepository } from "../../database/dice-ui/dice-ui.repository";
-import { PostgresItemUIRepository } from "../../database/item-ui/item-ui.repository";
+import { ItemPresenter } from "./item.presenter";
 
 @Injectable()
 export class GamePresenter {
-  constructor(
-    private readonly diceUIRepository: PostgresDiceUIRepository,
-    @Inject(ITEM_UI_REPOSITORY)
-    private readonly itemUIRepository: PostgresItemUIRepository,
-  ) {}
+  constructor(private readonly itemPresenter: ItemPresenter) {}
 
   public async toView(
     domain: ReturnType<GameDomain["toPlain"]>,
@@ -54,62 +45,18 @@ export class GamePresenter {
     inventory: ReturnType<Inventory["toPlain"]>;
   }): Promise<GameView["playableEntities"][string]["inventory"]> {
     const [backpack, gear] = await Promise.all([
-      Promise.all(inventory.backpack.map((item) => this.getItem({ item }))),
-      Promise.all(inventory.gear.map((item) => this.getItem({ item }))),
+      Promise.all(
+        inventory.backpack.map((item) => this.itemPresenter.toView({ item })),
+      ),
+      Promise.all(
+        inventory.gear.map((item) => this.itemPresenter.toView({ item })),
+      ),
     ]);
 
     return {
       backpack,
       gear,
       storageCapacity: inventory.storageCapacity,
-    };
-  }
-
-  private async getItem({
-    item,
-  }: { item: ReturnType<(Weapon | Spell)["toPlain"]> }): Promise<
-    GameView["playableEntities"][string]["inventory"][
-      | "backpack"
-      | "gear"][number]
-  > {
-    const itemUI = await this.itemUIRepository.getOneOrThrow({
-      name: item.name,
-    });
-
-    const attacks = await Promise.all(
-      item.attacks?.map(async (attack) => ({
-        ...attack,
-        dices: await Promise.all(
-          attack.dices.map((dice) => this.getDice({ dice })),
-        ),
-      })),
-    );
-
-    return {
-      ...item,
-      ...itemUI,
-      attacks,
-    };
-  }
-
-  private async getDice({
-    dice,
-  }: { dice: ReturnType<Dice["toPlain"]> }): Promise<
-    Extract<
-      GameItem,
-      { type: "Spell" | "Weapon" }
-    >["attacks"][number]["dices"][number]
-  > {
-    const diceUI = await this.diceUIRepository.getOneOrThrow({
-      name: dice.name,
-    });
-
-    return {
-      ...dice,
-      ...diceUI,
-      maxValue: Math.max(...dice.values),
-      minValue: Math.min(...dice.values),
-      meanValue: sum(...dice.values) / dice.values.length,
     };
   }
 }
