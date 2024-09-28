@@ -94,22 +94,34 @@ export class PlayableEntityAttackUseCase implements UseCase {
     }
 
     if (turnEnded) {
-      this.eventEmitter.emitAsync(
-        GameEvent.PlayableEntityTurnEnded,
-        new PlayableEntityTurnEndedPayload({
-          game: plainGame,
-          playableEntity: turnEnded.playingEntityWhoseTurnEnded.toPlain(),
-        }),
+      const lengthMax = Math.max(
+        turnEnded.playingEntitiesWhoseTurnStarted.length,
+        turnEnded.playingEntitiesWhoseTurnEnded.length,
       );
+      for (let idx = 0; idx < lengthMax; idx += 1) {
+        const playingEntityWhoseTurnEnded =
+          turnEnded.playingEntitiesWhoseTurnEnded[idx];
+        if (playingEntityWhoseTurnEnded) {
+          this.eventEmitter.emitAsync(
+            GameEvent.PlayableEntityTurnEnded,
+            new PlayableEntityTurnEndedPayload({
+              game: plainGame,
+              playableEntity: playingEntityWhoseTurnEnded.toPlain(),
+            }),
+          );
+        }
 
-      if (turnEnded.playingEntityWhoseTurnStarted) {
-        this.eventEmitter.emitAsync(
-          GameEvent.PlayableEntityTurnStarted,
-          new PlayableEntityTurnStartedPayload({
-            game: plainGame,
-            playableEntity: turnEnded.playingEntityWhoseTurnStarted.toPlain(),
-          }),
-        );
+        const playingEntityWhoseTurnStarted =
+          turnEnded.playingEntitiesWhoseTurnStarted[idx];
+        if (playingEntityWhoseTurnStarted) {
+          this.eventEmitter.emitAsync(
+            GameEvent.PlayableEntityTurnStarted,
+            new PlayableEntityTurnStartedPayload({
+              game: plainGame,
+              playableEntity: playingEntityWhoseTurnStarted.toPlain(),
+            }),
+          );
+        }
       }
     }
 

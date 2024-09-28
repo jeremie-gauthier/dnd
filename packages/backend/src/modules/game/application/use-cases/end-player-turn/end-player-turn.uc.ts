@@ -26,26 +26,39 @@ export class EndPlayerTurnUseCase implements UseCase {
   }: EndPlayerTurnInput & { userId: User["id"] }): Promise<void> {
     const game = await this.gameRepository.getOneOrThrow({ gameId });
 
-    const { playingEntityWhoseTurnEnded, playingEntityWhoseTurnStarted } =
+    const { playingEntitiesWhoseTurnEnded, playingEntitiesWhoseTurnStarted } =
       game.endPlayerTurn({ userId });
     await this.gameRepository.update({ game });
 
     const plainGame = game.toPlain();
-    this.eventEmitter.emitAsync(
-      GameEvent.PlayableEntityTurnEnded,
-      new PlayableEntityTurnEndedPayload({
-        game: plainGame,
-        playableEntity: playingEntityWhoseTurnEnded.toPlain(),
-      }),
+
+    const lengthMax = Math.max(
+      playingEntitiesWhoseTurnStarted.length,
+      playingEntitiesWhoseTurnEnded.length,
     );
-    if (playingEntityWhoseTurnStarted) {
-      this.eventEmitter.emitAsync(
-        GameEvent.PlayableEntityTurnStarted,
-        new PlayableEntityTurnStartedPayload({
-          game: plainGame,
-          playableEntity: playingEntityWhoseTurnStarted.toPlain(),
-        }),
-      );
+    for (let idx = 0; idx < lengthMax; idx += 1) {
+      const playingEntityWhoseTurnEnded = playingEntitiesWhoseTurnEnded[idx];
+      if (playingEntityWhoseTurnEnded) {
+        this.eventEmitter.emitAsync(
+          GameEvent.PlayableEntityTurnEnded,
+          new PlayableEntityTurnEndedPayload({
+            game: plainGame,
+            playableEntity: playingEntityWhoseTurnEnded.toPlain(),
+          }),
+        );
+      }
+
+      const playingEntityWhoseTurnStarted =
+        playingEntitiesWhoseTurnStarted[idx];
+      if (playingEntityWhoseTurnStarted) {
+        this.eventEmitter.emitAsync(
+          GameEvent.PlayableEntityTurnStarted,
+          new PlayableEntityTurnStartedPayload({
+            game: plainGame,
+            playableEntity: playingEntityWhoseTurnStarted.toPlain(),
+          }),
+        );
+      }
     }
 
     this.eventEmitter.emitAsync(

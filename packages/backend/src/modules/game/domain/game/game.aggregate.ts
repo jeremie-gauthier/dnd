@@ -81,14 +81,34 @@ export class Game extends AggregateRoot<Data> {
   public endPlayerTurn({ userId }: { userId: string }) {
     const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
     playingEntity.mustBePlayedBy({ userId });
-    const nextEntityToPlay = this._data.playableEntities.getNextEntityToPlay();
-
     playingEntity.endTurn();
-    nextEntityToPlay?.startTurn();
+
+    const playingEntitiesWhoseTurnEnded: Playable[] = [playingEntity];
+    const playingEntitiesWhoseTurnStarted: Playable[] = [];
+
+    let hasFoundNextEntityAbleToPlay = false;
+    while (!hasFoundNextEntityAbleToPlay) {
+      const nextEntityToPlay =
+        this._data.playableEntities.getNextEntityToPlay();
+      if (!nextEntityToPlay) {
+        break;
+      }
+
+      nextEntityToPlay.startTurn();
+      playingEntitiesWhoseTurnStarted.push(nextEntityToPlay);
+
+      if (nextEntityToPlay.isPlaying) {
+        hasFoundNextEntityAbleToPlay = true;
+      } else {
+        playingEntitiesWhoseTurnEnded.push(nextEntityToPlay);
+      }
+
+      this._data.playableEntities.incrementTimeline();
+    }
 
     return {
-      playingEntityWhoseTurnEnded: playingEntity,
-      playingEntityWhoseTurnStarted: nextEntityToPlay,
+      playingEntitiesWhoseTurnEnded,
+      playingEntitiesWhoseTurnStarted,
     };
   }
 
