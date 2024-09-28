@@ -5,14 +5,29 @@ import { Item } from "../item.abstract";
 
 type Data = {
   readonly type: "ChestTrap";
-  readonly name: string;
+  readonly name:
+    | "dazzling_light_1"
+    | "call_from_the_grave_1"
+    | "brutal_betrayal_1"
+    | "blanket_of_flames_1"
+    | "magic_loss_1"
+    | "smothering_mist_1"
+    | "voices_of_the_damned_1";
   readonly level: number;
 };
 
 export abstract class ChestTrap extends Item<Data> {
   private static schema = z.object({
     type: z.literal("ChestTrap").optional().default("ChestTrap"),
-    name: z.string(),
+    name: z.enum([
+      "dazzling_light_1",
+      "call_from_the_grave_1",
+      "brutal_betrayal_1",
+      "blanket_of_flames_1",
+      "magic_loss_1",
+      "smothering_mist_1",
+      "voices_of_the_damned_1",
+    ]),
     level: z.number().min(0).max(3),
   });
 
