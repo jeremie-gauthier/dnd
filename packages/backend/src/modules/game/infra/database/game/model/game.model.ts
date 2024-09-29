@@ -5,6 +5,7 @@ import { GameMaster } from "./game-master.type";
 import { Item } from "./item.type";
 import { MonsterTemplate } from "./monster-template.type";
 import { PlayableEntity } from "./playable-entity/playable.type";
+import { Room } from "./rooms.type";
 
 export type GamePersistence = {
   id: string;
@@ -20,4 +21,5 @@ export type GamePersistence = {
   winConditions: GameWinConditionsDeserialized;
   maxLevelLoot: Item["level"];
   itemsLooted: Array<Item["name"]>;
+  rooms: Array<Room>;
 };

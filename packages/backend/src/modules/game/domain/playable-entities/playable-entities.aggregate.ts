@@ -1,6 +1,7 @@
 import { zip } from "@dnd/shared";
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
+import { Room } from "../rooms/room/room.entity";
 import { Playable } from "./playable-entity/playable-entity.abstract";
 import { PlayableEntityError } from "./playable-entity/playable-entity.error";
 
@@ -122,6 +123,12 @@ export class PlayableEntities extends Entity<Data> {
   }: { playableEntity: Playable }) {
     this._data.values = this._data.values.filter(
       ({ id }) => id !== playableEntity.id,
+    );
+  }
+
+  public getAllPlayableEntitiesInRoom({ room }: { room: Room }) {
+    return this._data.values.filter((playableEntity) =>
+      room.contains({ coord: playableEntity.coord }),
     );
   }
 }
