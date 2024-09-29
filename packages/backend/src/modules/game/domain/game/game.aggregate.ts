@@ -62,6 +62,14 @@ export class Game extends AggregateRoot<Data> {
     super(data, data.id);
   }
 
+  public get playableEntities() {
+    return this._data.playableEntities;
+  }
+
+  public get rooms() {
+    return this._data.rooms;
+  }
+
   public toPlain() {
     return {
       id: this._data.id,

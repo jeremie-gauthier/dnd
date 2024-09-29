@@ -7,10 +7,25 @@ export class SmotheringMist extends ChestTrap {
     super({ level: 1, name: "smothering_mist_1" });
   }
 
-  public use(_: {
+  public use({
+    entityThatOpenedTheChest,
+    game,
+  }: {
     entityThatOpenedTheChest: Playable;
     game: Game;
   }): void {
-    throw new Error("Method not implemented.");
+    const room = game.rooms.getRoomOrThrow({
+      coord: entityThatOpenedTheChest.coord,
+    });
+    const playableEntitiesInRoom =
+      game.playableEntities.getAllPlayableEntitiesInRoom({ room });
+
+    const trappedEntities = playableEntitiesInRoom.filter(
+      (playableEntity) => playableEntity.isAlive && !playableEntity.isUndead(),
+    );
+
+    for (const trappedEntity of trappedEntities) {
+      trappedEntity.takeDirectDamage({ amount: 1 });
+    }
   }
 }
