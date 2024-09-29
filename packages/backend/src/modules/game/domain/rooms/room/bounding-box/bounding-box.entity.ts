@@ -18,6 +18,15 @@ export class BoundingBox extends Entity<Data> {
     super(data);
   }
 
+  public contains({ coord }: { coord: Coord }) {
+    return (
+      coord.column >= this._data.topLeft.column &&
+      coord.column <= this._data.bottomRight.column &&
+      coord.row >= this._data.topLeft.row &&
+      coord.row <= this._data.bottomRight.row
+    );
+  }
+
   public toPlain(): PlainData<Data> {
     return {
       topLeft: this._data.topLeft.toPlain(),

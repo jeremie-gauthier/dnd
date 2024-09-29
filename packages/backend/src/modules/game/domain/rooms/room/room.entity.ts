@@ -1,5 +1,6 @@
 import { Entity, PlainData } from "src/modules/shared/domain/entity";
 import { z } from "zod";
+import { Coord } from "../../coord/coord.vo";
 import { BoundingBox } from "./bounding-box/bounding-box.entity";
 
 type Data = {
@@ -18,6 +19,12 @@ export class Room extends Entity<Data> {
   constructor(rawData: Data) {
     const data = Room.schema.parse(rawData);
     super(data, data.id);
+  }
+
+  public contains({ coord }: { coord: Coord }) {
+    return this._data.boundingBoxes.some((boundingBox) =>
+      boundingBox.contains({ coord }),
+    );
   }
 
   public toPlain(): PlainData<Data> {
