@@ -217,6 +217,15 @@ export abstract class Playable<
     );
   }
 
+  public removeArmorClass() {
+    this._data.characteristic.armorClass = 0;
+  }
+
+  public resetArmorClass() {
+    this._data.characteristic.armorClass =
+      this._data.characteristic.baseArmorClass;
+  }
+
   protected mustHaveActionPoints() {
     if (this._data.characteristic.actionPoints < 1) {
       throw new PlayableEntityError({

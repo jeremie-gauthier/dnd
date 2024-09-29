@@ -26,4 +26,8 @@ export class Stopped extends Condition {
     playableEntityAffected.endTurn();
     this._data.remainingTurns -= 1;
   }
+
+  public exhaustion(_: { playableEntityAffected: Playable }): void {
+    return;
+  }
 }

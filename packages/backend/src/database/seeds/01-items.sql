@@ -247,7 +247,7 @@ INSERT INTO "attack_perks_perk" ("attack_id", "perk_name") VALUES
 ('76fee024-70f8-497b-924f-287971559a53',	'stop'),
 ('a25756b8-99b3-4e5e-9862-ca912d5ea633',	'reroll_one_dice'),
 ('80b60cd2-f835-4762-bf24-e9d967e09d97',	'reroll_one_dice'),
-('2688c50c-b4e3-4781-ad1d-8839392b9b01',	'ignore_armor_class'),
+('a69381d8-b447-4098-86e9-a1dbd028a2a4',	'ignore_armor_class'),
 ('2688c50c-b4e3-4781-ad1d-8839392b9b01',	'blood_price'),
 ('fe3e0d2f-318d-4865-b04a-7cf0a14f6b9d',	'reroll_one_dice'),
 ('fe3e0d2f-318d-4865-b04a-7cf0a14f6b9d',	'mana_leech'),
