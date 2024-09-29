@@ -1,5 +1,6 @@
 import cleric_icon from "@assets/classes/cleric_icon.png";
 import sorcerer_icon from "@assets/classes/sorcerer_icon.png";
+import thief_bottom_left from "@assets/classes/thief_bottom_left.png";
 import thief_icon from "@assets/classes/thief_icon.png";
 import unknown_icon from "@assets/classes/unknown_icon.png";
 import warrior_icon from "@assets/classes/warrior_icon.png";
@@ -31,6 +32,7 @@ export const assetCollection = {
   sorcerer_icon,
   cleric_icon,
   thief_icon,
+  thief_bottom_left,
   goblin_icon,
   move_layer,
   unknown_icon,
@@ -59,6 +61,7 @@ export const entitiesAssetsCollection = {
   sorcerer_icon,
   cleric_icon,
   thief_icon,
+  thief_bottom_left,
   unknown_icon,
   goblin_icon,
   trap_active,

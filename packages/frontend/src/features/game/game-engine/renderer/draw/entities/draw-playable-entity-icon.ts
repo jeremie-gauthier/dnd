@@ -1,5 +1,6 @@
 import type { PlayableEnemyEntity, PlayableHeroEntity } from "@dnd/shared";
 import { entitiesAssetsCollection } from "../../assets-loader/assets.config";
+import { getElevationOffset } from "../utils/get-elevation-offset.util";
 import type { EntityDrawerParams } from "./entity-drawer-params.interface";
 
 type RequiredAssets = typeof entitiesAssetsCollection;
@@ -20,11 +21,28 @@ export function drawPlayableEntityIcon({
     assets: config.assets,
   });
 
-  context.drawImage(
-    playableEntityAsset,
-    subject.coordIsometric.column,
-    subject.coordIsometric.row,
-  );
+  if (
+    subject.playableEntity.faction === "hero" &&
+    subject.playableEntity.class === "THIEF"
+  ) {
+    context.drawImage(
+      playableEntityAsset,
+      subject.coordIsometric.column,
+      subject.coordIsometric.row -
+        getElevationOffset({
+          options: {
+            assetHeight: config.assetSize,
+          },
+          elevationLevel: 0.5,
+        }),
+    );
+  } else {
+    context.drawImage(
+      playableEntityAsset,
+      subject.coordIsometric.column,
+      subject.coordIsometric.row,
+    );
+  }
 }
 
 function getPlayableEntityAsset({
@@ -59,7 +77,7 @@ function getHeroAsset({
     case "CLERIC":
       return assets.cleric_icon;
     case "THIEF":
-      return assets.thief_icon;
+      return assets.thief_bottom_left;
     default:
       return assets.unknown_icon;
   }
