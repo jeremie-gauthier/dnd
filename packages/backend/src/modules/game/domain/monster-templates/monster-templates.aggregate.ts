@@ -26,15 +26,15 @@ export class MonsterTemplates extends Entity<Data> {
   }
 
   public getMonsterTemplateOrThrow({
-    kind,
-  }: { kind: MonsterTemplate["kind"] }) {
+    race,
+  }: { race: MonsterTemplate["race"] }) {
     const monsterTemplate = this._data.values.find(
-      (value) => value.kind === kind,
+      (value) => value.race === race,
     );
     if (!monsterTemplate) {
       throw new MonsterTemplatesError({
         name: "MONSTER_TEMPLATE_NOT_FOUND",
-        message: `Monster template "${kind}" not found`,
+        message: `Monster template "${race}" not found`,
       });
     }
     return monsterTemplate;

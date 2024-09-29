@@ -70,7 +70,7 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
               ...enemyTemplate,
               inventory: new Inventory({
                 ...enemyTemplate.inventory,
-                playableId: enemyTemplate.kind,
+                playableId: enemyTemplate.race,
                 backpack: enemyTemplate.inventory.backpack.map((item) =>
                   ItemFactory.create(item as unknown as GameItem),
                 ),
@@ -147,7 +147,6 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
   private getHero({ hero }: { hero: ReturnType<Hero["toPlain"]> }) {
     return {
       ...hero,
-      type: hero.faction,
       currentPhase: hero.status.toLowerCase() as Lowercase<
         ReturnType<PlayerStatus["toPlain"]>
       >,
@@ -163,7 +162,6 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
   private getMonster({ monster }: { monster: ReturnType<Monster["toPlain"]> }) {
     return {
       ...monster,
-      type: monster.faction,
       currentPhase: monster.status.toLowerCase() as Lowercase<
         ReturnType<PlayerStatus["toPlain"]>
       >,

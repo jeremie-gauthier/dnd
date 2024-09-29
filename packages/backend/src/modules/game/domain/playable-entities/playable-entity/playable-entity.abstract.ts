@@ -1,3 +1,8 @@
+import {
+  PlayableEntityRaceType,
+  PlayableEntityType,
+  PlayableEntityTypeType,
+} from "@dnd/shared";
 import { Entity, PlainData } from "src/modules/shared/domain/entity";
 import { Attack } from "../../attack/attack.entity";
 import { Coord } from "../../coord/coord.vo";
@@ -16,8 +21,11 @@ import { PlayerStatus } from "./player-status/player-status.vo";
 
 type Data = {
   readonly id: string;
-  readonly name: string;
   readonly faction: "hero" | "monster";
+  readonly type: PlayableEntityTypeType;
+  readonly race: PlayableEntityRaceType;
+  readonly name: string;
+
   coord: Coord;
   isBlocking: boolean;
 
@@ -119,6 +127,10 @@ export abstract class Playable<
 
   public isMonster(): this is Monster {
     return this._data.faction === "monster";
+  }
+
+  public isUndead() {
+    return this._data.type === PlayableEntityType.UNDEAD;
   }
 
   public mustBeAlive() {

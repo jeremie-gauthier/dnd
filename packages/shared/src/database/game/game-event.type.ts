@@ -1,11 +1,11 @@
+import { PlayableEntityRaceType } from "../enums/playable-entity-race.enum";
 import { Coord } from "./coord.interface";
-import { EnemyKind } from "./enemy-kind.type";
 
 export type OnDoorOpeningGameEvent = {
   readonly name: "on_door_opening";
   readonly action: "spawn_monsters";
   readonly doorCoord: Coord;
-  readonly monsters: Array<EnemyKind>;
+  readonly monsters: Array<PlayableEntityRaceType>;
   readonly startingTiles: Array<Coord>;
 };
 

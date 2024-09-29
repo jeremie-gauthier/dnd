@@ -42,6 +42,8 @@ export class CreateCampaignForUserUseCase implements UseCase {
   ): DeepPartial<Hero>[] {
     return heroesTemplate.map((heroTemplate) => ({
       characteristic: heroTemplate.characteristic,
+      type: heroTemplate.type,
+      race: heroTemplate.race,
       name: heroTemplate.name,
       class: heroTemplate.class,
       level: heroTemplate.level,

@@ -62,6 +62,14 @@ export class Game extends AggregateRoot<Data> {
     super(data, data.id);
   }
 
+  public get playableEntities() {
+    return this._data.playableEntities;
+  }
+
+  public get rooms() {
+    return this._data.rooms;
+  }
+
   public toPlain() {
     return {
       id: this._data.id,
@@ -167,13 +175,13 @@ export class Game extends AggregateRoot<Data> {
     });
     for (const doorOpeningEvent of doorOpeningEvents) {
       if (doorOpeningEvent.isSpawnMonsterAction()) {
-        const monsterKindWithStartingCoord = zip(
+        const monsterRaceWithStartingCoord = zip(
           doorOpeningEvent.monsters,
           doorOpeningEvent.startingTiles,
         );
-        for (const [kind, startingCoord] of monsterKindWithStartingCoord) {
+        for (const [race, startingCoord] of monsterRaceWithStartingCoord) {
           const monsterTemplate =
-            this._data.monsterTemplates.getMonsterTemplateOrThrow({ kind });
+            this._data.monsterTemplates.getMonsterTemplateOrThrow({ race });
           const monster = monsterTemplate.create({
             gameMasterUserId: this._data.gameMaster.id,
           });
@@ -393,7 +401,7 @@ export class Game extends AggregateRoot<Data> {
 
     chestTrap.use({
       entityThatOpenedTheChest: playingEntity,
-      board: this._data.board,
+      game: this,
     });
 
     const turnEnded = this.endPlayerTurn({ userId });

@@ -1,6 +1,8 @@
 INSERT INTO
   hero_template (
     name,
+    TYPE,
+    race,
     class,
     LEVEL,
     characteristic_base_action_points,
@@ -13,6 +15,8 @@ INSERT INTO
 VALUES
   (
     'Regdar',
+    'humanoid',
+    'human',
     'WARRIOR',
     1,
     2,
@@ -24,6 +28,8 @@ VALUES
   ),
   (
     'Regdar',
+    'humanoid',
+    'human',
     'WARRIOR',
     2,
     2,
@@ -35,6 +41,8 @@ VALUES
   ),
   (
     'Regdar',
+    'humanoid',
+    'human',
     'WARRIOR',
     3,
     2,
@@ -46,6 +54,8 @@ VALUES
   ),
   (
     'Lidda',
+    'humanoid',
+    'halfling',
     'THIEF',
     1,
     2,
@@ -57,6 +67,8 @@ VALUES
   ),
   (
     'Lidda',
+    'humanoid',
+    'halfling',
     'THIEF',
     2,
     2,
@@ -68,6 +80,8 @@ VALUES
   ),
   (
     'Lidda',
+    'humanoid',
+    'halfling',
     'THIEF',
     3,
     2,
@@ -79,6 +93,8 @@ VALUES
   ),
   (
     'Mialyë',
+    'humanoid',
+    'elf',
     'SORCERER',
     1,
     2,
@@ -90,6 +106,8 @@ VALUES
   ),
   (
     'Mialyë',
+    'humanoid',
+    'elf',
     'SORCERER',
     2,
     2,
@@ -101,6 +119,8 @@ VALUES
   ),
   (
     'Mialyë',
+    'humanoid',
+    'elf',
     'SORCERER',
     3,
     2,
@@ -112,6 +132,8 @@ VALUES
   ),
   (
     'Jozan',
+    'humanoid',
+    'human',
     'CLERIC',
     1,
     2,
@@ -123,6 +145,8 @@ VALUES
   ),
   (
     'Jozan',
+    'humanoid',
+    'human',
     'CLERIC',
     2,
     2,
@@ -134,6 +158,8 @@ VALUES
   ),
   (
     'Jozan',
+    'humanoid',
+    'human',
     'CLERIC',
     3,
     2,

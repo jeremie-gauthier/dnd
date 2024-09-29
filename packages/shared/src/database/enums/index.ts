@@ -4,3 +4,5 @@ export * from "./hero-class.enum";
 export * from "./storage-space.enum";
 export * from "./perk-trigger.enum";
 export * from "./perk-name.enum";
+export * from "./playable-entity-type.enum";
+export * from "./playable-entity-race.enum";

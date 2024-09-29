@@ -3,7 +3,7 @@ import { InventoryJson, StorageSpace, zip } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
-import { EnemyTemplate } from "src/database/entities/enemy-template.entity";
+import { MonsterTemplate as MonsterTemplatePersistence } from "src/database/entities/enemy-template.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { GameInitializationDonePayload as CampaignGameInitializationDonePayload } from "src/modules/campaign/events/game-initialization-done.payload";
 import { Board } from "src/modules/game/domain/board/board.entity";
@@ -13,7 +13,7 @@ import { GameMaster } from "src/modules/game/domain/game-master/game-master.enti
 import { GameStatus } from "src/modules/game/domain/game-status/game-status.vo";
 import { Game } from "src/modules/game/domain/game/game.aggregate";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
-import { MonsterTemplate } from "src/modules/game/domain/monster-templates/monster-template/monster-template.vo";
+import { MonsterTemplate as MonsterTemplateDomain } from "src/modules/game/domain/monster-templates/monster-template/monster-template.vo";
 import { MonsterTemplates } from "src/modules/game/domain/monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "src/modules/game/domain/playable-entities/playable-entities.aggregate";
 import { Conditions } from "src/modules/game/domain/playable-entities/playable-entity/conditions/conditions.aggregate";
@@ -224,6 +224,8 @@ export class GameInitializationUseCase implements UseCase {
         const HeroClass = HeroFactory.getHeroClass(hero.name);
         return new HeroClass({
           id: hero.id,
+          type: hero.type,
+          race: hero.race,
           status: new PlayerStatus("IDLE"),
           playedByUserId: heroPlayersMap[hero.id]!,
           name: hero.name,
@@ -235,7 +237,6 @@ export class GameInitializationUseCase implements UseCase {
             column: Number.NaN,
           }),
           isBlocking: true,
-
           characteristic: {
             ...hero.characteristic,
             healthPoints: hero.characteristic.baseHealthPoints,
@@ -267,14 +268,15 @@ export class GameInitializationUseCase implements UseCase {
 
   private async getMonsterTemplates({
     enemyTemplates,
-  }: { enemyTemplates: EnemyTemplate[] }): Promise<MonsterTemplates> {
+  }: {
+    enemyTemplates: MonsterTemplatePersistence[];
+  }): Promise<MonsterTemplates> {
     return new MonsterTemplates({
       values: await Promise.all(
         enemyTemplates.map(
           async (enemyTemplate) =>
-            new MonsterTemplate({
+            new MonsterTemplateDomain({
               ...enemyTemplate,
-              kind: enemyTemplate.name,
               inventory:
                 await this.getPlayableEntityInventoryFromEnemyInventory({
                   enemyInventory: enemyTemplate.inventory,
