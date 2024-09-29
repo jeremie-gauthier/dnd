@@ -18,7 +18,7 @@ import ref_red from "@assets/tiles/references/red.png";
 import trap_active from "@assets/tiles/traps/trap_active.png";
 import trap_inactive from "@assets/tiles/traps/trap_inactive.png";
 import wall from "@assets/tiles/wall/wall.png";
-import move_forbidden from "@assets/layers/move_forbidden.png";
+import move_forbidden from "@assets/tooltips/move_forbidden.png";
 
 export const assetCollection = {
   floor_light,
