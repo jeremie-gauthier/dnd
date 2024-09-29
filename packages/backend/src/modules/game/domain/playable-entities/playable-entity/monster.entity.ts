@@ -1,4 +1,9 @@
-import { PlayableEntityRaceType, PlayableEntityTypeType } from "@dnd/shared";
+import {
+  PlayableEntityRace,
+  PlayableEntityRaceType,
+  PlayableEntityType,
+  PlayableEntityTypeType,
+} from "@dnd/shared";
 import { z } from "zod";
 import { Attack } from "../../attack/attack.entity";
 import { Coord } from "../../coord/coord.vo";
@@ -53,8 +58,8 @@ export class Monster extends Playable<Data> {
   private static schema = z.object({
     id: z.string(),
     faction: z.literal("monster").default("monster"),
-    type: z.enum(["gobelinoid", "undead"]),
-    race: z.enum(["goblin", "bugbear"]),
+    type: z.enum([PlayableEntityType.GOBELINOID, PlayableEntityType.UNDEAD]),
+    race: z.enum([PlayableEntityRace.GOBLIN, PlayableEntityRace.BUGBEAR]),
     name: z.string(),
     coord: z.instanceof(Coord),
     isBlocking: z.boolean(),

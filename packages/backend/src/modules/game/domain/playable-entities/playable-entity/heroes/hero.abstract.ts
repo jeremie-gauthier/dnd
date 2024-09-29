@@ -1,6 +1,9 @@
 import {
+  HeroClass,
   HeroClassType,
+  PlayableEntityRace,
   PlayableEntityRaceType,
+  PlayableEntityType,
   PlayableEntityTypeType,
 } from "@dnd/shared";
 import { z } from "zod";
@@ -60,9 +63,18 @@ export abstract class Hero extends Playable<Data> {
     id: z.string().uuid(),
     faction: z.literal("hero").default("hero"),
     name: z.string(),
-    type: z.enum(["humanoid"]),
-    race: z.enum(["human", "elf", "halfling"]),
-    class: z.enum(["WARRIOR", "CLERIC", "SORCERER", "THIEF"]),
+    type: z.enum([PlayableEntityType.HUMANOID]),
+    race: z.enum([
+      PlayableEntityRace.HUMAN,
+      PlayableEntityRace.ELF,
+      PlayableEntityRace.HALFLING,
+    ]),
+    class: z.enum([
+      HeroClass.WARRIOR,
+      HeroClass.CLERIC,
+      HeroClass.SORCERER,
+      HeroClass.THIEF,
+    ]),
     level: z.number().min(1).max(3),
     coord: z.instanceof(Coord),
     isBlocking: z.boolean(),
