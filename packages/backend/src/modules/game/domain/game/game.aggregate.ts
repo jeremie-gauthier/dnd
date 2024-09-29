@@ -19,6 +19,7 @@ import { MonsterTemplates } from "../monster-templates/monster-templates.aggrega
 import { PlayableEntities } from "../playable-entities/playable-entities.aggregate";
 import { Monster } from "../playable-entities/playable-entity/monster.entity";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
+import { Rooms } from "../rooms/rooms.aggregate";
 import { TilePlayableEntity } from "../tile/tile-entity/playable/playable.entity";
 import { WinConditions } from "../win-conditions/win-conditions.aggregate";
 import { GameError } from "./game.error";
@@ -37,6 +38,7 @@ type Data = {
   winConditions: WinConditions;
   readonly maxLevelLoot: number;
   itemsLooted: Array<Item["id"]>;
+  rooms: Rooms;
 };
 
 export class Game extends AggregateRoot<Data> {
@@ -52,6 +54,7 @@ export class Game extends AggregateRoot<Data> {
     winConditions: z.instanceof(WinConditions),
     maxLevelLoot: z.number().min(1),
     itemsLooted: z.array(z.string()),
+    rooms: z.instanceof(Rooms),
   });
 
   constructor(rawData: Data) {
@@ -72,6 +75,7 @@ export class Game extends AggregateRoot<Data> {
       winConditions: this._data.winConditions.toPlain(),
       maxLevelLoot: this._data.maxLevelLoot,
       itemsLooted: this._data.itemsLooted,
+      rooms: this._data.rooms.toPlain(),
     };
   }
 

@@ -1,15 +1,17 @@
-import type {
-  ChestEntity,
-  Coord,
-  DoorEntity,
-  GameView,
-  MapCompiledJson,
-  Tile,
-  TileEntity,
-  TileNonPlayableInteractiveEntity,
-  TileNonPlayableNonInteractiveEntity,
-  TrapEntity,
-  WinCondition,
+import {
+  type ChestEntity,
+  type Coord,
+  type DoorEntity,
+  type GameView,
+  type MapCompiledJson,
+  type Room,
+  type Tile,
+  type TileEntity,
+  type TileNonPlayableInteractiveEntity,
+  type TileNonPlayableNonInteractiveEntity,
+  type TrapEntity,
+  type WinCondition,
+  coordToIndex,
 } from "@dnd/shared";
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { GameBoardDeserialized } from "src/modules/shared/interfaces/game-board-deserialized.interface";
@@ -44,6 +46,7 @@ export class MapSerializerService {
     map: GameBoardDeserialized;
     events: GameEventDeserialized[];
     winConditions: WinCondition[];
+    rooms: Room[];
   } {
     const metadata = {
       width: mapCompiled.width,
@@ -85,6 +88,9 @@ export class MapSerializerService {
       metadata,
     });
 
+    // parsing rooms
+    this.assertsValidRooms({ rooms: mapCompiled.rooms, tiles, metadata });
+
     this.assertsValidEvents({ tiles, events: mapCompiled.events, metadata });
     this.assertsValidWinConditions({
       winConditions: mapCompiled.winConditions,
@@ -94,7 +100,41 @@ export class MapSerializerService {
       map: { ...metadata, tiles },
       events: mapCompiled.events,
       winConditions: mapCompiled.winConditions,
+      rooms: mapCompiled.rooms,
     };
+  }
+
+  private assertsValidRooms({
+    rooms,
+    tiles,
+    metadata,
+  }: {
+    rooms: MapCompiledJson["rooms"];
+    tiles: Tile[];
+    metadata: { width: number; height: number };
+  }) {
+    const ids = new Set(rooms.map(({ id }) => id));
+    if (ids.size < rooms.length) {
+      throw new InternalServerErrorException("Duplicate room identifier found");
+    }
+
+    const boundingBoxCoords = rooms.flatMap(({ boundingBoxes }) =>
+      boundingBoxes.flatMap(({ topLeft, bottomRight }) => [
+        topLeft,
+        bottomRight,
+      ]),
+    );
+    const hasSomeInvalidBoundingBoxCoord = boundingBoxCoords.some(
+      (boundingBoxCoord) => {
+        const tileIdx = coordToIndex({ coord: boundingBoxCoord, metadata });
+        return tiles[tileIdx] === undefined;
+      },
+    );
+    if (hasSomeInvalidBoundingBoxCoord) {
+      throw new InternalServerErrorException(
+        "Invalid bounding box coord found in rooms",
+      );
+    }
   }
 
   private assertsValidWinConditions({

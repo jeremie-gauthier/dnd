@@ -16,9 +16,13 @@ import { PlayableEntities } from "src/modules/game/domain/playable-entities/play
 import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/heroes/hero.abstract";
 import { Monster } from "src/modules/game/domain/playable-entities/playable-entity/monster.entity";
 import { PlayerStatus } from "src/modules/game/domain/playable-entities/playable-entity/player-status/player-status.vo";
+import { BoundingBox } from "src/modules/game/domain/rooms/room/bounding-box/bounding-box.entity";
+import { Room } from "src/modules/game/domain/rooms/room/room.entity";
+import { Rooms } from "src/modules/game/domain/rooms/rooms.aggregate";
 import { Tile } from "src/modules/game/domain/tile/tile.entity";
 import { WinConditions } from "src/modules/game/domain/win-conditions/win-conditions.aggregate";
 import { Mapper } from "src/modules/shared/infra/mapper";
+import { GameRoomsDeserialized } from "src/modules/shared/interfaces/game-rooms-deserialized.interface";
 import { GameWinConditionsDeserialized } from "src/modules/shared/interfaces/game-win-conditions-deserialized.interface";
 import { GameEvent } from "../model/game-event.type";
 import { GamePersistence } from "../model/game.model";
@@ -89,6 +93,21 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
       }),
       maxLevelLoot: persistence.maxLevelLoot,
       itemsLooted: persistence.itemsLooted,
+      rooms: new Rooms({
+        values: persistence.rooms.map(
+          (room) =>
+            new Room({
+              ...room,
+              boundingBoxes: room.boundingBoxes.map(
+                (boundingBox) =>
+                  new BoundingBox({
+                    topLeft: new Coord(boundingBox.topLeft),
+                    bottomRight: new Coord(boundingBox.bottomRight),
+                  }),
+              ),
+            }),
+        ),
+      }),
     });
   }
 
@@ -121,6 +140,7 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
         .values as GameWinConditionsDeserialized,
       maxLevelLoot: plain.maxLevelLoot,
       itemsLooted: plain.itemsLooted,
+      rooms: plain.rooms.values as GameRoomsDeserialized,
     };
   }
 

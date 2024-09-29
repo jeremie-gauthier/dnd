@@ -19,6 +19,9 @@ import { PlayableEntities } from "src/modules/game/domain/playable-entities/play
 import { Conditions } from "src/modules/game/domain/playable-entities/playable-entity/conditions/conditions.aggregate";
 import { Initiative } from "src/modules/game/domain/playable-entities/playable-entity/initiative/initiative.vo";
 import { PlayerStatus } from "src/modules/game/domain/playable-entities/playable-entity/player-status/player-status.vo";
+import { BoundingBox } from "src/modules/game/domain/rooms/room/bounding-box/bounding-box.entity";
+import { Room } from "src/modules/game/domain/rooms/room/room.entity";
+import { Rooms } from "src/modules/game/domain/rooms/rooms.aggregate";
 import { Tile } from "src/modules/game/domain/tile/tile.entity";
 import { WinConditions } from "src/modules/game/domain/win-conditions/win-conditions.aggregate";
 import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
@@ -107,6 +110,21 @@ export class GameInitializationUseCase implements UseCase {
       }),
       maxLevelLoot: payload.campaignStageProgression.stage.maxLevelLoot,
       itemsLooted: [],
+      rooms: new Rooms({
+        values: payload.rooms.map(
+          (room) =>
+            new Room({
+              ...room,
+              boundingBoxes: room.boundingBoxes.map(
+                (boundingBox) =>
+                  new BoundingBox({
+                    topLeft: new Coord(boundingBox.topLeft),
+                    bottomRight: new Coord(boundingBox.bottomRight),
+                  }),
+              ),
+            }),
+        ),
+      }),
     });
 
     // 3. Attribution d'une position de depart aux heros

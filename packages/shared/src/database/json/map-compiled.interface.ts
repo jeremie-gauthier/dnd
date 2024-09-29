@@ -1,4 +1,4 @@
-import { Coord, TileEntity } from "../game";
+import { Coord, Room, TileEntity } from "../game";
 import { GameEvent } from "../game/game-event.type";
 import { WinCondition } from "../game/win-condition.type";
 
@@ -22,4 +22,5 @@ export type MapCompiledJson = {
   entities: Entity[];
   events: GameEvent[];
   winConditions: WinCondition[];
+  rooms: Room[];
 };
