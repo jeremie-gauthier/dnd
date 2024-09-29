@@ -6,6 +6,7 @@ import unknown_icon from "@assets/classes/unknown_icon.png";
 import warrior_icon from "@assets/classes/warrior_icon.png";
 import attack_layer from "@assets/layers/attack_layer.png";
 import move_layer from "@assets/layers/move_layer.png";
+import player_turn_layer from "@assets/layers/player_turn_layer.png";
 import goblin_icon from "@assets/monsters/goblin_icon.png";
 import chest_close from "@assets/tiles/chests/chest_close.png";
 import chest_open from "@assets/tiles/chests/chest_open.png";
@@ -35,6 +36,7 @@ export const assetCollection = {
   thief_bottom_left,
   goblin_icon,
   move_layer,
+  player_turn_layer,
   unknown_icon,
   ref_blue,
   ref_red,
@@ -73,6 +75,7 @@ export const entitiesAssetsCollection = {
 export const previewsAssetsCollection = {
   attack_layer,
   move_layer,
+  player_turn_layer,
 } as const;
 
 export const tooltipsAssetsCollection = {
