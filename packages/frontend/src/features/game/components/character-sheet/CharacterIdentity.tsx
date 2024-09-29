@@ -21,7 +21,7 @@ export const CharacterIdentity = ({ character }: Props) => {
             })}
           </span>
         ) : (
-          <span>{t("monsterIdentity", { kind: character.kind })}</span>
+          <span>{t("monsterIdentity", { race: character.race })}</span>
         )}
       </div>
     </div>

@@ -1,9 +1,13 @@
+import { PlayableEntityRaceType, PlayableEntityTypeType } from "@dnd/shared";
 import { Coord } from "../coord.type";
 import { Inventory } from "../inventory.type";
 import { PlayableEntityCondition } from "./condition.type";
 
 export type BasePlayableEntity = {
   id: string;
+
+  type: PlayableEntityTypeType;
+  race: PlayableEntityRaceType;
 
   currentPhase: "preparation" | "idle" | "action";
   playedByUserId: string;

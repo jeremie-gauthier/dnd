@@ -1,6 +1,7 @@
 INSERT INTO
-  enemy_template (
-    name,
+  monster_template (
+    race,
+    TYPE,
     characteristic_base_action_points,
     characteristic_base_movement_points,
     characteristic_base_armor_class,
@@ -11,6 +12,7 @@ INSERT INTO
 VALUES
   (
     'goblin',
+    'gobelinoid',
     2,
     5,
     1,
@@ -20,6 +22,7 @@ VALUES
   ),
   (
     'bugbear',
+    'gobelinoid',
     2,
     4,
     2,

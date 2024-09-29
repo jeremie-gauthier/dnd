@@ -4,7 +4,7 @@ import { CampaignProgression } from "src/database/entities/campaign-progression.
 import { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import { Campaign } from "src/database/entities/campaign.entity";
-import { EnemyTemplate } from "src/database/entities/enemy-template.entity";
+import { MonsterTemplate } from "src/database/entities/enemy-template.entity";
 import { HeroTemplate } from "src/database/entities/hero-template.entity";
 import { Hero } from "src/database/entities/hero.entity";
 import { CoordService } from "./domain/coord/coord.service";
@@ -31,7 +31,7 @@ import { RequestCreateLobbyUseCase } from "./use-cases/request-create-lobby/requ
     TypeOrmModule.forFeature([
       Hero,
       HeroTemplate,
-      EnemyTemplate,
+      MonsterTemplate,
       Campaign,
       CampaignStage,
       CampaignProgression,

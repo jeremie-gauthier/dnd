@@ -167,13 +167,13 @@ export class Game extends AggregateRoot<Data> {
     });
     for (const doorOpeningEvent of doorOpeningEvents) {
       if (doorOpeningEvent.isSpawnMonsterAction()) {
-        const monsterKindWithStartingCoord = zip(
+        const monsterRaceWithStartingCoord = zip(
           doorOpeningEvent.monsters,
           doorOpeningEvent.startingTiles,
         );
-        for (const [kind, startingCoord] of monsterKindWithStartingCoord) {
+        for (const [race, startingCoord] of monsterRaceWithStartingCoord) {
           const monsterTemplate =
-            this._data.monsterTemplates.getMonsterTemplateOrThrow({ kind });
+            this._data.monsterTemplates.getMonsterTemplateOrThrow({ race });
           const monster = monsterTemplate.create({
             gameMasterUserId: this._data.gameMaster.id,
           });

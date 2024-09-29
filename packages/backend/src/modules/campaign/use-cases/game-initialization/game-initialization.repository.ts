@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import { CampaignStage } from "src/database/entities/campaign-stage.entity";
-import { EnemyTemplate } from "src/database/entities/enemy-template.entity";
+import { MonsterTemplate } from "src/database/entities/enemy-template.entity";
 import { User } from "src/database/entities/user.entity";
 import { In, Repository } from "typeorm";
 
@@ -11,18 +11,18 @@ export class GameInitializationRepository {
   constructor(
     @InjectRepository(CampaignStageProgression)
     private readonly campaignStageProgressionRepository: Repository<CampaignStageProgression>,
-    @InjectRepository(EnemyTemplate)
-    private readonly enemyTemplateRepository: Repository<EnemyTemplate>,
+    @InjectRepository(MonsterTemplate)
+    private readonly monsterTemplateRepository: Repository<MonsterTemplate>,
   ) {}
 
   public async getEnemiesByNames({
     enemiesName,
   }: {
-    enemiesName: EnemyTemplate["name"][];
-  }): Promise<EnemyTemplate[]> {
-    return this.enemyTemplateRepository.find({
+    enemiesName: MonsterTemplate["race"][];
+  }): Promise<MonsterTemplate[]> {
+    return this.monsterTemplateRepository.find({
       where: {
-        name: In(enemiesName),
+        race: In(enemiesName),
       },
     });
   }

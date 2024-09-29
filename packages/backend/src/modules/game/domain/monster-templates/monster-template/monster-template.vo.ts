@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { EnemyKind } from "@dnd/shared";
+import { PlayableEntityRaceType, PlayableEntityTypeType } from "@dnd/shared";
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { Coord } from "../../coord/coord.vo";
@@ -11,7 +11,8 @@ import { Monster } from "../../playable-entities/playable-entity/monster.entity"
 import { PlayerStatus } from "../../playable-entities/playable-entity/player-status/player-status.vo";
 
 type Data = {
-  readonly kind: EnemyKind;
+  readonly type: PlayableEntityTypeType;
+  readonly race: PlayableEntityRaceType;
   readonly characteristic: {
     readonly baseHealthPoints: number;
     readonly baseManaPoints: number;
@@ -24,7 +25,8 @@ type Data = {
 
 export class MonsterTemplate extends Entity<Data> {
   private static schema = z.object({
-    kind: z.enum(["goblin"]),
+    type: z.enum(["gobelinoid", "undead"]),
+    race: z.enum(["goblin", "bugbear"]),
     characteristic: z.object({
       baseHealthPoints: z.number(),
       baseManaPoints: z.number(),
@@ -37,16 +39,17 @@ export class MonsterTemplate extends Entity<Data> {
 
   constructor(rawData: Data) {
     const data = MonsterTemplate.schema.parse(rawData);
-    super(data, data.kind);
+    super(data, data.race);
   }
 
-  public get kind() {
-    return this._data.kind;
+  public get race() {
+    return this._data.race;
   }
 
   public equals(other: MonsterTemplate): boolean {
     return (
-      this._data.kind === other._data.kind &&
+      this._data.type === other._data.type &&
+      this._data.race === other._data.race &&
       this._data.inventory.equals(other._data.inventory) &&
       this._data.characteristic.baseHealthPoints ===
         other._data.characteristic.baseHealthPoints &&
@@ -63,15 +66,18 @@ export class MonsterTemplate extends Entity<Data> {
 
   public toPlain() {
     return {
-      kind: this._data.kind,
+      type: this._data.type,
+      race: this._data.race,
       characteristic: this._data.characteristic,
       inventory: this._data.inventory.toPlain(),
     };
   }
 
   public create({ gameMasterUserId }: { gameMasterUserId: GameMaster["id"] }) {
+    const randomId = randomUUID();
+
     return new Monster({
-      id: `${this._data.kind}:${randomUUID()}`,
+      id: `${this._data.race}:${randomId}`,
       characteristic: {
         actionPoints: this._data.characteristic.baseActionPoints,
         baseActionPoints: this._data.characteristic.baseActionPoints,
@@ -89,8 +95,9 @@ export class MonsterTemplate extends Entity<Data> {
       inventory: this._data.inventory,
       playedByUserId: gameMasterUserId,
       isBlocking: true,
-      kind: this._data.kind,
-      name: this._data.kind,
+      type: this._data.type,
+      race: this._data.race,
+      name: `${this._data.race}-${randomId.slice(0, 4)}`,
       status: new PlayerStatus("IDLE"),
       actionsDoneThisTurn: [],
       conditions: new Conditions({ values: [] }),

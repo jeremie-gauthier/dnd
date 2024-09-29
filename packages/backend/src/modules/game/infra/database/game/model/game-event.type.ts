@@ -5,7 +5,7 @@ type OnDoorOpeningGameEvent = {
   readonly name: "on_door_opening";
   readonly action: "spawn_monsters";
   readonly doorCoord: Coord;
-  readonly monsters: Array<MonsterTemplate["kind"]>;
+  readonly monsters: Array<MonsterTemplate["race"]>;
   readonly startingTiles: Array<Coord>;
 };
 

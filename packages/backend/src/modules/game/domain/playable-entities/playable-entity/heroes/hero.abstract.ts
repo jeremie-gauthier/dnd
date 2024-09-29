@@ -1,4 +1,8 @@
-import { HeroClassType } from "@dnd/shared";
+import {
+  HeroClassType,
+  PlayableEntityRaceType,
+  PlayableEntityTypeType,
+} from "@dnd/shared";
 import { z } from "zod";
 import { Attack } from "../../../attack/attack.entity";
 import { Coord } from "../../../coord/coord.vo";
@@ -15,8 +19,10 @@ import { PlayerStatus } from "../player-status/player-status.vo";
 
 type Data = {
   readonly id: string;
-  readonly name: string;
   readonly faction: "hero";
+  readonly name: string;
+  readonly type: PlayableEntityTypeType;
+  readonly race: PlayableEntityRaceType;
   readonly class: HeroClassType;
   readonly level: number;
 
@@ -52,8 +58,10 @@ type Data = {
 export abstract class Hero extends Playable<Data> {
   private static schema = z.object({
     id: z.string().uuid(),
-    name: z.string(),
     faction: z.literal("hero").default("hero"),
+    name: z.string(),
+    type: z.enum(["humanoid"]),
+    race: z.enum(["human", "elf", "halfling"]),
     class: z.enum(["WARRIOR", "CLERIC", "SORCERER", "THIEF"]),
     level: z.number().min(1).max(3),
     coord: z.instanceof(Coord),
@@ -172,8 +180,10 @@ export abstract class Hero extends Playable<Data> {
   public toPlain() {
     return {
       id: this._data.id,
-      name: this._data.name,
       faction: this._data.faction,
+      name: this._data.name,
+      type: this._data.type,
+      race: this._data.race,
       class: this._data.class,
       level: this._data.level,
       coord: this._data.coord.toPlain(),

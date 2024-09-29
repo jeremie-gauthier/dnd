@@ -72,7 +72,7 @@ function getEnemyAsset({
   enemyEntity: PlayableEnemyEntity;
   assets: EntityDrawerParams<RequiredAssets>["config"]["assets"];
 }): HTMLImageElement {
-  switch (enemyEntity.kind) {
+  switch (enemyEntity.race) {
     case "goblin":
       return assets.goblin_icon;
     default:

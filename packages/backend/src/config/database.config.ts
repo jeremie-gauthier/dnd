@@ -11,7 +11,7 @@ import { Campaign } from "../database/entities/campaign.entity";
 import { ChestTrap } from "../database/entities/chest-trap.entity";
 import { DiceUI } from "../database/entities/dice-ui.entity";
 import { Dice } from "../database/entities/dice.entity";
-import { EnemyTemplate } from "../database/entities/enemy-template.entity";
+import { MonsterTemplate } from "../database/entities/enemy-template.entity";
 import { HeroTemplate } from "../database/entities/hero-template.entity";
 import { Hero } from "../database/entities/hero.entity";
 import { ItemUI } from "../database/entities/item-ui.entity";
@@ -51,7 +51,7 @@ export class DatabaseConfiguration implements TypeOrmOptionsFactory {
         Potion,
         Artifact,
         Stuff,
-        EnemyTemplate,
+        MonsterTemplate,
         Translation,
       ],
       migrations: ["dist/src/database/migrations/*.js"],

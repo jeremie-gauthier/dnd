@@ -1,4 +1,4 @@
-import { EnemyKind } from "@dnd/shared";
+import { PlayableEntityRaceType, PlayableEntityTypeType } from "@dnd/shared";
 import { z } from "zod";
 import { Attack } from "../../attack/attack.entity";
 import { Coord } from "../../coord/coord.vo";
@@ -15,9 +15,11 @@ import { PlayerStatus } from "./player-status/player-status.vo";
 
 type Data = {
   readonly id: string;
-  readonly name: string;
+  readonly type: PlayableEntityTypeType;
+  readonly race: PlayableEntityRaceType;
   readonly faction: "monster";
-  readonly kind: EnemyKind;
+  readonly name: string;
+
   coord: Coord;
   isBlocking: boolean;
 
@@ -50,9 +52,10 @@ type Data = {
 export class Monster extends Playable<Data> {
   private static schema = z.object({
     id: z.string(),
-    name: z.string(),
     faction: z.literal("monster").default("monster"),
-    kind: z.enum(["goblin"]),
+    type: z.enum(["gobelinoid", "undead"]),
+    race: z.enum(["goblin", "bugbear"]),
+    name: z.string(),
     coord: z.instanceof(Coord),
     isBlocking: z.boolean(),
     status: z.instanceof(PlayerStatus),
@@ -148,7 +151,7 @@ export class Monster extends Playable<Data> {
     ) {
       throw new PlayableEntityError({
         name: "MONSTER_CANNOT_ATTACK_MORE_THAN_ONCE_PER_TURN",
-        message: `${this._data.name} has already attacked this turn`,
+        message: `${this._data.id} has already attacked this turn`,
       });
     }
   }
@@ -178,9 +181,10 @@ export class Monster extends Playable<Data> {
   public toPlain() {
     return {
       id: this._data.id,
-      name: this._data.name,
       faction: this._data.faction,
-      kind: this._data.kind,
+      type: this._data.type,
+      race: this._data.race,
+      name: this._data.name,
       coord: this._data.coord.toPlain(),
       isBlocking: this._data.isBlocking,
       initiative: this._data.initiative.toPlain(),

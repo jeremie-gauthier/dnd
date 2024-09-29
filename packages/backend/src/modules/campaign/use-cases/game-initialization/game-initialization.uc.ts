@@ -1,7 +1,7 @@
-import { EnemyKind, unique } from "@dnd/shared";
+import { PlayableEntityRaceType, unique } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { EnemyTemplate } from "src/database/entities/enemy-template.entity";
+import { MonsterTemplate } from "src/database/entities/enemy-template.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { HostRequestedGameStartPayload } from "src/modules/shared/events/lobby/host-requested-game-start.payload";
 import { GameEventDeserialized } from "src/modules/shared/interfaces/game-events-deserialized.interface";
@@ -50,7 +50,7 @@ export class GameInitializationUseCase implements UseCase {
 
   private async getEnemyTemplates({
     events,
-  }: { events: GameEventDeserialized[] }): Promise<EnemyTemplate[]> {
+  }: { events: GameEventDeserialized[] }): Promise<MonsterTemplate[]> {
     const enemiesName = this.getDistinctAvailableEnemies({ events });
     const enemyTemplates = await this.repository.getEnemiesByNames({
       enemiesName,
@@ -60,7 +60,7 @@ export class GameInitializationUseCase implements UseCase {
 
   private getDistinctAvailableEnemies({
     events,
-  }: { events: GameEventDeserialized[] }): EnemyKind[] {
+  }: { events: GameEventDeserialized[] }): PlayableEntityRaceType[] {
     return unique(events.flatMap((event) => event?.monsters ?? []));
   }
 }

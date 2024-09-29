@@ -1,7 +1,7 @@
+import { PlayableEntityRaceType, PlayableEntityTypeType } from "../enums";
 import type { HeroClassType } from "../enums/hero-class.enum";
 import { StuffStorageCapacityJson } from "../json";
 import { Coord } from "./coord.interface";
-import type { EnemyKind } from "./enemy-kind.type";
 import { GameItem } from "./game-item";
 import {
   ChestEntity,
@@ -22,6 +22,8 @@ type Player = {
 
 type BasePlayableEntity = Player & {
   id: string;
+  type: PlayableEntityTypeType;
+  race: PlayableEntityRaceType;
 
   playedByUserId: string;
 
@@ -52,7 +54,6 @@ type BasePlayableEntity = Player & {
 
 export type PlayableEnemyEntity = BasePlayableEntity & {
   faction: "monster";
-  kind: EnemyKind;
 };
 
 export type PlayableHeroEntity = BasePlayableEntity & {
