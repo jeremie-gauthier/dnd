@@ -34,6 +34,7 @@ export const useMapRenderer = ({
   const {
     renderMovePreview,
     renderAttackPreview,
+    renderPlayableEntityTurnHighlight,
     clear: clearPreviewLayer,
   } = usePreviewLayer({
     gameEventManager,
@@ -62,6 +63,7 @@ export const useMapRenderer = ({
     render: canRender ? render : null,
     renderAttackPreview,
     renderMovePreview,
+    renderPlayableEntityTurnHighlight,
     clearPreviewLayer,
     clearTooltipLayer,
     renderMoveForbiddenTooltip,

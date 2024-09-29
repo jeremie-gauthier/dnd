@@ -37,6 +37,7 @@ export const useGameEngine = ({
   const {
     render,
     renderMovePreview,
+    renderPlayableEntityTurnHighlight,
     clearPreviewLayer,
     renderMoveForbiddenTooltip,
     clearTooltipLayer,
@@ -114,7 +115,19 @@ export const useGameEngine = ({
     }
 
     clearPreviewLayer();
-  }, [playerState.currentAction, clearPreviewLayer]);
+    if (entityPlaying) {
+      renderPlayableEntityTurnHighlight({
+        map: gameEntity.map,
+        playingEntityCoord: entityPlaying.coord,
+      });
+    }
+  }, [
+    playerState.currentAction,
+    clearPreviewLayer,
+    gameEntity.map,
+    entityPlaying,
+    renderPlayableEntityTurnHighlight,
+  ]);
 
   return {
     assetSize,

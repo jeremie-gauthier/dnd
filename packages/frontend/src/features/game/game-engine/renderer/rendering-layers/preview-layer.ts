@@ -6,9 +6,10 @@ import { translate2DToIsometricCoord } from "../../utils/coords-conversion.util"
 import { useAssetsLoader } from "../assets-loader/assets-loader";
 import { previewsAssetsCollection } from "../assets-loader/assets.config";
 import { drawAttackPreview } from "../draw/layers/draw-attack-preview";
+import { drawEntityTurnHighlight } from "../draw/layers/draw-entity-turn-highlight";
+import { drawMovePreview } from "../draw/layers/draw-move-preview";
 import { LayerDrawerParams } from "../draw/layers/layer-drawer-params.interface";
 import { centerIsometricDrawing } from "../draw/utils/center-isometric-drawing.util";
-import { drawMovePreview } from "../draw/layers/draw-move-preview";
 
 type Params = {
   gameEventManager: GameEventManager;
@@ -158,9 +159,43 @@ export const usePreviewLayer = ({ gameEventManager, canvasRef }: Params) => {
     renderAttackPreview,
   ]);
 
+  const renderPlayableEntityTurnHighlight = ({
+    map,
+    playingEntityCoord,
+  }: {
+    map: GameView["map"];
+    playingEntityCoord: Coord;
+  }) => {
+    if (!canvas || !context || !assets) return;
+
+    const config = { assets, assetSize, map };
+    clear();
+
+    context.save();
+
+    centerIsometricDrawing({ context, map, assetSize });
+
+    const coordIsometric = translate2DToIsometricCoord(
+      playingEntityCoord,
+      config,
+    );
+    drawEntityTurnHighlight({
+      context,
+      config,
+      subject: {
+        coord2D: playingEntityCoord,
+        coordIsometric,
+        tile: {} as Tile,
+      },
+    });
+
+    context.restore();
+  };
+
   return {
     renderMovePreview,
     renderAttackPreview,
+    renderPlayableEntityTurnHighlight,
     clear,
   };
 };
