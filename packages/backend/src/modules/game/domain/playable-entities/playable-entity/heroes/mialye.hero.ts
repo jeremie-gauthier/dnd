@@ -8,12 +8,20 @@ export class Mialye extends Hero {
       this._data.characteristic.manaPoints -= amount;
     }
 
+    this._data.characteristic.armorClass = this.getArmorClassFromMana();
+  }
+
+  public resetArmorClass() {
+    this._data.characteristic.armorClass = this.getArmorClassFromMana();
+  }
+
+  private getArmorClassFromMana() {
     if (this._data.characteristic.manaPoints >= 3) {
-      this._data.characteristic.armorClass = 2;
+      return 2;
     } else if (this._data.characteristic.manaPoints >= 1) {
-      this._data.characteristic.armorClass = 1;
+      return 1;
     } else {
-      this._data.characteristic.armorClass = 0;
+      return 0;
     }
   }
 }

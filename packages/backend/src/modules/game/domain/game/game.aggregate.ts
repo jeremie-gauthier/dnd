@@ -284,8 +284,16 @@ export class Game extends AggregateRoot<Data> {
       itemUsed: attackItem,
     });
 
+    targetPlayableEntity.conditions.applyAllNextIncomingAttackConditions({
+      playableEntityAffected: targetPlayableEntity,
+    });
+
     const damageDone = targetPlayableEntity.takeDamage({
       amount: attackResult.attackResult.sumResult,
+    });
+
+    targetPlayableEntity.conditions.clearExhausted({
+      playableEntityAffected: targetPlayableEntity,
     });
 
     if (targetPlayableEntity.isDead && targetPlayableEntity.isMonster()) {

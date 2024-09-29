@@ -21,7 +21,7 @@ export class Conditions extends Entity<Data> {
       conditon.apply({ playableEntityAffected });
     }
 
-    this.clearExhausted();
+    this.clearExhausted({ playableEntityAffected });
   }
 
   public applyAllEndTurnConditions({
@@ -34,10 +34,29 @@ export class Conditions extends Entity<Data> {
       conditon.apply({ playableEntityAffected });
     }
 
-    this.clearExhausted();
+    this.clearExhausted({ playableEntityAffected });
   }
 
-  private clearExhausted() {
+  public applyAllNextIncomingAttackConditions({
+    playableEntityAffected,
+  }: { playableEntityAffected: Playable }) {
+    const nestIncomingAttackConditions = this._data.values.filter(
+      (condition) => condition.isApplicableAtNextIncomingAttack,
+    );
+    for (const conditon of nestIncomingAttackConditions) {
+      conditon.apply({ playableEntityAffected });
+    }
+  }
+
+  public clearExhausted({
+    playableEntityAffected,
+  }: { playableEntityAffected: Playable }) {
+    for (const condition of this._data.values) {
+      if (condition.isExhausted) {
+        condition.exhaustion({ playableEntityAffected });
+      }
+    }
+
     this._data.values = this._data.values.filter((value) => !value.isExhausted);
   }
 
