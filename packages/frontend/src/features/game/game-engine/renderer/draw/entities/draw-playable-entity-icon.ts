@@ -1,4 +1,9 @@
-import type { PlayableEnemyEntity, PlayableHeroEntity } from "@dnd/shared";
+import {
+  HeroClass,
+  type PlayableEnemyEntity,
+  PlayableEntityRace,
+  type PlayableHeroEntity,
+} from "@dnd/shared";
 import { entitiesAssetsCollection } from "../../assets-loader/assets.config";
 import { getElevationOffset } from "../utils/get-elevation-offset.util";
 import type { EntityDrawerParams } from "./entity-drawer-params.interface";
@@ -23,7 +28,7 @@ export function drawPlayableEntityIcon({
 
   if (
     subject.playableEntity.faction === "hero" &&
-    subject.playableEntity.class === "THIEF"
+    subject.playableEntity.class === HeroClass.THIEF
   ) {
     context.drawImage(
       playableEntityAsset,
@@ -70,13 +75,13 @@ function getHeroAsset({
   assets: EntityDrawerParams<RequiredAssets>["config"]["assets"];
 }): HTMLImageElement {
   switch (heroEntity.class) {
-    case "WARRIOR":
+    case HeroClass.WARRIOR:
       return assets.warrior_icon;
-    case "SORCERER":
+    case HeroClass.SORCERER:
       return assets.sorcerer_icon;
-    case "CLERIC":
+    case HeroClass.CLERIC:
       return assets.cleric_icon;
-    case "THIEF":
+    case HeroClass.THIEF:
       return assets.thief_bottom_left;
     default:
       return assets.unknown_icon;
@@ -91,7 +96,7 @@ function getEnemyAsset({
   assets: EntityDrawerParams<RequiredAssets>["config"]["assets"];
 }): HTMLImageElement {
   switch (enemyEntity.race) {
-    case "goblin":
+    case PlayableEntityRace.GOBLIN:
       return assets.goblin_icon;
     default:
       return assets.unknown_icon;
