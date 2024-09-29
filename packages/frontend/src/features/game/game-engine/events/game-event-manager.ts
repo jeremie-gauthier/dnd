@@ -72,7 +72,7 @@ export class GameEventManager extends EventTarget {
     game: GameView;
     entityPlaying: PlayableEntity;
     item: GameItem;
-    attack: GameItem["attacks"][number];
+    attack: Extract<GameItem, { type: "Weapon" | "Spell" }>["attacks"][number];
   }) {
     this.dispatchEvent(
       new PreparingAttackEvent(game, entityPlaying, item, attack),
