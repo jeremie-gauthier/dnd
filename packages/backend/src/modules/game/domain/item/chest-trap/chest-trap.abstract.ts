@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Board } from "../../board/board.entity";
+import { Game } from "../../game/game.aggregate";
 import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
 import { Item } from "../item.abstract";
 
@@ -38,7 +38,7 @@ export abstract class ChestTrap extends Item<Data> {
 
   public abstract use(_: {
     entityThatOpenedTheChest: Playable;
-    board: Board;
+    game: Game;
   }): void;
 
   public toPlain() {

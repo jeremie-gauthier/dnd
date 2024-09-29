@@ -393,7 +393,7 @@ export class Game extends AggregateRoot<Data> {
 
     chestTrap.use({
       entityThatOpenedTheChest: playingEntity,
-      board: this._data.board,
+      game: this,
     });
 
     const turnEnded = this.endPlayerTurn({ userId });

@@ -1,4 +1,4 @@
-import { Board } from "../../board/board.entity";
+import { Game } from "../../game/game.aggregate";
 import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
 import { ChestTrap } from "./chest-trap.abstract";
 
@@ -9,7 +9,7 @@ export class MagicLoss extends ChestTrap {
 
   public use(_: {
     entityThatOpenedTheChest: Playable;
-    board: Board;
+    game: Game;
   }): void {
     throw new Error("Method not implemented.");
   }
