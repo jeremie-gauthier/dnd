@@ -18,6 +18,24 @@ export class BoundingBox extends Entity<Data> {
     super(data);
   }
 
+  public getContainedCoords() {
+    const nbColumns = this._data.bottomRight.column - this._data.topLeft.column;
+    const nbRows = this._data.bottomRight.row - this._data.topLeft.row;
+
+    const coords: Coord[] = [];
+    for (let rowIdx = 0; rowIdx <= nbRows; rowIdx += 1) {
+      for (let colIdx = 0; colIdx <= nbColumns; colIdx += 1) {
+        coords.push(
+          new Coord({
+            row: this._data.topLeft.row + rowIdx,
+            column: this._data.topLeft.row + colIdx,
+          }),
+        );
+      }
+    }
+    return coords;
+  }
+
   public contains({ coord }: { coord: Coord }) {
     return (
       coord.column >= this._data.topLeft.column &&

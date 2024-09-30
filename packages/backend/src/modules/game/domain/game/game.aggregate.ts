@@ -1,6 +1,8 @@
 import {
   AttackRangeType,
   PlayableEntityAttackInput,
+  PlayableEntityRace,
+  PlayableEntityRaceType,
   canAttackTarget,
   zip,
 } from "@dnd/shared";
@@ -70,6 +72,18 @@ export class Game extends AggregateRoot<Data> {
 
   public get rooms() {
     return this._data.rooms;
+  }
+
+  public get winConditions() {
+    return this._data.winConditions;
+  }
+
+  public get board() {
+    return this._data.board;
+  }
+
+  public popLastMonsterKilled() {
+    return this._data.monstersKilled.pop();
   }
 
   public toPlain() {

@@ -21,6 +21,12 @@ export class Room extends Entity<Data> {
     super(data, data.id);
   }
 
+  public getContainedCoords() {
+    return this._data.boundingBoxes.flatMap((boundingBox) =>
+      boundingBox.getContainedCoords(),
+    );
+  }
+
   public contains({ coord }: { coord: Coord }) {
     return this._data.boundingBoxes.some((boundingBox) =>
       boundingBox.contains({ coord }),
