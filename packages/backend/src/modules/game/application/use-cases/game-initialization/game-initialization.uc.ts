@@ -125,6 +125,7 @@ export class GameInitializationUseCase implements UseCase {
             }),
         ),
       }),
+      monstersKilled: [],
     });
 
     // 3. Attribution d'une position de depart aux heros

@@ -81,6 +81,10 @@ export abstract class Playable<
     super(rawData, rawData.id);
   }
 
+  get race() {
+    return this._data.race;
+  }
+
   get healthPoints() {
     return this._data.characteristic.healthPoints;
   }

@@ -22,4 +22,5 @@ export type GamePersistence = {
   maxLevelLoot: Item["level"];
   itemsLooted: Array<Item["name"]>;
   rooms: Array<Room>;
+  monstersKilled: Array<string>;
 };

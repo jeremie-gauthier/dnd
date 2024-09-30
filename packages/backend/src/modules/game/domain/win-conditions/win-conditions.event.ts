@@ -1,1 +1,1 @@
-export type WinConditionEvent = "enemy_died";
+export type WinConditionEvent = "enemy_died" | "enemy_resurrected";
