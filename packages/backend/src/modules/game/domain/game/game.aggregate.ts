@@ -158,6 +158,26 @@ export class Game extends AggregateRoot<Data> {
     this._data.playableEntities.rollInitiatives();
   }
 
+  public spawnMonster({
+    race,
+    startingCoord,
+  }: { race: PlayableEntityRaceType; startingCoord: Coord }) {
+    const monsterTemplate =
+      this._data.monsterTemplates.getMonsterTemplateOrThrow({ race });
+    const monster = monsterTemplate.create({
+      gameMasterUserId: this._data.gameMaster.id,
+    });
+    this._data.playableEntities.addPlayableEntity({
+      playableEntity: monster,
+    });
+    this.movePlayableEntity({
+      destinationCoord: startingCoord,
+      playableEntityId: monster.id,
+    });
+
+    return monster;
+  }
+
   public openDoor({
     userId,
     coordOfTileWithDoor,
@@ -183,19 +203,7 @@ export class Game extends AggregateRoot<Data> {
           doorOpeningEvent.startingTiles,
         );
         for (const [race, startingCoord] of monsterRaceWithStartingCoord) {
-          const monsterTemplate =
-            this._data.monsterTemplates.getMonsterTemplateOrThrow({ race });
-          const monster = monsterTemplate.create({
-            gameMasterUserId: this._data.gameMaster.id,
-          });
-          this._data.playableEntities.addPlayableEntity({
-            playableEntity: monster,
-          });
-          this.movePlayableEntity({
-            destinationCoord: startingCoord,
-            playableEntityId: monster.id,
-          });
-
+          const monster = this.spawnMonster({ race, startingCoord });
           monstersSpawned.push(monster);
         }
       }
