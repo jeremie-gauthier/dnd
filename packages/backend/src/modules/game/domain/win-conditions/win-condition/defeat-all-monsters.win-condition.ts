@@ -40,6 +40,8 @@ export class DefeatAllMonsters extends WinCondition<Data> {
 
     if (eventName === "enemy_died") {
       this._data.nbMonstersRemaining -= 1;
+    } else if (eventName === "enemy_resurrected") {
+      this._data.nbMonstersRemaining += 1;
     }
   }
 }
