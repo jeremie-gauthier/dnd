@@ -108,6 +108,7 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
             }),
         ),
       }),
+      monstersKilled: persistence.monstersKilled,
     });
   }
 
@@ -141,6 +142,7 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
       maxLevelLoot: plain.maxLevelLoot,
       itemsLooted: plain.itemsLooted,
       rooms: plain.rooms.values as GameRoomsDeserialized,
+      monstersKilled: plain.monstersKilled,
     };
   }
 

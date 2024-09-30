@@ -39,6 +39,7 @@ type Data = {
   readonly maxLevelLoot: number;
   itemsLooted: Array<Item["id"]>;
   rooms: Rooms;
+  monstersKilled: Array<string>;
 };
 
 export class Game extends AggregateRoot<Data> {
@@ -55,6 +56,7 @@ export class Game extends AggregateRoot<Data> {
     maxLevelLoot: z.number().min(1),
     itemsLooted: z.array(z.string()),
     rooms: z.instanceof(Rooms),
+    monstersKilled: z.array(z.nativeEnum(PlayableEntityRace)),
   });
 
   constructor(rawData: Data) {
@@ -84,6 +86,7 @@ export class Game extends AggregateRoot<Data> {
       maxLevelLoot: this._data.maxLevelLoot,
       itemsLooted: this._data.itemsLooted,
       rooms: this._data.rooms.toPlain(),
+      monstersKilled: this._data.monstersKilled,
     };
   }
 
@@ -297,6 +300,7 @@ export class Game extends AggregateRoot<Data> {
     });
 
     if (targetPlayableEntity.isDead && targetPlayableEntity.isMonster()) {
+      this._data.monstersKilled.push(targetPlayableEntity.race);
       this._data.board.removeEntityAtCoord({
         tileEntity: new TilePlayableEntity({
           faction: targetPlayableEntity.faction,
