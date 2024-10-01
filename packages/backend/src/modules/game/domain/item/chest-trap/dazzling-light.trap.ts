@@ -1,5 +1,5 @@
 import { Stopped } from "../../playable-entities/playable-entity/conditions/condition/stopped.condition";
-import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
+import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
 import { ChestTrap } from "./chest-trap.abstract";
 
 export class DazzlingLight extends ChestTrap {
@@ -10,7 +10,7 @@ export class DazzlingLight extends ChestTrap {
   public use({
     entityThatOpenedTheChest,
   }: {
-    entityThatOpenedTheChest: Playable;
+    entityThatOpenedTheChest: Hero;
   }): void {
     const condition = new Stopped({ remainingTurns: 1 });
     entityThatOpenedTheChest.conditions.add({ condition });

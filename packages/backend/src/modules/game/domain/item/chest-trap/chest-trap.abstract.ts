@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { Game } from "../../game/game.aggregate";
-import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
+import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
 import { Item } from "../item.abstract";
 
 type Data = {
@@ -37,7 +37,7 @@ export abstract class ChestTrap extends Item<Data> {
   }
 
   public abstract use(_: {
-    entityThatOpenedTheChest: Playable;
+    entityThatOpenedTheChest: Hero;
     game: Game;
   }): void;
 
