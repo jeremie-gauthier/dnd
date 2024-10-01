@@ -1,5 +1,5 @@
 import { Game } from "../../game/game.aggregate";
-import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
+import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
 import { ChestTrap } from "./chest-trap.abstract";
 
 export class SmotheringMist extends ChestTrap {
@@ -11,7 +11,7 @@ export class SmotheringMist extends ChestTrap {
     entityThatOpenedTheChest,
     game,
   }: {
-    entityThatOpenedTheChest: Playable;
+    entityThatOpenedTheChest: Hero;
     game: Game;
   }): void {
     const room = game.rooms.getRoomOrThrow({

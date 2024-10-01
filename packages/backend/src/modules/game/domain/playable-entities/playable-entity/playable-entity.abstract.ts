@@ -183,6 +183,15 @@ export abstract class Playable<
     }
   }
 
+  public mustBeHero() {
+    if (!this.isHero()) {
+      throw new PlayableEntityError({
+        name: "BAD_ROLE",
+        message: "Playable entity must be a Hero",
+      });
+    }
+  }
+
   public endTurn() {
     this.conditions.applyAllEndTurnConditions({ playableEntityAffected: this });
     this._data.status = this._data.status.advanceTo("IDLE");

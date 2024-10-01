@@ -1,7 +1,7 @@
 import { PlayableEntityRaceType } from "@dnd/shared";
 import { Coord } from "../../coord/coord.vo";
 import { Game } from "../../game/game.aggregate";
-import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
+import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
 import { ChestTrap } from "./chest-trap.abstract";
 import { ChestTrapError } from "./chest-trap.error";
 
@@ -14,7 +14,7 @@ export class CallFromTheGrave extends ChestTrap {
     entityThatOpenedTheChest,
     game,
   }: {
-    entityThatOpenedTheChest: Playable;
+    entityThatOpenedTheChest: Hero;
     game: Game;
   }): void {
     const lastMonsterKilled = game.popLastMonsterKilled();

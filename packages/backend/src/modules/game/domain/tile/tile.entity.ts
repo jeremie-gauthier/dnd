@@ -102,4 +102,8 @@ export class Tile extends Entity<Data> {
         tileEntity.canInteract,
     ) as Trap | undefined;
   }
+
+  public isBlockedByNonInteractiveEntity() {
+    return this._data.entities.some((entity) => entity.isNonInteractive());
+  }
 }

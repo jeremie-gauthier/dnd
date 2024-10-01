@@ -2,6 +2,7 @@ import { zip } from "@dnd/shared";
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { Room } from "../rooms/room/room.entity";
+import { Hero } from "./playable-entity/heroes/hero.abstract";
 import { Playable } from "./playable-entity/playable-entity.abstract";
 import { PlayableEntityError } from "./playable-entity/playable-entity.error";
 
@@ -50,6 +51,13 @@ export class PlayableEntities extends Entity<Data> {
       ...this._data.values.slice(1),
       ...this._data.values.slice(0, 1),
     ];
+  }
+
+  public getOtherAlivedHeroes({ hero }: { hero: Hero }) {
+    return this._data.values.filter(
+      (value): value is Hero =>
+        value.isHero() && !hero.equals(value) && value.isAlive,
+    );
   }
 
   public toPlain() {
