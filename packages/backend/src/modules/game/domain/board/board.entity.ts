@@ -28,6 +28,14 @@ export class Board extends Entity<Data> {
     super(data);
   }
 
+  public get width() {
+    return this._data.width;
+  }
+
+  public get height() {
+    return this._data.height;
+  }
+
   public toPlain() {
     return {
       width: this._data.width,

@@ -39,6 +39,12 @@ export class Inventory extends Entity<Data> {
     super(data, data.playableId);
   }
 
+  public getFirstWeaponInGear() {
+    return this._data.gear.find(
+      (item) => item.isWeapon() && item.canAttackInMelee(),
+    ) as Weapon | undefined;
+  }
+
   public getItemInInventoryOrThrow({ itemId }: { itemId: Item["id"] }) {
     const gearItem = this._data.gear.find(({ id }) => id === itemId);
     if (gearItem) {

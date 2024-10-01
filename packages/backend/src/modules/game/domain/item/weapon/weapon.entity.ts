@@ -1,6 +1,8 @@
+import { AttackRange, AttackType } from "@dnd/shared";
 import { z } from "zod";
 import { Attack } from "../../attack/attack.entity";
 import { Item } from "../item.abstract";
+import { WeaponError } from "./weapon.error";
 
 type Data = {
   readonly type: "Weapon";
@@ -35,6 +37,28 @@ export class Weapon extends Item<Data> {
   }: { attackId: Attack["id"] }): ReturnType<Attack["roll"]> {
     const attack = this.getAttackOrThrow({ attackId });
     return attack.roll();
+  }
+
+  public canAttackInMelee() {
+    return this._data.attacks.find(
+      (attack) =>
+        (attack.type === AttackType.REGULAR &&
+          attack.range === AttackRange.MELEE) ||
+        attack.range === AttackRange.VERSATILE,
+    );
+  }
+
+  public getRegularAttackOrThrow() {
+    const regularAttack = this._data.attacks.find(
+      (attack) => attack.type === AttackType.REGULAR,
+    );
+    if (!regularAttack) {
+      throw new WeaponError({
+        name: "ATTACK_NOT_FOUND",
+        message: `Regular Attack not found on Weapon "${this._data.name}"`,
+      });
+    }
+    return regularAttack;
   }
 
   public getAttackOrThrow({ attackId }: { attackId: Attack["id"] }) {

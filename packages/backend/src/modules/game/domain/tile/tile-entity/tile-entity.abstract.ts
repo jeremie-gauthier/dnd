@@ -1,5 +1,6 @@
 import { Entity, type PlainData } from "src/modules/shared/domain/entity";
 import { TileInteractiveEntity } from "./interactive/interactive.abstract";
+import { TileNonInteractiveEntity } from "./non-interactive/non-interactive.abstract";
 import { TilePlayableEntity } from "./playable/playable.entity";
 
 type Data = {
@@ -34,5 +35,9 @@ export abstract class TileEntity<
 
   public isPlayable(): this is TilePlayableEntity {
     return this._data.type === "playable-entity";
+  }
+
+  public isNonInteractive(): this is TileNonInteractiveEntity {
+    return this._data.type === "non-interactive-entity";
   }
 }
