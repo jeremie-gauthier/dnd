@@ -8,6 +8,7 @@ import {
 } from "@dnd/shared";
 import { AggregateRoot } from "src/modules/shared/domain/aggregate-root";
 import { z } from "zod";
+import { Attack } from "../attack/attack.entity";
 import { AttackError } from "../attack/attack.error";
 import { Board } from "../board/board.entity";
 import { Coord } from "../coord/coord.vo";
@@ -17,8 +18,11 @@ import { GameStatus } from "../game-status/game-status.vo";
 import { StorageSpace } from "../inventory/inventory.entity";
 import { ChestTrap } from "../item/chest-trap/chest-trap.abstract";
 import { Item } from "../item/item.abstract";
+import { Spell } from "../item/spell/spell.entity";
+import { Weapon } from "../item/weapon/weapon.entity";
 import { MonsterTemplates } from "../monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "../playable-entities/playable-entities.aggregate";
+import { Hero } from "../playable-entities/playable-entity/heroes/hero.abstract";
 import { Monster } from "../playable-entities/playable-entity/monster.entity";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
 import { Rooms } from "../rooms/rooms.aggregate";
@@ -287,38 +291,11 @@ export class Game extends AggregateRoot<Data> {
       attackId,
     });
 
-    const attack = attackItem.getAttackOrThrow({ attackId });
-    this.mustHaveTargetInRange({
-      attacker: playingEntity,
-      range: attack.range,
-      targetCoord: targetPlayableEntity.coord,
-    });
-
-    const attackResult = playingEntity.getAttackResult({
-      attackId,
-      attackItem,
-    });
-    if (attackResult.type === "Spell") {
-      playingEntity.consumeMana({ amount: attackResult.manaCost });
-    }
-
-    attack.applyPerksToDicesResults({
+    const { attack, attackResult, damageDone } = this.playableEntityAttack({
       attacker: playingEntity,
       defender: targetPlayableEntity,
-      dicesResults: attackResult.attackResult,
-      itemUsed: attackItem,
-    });
-
-    targetPlayableEntity.conditions.applyAllNextIncomingAttackConditions({
-      playableEntityAffected: targetPlayableEntity,
-    });
-
-    const damageDone = targetPlayableEntity.takeDamage({
-      amount: attackResult.attackResult.sumResult,
-    });
-
-    targetPlayableEntity.conditions.clearExhausted({
-      playableEntityAffected: targetPlayableEntity,
+      attackId,
+      attackItem,
     });
 
     if (targetPlayableEntity.isDead && targetPlayableEntity.isMonster()) {
@@ -350,6 +327,54 @@ export class Game extends AggregateRoot<Data> {
       target: targetPlayableEntity,
       turnEnded,
     };
+  }
+
+  public playableEntityAttack({
+    attacker,
+    defender,
+    attackItem,
+    attackId,
+  }: {
+    attacker: Playable;
+    attackItem: Spell | Weapon;
+    attackId: Attack["id"];
+    defender: Playable;
+  }) {
+    const attack = attackItem.getAttackOrThrow({ attackId });
+    this.mustHaveTargetInRange({
+      attacker,
+      range: attack.range,
+      targetCoord: defender.coord,
+    });
+
+    const attackResult = attacker.getAttackResult({
+      attackId,
+      attackItem,
+    });
+    if (attackResult.type === "Spell") {
+      attacker.consumeMana({ amount: attackResult.manaCost });
+    }
+
+    attack.applyPerksToDicesResults({
+      attacker,
+      defender,
+      dicesResults: attackResult.attackResult,
+      itemUsed: attackItem,
+    });
+
+    defender.conditions.applyAllNextIncomingAttackConditions({
+      playableEntityAffected: defender,
+    });
+
+    const damageDone = defender.takeDamage({
+      amount: attackResult.attackResult.sumResult,
+    });
+
+    defender.conditions.clearExhausted({
+      playableEntityAffected: defender,
+    });
+
+    return { attack, attackResult, damageDone };
   }
 
   private mustHaveTargetInRange({
@@ -436,7 +461,7 @@ export class Game extends AggregateRoot<Data> {
     }
 
     chestTrap.use({
-      entityThatOpenedTheChest: playingEntity,
+      entityThatOpenedTheChest: playingEntity as Hero,
       game: this,
     });
 
