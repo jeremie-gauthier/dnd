@@ -40,7 +40,10 @@ export class Weapon extends Item<Data> {
   public getAttackOrThrow({ attackId }: { attackId: Attack["id"] }) {
     const attack = this._data.attacks.find(({ id }) => id === attackId);
     if (!attack) {
-      throw new Error("Attack does not exists on this Weapon");
+      throw new WeaponError({
+        name: "ATTACK_NOT_FOUND",
+        message: "Attack does not exists on this Weapon",
+      });
     }
     return attack;
   }
