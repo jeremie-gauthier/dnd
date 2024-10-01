@@ -391,6 +391,7 @@ export class Game extends AggregateRoot<Data> {
     storageSpace: StorageSpace;
   }) {
     const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
+    playingEntity.mustBeHero();
     playingEntity.mustBePlayedBy({ userId });
     playingEntity.mustBeLooting();
 
@@ -422,6 +423,7 @@ export class Game extends AggregateRoot<Data> {
     chestTrap,
   }: { userId: string; chestTrap: ChestTrap }) {
     const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
+    playingEntity.mustBeHero();
     playingEntity.mustBePlayedBy({ userId });
     playingEntity.mustBeLooting();
 
@@ -489,6 +491,7 @@ export class Game extends AggregateRoot<Data> {
     coordOfTileWithChest,
   }: { userId: string; coordOfTileWithChest: Coord }) {
     const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
+    playingEntity.mustBeHero();
     playingEntity.mustBePlayedBy({ userId });
     playingEntity.act({ action: "open_chest" });
 
