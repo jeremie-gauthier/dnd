@@ -189,6 +189,15 @@ export abstract class Hero extends Playable<Data> {
     this._data.characteristic.actionPoints -= 1;
   }
 
+  public revive({
+    amountHealthPoints,
+    amountManaPoints,
+  }: { amountHealthPoints: number; amountManaPoints: number }) {
+    this._data.isBlocking = true;
+    this.regenHealthPoints({ amount: amountHealthPoints });
+    this.regenMana({ amount: amountManaPoints });
+  }
+
   public toPlain() {
     return {
       id: this._data.id,
