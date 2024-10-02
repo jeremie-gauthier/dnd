@@ -18,6 +18,7 @@ import { GameStatus } from "../game-status/game-status.vo";
 import { StorageSpace } from "../inventory/inventory.entity";
 import { ChestTrap } from "../item/chest-trap/chest-trap.abstract";
 import { Item } from "../item/item.abstract";
+import { Potion } from "../item/potion/potion.abstract";
 import { Spell } from "../item/spell/spell.entity";
 import { Weapon } from "../item/weapon/weapon.entity";
 import { MonsterTemplates } from "../monster-templates/monster-templates.aggregate";
@@ -534,5 +535,24 @@ export class Game extends AggregateRoot<Data> {
 
   public markItemAsLooted({ item }: { item: Item }) {
     this._data.itemsLooted.push(item.toPlain().name);
+  }
+
+  public playerDrinkPotion({
+    userId,
+    itemId,
+  }: { userId: string; itemId: Item["id"] }) {
+    const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
+    playingEntity.mustBeHero();
+    playingEntity.mustBePlayedBy({ userId });
+
+    const item = playingEntity.inventory.getItemInInventoryOrThrow({ itemId });
+    item.mustBePotion();
+
+    (item as Potion).use({
+      game: this,
+      playableEntity: playingEntity as Hero,
+    });
+
+    playingEntity.inventory.removeItemFromInventory({ item });
   }
 }
