@@ -223,6 +223,13 @@ export abstract class Playable<
     }
   }
 
+  public regenHealthPoints({ amount }: { amount: number }) {
+    this._data.characteristic.healthPoints = Math.min(
+      this._data.characteristic.healthPoints + amount,
+      this._data.characteristic.baseHealthPoints,
+    );
+  }
+
   public regenMana({ amount }: { amount: number }) {
     this._data.characteristic.manaPoints = Math.min(
       this._data.characteristic.manaPoints + amount,

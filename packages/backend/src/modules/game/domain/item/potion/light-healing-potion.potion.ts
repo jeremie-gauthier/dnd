@@ -7,10 +7,12 @@ export class LightHealingPotion extends Potion {
     super({ level: 1, name: "light_healing_potion_1" });
   }
 
-  public use(_: {
+  public use({
+    playableEntity,
+  }: {
     playableEntity: Hero;
     game: Game;
   }): void {
-    throw new Error("Method not implemented.");
+    playableEntity.regenHealthPoints({ amount: 3 });
   }
 }
