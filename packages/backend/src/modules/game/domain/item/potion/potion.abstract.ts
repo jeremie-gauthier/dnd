@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { Board } from "../../board/board.entity";
-import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
+import { Game } from "../../game/game.aggregate";
+import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
 import { Item } from "../item.abstract";
 
 type Data = {
@@ -22,8 +22,8 @@ export abstract class Potion extends Item<Data> {
   }
 
   public abstract use(_: {
-    playableEntity: Playable;
-    board: Board;
+    playableEntity: Hero;
+    game: Game;
   }): void;
 
   public toPlain() {
