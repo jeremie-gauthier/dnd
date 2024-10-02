@@ -11,6 +11,7 @@ import { WsExceptionFilter } from "src/errors/ws-exception-filter";
 import type { ServerSocket } from "src/interfaces/socket.interface";
 import { PlayableEntityDeleteItemInputDto } from "src/modules/game/application/use-cases/playable-entity-delete-item/playable-entity-delete-item.dto";
 import { PlayableEntityDeleteItemUseCase } from "src/modules/game/application/use-cases/playable-entity-delete-item/playable-entity-delete-item.uc";
+import { PlayableEntityDrinkPotionInputDto } from "src/modules/game/application/use-cases/playable-entity-drink-potion/playable-entity-drink-potion.dto";
 import { PlayableEntityDrinkPotionUseCase } from "src/modules/game/application/use-cases/playable-entity-drink-potion/playable-entity-drink-potion.uc";
 import { PlayableEntityLootItemInputDto } from "src/modules/game/application/use-cases/playable-entity-loot-item/playable-entity-loot-item.dto";
 import { PlayableEntityLootItemUseCase } from "src/modules/game/application/use-cases/playable-entity-loot-item/playable-entity-loot-item.uc";
@@ -160,7 +161,7 @@ export class GameSubscriberGateway {
   @SubscribeMessage(ClientGameEvent.PlayableEntityDrinkPotion)
   public async playableEntityDrinkPotion(
     @MessageBody()
-    playableEntityLootItemInputDto: PlayableEntityLootItemInputDto,
+    playableEntityLootItemInputDto: PlayableEntityDrinkPotionInputDto,
     @ConnectedSocket() client: ServerSocket,
   ): Promise<void> {
     await this.playableEntityDrinkPotionUseCase.execute({
