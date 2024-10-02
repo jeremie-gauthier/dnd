@@ -11,6 +11,7 @@ import { WsExceptionFilter } from "src/errors/ws-exception-filter";
 import type { ServerSocket } from "src/interfaces/socket.interface";
 import { PlayableEntityDeleteItemInputDto } from "src/modules/game/application/use-cases/playable-entity-delete-item/playable-entity-delete-item.dto";
 import { PlayableEntityDeleteItemUseCase } from "src/modules/game/application/use-cases/playable-entity-delete-item/playable-entity-delete-item.uc";
+import { PlayableEntityDrinkPotionUseCase } from "src/modules/game/application/use-cases/playable-entity-drink-potion/playable-entity-drink-potion.uc";
 import { PlayableEntityLootItemInputDto } from "src/modules/game/application/use-cases/playable-entity-loot-item/playable-entity-loot-item.dto";
 import { PlayableEntityLootItemUseCase } from "src/modules/game/application/use-cases/playable-entity-loot-item/playable-entity-loot-item.uc";
 import {
@@ -53,6 +54,7 @@ export class GameSubscriberGateway {
     private readonly playableEntitySwapItemsUseCase: PlayableEntitySwapItemsUseCase,
     private readonly playableEntityOpenChestUseCase: PlayableEntityOpenChestUseCase,
     private readonly playableEntityLootItemUseCase: PlayableEntityLootItemUseCase,
+    private readonly playableEntityDrinkPotionUseCase: PlayableEntityDrinkPotionUseCase,
   ) {}
 
   @SubscribeMessage(ClientGameEvent.PlayableEntityTurnEnds)
@@ -150,6 +152,18 @@ export class GameSubscriberGateway {
     @ConnectedSocket() client: ServerSocket,
   ): Promise<void> {
     await this.playableEntityLootItemUseCase.execute({
+      ...playableEntityLootItemInputDto,
+      userId: client.data.userId,
+    });
+  }
+
+  @SubscribeMessage(ClientGameEvent.PlayableEntityDrinkPotion)
+  public async playableEntityDrinkPotion(
+    @MessageBody()
+    playableEntityLootItemInputDto: PlayableEntityLootItemInputDto,
+    @ConnectedSocket() client: ServerSocket,
+  ): Promise<void> {
+    await this.playableEntityDrinkPotionUseCase.execute({
       ...playableEntityLootItemInputDto,
       userId: client.data.userId,
     });
