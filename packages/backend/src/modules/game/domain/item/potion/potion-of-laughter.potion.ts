@@ -1,5 +1,5 @@
-import { Board } from "../../board/board.entity";
-import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
+import { Game } from "../../game/game.aggregate";
+import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
 import { Potion } from "./potion.abstract";
 
 export class PotionOfLaughter extends Potion {
@@ -8,8 +8,8 @@ export class PotionOfLaughter extends Potion {
   }
 
   public use(_: {
-    playableEntity: Playable;
-    board: Board;
+    playableEntity: Hero;
+    game: Game;
   }): void {
     throw new Error("Method not implemented.");
   }

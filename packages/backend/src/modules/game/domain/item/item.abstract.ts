@@ -1,5 +1,7 @@
 import { Entity, PlainData } from "src/modules/shared/domain/entity";
 import { ChestTrap } from "./chest-trap/chest-trap.abstract";
+import { ItemError } from "./item.error";
+import { Potion } from "./potion/potion.abstract";
 import { Spell } from "./spell/spell.entity";
 import { Weapon } from "./weapon/weapon.entity";
 
@@ -36,7 +38,20 @@ export abstract class Item<
     return this._data.type === "ChestTrap";
   }
 
+  public isPotion(): this is Potion {
+    return this._data.type === "Potion";
+  }
+
   public toString() {
     return `${this._data.name} (${this._data.type} lv. ${this._data.level})`;
+  }
+
+  public mustBePotion() {
+    if (!this.isPotion()) {
+      throw new ItemError({
+        name: "BAD_ITEM_TYPE",
+        message: `Bad item type: "${this.id}" is not a Potion`,
+      });
+    }
   }
 }

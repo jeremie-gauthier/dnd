@@ -52,6 +52,11 @@ export const useGameActions = ({ socket }: Params) => {
       socket.emit(ClientGameEvent.PlayableEntityLootItem, payload);
     };
 
+  const drinkPotionHandler: ClientToServerEvents["client.game.player_requests_playable_entity_drink_potion"] =
+    (payload) => {
+      socket.emit(ClientGameEvent.PlayableEntityDrinkPotion, payload);
+    };
+
   return {
     move: moveHandler,
     endTurn: endTurnHandler,
@@ -61,5 +66,6 @@ export const useGameActions = ({ socket }: Params) => {
     swapItems: swapItemsHandler,
     openChest: openChestHandler,
     lootItem: lootItemHandler,
+    drinkPotion: drinkPotionHandler,
   };
 };

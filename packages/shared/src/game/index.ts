@@ -19,3 +19,5 @@ export * from "./playable-entity-open-chest/playable-entity-open-chest-input.sch
 export * from "./playable-entity-open-chest/playable-entity-open-chest-output.schema";
 export * from "./playable-entity-loot-item/playable-entity-loot-item-input.schema";
 export * from "./playable-entity-loot-item/playable-entity-loot-item-output.schema";
+export * from "./playable-entity-drink-potion/playable-entity-drink-potion-input.schema";
+export * from "./playable-entity-drink-potion/playable-entity-drink-potion-output.schema";

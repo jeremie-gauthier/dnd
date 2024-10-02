@@ -16,4 +16,6 @@ export const ClientGameEvent = {
     "client.game.player_requests_playable_entity_open_chest",
   PlayableEntityLootItem:
     "client.game.player_requests_playable_entity_loot_item",
+  PlayableEntityDrinkPotion:
+    "client.game.player_requests_playable_entity_drink_potion",
 } as const;

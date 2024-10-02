@@ -4,6 +4,7 @@ import {
   OpenDoorInput,
   PlayableEntityAttackInput,
   PlayableEntityDeleteItemInput,
+  PlayableEntityDrinkPotionInput,
   PlayableEntityLootItemInput,
   PlayableEntityMoveInput,
   PlayableEntityOpenChestInput,
@@ -60,6 +61,9 @@ interface ClientToServerEventsAndPayloads
   ) => PlayableEntityOpenChestOutput;
   [ClientGameEvent.PlayableEntityLootItem]: (
     payload: PlayableEntityLootItemInput,
+  ) => void;
+  [ClientGameEvent.PlayableEntityDrinkPotion]: (
+    payload: PlayableEntityDrinkPotionInput,
   ) => void;
 }
 

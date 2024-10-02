@@ -4,11 +4,16 @@ import { ActionPoints } from "./components/characteristics/action-points.compone
 import { HealthPoints } from "./components/characteristics/health-points.component";
 import { ManaPoints } from "./components/characteristics/mana-points.component";
 import { MovementPoints } from "./components/characteristics/movement-points.component";
+import { ConsumableList } from "./components/consumables/consumable-list.component";
 import { useGameContext } from "./context/use-game-context";
 import { Timeline } from "./timeline/timeline.component";
 
 export const Game = () => {
   const { game, isPlaying, entityPlaying } = useGameContext();
+
+  const consumables = entityPlaying?.inventory.backpack.filter(
+    (item) => item.type === "Potion",
+  );
 
   return (
     <div className="flex flex-col w-full gap-4">
@@ -16,6 +21,9 @@ export const Game = () => {
 
       <div className="flex flex-col bg-black p-4 gap-4">
         <div className="flex justify-center">
+          {consumables && consumables.length > 0 && (
+            <ConsumableList items={consumables} />
+          )}
           <BoardGameCanvas />
         </div>
 
