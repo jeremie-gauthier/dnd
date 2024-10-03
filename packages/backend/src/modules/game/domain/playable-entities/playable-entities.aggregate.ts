@@ -60,6 +60,10 @@ export class PlayableEntities extends Entity<Data> {
     );
   }
 
+  public getMonsters() {
+    return this._data.values.filter((value) => value.isMonster());
+  }
+
   public toPlain() {
     return {
       values: this._data.values.map((playableEntity) =>
