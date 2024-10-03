@@ -461,14 +461,26 @@ export class Game extends AggregateRoot<Data> {
       });
     }
 
-    chestTrap.use({
-      entityThatOpenedTheChest: playingEntity as Hero,
-      game: this,
-    });
+    const isHeroProtectedAgainstTraps =
+      playingEntity.conditions.hasTrapProtection();
 
-    const turnEnded = this.endPlayerTurn({ userId });
+    if (isHeroProtectedAgainstTraps) {
+      playingEntity.conditions.applyAllNextTrapOrChestTrap({
+        playableEntityAffected: playingEntity,
+      });
+      playingEntity.conditions.clearExhausted({
+        playableEntityAffected: playingEntity,
+      });
+      return;
+    } else {
+      chestTrap.use({
+        entityThatOpenedTheChest: playingEntity as Hero,
+        game: this,
+      });
+      const turnEnded = this.endPlayerTurn({ userId });
 
-    return { ...turnEnded, entityThatTriggeredTheChestTrap: playingEntity };
+      return { ...turnEnded, entityThatTriggeredTheChestTrap: playingEntity };
+    }
   }
 
   public playerDeleteItem({

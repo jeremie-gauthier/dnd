@@ -2,7 +2,8 @@ type ConditionName =
   | "stopped"
   | "weakness"
   | "brokenArmor"
-  | "doubleMovementPoints";
+  | "doubleMovementPoints"
+  | "trapProtection";
 
 export type PlayableEntityCondition = {
   name: ConditionName;
