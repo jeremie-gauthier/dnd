@@ -7,10 +7,12 @@ export class PartialRestorationPotion extends Potion {
     super({ level: 1, name: "partial_restoration_potion_1" });
   }
 
-  public use(_: {
+  public use({
+    playableEntity,
+  }: {
     playableEntity: Hero;
     game: Game;
   }): void {
-    throw new Error("Method not implemented.");
+    playableEntity.regenMana({ amount: 3 });
   }
 }
