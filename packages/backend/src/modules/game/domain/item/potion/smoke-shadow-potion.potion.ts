@@ -1,4 +1,5 @@
 import { Game } from "../../game/game.aggregate";
+import { DoubleMovementPoints } from "../../playable-entities/playable-entity/conditions/condition/double-movement-points.condition";
 import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
 import { Potion } from "./potion.abstract";
 
@@ -7,10 +8,30 @@ export class SmokeShadowPotion extends Potion {
     super({ level: 1, name: "smoke_shadow_potion_1" });
   }
 
-  public use(_: {
+  public use({
+    playableEntity,
+    game,
+  }: {
     playableEntity: Hero;
     game: Game;
   }): void {
-    throw new Error("Method not implemented.");
+    const room = game.rooms.getRoomOrThrow({ coord: playableEntity.coord });
+    const heroesInTheRoom = game.playableEntities
+      .getAllPlayableEntitiesInRoom({
+        room,
+      })
+      .filter(
+        (playableEntity) => playableEntity.isHero() && playableEntity.isAlive,
+      );
+
+    for (const hero of heroesInTheRoom) {
+      const doubleMovementPointsCondition = new DoubleMovementPoints({
+        remainingTurns: 2,
+      });
+      doubleMovementPointsCondition.apply({
+        playableEntityAffected: hero,
+      });
+      hero.conditions.add({ condition: doubleMovementPointsCondition });
+    }
   }
 }

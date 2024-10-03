@@ -89,6 +89,10 @@ export abstract class Playable<
     return this._data.characteristic.healthPoints;
   }
 
+  get baseMovementPoints() {
+    return this._data.characteristic.baseMovementPoints;
+  }
+
   get isAlive() {
     return this.healthPoints > 0;
   }
@@ -244,6 +248,16 @@ export abstract class Playable<
   public resetArmorClass() {
     this._data.characteristic.armorClass =
       this._data.characteristic.baseArmorClass;
+  }
+
+  public addMovementPoints({ amount }: { amount: number }) {
+    this._data.characteristic.movementPoints =
+      this._data.characteristic.movementPoints + amount;
+  }
+
+  public resetMovementPoints() {
+    this._data.characteristic.movementPoints =
+      this._data.characteristic.baseMovementPoints;
   }
 
   protected mustHaveActionPoints() {

@@ -1,5 +1,6 @@
 import { BrokenArmor } from "../../domain/playable-entities/playable-entity/conditions/condition/broken-armor.condition";
 import { Condition } from "../../domain/playable-entities/playable-entity/conditions/condition/condition.abstract";
+import { DoubleMovementPoints } from "../../domain/playable-entities/playable-entity/conditions/condition/double-movement-points.condition";
 import { Stopped } from "../../domain/playable-entities/playable-entity/conditions/condition/stopped.condition";
 import { Weakness } from "../../domain/playable-entities/playable-entity/conditions/condition/weakness.condition";
 import { PlayableEntityCondition } from "../../infra/database/game/model/playable-entity/condition.type";
@@ -15,6 +16,8 @@ export class ConditionFactory {
         return new BrokenArmor(data);
       case "weakness":
         return new Weakness(data);
+      case "doubleMovementPoints":
+        return new DoubleMovementPoints(data);
       default:
         throw new Error(`No "${data.name}" Condition found`);
     }

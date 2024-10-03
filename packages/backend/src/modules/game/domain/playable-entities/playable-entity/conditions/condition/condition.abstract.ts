@@ -2,7 +2,11 @@ import { Entity } from "src/modules/shared/domain/entity";
 import { Playable } from "../../playable-entity.abstract";
 
 type Data = {
-  readonly name: "stopped" | "brokenArmor" | "weakness";
+  readonly name:
+    | "stopped"
+    | "brokenArmor"
+    | "weakness"
+    | "doubleMovementPoints";
   readonly applicableAt: "startOfTurn" | "endOfTurn" | "nextIncomingAttack";
   remainingTurns: number;
 };
