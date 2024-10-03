@@ -1,4 +1,4 @@
-type ConditionName = "stopped";
+type ConditionName = "stopped" | "weakness" | "brokenArmor";
 
 export type PlayableEntityCondition = {
   name: ConditionName;
