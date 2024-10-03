@@ -6,14 +6,23 @@ type Data = {
     | "stopped"
     | "brokenArmor"
     | "weakness"
-    | "doubleMovementPoints";
-  readonly applicableAt: "startOfTurn" | "endOfTurn" | "nextIncomingAttack";
+    | "doubleMovementPoints"
+    | "trapProtection";
+  readonly applicableAt:
+    | "startOfTurn"
+    | "endOfTurn"
+    | "nextIncomingAttack"
+    | "nextTrapOrChestTrap";
   remainingTurns: number;
 };
 
 export abstract class Condition extends Entity<Data> {
   public abstract apply(_: { playableEntityAffected: Playable }): void;
   public abstract exhaustion(_: { playableEntityAffected: Playable }): void;
+
+  public get name() {
+    return this._data.name;
+  }
 
   public get isApplicableAtStartOfTurn() {
     return this._data.applicableAt === "startOfTurn";
@@ -25,6 +34,10 @@ export abstract class Condition extends Entity<Data> {
 
   public get isApplicableAtNextIncomingAttack() {
     return this._data.applicableAt === "nextIncomingAttack";
+  }
+
+  public get isApplicableAtNextTrapOrChestTrap() {
+    return this._data.applicableAt === "nextTrapOrChestTrap";
   }
 
   public get isExhausted() {

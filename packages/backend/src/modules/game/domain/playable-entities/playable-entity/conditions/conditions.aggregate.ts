@@ -48,6 +48,17 @@ export class Conditions extends Entity<Data> {
     }
   }
 
+  public applyAllNextTrapOrChestTrap({
+    playableEntityAffected,
+  }: { playableEntityAffected: Playable }) {
+    const nestIncomingAttackConditions = this._data.values.filter(
+      (condition) => condition.isApplicableAtNextTrapOrChestTrap,
+    );
+    for (const conditon of nestIncomingAttackConditions) {
+      conditon.apply({ playableEntityAffected });
+    }
+  }
+
   public clearExhausted({
     playableEntityAffected,
   }: { playableEntityAffected: Playable }) {
@@ -58,6 +69,12 @@ export class Conditions extends Entity<Data> {
     }
 
     this._data.values = this._data.values.filter((value) => !value.isExhausted);
+  }
+
+  public hasTrapProtection() {
+    return this._data.values.some(
+      (condition) => condition.name === "trapProtection",
+    );
   }
 
   public toPlain(): PlainData<Data> {
