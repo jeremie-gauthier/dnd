@@ -36,7 +36,17 @@ export class Trap extends TileInteractiveEntity<Data> {
     this._data.isBlocking = false;
     this._data.canInteract = false;
     this._data.isVisible = true;
-    playableEntity.takeDirectDamage({ amount: 1 });
+
+    if (playableEntity.conditions.hasTrapProtection()) {
+      playableEntity.conditions.applyAllNextTrapOrChestTrap({
+        playableEntityAffected: playableEntity,
+      });
+      playableEntity.conditions.clearExhausted({
+        playableEntityAffected: playableEntity,
+      });
+    } else {
+      playableEntity.takeDirectDamage({ amount: 1 });
+    }
   }
 
   public toPlain() {

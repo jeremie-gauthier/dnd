@@ -51,29 +51,33 @@ export class PlayableEntityOpenChestUseCase implements UseCase {
 
     game.markItemAsLooted({ item: itemFound });
     if (itemFound.isChestTrap()) {
-      const {
-        entityThatTriggeredTheChestTrap,
-        playingEntitiesWhoseTurnEnded,
-        playingEntitiesWhoseTurnStarted,
-      } = game.playerTriggeredAChestTrap({
+      const trapTriggered = game.playerTriggeredAChestTrap({
         userId,
         chestTrap: itemFound,
       });
 
-      this.eventEmitter.emitAsync(
-        GameEvent.ChestTrapTriggered,
-        new ChestTrapTriggeredPayload({
-          chestTrapItem: itemFound.toPlain(),
-          game: game.toPlain(),
-          subjectEntity: entityThatTriggeredTheChestTrap.toPlain(),
-        }),
-      );
+      if (trapTriggered) {
+        const {
+          entityThatTriggeredTheChestTrap,
+          playingEntitiesWhoseTurnEnded,
+          playingEntitiesWhoseTurnStarted,
+        } = trapTriggered;
 
-      this.turnService.emitAsyncTurnEvents({
-        game,
-        playingEntitiesWhoseTurnEnded,
-        playingEntitiesWhoseTurnStarted,
-      });
+        this.eventEmitter.emitAsync(
+          GameEvent.ChestTrapTriggered,
+          new ChestTrapTriggeredPayload({
+            chestTrapItem: itemFound.toPlain(),
+            game: game.toPlain(),
+            subjectEntity: entityThatTriggeredTheChestTrap.toPlain(),
+          }),
+        );
+
+        this.turnService.emitAsyncTurnEvents({
+          game,
+          playingEntitiesWhoseTurnEnded,
+          playingEntitiesWhoseTurnStarted,
+        });
+      }
     }
 
     await this.gameRepository.update({ game });
