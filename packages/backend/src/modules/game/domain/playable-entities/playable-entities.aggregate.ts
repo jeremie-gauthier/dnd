@@ -3,6 +3,7 @@ import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { Room } from "../rooms/room/room.entity";
 import { Hero } from "./playable-entity/heroes/hero.abstract";
+import { Monster } from "./playable-entity/monster.entity";
 import { Playable } from "./playable-entity/playable-entity.abstract";
 import { PlayableEntityError } from "./playable-entity/playable-entity.error";
 
@@ -142,5 +143,20 @@ export class PlayableEntities extends Entity<Data> {
     return this._data.values.filter((playableEntity) =>
       room.contains({ coord: playableEntity.coord }),
     );
+  }
+
+  public getRandomMonsterOrThrow(): Monster {
+    const monsters = this.getMonsters();
+    const randIndex = Math.trunc(Math.random() * monsters.length);
+    const randomMonster = monsters[randIndex];
+
+    if (!randomMonster) {
+      throw new PlayableEntityError({
+        name: "NO_ALIVE_MONSTER_FOUND",
+        message: "No Monster alive",
+      });
+    }
+
+    return randomMonster;
   }
 }
