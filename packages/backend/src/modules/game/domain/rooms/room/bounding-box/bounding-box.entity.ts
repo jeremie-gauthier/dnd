@@ -28,7 +28,7 @@ export class BoundingBox extends Entity<Data> {
         coords.push(
           new Coord({
             row: this._data.topLeft.row + rowIdx,
-            column: this._data.topLeft.row + colIdx,
+            column: this._data.topLeft.column + colIdx,
           }),
         );
       }
