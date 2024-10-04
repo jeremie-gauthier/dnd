@@ -10,6 +10,7 @@ type ErrorName =
   | "CANNOT_ATTACK_WITH_A_NON_ATTACK_ITEM"
   | "MONSTER_CANNOT_ATTACK_MORE_THAN_ONCE_PER_TURN"
   | "FORBIDDEN_ACTION"
-  | "BAD_ROLE";
+  | "BAD_ROLE"
+  | "NO_ALIVE_MONSTER_FOUND";
 
 export class PlayableEntityError extends GameDomainError<ErrorName> {}
