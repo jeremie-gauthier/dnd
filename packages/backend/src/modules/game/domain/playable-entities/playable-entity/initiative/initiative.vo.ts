@@ -14,6 +14,10 @@ export class Initiative extends ValueObject<Data> {
     super(data);
   }
 
+  get value() {
+    return this._data;
+  }
+
   public equals(other: Initiative): boolean {
     return this._data === other._data;
   }
