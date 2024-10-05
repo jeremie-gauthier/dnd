@@ -59,6 +59,17 @@ export class Conditions extends Entity<Data> {
     }
   }
 
+  public applyAllNextOutgoingWeaponAttack({
+    playableEntityAffected,
+  }: { playableEntityAffected: Playable }) {
+    const nestIncomingAttackConditions = this._data.values.filter(
+      (condition) => condition.isApplicableAtNextOutgoingWeaponAttack,
+    );
+    for (const conditon of nestIncomingAttackConditions) {
+      conditon.apply({ playableEntityAffected });
+    }
+  }
+
   public clearExhausted({
     playableEntityAffected,
   }: { playableEntityAffected: Playable }) {
@@ -74,6 +85,12 @@ export class Conditions extends Entity<Data> {
   public hasTrapProtection() {
     return this._data.values.some(
       (condition) => condition.name === "trapProtection",
+    );
+  }
+
+  public hasDoubleWeaponDamage() {
+    return this._data.values.some(
+      (condition) => condition.name === "doubleWeaponDamage",
     );
   }
 

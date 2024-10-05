@@ -20,6 +20,15 @@ export class Regdar extends Hero {
     weapon,
   }: { weapon: Weapon; attackId: Attack["id"] }) {
     const result = weapon.use({ attackId });
+    if (this.conditions.hasDoubleWeaponDamage()) {
+      result.sumResult *= 2;
+
+      this.conditions.applyAllNextOutgoingWeaponAttack({
+        playableEntityAffected: this,
+      });
+      this.conditions.clearExhausted({ playableEntityAffected: this });
+    }
+
     result.sumResult += this.getAttackBonus({ attackId, weapon });
     return result;
   }

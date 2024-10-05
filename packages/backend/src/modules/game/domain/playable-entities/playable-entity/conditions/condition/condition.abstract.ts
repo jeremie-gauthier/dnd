@@ -7,12 +7,14 @@ type Data = {
     | "brokenArmor"
     | "weakness"
     | "doubleMovementPoints"
-    | "trapProtection";
+    | "trapProtection"
+    | "doubleWeaponDamage";
   readonly applicableAt:
     | "startOfTurn"
     | "endOfTurn"
     | "nextIncomingAttack"
-    | "nextTrapOrChestTrap";
+    | "nextTrapOrChestTrap"
+    | "nextOutgoingWeaponAttack";
   remainingTurns: number;
 };
 
@@ -38,6 +40,10 @@ export abstract class Condition extends Entity<Data> {
 
   public get isApplicableAtNextTrapOrChestTrap() {
     return this._data.applicableAt === "nextTrapOrChestTrap";
+  }
+
+  public get isApplicableAtNextOutgoingWeaponAttack() {
+    return this._data.applicableAt === "nextOutgoingWeaponAttack";
   }
 
   public get isExhausted() {
