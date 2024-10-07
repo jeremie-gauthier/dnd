@@ -178,7 +178,7 @@ VALUES
   "confirm_loot_swap_instructions": "Relâchez pour confirmer",
   "gear": "Équipement",
   "backpack": "Sac à dos",
-  "heroIdentity": "{{class}} NIVEAU {{level}}",
+  "heroIdentity": "$t(heroes:{{class}}) NIVEAU {{level}}",
   "monsterIdentity": "{{kind}}"
 }'
   );
