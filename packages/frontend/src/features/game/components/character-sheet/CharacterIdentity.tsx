@@ -16,7 +16,7 @@ export const CharacterIdentity = ({ character }: Props) => {
           <span>
             {t("heroIdentity", {
               ns: "inventory",
-              class: t(character.class, { ns: "heroes" }),
+              class: character.class,
               level: character.level,
             })}
           </span>

@@ -1,6 +1,13 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { GameItem } from "@dnd/shared";
+import { InspectItem } from "@features/game/components/inspect-item/inspect-item.component";
 import { useTranslation } from "react-i18next";
 
 type Props = {
@@ -15,40 +22,29 @@ export const InventoryItem = ({ item, storageSpace }: Props) => {
     data: { item, storageSpace },
   });
 
-  // const regularAttack = item.attacks.find(
-  //   (attack) => attack.type === "regular",
-  // );
-
-  // if (!regularAttack) return null;
-
-  // const minDamage = sum(...regularAttack.dices.map(({ minValue }) => minValue));
-  // const maxDamage = sum(...regularAttack.dices.map(({ maxValue }) => maxValue));
-  // const mean =
-  //   Math.round(
-  //     (sum(...regularAttack.dices.map(({ values }) => sum(...values))) /
-  //       (regularAttack.dices.length * 6)) *
-  //       10,
-  //   ) / 10;
-
   return (
-    <button
-      type="button"
-      ref={setNodeRef}
-      style={
-        transform
-          ? { transform: CSS.Translate.toString(transform), zIndex: 99 }
-          : undefined
-      }
-      {...listeners}
-      {...attributes}
-    >
-      <img src={item.imgUrl} alt={item.name} className="rounded" />
-      <div className="absolute hidden inset-0 bg-black bg-opacity-35 text-white text-sm group-hover:flex flex-col p-1">
-        <p>{t(item.name)}</p>
-        {/* <p>
-          {minDamage}-{maxDamage}(~{mean}) dmg
-        </p> */}
-      </div>
-    </button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger
+          ref={setNodeRef}
+          style={
+            transform
+              ? { transform: CSS.Translate.toString(transform), zIndex: 99 }
+              : undefined
+          }
+          {...listeners}
+          {...attributes}
+        >
+          <img src={item.imgUrl} alt={item.name} className="rounded" />
+          <div className="absolute hidden inset-0 bg-black bg-opacity-35 text-white text-sm group-hover:flex flex-col p-1">
+            <p>{t(item.name)}</p>
+          </div>
+        </TooltipTrigger>
+
+        <TooltipContent className="border-0 bg-primary-600 text-white p-0 shadow-md">
+          <InspectItem item={item} />
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };

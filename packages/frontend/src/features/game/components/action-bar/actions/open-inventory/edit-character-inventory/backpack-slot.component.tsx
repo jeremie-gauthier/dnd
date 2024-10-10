@@ -1,7 +1,7 @@
 import { GameItem } from "@dnd/shared";
 import { Icon } from "@features/ui/icon/Icon";
 import { InventoryItem } from "./common/inventory-item.component";
-import { InventorySlot } from "./common/invnetory-slot.component";
+import { InventorySlot } from "./common/inventory-slot.component";
 
 type Props = {
   item?: GameItem;

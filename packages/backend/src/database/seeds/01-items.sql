@@ -149,8 +149,6 @@ INSERT INTO "attack" ("id", "range", "type", "item_name") VALUES
 ('a86155ab-3921-4b76-bdb9-b11e5dd23f3b',	'versatile',	'regular',	'burning_hands_1');
 
 INSERT INTO "attack_dice" ("id", "attack_id", "dice_name") VALUES
-('58116f6c-8827-4a7f-af20-08e21c250742',	'd6935dcd-0a9e-4e8e-9e17-d1d7242ccd68',	'yellow'),
-('aa777bcd-bf74-4a7f-a292-a0f595e3f713',	'd6935dcd-0a9e-4e8e-9e17-d1d7242ccd68',	'yellow'),
 ('86bc7bcb-4cf0-4660-856f-3cace27ec5c7',	'd6935dcd-0a9e-4e8e-9e17-d1d7242ccd68',	'orange'),
 ('c114dac3-9065-436d-975f-19609d07137e',	'caf774ee-71cf-400d-af29-e91ffb1aa9e2',	'yellow'),
 ('a590667e-5300-4150-b221-ce10ffb34c9f',	'caf774ee-71cf-400d-af29-e91ffb1aa9e2',	'yellow'),

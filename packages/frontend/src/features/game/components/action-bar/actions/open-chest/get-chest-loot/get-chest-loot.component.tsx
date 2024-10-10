@@ -30,8 +30,9 @@ export const GetChestLoot = (props: Props) => {
 
     const lootedItemType = active.data.current.item.type;
     const destinationSlotType = over.data.current.slotType;
+    const destinationStorageSpace = over.data.current.storageSpace;
     if (
-      destinationSlotType !== "backpackAnyItem" &&
+      destinationStorageSpace === "gear" &&
       lootedItemType !== destinationSlotType
     ) {
       return;

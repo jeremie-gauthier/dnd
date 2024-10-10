@@ -25,7 +25,8 @@
       "@config/*": ["./src/config/*"],
       "@assets/*": ["./src/assets/*"],
       "@utils/*": ["./src/utils/*"],
-      "@lib/*": ["./src/lib/*"]
+      "@lib/*": ["./src/lib/*"],
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"],
