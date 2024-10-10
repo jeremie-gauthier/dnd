@@ -1,5 +1,6 @@
 import { BoardGameCanvas } from "./board-game/board-game.component";
 import { ActionBar } from "./components/action-bar/action-bar";
+import { ActionsLog } from "./components/action-log/action-log-list.component";
 import { ActionPoints } from "./components/characteristics/action-points.component";
 import { HealthPoints } from "./components/characteristics/health-points.component";
 import { ManaPoints } from "./components/characteristics/mana-points.component";
@@ -19,12 +20,13 @@ export const Game = () => {
     <div className="flex flex-col w-full gap-4">
       <p className="flex justify-start text-xs">Game ID: {game.id}</p>
 
-      <div className="flex flex-col bg-black p-4 gap-4">
+      <div className="relative flex flex-col bg-black p-4 gap-4">
         <div className="flex justify-center">
           {consumables && consumables.length > 0 && (
             <ConsumableList items={consumables} />
           )}
           <BoardGameCanvas />
+          <ActionsLog />
         </div>
 
         <div className="flex flex-row justify-end">

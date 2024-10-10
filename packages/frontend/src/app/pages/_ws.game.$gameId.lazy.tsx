@@ -1,5 +1,4 @@
 import { GameEnded } from "@features/game-ended/game-ended.component";
-import { ActionsLog } from "@features/game/components/action-log/action-log-list.component";
 import { GameContextProvider } from "@features/game/context/game-context-provider";
 import { Game } from "@features/game/game.component";
 import { useGame } from "@features/game/use-game/use-game";
@@ -29,10 +28,7 @@ export function GameRouteComponent() {
   return (
     <GameContextProvider game={game} phase={phase} socket={socket}>
       {gameConditionsStatus === "ongoing" ? (
-        <div className="flex flex-col gap-12 items-center">
-          <Game />
-          <ActionsLog socket={socket} />
-        </div>
+        <Game />
       ) : (
         <GameEnded gameConditionsStatus={gameConditionsStatus} />
       )}

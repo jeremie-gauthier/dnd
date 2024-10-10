@@ -1,32 +1,11 @@
-import { GameLog, ServerGameEvent } from "@dnd/shared";
-import { useEffect, useState } from "react";
-import { ClientSocket } from "../../../../types/socket.type";
+import { useGameContext } from "@features/game/context/use-game-context";
 import { ActionLogItem } from "./action-log-item.component";
 
-type Props = {
-  socket: ClientSocket;
-};
-
-export const ActionsLog = ({ socket }: Props) => {
-  const [actionsLogs, setActionsLogs] = useState<GameLog[]>([]);
-
-  useEffect(() => {
-    const handleGameLog = (gameLog: GameLog) => {
-      setActionsLogs((previousData) => [
-        { ...gameLog, createdAt: new Date(gameLog.createdAt) },
-        ...previousData.slice(0, 49),
-      ]);
-    };
-
-    socket.on(ServerGameEvent.GameLogCreated, handleGameLog);
-
-    return () => {
-      socket.removeListener(ServerGameEvent.GameLogCreated, handleGameLog);
-    };
-  }, [socket]);
+export const ActionsLog = () => {
+  const { actionsLogs } = useGameContext();
 
   return (
-    <ul className="flex flex-col-reverse h-32 w-96 overflow-y-scroll border rounded-sm px-1">
+    <ul className="absolute bottom-4 left-4 flex flex-col-reverse h-32 w-96 overflow-y-scroll rounded-sm px-1 bg-primary-600 text-white">
       {actionsLogs.map((actionLog, idx) => (
         <ActionLogItem
           key={`${actionLog.type}:${actionLog.createdAt.valueOf()}:${idx}`}
