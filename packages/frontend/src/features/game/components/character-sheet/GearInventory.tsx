@@ -1,4 +1,5 @@
 import { GameItem, StuffStorageCapacityJson } from "@dnd/shared";
+import { Fragment } from "react";
 
 type Props = {
   gear: GameItem[];
@@ -39,7 +40,8 @@ export const GearInventory = ({
     }).fill({ item: undefined, type: "Spell" }),
   ];
 
-  return gearInventorySlots.map(({ item, type }, idx) =>
-    renderGearSlot({ item, type, idx }),
-  );
+  return gearInventorySlots.map(({ item, type }, idx) => (
+    // biome-ignore lint/suspicious/noArrayIndexKey:
+    <Fragment key={idx}>{renderGearSlot({ item, type, idx })}</Fragment>
+  ));
 };
