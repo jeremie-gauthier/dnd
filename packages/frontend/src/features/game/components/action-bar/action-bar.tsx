@@ -4,7 +4,7 @@ import { AttackItem } from "./actions/attack-item.component";
 import { EndTurnButton } from "./actions/end-turn-button.component";
 import { OpenChestButton } from "./actions/open-chest/open-chest-button.component";
 import { OpenDoorButton } from "./actions/open-door-button.component";
-import { InventorySlot } from "./actions/open-inventory/edit-character-inventory/common/invnetory-slot.component";
+import { InventorySlot } from "./actions/open-inventory/edit-character-inventory/common/inventory-slot.component";
 import { OpenInventoryButton } from "./actions/open-inventory/open-inventory-button.component";
 import { ActionBarContextProvider } from "./context/action-bar-context-provider";
 
