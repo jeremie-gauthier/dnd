@@ -16,15 +16,11 @@ export const ActionLogItem = ({ createdAt, data, type }: Props) => {
 
       {hasDiceRollResults ? (
         <div className="rounded flex w-max gap-2 px-2">
-          {data.diceRollResults.map(({ color, name, result }, idx) => (
+          {data.diceRollResults.map(({ name, result }, idx) => (
             <span
               // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
               key={idx}
-              style={{
-                backgroundColor: color,
-                color: ["special", "red"].includes(name) ? "#fff" : undefined,
-              }}
-              className="font-semibold border rounded flex items-center justify-center w-6 h-6"
+              className={`font-semibold rounded flex items-center justify-center w-6 h-6 ${getDiceClass[name]}`}
             >
               {result}
             </span>
@@ -33,4 +29,15 @@ export const ActionLogItem = ({ createdAt, data, type }: Props) => {
       ) : null}
     </li>
   );
+};
+
+const getDiceClass: Record<string, string> = {
+  yellow: "bg-dice-yellow text-black",
+  orange: "bg-dice-orange text-black",
+  red: "bg-dice-red text-white",
+  purple: "bg-dice-purple text-black",
+  special: "bg-dice-special text-white",
+  "disarm-trap": "bg-dice-disarm-trap text-white",
+  "detect-trap": "bg-dice-detect-trap text-white",
+  "turn-undead": "bg-dice-turn-undead text-white",
 };

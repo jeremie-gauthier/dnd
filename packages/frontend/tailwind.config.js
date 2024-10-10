@@ -16,6 +16,16 @@ export default {
           600: "#3B3D58",
           900: "#1B1D31",
         },
+        dice: {
+          yellow: "#FFF700",
+          orange: "#FF6E00",
+          red: "#DC143C",
+          purple: "#581c87",
+          special: "#000000",
+          "disarm-trap": "#000000",
+          "detect-trap": "#000000",
+          "turn-undead": "#000000",
+        },
       },
       fill: {
         "dice-yellow": "#FFF700",

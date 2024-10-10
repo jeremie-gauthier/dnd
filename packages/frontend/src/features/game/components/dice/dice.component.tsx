@@ -2,12 +2,7 @@ import { Icon } from "@features/ui/icon/Icon";
 
 type Props = {
   dice: {
-    values: number[];
     name: string;
-    color: string;
-    minValue: number;
-    maxValue: number;
-    meanValue: number;
   };
 };
 

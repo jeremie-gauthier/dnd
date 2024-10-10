@@ -4,6 +4,7 @@ import { ClientSocket } from "../../../types/socket.type";
 import { useGameEngine } from "../game-engine";
 import { GameContext } from "./game.context";
 import { useGameActions } from "./use-game-actions";
+import { useGameLogs } from "./use-game-logs";
 import { useGetNeighbourTiles } from "./use-get-neighbour-tiles";
 
 type Props = PropsWithChildren<{
@@ -18,6 +19,7 @@ export const GameContextProvider = ({
   socket,
   children,
 }: Props) => {
+  const { actionsLogs } = useGameLogs({ socket });
   const gameActions = useGameActions({ socket });
   const floorCanvasRef = useRef<HTMLCanvasElement>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -48,6 +50,7 @@ export const GameContextProvider = ({
   return (
     <GameContext.Provider
       value={{
+        actionsLogs,
         canvasRef: {
           floor: floorCanvasRef,
           preview: previewCanvasRef,
