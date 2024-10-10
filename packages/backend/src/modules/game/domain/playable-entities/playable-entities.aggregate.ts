@@ -124,7 +124,8 @@ export class PlayableEntities extends Entity<Data> {
       values: this._data.values,
     });
 
-    this._data.values[0]?.startTurn();
+    const nextEntityToPlay = this.getNextEntityToPlay();
+    nextEntityToPlay?.startTurn();
   }
 
   public addPlayableEntity({ playableEntity }: { playableEntity: Playable }) {
