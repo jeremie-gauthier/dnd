@@ -29,8 +29,11 @@ export const InventorySlot = ({
   });
 
   const isDragging = active !== null;
+  const isBackpack = storageSpace === "backpack";
   const isDraggingCompatibleItem =
-    type === "backpackAnyItem" || active?.data.current?.item.type === type;
+    isBackpack ||
+    type === "backpackAnyItem" ||
+    active?.data.current?.item.type === type;
 
   const { setTooltipType } = useGetChestLootContext();
 
