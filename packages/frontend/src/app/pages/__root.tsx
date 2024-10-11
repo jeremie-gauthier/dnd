@@ -1,3 +1,4 @@
+import { Auth0ContextInterface, User } from "@auth0/auth0-react";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
@@ -7,7 +8,6 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { ClientSocket } from "../../types/socket.type";
-import { Auth0ContextInterface, User } from "@auth0/auth0-react";
 
 function RouterLoader() {
   const isLoading = useRouterState({ select: (s) => s.status === "pending" });

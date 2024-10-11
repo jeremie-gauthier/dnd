@@ -1,8 +1,8 @@
 import {
   ChildTilePath,
   Coord,
-  TilePath,
   GameBoardTile,
+  TilePath,
   getNeighbourCoords,
 } from "@dnd/shared";
 

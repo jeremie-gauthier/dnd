@@ -1,20 +1,20 @@
 import {
   Coord,
-  coordToIndex,
   GameView,
-  getAllPathsFromTileWithinRange,
-  getNeighbourCoords,
   PlayableEntity,
   TilePath,
+  coordToIndex,
+  getAllPathsFromTileWithinRange,
+  getNeighbourCoords,
 } from "@dnd/shared";
+import { useGameActions } from "@features/game/context/use-game-actions";
 import { useEffect, useState } from "react";
+import { GameEventManager, TileHoveredEvent } from "../events";
 import { TileClickedEvent } from "../events/tile-clicked.event";
 import { TilePressedEvent } from "../events/tile-pressed.event";
 import { TileReleasedEvent } from "../events/tile-released.event";
 import { useMapRenderer } from "../renderer";
 import { usePlayerState } from "../state-machine";
-import { GameEventManager, TileHoveredEvent } from "../events";
-import { useGameActions } from "@features/game/context/use-game-actions";
 import { getAllCoordsFromTilePaths } from "./move-utils";
 
 export const useMove = ({
