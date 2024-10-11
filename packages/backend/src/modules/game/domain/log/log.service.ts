@@ -58,7 +58,6 @@ export class LogService {
             attackPower: payload.damageDone,
             diceRollResults: payload.dicesResults.map((diceResult) => ({
               name: diceResult.dice.name,
-              color: "#fff",
               result: diceResult.result,
             })),
             bonusScore: payload.damageDone - diceScore,

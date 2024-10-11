@@ -9,7 +9,6 @@ import { CampaignStageProgression } from "../database/entities/campaign-stage-pr
 import { CampaignStage } from "../database/entities/campaign-stage.entity";
 import { Campaign } from "../database/entities/campaign.entity";
 import { ChestTrap } from "../database/entities/chest-trap.entity";
-import { DiceUI } from "../database/entities/dice-ui.entity";
 import { Dice } from "../database/entities/dice.entity";
 import { MonsterTemplate } from "../database/entities/enemy-template.entity";
 import { HeroTemplate } from "../database/entities/hero-template.entity";
@@ -39,7 +38,6 @@ export class DatabaseConfiguration implements TypeOrmOptionsFactory {
         HeroTemplate,
         Perk,
         Dice,
-        DiceUI,
         Attack,
         AttackDice,
         Item,
