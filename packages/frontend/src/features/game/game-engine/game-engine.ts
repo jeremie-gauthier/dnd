@@ -39,15 +39,12 @@ export const useGameEngine = ({
     renderMovePreview,
     renderPlayableEntityTurnHighlight,
     clearPreviewLayer,
-    renderMoveForbiddenTooltip,
-    clearTooltipLayer,
     assetSize,
   } = useMapRenderer({
     gameEventManager,
     floorCanvasRef,
     previewCanvasRef,
     entitiesCanvasRef,
-    tooltipsLayerRef,
   });
 
   const {
@@ -80,8 +77,6 @@ export const useGameEngine = ({
     isPlaying: gamePhase === "action",
     playerState,
     renderMovePreview,
-    renderMoveForbiddenTooltip,
-    clearTooltipLayer,
   });
 
   useEffect(() => {

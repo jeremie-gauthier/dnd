@@ -1,4 +1,6 @@
 import { Coord, GameItem, GameView, PlayableEntity } from "@dnd/shared";
+import { MoveAuthorizedEvent } from "./move-authorized.event";
+import { MoveForbiddenEvent } from "./move-forbidden.event";
 import { PreparingAttackEvent } from "./preparing-attack.event";
 import { TileClickedEvent } from "./tile-clicked.event";
 import { TileHoveredEvent } from "./tile-hovered.event";
@@ -77,5 +79,23 @@ export class GameEventManager extends EventTarget {
     this.dispatchEvent(
       new PreparingAttackEvent(game, entityPlaying, item, attack),
     );
+  }
+
+  public emitMoveForbidden({
+    coordHovered,
+    isometricCoord,
+  }: {
+    coordHovered: Coord;
+    isometricCoord: Coord;
+  }) {
+    this.dispatchEvent(new MoveForbiddenEvent(coordHovered, isometricCoord));
+  }
+
+  public emitMoveAuthorized({
+    isometricCoord,
+  }: {
+    isometricCoord: Coord;
+  }) {
+    this.dispatchEvent(new MoveAuthorizedEvent(isometricCoord));
   }
 }
