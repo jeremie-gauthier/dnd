@@ -13,7 +13,7 @@ type Params = {
   floorCanvasRef: RefObject<HTMLCanvasElement>;
   previewCanvasRef: RefObject<HTMLCanvasElement>;
   entitiesCanvasRef: RefObject<HTMLCanvasElement>;
-  tooltipsCanvasRef: RefObject<HTMLCanvasElement>;
+  tooltipsLayerRef: RefObject<SVGSVGElement>;
 };
 
 export const useMapRenderer = ({
@@ -21,7 +21,7 @@ export const useMapRenderer = ({
   floorCanvasRef,
   previewCanvasRef,
   entitiesCanvasRef,
-  tooltipsCanvasRef,
+  tooltipsLayerRef,
 }: Params) => {
   const canvas = floorCanvasRef.current;
   const context = canvas?.getContext("2d");
@@ -46,7 +46,7 @@ export const useMapRenderer = ({
   });
 
   const { clear: clearTooltipLayer, renderMoveForbiddenTooltip } =
-    useTooltipLayer({ gameEventManager, canvasRef: tooltipsCanvasRef });
+    useTooltipLayer({ gameEventManager, layerRef: tooltipsLayerRef });
 
   const render = (
     map: GameView["map"],

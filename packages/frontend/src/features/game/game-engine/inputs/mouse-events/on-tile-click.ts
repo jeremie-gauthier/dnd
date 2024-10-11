@@ -7,9 +7,9 @@ import {
 import { getCursorCoordinates } from "./get-cursor-coordinates";
 
 export type HandleTileClickParams = {
-  canvas: HTMLCanvasElement;
+  layer: SVGSVGElement;
   ev: MouseEvent;
-  canvasConfig: CanvasConfig;
+  layerConfig: CanvasConfig;
   mapMetadata: {
     height: GameView["map"]["height"];
     width: GameView["map"]["width"];
@@ -19,15 +19,15 @@ export type HandleTileClickParams = {
 
 export const handleTileClick = ({
   ev,
-  canvas,
-  canvasConfig,
+  layer,
+  layerConfig,
   mapMetadata,
   gameEventManager,
 }: HandleTileClickParams) => {
-  const coord = getCursorCoordinates(ev, canvas);
+  const coord = getCursorCoordinates(ev, layer);
   const isometricCoord = translateIsometricTo2DCoord(
     { row: coord.y, column: coord.x },
-    canvasConfig,
+    layerConfig,
   );
 
   if (

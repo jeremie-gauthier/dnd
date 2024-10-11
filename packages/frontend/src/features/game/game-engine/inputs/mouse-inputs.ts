@@ -4,16 +4,16 @@ import { GameEventManager } from "../events";
 import type { CanvasConfig } from "../utils/coords-conversion.util";
 import { handleHover } from "./mouse-events/on-hover";
 import { handleTileClick } from "./mouse-events/on-tile-click";
-import { handleTileReleased } from "./mouse-events/on-tile-released";
 import { handleTilePressed } from "./mouse-events/on-tile-pressed";
+import { handleTileReleased } from "./mouse-events/on-tile-released";
 
 export const useMouseInputs = ({
-  canvasRef,
+  layerRef,
   canvasConfig,
   mapMetadata,
   gameEventManager,
 }: {
-  canvasRef: RefObject<HTMLCanvasElement>;
+  layerRef: RefObject<SVGSVGElement>;
   canvasConfig: CanvasConfig;
   mapMetadata: {
     height: GameView["map"]["height"];
@@ -21,66 +21,66 @@ export const useMouseInputs = ({
   };
   gameEventManager: GameEventManager;
 }) => {
-  const canvas = canvasRef.current;
+  const layer = layerRef.current;
 
   const tileClickHandler = (ev: MouseEvent) => {
-    if (!canvas) return;
+    if (!layer) return;
     handleTileClick({
       ev,
-      canvas,
-      canvasConfig,
+      layer,
+      layerConfig: canvasConfig,
       mapMetadata,
       gameEventManager,
     });
   };
 
   const tileReleasedHandler = (ev: MouseEvent) => {
-    if (!canvas) return;
+    if (!layer) return;
     handleTileReleased({
       ev,
-      canvas,
-      canvasConfig,
+      layer,
+      layerConfig: canvasConfig,
       gameEventManager,
     });
   };
 
   const tilePressedHandler = (ev: MouseEvent) => {
-    if (!canvas) return;
+    if (!layer) return;
     handleTilePressed({
       ev,
-      canvas,
-      canvasConfig,
+      layer,
+      layerConfig: canvasConfig,
       mapMetadata,
       gameEventManager,
     });
   };
 
   const hoverHandler = (ev: MouseEvent) => {
-    if (!canvas) return;
-    handleHover({ ev, canvas, canvasConfig, gameEventManager });
+    if (!layer) return;
+    handleHover({ ev, layer, layerConfig: canvasConfig, gameEventManager });
   };
 
   const addTileClickEvent = () => {
-    canvas?.addEventListener("click", tileClickHandler);
+    layer?.addEventListener("click", tileClickHandler);
   };
 
   const addTilePressedEvent = () => {
-    canvas?.addEventListener("mousedown", tilePressedHandler);
+    layer?.addEventListener("mousedown", tilePressedHandler);
   };
 
   const addTileReleasedEvent = () => {
-    canvas?.addEventListener("mouseup", tileReleasedHandler);
+    layer?.addEventListener("mouseup", tileReleasedHandler);
   };
 
   const addHoverEvent = () => {
-    canvas?.addEventListener("mousemove", hoverHandler);
+    layer?.addEventListener("mousemove", hoverHandler);
   };
 
   const clearMouseEvents = () => {
-    canvas?.removeEventListener("click", tileClickHandler);
-    canvas?.removeEventListener("mousedown", tilePressedHandler);
-    canvas?.removeEventListener("mouseup", tileReleasedHandler);
-    canvas?.removeEventListener("mousemove", addHoverEvent);
+    layer?.removeEventListener("click", tileClickHandler);
+    layer?.removeEventListener("mousedown", tilePressedHandler);
+    layer?.removeEventListener("mouseup", tileReleasedHandler);
+    layer?.removeEventListener("mousemove", addHoverEvent);
   };
 
   return {

@@ -6,22 +6,22 @@ import {
 import { getCursorCoordinates } from "./get-cursor-coordinates";
 
 export type HandleTileReleasedParams = {
-  canvas: HTMLCanvasElement;
+  layer: SVGSVGElement;
   ev: MouseEvent;
-  canvasConfig: CanvasConfig;
+  layerConfig: CanvasConfig;
   gameEventManager: GameEventManager;
 };
 
 export const handleTileReleased = ({
   ev,
-  canvas,
-  canvasConfig,
+  layer,
+  layerConfig,
   gameEventManager,
 }: HandleTileReleasedParams) => {
-  const coord = getCursorCoordinates(ev, canvas);
+  const coord = getCursorCoordinates(ev, layer);
   const isometricCoord = translateIsometricTo2DCoord(
     { row: coord.y, column: coord.x },
-    canvasConfig,
+    layerConfig,
   );
 
   gameEventManager.emitTileReleased(coord, isometricCoord);

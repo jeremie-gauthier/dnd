@@ -11,7 +11,7 @@ export const useGameEngine = ({
   floorCanvasRef,
   previewCanvasRef,
   entitiesCanvasRef,
-  tooltipsCanvasRef,
+  tooltipsLayerRef,
   gameActions,
   gameEntity,
   gamePhase,
@@ -19,7 +19,7 @@ export const useGameEngine = ({
   floorCanvasRef: RefObject<HTMLCanvasElement>;
   previewCanvasRef: RefObject<HTMLCanvasElement>;
   entitiesCanvasRef: RefObject<HTMLCanvasElement>;
-  tooltipsCanvasRef: RefObject<HTMLCanvasElement>;
+  tooltipsLayerRef: RefObject<SVGSVGElement>;
   gameActions: ReturnType<typeof useGameActions>;
   gameEntity: GameView;
   gamePhase: PlayerGamePhase;
@@ -47,7 +47,7 @@ export const useGameEngine = ({
     floorCanvasRef,
     previewCanvasRef,
     entitiesCanvasRef,
-    tooltipsCanvasRef,
+    tooltipsLayerRef,
   });
 
   const {
@@ -57,7 +57,7 @@ export const useGameEngine = ({
     addHoverEvent,
     clearMouseEvents,
   } = useMouseInputs({
-    canvasRef: tooltipsCanvasRef,
+    layerRef: tooltipsLayerRef,
     canvasConfig: {
       assetSize,
       map: {
@@ -91,7 +91,7 @@ export const useGameEngine = ({
   }, [gameEntity.map, gameEntity.playableEntities, gamePhase, render]);
 
   useEffect(() => {
-    if (!tooltipsCanvasRef.current || !render) return;
+    if (!tooltipsLayerRef.current || !render) return;
 
     addTileClickEvent();
     addHoverEvent();
@@ -100,7 +100,7 @@ export const useGameEngine = ({
 
     return clearMouseEvents;
   }, [
-    tooltipsCanvasRef.current,
+    tooltipsLayerRef.current,
     addTileClickEvent,
     addTilePressedEvent,
     addTileReleasedEvent,

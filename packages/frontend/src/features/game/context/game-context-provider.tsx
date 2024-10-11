@@ -24,7 +24,7 @@ export const GameContextProvider = ({
   const floorCanvasRef = useRef<HTMLCanvasElement>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
   const entitiesCanvasRef = useRef<HTMLCanvasElement>(null);
-  const tooltipsCanvasRef = useRef<HTMLCanvasElement>(null);
+  const tooltipsLayerRef = useRef<SVGSVGElement>(null);
 
   const { assetSize, gameEventManager, playerState } = useGameEngine({
     floorCanvasRef,
@@ -33,7 +33,7 @@ export const GameContextProvider = ({
     gameActions,
     gameEntity: game,
     gamePhase: phase,
-    tooltipsCanvasRef,
+    tooltipsLayerRef,
   });
 
   const isPlaying = phase === "action";
@@ -55,7 +55,7 @@ export const GameContextProvider = ({
           floor: floorCanvasRef,
           preview: previewCanvasRef,
           entities: entitiesCanvasRef,
-          tooltips: tooltipsCanvasRef,
+          tooltips: tooltipsLayerRef,
         },
         game,
         phase,

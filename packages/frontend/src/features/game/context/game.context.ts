@@ -16,7 +16,7 @@ type GameContextParams = {
     floor: React.RefObject<HTMLCanvasElement>;
     preview: React.RefObject<HTMLCanvasElement>;
     entities: React.RefObject<HTMLCanvasElement>;
-    tooltips: React.RefObject<HTMLCanvasElement>;
+    tooltips: React.RefObject<SVGSVGElement>;
   };
   assetSize: number;
   gameEventManager: GameEventManager;
