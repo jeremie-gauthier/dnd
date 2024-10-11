@@ -2,7 +2,6 @@ import { z } from "zod";
 
 export const diceSchema = z.object({
   name: z.string(),
-  color: z.string().startsWith("#"),
   values: z.array(z.number()).length(6),
   minValue: z.number(),
   maxValue: z.number(),

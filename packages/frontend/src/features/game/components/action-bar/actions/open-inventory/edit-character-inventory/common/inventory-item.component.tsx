@@ -24,7 +24,7 @@ export const InventoryItem = ({ item, storageSpace }: Props) => {
 
   return (
     <TooltipProvider>
-      <Tooltip>
+      <Tooltip delayDuration={0}>
         <TooltipTrigger
           ref={setNodeRef}
           style={
@@ -41,7 +41,10 @@ export const InventoryItem = ({ item, storageSpace }: Props) => {
           </div>
         </TooltipTrigger>
 
-        <TooltipContent className="border-0 bg-primary-600 text-white p-0 shadow-md">
+        <TooltipContent
+          sideOffset={8}
+          className="border-0 bg-primary-600 text-white p-0 shadow-md"
+        >
           <InspectItem item={item} />
         </TooltipContent>
       </Tooltip>

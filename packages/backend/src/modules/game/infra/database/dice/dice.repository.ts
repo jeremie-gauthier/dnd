@@ -36,4 +36,9 @@ export class PostgresDiceRepository implements DiceRepository {
     const dices = await this.repository.find();
     return dices.map((dice) => this.mapper.toDomain(dice));
   }
+
+  public async getAllRaw(): Promise<Array<DicePersistence>> {
+    const dices = await this.repository.find();
+    return dices;
+  }
 }

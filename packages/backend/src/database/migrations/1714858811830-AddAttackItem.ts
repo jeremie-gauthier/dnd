@@ -23,7 +23,7 @@ export class AddAttackItem1714858811830 implements MigrationInterface {
       `CREATE TABLE "attack" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "range" "public"."attack_range_enum" NOT NULL, "type" "public"."attack_type_enum" NOT NULL, "item_name" character varying NOT NULL, CONSTRAINT "PK_b63e4c74e7b45ef2d42a82bdabc" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "dice" ("name" character varying NOT NULL, "color" character varying(9) NOT NULL, "values" json NOT NULL, "min_value" integer NOT NULL, "max_value" integer NOT NULL, "mean_value" double precision NOT NULL, CONSTRAINT "PK_05b8e329851824881056dfae481" PRIMARY KEY ("name"))`,
+      `CREATE TABLE "dice" ("name" character varying NOT NULL, "values" json NOT NULL, "min_value" integer NOT NULL, "max_value" integer NOT NULL, "mean_value" double precision NOT NULL, CONSTRAINT "PK_05b8e329851824881056dfae481" PRIMARY KEY ("name"))`,
     );
     await queryRunner.query(
       `CREATE TABLE "attack_dice" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "attack_id" uuid NOT NULL, "dice_name" character varying, CONSTRAINT "PK_395e57ebb70fef189e0fcf280f5" PRIMARY KEY ("id"))`,

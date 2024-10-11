@@ -8,7 +8,7 @@ export interface EntityAttackedActionLog extends ActionLog {
     attackItemUsedName: GameItem["name"];
     bonusScore: number;
     diceScore: number;
-    diceRollResults: { name: string; color: `#${string}`; result: number }[];
+    diceRollResults: { name: string; result: number }[];
     attackPower: number;
     targetEntityName: PlayableEntity["name"];
   };
