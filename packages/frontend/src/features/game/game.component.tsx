@@ -1,4 +1,4 @@
-import { BoardGameCanvas } from "./board-game/board-game.component";
+import { BoardGame } from "./board-game/board-game.component";
 import { ActionBar } from "./components/action-bar/action-bar";
 import { ActionsLog } from "./components/action-log/action-log-list.component";
 import { ActionPoints } from "./components/characteristics/action-points.component";
@@ -25,7 +25,7 @@ export const Game = () => {
           {consumables && consumables.length > 0 && (
             <ConsumableList items={consumables} />
           )}
-          <BoardGameCanvas />
+          <BoardGame />
           <ActionsLog />
         </div>
 
