@@ -46,14 +46,16 @@ export const InspectSpell = ({ spell }: Props) => {
                 ))}
               </div>
 
-              <div>
-                {attack.perks.map((perk) => (
-                  <Perk
-                    key={`${spell.name}-${attack.type}-${perk.name}`}
-                    perk={perk}
-                  />
-                ))}
-              </div>
+              {attack.perks.length > 0 ? (
+                <div className="mt-2">
+                  {attack.perks.map((perk) => (
+                    <Perk
+                      key={`${spell.name}-${attack.type}-${perk.name}`}
+                      perk={perk}
+                    />
+                  ))}
+                </div>
+              ) : null}
             </div>
           </Fragment>
         );

@@ -11,8 +11,9 @@ export const Perk = ({ perk }: Props) => {
   const { t } = useTranslation(["perks"]);
 
   return (
-    <div>
-      {t(perk.trigger)}: {t(`${perk.name}.description`)}
+    <div className="flex flex-col">
+      <span>{t(perk.trigger)} :</span>
+      <span>• {t(`${perk.name}.description`)}</span>
     </div>
   );
 };

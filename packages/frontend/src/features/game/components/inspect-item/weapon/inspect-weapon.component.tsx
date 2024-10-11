@@ -43,14 +43,16 @@ export const InspectWeapon = ({ weapon }: Props) => {
                 ))}
               </div>
 
-              <div>
-                {attack.perks.map((perk) => (
-                  <Perk
-                    key={`${weapon.name}-${attack.type}-${perk.name}`}
-                    perk={perk}
-                  />
-                ))}
-              </div>
+              {attack.perks.length > 0 ? (
+                <div className="mt-2">
+                  {attack.perks.map((perk) => (
+                    <Perk
+                      key={`${weapon.name}-${attack.type}-${perk.name}`}
+                      perk={perk}
+                    />
+                  ))}
+                </div>
+              ) : null}
             </div>
           </Fragment>
         );
