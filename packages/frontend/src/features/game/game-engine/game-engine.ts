@@ -39,6 +39,7 @@ export const useGameEngine = ({
     render,
     renderMovePreview,
     renderPlayableEntityTurnHighlight,
+    renderAttackPreview,
     clearPreviewLayer,
     assetSize,
   } = useMapRenderer({
@@ -86,6 +87,8 @@ export const useGameEngine = ({
     gameEventManager,
     isPlaying: gamePhase === "action",
     playerState,
+    renderAttackPreview,
+    clearPreviewLayer,
   });
 
   useEffect(() => {

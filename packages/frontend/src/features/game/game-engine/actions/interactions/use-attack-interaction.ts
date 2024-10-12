@@ -10,6 +10,9 @@ import { useGameActions } from "@features/game/context/use-game-actions";
 import { useEffect } from "react";
 import { GameEventManager } from "../../events";
 import { TilePressedEvent } from "../../events/tile-pressed.event";
+import { TileReleasedEvent } from "../../events/tile-released.event";
+import { useMapRenderer } from "../../renderer";
+import { usePlayerState } from "../../state-machine";
 import { translate2DToIsometricCoord } from "../../utils/coords-conversion.util";
 
 type Params = {
@@ -18,6 +21,9 @@ type Params = {
   gameActions: ReturnType<typeof useGameActions>;
   gameEventManager: GameEventManager;
   isIdle: boolean;
+  playerState: ReturnType<typeof usePlayerState>;
+  renderAttackPreview: ReturnType<typeof useMapRenderer>["renderAttackPreview"];
+  clearPreviewLayer: ReturnType<typeof useMapRenderer>["clearPreviewLayer"];
 };
 
 export const useAttackInteraction = ({
@@ -26,6 +32,9 @@ export const useAttackInteraction = ({
   gameActions,
   gameEventManager,
   isIdle,
+  playerState,
+  renderAttackPreview,
+  clearPreviewLayer,
 }: Params) => {
   useEffect(() => {
     const handleTilePressed: EventListener = (e) => {
@@ -137,6 +146,9 @@ export const useAttackInteraction = ({
           })),
         });
       }
+
+      playerState.toggleTo("attack");
+      renderAttackPreview({ map: game.map, coords: [isometricCoord] });
     };
     gameEventManager.addEventListener(
       TilePressedEvent.EventName,
@@ -153,9 +165,34 @@ export const useAttackInteraction = ({
     game,
     entityPlaying,
     isIdle,
+    renderAttackPreview,
+    playerState.toggleTo,
     gameActions.attack,
     gameEventManager.addEventListener,
     gameEventManager.removeEventListener,
     gameEventManager.emitInteractionsAuthorized,
+  ]);
+
+  useEffect(() => {
+    const handleTileReleased = () => {
+      playerState.toggleTo("idle");
+      clearPreviewLayer();
+    };
+    gameEventManager.addEventListener(
+      TileReleasedEvent.EventName,
+      handleTileReleased,
+    );
+
+    return () => {
+      gameEventManager.removeEventListener(
+        TileReleasedEvent.EventName,
+        handleTileReleased,
+      );
+    };
+  }, [
+    clearPreviewLayer,
+    playerState.toggleTo,
+    gameEventManager.addEventListener,
+    gameEventManager.removeEventListener,
   ]);
 };

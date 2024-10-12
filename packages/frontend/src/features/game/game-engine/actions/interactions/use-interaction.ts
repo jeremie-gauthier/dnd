@@ -1,6 +1,7 @@
 import { GameView, PlayableEntity } from "@dnd/shared";
 import { useGameActions } from "@features/game/context/use-game-actions";
 import { GameEventManager } from "../../events";
+import { useMapRenderer } from "../../renderer";
 import { usePlayerState } from "../../state-machine";
 import { useAttackInteraction } from "./use-attack-interaction";
 import { useOpenDoorInteraction } from "./use-open-door-interaction";
@@ -12,6 +13,8 @@ type Params = {
   gameEventManager: GameEventManager;
   isPlaying: boolean;
   playerState: ReturnType<typeof usePlayerState>;
+  renderAttackPreview: ReturnType<typeof useMapRenderer>["renderAttackPreview"];
+  clearPreviewLayer: ReturnType<typeof useMapRenderer>["clearPreviewLayer"];
 };
 
 export const useInteraction = ({
@@ -21,6 +24,8 @@ export const useInteraction = ({
   gameEventManager,
   isPlaying,
   playerState,
+  renderAttackPreview,
+  clearPreviewLayer,
 }: Params) => {
   const isIdle = isPlaying && playerState.currentAction === "idle";
 
@@ -37,5 +42,8 @@ export const useInteraction = ({
     gameActions,
     gameEventManager,
     isIdle,
+    playerState,
+    renderAttackPreview,
+    clearPreviewLayer,
   });
 };
