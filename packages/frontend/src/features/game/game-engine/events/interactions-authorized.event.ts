@@ -3,7 +3,7 @@ import { Coord, GameItem, Tile } from "@dnd/shared";
 export type Interaction =
   | {
       name: "attack";
-      attackItem: Extract<
+      attack: Extract<
         GameItem,
         { type: "Weapon" | "Spell" }
       >["attacks"][number];
