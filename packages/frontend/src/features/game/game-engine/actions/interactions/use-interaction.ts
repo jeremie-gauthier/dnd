@@ -4,6 +4,7 @@ import { GameEventManager } from "../../events";
 import { useMapRenderer } from "../../renderer";
 import { usePlayerState } from "../../state-machine";
 import { useAttackInteraction } from "./use-attack-interaction";
+import { useOpenChestInteraction } from "./use-open-chest-interaction";
 import { useOpenDoorInteraction } from "./use-open-door-interaction";
 
 type Params = {
@@ -45,5 +46,12 @@ export const useInteraction = ({
     playerState,
     renderAttackPreview,
     clearPreviewLayer,
+  });
+  useOpenChestInteraction({
+    entityPlaying,
+    game,
+    gameActions,
+    gameEventManager,
+    isIdle,
   });
 };

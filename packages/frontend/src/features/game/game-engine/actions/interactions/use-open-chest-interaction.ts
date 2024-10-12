@@ -18,7 +18,7 @@ type Params = {
   isIdle: boolean;
 };
 
-export const useOpenDoorInteraction = ({
+export const useOpenChestInteraction = ({
   entityPlaying,
   game,
   gameActions,
@@ -55,13 +55,13 @@ export const useOpenDoorInteraction = ({
         return;
       }
 
-      const isPressingADoor = tilePressed.entities.some(
+      const isPressingAChest = tilePressed.entities.some(
         (entity) =>
           entity.type === "interactive-entity" &&
-          entity.kind === "door" &&
+          entity.kind === "chest" &&
           entity.canInteract,
       );
-      if (!isPressingADoor) {
+      if (!isPressingAChest) {
         return;
       }
 
@@ -83,12 +83,19 @@ export const useOpenDoorInteraction = ({
         tile: tilePressed,
         interactions: [
           {
-            name: "openDoor",
-            onInteract: () =>
-              gameActions.openDoor({
+            name: "openChest",
+            onInteract: async () => {
+              const openChestResult = await gameActions.openChest({
                 gameId: game.id,
-                coordOfTileWithDoor: isometricCoord,
-              }),
+                coordOfTileWithChest: isometricCoord,
+              });
+
+              if (openChestResult.itemFound.type !== "ChestTrap") {
+                gameEventManager.emitItemFound({
+                  itemFound: openChestResult.itemFound,
+                });
+              }
+            },
           },
         ],
       });
@@ -108,9 +115,10 @@ export const useOpenDoorInteraction = ({
     game,
     isIdle,
     entityPlaying,
-    gameActions.openDoor,
+    gameActions.openChest,
     gameEventManager.addEventListener,
     gameEventManager.removeEventListener,
     gameEventManager.emitInteractionsAuthorized,
+    gameEventManager.emitItemFound,
   ]);
 };

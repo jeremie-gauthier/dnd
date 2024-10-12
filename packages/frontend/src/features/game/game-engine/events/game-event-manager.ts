@@ -3,6 +3,7 @@ import {
   Interaction,
   InteractionsAuthorizedEvent,
 } from "./interactions-authorized.event";
+import { ItemFoundEvent } from "./item-found.event";
 import { MoveAuthorizedEvent } from "./move-authorized.event";
 import { MoveForbiddenEvent } from "./move-forbidden.event";
 import { PreparingAttackEvent } from "./preparing-attack.event";
@@ -115,5 +116,13 @@ export class GameEventManager extends EventTarget {
     this.dispatchEvent(
       new InteractionsAuthorizedEvent(isometricCoord, tile, interactions),
     );
+  }
+
+  public emitItemFound({
+    itemFound,
+  }: {
+    itemFound: GameItem;
+  }) {
+    this.dispatchEvent(new ItemFoundEvent(itemFound));
   }
 }

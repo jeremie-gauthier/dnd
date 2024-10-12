@@ -15,7 +15,7 @@ export type Interaction =
     }
   | {
       name: "openChest";
-      onInteract: () => void;
+      onInteract: () => Promise<void>;
     };
 
 export class InteractionsAuthorizedEvent extends Event {

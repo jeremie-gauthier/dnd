@@ -1,5 +1,6 @@
 import { Interaction } from "@features/game/game-engine/events/interactions-authorized.event";
 import { AttackRadialSlot } from "./attack-radial-slot.component";
+import { OpenChestRadialSlot } from "./open-chest-radial-slot.component";
 import { OpenDoorRadialSlot } from "./open-door-radial-slot.component";
 
 type Props = {
@@ -13,6 +14,6 @@ export const RadialSlot = ({ interaction }: Props) => {
     case "openDoor":
       return <OpenDoorRadialSlot interaction={interaction} />;
     case "openChest":
-      return null;
+      return <OpenChestRadialSlot interaction={interaction} />;
   }
 };
