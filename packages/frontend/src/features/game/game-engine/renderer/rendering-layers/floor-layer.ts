@@ -1,10 +1,17 @@
-import type { GameView, Tile, TileEntity } from "@dnd/shared";
+import {
+  type GameView,
+  type PlayableEntity,
+  type Tile,
+  type TileEntity,
+  getLineOfSight,
+} from "@dnd/shared";
 import { RefObject } from "react";
 import { translate2DToIsometricCoord } from "../../utils/coords-conversion.util";
 import { useAssetsLoader } from "../assets-loader/assets-loader";
 import { floorAssetCollection } from "../assets-loader/assets.config";
 import { drawBackground } from "../draw/draw-background";
 import { drawFloor } from "../draw/entities/draw-floor";
+import { drawFloorNotInSight } from "../draw/entities/draw-floor_not_in_sight";
 import { centerIsometricDrawing } from "../draw/utils/center-isometric-drawing.util";
 
 type Params = {
@@ -16,8 +23,22 @@ export const useFloorLayer = ({ canvasRef }: Params) => {
   const context = canvas?.getContext("2d");
   const { assets, assetSize } = useAssetsLoader(floorAssetCollection);
 
-  const render = ({ map }: { map: GameView["map"] }) => {
+  const render = ({
+    map,
+    entityPlaying,
+  }: { map: GameView["map"]; entityPlaying?: PlayableEntity }) => {
     if (!canvas || !context || !assets) return;
+
+    const lineOfSight = entityPlaying
+      ? getLineOfSight({
+          ally: entityPlaying.faction,
+          gameBoard: map,
+          originCoord: entityPlaying.coord,
+          range: "versatile",
+        })
+          .map(({ coord }) => coord)
+          .concat(entityPlaying.coord)
+      : [];
 
     const config = { assets, assetSize, map };
 
@@ -47,15 +68,31 @@ export const useFloorLayer = ({ canvasRef }: Params) => {
         },
       });
 
-      drawFloor({
-        context,
-        config,
-        subject: {
-          coord2D,
-          coordIsometric,
-          entity: {} as TileEntity,
-        },
-      });
+      const isInLineOfSight = lineOfSight.some(
+        (coord) => coord.column === coord2D.column && coord.row === coord2D.row,
+      );
+
+      if (isInLineOfSight) {
+        drawFloor({
+          context,
+          config,
+          subject: {
+            coord2D,
+            coordIsometric,
+            entity: {} as TileEntity,
+          },
+        });
+      } else {
+        drawFloorNotInSight({
+          context,
+          config,
+          subject: {
+            coord2D,
+            coordIsometric,
+            entity: {} as TileEntity,
+          },
+        });
+      }
     }
 
     context.restore();

@@ -1,4 +1,4 @@
-import type { GameView, PlayerGamePhase } from "@dnd/shared";
+import type { GameView, PlayableEntity, PlayerGamePhase } from "@dnd/shared";
 import { RefObject } from "react";
 import { GameEventManager } from "../events";
 import { useAssetsLoader } from "./assets-loader/assets-loader";
@@ -12,6 +12,7 @@ type Params = {
   floorCanvasRef: RefObject<HTMLCanvasElement>;
   previewCanvasRef: RefObject<HTMLCanvasElement>;
   entitiesCanvasRef: RefObject<HTMLCanvasElement>;
+  entityPlaying?: PlayableEntity;
 };
 
 export const useMapRenderer = ({
@@ -19,6 +20,7 @@ export const useMapRenderer = ({
   floorCanvasRef,
   previewCanvasRef,
   entitiesCanvasRef,
+  entityPlaying,
 }: Params) => {
   const canvas = floorCanvasRef.current;
   const context = canvas?.getContext("2d");
@@ -47,7 +49,7 @@ export const useMapRenderer = ({
     playableEntities: GameView["playableEntities"],
     _: PlayerGamePhase,
   ) => {
-    renderFloorLayer({ map });
+    renderFloorLayer({ map, entityPlaying });
     renderEntitiesLayer({ map, playableEntities });
   };
 

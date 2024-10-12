@@ -47,6 +47,7 @@ export const useGameEngine = ({
     floorCanvasRef,
     previewCanvasRef,
     entitiesCanvasRef,
+    entityPlaying,
   });
 
   const {
