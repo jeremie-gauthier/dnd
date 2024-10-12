@@ -175,8 +175,10 @@ export const useAttackInteraction = ({
 
   useEffect(() => {
     const handleTileReleased = () => {
-      playerState.toggleTo("idle");
-      clearPreviewLayer();
+      if (playerState.currentAction === "attack") {
+        playerState.toggleTo("idle");
+        clearPreviewLayer();
+      }
     };
     gameEventManager.addEventListener(
       TileReleasedEvent.EventName,
@@ -191,6 +193,7 @@ export const useAttackInteraction = ({
     };
   }, [
     clearPreviewLayer,
+    playerState.currentAction,
     playerState.toggleTo,
     gameEventManager.addEventListener,
     gameEventManager.removeEventListener,
