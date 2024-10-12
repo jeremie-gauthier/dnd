@@ -1,6 +1,6 @@
 import { useGameContext } from "../context/use-game-context";
 import { Canvas } from "./canvas.component";
-import { TooltipLayer } from "./tooltip-layer.component";
+import { TooltipLayer } from "./tooltip-layer/tooltip-layer.component";
 import { useCanvasSize } from "./use-canvas-size";
 
 export const BoardGame = () => {
