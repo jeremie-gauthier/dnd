@@ -18,6 +18,16 @@ import { usePlayerState } from "../state-machine";
 import { translate2DToIsometricCoord } from "../utils/coords-conversion.util";
 import { getAllCoordsFromTilePaths } from "./move-utils";
 
+type Params = {
+  entityPlaying?: PlayableEntity;
+  game: GameView;
+  gameActions: ReturnType<typeof useGameActions>;
+  gameEventManager: GameEventManager;
+  isPlaying: boolean;
+  playerState: ReturnType<typeof usePlayerState>;
+  renderMovePreview: ReturnType<typeof useMapRenderer>["renderMovePreview"];
+};
+
 export const useMove = ({
   entityPlaying,
   game,
@@ -26,15 +36,7 @@ export const useMove = ({
   isPlaying,
   playerState,
   renderMovePreview,
-}: {
-  entityPlaying?: PlayableEntity;
-  game: GameView;
-  gameActions: ReturnType<typeof useGameActions>;
-  gameEventManager: GameEventManager;
-  isPlaying: boolean;
-  playerState: ReturnType<typeof usePlayerState>;
-  renderMovePreview: ReturnType<typeof useMapRenderer>["renderMovePreview"];
-}) => {
+}: Params) => {
   const isMoving = isPlaying && playerState.currentAction === "move";
   const canMove =
     isPlaying &&
