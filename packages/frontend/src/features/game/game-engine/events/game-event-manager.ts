@@ -1,4 +1,8 @@
-import { Coord, GameItem, GameView, PlayableEntity } from "@dnd/shared";
+import { Coord, GameItem, GameView, PlayableEntity, Tile } from "@dnd/shared";
+import {
+  Interaction,
+  InteractionsAuthorizedEvent,
+} from "./interactions-authorized.event";
 import { MoveAuthorizedEvent } from "./move-authorized.event";
 import { MoveForbiddenEvent } from "./move-forbidden.event";
 import { PreparingAttackEvent } from "./preparing-attack.event";
@@ -97,5 +101,19 @@ export class GameEventManager extends EventTarget {
     isometricCoord: Coord;
   }) {
     this.dispatchEvent(new MoveAuthorizedEvent(isometricCoord));
+  }
+
+  public emitInteractionsAuthorized({
+    isometricCoord,
+    tile,
+    interactions,
+  }: {
+    isometricCoord: Coord;
+    tile: Tile;
+    interactions: Array<Interaction>;
+  }) {
+    this.dispatchEvent(
+      new InteractionsAuthorizedEvent(isometricCoord, tile, interactions),
+    );
   }
 }
