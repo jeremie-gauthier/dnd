@@ -3,6 +3,7 @@ import {
   PlayableEntity,
   TilePlayableEntity,
   coordToIndex,
+  getLineOfSight,
   getNeighbourCoords,
 } from "@dnd/shared";
 import { useGameActions } from "@features/game/context/use-game-actions";
@@ -103,6 +104,21 @@ export const useAttackInteraction = ({
           (attack) => attack.range === "long" || attack.range === "versatile",
         );
         if (rangeAttack.length === 0) {
+          return;
+        }
+
+        const lineOfSight = getLineOfSight({
+          ally: entityPlaying.faction,
+          gameBoard: game.map,
+          originCoord: entityPlaying.coord,
+          range: "long",
+        });
+        const isTargetInLineOfSight = lineOfSight.some(
+          (tile) =>
+            tile.coord.column === isometricCoord.column &&
+            tile.coord.row === isometricCoord.row,
+        );
+        if (!isTargetInLineOfSight) {
           return;
         }
 
