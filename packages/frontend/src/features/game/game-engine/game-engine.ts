@@ -1,6 +1,7 @@
 import { type GameView, type PlayerGamePhase } from "@dnd/shared";
 import { RefObject, useEffect } from "react";
 import { useGameActions } from "../context/use-game-actions";
+import { useInteraction } from "./actions/interactions/use-interaction";
 import { useMove } from "./actions/use-move";
 import { GameEventManager } from "./events";
 import { useMouseInputs } from "./inputs";
@@ -77,6 +78,14 @@ export const useGameEngine = ({
     isPlaying: gamePhase === "action",
     playerState,
     renderMovePreview,
+  });
+  useInteraction({
+    entityPlaying,
+    game: gameEntity,
+    gameActions,
+    gameEventManager,
+    isPlaying: gamePhase === "action",
+    playerState,
   });
 
   useEffect(() => {
