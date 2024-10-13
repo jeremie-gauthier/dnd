@@ -5,6 +5,7 @@ import { Select } from "@features/ui/select/select";
 import { useNavigate } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import type { ClientSocket } from "../../../types/socket.type";
 import { useCreateLobbyForm } from "./use-create-lobby-form";
 import { type GetCampaignsResponse } from "./use-get-campaigns";
@@ -15,6 +16,7 @@ type Props = {
 };
 
 export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
+  const { t } = useTranslation(["lobbies"]);
   const {
     form,
     getCampaignDisplayedValue,
@@ -53,7 +55,7 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
 
   return (
     <div className="flex flex-col items-center space-y-8">
-      <h1 className="font-semibold text-2xl">Host a game</h1>
+      <h1 className="font-semibold text-2xl">{t("hostAGame")}</h1>
 
       <form onSubmit={handleLobbyCreation} className="space-y-4">
         <div>
@@ -64,7 +66,7 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
           >
             {(field) => (
               <Select
-                label="Select your campaign"
+                label={t("selectCampaign")}
                 value={field.state.value}
                 list={campaigns}
                 onChange={field.handleChange}
@@ -87,7 +89,7 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
                   max={5}
                   value={field.state.value}
                   onChange={field.handleChange}
-                  label="Select the number of players"
+                  label={t("selectNbPlayers")}
                 />
                 <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6">
                   2
@@ -111,7 +113,7 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
         >
           {([canSubmit, isSubmitting]) => (
             <Button type="submit" disabled={!canSubmit}>
-              {isSubmitting ? "Your Lobby is being created" : "Create Lobby"}
+              {isSubmitting ? t("creatingLobby") : t("createLobby")}
             </Button>
           )}
         </form.Subscribe>

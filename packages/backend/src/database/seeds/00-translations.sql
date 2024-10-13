@@ -13,6 +13,32 @@ VALUES
   ),
   (
     'fr-FR',
+    'lobbies',
+    '{
+  "pick": "Sélectionner",
+  "discard": "Désélectionner",
+  "ready": "Je suis prêt",
+  "notReady": "Je ne suis pas prêt",
+  "startGame": "Commencer la partie",
+  "leave": "Quitter le salon",
+  "isReady": "Prêt",
+  "isNotReady": "Pas prêt",
+  "host": "Hôte",
+  "guest": "Invité",
+  "gameMaster": "Maître du donjon",
+  "gameMaster.description": "Contrôle tous les monstres",
+  "chooseYourRoles": "Choisissez vos rôles",
+  "players": "Joueurs",
+  "hostAGame": "Héberger une partie",
+  "selectCampaign": "Choisissez la campagne",
+  "selectNbPlayers": "Choisissez le nombre de joueurs",
+  "createLobby": "Créer le salon",
+  "creatingLobby": "Le salon est en cours de création"
+}
+'
+  ),
+  (
+    'fr-FR',
     'action-log',
     '{
   "game.update.playable_entity_turn_ended": "{{entityName}} a passé son tour.",

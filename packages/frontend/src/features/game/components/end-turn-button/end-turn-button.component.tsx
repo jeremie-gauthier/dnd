@@ -19,7 +19,7 @@ export const EndTurnButton = () => {
 
   return (
     <Button
-      variant={hasActionPointsLeft ? "outlined" : "primary"}
+      variant={hasActionPointsLeft ? "darkOutlined" : "darkPrimary"}
       onClick={handleClick}
     >
       <span className="text-xl">{t("endTurn")}</span>

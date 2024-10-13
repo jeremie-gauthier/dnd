@@ -7,7 +7,10 @@ type Props = PropsWithChildren<{
 
 export const LinkButton = ({ children, to }: Props) => {
   return (
-    <Link to={to} className="bg-amber-800 text-white p-2 rounded">
+    <Link
+      to={to}
+      className="bg-primary-600 text-white p-2 rounded hover:bg-primary-900"
+    >
       {children}
     </Link>
   );

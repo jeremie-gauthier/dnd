@@ -44,10 +44,12 @@ export const Game = () => {
                     entityPlaying.characteristic.baseHealthPoints
                   }
                 />
-                <ManaPoints
-                  manaPoints={entityPlaying.characteristic.manaPoints}
-                  baseManaPoints={entityPlaying.characteristic.baseManaPoints}
-                />
+                {entityPlaying.characteristic.baseManaPoints > 0 ? (
+                  <ManaPoints
+                    manaPoints={entityPlaying.characteristic.manaPoints}
+                    baseManaPoints={entityPlaying.characteristic.baseManaPoints}
+                  />
+                ) : null}
                 <ActionPoints
                   actionPoints={entityPlaying.characteristic.actionPoints}
                 />

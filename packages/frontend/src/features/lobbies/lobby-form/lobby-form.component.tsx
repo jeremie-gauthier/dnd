@@ -2,6 +2,7 @@ import { type User } from "@auth0/auth0-react";
 import { ClientLobbyEvent } from "@dnd/shared";
 import { Button } from "@features/ui/button/button";
 import { UserCard } from "@features/ui/user-card/user-card";
+import { useTranslation } from "react-i18next";
 import type { ClientSocket } from "../../../types/socket.type";
 import { GameMasterCard } from "./playable-cards/game-master-card.component";
 import { HeroCard } from "./playable-cards/hero-card.component";
@@ -14,6 +15,8 @@ type Props = {
 };
 
 export const LobbyForm = ({ user, lobby, socket }: Props) => {
+  const { t } = useTranslation(["lobbies"]);
+
   const handleClickOnLeaveLobby = async () => {
     await socket.emitWithAck(ClientLobbyEvent.RequestLeaveLobby);
   };
@@ -57,7 +60,7 @@ export const LobbyForm = ({ user, lobby, socket }: Props) => {
       </h1>
 
       <div>
-        <h2 className="font-medium text-lg">Players:</h2>
+        <h2 className="font-medium text-lg">{t("players")}</h2>
         <ul className="flex flex-row gap-6">
           {lobby.players.map((player) => {
             const isHost = lobby.host.userId === player.userId;
@@ -68,9 +71,9 @@ export const LobbyForm = ({ user, lobby, socket }: Props) => {
                 className="flex flex-col w-32 p-2 rounded shadow-lg"
               >
                 <UserCard userId={player.userId} />
-                <p className="text-sm">{isHost ? "Host" : "Guest"}</p>
+                <p className="text-sm">{isHost ? t("host") : t("guest")}</p>
                 <p className="text-sm">
-                  {player.isReady ? "Ready" : "Not ready"}
+                  {player.isReady ? t("isReady") : t("isNotReady")}
                 </p>
               </li>
             );
@@ -79,7 +82,7 @@ export const LobbyForm = ({ user, lobby, socket }: Props) => {
       </div>
 
       <div>
-        <h2 className="font-medium text-lg">Choose your heroes:</h2>
+        <h2 className="font-medium text-lg">{t("chooseYourRoles")}</h2>
         <div className="flex flex-row gap-6">
           {lobby.playableCharacters.map((playableCharacter) => {
             const canBePicked = playableCharacter.pickedBy === undefined;
@@ -103,7 +106,7 @@ export const LobbyForm = ({ user, lobby, socket }: Props) => {
                     <Button
                       onClick={() => handlePickHero(playableCharacter.id)}
                     >
-                      Pick
+                      {t("pick")}
                     </Button>
                   ) : null}
                   {isPickedByMe ? (
@@ -111,7 +114,7 @@ export const LobbyForm = ({ user, lobby, socket }: Props) => {
                       onClick={() => handleDiscardHero(playableCharacter.id)}
                       variant="outlined"
                     >
-                      Discard
+                      {t("discard")}
                     </Button>
                   ) : null}
                   {!canBePicked &&
@@ -130,18 +133,18 @@ export const LobbyForm = ({ user, lobby, socket }: Props) => {
 
       <div className="flex gap-4">
         <Button variant="outlined" onClick={handleClickOnLeaveLobby}>
-          Leave this lobby
+          {t("leave")}
         </Button>
         <Button
           variant={currentUserIsReady ? "outlined" : "primary"}
           onClick={handleClickOnReady}
         >
-          {currentUserIsReady ? "I'm not ready" : "I'm ready!"}
+          {currentUserIsReady ? t("notReady") : t("ready")}
         </Button>
 
         {isLobbyHost ? (
           <Button onClick={handleStartGame} disabled={!canStartGame}>
-            Start game
+            {t("startGame")}
           </Button>
         ) : null}
       </div>

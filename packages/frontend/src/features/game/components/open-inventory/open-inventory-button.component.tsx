@@ -16,8 +16,11 @@ export const OpenInventoryButton = () => {
 
   return (
     <>
-      <Button variant="primary" onClick={open}>
-        <Icon icon="battleGear" className="fill-white h-10 w-10" />
+      <Button variant="darkPrimary" onClick={open}>
+        <Icon
+          icon="battleGear"
+          className="fill-primary-600 group-hover:fill-primary-200 h-10 w-10"
+        />
       </Button>
 
       <EditCharacterInventory isOpen={isInventoryOpen} close={close} />

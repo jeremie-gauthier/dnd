@@ -18,21 +18,6 @@ export const ChestLootContent = ({ item, onRefuseLoot }: Props) => {
     data: { item },
   });
 
-  // const isAttackItem = item.type === "Weapon" || item.type === "Spell";
-
-  // const regularAttack = isAttackItem
-  //   ? item.attacks.find((attack) => attack.type === "regular")
-  //   : [];
-
-  // const minDamage = sum(...regularAttack.dices.map(({ minValue }) => minValue));
-  // const maxDamage = sum(...regularAttack.dices.map(({ maxValue }) => maxValue));
-  // const mean =
-  //   Math.round(
-  //     (sum(...regularAttack.dices.map(({ values }) => sum(...values))) /
-  //       (regularAttack.dices.length * 6)) *
-  //       10,
-  //   ) / 10;
-
   return (
     <div className="flex flex-col items-center bg-primary-900 gap-8 rounded-b-md">
       <div className="flex flex-row bg-primary-600 w-full py-4 text-white font-semibold text-xl justify-center">
@@ -61,14 +46,11 @@ export const ChestLootContent = ({ item, onRefuseLoot }: Props) => {
             <img src={item.imgUrl} alt={item.name} className="rounded" />
             <div className="absolute hidden inset-0 bg-black bg-opacity-35 text-white text-sm group-hover:flex flex-col p-1">
               <p>{t(item.name, { ns: "items" })}</p>
-              {/* <p>
-                {minDamage}-{maxDamage}(~{mean}) dmg
-              </p> */}
             </div>
           </div>
         </div>
 
-        <Button variant="outlined" onClick={onRefuseLoot}>
+        <Button variant="darkOutlined" onClick={onRefuseLoot}>
           {t("refuse_loot", { ns: "inventory" })}
         </Button>
       </div>

@@ -29,7 +29,7 @@ export const MinMaxRange = ({ min, max, value, onChange, label }: Props) => {
         max={max}
         value={value}
         onChange={handleChange}
-        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-amber-800"
+        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
       />
     </>
   );
