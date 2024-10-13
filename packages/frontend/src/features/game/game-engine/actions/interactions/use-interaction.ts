@@ -36,6 +36,7 @@ export const useInteraction = ({
     gameActions,
     gameEventManager,
     isIdle,
+    playerState,
   });
   useAttackInteraction({
     entityPlaying,

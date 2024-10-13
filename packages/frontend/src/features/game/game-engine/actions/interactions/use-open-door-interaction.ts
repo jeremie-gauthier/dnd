@@ -8,6 +8,7 @@ import { useGameActions } from "@features/game/context/use-game-actions";
 import { useEffect } from "react";
 import { GameEventManager } from "../../events";
 import { TilePressedEvent } from "../../events/tile-pressed.event";
+import { usePlayerState } from "../../state-machine";
 import { translate2DToIsometricCoord } from "../../utils/coords-conversion.util";
 
 type Params = {
@@ -16,6 +17,7 @@ type Params = {
   gameActions: ReturnType<typeof useGameActions>;
   gameEventManager: GameEventManager;
   isIdle: boolean;
+  playerState: ReturnType<typeof usePlayerState>;
 };
 
 export const useOpenDoorInteraction = ({
@@ -24,6 +26,7 @@ export const useOpenDoorInteraction = ({
   gameActions,
   gameEventManager,
   isIdle,
+  playerState,
 }: Params) => {
   useEffect(() => {
     const handleTilePressed: EventListener = (e) => {
@@ -79,11 +82,13 @@ export const useOpenDoorInteraction = ({
         interactions: [
           {
             name: "openDoor",
-            onInteract: () =>
+            onInteract: () => {
+              playerState.toggleTo("idle");
               gameActions.openDoor({
                 gameId: game.id,
                 coordOfTileWithDoor: coord2D,
-              }),
+              });
+            },
           },
         ],
       });
@@ -103,6 +108,7 @@ export const useOpenDoorInteraction = ({
     game,
     isIdle,
     entityPlaying,
+    playerState.toggleTo,
     gameActions.openDoor,
     gameEventManager.addEventListener,
     gameEventManager.removeEventListener,

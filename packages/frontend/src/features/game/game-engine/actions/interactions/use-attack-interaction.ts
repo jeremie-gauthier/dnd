@@ -95,12 +95,14 @@ export const useAttackInteraction = ({
           interactions: meleeAttacks.map((meleeAttack) => ({
             attack: meleeAttack,
             name: "attack",
-            onInteract: () =>
+            onInteract: () => {
+              playerState.toggleTo("idle");
               gameActions.attack({
                 gameId: game.id,
                 attackId: meleeAttack.id,
                 targetPlayableEntityId: tilePlayableEntityTargeted.id,
-              }),
+              });
+            },
           })),
         });
       } else {
@@ -132,12 +134,14 @@ export const useAttackInteraction = ({
           interactions: rangeAttack.map((rangeAttack) => ({
             attack: rangeAttack,
             name: "attack",
-            onInteract: () =>
+            onInteract: () => {
+              playerState.toggleTo("idle");
               gameActions.attack({
                 gameId: game.id,
                 attackId: rangeAttack.id,
                 targetPlayableEntityId: tilePlayableEntityTargeted.id,
-              }),
+              });
+            },
           })),
         });
       }
