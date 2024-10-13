@@ -9,7 +9,7 @@ VALUES
   (
     'fr-FR',
     'common',
-    '{"cancel": "Annuler", "confirm": "Confirmer"}'
+    '{"cancel": "Annuler", "confirm": "Confirmer", "endTurn": "Fin de tour"}'
   ),
   (
     'fr-FR',

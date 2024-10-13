@@ -18,7 +18,7 @@ export const Timeline = ({ game }: Props) => {
           <li
             key={playableEntity.id}
             className={classNames(
-              "border rounded-lg px-2 border-amber-800",
+              "border rounded-lg px-2 border-amber-800 min-w-fit",
               playableEntity.currentPhase === "action"
                 ? "bg-amber-800"
                 : "bg-transparent",

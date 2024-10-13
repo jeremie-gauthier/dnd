@@ -1,7 +1,9 @@
 import { useGameContext } from "@features/game/context/use-game-context";
 import { Button } from "@features/ui/button/button";
+import { useTranslation } from "react-i18next";
 
 export const EndTurnButton = () => {
+  const { t } = useTranslation(["common"]);
   const { game, playerState, entityPlaying, gameActions } = useGameContext();
 
   const handleClick = () => {
@@ -20,7 +22,7 @@ export const EndTurnButton = () => {
       variant={hasActionPointsLeft ? "outlined" : "primary"}
       onClick={handleClick}
     >
-      <span className="text-xl">End Turn</span>
+      <span className="text-xl">{t("endTurn")}</span>
     </Button>
   );
 };

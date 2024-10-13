@@ -16,6 +16,12 @@ export default {
           600: "#3B3D58",
           900: "#1B1D31",
         },
+        support: {
+          gray: {
+            600: "#252525",
+            900: "#202020",
+          },
+        },
         dice: {
           yellow: "#FFF700",
           orange: "#FF6E00",
@@ -44,5 +50,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar")],
 };
