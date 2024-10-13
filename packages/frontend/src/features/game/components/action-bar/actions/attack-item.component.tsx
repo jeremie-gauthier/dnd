@@ -31,13 +31,13 @@ export const AttackItem = ({ item, attack }: Props) => {
       )
         return;
 
-      const { isometricCoord } = e as TileClickedEvent;
+      const { coord2D } = e as TileClickedEvent;
 
       const playableEntities = Object.values(game.playableEntities);
       const targetPlayableEntityId = playableEntities.find(
         ({ coord, characteristic }) =>
-          coord.row === isometricCoord.row &&
-          coord.column === isometricCoord.column &&
+          coord.row === coord2D.row &&
+          coord.column === coord2D.column &&
           characteristic.healthPoints > 0,
       )?.id;
 

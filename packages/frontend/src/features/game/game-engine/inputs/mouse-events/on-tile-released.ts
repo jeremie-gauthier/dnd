@@ -19,10 +19,10 @@ export const handleTileReleased = ({
   gameEventManager,
 }: HandleTileReleasedParams) => {
   const coord = getCursorCoordinates(ev, layer);
-  const isometricCoord = translateIsometricTo2DCoord(
+  const coord2D = translateIsometricTo2DCoord(
     { row: coord.y, column: coord.x },
     layerConfig,
   );
 
-  gameEventManager.emitTileReleased(coord, isometricCoord);
+  gameEventManager.emitTileReleased(coord, coord2D);
 };

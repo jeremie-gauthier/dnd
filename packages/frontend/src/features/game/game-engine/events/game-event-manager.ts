@@ -39,35 +39,26 @@ export class GameEventManager extends EventTarget {
     );
   }
 
-  public emitTileHovered(
-    mouseCoord: { x: number; y: number },
-    isometricCoord: Coord,
-  ) {
-    if (this.isNewCoord(isometricCoord)) {
-      this.lastIsometricCoordHovered = isometricCoord;
-      this.dispatchEvent(new TileHoveredEvent(mouseCoord, isometricCoord));
+  public emitTileHovered(mouseCoord: { x: number; y: number }, coord2D: Coord) {
+    if (this.isNewCoord(coord2D)) {
+      this.lastIsometricCoordHovered = coord2D;
+      this.dispatchEvent(new TileHoveredEvent(mouseCoord, coord2D));
     }
   }
 
-  public emitTileClicked(
-    mouseCoord: { x: number; y: number },
-    isometricCoord: Coord,
-  ) {
-    this.dispatchEvent(new TileClickedEvent(mouseCoord, isometricCoord));
+  public emitTileClicked(mouseCoord: { x: number; y: number }, coord2D: Coord) {
+    this.dispatchEvent(new TileClickedEvent(mouseCoord, coord2D));
   }
 
-  public emitTilePressed(
-    mouseCoord: { x: number; y: number },
-    isometricCoord: Coord,
-  ) {
-    this.dispatchEvent(new TilePressedEvent(mouseCoord, isometricCoord));
+  public emitTilePressed(mouseCoord: { x: number; y: number }, coord2D: Coord) {
+    this.dispatchEvent(new TilePressedEvent(mouseCoord, coord2D));
   }
 
   public emitTileReleased(
     mouseCoord: { x: number; y: number },
-    isometricCoord: Coord,
+    coord2D: Coord,
   ) {
-    this.dispatchEvent(new TileReleasedEvent(mouseCoord, isometricCoord));
+    this.dispatchEvent(new TileReleasedEvent(mouseCoord, coord2D));
   }
 
   public emitPreparingAttack({

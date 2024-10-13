@@ -19,10 +19,10 @@ export const handleHover = ({
   gameEventManager,
 }: HandleCanvasClickParams) => {
   const coord = getCursorCoordinates(ev, layer);
-  const isometricCoord = translateIsometricTo2DCoord(
+  const coord2D = translateIsometricTo2DCoord(
     { row: coord.y, column: coord.x },
     layerConfig,
   );
 
-  gameEventManager.emitTileHovered(coord, isometricCoord);
+  gameEventManager.emitTileHovered(coord, coord2D);
 };

@@ -27,7 +27,7 @@ export const useOpenChestInteraction = ({
 }: Params) => {
   useEffect(() => {
     const handleTilePressed: EventListener = (e) => {
-      const { isometricCoord } = e as TilePressedEvent;
+      const { coord2D } = e as TilePressedEvent;
 
       if (
         !isIdle ||
@@ -40,16 +40,14 @@ export const useOpenChestInteraction = ({
       const isAdjacent = getNeighbourCoords({
         coord: entityPlaying.coord,
       }).some(
-        (coord) =>
-          coord.row === isometricCoord.row &&
-          coord.column === isometricCoord.column,
+        (coord) => coord.row === coord2D.row && coord.column === coord2D.column,
       );
       if (!isAdjacent) {
         return;
       }
 
       const metadata = { width: game.map.width, height: game.map.height };
-      const tileIdx = coordToIndex({ coord: isometricCoord, metadata });
+      const tileIdx = coordToIndex({ coord: coord2D, metadata });
       const tilePressed = game.map.tiles[tileIdx];
       if (!tilePressed) {
         return;
@@ -66,18 +64,15 @@ export const useOpenChestInteraction = ({
       }
 
       const assetSize = 64;
-      const isometricCoordTranslated = translate2DToIsometricCoord(
-        isometricCoord,
-        {
-          assetSize,
-          // Beware of the offset, it may shift everything being computed here.
-          // We really want to have the tiles next to the borders of the canvas.
-          map: {
-            height: game.map.height * assetSize,
-            width: game.map.width * assetSize,
-          },
+      const isometricCoordTranslated = translate2DToIsometricCoord(coord2D, {
+        assetSize,
+        // Beware of the offset, it may shift everything being computed here.
+        // We really want to have the tiles next to the borders of the canvas.
+        map: {
+          height: game.map.height * assetSize,
+          width: game.map.width * assetSize,
         },
-      );
+      });
       gameEventManager.emitInteractionsAuthorized({
         isometricCoord: isometricCoordTranslated,
         tile: tilePressed,
@@ -87,7 +82,7 @@ export const useOpenChestInteraction = ({
             onInteract: async () => {
               const openChestResult = await gameActions.openChest({
                 gameId: game.id,
-                coordOfTileWithChest: isometricCoord,
+                coordOfTileWithChest: coord2D,
               });
 
               if (openChestResult.itemFound.type !== "ChestTrap") {

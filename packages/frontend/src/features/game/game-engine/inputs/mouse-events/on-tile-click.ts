@@ -25,15 +25,15 @@ export const handleTileClick = ({
   gameEventManager,
 }: HandleTileClickParams) => {
   const coord = getCursorCoordinates(ev, layer);
-  const isometricCoord = translateIsometricTo2DCoord(
+  const coord2D = translateIsometricTo2DCoord(
     { row: coord.y, column: coord.x },
     layerConfig,
   );
 
   if (
-    isInRange(isometricCoord.row, 0, mapMetadata.height - 1) &&
-    isInRange(isometricCoord.column, 0, mapMetadata.width - 1)
+    isInRange(coord2D.row, 0, mapMetadata.height - 1) &&
+    isInRange(coord2D.column, 0, mapMetadata.width - 1)
   ) {
-    gameEventManager.emitTileClicked(coord, isometricCoord);
+    gameEventManager.emitTileClicked(coord, coord2D);
   }
 };

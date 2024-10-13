@@ -38,14 +38,14 @@ export const useAttackInteraction = ({
 }: Params) => {
   useEffect(() => {
     const handleTilePressed: EventListener = (e) => {
-      const { isometricCoord } = e as TilePressedEvent;
+      const { coord2D } = e as TilePressedEvent;
 
       if (!isIdle || !entityPlaying) {
         return;
       }
 
       const metadata = { width: game.map.width, height: game.map.height };
-      const tileIdx = coordToIndex({ coord: isometricCoord, metadata });
+      const tileIdx = coordToIndex({ coord: coord2D, metadata });
       const tilePressed = game.map.tiles[tileIdx];
       if (!tilePressed) {
         return;
@@ -62,18 +62,15 @@ export const useAttackInteraction = ({
       }
 
       const assetSize = 64;
-      const isometricCoordTranslated = translate2DToIsometricCoord(
-        isometricCoord,
-        {
-          assetSize,
-          // Beware of the offset, it may shift everything being computed here.
-          // We really want to have the tiles next to the borders of the canvas.
-          map: {
-            height: game.map.height * assetSize,
-            width: game.map.width * assetSize,
-          },
+      const isometricCoord = translate2DToIsometricCoord(coord2D, {
+        assetSize,
+        // Beware of the offset, it may shift everything being computed here.
+        // We really want to have the tiles next to the borders of the canvas.
+        map: {
+          height: game.map.height * assetSize,
+          width: game.map.width * assetSize,
         },
-      );
+      });
 
       const attacks = entityPlaying.inventory.gear
         .filter((stuff) => stuff.type === "Weapon" || stuff.type === "Spell")
@@ -82,9 +79,7 @@ export const useAttackInteraction = ({
       const isAdjacent = getNeighbourCoords({
         coord: entityPlaying.coord,
       }).some(
-        (coord) =>
-          coord.row === isometricCoord.row &&
-          coord.column === isometricCoord.column,
+        (coord) => coord.row === coord2D.row && coord.column === coord2D.column,
       );
       if (isAdjacent) {
         const meleeAttacks = attacks.filter(
@@ -95,7 +90,7 @@ export const useAttackInteraction = ({
         }
 
         gameEventManager.emitInteractionsAuthorized({
-          isometricCoord: isometricCoordTranslated,
+          isometricCoord,
           tile: tilePressed,
           interactions: meleeAttacks.map((meleeAttack) => ({
             attack: meleeAttack,
@@ -124,15 +119,15 @@ export const useAttackInteraction = ({
         });
         const isTargetInLineOfSight = lineOfSight.some(
           (tile) =>
-            tile.coord.column === isometricCoord.column &&
-            tile.coord.row === isometricCoord.row,
+            tile.coord.column === coord2D.column &&
+            tile.coord.row === coord2D.row,
         );
         if (!isTargetInLineOfSight) {
           return;
         }
 
         gameEventManager.emitInteractionsAuthorized({
-          isometricCoord: isometricCoordTranslated,
+          isometricCoord,
           tile: tilePressed,
           interactions: rangeAttack.map((rangeAttack) => ({
             attack: rangeAttack,
@@ -148,7 +143,7 @@ export const useAttackInteraction = ({
       }
 
       playerState.toggleTo("attack");
-      renderAttackPreview({ map: game.map, coords: [isometricCoord] });
+      renderAttackPreview({ map: game.map, coords: [coord2D] });
     };
     gameEventManager.addEventListener(
       TilePressedEvent.EventName,
