@@ -1,5 +1,6 @@
 import { IconBattleGear } from "./icons/IconBattleGear";
 import { IconBrain } from "./icons/IconBrain";
+import { IconChevronUpDown } from "./icons/IconChevronUpDown";
 import { IconDice } from "./icons/IconDice";
 import { IconHand } from "./icons/IconHand";
 import { IconHeart } from "./icons/IconHeart";
@@ -34,4 +35,5 @@ export const iconMapping = {
   x: IconX,
   openChest: IconOpenChest,
   dice: IconDice,
+  chevronUpDown: IconChevronUpDown,
 } as const;

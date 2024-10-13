@@ -6,9 +6,9 @@ import {
   ListboxOptions,
   Transition,
 } from "@headlessui/react";
-import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { classNames } from "@utils/class-names.util";
 import { Fragment, ReactNode } from "react";
+import { Icon } from "../icon/Icon";
 
 type Props<Element, List extends Element[]> = {
   label: ReactNode;
@@ -38,8 +38,9 @@ export const Select = <Value, List extends any[]>({
                 {getDisplayedValue(value)}
               </span>
               <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                <ChevronUpDownIcon
-                  className="h-5 w-5 text-gray-400"
+                <Icon
+                  icon="chevronUpDown"
+                  className="size-6 stroke-[1.5]"
                   aria-hidden="true"
                 />
               </span>
