@@ -40,7 +40,11 @@ export const useAttackInteraction = ({
     const handleTilePressed: EventListener = (e) => {
       const { coord2D } = e as TilePressedEvent;
 
-      if (!isIdle || !entityPlaying) {
+      if (
+        !isIdle ||
+        !entityPlaying ||
+        entityPlaying.characteristic.actionPoints <= 0
+      ) {
         return;
       }
 
