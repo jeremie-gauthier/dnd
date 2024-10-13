@@ -5,23 +5,23 @@ import { InventorySlot } from "./common/inventory-slot.component";
 
 type Props = {
   item?: GameItem;
-  type: "Weapon" | "Spell" | "backpackAnyItem";
+  type: "Weapon" | "Spell" | "Artifact";
   idx: number;
 };
 
-export const BackpackSlot = ({ item, type, idx }: Props) => {
+export const GearSlot = ({ item, type, idx }: Props) => {
   return (
     <InventorySlot
       key={idx}
       type={type}
-      droppableId={`droppable-backpack-slot-${idx}`}
-      storageSpace="backpack"
+      droppableId={`droppable-gear-slot-${idx}`}
+      storageSpace="gear"
       hostedItem={item}
     >
       {item ? (
-        <InventoryItem item={item} storageSpace="backpack" />
+        <InventoryItem item={item} />
       ) : (
-        <Icon icon="knapsack" className="fill-primary-600 h-28 w-28" />
+        <Icon icon="hand" className="fill-primary-600 h-28 w-28" />
       )}
     </InventorySlot>
   );

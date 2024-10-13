@@ -7,9 +7,9 @@ import {
 import { getCursorCoordinates } from "./get-cursor-coordinates";
 
 export type HandleTilePressedParams = {
-  canvas: HTMLCanvasElement;
+  layer: SVGSVGElement;
   ev: MouseEvent;
-  canvasConfig: CanvasConfig;
+  layerConfig: CanvasConfig;
   mapMetadata: {
     height: GameView["map"]["height"];
     width: GameView["map"]["width"];
@@ -19,21 +19,21 @@ export type HandleTilePressedParams = {
 
 export const handleTilePressed = ({
   ev,
-  canvas,
-  canvasConfig,
+  layer,
+  layerConfig,
   mapMetadata,
   gameEventManager,
 }: HandleTilePressedParams) => {
-  const coord = getCursorCoordinates(ev, canvas);
-  const isometricCoord = translateIsometricTo2DCoord(
+  const coord = getCursorCoordinates(ev, layer);
+  const coord2D = translateIsometricTo2DCoord(
     { row: coord.y, column: coord.x },
-    canvasConfig,
+    layerConfig,
   );
 
   if (
-    isInRange(isometricCoord.row, 0, mapMetadata.height - 1) &&
-    isInRange(isometricCoord.column, 0, mapMetadata.width - 1)
+    isInRange(coord2D.row, 0, mapMetadata.height - 1) &&
+    isInRange(coord2D.column, 0, mapMetadata.width - 1)
   ) {
-    gameEventManager.emitTilePressed(coord, isometricCoord);
+    gameEventManager.emitTilePressed(coord, coord2D);
   }
 };

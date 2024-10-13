@@ -1,8 +1,8 @@
 export function getCursorCoordinates(
   ev: MouseEvent,
-  canvas: HTMLCanvasElement,
+  layer: SVGSVGElement,
 ): { x: number; y: number } {
-  const rect = canvas.getBoundingClientRect();
+  const rect = layer.getBoundingClientRect();
   const x = ev.clientX - rect.left;
   const y = ev.clientY - rect.top;
 

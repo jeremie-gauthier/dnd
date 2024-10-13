@@ -1,15 +1,11 @@
+import { floorAssetCollection } from "../../assets-loader/assets.config";
 import type { EntityDrawerParams } from "./entity-drawer-params.interface";
-
-type RequiredAssets = {
-  readonly floor_light: string;
-  readonly floor_dark: string;
-};
 
 export function drawFloor({
   context,
   config,
   subject,
-}: EntityDrawerParams<RequiredAssets>) {
+}: EntityDrawerParams<typeof floorAssetCollection>) {
   const isEvenTile = (subject.coord2D.column + subject.coord2D.row) % 2 === 0;
   const floorAsset = isEvenTile
     ? config.assets.floor_light

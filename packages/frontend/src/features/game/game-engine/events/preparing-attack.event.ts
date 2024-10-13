@@ -7,7 +7,10 @@ export class PreparingAttackEvent extends Event {
     public readonly game: GameView,
     public readonly entityPlaying: PlayableEntity,
     public readonly item: GameItem,
-    public readonly attack: GameItem["attacks"][number],
+    public readonly attack: Extract<
+      GameItem,
+      { type: "Weapon" | "Spell" }
+    >["attacks"][number],
   ) {
     super(PreparingAttackEvent.EventName);
   }

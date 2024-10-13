@@ -1,8 +1,9 @@
 import { useGameContext } from "../context/use-game-context";
 import { Canvas } from "./canvas.component";
+import { TooltipLayer } from "./tooltip-layer/tooltip-layer.component";
 import { useCanvasSize } from "./use-canvas-size";
 
-export const BoardGameCanvas = () => {
+export const BoardGame = () => {
   const { assetSize, canvasRef, game } = useGameContext();
   const { width, height } = useCanvasSize({
     mapWidth: game.map.width,
@@ -30,7 +31,7 @@ export const BoardGameCanvas = () => {
         width={width}
         className="absolute z-20"
       />
-      <Canvas
+      <TooltipLayer
         ref={canvasRef.tooltips}
         height={height}
         width={width}

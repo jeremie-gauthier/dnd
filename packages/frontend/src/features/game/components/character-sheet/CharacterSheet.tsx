@@ -18,12 +18,12 @@ type Props = {
   character: PlayableEntity;
   renderBackpackSlot: React.FC<{
     item?: GameItem;
-    type: "Weapon" | "Spell" | "backpackAnyItem";
+    type: "Weapon" | "Spell" | "Artifact" | "Potion" | "backpackAnyItem";
     idx: number;
   }>;
   renderGearSlot: React.FC<{
     item?: GameItem;
-    type: "Weapon" | "Spell" | "backpackAnyItem";
+    type: "Weapon" | "Spell" | "Artifact";
     idx: number;
   }>;
 };

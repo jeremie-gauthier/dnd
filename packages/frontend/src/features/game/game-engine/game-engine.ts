@@ -1,6 +1,7 @@
 import { type GameView, type PlayerGamePhase } from "@dnd/shared";
 import { RefObject, useEffect } from "react";
 import { useGameActions } from "../context/use-game-actions";
+import { useInteraction } from "./actions/interactions/use-interaction";
 import { useMove } from "./actions/use-move";
 import { GameEventManager } from "./events";
 import { useMouseInputs } from "./inputs";
@@ -11,7 +12,7 @@ export const useGameEngine = ({
   floorCanvasRef,
   previewCanvasRef,
   entitiesCanvasRef,
-  tooltipsCanvasRef,
+  tooltipsLayerRef,
   gameActions,
   gameEntity,
   gamePhase,
@@ -19,7 +20,7 @@ export const useGameEngine = ({
   floorCanvasRef: RefObject<HTMLCanvasElement>;
   previewCanvasRef: RefObject<HTMLCanvasElement>;
   entitiesCanvasRef: RefObject<HTMLCanvasElement>;
-  tooltipsCanvasRef: RefObject<HTMLCanvasElement>;
+  tooltipsLayerRef: RefObject<SVGSVGElement>;
   gameActions: ReturnType<typeof useGameActions>;
   gameEntity: GameView;
   gamePhase: PlayerGamePhase;
@@ -38,16 +39,15 @@ export const useGameEngine = ({
     render,
     renderMovePreview,
     renderPlayableEntityTurnHighlight,
+    renderAttackPreview,
     clearPreviewLayer,
-    renderMoveForbiddenTooltip,
-    clearTooltipLayer,
     assetSize,
   } = useMapRenderer({
     gameEventManager,
     floorCanvasRef,
     previewCanvasRef,
     entitiesCanvasRef,
-    tooltipsCanvasRef,
+    entityPlaying,
   });
 
   const {
@@ -57,7 +57,7 @@ export const useGameEngine = ({
     addHoverEvent,
     clearMouseEvents,
   } = useMouseInputs({
-    canvasRef: tooltipsCanvasRef,
+    layerRef: tooltipsLayerRef,
     canvasConfig: {
       assetSize,
       map: {
@@ -80,8 +80,16 @@ export const useGameEngine = ({
     isPlaying: gamePhase === "action",
     playerState,
     renderMovePreview,
-    renderMoveForbiddenTooltip,
-    clearTooltipLayer,
+  });
+  useInteraction({
+    entityPlaying,
+    game: gameEntity,
+    gameActions,
+    gameEventManager,
+    isPlaying: gamePhase === "action",
+    playerState,
+    renderAttackPreview,
+    clearPreviewLayer,
   });
 
   useEffect(() => {
@@ -91,7 +99,7 @@ export const useGameEngine = ({
   }, [gameEntity.map, gameEntity.playableEntities, gamePhase, render]);
 
   useEffect(() => {
-    if (!tooltipsCanvasRef.current || !render) return;
+    if (!tooltipsLayerRef.current || !render) return;
 
     addTileClickEvent();
     addHoverEvent();
@@ -100,7 +108,7 @@ export const useGameEngine = ({
 
     return clearMouseEvents;
   }, [
-    tooltipsCanvasRef.current,
+    tooltipsLayerRef.current,
     addTileClickEvent,
     addTilePressedEvent,
     addTileReleasedEvent,

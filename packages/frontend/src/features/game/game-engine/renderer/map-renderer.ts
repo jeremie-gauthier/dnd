@@ -1,4 +1,4 @@
-import type { GameView, PlayerGamePhase } from "@dnd/shared";
+import type { GameView, PlayableEntity, PlayerGamePhase } from "@dnd/shared";
 import { RefObject } from "react";
 import { GameEventManager } from "../events";
 import { useAssetsLoader } from "./assets-loader/assets-loader";
@@ -6,14 +6,13 @@ import { assetCollection } from "./assets-loader/assets.config";
 import { useEntitiesLayer } from "./rendering-layers/entities-layer";
 import { useFloorLayer } from "./rendering-layers/floor-layer";
 import { usePreviewLayer } from "./rendering-layers/preview-layer";
-import { useTooltipLayer } from "./rendering-layers/tooltip-layer";
 
 type Params = {
   gameEventManager: GameEventManager;
   floorCanvasRef: RefObject<HTMLCanvasElement>;
   previewCanvasRef: RefObject<HTMLCanvasElement>;
   entitiesCanvasRef: RefObject<HTMLCanvasElement>;
-  tooltipsCanvasRef: RefObject<HTMLCanvasElement>;
+  entityPlaying?: PlayableEntity;
 };
 
 export const useMapRenderer = ({
@@ -21,7 +20,7 @@ export const useMapRenderer = ({
   floorCanvasRef,
   previewCanvasRef,
   entitiesCanvasRef,
-  tooltipsCanvasRef,
+  entityPlaying,
 }: Params) => {
   const canvas = floorCanvasRef.current;
   const context = canvas?.getContext("2d");
@@ -45,15 +44,12 @@ export const useMapRenderer = ({
     canvasRef: entitiesCanvasRef,
   });
 
-  const { clear: clearTooltipLayer, renderMoveForbiddenTooltip } =
-    useTooltipLayer({ gameEventManager, canvasRef: tooltipsCanvasRef });
-
   const render = (
     map: GameView["map"],
     playableEntities: GameView["playableEntities"],
     _: PlayerGamePhase,
   ) => {
-    renderFloorLayer({ map });
+    renderFloorLayer({ map, entityPlaying });
     renderEntitiesLayer({ map, playableEntities });
   };
 
@@ -65,8 +61,6 @@ export const useMapRenderer = ({
     renderMovePreview,
     renderPlayableEntityTurnHighlight,
     clearPreviewLayer,
-    clearTooltipLayer,
-    renderMoveForbiddenTooltip,
     assetSize,
   };
 };

@@ -6,23 +6,23 @@ import {
 import { getCursorCoordinates } from "./get-cursor-coordinates";
 
 export type HandleCanvasClickParams = {
-  canvas: HTMLCanvasElement;
+  layer: SVGSVGElement;
   ev: MouseEvent;
-  canvasConfig: CanvasConfig;
+  layerConfig: CanvasConfig;
   gameEventManager: GameEventManager;
 };
 
 export const handleHover = ({
   ev,
-  canvas,
-  canvasConfig,
+  layer,
+  layerConfig,
   gameEventManager,
 }: HandleCanvasClickParams) => {
-  const coord = getCursorCoordinates(ev, canvas);
-  const isometricCoord = translateIsometricTo2DCoord(
+  const coord = getCursorCoordinates(ev, layer);
+  const coord2D = translateIsometricTo2DCoord(
     { row: coord.y, column: coord.x },
-    canvasConfig,
+    layerConfig,
   );
 
-  gameEventManager.emitTileHovered(coord, isometricCoord);
+  gameEventManager.emitTileHovered(coord, coord2D);
 };

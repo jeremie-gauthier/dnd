@@ -2,14 +2,9 @@ import cleric from "@assets/classes/cleric.webp";
 import sorcerer from "@assets/classes/sorcerer.webp";
 import thief from "@assets/classes/thief.webp";
 import warrior from "@assets/classes/warrior.webp";
-import { HeroClassType, LobbyView } from "@dnd/shared";
-import {
-  ChevronDoubleRightIcon,
-  HeartIcon,
-  ShieldExclamationIcon,
-  SparklesIcon,
-  StarIcon,
-} from "@heroicons/react/20/solid";
+import { HeroClassType, LobbyView, capitalize } from "@dnd/shared";
+import { Icon } from "@features/ui/icon/Icon";
+import { useTranslation } from "react-i18next";
 import { useGetHeroDetails } from "./use-get-hero-details";
 
 const CLASS_TO_IMG: Readonly<Record<HeroClassType, string>> = {
@@ -24,6 +19,8 @@ type Props = {
 };
 
 export const HeroCard = ({ hero }: Props) => {
+  const { t } = useTranslation(["heroes"]);
+
   const { data: heroDetails, isLoading } = useGetHeroDetails({
     heroId: hero.id,
   });
@@ -41,30 +38,30 @@ export const HeroCard = ({ hero }: Props) => {
         className="h-64"
       />
       <h3 className="font-medium">{heroDetails.name}</h3>
-      <p>{heroDetails.class.toLowerCase()}</p>
+      <p>{capitalize(t(heroDetails.class).toLocaleLowerCase())}</p>
       <div className="flex gap-2">
         <div className="flex items-center">
-          <HeartIcon className="h-5 w-5 text-red-500" />
+          <Icon icon="heart" className="fill-red-600" />
           <span>{heroDetails.characteristic.baseHealthPoints}</span>
         </div>
 
         <div className="flex items-center">
-          <ShieldExclamationIcon className="h-5 w-5 text-gray-500" />
+          <Icon icon="shield" className="fill-slate-700" />
           <span>{heroDetails.characteristic.baseArmorClass}</span>
         </div>
 
         <div className="flex items-center">
-          <ChevronDoubleRightIcon className="h-5 w-5 text-green-500" />
+          <Icon icon="walkingBoot" className="fill-green-700" />
           <span>{heroDetails.characteristic.baseMovementPoints}</span>
         </div>
 
         <div className="flex items-center">
-          <SparklesIcon className="h-5 w-5 text-blue-500" />
+          <Icon icon="wizardStaff" className="fill-blue-600" />
           <span>{heroDetails.characteristic.baseManaPoints}</span>
         </div>
 
         <div className="flex items-center">
-          <StarIcon className="h-5 w-5 text-yellow-500" />
+          <Icon icon="roundStar" className="fill-yellow-600" />
           <span>{heroDetails.characteristic.baseActionPoints}</span>
         </div>
       </div>

@@ -1,21 +1,32 @@
 import {
   Coord,
-  coordToIndex,
   GameView,
-  getAllPathsFromTileWithinRange,
-  getNeighbourCoords,
   PlayableEntity,
   TilePath,
+  coordToIndex,
+  getAllPathsFromTileWithinRange,
+  getNeighbourCoords,
 } from "@dnd/shared";
+import { useGameActions } from "@features/game/context/use-game-actions";
 import { useEffect, useState } from "react";
+import { GameEventManager, TileHoveredEvent } from "../events";
 import { TileClickedEvent } from "../events/tile-clicked.event";
 import { TilePressedEvent } from "../events/tile-pressed.event";
 import { TileReleasedEvent } from "../events/tile-released.event";
 import { useMapRenderer } from "../renderer";
 import { usePlayerState } from "../state-machine";
-import { GameEventManager, TileHoveredEvent } from "../events";
-import { useGameActions } from "@features/game/context/use-game-actions";
+import { translate2DToIsometricCoord } from "../utils/coords-conversion.util";
 import { getAllCoordsFromTilePaths } from "./move-utils";
+
+type Params = {
+  entityPlaying?: PlayableEntity;
+  game: GameView;
+  gameActions: ReturnType<typeof useGameActions>;
+  gameEventManager: GameEventManager;
+  isPlaying: boolean;
+  playerState: ReturnType<typeof usePlayerState>;
+  renderMovePreview: ReturnType<typeof useMapRenderer>["renderMovePreview"];
+};
 
 export const useMove = ({
   entityPlaying,
@@ -25,21 +36,7 @@ export const useMove = ({
   isPlaying,
   playerState,
   renderMovePreview,
-  renderMoveForbiddenTooltip,
-  clearTooltipLayer,
-}: {
-  entityPlaying?: PlayableEntity;
-  game: GameView;
-  gameActions: ReturnType<typeof useGameActions>;
-  gameEventManager: GameEventManager;
-  isPlaying: boolean;
-  playerState: ReturnType<typeof usePlayerState>;
-  renderMovePreview: ReturnType<typeof useMapRenderer>["renderMovePreview"];
-  renderMoveForbiddenTooltip: ReturnType<
-    typeof useMapRenderer
-  >["renderMoveForbiddenTooltip"];
-  clearTooltipLayer: ReturnType<typeof useMapRenderer>["clearTooltipLayer"];
-}) => {
+}: Params) => {
   const isMoving = isPlaying && playerState.currentAction === "move";
   const canMove =
     isPlaying &&
@@ -78,9 +75,9 @@ export const useMove = ({
     const handleMouseDown: EventListener = (e) => {
       setTilePathCoords([entityPlaying.coord]);
 
-      const { isometricCoord } = e as TileClickedEvent;
+      const { coord2D } = e as TileClickedEvent;
       const idx = coordToIndex({
-        coord: isometricCoord,
+        coord: coord2D,
         metadata: { height: game.map.height, width: game.map.width },
       });
       const tile = game.map.tiles[idx];
@@ -122,13 +119,12 @@ export const useMove = ({
     const handleMouseMove: EventListener = (e) => {
       if (!entityPlaying) return;
 
-      const { isometricCoord } = e as TileHoveredEvent;
+      const { coord2D } = e as TileHoveredEvent;
 
       // if it's a non accessible coord
       const isHoveredCoordAccessibleForEntityPlaying =
         availableTilesToMoveOn.some(
-          ({ row, column }) =>
-            row === isometricCoord.row && column === isometricCoord.column,
+          ({ row, column }) => row === coord2D.row && column === coord2D.column,
         );
       if (!isHoveredCoordAccessibleForEntityPlaying) {
         setTilePathCoords((coords) => coords.slice(0, 1));
@@ -137,8 +133,7 @@ export const useMove = ({
 
       // if it's a coord that has already been hovered
       const hoveredCoordTilePathIdx = tilePathCoords.findIndex(
-        ({ row, column }) =>
-          row === isometricCoord.row && column === isometricCoord.column,
+        ({ row, column }) => row === coord2D.row && column === coord2D.column,
       );
       const isHoveredCoordAlreadyInTilePath = hoveredCoordTilePathIdx >= 0;
       if (isHoveredCoordAlreadyInTilePath) {
@@ -158,11 +153,10 @@ export const useMove = ({
       if (isInMoveRange) {
         // if it's a new coord adjacent to the last one
         const isHoveredCoordAdjacentToLastOne = lastCoordHoveredNeighbours.some(
-          ({ row, column }) =>
-            row === isometricCoord.row && column === isometricCoord.column,
+          ({ row, column }) => row === coord2D.row && column === coord2D.column,
         );
         if (isHoveredCoordAdjacentToLastOne) {
-          setTilePathCoords((coords) => [...coords, isometricCoord]);
+          setTilePathCoords((coords) => [...coords, coord2D]);
           return;
         }
       }
@@ -170,8 +164,8 @@ export const useMove = ({
       // if it's a new coord non-adjacent to the last one
       const selectedPath = tilePaths.find(
         ({ tile }) =>
-          tile.coord.row === isometricCoord.row &&
-          tile.coord.column === isometricCoord.column,
+          tile.coord.row === coord2D.row &&
+          tile.coord.column === coord2D.column,
       );
       const newTilePathCoords = getAllCoordsFromTilePaths(
         selectedPath ? [selectedPath] : [],
@@ -203,15 +197,13 @@ export const useMove = ({
     if (!canMove || !isMoving) return;
 
     const handleMouseUp: EventListener = (e) => {
-      const { isometricCoord } = e as TileReleasedEvent;
+      const { coord2D } = e as TileReleasedEvent;
 
       playerState.toggleTo("idle");
-      clearTooltipLayer();
 
       const tilePathCoordsToMoveOn = tilePathCoords.slice(1);
       const canCommitMove = tilePathCoordsToMoveOn.some(
-        ({ row, column }) =>
-          row === isometricCoord.row && column === isometricCoord.column,
+        ({ row, column }) => row === coord2D.row && column === coord2D.column,
       );
       if (canCommitMove) {
         gameActions.move({
@@ -238,7 +230,6 @@ export const useMove = ({
     canMove,
     gameEventManager.addEventListener,
     gameEventManager.removeEventListener,
-    clearTooltipLayer,
     playerState.toggleTo,
     gameActions.move,
   ]);
@@ -267,11 +258,22 @@ export const useMove = ({
     const tile = game.map.tiles[tileIdx];
     if (!tile) return;
 
+    const assetSize = 64;
+    const isometricCoord = translate2DToIsometricCoord(coordHovered, {
+      assetSize,
+      // Beware of the offset, it may shift everything being computed here.
+      // We really want to have the tiles next to the borders of the canvas.
+      map: {
+        height: game.map.height * assetSize,
+        width: game.map.width * assetSize,
+      },
+    });
+
     const isAccessible = tile.entities.every((entity) => !entity.isBlocking);
     if (!isAccessible && !isPlayingEntityPosition) {
-      renderMoveForbiddenTooltip({ map: game.map, coord2D: coordHovered });
+      gameEventManager.emitMoveForbidden({ coordHovered, isometricCoord });
     } else {
-      clearTooltipLayer();
+      gameEventManager.emitMoveAuthorized({ isometricCoord });
     }
   }, [
     isMoving,
@@ -280,7 +282,7 @@ export const useMove = ({
     tilePathCoords,
     availableTilesToMoveOn,
     renderMovePreview,
-    renderMoveForbiddenTooltip,
-    clearTooltipLayer,
+    gameEventManager.emitMoveForbidden,
+    gameEventManager.emitMoveAuthorized,
   ]);
 };

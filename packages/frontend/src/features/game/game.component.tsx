@@ -1,11 +1,13 @@
-import { BoardGameCanvas } from "./board-game/board-game.component";
-import { ActionBar } from "./components/action-bar/action-bar";
+import { BoardGame } from "./board-game/board-game.component";
 import { ActionsLog } from "./components/action-log/action-log-list.component";
 import { ActionPoints } from "./components/characteristics/action-points.component";
 import { HealthPoints } from "./components/characteristics/health-points.component";
 import { ManaPoints } from "./components/characteristics/mana-points.component";
 import { MovementPoints } from "./components/characteristics/movement-points.component";
 import { ConsumableList } from "./components/consumables/consumable-list.component";
+import { EndTurnButton } from "./components/end-turn-button/end-turn-button.component";
+import { GetChestLoot } from "./components/get-chest-loot/get-chest-loot.component";
+import { OpenInventoryButton } from "./components/open-inventory/open-inventory-button.component";
 import { useGameContext } from "./context/use-game-context";
 import { Timeline } from "./timeline/timeline.component";
 
@@ -17,50 +19,63 @@ export const Game = () => {
   );
 
   return (
-    <div className="flex flex-col w-full gap-4">
-      <p className="flex justify-start text-xs">Game ID: {game.id}</p>
+    <>
+      <div className="flex flex-col w-full gap-4 bg-support-gray-900 ">
+        <p className="flex justify-start text-xs italic text-white">
+          Game ID: {game.id}
+        </p>
 
-      <div className="relative flex flex-col bg-black p-4 gap-4">
-        <div className="flex justify-center">
-          {consumables && consumables.length > 0 && (
-            <ConsumableList items={consumables} />
-          )}
-          <BoardGameCanvas />
-          <ActionsLog />
-        </div>
+        <div className="relative flex flex-col p-4 gap-4">
+          <div className="flex justify-center">
+            {consumables && consumables.length > 0 && (
+              <ConsumableList items={consumables} />
+            )}
+            <BoardGame />
+          </div>
 
-        <div className="flex flex-row justify-end">
-          <Timeline game={game} />
-        </div>
-      </div>
+          <div className="flex flex-row justify-between">
+            <ActionsLog />
 
-      <div className="flex flex-row justify-center w-full gap-16">
-        {isPlaying && entityPlaying ? (
-          <>
-            <div className="flex flex-col items-center">
-              <HealthPoints
-                healthPoints={entityPlaying.characteristic.healthPoints}
-                baseHealthPoints={entityPlaying.characteristic.baseHealthPoints}
-                size="large"
-              />
-              <div className="flex flex-row gap-1">
-                <ManaPoints
-                  manaPoints={entityPlaying.characteristic.manaPoints}
-                  baseManaPoints={entityPlaying.characteristic.baseManaPoints}
+            {isPlaying && entityPlaying ? (
+              <div className="flex flex-row items-end gap-2">
+                <HealthPoints
+                  healthPoints={entityPlaying.characteristic.healthPoints}
+                  baseHealthPoints={
+                    entityPlaying.characteristic.baseHealthPoints
+                  }
                 />
+                {entityPlaying.characteristic.baseManaPoints > 0 ? (
+                  <ManaPoints
+                    manaPoints={entityPlaying.characteristic.manaPoints}
+                    baseManaPoints={entityPlaying.characteristic.baseManaPoints}
+                  />
+                ) : null}
                 <ActionPoints
                   actionPoints={entityPlaying.characteristic.actionPoints}
                 />
                 <MovementPoints
                   movementPoints={entityPlaying.characteristic.movementPoints}
                 />
+
+                {entityPlaying.faction === "hero" ? (
+                  <div className="flex flex-col justify-between">
+                    <OpenInventoryButton />
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+
+            <div className="flex flex-col items-end justify-end gap-4">
+              <EndTurnButton />
+              <div className="flex flex-row max-w-lg overflow-x-scroll scrollbar-thin scrollbar-thumb-primary-600 scrollbar-track-primary-900">
+                <Timeline game={game} />
               </div>
             </div>
-
-            <ActionBar />
-          </>
-        ) : null}
+          </div>
+        </div>
       </div>
-    </div>
+
+      <GetChestLoot />
+    </>
   );
 };

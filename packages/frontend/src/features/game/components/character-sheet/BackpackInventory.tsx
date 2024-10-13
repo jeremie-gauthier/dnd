@@ -6,7 +6,7 @@ type Props = {
   storageCapacity: StuffStorageCapacityJson;
   renderBackpackSlot: React.FC<{
     item?: GameItem;
-    type: "Weapon" | "Spell" | "backpackAnyItem";
+    type: "Weapon" | "Spell" | "Artifact" | "Potion" | "backpackAnyItem";
     idx: number;
   }>;
 };
@@ -18,7 +18,7 @@ export const BackpackInventory = ({
 }: Props) => {
   const backpackItems = backpack.map((item) => ({
     item,
-    type: item.type,
+    type: item.type as "Weapon" | "Spell" | "Artifact" | "Potion",
   }));
 
   const backpackInventorySlots = [

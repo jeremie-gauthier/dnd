@@ -1,3 +1,4 @@
+import { Auth0ContextInterface, useAuth0 } from "@auth0/auth0-react";
 import { getSocket } from "@config/socket";
 import { queryClient } from "@lib/react-query";
 import {
@@ -5,9 +6,8 @@ import {
   RouterProvider,
   createRouter,
 } from "@tanstack/react-router";
-import { routeTree } from "./route-tree.gen";
-import { Auth0ContextInterface, useAuth0 } from "@auth0/auth0-react";
 import { useMemo } from "react";
+import { routeTree } from "./route-tree.gen";
 
 const getRouter = ({
   getAccessTokenSilently,

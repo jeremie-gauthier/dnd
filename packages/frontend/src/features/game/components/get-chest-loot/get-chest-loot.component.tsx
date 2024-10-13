@@ -1,9 +1,11 @@
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { GameItem } from "@dnd/shared";
+import { ItemFoundEvent } from "@features/game/game-engine/events/item-found.event";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useGameContext } from "../../../../../context/use-game-context";
-import { CharacterSheet } from "../../../../character-sheet/CharacterSheet";
+import { useGameContext } from "../../context/use-game-context";
+import { CharacterSheet } from "../character-sheet/CharacterSheet";
 import { BackpackSlot } from "./backpack-slot.component";
 import { ChestLootContent } from "./chest-loot-content.component";
 import { GearSlot } from "./gear-slot.component";
@@ -13,14 +15,33 @@ import {
   useGetChestLootContext,
 } from "./get-chest-loot.context";
 
-type Props = {
-  isOpen: boolean;
-  close: (clickedTarget?: "button") => void;
-  itemFoundInChest: GameItem | null;
-};
+export const GetChestLoot = () => {
+  const { game, gameActions, gameEventManager } = useGameContext();
+  const [itemFoundInChest, setItemFoundInChest] = useState<GameItem | null>(
+    null,
+  );
 
-export const GetChestLoot = (props: Props) => {
-  const { game, gameActions } = useGameContext();
+  useEffect(() => {
+    const handleItemFound: EventListener = (e) => {
+      const { itemFound } = e as ItemFoundEvent;
+      setItemFoundInChest(itemFound);
+    };
+    gameEventManager.addEventListener(
+      ItemFoundEvent.EventName,
+      handleItemFound,
+    );
+
+    return () => {
+      gameEventManager.removeEventListener(
+        ItemFoundEvent.EventName,
+        handleItemFound,
+      );
+    };
+  }, [gameEventManager.addEventListener, gameEventManager.removeEventListener]);
+
+  const handleClose = () => {
+    setItemFoundInChest(null);
+  };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { over, active } = event;
@@ -51,24 +72,28 @@ export const GetChestLoot = (props: Props) => {
         replacedItemId,
         storageSpace: over.data.current.storageSpace,
       });
-      props.close();
+      handleClose();
     }
   };
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
       <GetChestLootContextProvider>
-        <InnerGetChestLoot {...props} />
+        <InnerGetChestLoot
+          close={handleClose}
+          itemFoundInChest={itemFoundInChest}
+        />
       </GetChestLootContextProvider>
     </DndContext>
   );
 };
 
-const InnerGetChestLoot = ({
-  isOpen,
-  close,
-  itemFoundInChest,
-}: Pick<Props, "close" | "isOpen" | "itemFoundInChest">) => {
+type Props = {
+  close: (clickedTarget?: "button") => void;
+  itemFoundInChest: GameItem | null;
+};
+
+const InnerGetChestLoot = ({ close, itemFoundInChest }: Props) => {
   const { t } = useTranslation(["inventory"]);
   const { entityPlaying } = useGameContext();
   const { updateCursorPosition } = useGetChestLootContext();
@@ -84,7 +109,7 @@ const InnerGetChestLoot = ({
 
   return (
     <Dialog
-      open={isOpen}
+      open={itemFoundInChest !== null}
       as="div"
       className="relative z-40 focus:outline-none"
       onClose={noOp}
