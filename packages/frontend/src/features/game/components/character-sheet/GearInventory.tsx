@@ -6,7 +6,7 @@ type Props = {
   storageCapacity: StuffStorageCapacityJson;
   renderGearSlot: React.FC<{
     item?: GameItem;
-    type: "Weapon" | "Spell" | "backpackAnyItem";
+    type: "Weapon" | "Spell" | "Artifact";
     idx: number;
   }>;
 };

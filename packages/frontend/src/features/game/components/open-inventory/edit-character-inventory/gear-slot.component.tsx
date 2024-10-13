@@ -5,7 +5,7 @@ import { InventorySlot } from "./common/inventory-slot.component";
 
 type Props = {
   item?: GameItem;
-  type: "Weapon" | "Spell" | "backpackAnyItem";
+  type: "Weapon" | "Spell" | "Artifact";
   idx: number;
 };
 
