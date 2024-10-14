@@ -6,6 +6,8 @@ import {
 import { Entity, PlainData } from "src/modules/shared/domain/entity";
 import { Attack } from "../../attack/attack.entity";
 import { Coord } from "../../coord/coord.vo";
+import { PlayableEntityTurnEndedDomainEvent } from "../../domain-events/dtos/playable-entity-turn-ended.dto";
+import { PlayableEntityTurnStartedDomainEvent } from "../../domain-events/dtos/playable-entity-turn-started.dto";
 import { Inventory } from "../../inventory/inventory.entity";
 import { Spell } from "../../item/spell/spell.entity";
 import { Weapon } from "../../item/weapon/weapon.entity";
@@ -199,6 +201,11 @@ export abstract class Playable<
   public endTurn() {
     this.conditions.applyAllEndTurnConditions({ playableEntityAffected: this });
     this._data.status = this._data.status.advanceTo("IDLE");
+    this.addDomainEvent(
+      new PlayableEntityTurnEndedDomainEvent({
+        playableEntity: this.toPlain(),
+      }),
+    );
   }
 
   public startTurn() {
@@ -209,6 +216,11 @@ export abstract class Playable<
     this.conditions.applyAllStartTurnConditions({
       playableEntityAffected: this,
     });
+    this.addDomainEvent(
+      new PlayableEntityTurnStartedDomainEvent({
+        playableEntity: this.toPlain(),
+      }),
+    );
   }
 
   public setCoord(coord: Coord) {

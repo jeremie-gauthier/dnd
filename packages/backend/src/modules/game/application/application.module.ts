@@ -2,6 +2,8 @@ import { Module } from "@nestjs/common";
 import { LogService } from "../domain/log/log.service";
 import { DatabaseModule } from "../infra/database/database.module";
 import { GameListeners } from "./game.listeners";
+import { DomainEventMapperService } from "./services/domain-event-mapper.service";
+import { DomainEventsDispatcherService } from "./services/domain-events-dispatcher.service";
 import { GameStateService } from "./services/game-state.service";
 import { TurnService } from "./services/turn.service";
 import { CreateItemsFromCsvUseCase } from "./use-cases/create-items-from-csv/create-items-from-csv.uc";
@@ -38,6 +40,8 @@ import { PlayableEntitySwapItemsUseCase } from "./use-cases/playable-entity-swap
     PlayableEntityLootItemUseCase,
     CreateItemsFromCsvUseCase,
     PlayableEntityDrinkPotionUseCase,
+    DomainEventMapperService,
+    DomainEventsDispatcherService,
   ],
   exports: [
     GameListeners,

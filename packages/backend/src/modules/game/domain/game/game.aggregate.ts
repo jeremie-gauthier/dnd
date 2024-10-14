@@ -117,8 +117,11 @@ export class Game extends AggregateRoot<Data> {
     const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
     playingEntity.mustBePlayedBy({ userId });
     playingEntity.endTurn();
+    this.addDomainEvents(playingEntity.collectDomainEvents());
 
+    // TODO: to delete
     const playingEntitiesWhoseTurnEnded: Playable[] = [playingEntity];
+    // TODO: to delete
     const playingEntitiesWhoseTurnStarted: Playable[] = [];
 
     let hasFoundNextEntityAbleToPlay = false;
@@ -130,17 +133,21 @@ export class Game extends AggregateRoot<Data> {
       }
 
       nextEntityToPlay.startTurn();
+      this.addDomainEvents(nextEntityToPlay.collectDomainEvents());
+      // TODO: to delete
       playingEntitiesWhoseTurnStarted.push(nextEntityToPlay);
 
       if (nextEntityToPlay.isPlaying) {
         hasFoundNextEntityAbleToPlay = true;
       } else {
+        // TODO: to delete
         playingEntitiesWhoseTurnEnded.push(nextEntityToPlay);
       }
 
       this._data.playableEntities.incrementTimeline();
     }
 
+    // TODO: to delete
     return {
       playingEntitiesWhoseTurnEnded,
       playingEntitiesWhoseTurnStarted,
