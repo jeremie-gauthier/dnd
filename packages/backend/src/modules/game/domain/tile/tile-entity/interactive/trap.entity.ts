@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { TrapTriggeredDomainEvent } from "../../../domain-events/dtos/trap-triggered.dto";
 import { Playable } from "../../../playable-entities/playable-entity/playable-entity.abstract";
 import { TileInteractiveEntity } from "./interactive.abstract";
 
@@ -37,6 +38,13 @@ export class Trap extends TileInteractiveEntity<Data> {
     this._data.canInteract = false;
     this._data.isVisible = true;
 
+    this.addDomainEvent(
+      new TrapTriggeredDomainEvent({
+        trapEntity: this.toPlain(),
+        subjectEntity: playableEntity.toPlain(),
+      }),
+    );
+
     if (playableEntity.conditions.hasTrapProtection()) {
       playableEntity.conditions.applyAllNextTrapOrChestTrap({
         playableEntityAffected: playableEntity,
@@ -46,6 +54,7 @@ export class Trap extends TileInteractiveEntity<Data> {
       });
     } else {
       playableEntity.takeDirectDamage({ amount: 1 });
+      playableEntity.addDomainEvents(playableEntity.collectDomainEvents());
     }
   }
 

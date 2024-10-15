@@ -9,6 +9,7 @@ import { InitiativesRerolledPayload } from "src/modules/shared/events/game/initi
 import { PlayableEntityMovedPayload } from "src/modules/shared/events/game/playable-entity-moved.payload";
 import { PlayableEntityTurnEndedPayload } from "src/modules/shared/events/game/playable-entity-turn-ended.payload";
 import { PlayableEntityTurnStartedPayload } from "src/modules/shared/events/game/playable-entity-turn-started.payload";
+import { TrapTriggeredPayload } from "src/modules/shared/events/game/trap-triggered.payload";
 
 export type LoggableAction =
   | PlayableEntityMovedPayload
@@ -21,4 +22,5 @@ export type LoggableAction =
   | EntityDiedPayload
   | EntityTookDamagePayload
   | GameWonPayload
+  | TrapTriggeredPayload
   | ChestTrapTriggeredPayload;

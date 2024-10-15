@@ -34,6 +34,7 @@ export class GamePublisherGateway {
   @OnEvent(GameEvent.EntityDied)
   @OnEvent(GameEvent.GameWon)
   @OnEvent(GameEvent.ChestTrapTriggered)
+  @OnEvent(GameEvent.TrapTriggered)
   protected async gameLogHandler(payload: LoggableAction) {
     const log = this.logService.createLog(payload);
     if (!log) {

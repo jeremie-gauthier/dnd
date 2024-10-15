@@ -98,6 +98,15 @@ export class LogService {
             subjectEntityName: payload.subjectEntity.name,
           },
         };
+      case GameEvent.TrapTriggered:
+        return {
+          type: GameEvent.TrapTriggered,
+          createdAt: new Date(),
+          data: {
+            trapName: payload.trapEntity.name,
+            subjectEntityName: payload.subjectEntity.name,
+          },
+        };
     }
   }
 }

@@ -8,3 +8,4 @@ export * from "./move-log.interface";
 export * from "./open-door-log.interface";
 export * from "./start-turn-log.interface";
 export * from "./game-won-log.interface";
+export * from "./trap-triggered.interface";

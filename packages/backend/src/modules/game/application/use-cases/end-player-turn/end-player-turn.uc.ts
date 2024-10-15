@@ -30,15 +30,15 @@ export class EndPlayerTurnUseCase implements UseCase {
     await this.gameRepository.update({ game });
 
     const plainGame = game.toPlain();
+    this.eventEmitter.emitAsync(
+      GameEvent.GameUpdated,
+      new GameUpdatedPayload({ game: plainGame }),
+    );
+
     const domainEvents = game.collectDomainEvents();
     this.domainEventsDispatcherService.dispatch({
       domainEvents,
       game: plainGame,
     });
-
-    this.eventEmitter.emitAsync(
-      GameEvent.GameUpdated,
-      new GameUpdatedPayload({ game: plainGame }),
-    );
   }
 }

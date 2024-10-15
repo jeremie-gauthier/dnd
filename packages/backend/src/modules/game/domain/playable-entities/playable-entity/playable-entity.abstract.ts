@@ -6,6 +6,7 @@ import {
 import { Entity, PlainData } from "src/modules/shared/domain/entity";
 import { Attack } from "../../attack/attack.entity";
 import { Coord } from "../../coord/coord.vo";
+import { EntityDiedDomainEvent } from "../../domain-events/dtos/entity-died.dto";
 import { PlayableEntityTurnEndedDomainEvent } from "../../domain-events/dtos/playable-entity-turn-ended.dto";
 import { PlayableEntityTurnStartedDomainEvent } from "../../domain-events/dtos/playable-entity-turn-started.dto";
 import { Inventory } from "../../inventory/inventory.entity";
@@ -178,6 +179,7 @@ export abstract class Playable<
   protected death(): void {
     this._data.characteristic.healthPoints = 0;
     this._data.isBlocking = false;
+    this.addDomainEvent(new EntityDiedDomainEvent({ target: this.toPlain() }));
   }
 
   public mustBePlayedBy({ userId }: { userId: Data["playedByUserId"] }) {

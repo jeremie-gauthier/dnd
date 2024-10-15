@@ -12,6 +12,7 @@ import { Attack } from "../attack/attack.entity";
 import { AttackError } from "../attack/attack.error";
 import { Board } from "../board/board.entity";
 import { Coord } from "../coord/coord.vo";
+import { PlayableEntityMovedDomainEvent } from "../domain-events/dtos/playable-entity-moved.dto";
 import { GameEvents } from "../game-events/game-events.aggregate";
 import { GameMaster } from "../game-master/game-master.entity";
 import { GameStatus } from "../game-status/game-status.vo";
@@ -178,6 +179,11 @@ export class Game extends AggregateRoot<Data> {
 
     this._data.board.addEntityAtCoord({ tileEntity, coord: destinationCoord });
     playableEntity.setCoord(destinationCoord);
+    this.addDomainEvent(
+      new PlayableEntityMovedDomainEvent({
+        playableEntity: playableEntity.toPlain(),
+      }),
+    );
   }
 
   public rollInitiatives() {
@@ -270,13 +276,12 @@ export class Game extends AggregateRoot<Data> {
 
     if (trapTriggered) {
       trapTriggered.onInteraction({ playableEntity: playingEntity });
+      this.addDomainEvents(trapTriggered.collectDomainEvents());
+
+      if (playingEntity.isDead) {
+        this.endPlayerTurn({ userId });
+      }
     }
-
-    const turnEnded = playingEntity.isDead
-      ? this.endPlayerTurn({ userId })
-      : undefined;
-
-    return { playingEntity, turnEnded };
   }
 
   public playerAttack({

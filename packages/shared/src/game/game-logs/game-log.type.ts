@@ -4,6 +4,7 @@ import {
   EntityDiedActionLog,
   EntityTookDamageActionLog,
   GameWonActionLog,
+  TrapTriggeredLog,
 } from "./action-log";
 import { ChestTrapTriggeredLog } from "./action-log/chest-trap-triggered.interface";
 import { InitiativesRerolledActionLog } from "./action-log/initiatives-rerolled-log.interface";
@@ -23,4 +24,5 @@ export type GameLog =
   | EntityDiedActionLog
   | EntityTookDamageActionLog
   | GameWonActionLog
+  | TrapTriggeredLog
   | ChestTrapTriggeredLog;
