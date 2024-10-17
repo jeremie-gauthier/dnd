@@ -9,6 +9,7 @@ import {
   GAME_REPOSITORY,
   GameRepository,
 } from "../../repositories/game-repository.interface";
+import { DomainEventsDispatcherService } from "../../services/domain-events-dispatcher.service";
 
 @Injectable()
 export class PlayableEntityDrinkPotionUseCase implements UseCase {
@@ -16,6 +17,7 @@ export class PlayableEntityDrinkPotionUseCase implements UseCase {
     @Inject(GAME_REPOSITORY)
     private readonly gameRepository: GameRepository,
     private readonly eventEmitter: EventEmitter2,
+    private readonly domainEventsDispatcherService: DomainEventsDispatcherService,
   ) {}
 
   public async execute({
@@ -28,7 +30,6 @@ export class PlayableEntityDrinkPotionUseCase implements UseCase {
     const game = await this.gameRepository.getOneOrThrow({ gameId });
 
     game.playerDrinkPotion({ userId, itemId });
-
     await this.gameRepository.update({ game });
 
     const plainGame = game.toPlain();
@@ -36,5 +37,11 @@ export class PlayableEntityDrinkPotionUseCase implements UseCase {
       GameEvent.GameUpdated,
       new GameUpdatedPayload({ game: plainGame }),
     );
+
+    const domainEvents = game.collectDomainEvents();
+    this.domainEventsDispatcherService.dispatch({
+      domainEvents,
+      game: plainGame,
+    });
   }
 }

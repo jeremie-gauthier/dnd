@@ -15,6 +15,7 @@ import { Coord } from "../coord/coord.vo";
 import { ChestTrapTriggeredDomainEvent } from "../domain-events/dtos/chest-trap-triggered.dto";
 import { MonsterSpawnedDomainEvent } from "../domain-events/dtos/monster-spawned.dto";
 import { PlayableEntityAttackedDomainEvent } from "../domain-events/dtos/playable-entity-attacked.dto";
+import { PlayableEntityDrankPotionDomainEvent } from "../domain-events/dtos/playable-entity-drank-potion.dto";
 import { PlayableEntityMovedDomainEvent } from "../domain-events/dtos/playable-entity-moved.dto";
 import { PlayableEntityOpenedChestDomainEvent } from "../domain-events/dtos/playable-entity-opened-chest.dto";
 import { GameEvents } from "../game-events/game-events.aggregate";
@@ -564,6 +565,13 @@ export class Game extends AggregateRoot<Data> {
       game: this,
       playableEntity: playingEntity as Hero,
     });
+
+    this.addDomainEvent(
+      new PlayableEntityDrankPotionDomainEvent({
+        playableEntity: playingEntity.toPlain(),
+        potion: (item as Potion).toPlain(),
+      }),
+    );
 
     playingEntity.inventory.removeItemFromInventory({ item });
   }

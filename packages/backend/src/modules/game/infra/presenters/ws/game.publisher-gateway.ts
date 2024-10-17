@@ -36,6 +36,7 @@ export class GamePublisherGateway {
   @OnEvent(GameEvent.ChestTrapTriggered)
   @OnEvent(GameEvent.TrapTriggered)
   @OnEvent(GameEvent.PlayableEntityOpenedChest)
+  @OnEvent(GameEvent.PlayableEntityDrankPotion)
   protected async gameLogHandler(payload: LoggableAction) {
     const log = this.logService.createLog(payload);
     if (!log) {
