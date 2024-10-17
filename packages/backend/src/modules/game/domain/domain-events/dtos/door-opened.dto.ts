@@ -10,7 +10,7 @@ export class DoorOpenedDomainEvent
 
   constructor({
     entityThatOpenedTheDoor,
-  }: { entityThatOpenedTheDoor: ReturnType<Playable["toPlain"]> }) {
+  }: Omit<DoorOpenedDomainEvent, "name">) {
     this.entityThatOpenedTheDoor = entityThatOpenedTheDoor;
   }
 }

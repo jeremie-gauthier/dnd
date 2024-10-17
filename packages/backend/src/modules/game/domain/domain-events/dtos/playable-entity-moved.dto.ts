@@ -10,7 +10,7 @@ export class PlayableEntityMovedDomainEvent
 
   constructor({
     playableEntity,
-  }: { playableEntity: ReturnType<Playable["toPlain"]> }) {
+  }: Omit<PlayableEntityMovedDomainEvent, "name">) {
     this.playableEntity = playableEntity;
   }
 }

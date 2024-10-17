@@ -8,7 +8,7 @@ export class MonsterSpawnedDomainEvent
   public readonly name = GameEvent.MonsterSpawned;
   public readonly monster: ReturnType<Monster["toPlain"]>;
 
-  constructor({ monster }: { monster: ReturnType<Monster["toPlain"]> }) {
+  constructor({ monster }: Omit<MonsterSpawnedDomainEvent, "name">) {
     this.monster = monster;
   }
 }

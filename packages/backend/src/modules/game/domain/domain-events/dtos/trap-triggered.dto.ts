@@ -13,10 +13,7 @@ export class TrapTriggeredDomainEvent
   constructor({
     trapEntity,
     subjectEntity,
-  }: {
-    trapEntity: ReturnType<Trap["toPlain"]>;
-    subjectEntity: ReturnType<Playable["toPlain"]>;
-  }) {
+  }: Omit<TrapTriggeredDomainEvent, "name">) {
     this.trapEntity = trapEntity;
     this.subjectEntity = subjectEntity;
   }

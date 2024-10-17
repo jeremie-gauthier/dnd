@@ -10,7 +10,7 @@ export class PlayableEntityTurnStartedDomainEvent
 
   constructor({
     playableEntity,
-  }: { playableEntity: ReturnType<Playable["toPlain"]> }) {
+  }: Omit<PlayableEntityTurnStartedDomainEvent, "name">) {
     this.playableEntity = playableEntity;
   }
 }

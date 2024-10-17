@@ -8,11 +8,7 @@ export class EntityDiedDomainEvent
   public readonly name = GameEvent.EntityDied;
   public readonly target: ReturnType<Playable["toPlain"]>;
 
-  constructor({
-    target,
-  }: {
-    target: ReturnType<Playable["toPlain"]>;
-  }) {
+  constructor({ target }: Omit<EntityDiedDomainEvent, "name">) {
     this.target = target;
   }
 }

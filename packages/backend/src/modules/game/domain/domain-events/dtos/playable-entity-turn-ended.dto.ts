@@ -10,7 +10,7 @@ export class PlayableEntityTurnEndedDomainEvent
 
   constructor({
     playableEntity,
-  }: { playableEntity: ReturnType<Playable["toPlain"]> }) {
+  }: Omit<PlayableEntityTurnEndedDomainEvent, "name">) {
     this.playableEntity = playableEntity;
   }
 }
