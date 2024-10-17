@@ -45,7 +45,7 @@ export class LogService {
             monsterRace: payload.monster.race as MonsterRace,
           },
         };
-      case GameEvent.EntityAttacked: {
+      case GameEvent.PlayableEntityAttacked: {
         const diceScore = sum(
           ...payload.dicesResults
             .filter(({ dice }) => dice.name !== "special")
@@ -53,7 +53,7 @@ export class LogService {
         );
 
         return {
-          type: GameEvent.EntityAttacked,
+          type: GameEvent.PlayableEntityAttacked,
           createdAt: new Date(),
           data: {
             attackItemUsedName: payload.attackItemUsed.name,
@@ -69,9 +69,9 @@ export class LogService {
           },
         };
       }
-      case GameEvent.EntityTookDamage:
+      case GameEvent.PlayableEntityTookDamage:
         return {
-          type: GameEvent.EntityTookDamage,
+          type: GameEvent.PlayableEntityTookDamage,
           createdAt: new Date(),
           data: {
             damageDone: payload.amount,

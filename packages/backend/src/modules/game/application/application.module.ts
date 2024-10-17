@@ -5,7 +5,6 @@ import { GameListeners } from "./game.listeners";
 import { DomainEventMapperService } from "./services/domain-event-mapper.service";
 import { DomainEventsDispatcherService } from "./services/domain-events-dispatcher.service";
 import { GameStateService } from "./services/game-state.service";
-import { TurnService } from "./services/turn.service";
 import { CreateItemsFromCsvUseCase } from "./use-cases/create-items-from-csv/create-items-from-csv.uc";
 import { DeleteGameUseCase } from "./use-cases/delete-game/delete-game.uc";
 import { EndPlayerTurnUseCase } from "./use-cases/end-player-turn/end-player-turn.uc";
@@ -33,7 +32,6 @@ import { PlayableEntitySwapItemsUseCase } from "./use-cases/playable-entity-swap
     PlayableEntityMoveUseCase,
     LogService,
     GameStateService,
-    TurnService,
     PlayableEntityDeleteItemUseCase,
     PlayableEntitySwapItemsUseCase,
     PlayableEntityOpenChestUseCase,

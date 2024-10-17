@@ -12,7 +12,9 @@ import { Attack } from "../attack/attack.entity";
 import { AttackError } from "../attack/attack.error";
 import { Board } from "../board/board.entity";
 import { Coord } from "../coord/coord.vo";
+import { ChestTrapTriggeredDomainEvent } from "../domain-events/dtos/chest-trap-triggered.dto";
 import { MonsterSpawnedDomainEvent } from "../domain-events/dtos/monster-spawned.dto";
+import { PlayableEntityAttackedDomainEvent } from "../domain-events/dtos/playable-entity-attacked.dto";
 import { PlayableEntityMovedDomainEvent } from "../domain-events/dtos/playable-entity-moved.dto";
 import { GameEvents } from "../game-events/game-events.aggregate";
 import { GameMaster } from "../game-master/game-master.entity";
@@ -110,20 +112,11 @@ export class Game extends AggregateRoot<Data> {
     };
   }
 
-  public isWin() {
-    return this._data.winConditions.areWin();
-  }
-
   public endPlayerTurn({ userId }: { userId: string }) {
     const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
     playingEntity.mustBePlayedBy({ userId });
     playingEntity.endTurn();
     this.addDomainEvents(playingEntity.collectDomainEvents());
-
-    // TODO: to delete
-    const playingEntitiesWhoseTurnEnded: Playable[] = [playingEntity];
-    // TODO: to delete
-    const playingEntitiesWhoseTurnStarted: Playable[] = [];
 
     let hasFoundNextEntityAbleToPlay = false;
     while (!hasFoundNextEntityAbleToPlay) {
@@ -135,24 +128,13 @@ export class Game extends AggregateRoot<Data> {
 
       nextEntityToPlay.startTurn();
       this.addDomainEvents(nextEntityToPlay.collectDomainEvents());
-      // TODO: to delete
-      playingEntitiesWhoseTurnStarted.push(nextEntityToPlay);
 
       if (nextEntityToPlay.isPlaying) {
         hasFoundNextEntityAbleToPlay = true;
-      } else {
-        // TODO: to delete
-        playingEntitiesWhoseTurnEnded.push(nextEntityToPlay);
       }
 
       this._data.playableEntities.incrementTimeline();
     }
-
-    // TODO: to delete
-    return {
-      playingEntitiesWhoseTurnEnded,
-      playingEntitiesWhoseTurnStarted,
-    };
   }
 
   public movePlayableEntity({
@@ -300,7 +282,7 @@ export class Game extends AggregateRoot<Data> {
       attackId,
     });
 
-    const { attack, attackResult, damageDone } = this.playableEntityAttack({
+    this.playableEntityAttack({
       attacker: playingEntity,
       defender: targetPlayableEntity,
       attackId,
@@ -321,21 +303,12 @@ export class Game extends AggregateRoot<Data> {
         playableEntity: targetPlayableEntity,
       });
       this._data.winConditions.updateWinConditions({ eventName: "enemy_died" });
+      this.addDomainEvents(this._data.winConditions.collectDomainEvents());
     }
 
-    const turnEnded = playingEntity.isDead
-      ? this.endPlayerTurn({ userId })
-      : undefined;
-
-    return {
-      attack,
-      attacker: playingEntity,
-      attackItem,
-      attackResult,
-      damageDone,
-      target: targetPlayableEntity,
-      turnEnded,
-    };
+    if (playingEntity.isDead) {
+      this.endPlayerTurn({ userId });
+    }
   }
 
   public playableEntityAttack({
@@ -360,6 +333,17 @@ export class Game extends AggregateRoot<Data> {
       attackId,
       attackItem,
     });
+    this.addDomainEvent(
+      new PlayableEntityAttackedDomainEvent({
+        attacker: attacker.toPlain(),
+        target: defender.toPlain(),
+        damageDone: attackResult.attackResult.sumResult,
+        dicesResults: attackResult.attackResult.dicesResults,
+        attack: attack.toPlain(),
+        attackItemUsed: attackItem.toPlain(),
+      }),
+    );
+
     if (attackResult.type === "Spell") {
       attacker.consumeMana({ amount: attackResult.manaCost });
     }
@@ -375,15 +359,13 @@ export class Game extends AggregateRoot<Data> {
       playableEntityAffected: defender,
     });
 
-    const damageDone = defender.takeDamage({
-      amount: attackResult.attackResult.sumResult,
-    });
+    defender.takeDamage({ amount: attackResult.attackResult.sumResult });
+    this.addDomainEvents(defender.collectDomainEvents());
+    this.addDomainEvents(attacker.collectDomainEvents());
 
     defender.conditions.clearExhausted({
       playableEntityAffected: defender,
     });
-
-    return { attack, attackResult, damageDone };
   }
 
   private mustHaveTargetInRange({
@@ -479,15 +461,18 @@ export class Game extends AggregateRoot<Data> {
       playingEntity.conditions.clearExhausted({
         playableEntityAffected: playingEntity,
       });
-      return;
     } else {
       chestTrap.use({
         entityThatOpenedTheChest: playingEntity as Hero,
         game: this,
       });
-      const turnEnded = this.endPlayerTurn({ userId });
-
-      return { ...turnEnded, entityThatTriggeredTheChestTrap: playingEntity };
+      this.addDomainEvent(
+        new ChestTrapTriggeredDomainEvent({
+          chestTrapItem: chestTrap.toPlain(),
+          subjectEntity: playingEntity.toPlain(),
+        }),
+      );
+      this.endPlayerTurn({ userId });
     }
   }
 

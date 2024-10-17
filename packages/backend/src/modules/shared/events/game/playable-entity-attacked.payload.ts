@@ -6,10 +6,10 @@ import { Item } from "src/modules/game/domain/item/item.abstract";
 import { Playable } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.abstract";
 import { GameEvent } from "./game-event.enum";
 
-export class EntityAttackedPayload
-  implements EventPayload<GameEvent.EntityAttacked>
+export class PlayableEntityAttackedPayload
+  implements EventPayload<GameEvent.PlayableEntityAttacked>
 {
-  public readonly name = GameEvent.EntityAttacked;
+  public readonly name = GameEvent.PlayableEntityAttacked;
   public readonly game: ReturnType<Game["toPlain"]>;
   public readonly attacker: ReturnType<Playable["toPlain"]>;
   public readonly target: ReturnType<Playable["toPlain"]>;
@@ -29,7 +29,7 @@ export class EntityAttackedPayload
     dicesResults,
     attack,
     attackItemUsed,
-  }: Omit<EntityAttackedPayload, "name">) {
+  }: Omit<PlayableEntityAttackedPayload, "name">) {
     this.game = game;
     this.attacker = attacker;
     this.target = target;

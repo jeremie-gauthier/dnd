@@ -7,6 +7,7 @@ import { Entity, PlainData } from "src/modules/shared/domain/entity";
 import { Attack } from "../../attack/attack.entity";
 import { Coord } from "../../coord/coord.vo";
 import { EntityDiedDomainEvent } from "../../domain-events/dtos/entity-died.dto";
+import { PlayableEntityTookDamageDomainEvent } from "../../domain-events/dtos/playable-entity-took-damage.dto";
 import { PlayableEntityTurnEndedDomainEvent } from "../../domain-events/dtos/playable-entity-turn-ended.dto";
 import { PlayableEntityTurnStartedDomainEvent } from "../../domain-events/dtos/playable-entity-turn-started.dto";
 import { Inventory } from "../../inventory/inventory.entity";
@@ -160,6 +161,13 @@ export abstract class Playable<
     const { damageTaken } = this.getDamagesTakenResult({ rawDamages: amount });
 
     this._data.characteristic.healthPoints -= damageTaken;
+    this.addDomainEvent(
+      new PlayableEntityTookDamageDomainEvent({
+        target: this.toPlain(),
+        amount: damageTaken,
+      }),
+    );
+
     if (this.healthPoints <= 0) {
       this.death();
     }
