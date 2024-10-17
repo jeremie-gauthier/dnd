@@ -109,6 +109,14 @@ export class LogService {
             subjectEntityName: payload.subjectEntity.name,
           },
         };
+      case GameEvent.PlayableEntityOpenedChest:
+        return {
+          type: GameEvent.PlayableEntityOpenedChest,
+          createdAt: new Date(),
+          data: {
+            entityName: payload.playableEntity.name,
+          },
+        };
     }
   }
 }

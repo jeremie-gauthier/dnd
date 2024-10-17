@@ -16,6 +16,7 @@ import { ChestTrapTriggeredDomainEvent } from "../domain-events/dtos/chest-trap-
 import { MonsterSpawnedDomainEvent } from "../domain-events/dtos/monster-spawned.dto";
 import { PlayableEntityAttackedDomainEvent } from "../domain-events/dtos/playable-entity-attacked.dto";
 import { PlayableEntityMovedDomainEvent } from "../domain-events/dtos/playable-entity-moved.dto";
+import { PlayableEntityOpenedChestDomainEvent } from "../domain-events/dtos/playable-entity-opened-chest.dto";
 import { GameEvents } from "../game-events/game-events.aggregate";
 import { GameMaster } from "../game-master/game-master.entity";
 import { GameStatus } from "../game-status/game-status.vo";
@@ -530,6 +531,12 @@ export class Game extends AggregateRoot<Data> {
       coord: coordOfTileWithChest,
     });
     tile.openChest({ playableEntity: playingEntity });
+
+    this.addDomainEvent(
+      new PlayableEntityOpenedChestDomainEvent({
+        playableEntity: playingEntity.toPlain(),
+      }),
+    );
 
     return {
       maxLevelLoot: this._data.maxLevelLoot,

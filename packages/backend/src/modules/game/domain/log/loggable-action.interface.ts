@@ -6,6 +6,7 @@ import { InitiativesRerolledPayload } from "src/modules/shared/events/game/initi
 import { MonsterSpawnedPayload } from "src/modules/shared/events/game/monster-spawned.payload";
 import { PlayableEntityAttackedPayload } from "src/modules/shared/events/game/playable-entity-attacked.payload";
 import { PlayableEntityMovedPayload } from "src/modules/shared/events/game/playable-entity-moved.payload";
+import { PlayableEntityOpenedChestPayload } from "src/modules/shared/events/game/playable-entity-opened-chest.payload";
 import { PlayableEntityTookDamagePayload } from "src/modules/shared/events/game/playable-entity-took-damage.payload";
 import { PlayableEntityTurnEndedPayload } from "src/modules/shared/events/game/playable-entity-turn-ended.payload";
 import { PlayableEntityTurnStartedPayload } from "src/modules/shared/events/game/playable-entity-turn-started.payload";
@@ -23,4 +24,5 @@ export type LoggableAction =
   | PlayableEntityTookDamagePayload
   | GameWonPayload
   | TrapTriggeredPayload
-  | ChestTrapTriggeredPayload;
+  | ChestTrapTriggeredPayload
+  | PlayableEntityOpenedChestPayload;
