@@ -1,7 +1,7 @@
 import { EventPayload } from "src/interfaces/event-payload.interface";
 import { Game } from "src/modules/game/domain/game/game.aggregate";
 import { Monster } from "src/modules/game/domain/playable-entities/playable-entity/monster.entity";
-import { GameEvent } from "./game-event.enum";
+import { GameEvent } from "../../domain/domain-events/game-event.enum";
 
 export class MonsterSpawnedPayload
   implements EventPayload<GameEvent.MonsterSpawned>

@@ -1,7 +1,7 @@
 import { IDomainEvent } from "src/modules/shared/domain/domain-event.interface";
-import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { ChestTrap } from "../../item/chest-trap/chest-trap.abstract";
 import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
+import { GameEvent } from "../game-event.enum";
 
 export class ChestTrapTriggeredDomainEvent
   implements IDomainEvent<GameEvent.ChestTrapTriggered>

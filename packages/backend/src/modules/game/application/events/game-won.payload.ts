@@ -1,6 +1,6 @@
 import { EventPayload } from "src/interfaces/event-payload.interface";
 import { Game } from "src/modules/game/domain/game/game.aggregate";
-import { GameEvent } from "./game-event.enum";
+import { GameEvent } from "../../domain/domain-events/game-event.enum";
 
 export class GameWonPayload implements EventPayload<GameEvent.GameWon> {
   public readonly name = GameEvent.GameWon;

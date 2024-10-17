@@ -1,6 +1,6 @@
 import { IDomainEvent } from "src/modules/shared/domain/domain-event.interface";
-import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { Monster } from "../../playable-entities/playable-entity/monster.entity";
+import { GameEvent } from "../game-event.enum";
 
 export class MonsterSpawnedDomainEvent
   implements IDomainEvent<GameEvent.MonsterSpawned>

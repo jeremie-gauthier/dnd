@@ -3,8 +3,8 @@ import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
-import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
-import { GameUpdatedPayload } from "src/modules/shared/events/game/game-updated.payload";
+import { GameUpdatedPayload } from "src/modules/game/application/events/game-updated.payload";
+import { GameEvent } from "src/modules/game/domain/domain-events/game-event.enum";
 import {
   GAME_REPOSITORY,
   GameRepository,

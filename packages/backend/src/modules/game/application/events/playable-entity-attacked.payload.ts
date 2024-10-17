@@ -4,7 +4,7 @@ import { Dice } from "src/modules/game/domain/dice/dice.vo";
 import { Game } from "src/modules/game/domain/game/game.aggregate";
 import { Item } from "src/modules/game/domain/item/item.abstract";
 import { Playable } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.abstract";
-import { GameEvent } from "./game-event.enum";
+import { GameEvent } from "../../domain/domain-events/game-event.enum";
 
 export class PlayableEntityAttackedPayload
   implements EventPayload<GameEvent.PlayableEntityAttacked>

@@ -1,7 +1,7 @@
 import type { EventPayload } from "src/interfaces/event-payload.interface";
 import { Game } from "src/modules/game/domain/game/game.aggregate";
 import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
-import { GameEvent } from "./game-event.enum";
+import { GameEvent } from "../../domain/domain-events/game-event.enum";
 
 export class GameInitializationDonePayload
   implements EventPayload<GameEvent.GameInitializationDone>

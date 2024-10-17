@@ -2,19 +2,17 @@ import { ServerGameEvent } from "@dnd/shared";
 import { OnEvent } from "@nestjs/event-emitter";
 import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import type { WsServer } from "src/interfaces/socket.interface";
+import { GameWonPayload } from "src/modules/game/application/events/game-won.payload";
 import { GetUserGameStateUseCase } from "src/modules/game/application/use-cases/get-user-game-state/get-user-game-state.uc";
+import { GameEvent } from "src/modules/game/domain/domain-events/game-event.enum";
 import { Game } from "src/modules/game/domain/game/game.aggregate";
-import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
-import { GameWonPayload } from "src/modules/shared/events/game/game-won.payload";
-import { LogService } from "../../../domain/log/log.service";
-import { LoggableAction } from "../../../domain/log/loggable-action.interface";
 import { GamePresenter } from "../services/game.presenter";
 import { LogPresenter } from "../services/log.presenter";
+import { LoggableAction } from "../services/loggable-action.interface";
 
 @WebSocketGateway()
 export class GamePublisherGateway {
   constructor(
-    private readonly logService: LogService,
     private readonly getUserGameStateUseCase: GetUserGameStateUseCase,
     private readonly gamePresenter: GamePresenter,
     private readonly logPresenter: LogPresenter,
@@ -38,16 +36,12 @@ export class GamePublisherGateway {
   @OnEvent(GameEvent.PlayableEntityOpenedChest)
   @OnEvent(GameEvent.PlayableEntityDrankPotion)
   protected async gameLogHandler(payload: LoggableAction) {
-    const log = this.logService.createLog(payload);
+    const log = this.logPresenter.createLog(payload);
     if (!log) {
       return;
     }
 
-    const formattedLog = await this.logPresenter.toView(log);
-
-    this.server
-      .to(payload.game.id)
-      .emit(ServerGameEvent.GameLogCreated, formattedLog);
+    this.server.to(payload.game.id).emit(ServerGameEvent.GameLogCreated, log);
   }
 
   @OnEvent(GameEvent.GameInitializationDone)

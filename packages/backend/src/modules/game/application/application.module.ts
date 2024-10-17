@@ -1,5 +1,4 @@
 import { Module } from "@nestjs/common";
-import { LogService } from "../domain/log/log.service";
 import { DatabaseModule } from "../infra/database/database.module";
 import { GameListeners } from "./game.listeners";
 import { DomainEventMapperService } from "./services/domain-event-mapper.service";
@@ -30,7 +29,6 @@ import { PlayableEntitySwapItemsUseCase } from "./use-cases/playable-entity-swap
     OpenDoorUseCase,
     PlayableEntityAttackUseCase,
     PlayableEntityMoveUseCase,
-    LogService,
     GameStateService,
     PlayableEntityDeleteItemUseCase,
     PlayableEntitySwapItemsUseCase,
@@ -50,7 +48,6 @@ import { PlayableEntitySwapItemsUseCase } from "./use-cases/playable-entity-swap
     OpenDoorUseCase,
     PlayableEntityAttackUseCase,
     PlayableEntityMoveUseCase,
-    LogService,
     PlayableEntityDeleteItemUseCase,
     PlayableEntitySwapItemsUseCase,
     PlayableEntityOpenChestUseCase,
