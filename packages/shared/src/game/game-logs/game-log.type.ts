@@ -2,6 +2,7 @@ import {
   EndTurnActionLog,
   EntityAttackedActionLog,
   EntityDiedActionLog,
+  EntityDrankPotionActionLog,
   EntityOpenedChestActionLog,
   EntityTookDamageActionLog,
   GameWonActionLog,
@@ -27,4 +28,5 @@ export type GameLog =
   | GameWonActionLog
   | TrapTriggeredLog
   | ChestTrapTriggeredLog
-  | EntityOpenedChestActionLog;
+  | EntityOpenedChestActionLog
+  | EntityDrankPotionActionLog;

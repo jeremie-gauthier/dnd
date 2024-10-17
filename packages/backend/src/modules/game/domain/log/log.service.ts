@@ -117,6 +117,15 @@ export class LogService {
             entityName: payload.playableEntity.name,
           },
         };
+      case GameEvent.PlayableEntityDrankPotion:
+        return {
+          type: GameEvent.PlayableEntityDrankPotion,
+          createdAt: new Date(),
+          data: {
+            entityName: payload.playableEntity.name,
+            potionName: payload.potion.name,
+          },
+        };
     }
   }
 }
