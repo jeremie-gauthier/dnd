@@ -10,3 +10,4 @@ export * from "./start-turn-log.interface";
 export * from "./game-won-log.interface";
 export * from "./trap-triggered.interface";
 export * from "./entity-opened-chest-log.interface";
+export * from "./entity-drank-potion-log.interface";

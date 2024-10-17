@@ -14,4 +14,5 @@ export enum GameEvent {
   TrapTriggered = "game.update.trap_triggered",
   ChestTrapTriggered = "game.update.chest_trap_triggered",
   PlayableEntityOpenedChest = "game.update.playable_entity_opened_chest",
+  PlayableEntityDrankPotion = "game.update.playable_entity_drank_potion",
 }

@@ -53,7 +53,8 @@ VALUES
   "game.status.win": "Victoire des héros !",
   "game.update.chest_trap_triggered": "{{subjectEntityName}} a déclenché un piège ! ($t(items:{{chestTrapName}}))",
   "game.update.trap_triggered": "{{subjectEntityName}} a marché sur un piège ! Son déplacement a été interrompu. ($t(items:trap.{{trapName}}) : $t(items:trap.{{trapName}}.description))",
-  "game.update.playable_entity_opened_chest": "{{entityName}} a ouvert un coffre."
+  "game.update.playable_entity_opened_chest": "{{entityName}} a ouvert un coffre.",
+  "game.update.playable_entity_drank_potion": "{{entityName}} a bu une potion ($t(items:{{potionName}}) : $t(items:{{potionName}}.description))."
 }
 '
   ),

@@ -5,6 +5,7 @@ import { GameWonDomainEvent } from "./dtos/game-won.dto";
 import { InitiativesRerolledDomainEvent } from "./dtos/initiatives-rerolled.dto";
 import { MonsterSpawnedDomainEvent } from "./dtos/monster-spawned.dto";
 import { PlayableEntityAttackedDomainEvent } from "./dtos/playable-entity-attacked.dto";
+import { PlayableEntityDrankPotionDomainEvent } from "./dtos/playable-entity-drank-potion.dto";
 import { PlayableEntityMovedDomainEvent } from "./dtos/playable-entity-moved.dto";
 import { PlayableEntityOpenedChestDomainEvent } from "./dtos/playable-entity-opened-chest.dto";
 import { PlayableEntityTookDamageDomainEvent } from "./dtos/playable-entity-took-damage.dto";
@@ -25,4 +26,5 @@ export type DomainEvent =
   | PlayableEntityTookDamageDomainEvent
   | GameWonDomainEvent
   | ChestTrapTriggeredDomainEvent
-  | PlayableEntityOpenedChestDomainEvent;
+  | PlayableEntityOpenedChestDomainEvent
+  | PlayableEntityDrankPotionDomainEvent;

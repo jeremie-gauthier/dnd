@@ -5,6 +5,7 @@ import { GameWonPayload } from "src/modules/shared/events/game/game-won.payload"
 import { InitiativesRerolledPayload } from "src/modules/shared/events/game/initiatives-rerolled.payload";
 import { MonsterSpawnedPayload } from "src/modules/shared/events/game/monster-spawned.payload";
 import { PlayableEntityAttackedPayload } from "src/modules/shared/events/game/playable-entity-attacked.payload";
+import { PlayableEntityDrankPotionPayload } from "src/modules/shared/events/game/playable-entity-drank-potion.payload";
 import { PlayableEntityMovedPayload } from "src/modules/shared/events/game/playable-entity-moved.payload";
 import { PlayableEntityOpenedChestPayload } from "src/modules/shared/events/game/playable-entity-opened-chest.payload";
 import { PlayableEntityTookDamagePayload } from "src/modules/shared/events/game/playable-entity-took-damage.payload";
@@ -25,4 +26,5 @@ export type LoggableAction =
   | GameWonPayload
   | TrapTriggeredPayload
   | ChestTrapTriggeredPayload
-  | PlayableEntityOpenedChestPayload;
+  | PlayableEntityOpenedChestPayload
+  | PlayableEntityDrankPotionPayload;
