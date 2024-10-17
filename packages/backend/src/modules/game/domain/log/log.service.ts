@@ -1,4 +1,4 @@
-import { GameLog, sum } from "@dnd/shared";
+import { GameLog, MonsterRace, sum } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { LoggableAction } from "./loggable-action.interface";
@@ -37,13 +37,15 @@ export class LogService {
           createdAt: new Date(),
           data: {},
         };
-      case GameEvent.MonstersSpawned:
+      case GameEvent.MonsterSpawned:
         return {
-          type: GameEvent.MonstersSpawned,
+          type: GameEvent.MonsterSpawned,
           createdAt: new Date(),
-          data: {},
+          data: {
+            monsterRace: payload.monster.race as MonsterRace,
+          },
         };
-      case GameEvent.EntityAttacked: {
+      case GameEvent.PlayableEntityAttacked: {
         const diceScore = sum(
           ...payload.dicesResults
             .filter(({ dice }) => dice.name !== "special")
@@ -51,7 +53,7 @@ export class LogService {
         );
 
         return {
-          type: GameEvent.EntityAttacked,
+          type: GameEvent.PlayableEntityAttacked,
           createdAt: new Date(),
           data: {
             attackItemUsedName: payload.attackItemUsed.name,
@@ -67,9 +69,9 @@ export class LogService {
           },
         };
       }
-      case GameEvent.EntityTookDamage:
+      case GameEvent.PlayableEntityTookDamage:
         return {
-          type: GameEvent.EntityTookDamage,
+          type: GameEvent.PlayableEntityTookDamage,
           createdAt: new Date(),
           data: {
             damageDone: payload.amount,
@@ -96,6 +98,23 @@ export class LogService {
           data: {
             chestTrapName: payload.chestTrapItem.name,
             subjectEntityName: payload.subjectEntity.name,
+          },
+        };
+      case GameEvent.TrapTriggered:
+        return {
+          type: GameEvent.TrapTriggered,
+          createdAt: new Date(),
+          data: {
+            trapName: payload.trapEntity.name,
+            subjectEntityName: payload.subjectEntity.name,
+          },
+        };
+      case GameEvent.PlayableEntityOpenedChest:
+        return {
+          type: GameEvent.PlayableEntityOpenedChest,
+          createdAt: new Date(),
+          data: {
+            entityName: payload.playableEntity.name,
           },
         };
     }

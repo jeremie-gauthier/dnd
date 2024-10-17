@@ -6,6 +6,10 @@ import {
 import { Entity, PlainData } from "src/modules/shared/domain/entity";
 import { Attack } from "../../attack/attack.entity";
 import { Coord } from "../../coord/coord.vo";
+import { EntityDiedDomainEvent } from "../../domain-events/dtos/entity-died.dto";
+import { PlayableEntityTookDamageDomainEvent } from "../../domain-events/dtos/playable-entity-took-damage.dto";
+import { PlayableEntityTurnEndedDomainEvent } from "../../domain-events/dtos/playable-entity-turn-ended.dto";
+import { PlayableEntityTurnStartedDomainEvent } from "../../domain-events/dtos/playable-entity-turn-started.dto";
 import { Inventory } from "../../inventory/inventory.entity";
 import { Spell } from "../../item/spell/spell.entity";
 import { Weapon } from "../../item/weapon/weapon.entity";
@@ -157,6 +161,13 @@ export abstract class Playable<
     const { damageTaken } = this.getDamagesTakenResult({ rawDamages: amount });
 
     this._data.characteristic.healthPoints -= damageTaken;
+    this.addDomainEvent(
+      new PlayableEntityTookDamageDomainEvent({
+        target: this.toPlain(),
+        amount: damageTaken,
+      }),
+    );
+
     if (this.healthPoints <= 0) {
       this.death();
     }
@@ -176,6 +187,7 @@ export abstract class Playable<
   protected death(): void {
     this._data.characteristic.healthPoints = 0;
     this._data.isBlocking = false;
+    this.addDomainEvent(new EntityDiedDomainEvent({ target: this.toPlain() }));
   }
 
   public mustBePlayedBy({ userId }: { userId: Data["playedByUserId"] }) {
@@ -199,6 +211,11 @@ export abstract class Playable<
   public endTurn() {
     this.conditions.applyAllEndTurnConditions({ playableEntityAffected: this });
     this._data.status = this._data.status.advanceTo("IDLE");
+    this.addDomainEvent(
+      new PlayableEntityTurnEndedDomainEvent({
+        playableEntity: this.toPlain(),
+      }),
+    );
   }
 
   public startTurn() {
@@ -209,6 +226,11 @@ export abstract class Playable<
     this.conditions.applyAllStartTurnConditions({
       playableEntityAffected: this,
     });
+    this.addDomainEvent(
+      new PlayableEntityTurnStartedDomainEvent({
+        playableEntity: this.toPlain(),
+      }),
+    );
   }
 
   public setCoord(coord: Coord) {

@@ -12,6 +12,11 @@ import { Attack } from "../attack/attack.entity";
 import { AttackError } from "../attack/attack.error";
 import { Board } from "../board/board.entity";
 import { Coord } from "../coord/coord.vo";
+import { ChestTrapTriggeredDomainEvent } from "../domain-events/dtos/chest-trap-triggered.dto";
+import { MonsterSpawnedDomainEvent } from "../domain-events/dtos/monster-spawned.dto";
+import { PlayableEntityAttackedDomainEvent } from "../domain-events/dtos/playable-entity-attacked.dto";
+import { PlayableEntityMovedDomainEvent } from "../domain-events/dtos/playable-entity-moved.dto";
+import { PlayableEntityOpenedChestDomainEvent } from "../domain-events/dtos/playable-entity-opened-chest.dto";
 import { GameEvents } from "../game-events/game-events.aggregate";
 import { GameMaster } from "../game-master/game-master.entity";
 import { GameStatus } from "../game-status/game-status.vo";
@@ -24,7 +29,6 @@ import { Weapon } from "../item/weapon/weapon.entity";
 import { MonsterTemplates } from "../monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "../playable-entities/playable-entities.aggregate";
 import { Hero } from "../playable-entities/playable-entity/heroes/hero.abstract";
-import { Monster } from "../playable-entities/playable-entity/monster.entity";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
 import { Rooms } from "../rooms/rooms.aggregate";
 import { TilePlayableEntity } from "../tile/tile-entity/playable/playable.entity";
@@ -109,17 +113,11 @@ export class Game extends AggregateRoot<Data> {
     };
   }
 
-  public isWin() {
-    return this._data.winConditions.areWin();
-  }
-
   public endPlayerTurn({ userId }: { userId: string }) {
     const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
     playingEntity.mustBePlayedBy({ userId });
     playingEntity.endTurn();
-
-    const playingEntitiesWhoseTurnEnded: Playable[] = [playingEntity];
-    const playingEntitiesWhoseTurnStarted: Playable[] = [];
+    this.addDomainEvents(playingEntity.collectDomainEvents());
 
     let hasFoundNextEntityAbleToPlay = false;
     while (!hasFoundNextEntityAbleToPlay) {
@@ -130,21 +128,14 @@ export class Game extends AggregateRoot<Data> {
       }
 
       nextEntityToPlay.startTurn();
-      playingEntitiesWhoseTurnStarted.push(nextEntityToPlay);
+      this.addDomainEvents(nextEntityToPlay.collectDomainEvents());
 
       if (nextEntityToPlay.isPlaying) {
         hasFoundNextEntityAbleToPlay = true;
-      } else {
-        playingEntitiesWhoseTurnEnded.push(nextEntityToPlay);
       }
 
       this._data.playableEntities.incrementTimeline();
     }
-
-    return {
-      playingEntitiesWhoseTurnEnded,
-      playingEntitiesWhoseTurnStarted,
-    };
   }
 
   public movePlayableEntity({
@@ -175,6 +166,7 @@ export class Game extends AggregateRoot<Data> {
 
   public rollInitiatives() {
     this._data.playableEntities.rollInitiatives();
+    this.addDomainEvents(this._data.playableEntities.collectDomainEvents());
   }
 
   public spawnMonster({
@@ -194,6 +186,10 @@ export class Game extends AggregateRoot<Data> {
       playableEntityId: monster.id,
     });
 
+    this.addDomainEvent(
+      new MonsterSpawnedDomainEvent({ monster: monster.toPlain() }),
+    );
+
     return monster;
   }
 
@@ -210,8 +206,8 @@ export class Game extends AggregateRoot<Data> {
     });
     tile.openDoor({ playableEntity: playingEntity });
 
-    // ! GAME EVENTS (refacto this)
-    const monstersSpawned: Monster[] = [];
+    this.addDomainEvents(tile.collectDomainEvents());
+
     const doorOpeningEvents = this._data.events.getRelatedDoorOpeningEvents({
       doorCoord: coordOfTileWithDoor,
     });
@@ -222,21 +218,12 @@ export class Game extends AggregateRoot<Data> {
           doorOpeningEvent.startingTiles,
         );
         for (const [race, startingCoord] of monsterRaceWithStartingCoord) {
-          const monster = this.spawnMonster({ race, startingCoord });
-          monstersSpawned.push(monster);
+          this.spawnMonster({ race, startingCoord });
         }
       }
     }
-    // ! -- GAME EVENTS (refacto this)
 
     this.rollInitiatives();
-
-    return {
-      entityThatOpenedTheDoor: playingEntity,
-      playingEntityWhoseTurnStarted:
-        this._data.playableEntities.getPlayingEntityOrThrow(),
-      monstersSpawned,
-    };
   }
 
   public playerMove({
@@ -259,17 +246,21 @@ export class Game extends AggregateRoot<Data> {
         playableEntityId: playingEntity.id,
         destinationCoord: destinationTile.coord,
       });
+      this.addDomainEvent(
+        new PlayableEntityMovedDomainEvent({
+          playableEntity: playingEntity.toPlain(),
+        }),
+      );
     }
 
     if (trapTriggered) {
       trapTriggered.onInteraction({ playableEntity: playingEntity });
+      this.addDomainEvents(trapTriggered.collectDomainEvents());
+
+      if (playingEntity.isDead) {
+        this.endPlayerTurn({ userId });
+      }
     }
-
-    const turnEnded = playingEntity.isDead
-      ? this.endPlayerTurn({ userId })
-      : undefined;
-
-    return { playingEntity, turnEnded };
   }
 
   public playerAttack({
@@ -292,7 +283,7 @@ export class Game extends AggregateRoot<Data> {
       attackId,
     });
 
-    const { attack, attackResult, damageDone } = this.playableEntityAttack({
+    this.playableEntityAttack({
       attacker: playingEntity,
       defender: targetPlayableEntity,
       attackId,
@@ -313,21 +304,12 @@ export class Game extends AggregateRoot<Data> {
         playableEntity: targetPlayableEntity,
       });
       this._data.winConditions.updateWinConditions({ eventName: "enemy_died" });
+      this.addDomainEvents(this._data.winConditions.collectDomainEvents());
     }
 
-    const turnEnded = playingEntity.isDead
-      ? this.endPlayerTurn({ userId })
-      : undefined;
-
-    return {
-      attack,
-      attacker: playingEntity,
-      attackItem,
-      attackResult,
-      damageDone,
-      target: targetPlayableEntity,
-      turnEnded,
-    };
+    if (playingEntity.isDead) {
+      this.endPlayerTurn({ userId });
+    }
   }
 
   public playableEntityAttack({
@@ -352,6 +334,17 @@ export class Game extends AggregateRoot<Data> {
       attackId,
       attackItem,
     });
+    this.addDomainEvent(
+      new PlayableEntityAttackedDomainEvent({
+        attacker: attacker.toPlain(),
+        target: defender.toPlain(),
+        damageDone: attackResult.attackResult.sumResult,
+        dicesResults: attackResult.attackResult.dicesResults,
+        attack: attack.toPlain(),
+        attackItemUsed: attackItem.toPlain(),
+      }),
+    );
+
     if (attackResult.type === "Spell") {
       attacker.consumeMana({ amount: attackResult.manaCost });
     }
@@ -367,15 +360,13 @@ export class Game extends AggregateRoot<Data> {
       playableEntityAffected: defender,
     });
 
-    const damageDone = defender.takeDamage({
-      amount: attackResult.attackResult.sumResult,
-    });
+    defender.takeDamage({ amount: attackResult.attackResult.sumResult });
+    this.addDomainEvents(defender.collectDomainEvents());
+    this.addDomainEvents(attacker.collectDomainEvents());
 
     defender.conditions.clearExhausted({
       playableEntityAffected: defender,
     });
-
-    return { attack, attackResult, damageDone };
   }
 
   private mustHaveTargetInRange({
@@ -471,15 +462,18 @@ export class Game extends AggregateRoot<Data> {
       playingEntity.conditions.clearExhausted({
         playableEntityAffected: playingEntity,
       });
-      return;
     } else {
       chestTrap.use({
         entityThatOpenedTheChest: playingEntity as Hero,
         game: this,
       });
-      const turnEnded = this.endPlayerTurn({ userId });
-
-      return { ...turnEnded, entityThatTriggeredTheChestTrap: playingEntity };
+      this.addDomainEvent(
+        new ChestTrapTriggeredDomainEvent({
+          chestTrapItem: chestTrap.toPlain(),
+          subjectEntity: playingEntity.toPlain(),
+        }),
+      );
+      this.endPlayerTurn({ userId });
     }
   }
 
@@ -537,6 +531,12 @@ export class Game extends AggregateRoot<Data> {
       coord: coordOfTileWithChest,
     });
     tile.openChest({ playableEntity: playingEntity });
+
+    this.addDomainEvent(
+      new PlayableEntityOpenedChestDomainEvent({
+        playableEntity: playingEntity.toPlain(),
+      }),
+    );
 
     return {
       maxLevelLoot: this._data.maxLevelLoot,

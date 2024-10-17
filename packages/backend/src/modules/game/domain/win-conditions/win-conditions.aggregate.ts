@@ -1,5 +1,6 @@
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
+import { GameWonDomainEvent } from "../domain-events/dtos/game-won.dto";
 import { WinCondition } from "./win-condition/win-condition.abstract";
 import { WinConditionEvent } from "./win-conditions.event";
 
@@ -28,6 +29,10 @@ export class WinConditions extends Entity<Data> {
   }): void {
     for (const winCondition of this._data.values) {
       winCondition.updateProgression(eventData);
+    }
+
+    if (this.areWin()) {
+      this.addDomainEvent(new GameWonDomainEvent());
     }
   }
 

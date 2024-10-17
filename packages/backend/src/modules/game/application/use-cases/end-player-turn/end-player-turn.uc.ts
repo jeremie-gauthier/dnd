@@ -9,15 +9,15 @@ import {
   GAME_REPOSITORY,
   GameRepository,
 } from "../../repositories/game-repository.interface";
-import { TurnService } from "../../services/turn.service";
+import { DomainEventsDispatcherService } from "../../services/domain-events-dispatcher.service";
 
 @Injectable()
 export class EndPlayerTurnUseCase implements UseCase {
   constructor(
     @Inject(GAME_REPOSITORY)
-    protected readonly gameRepository: GameRepository,
+    private readonly gameRepository: GameRepository,
+    private readonly domainEventsDispatcherService: DomainEventsDispatcherService,
     private readonly eventEmitter: EventEmitter2,
-    private readonly turnService: TurnService,
   ) {}
 
   public async execute({
@@ -26,20 +26,19 @@ export class EndPlayerTurnUseCase implements UseCase {
   }: EndPlayerTurnInput & { userId: User["id"] }): Promise<void> {
     const game = await this.gameRepository.getOneOrThrow({ gameId });
 
-    const { playingEntitiesWhoseTurnEnded, playingEntitiesWhoseTurnStarted } =
-      game.endPlayerTurn({ userId });
+    game.endPlayerTurn({ userId });
     await this.gameRepository.update({ game });
-
-    this.turnService.emitAsyncTurnEvents({
-      game,
-      playingEntitiesWhoseTurnEnded,
-      playingEntitiesWhoseTurnStarted,
-    });
 
     const plainGame = game.toPlain();
     this.eventEmitter.emitAsync(
       GameEvent.GameUpdated,
       new GameUpdatedPayload({ game: plainGame }),
     );
+
+    const domainEvents = game.collectDomainEvents();
+    this.domainEventsDispatcherService.dispatch({
+      domainEvents,
+      game: plainGame,
+    });
   }
 }

@@ -4,16 +4,13 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
-import { DoorOpenedPayload } from "src/modules/shared/events/game/door-opened.payload";
-import { MonstersSpawnedPayload } from "src/modules/shared/events/game/enemies-spawned.payload";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { GameUpdatedPayload } from "src/modules/shared/events/game/game-updated.payload";
-import { PlayableEntityTurnEndedPayload } from "src/modules/shared/events/game/playable-entity-turn-ended.payload";
-import { PlayableEntityTurnStartedPayload } from "src/modules/shared/events/game/playable-entity-turn-started.payload";
 import {
   GAME_REPOSITORY,
   GameRepository,
 } from "../../repositories/game-repository.interface";
+import { DomainEventsDispatcherService } from "../../services/domain-events-dispatcher.service";
 
 @Injectable()
 export class OpenDoorUseCase implements UseCase {
@@ -21,6 +18,7 @@ export class OpenDoorUseCase implements UseCase {
     @Inject(GAME_REPOSITORY)
     private readonly gameRepository: GameRepository,
     private readonly eventEmitter: EventEmitter2,
+    private readonly domainEventsDispatcherService: DomainEventsDispatcherService,
   ) {}
 
   public async execute({
@@ -32,11 +30,7 @@ export class OpenDoorUseCase implements UseCase {
   }): Promise<void> {
     const game = await this.gameRepository.getOneOrThrow({ gameId });
 
-    const {
-      entityThatOpenedTheDoor,
-      playingEntityWhoseTurnStarted,
-      monstersSpawned,
-    } = game.openDoor({
+    game.openDoor({
       userId,
       coordOfTileWithDoor: new Coord(coordOfTileWithDoor),
     });
@@ -48,38 +42,10 @@ export class OpenDoorUseCase implements UseCase {
       new GameUpdatedPayload({ game: plainGame }),
     );
 
-    const plainEntityThatOpenedTheDoor = entityThatOpenedTheDoor.toPlain();
-    this.eventEmitter.emitAsync(
-      GameEvent.DoorOpened,
-      new DoorOpenedPayload({
-        game: plainGame,
-        entityThatOpenedTheDoor: plainEntityThatOpenedTheDoor,
-      }),
-    );
-
-    this.eventEmitter.emitAsync(
-      GameEvent.MonstersSpawned,
-      new MonstersSpawnedPayload({
-        game: plainGame,
-        monsters: monstersSpawned.map((monster) => monster.toPlain()),
-      }),
-    );
-
-    this.eventEmitter.emitAsync(
-      GameEvent.PlayableEntityTurnEnded,
-      new PlayableEntityTurnEndedPayload({
-        game: plainGame,
-        playableEntity: plainEntityThatOpenedTheDoor,
-      }),
-    );
-    if (playingEntityWhoseTurnStarted) {
-      this.eventEmitter.emitAsync(
-        GameEvent.PlayableEntityTurnStarted,
-        new PlayableEntityTurnStartedPayload({
-          game: plainGame,
-          playableEntity: playingEntityWhoseTurnStarted.toPlain(),
-        }),
-      );
-    }
+    const domainEvents = game.collectDomainEvents();
+    this.domainEventsDispatcherService.dispatch({
+      domainEvents,
+      game: plainGame,
+    });
   }
 }

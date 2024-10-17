@@ -45,13 +45,15 @@ VALUES
   "game.update.playable_entity_moved": "{{entityName}} s''est déplacé.",
   "game.update.door_opened": "{{entityName}} a ouvert une porte.",
   "game.update.playable_entity_turn_started": "{{entityName}} commence son tour.",
-  "game.update.monsters_spawned": "Des monstres sont apparus.",
+  "game.update.monster_spawned": "Un monstre est apparu. ($t(monsters:{{monsterRace}}))",
   "game.update.initiatives_rerolled": "Les jets d''initiative ont été relancés.",
   "game.update.playable_entity_died": "{{entityName}} est mort.",
   "game.update.playable_entity_attacked": "{{attackerEntityName}} attaque {{targetEntityName}} avec $t(items:{{attackItemUsedName}}) et inflige {{attackPower}} ({{diceScore}} + {{bonusScore}}) point(s) de dégât.",
   "game.update.playable_entity_took_damage": "{{entityName}} subit {{damageDone}} point(s) de dégât. {{entityHpLeft}} pv restant(s).",
-  "game.status.win": "Victoire des héros !",
-  "game.update.chest_trap_triggered": "{{subjectEntityName}} a déclenché un piège ! ($t(items:{{chestTrapName}}))"
+  "game.status.win": "Victoire des héros !",
+  "game.update.chest_trap_triggered": "{{subjectEntityName}} a déclenché un piège ! ($t(items:{{chestTrapName}}))",
+  "game.update.trap_triggered": "{{subjectEntityName}} a marché sur un piège ! Son déplacement a été interrompu. ($t(items:trap.{{trapName}}) : $t(items:trap.{{trapName}}.description))",
+  "game.update.playable_entity_opened_chest": "{{entityName}} a ouvert un coffre."
 }
 '
   ),
@@ -80,6 +82,8 @@ VALUES
     'fr-FR',
     'items',
     '{
+  "trap.pit": "Fosse",
+  "trap.pit.description": "Le héros perd 1 point de vie",
   "freeAction": "Action gratuite",
   "cannotCastSpell": "Vous ne pouvez pas lancer ce sort",
   "perUse": "par utilisation",
@@ -219,6 +223,14 @@ VALUES
   "CLERIC": "CLERC",
   "WARRIOR": "GUERRIER",
   "THIEF": "ROUBLARDE"
+}'
+  ),
+  (
+    'fr-FR',
+    'monsters',
+    '{
+  "goblin": "gobelin",
+  "bugbear": "gobelours"
 }'
   ),
   (

@@ -6,12 +6,11 @@ import { UseCase } from "src/interfaces/use-case.interface";
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { GameUpdatedPayload } from "src/modules/shared/events/game/game-updated.payload";
-import { PlayableEntityMovedPayload } from "src/modules/shared/events/game/playable-entity-moved.payload";
 import {
   GAME_REPOSITORY,
   GameRepository,
 } from "../../repositories/game-repository.interface";
-import { TurnService } from "../../services/turn.service";
+import { DomainEventsDispatcherService } from "../../services/domain-events-dispatcher.service";
 
 @Injectable()
 export class PlayableEntityMoveUseCase implements UseCase {
@@ -19,7 +18,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
     @Inject(GAME_REPOSITORY)
     private readonly gameRepository: GameRepository,
     private readonly eventEmitter: EventEmitter2,
-    private readonly turnService: TurnService,
+    private readonly domainEventsDispatcherService: DomainEventsDispatcherService,
   ) {}
 
   public async execute({
@@ -32,10 +31,7 @@ export class PlayableEntityMoveUseCase implements UseCase {
     const game = await this.gameRepository.getOneOrThrow({ gameId });
 
     const pathToTileDomain = pathToTile.map((coord) => new Coord(coord));
-    const { playingEntity, turnEnded } = game.playerMove({
-      userId,
-      pathToTile: pathToTileDomain,
-    });
+    game.playerMove({ userId, pathToTile: pathToTileDomain });
 
     await this.gameRepository.update({ game });
 
@@ -45,16 +41,10 @@ export class PlayableEntityMoveUseCase implements UseCase {
       new GameUpdatedPayload({ game: plainGame }),
     );
 
-    this.eventEmitter.emitAsync(
-      GameEvent.PlayableEntityMoved,
-      new PlayableEntityMovedPayload({
-        game: plainGame,
-        playableEntity: playingEntity.toPlain(),
-      }),
-    );
-
-    if (turnEnded) {
-      this.turnService.emitAsyncTurnEvents({ ...turnEnded, game });
-    }
+    const domainEvents = game.collectDomainEvents();
+    this.domainEventsDispatcherService.dispatch({
+      domainEvents,
+      game: plainGame,
+    });
   }
 }

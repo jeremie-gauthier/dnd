@@ -5,7 +5,6 @@ import { User } from "src/database/entities/user.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { Coord } from "src/modules/game/domain/coord/coord.vo";
 import { Item } from "src/modules/game/domain/item/item.abstract";
-import { ChestTrapTriggeredPayload } from "src/modules/shared/events/game/chest-trap-triggered.payload";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { GameUpdatedPayload } from "src/modules/shared/events/game/game-updated.payload";
 import {
@@ -16,7 +15,7 @@ import {
   ITEM_REPOSITORY,
   ItemRepository,
 } from "../../repositories/item-repository.interface";
-import { TurnService } from "../../services/turn.service";
+import { DomainEventsDispatcherService } from "../../services/domain-events-dispatcher.service";
 
 @Injectable()
 export class PlayableEntityOpenChestUseCase implements UseCase {
@@ -26,7 +25,7 @@ export class PlayableEntityOpenChestUseCase implements UseCase {
     @Inject(ITEM_REPOSITORY)
     private readonly itemRepository: ItemRepository,
     private readonly eventEmitter: EventEmitter2,
-    private readonly turnService: TurnService,
+    private readonly domainEventsDispatcherService: DomainEventsDispatcherService,
   ) {}
 
   public async execute({
@@ -51,33 +50,7 @@ export class PlayableEntityOpenChestUseCase implements UseCase {
 
     game.markItemAsLooted({ item: itemFound });
     if (itemFound.isChestTrap()) {
-      const trapTriggered = game.playerTriggeredAChestTrap({
-        userId,
-        chestTrap: itemFound,
-      });
-
-      if (trapTriggered) {
-        const {
-          entityThatTriggeredTheChestTrap,
-          playingEntitiesWhoseTurnEnded,
-          playingEntitiesWhoseTurnStarted,
-        } = trapTriggered;
-
-        this.eventEmitter.emitAsync(
-          GameEvent.ChestTrapTriggered,
-          new ChestTrapTriggeredPayload({
-            chestTrapItem: itemFound.toPlain(),
-            game: game.toPlain(),
-            subjectEntity: entityThatTriggeredTheChestTrap.toPlain(),
-          }),
-        );
-
-        this.turnService.emitAsyncTurnEvents({
-          game,
-          playingEntitiesWhoseTurnEnded,
-          playingEntitiesWhoseTurnStarted,
-        });
-      }
+      game.playerTriggeredAChestTrap({ userId, chestTrap: itemFound });
     }
 
     await this.gameRepository.update({ game });
@@ -87,6 +60,12 @@ export class PlayableEntityOpenChestUseCase implements UseCase {
       GameEvent.GameUpdated,
       new GameUpdatedPayload({ game: plainGame }),
     );
+
+    const domainEvents = game.collectDomainEvents();
+    this.domainEventsDispatcherService.dispatch({
+      domainEvents,
+      game: plainGame,
+    });
 
     return { itemFound: itemFound.toPlain() };
   }

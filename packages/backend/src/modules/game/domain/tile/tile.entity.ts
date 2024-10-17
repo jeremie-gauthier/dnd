@@ -1,6 +1,7 @@
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { Coord } from "../coord/coord.vo";
+import { DoorOpenedDomainEvent } from "../domain-events/dtos/door-opened.dto";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
 import { TileInteractiveEntityError } from "./tile-entity/interactive/interactive.error";
 import { Trap } from "./tile-entity/interactive/trap.entity";
@@ -71,6 +72,11 @@ export class Tile extends Entity<Data> {
     }
 
     doorEntity.onInteraction();
+    this.addDomainEvent(
+      new DoorOpenedDomainEvent({
+        entityThatOpenedTheDoor: playableEntity.toPlain(),
+      }),
+    );
   }
 
   public openChest({ playableEntity }: { playableEntity: Playable }) {

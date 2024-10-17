@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { Plainable } from "src/interfaces/plainable.interface";
+import { DomainEvent } from "src/modules/game/domain/domain-events/domain-event.interface";
 import { type ValueObject } from "./value-object";
 
 type Data = {
@@ -21,6 +22,7 @@ export abstract class Entity<T extends Data>
 {
   private readonly _id: string;
   public abstract toPlain(): PlainData<T>;
+  public readonly domainEvents: Array<DomainEvent> = [];
 
   constructor(
     protected readonly _data: T,
@@ -43,5 +45,17 @@ export abstract class Entity<T extends Data>
     }
 
     return this.id === other.id;
+  }
+
+  public addDomainEvent(event: DomainEvent) {
+    this.domainEvents.push(event);
+  }
+
+  public addDomainEvents(events: Array<DomainEvent>) {
+    this.domainEvents.push(...events);
+  }
+
+  public collectDomainEvents() {
+    return this.domainEvents;
   }
 }
