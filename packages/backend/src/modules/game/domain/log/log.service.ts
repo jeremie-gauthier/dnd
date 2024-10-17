@@ -1,4 +1,4 @@
-import { GameLog, sum } from "@dnd/shared";
+import { GameLog, MonsterRace, sum } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { LoggableAction } from "./loggable-action.interface";
@@ -37,11 +37,13 @@ export class LogService {
           createdAt: new Date(),
           data: {},
         };
-      case GameEvent.MonstersSpawned:
+      case GameEvent.MonsterSpawned:
         return {
-          type: GameEvent.MonstersSpawned,
+          type: GameEvent.MonsterSpawned,
           createdAt: new Date(),
-          data: {},
+          data: {
+            monsterRace: payload.monster.race as MonsterRace,
+          },
         };
       case GameEvent.EntityAttacked: {
         const diceScore = sum(

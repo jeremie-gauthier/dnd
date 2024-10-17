@@ -1,6 +1,7 @@
 import { zip } from "@dnd/shared";
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
+import { InitiativesRerolledDomainEvent } from "../domain-events/dtos/initiatives-rerolled.dto";
 import { Room } from "../rooms/room/room.entity";
 import { Hero } from "./playable-entity/heroes/hero.abstract";
 import { Monster } from "./playable-entity/monster.entity";
@@ -110,6 +111,9 @@ export class PlayableEntities extends Entity<Data> {
     const initiatives = Array.from({ length: this._data.values.length })
       .map((_, idx) => idx + 1)
       .sort(() => Math.random() - Math.random());
+
+    this.addDomainEvent(new InitiativesRerolledDomainEvent());
+
     for (const [playableEntity, initiativeScore] of zip(
       this._data.values,
       initiatives,
@@ -117,6 +121,7 @@ export class PlayableEntities extends Entity<Data> {
       playableEntity.setInitiative(initiativeScore);
       if (playableEntity.isPlaying) {
         playableEntity.endTurn();
+        this.addDomainEvents(playableEntity.collectDomainEvents());
       }
     }
 
@@ -125,7 +130,10 @@ export class PlayableEntities extends Entity<Data> {
     });
 
     const nextEntityToPlay = this.getNextEntityToPlay();
-    nextEntityToPlay?.startTurn();
+    if (nextEntityToPlay) {
+      nextEntityToPlay.startTurn();
+      this.addDomainEvents(nextEntityToPlay.collectDomainEvents());
+    }
   }
 
   public addPlayableEntity({ playableEntity }: { playableEntity: Playable }) {

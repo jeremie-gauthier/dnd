@@ -1,4 +1,7 @@
+import { DoorOpenedDomainEvent } from "./dtos/door-opened.dto";
 import { EntityDiedDomainEvent } from "./dtos/entity-died.dto";
+import { InitiativesRerolledDomainEvent } from "./dtos/initiatives-rerolled.dto";
+import { MonsterSpawnedDomainEvent } from "./dtos/monster-spawned.dto";
 import { PlayableEntityMovedDomainEvent } from "./dtos/playable-entity-moved.dto";
 import { PlayableEntityTurnEndedDomainEvent } from "./dtos/playable-entity-turn-ended.dto";
 import { PlayableEntityTurnStartedDomainEvent } from "./dtos/playable-entity-turn-started.dto";
@@ -9,4 +12,7 @@ export type DomainEvent =
   | PlayableEntityTurnStartedDomainEvent
   | PlayableEntityMovedDomainEvent
   | TrapTriggeredDomainEvent
-  | EntityDiedDomainEvent;
+  | EntityDiedDomainEvent
+  | MonsterSpawnedDomainEvent
+  | DoorOpenedDomainEvent
+  | InitiativesRerolledDomainEvent;

@@ -1,7 +1,7 @@
 export enum GameEvent {
   GameWon = "game.status.win",
   DoorOpened = "game.update.door_opened",
-  MonstersSpawned = "game.update.monsters_spawned",
+  MonsterSpawned = "game.update.monster_spawned",
   EntityAttacked = "game.update.playable_entity_attacked",
   EntityDied = "game.update.playable_entity_died",
   EntityTookDamage = "game.update.playable_entity_took_damage",

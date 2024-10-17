@@ -12,6 +12,7 @@ import { Attack } from "../attack/attack.entity";
 import { AttackError } from "../attack/attack.error";
 import { Board } from "../board/board.entity";
 import { Coord } from "../coord/coord.vo";
+import { MonsterSpawnedDomainEvent } from "../domain-events/dtos/monster-spawned.dto";
 import { PlayableEntityMovedDomainEvent } from "../domain-events/dtos/playable-entity-moved.dto";
 import { GameEvents } from "../game-events/game-events.aggregate";
 import { GameMaster } from "../game-master/game-master.entity";
@@ -25,7 +26,6 @@ import { Weapon } from "../item/weapon/weapon.entity";
 import { MonsterTemplates } from "../monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "../playable-entities/playable-entities.aggregate";
 import { Hero } from "../playable-entities/playable-entity/heroes/hero.abstract";
-import { Monster } from "../playable-entities/playable-entity/monster.entity";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
 import { Rooms } from "../rooms/rooms.aggregate";
 import { TilePlayableEntity } from "../tile/tile-entity/playable/playable.entity";
@@ -179,15 +179,11 @@ export class Game extends AggregateRoot<Data> {
 
     this._data.board.addEntityAtCoord({ tileEntity, coord: destinationCoord });
     playableEntity.setCoord(destinationCoord);
-    this.addDomainEvent(
-      new PlayableEntityMovedDomainEvent({
-        playableEntity: playableEntity.toPlain(),
-      }),
-    );
   }
 
   public rollInitiatives() {
     this._data.playableEntities.rollInitiatives();
+    this.addDomainEvents(this._data.playableEntities.collectDomainEvents());
   }
 
   public spawnMonster({
@@ -207,6 +203,10 @@ export class Game extends AggregateRoot<Data> {
       playableEntityId: monster.id,
     });
 
+    this.addDomainEvent(
+      new MonsterSpawnedDomainEvent({ monster: monster.toPlain() }),
+    );
+
     return monster;
   }
 
@@ -223,8 +223,8 @@ export class Game extends AggregateRoot<Data> {
     });
     tile.openDoor({ playableEntity: playingEntity });
 
-    // ! GAME EVENTS (refacto this)
-    const monstersSpawned: Monster[] = [];
+    this.addDomainEvents(tile.collectDomainEvents());
+
     const doorOpeningEvents = this._data.events.getRelatedDoorOpeningEvents({
       doorCoord: coordOfTileWithDoor,
     });
@@ -235,21 +235,12 @@ export class Game extends AggregateRoot<Data> {
           doorOpeningEvent.startingTiles,
         );
         for (const [race, startingCoord] of monsterRaceWithStartingCoord) {
-          const monster = this.spawnMonster({ race, startingCoord });
-          monstersSpawned.push(monster);
+          this.spawnMonster({ race, startingCoord });
         }
       }
     }
-    // ! -- GAME EVENTS (refacto this)
 
     this.rollInitiatives();
-
-    return {
-      entityThatOpenedTheDoor: playingEntity,
-      playingEntityWhoseTurnStarted:
-        this._data.playableEntities.getPlayingEntityOrThrow(),
-      monstersSpawned,
-    };
   }
 
   public playerMove({
@@ -272,6 +263,11 @@ export class Game extends AggregateRoot<Data> {
         playableEntityId: playingEntity.id,
         destinationCoord: destinationTile.coord,
       });
+      this.addDomainEvent(
+        new PlayableEntityMovedDomainEvent({
+          playableEntity: playingEntity.toPlain(),
+        }),
+      );
     }
 
     if (trapTriggered) {

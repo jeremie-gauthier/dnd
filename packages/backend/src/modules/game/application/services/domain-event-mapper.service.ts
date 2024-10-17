@@ -1,7 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { EventPayload } from "src/interfaces/event-payload.interface";
+import { DoorOpenedPayload } from "src/modules/shared/events/game/door-opened.payload";
 import { EntityDiedPayload } from "src/modules/shared/events/game/entity-died.payload";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
+import { InitiativesRerolledPayload } from "src/modules/shared/events/game/initiatives-rerolled.payload";
+import { MonsterSpawnedPayload } from "src/modules/shared/events/game/monster-spawned.payload";
 import { PlayableEntityMovedPayload } from "src/modules/shared/events/game/playable-entity-moved.payload";
 import { PlayableEntityTurnEndedPayload } from "src/modules/shared/events/game/playable-entity-turn-ended.payload";
 import { PlayableEntityTurnStartedPayload } from "src/modules/shared/events/game/playable-entity-turn-started.payload";
@@ -29,6 +32,12 @@ export class DomainEventMapperService {
         return new TrapTriggeredPayload({ ...domainEvent, game });
       case GameEvent.EntityDied:
         return new EntityDiedPayload({ ...domainEvent, game });
+      case GameEvent.MonsterSpawned:
+        return new MonsterSpawnedPayload({ ...domainEvent, game });
+      case GameEvent.DoorOpened:
+        return new DoorOpenedPayload({ ...domainEvent, game });
+      case GameEvent.InitiativesRerolled:
+        return new InitiativesRerolledPayload({ ...domainEvent, game });
     }
   }
 }

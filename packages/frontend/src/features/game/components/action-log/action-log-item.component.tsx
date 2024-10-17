@@ -5,7 +5,7 @@ import { ActionLogItemDate } from "./action-log-item-date.component";
 type Props = GameLog;
 
 export const ActionLogItem = ({ createdAt, data, type }: Props) => {
-  const { t } = useTranslation(["action-log", "items"]);
+  const { t } = useTranslation(["action-log", "items", "monsters"]);
 
   const hasDiceRollResults = type === "game.update.playable_entity_attacked";
 
