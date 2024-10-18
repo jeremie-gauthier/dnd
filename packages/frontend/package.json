@@ -19,6 +19,7 @@
     "@dnd-kit/core": "^6.1.0",
     "@dnd/shared": "file:../shared",
     "@headlessui/react": "^2.1.8",
+    "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-slider": "^1.2.1",
     "@radix-ui/react-slot": "^1.1.0",
