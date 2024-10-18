@@ -45,12 +45,5 @@ export const Route = createFileRoute("/_ws")({
 });
 
 export function WsRouteComponent() {
-  const { socket } = Route.useRouteContext();
-
-  return (
-    <>
-      <div>socket id: {socket.id}</div>
-      <Outlet />
-    </>
-  );
+  return <Outlet />;
 }

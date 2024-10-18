@@ -31,7 +31,6 @@ function RootComponent() {
   return (
     <>
       <div className={"min-h-screen flex flex-col"}>
-        <h1 className={"text-3xl p-2"}>DnD</h1>
         <div className={"text-3xl"}>
           <RouterLoader />
         </div>
