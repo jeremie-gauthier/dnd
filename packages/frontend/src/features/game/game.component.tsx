@@ -20,7 +20,7 @@ export const Game = () => {
 
   return (
     <>
-      <div className="flex flex-col w-full gap-2 bg-support-gray-900">
+      <div className="flex flex-col w-full gap-2 bg-neutral-800">
         <p className="flex justify-start text-xs italic text-white">
           Game ID: {game.id}
         </p>

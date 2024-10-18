@@ -5,6 +5,6 @@ type Params = {
 };
 
 export function drawBackground({ context, canvasHeight, canvasWidth }: Params) {
-  context.fillStyle = "#202020";
+  context.fillStyle = "#262626";
   context.fillRect(0, 0, canvasWidth, canvasHeight);
 }
