@@ -3,11 +3,16 @@ import { LinkButton } from "@features/ui/button/link-button";
 import { LoginButton } from "@features/users/login/login-button.component";
 import { useConnection } from "@features/users/login/use-connection";
 import { LogoutButton } from "@features/users/logout/logout-button.component";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import * as React from "react";
 import { z } from "zod";
 
 export const Route = createFileRoute("/login")({
+  beforeLoad: ({ context }) => {
+    if (context.auth?.isAuthenticated) {
+      return redirect({ to: "/profile" });
+    }
+  },
   validateSearch: z.object({
     redirect: z.string().optional(),
   }),
