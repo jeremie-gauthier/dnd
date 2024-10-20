@@ -62,7 +62,6 @@ export class CreateLobbyUseCase implements UseCase {
           id: campaign.id,
           nbStages: campaign.stages.length,
           stage: selectedStage,
-          title: campaign.title,
         },
       },
       heroes,

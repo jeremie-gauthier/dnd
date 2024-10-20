@@ -3,3 +3,4 @@ export * from "./lobby-playable-character.interface";
 export * from "./lobby-player.interface";
 export * from "./lobby.enum";
 export * from "./lobby.interface";
+export * from "./lobby-config.interface";

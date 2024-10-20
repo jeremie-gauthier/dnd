@@ -9,7 +9,25 @@ VALUES
   (
     'fr-FR',
     'common',
-    '{"cancel": "Annuler", "confirm": "Confirmer", "endTurn": "Fin de tour"}'
+    '{
+  "cancel": "Annuler",
+  "confirm": "Confirmer",
+  "endTurn": "Fin de tour",
+  "logout": "Déconnexion"
+}'
+  ),
+  (
+    'fr-FR',
+    'campaigns',
+    '{
+  "campaign_stage_overview": "Niveau {{stageOrder}} sur {{maxStageOrder}}",
+  "campaign_1.title": "La conquête",
+  "campaign_1.description": "La peur gagne peu à peu le pays de Rallion, car des forces noires y rôdent, détruisant tout sur leur passage. Selon les rumeurs, un Seigneur Liche, autrefois vaincu par des aventuriers, est revenu pour plonger le pays dans la terreur.\nQuatre héros - Regdar, Jozan, Lidda et Mialyë - se sont alliés pour trouver la source de cemal et la détruire pour toujours. Ils partent à l''aventure, prêts à affronter les périls qui les attendent...",
+  "campaign_1.stage_1.title": "Les bandits gobelins",
+  "campaign_1.stage_1.intro": "Le mal et les ténèbres se sont abattus sur le pays de Rallion et la région est devenue la proie des Monstres. Traversant la contrée, les Héros s''arrêtent dans le petit village de Holbrook, aux abords d''une forêt. Les villageois sont terrorisés par les attaques incessantes des gobelins. Le Shérif de Holbrook est parti à leur recherche pour les chasser, mais il n''est pas revenu. Les gobelins sont probablement responsables de sa disparition.",
+  "campaign_1.stage_1.objective": "Vaincre tous les Gobelins",
+  "campaign_1.stage_1.outro": "Félicitations - vous avez vaincu les bandits gobelins. Mais, tandis que les Héros fouillent leur repaire, ils découvrent un message alaramant. Il semblerait que les Gobelins ne soient que les éclaireurs d''un groupe plus important. Mais où se cache cet autre groupe, et où est le Shérif ?"
+}'
   ),
   (
     'fr-FR',
@@ -34,8 +52,7 @@ VALUES
   "selectNbPlayers": "Choisissez le nombre de joueurs",
   "createLobby": "Créer le salon",
   "creatingLobby": "Le salon est en cours de création"
-}
-'
+}'
   ),
   (
     'fr-FR',
@@ -55,8 +72,7 @@ VALUES
   "game.update.trap_triggered": "{{subjectEntityName}} a marché sur un piège ! Son déplacement a été interrompu. ($t(items:trap.{{trapName}}) : $t(items:trap.{{trapName}}.description))",
   "game.update.playable_entity_opened_chest": "{{entityName}} a ouvert un coffre.",
   "game.update.playable_entity_drank_potion": "{{entityName}} a bu une potion ($t(items:{{potionName}}) : $t(items:{{potionName}}.description))."
-}
-'
+}'
   ),
   (
     'fr-FR',
@@ -76,8 +92,7 @@ VALUES
   "blood_price.description": "L''attaquant perd 1 point de vie",
   "turn_undead.description": "Renvoie la cible si c''est un mort-vivant",
   "double_damage.description": "Double l''attaque"
-}
-'
+}'
   ),
   (
     'fr-FR',

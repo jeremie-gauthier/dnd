@@ -25,12 +25,8 @@ export const getFakeLobbyData = (): Pick<LobbyView, "config"> & {
         nbStages: 10,
         stage: {
           id: FAKE_CAMPAIGN_STAGE_ID,
-          intro: "this is the intro",
           order: 2,
-          outro: "this is the outro",
-          title: "Fake Campaign Stage 2/10",
         },
-        title: "Fake Campaign",
       },
       nbPlayersMax: 5,
     },

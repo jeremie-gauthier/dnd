@@ -38,15 +38,6 @@ export class CampaignStage {
   )
   readonly progressions: Relation<CampaignStageProgression[]>;
 
-  @Column()
-  readonly title: string;
-
-  @Column()
-  readonly intro: string;
-
-  @Column()
-  readonly outro: string;
-
   @Column({ type: "json" })
   readonly mapCompiled: MapCompiledJson;
 
