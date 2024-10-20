@@ -3,12 +3,12 @@ import {
   type LobbyView,
   ServerLobbyEvent,
 } from "@dnd/shared";
-import { LobbiesList } from "@features/lobbies/lobbies-list/lobbies-list.component";
+import { LobbyList } from "@features/lobbies/lobby-list/lobby-list.component";
 import {
   GET_LOBBIES_QUERY_KEY,
   type GetLobbiesResponse,
   useGetLobbies,
-} from "@features/lobbies/lobbies-list/use-get-lobbies";
+} from "@features/lobbies/lobby-list/use-get-lobbies";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 
@@ -80,5 +80,5 @@ export function LobbiesRouteComponent() {
     return <div>Lobby data is loading</div>;
   }
 
-  return <LobbiesList lobbies={lobbies} socket={socket} />;
+  return <LobbyList lobbies={lobbies} socket={socket} />;
 }

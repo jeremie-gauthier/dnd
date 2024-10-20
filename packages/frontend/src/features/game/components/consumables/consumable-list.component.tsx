@@ -15,10 +15,10 @@ export const ConsumableList = ({ items }: Props) => {
   };
 
   return (
-    <div className="fixed left-5 z-40 flex flex-col bg-primary-600 rounded p-2 h-fit max-w-20 gap-2">
+    <div className="fixed left-5 z-40 flex flex-col bg-slate-600 rounded p-2 h-fit max-w-20 gap-2">
       {items.map((item) => (
         <button key={item.name} type="button" onClick={() => handleClick(item)}>
-          <div className="flex border-4 bg-primary-900 border-primary-900 rounded items-center shadow-md shadow-primary-900">
+          <div className="flex border-4 bg-slate-700 border-slate-700 rounded items-center shadow-md shadow-slate-900">
             <ConsumableItem item={item} />
           </div>
         </button>

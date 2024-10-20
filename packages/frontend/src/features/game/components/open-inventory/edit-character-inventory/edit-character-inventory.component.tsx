@@ -137,7 +137,7 @@ const InnerEditCharacterInventory = ({ isOpen, close }: Props) => {
           >
             <DialogTitle
               as="h3"
-              className="relative text-base/7 font-medium text-white text-center t bg-primary-600 bg-opacity-[95%] rounded-t-md"
+              className="relative text-base/7 font-medium text-white text-center t bg-slate-600 bg-opacity-[95%] rounded-t-md"
             >
               {t("inventory_title", { ns: "inventory" })}
 

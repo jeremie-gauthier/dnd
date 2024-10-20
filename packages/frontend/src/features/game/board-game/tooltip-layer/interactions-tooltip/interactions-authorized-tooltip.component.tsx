@@ -22,7 +22,7 @@ export const InteractionsAuthorizedTooltip = ({
         r={radiusRing}
         cx={x}
         cy={y}
-        className="fill-transparent stroke-primary-600 stroke-2"
+        className="fill-transparent stroke-slate-700 stroke-2"
       />
       {interactions.map((interaction, idx) => {
         return (
@@ -35,7 +35,7 @@ export const InteractionsAuthorizedTooltip = ({
               r={assetSize / 2}
               cx={interaction.x}
               cy={interaction.y}
-              className="fill-primary-600 stroke-2 stroke-primary-600 group-hover:fill-white"
+              className="fill-slate-700 stroke-2 stroke-slate-700 group-hover:fill-white"
             />
             <RadialSlot interaction={interaction} />
           </g>

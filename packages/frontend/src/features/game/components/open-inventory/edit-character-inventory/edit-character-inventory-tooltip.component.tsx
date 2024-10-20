@@ -32,7 +32,7 @@ export const EditCharacterInventoryTooltip = () => {
         "fixed z-[9999] rounded-md p-2 font-semibold flex flex-col",
         tooltipType === "confirm_delete"
           ? "bg-red-400"
-          : "bg-primary-600 border border-primary-900 text-white",
+          : "bg-slate-500 border border-slate-800 text-white",
       )}
       style={{
         transform: `translate3d(${cursorPositionWithOffset.x}px, ${cursorPositionWithOffset.y}px, 0)`,

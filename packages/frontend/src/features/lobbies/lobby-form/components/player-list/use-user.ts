@@ -3,7 +3,7 @@ import { GetUserOutput } from "@dnd/shared";
 import { fetcherWithAuth } from "@lib/react-query";
 import { useQuery } from "@tanstack/react-query";
 
-export const useUser = (userId: string) => {
+export const useUser = (userId?: string) => {
   const { getAccessTokenSilently } = useAuth0();
 
   return useQuery({
@@ -13,5 +13,6 @@ export const useUser = (userId: string) => {
         `http://localhost:3000/user/private/get-user/${userId}`,
         getAccessTokenSilently,
       ),
+    enabled: !!userId,
   });
 };

@@ -1,8 +1,16 @@
+import { Navbar } from "@/components/navbar/navbar.component";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
 import { ServerLobbyEvent, ServerToClientEvents } from "@dnd/shared";
-import { Button } from "@features/ui/button/button";
-import { MinMaxRange } from "@features/ui/range/min-max-range";
-import { Select } from "@features/ui/select/select";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -16,15 +24,9 @@ type Props = {
 };
 
 export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
-  const { t } = useTranslation(["lobbies"]);
-  const {
-    form,
-    getCampaignDisplayedValue,
-    campaignValidators,
-    nbPlayersMaxValidators,
-  } = useCreateLobbyForm(socket, {
-    nbPlayersMax: 2,
-    campaign: campaigns[0],
+  const { t } = useTranslation(["lobbies", "campaigns"]);
+  const { form, validators, constraints } = useCreateLobbyForm(socket, {
+    stageId: campaigns[0].currentStage.id,
   });
   const navigate = useNavigate();
 
@@ -39,12 +41,7 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
   useEffect(() => {
     const handleLobbyCreated: ServerToClientEvents["server.lobby.create"] = ({
       lobby,
-    }) => {
-      return navigate({
-        to: "/lobby/$lobbyId",
-        params: { lobbyId: lobby.id },
-      });
-    };
+    }) => navigate({ to: "/lobby/$lobbyId", params: { lobbyId: lobby.id } });
 
     socket.on(ServerLobbyEvent.LobbyCreated, handleLobbyCreated);
 
@@ -54,70 +51,85 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
   }, [socket, navigate]);
 
   return (
-    <div className="flex flex-col items-center space-y-8">
-      <h1 className="font-semibold text-2xl">{t("hostAGame")}</h1>
+    <>
+      <Navbar />
 
-      <form onSubmit={handleLobbyCreation} className="space-y-4">
-        <div>
+      <div className="flex flex-col items-center gap-8">
+        <h1 className="font-semibold text-2xl">{t("hostAGame")}</h1>
+
+        <form onSubmit={handleLobbyCreation} className="space-y-6 w-60">
           <form.Field
-            name="campaign"
+            name="stageId"
             validatorAdapter={zodValidator()}
-            validators={campaignValidators}
+            validators={validators.stageId}
           >
             {(field) => (
-              <Select
-                label={t("selectCampaign")}
-                value={field.state.value}
-                list={campaigns}
-                onChange={field.handleChange}
-                getDisplayedValue={getCampaignDisplayedValue}
-              />
+              <div className="space-y-2">
+                <Label htmlFor="stageId">{t("selectCampaign")}</Label>
+                <Select
+                  onValueChange={field.handleChange}
+                  value={form.getFieldValue("stageId")}
+                >
+                  <SelectTrigger className="space-x-2">
+                    <SelectValue placeholder={t("selectCampaign")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {campaigns.map((campaign) => (
+                      <SelectItem
+                        key={campaign.id}
+                        value={campaign.currentStage.id}
+                      >
+                        {`${t(`${campaign.id}.title`, { ns: "campaigns" })} (${campaign.currentStage.order}/${campaign.nbStages})`}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             )}
           </form.Field>
-        </div>
-
-        <div className="relative !mb-6">
           <form.Field
             name="nbPlayersMax"
             validatorAdapter={zodValidator()}
-            validators={nbPlayersMaxValidators}
+            validators={validators.nbPlayersMax}
           >
             {(field) => (
-              <>
-                <MinMaxRange
-                  min={2}
-                  max={5}
-                  value={field.state.value}
-                  onChange={field.handleChange}
-                  label={t("selectNbPlayers")}
-                />
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6">
-                  2
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-1/3 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
-                  3
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute start-2/3 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">
-                  4
-                </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400 absolute end-0 -bottom-6">
-                  5
-                </span>
-              </>
+              <div className="space-y-2">
+                <Label htmlFor="nbPlayersMax">{t("selectNbPlayers")}</Label>
+                <div className="flex flex-row gap-2">
+                  <span>{constraints.nbPlayersMax.min}</span>
+                  <Slider
+                    min={constraints.nbPlayersMax.min}
+                    max={constraints.nbPlayersMax.max}
+                    step={1}
+                    onValueCommit={(value) => field.handleChange(value[0])}
+                  />
+                  <span>{constraints.nbPlayersMax.max}</span>
+                </div>
+              </div>
             )}
           </form.Field>
-        </div>
+          <form.Subscribe
+            selector={(state) => [state.canSubmit, state.isSubmitting]}
+          >
+            {([canSubmit, isSubmitting]) => (
+              <Button
+                className="w-full"
+                variant="default"
+                type="submit"
+                disabled={!canSubmit}
+              >
+                {isSubmitting ? t("creatingLobby") : t("createLobby")}
+              </Button>
+            )}
+          </form.Subscribe>
+        </form>
 
-        <form.Subscribe
-          selector={(state) => [state.canSubmit, state.isSubmitting]}
-        >
-          {([canSubmit, isSubmitting]) => (
-            <Button type="submit" disabled={!canSubmit}>
-              {isSubmitting ? t("creatingLobby") : t("createLobby")}
-            </Button>
-          )}
-        </form.Subscribe>
-      </form>
-    </div>
+        <Link to="/lobbies" className="-mt-6">
+          <Button role="link" variant="outline" className="w-60">
+            Retour
+          </Button>
+        </Link>
+      </div>
+    </>
   );
 };

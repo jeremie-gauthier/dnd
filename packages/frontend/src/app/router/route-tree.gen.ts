@@ -13,10 +13,8 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './../pages/__root'
-import { Route as ProfileImport } from './../pages/profile'
 import { Route as LoginImport } from './../pages/login'
 import { Route as WsImport } from './../pages/_ws'
-import { Route as WsMenuMultiplayerImport } from './../pages/_ws.menu-multiplayer'
 import { Route as WsLobbiesImport } from './../pages/_ws.lobbies'
 import { Route as WsCreateLobbyImport } from './../pages/_ws.create-lobby'
 import { Route as WsLobbyLobbyIdImport } from './../pages/_ws.lobby.$lobbyId'
@@ -27,11 +25,6 @@ const WsGameGameIdLazyImport = createFileRoute('/_ws/game/$gameId')()
 
 // Create/Update Routes
 
-const ProfileRoute = ProfileImport.update({
-  path: '/profile',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const LoginRoute = LoginImport.update({
   path: '/login',
   getParentRoute: () => rootRoute,
@@ -40,11 +33,6 @@ const LoginRoute = LoginImport.update({
 const WsRoute = WsImport.update({
   id: '/_ws',
   getParentRoute: () => rootRoute,
-} as any)
-
-const WsMenuMultiplayerRoute = WsMenuMultiplayerImport.update({
-  path: '/menu-multiplayer',
-  getParentRoute: () => WsRoute,
 } as any)
 
 const WsLobbiesRoute = WsLobbiesImport.update({
@@ -87,13 +75,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileImport
-      parentRoute: typeof rootRoute
-    }
     '/_ws/create-lobby': {
       id: '/_ws/create-lobby'
       path: '/create-lobby'
@@ -106,13 +87,6 @@ declare module '@tanstack/react-router' {
       path: '/lobbies'
       fullPath: '/lobbies'
       preLoaderRoute: typeof WsLobbiesImport
-      parentRoute: typeof WsImport
-    }
-    '/_ws/menu-multiplayer': {
-      id: '/_ws/menu-multiplayer'
-      path: '/menu-multiplayer'
-      fullPath: '/menu-multiplayer'
-      preLoaderRoute: typeof WsMenuMultiplayerImport
       parentRoute: typeof WsImport
     }
     '/_ws/lobby/$lobbyId': {
@@ -137,7 +111,6 @@ declare module '@tanstack/react-router' {
 interface WsRouteChildren {
   WsCreateLobbyRoute: typeof WsCreateLobbyRoute
   WsLobbiesRoute: typeof WsLobbiesRoute
-  WsMenuMultiplayerRoute: typeof WsMenuMultiplayerRoute
   WsLobbyLobbyIdRoute: typeof WsLobbyLobbyIdRoute
   WsGameGameIdLazyRoute: typeof WsGameGameIdLazyRoute
 }
@@ -145,7 +118,6 @@ interface WsRouteChildren {
 const WsRouteChildren: WsRouteChildren = {
   WsCreateLobbyRoute: WsCreateLobbyRoute,
   WsLobbiesRoute: WsLobbiesRoute,
-  WsMenuMultiplayerRoute: WsMenuMultiplayerRoute,
   WsLobbyLobbyIdRoute: WsLobbyLobbyIdRoute,
   WsGameGameIdLazyRoute: WsGameGameIdLazyRoute,
 }
@@ -155,10 +127,8 @@ const WsRouteWithChildren = WsRoute._addFileChildren(WsRouteChildren)
 export interface FileRoutesByFullPath {
   '': typeof WsRouteWithChildren
   '/login': typeof LoginRoute
-  '/profile': typeof ProfileRoute
   '/create-lobby': typeof WsCreateLobbyRoute
   '/lobbies': typeof WsLobbiesRoute
-  '/menu-multiplayer': typeof WsMenuMultiplayerRoute
   '/lobby/$lobbyId': typeof WsLobbyLobbyIdRoute
   '/game/$gameId': typeof WsGameGameIdLazyRoute
 }
@@ -166,10 +136,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '': typeof WsRouteWithChildren
   '/login': typeof LoginRoute
-  '/profile': typeof ProfileRoute
   '/create-lobby': typeof WsCreateLobbyRoute
   '/lobbies': typeof WsLobbiesRoute
-  '/menu-multiplayer': typeof WsMenuMultiplayerRoute
   '/lobby/$lobbyId': typeof WsLobbyLobbyIdRoute
   '/game/$gameId': typeof WsGameGameIdLazyRoute
 }
@@ -178,10 +146,8 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_ws': typeof WsRouteWithChildren
   '/login': typeof LoginRoute
-  '/profile': typeof ProfileRoute
   '/_ws/create-lobby': typeof WsCreateLobbyRoute
   '/_ws/lobbies': typeof WsLobbiesRoute
-  '/_ws/menu-multiplayer': typeof WsMenuMultiplayerRoute
   '/_ws/lobby/$lobbyId': typeof WsLobbyLobbyIdRoute
   '/_ws/game/$gameId': typeof WsGameGameIdLazyRoute
 }
@@ -191,30 +157,24 @@ export interface FileRouteTypes {
   fullPaths:
     | ''
     | '/login'
-    | '/profile'
     | '/create-lobby'
     | '/lobbies'
-    | '/menu-multiplayer'
     | '/lobby/$lobbyId'
     | '/game/$gameId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
     | '/login'
-    | '/profile'
     | '/create-lobby'
     | '/lobbies'
-    | '/menu-multiplayer'
     | '/lobby/$lobbyId'
     | '/game/$gameId'
   id:
     | '__root__'
     | '/_ws'
     | '/login'
-    | '/profile'
     | '/_ws/create-lobby'
     | '/_ws/lobbies'
-    | '/_ws/menu-multiplayer'
     | '/_ws/lobby/$lobbyId'
     | '/_ws/game/$gameId'
   fileRoutesById: FileRoutesById
@@ -223,13 +183,11 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   WsRoute: typeof WsRouteWithChildren
   LoginRoute: typeof LoginRoute
-  ProfileRoute: typeof ProfileRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   WsRoute: WsRouteWithChildren,
   LoginRoute: LoginRoute,
-  ProfileRoute: ProfileRoute,
 }
 
 export const routeTree = rootRoute
@@ -245,8 +203,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/_ws",
-        "/login",
-        "/profile"
+        "/login"
       ]
     },
     "/_ws": {
@@ -254,7 +211,6 @@ export const routeTree = rootRoute
       "children": [
         "/_ws/create-lobby",
         "/_ws/lobbies",
-        "/_ws/menu-multiplayer",
         "/_ws/lobby/$lobbyId",
         "/_ws/game/$gameId"
       ]
@@ -262,19 +218,12 @@ export const routeTree = rootRoute
     "/login": {
       "filePath": "login.tsx"
     },
-    "/profile": {
-      "filePath": "profile.tsx"
-    },
     "/_ws/create-lobby": {
       "filePath": "_ws.create-lobby.tsx",
       "parent": "/_ws"
     },
     "/_ws/lobbies": {
       "filePath": "_ws.lobbies.tsx",
-      "parent": "/_ws"
-    },
-    "/_ws/menu-multiplayer": {
-      "filePath": "_ws.menu-multiplayer.tsx",
       "parent": "/_ws"
     },
     "/_ws/lobby/$lobbyId": {

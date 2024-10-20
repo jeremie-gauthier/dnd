@@ -51,7 +51,7 @@ export const CharacterSheet = ({
       ) : null}
 
       <div className="flex flex-row rounded-xl">
-        <div className="flex flex-col pt-20 px-1 pb-4 bg-primary-600 rounded-bl-md gap-4">
+        <div className="flex flex-col pt-20 px-1 pb-4 bg-slate-500 rounded-bl-md gap-4">
           <HealthPoints
             healthPoints={entityPlaying.characteristic.healthPoints}
             baseHealthPoints={entityPlaying.characteristic.baseHealthPoints}
@@ -70,8 +70,8 @@ export const CharacterSheet = ({
           />
         </div>
 
-        <div className="flex flex-col bg-primary-900 rounded-br-md">
-          <div className="flex flex-row bg-primary-600 pl-4 py-2">
+        <div className="flex flex-col bg-slate-800 rounded-br-md">
+          <div className="flex flex-row bg-slate-500 pl-4 py-2">
             <CharacterIdentity character={entityPlaying} />
           </div>
           <div className="flex flex-col p-4 gap-8">

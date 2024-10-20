@@ -43,7 +43,7 @@ export const InventoryItem = ({ item, storageSpace }: Props) => {
 
         <TooltipContent
           sideOffset={8}
-          className="border-0 bg-primary-600 text-white p-0 shadow-md"
+          className="border-0 bg-slate-500 text-white p-0 shadow-md"
         >
           <InspectItem item={item} />
         </TooltipContent>

@@ -21,7 +21,7 @@ export const BackpackSlot = ({ item, type, idx }: Props) => {
       {item ? (
         <InventoryItem item={item} storageSpace="backpack" />
       ) : (
-        <Icon icon="knapsack" className="fill-primary-600 h-28 w-28" />
+        <Icon icon="knapsack" className="fill-slate-500 h-28 w-28" />
       )}
     </InventorySlot>
   );

@@ -30,8 +30,8 @@ export const Route = createRootRouteWithContext<{
 function RootComponent() {
   return (
     <>
-      <div className={"min-h-screen flex flex-col"}>
-        <div className={"text-3xl"}>
+      <div className="flex flex-col">
+        <div className="text-3xl">
           <RouterLoader />
         </div>
 

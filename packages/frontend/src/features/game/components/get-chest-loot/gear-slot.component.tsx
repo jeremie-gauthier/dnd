@@ -21,7 +21,7 @@ export const GearSlot = ({ item, type, idx }: Props) => {
       {item ? (
         <InventoryItem item={item} />
       ) : (
-        <Icon icon="hand" className="fill-primary-600 h-28 w-28" />
+        <Icon icon="hand" className="fill-slate-500 h-28 w-28" />
       )}
     </InventorySlot>
   );

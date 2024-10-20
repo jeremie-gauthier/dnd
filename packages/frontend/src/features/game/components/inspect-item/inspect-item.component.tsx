@@ -13,13 +13,13 @@ export const InspectItem = ({ item }: Props) => {
   const { t } = useTranslation(["items"]);
 
   return (
-    <div className="flex flex-col shadow-lg  bg-primary-900 rounded-md z-50">
-      <div className="flex flex-col bg-primary-600 p-2 rounded-t-md justify-start">
+    <div className="flex flex-col shadow-lg  bg-slate-900 rounded-md z-50">
+      <div className="flex flex-col bg-slate-500 p-2 rounded-t-md justify-start">
         <h5 className="font-semibold text-lg">{t(item.name)}</h5>
         <span>{t("itemIdentity", { type: item.type, level: item.level })}</span>
       </div>
 
-      <div className="bg-primary-900 rounded-b-md p-2">
+      <div className="bg-slate-700 rounded-b-md p-2">
         <ItemInspector item={item} />
       </div>
     </div>

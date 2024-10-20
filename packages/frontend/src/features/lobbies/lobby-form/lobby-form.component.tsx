@@ -1,11 +1,14 @@
+import { Navbar } from "@/components/navbar/navbar.component";
+import { Button } from "@/components/ui/button";
 import { type User } from "@auth0/auth0-react";
 import { ClientLobbyEvent } from "@dnd/shared";
-import { Button } from "@features/ui/button/button";
-import { UserCard } from "@features/ui/user-card/user-card";
+import { Icon } from "@features/ui/icon/Icon";
 import { useTranslation } from "react-i18next";
 import type { ClientSocket } from "../../../types/socket.type";
-import { GameMasterCard } from "./playable-cards/game-master-card.component";
-import { HeroCard } from "./playable-cards/hero-card.component";
+import { CampaignStageDescription } from "./components/campaign-stage-description.component";
+import { PersonaGameMaster } from "./components/persona-game-master.component";
+import { PersonaHero } from "./components/persona-hero/persona-hero.component";
+import { PlayerList } from "./components/player-list/player-list.component";
 import type { GetLobbyResponse } from "./use-get-lobby";
 
 type Props = {
@@ -15,7 +18,7 @@ type Props = {
 };
 
 export const LobbyForm = ({ user, lobby, socket }: Props) => {
-  const { t } = useTranslation(["lobbies"]);
+  const { t } = useTranslation(["lobbies", "campaigns"]);
 
   const handleClickOnLeaveLobby = async () => {
     await socket.emitWithAck(ClientLobbyEvent.RequestLeaveLobby);
@@ -45,109 +48,86 @@ export const LobbyForm = ({ user, lobby, socket }: Props) => {
     lobby.players.find((player) => player.userId === user.sub)?.isReady ??
     false;
 
-  const canStartGame = lobby.players.every(({ isReady }) => isReady);
+  const canStartGame =
+    lobby.players.every(({ isReady }) => isReady) &&
+    lobby.playableCharacters.every((pc) => !!pc.pickedBy);
   const handleStartGame = () => {
     socket.emit(ClientLobbyEvent.RequestStartLobby, { lobbyId: lobby.id });
   };
 
   const isLobbyHost = user.sub === lobby.host.userId;
 
+  const gameMaster = lobby.playableCharacters.find(
+    (pc) => pc.type === "game_master",
+  )!;
+  const heroes = lobby.playableCharacters.filter((pc) => pc.type === "hero");
+
   return (
-    <div className="flex flex-col items-center gap-4">
-      <h1 className="font-medium text-lg">
-        {lobby.config.campaign.title} ({lobby.config.campaign.stage.order}/
-        {lobby.config.campaign.nbStages})
-      </h1>
+    <>
+      <Navbar />
 
-      <div>
-        <h2 className="font-medium text-lg">{t("players")}</h2>
-        <ul className="flex flex-row gap-6">
-          {lobby.players.map((player) => {
-            const isHost = lobby.host.userId === player.userId;
+      <div className="flex flex-col items-center gap-8 max-w-5xl m-auto">
+        <CampaignStageDescription
+          campaignId={lobby.config.campaign.id}
+          campaignStageOrder={lobby.config.campaign.stage.order}
+          campaignNbStages={lobby.config.campaign.nbStages}
+        />
 
-            return (
-              <li
-                key={player.userId}
-                className="flex flex-col w-32 p-2 rounded shadow-lg"
-              >
-                <UserCard userId={player.userId} />
-                <p className="text-sm">{isHost ? t("host") : t("guest")}</p>
-                <p className="text-sm">
-                  {player.isReady ? t("isReady") : t("isNotReady")}
-                </p>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+        <div className="flex flex-row">
+          <div className="flex flex-col items-center gap-4">
+            <PersonaGameMaster
+              currentUser={user}
+              gameMaster={gameMaster}
+              onDiscardRole={handleDiscardHero}
+              onPickRole={handlePickHero}
+            />
 
-      <div>
-        <h2 className="font-medium text-lg">{t("chooseYourRoles")}</h2>
-        <div className="flex flex-row gap-6">
-          {lobby.playableCharacters.map((playableCharacter) => {
-            const canBePicked = playableCharacter.pickedBy === undefined;
-            const isPickedByMe = playableCharacter.pickedBy === user.sub;
+            <Icon
+              icon="crossedSwords"
+              size="xlarge"
+              className="fill-slate-900"
+            />
 
-            return (
-              <div
-                key={playableCharacter.id}
-                className="flex flex-col p-2 rounded shadow-lg justify-between"
-              >
-                <div>
-                  {playableCharacter.type === "hero" ? (
-                    <HeroCard hero={playableCharacter} />
-                  ) : (
-                    <GameMasterCard />
-                  )}
-                </div>
+            <ul className="flex flex-row gap-2">
+              {heroes.map((hero) => (
+                <PersonaHero
+                  key={hero.id}
+                  currentUser={user}
+                  hero={hero}
+                  onDiscardRole={handleDiscardHero}
+                  onPickRole={handlePickHero}
+                />
+              ))}
+            </ul>
+          </div>
 
-                <div className="flex flex-col">
-                  {canBePicked ? (
-                    <Button
-                      onClick={() => handlePickHero(playableCharacter.id)}
-                    >
-                      {t("pick")}
-                    </Button>
-                  ) : null}
-                  {isPickedByMe ? (
-                    <Button
-                      onClick={() => handleDiscardHero(playableCharacter.id)}
-                      variant="outlined"
-                    >
-                      {t("discard")}
-                    </Button>
-                  ) : null}
-                  {!canBePicked &&
-                  !isPickedByMe &&
-                  playableCharacter.pickedBy ? (
-                    <div className="flex flex-row justify-center items-center gap-2 h-9 max-w-[190px]">
-                      <UserCard userId={playableCharacter.pickedBy} />
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-            );
-          })}
+          <PlayerList
+            players={lobby.players.map((player) => ({
+              ...player,
+              isHost: lobby.host.userId === player.userId,
+            }))}
+            nbPlayersMax={lobby.config.nbPlayersMax}
+          />
+        </div>
+
+        <div className="flex gap-4">
+          <Button variant="outline" onClick={handleClickOnLeaveLobby}>
+            {t("leave")}
+          </Button>
+          <Button
+            variant={currentUserIsReady ? "outline" : "default"}
+            onClick={handleClickOnReady}
+          >
+            {currentUserIsReady ? t("notReady") : t("ready")}
+          </Button>
+
+          {isLobbyHost ? (
+            <Button onClick={handleStartGame} disabled={!canStartGame}>
+              {t("startGame")}
+            </Button>
+          ) : null}
         </div>
       </div>
-
-      <div className="flex gap-4">
-        <Button variant="outlined" onClick={handleClickOnLeaveLobby}>
-          {t("leave")}
-        </Button>
-        <Button
-          variant={currentUserIsReady ? "outlined" : "primary"}
-          onClick={handleClickOnReady}
-        >
-          {currentUserIsReady ? t("notReady") : t("ready")}
-        </Button>
-
-        {isLobbyHost ? (
-          <Button onClick={handleStartGame} disabled={!canStartGame}>
-            {t("startGame")}
-          </Button>
-        ) : null}
-      </div>
-    </div>
+    </>
   );
 };
