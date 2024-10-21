@@ -17,7 +17,7 @@ VALUES
     '{
   "thanks": "Vous avez terminé le premier niveau du portage numérique (non-officiel) du jeu de plateau Dungeons & Dragons (2003) !\n\n<Center>Merci d’avoir joué 🫶</Center>\n❓ Envie de rester informé des dernières mises à jour du projet ?\n<p>👉 Suivez <GithubLink>la page du projet</GithubLink> en l’ajoutant à votre watchlist et en mettant une étoile ⭐</p>\n❓ Envie de soutenir gratuitement le travail d’un solo dev ?\n👉 Faites moi votre plus beau retour sur ce qui pourrait être amélioré ✨",
   "returnToLobbies": "Retour à la liste des lobbies",
-  "campaign_stage_overview": "Niveau {{stageOrder}} sur {{maxStageOrder}}",
+  "campaignStageOverview": "Niveau {{stageOrder}} sur {{maxStageOrder}}",
   "campaign_1.title": "La conquête",
   "campaign_1.description": "La peur gagne peu à peu le pays de Rallion, car des forces noires y rôdent, détruisant tout sur leur passage. Selon les rumeurs, un Seigneur Liche, autrefois vaincu par des aventuriers, est revenu pour plonger le pays dans la terreur.\nQuatre héros - Regdar, Jozan, Lidda et Mialyë - se sont alliés pour trouver la source de cemal et la détruire pour toujours. Ils partent à l''aventure, prêts à affronter les périls qui les attendent...",
   "campaign_1.stage_1.title": "Les bandits gobelins",

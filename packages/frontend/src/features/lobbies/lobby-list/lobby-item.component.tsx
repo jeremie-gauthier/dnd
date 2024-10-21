@@ -40,7 +40,7 @@ export const LobbyItem = ({ lobby, socket }: Props) => {
           </h2>
           <span className="ml-1 font-normal text-sm">
             (
-            {t("campaign_stage_overview", {
+            {t("campaignStageOverview", {
               stageOrder: lobby.config.campaign.stage.order,
               maxStageOrder: lobby.config.campaign.nbStages,
             })}

@@ -19,7 +19,7 @@ export const CampaignStageDescription = ({
         {t(`${campaignId}.title`)}
         <span className="ml-1 font-normal text-sm">
           (
-          {t("campaign_stage_overview", {
+          {t("campaignStageOverview", {
             stageOrder: campaignStageOrder,
             maxStageOrder: campaignNbStages,
           })}
