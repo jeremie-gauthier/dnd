@@ -27,10 +27,10 @@ export function GameRouteComponent() {
 
   return (
     <GameContextProvider game={game} phase={phase} socket={socket}>
-      {gameConditionsStatus === "ongoing" ? (
+      {gameConditionsStatus !== "ongoing" ? (
         <Game />
       ) : (
-        <GameEnded gameConditionsStatus={gameConditionsStatus} />
+        <GameEnded gameConditionsStatus={"victory"} />
       )}
     </GameContextProvider>
   );
