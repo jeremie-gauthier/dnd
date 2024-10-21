@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const LobbyItem = ({ lobby, socket }: Props) => {
-  const { t } = useTranslation(["campaigns"]);
+  const { t } = useTranslation(["campaigns", "lobbies"]);
   const navigate = useNavigate();
   const { user } = useAuth0();
 
@@ -69,7 +69,7 @@ export const LobbyItem = ({ lobby, socket }: Props) => {
         variant="default"
         onClick={() => handleClickOnJoinLobby(lobby.id)}
       >
-        Join this lobby
+        {t("joinLobby", { ns: "lobbies" })}
       </Button>
     </li>
   );

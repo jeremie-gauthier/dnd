@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/navbar/navbar.component";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import type { ClientSocket } from "../../../types/socket.type";
 import { LobbyItem } from "./lobby-item.component";
 import type { GetLobbiesResponse } from "./use-get-lobbies";
@@ -11,14 +12,14 @@ type Props = {
 };
 
 export const LobbyList = ({ socket, lobbies }: Props) => {
+  const { t } = useTranslation(["lobbies"]);
+
   return (
     <>
       <Navbar />
 
       <div className="flex flex-col gap-4 items-center">
-        <h1 className="text-xl font-semibold">
-          Rejoins une partie ou héberges-en une
-        </h1>
+        <h1 className="text-xl font-semibold">{t("lobbies.title")}</h1>
 
         <Link to="/create-lobby">
           <Button
@@ -26,7 +27,7 @@ export const LobbyList = ({ socket, lobbies }: Props) => {
             variant="ghost"
             className="rounded shadow-lg w-96 border-2 border-dashed h-12"
           >
-            <h2>Héberger une partie</h2>
+            <h2>{t("lobbies.create")}</h2>
           </Button>
         </Link>
 

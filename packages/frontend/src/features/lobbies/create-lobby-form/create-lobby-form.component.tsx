@@ -24,7 +24,7 @@ type Props = {
 };
 
 export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
-  const { t } = useTranslation(["lobbies", "campaigns"]);
+  const { t } = useTranslation(["lobbies", "campaigns", "common"]);
   const { form, validators, constraints } = useCreateLobbyForm(socket, {
     stageId: campaigns[0].currentStage.id,
   });
@@ -126,7 +126,7 @@ export const CreateLobbyForm = ({ campaigns, socket }: Props) => {
 
         <Link to="/lobbies" className="-mt-6">
           <Button role="link" variant="outline" className="w-60">
-            Retour
+            {t("back", { ns: "common" })}
           </Button>
         </Link>
       </div>

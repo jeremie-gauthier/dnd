@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useTranslation } from "react-i18next";
 import { PlayerItem } from "./player-item.component";
 
 type Props = {
@@ -12,12 +13,13 @@ type Props = {
 };
 
 export const PlayerList = ({ players, nbPlayersMax }: Props) => {
+  const { t } = useTranslation(["lobbies"]);
   const isFull = players.length >= nbPlayersMax;
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-row items-baseline justify-between">
-        <h2>Players</h2>
+        <h2>{t("players")}</h2>
         <span
           className={clsx("text-sm font-semibold", { "text-red-600": isFull })}
         >

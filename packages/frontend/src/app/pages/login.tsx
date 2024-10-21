@@ -40,8 +40,7 @@ function LoginComponent() {
   }, [isAuthenticated]);
 
   return (
-    <div>
-      <div>You must log in!</div>
+    <div className="flex items-center justify-center min-h-screen w-full">
       <LoginButton />
     </div>
   );

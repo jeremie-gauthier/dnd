@@ -1,6 +1,7 @@
 import { ClientLobbyEvent } from "@dnd/shared";
 import { useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { ClientSocket } from "../../../types/socket.type";
 import { type GetCampaignsResponse } from "./use-get-campaigns";
@@ -18,6 +19,8 @@ export const useCreateLobbyForm = (
   socket: ClientSocket,
   defaultValues: DefaultValues,
 ) => {
+  const { t } = useTranslation(["lobbies"]);
+
   const constraints = {
     nbPlayersMax: {
       min: 2,
@@ -50,13 +53,10 @@ export const useCreateLobbyForm = (
   const nbPlayersMaxValidator = {
     onChange: z
       .number()
-      .min(
-        constraints.nbPlayersMax.min,
-        "Your lobby must at least accept 2 players",
-      )
+      .min(constraints.nbPlayersMax.min, t("createLobbyForm.errorMinNbPlayers"))
       .max(
         constraints.nbPlayersMax.max,
-        "Your lobby must at most accept 5 players",
+        t("createLobbyForm.errorMaxNbPlayers"),
       ),
   };
 

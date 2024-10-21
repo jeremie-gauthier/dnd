@@ -9,6 +9,8 @@ VALUES
   "confirm": "Confirmer",
   "endTurn": "Fin de tour",
   "logout": "Déconnexion",
+  "back": "Retour",
+  "login": "Connexion"
 }'
   ),
   (
@@ -48,7 +50,13 @@ VALUES
   "selectCampaign": "Choisissez la campagne",
   "selectNbPlayers": "Choisissez le nombre de joueurs",
   "createLobby": "Créer le salon",
-  "creatingLobby": "Le salon est en cours de création"
+  "creatingLobby": "Le salon est en cours de création",
+  "players": "Joueurs",
+  "createLobbyForm.errorMinNbPlayers": "Votre salon doit accepter au moins 2 joueurs",
+  "createLobbyForm.errorMaxNbPlayers": "Votre salon ne peut accepter plus de 5 joueurs",
+  "joinLobby": "Rejoindre le salon",
+  "lobbies.title": "Rejoins un salon ou crées-en un",
+  "lobbies.create": "Créer un salon"
 }'
   ),
   (
