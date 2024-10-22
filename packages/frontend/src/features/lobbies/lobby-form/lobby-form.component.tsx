@@ -1,8 +1,8 @@
+import { Icon } from "@/components/icon/Icon";
 import { Navbar } from "@/components/navbar/navbar.component";
 import { Button } from "@/components/ui/button";
 import { type User } from "@auth0/auth0-react";
 import { ClientLobbyEvent } from "@dnd/shared";
-import { Icon } from "@features/ui/icon/Icon";
 import { useTranslation } from "react-i18next";
 import type { ClientSocket } from "../../../types/socket.type";
 import { CampaignStageDescription } from "./components/campaign-stage-description.component";

@@ -1,4 +1,4 @@
-import { classNames } from "@utils/class-names.util";
+import { cn } from "@lib/utils";
 import { useTranslation } from "react-i18next";
 import { useGetChestLootContext } from "./get-chest-loot.context";
 
@@ -19,7 +19,7 @@ export const GetChestLootTooltip = () => {
 
   return (
     <div
-      className={classNames(
+      className={cn(
         "fixed z-[9999] rounded-md p-2 font-semibold flex flex-col",
         tooltipType === "confirm_loot_swap" ? "bg-red-400" : "",
       )}

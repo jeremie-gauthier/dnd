@@ -1,4 +1,4 @@
-import { Icon } from "@features/ui/icon/Icon";
+import { Icon } from "@/components/icon/Icon";
 
 type Props = {
   manaPoints: number;

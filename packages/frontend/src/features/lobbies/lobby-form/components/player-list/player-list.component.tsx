@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { cn } from "@lib/utils";
 import { useTranslation } from "react-i18next";
 import { PlayerItem } from "./player-item.component";
 
@@ -21,7 +21,7 @@ export const PlayerList = ({ players, nbPlayersMax }: Props) => {
       <div className="flex flex-row items-baseline justify-between">
         <h2>{t("players")}</h2>
         <span
-          className={clsx("text-sm font-semibold", { "text-red-600": isFull })}
+          className={cn("text-sm font-semibold", { "text-red-600": isFull })}
         >
           {players.length} / {nbPlayersMax}
         </span>

@@ -1,6 +1,6 @@
 import { useDroppable } from "@dnd-kit/core";
 import { GameItem } from "@dnd/shared";
-import { classNames } from "@utils/class-names.util";
+import { cn } from "@lib/utils";
 import { PropsWithChildren, useEffect } from "react";
 import { useEditCharacterInventoryContext } from "../edit-character-inventory.context";
 
@@ -59,7 +59,7 @@ export const InventorySlot = ({
   return (
     <div
       ref={setNodeRef}
-      className={classNames(
+      className={cn(
         "relative h-32 w-28 border-2 rounded flex flex-col items-center justify-center group",
         isOver &&
           isDraggingCompatibleItem &&

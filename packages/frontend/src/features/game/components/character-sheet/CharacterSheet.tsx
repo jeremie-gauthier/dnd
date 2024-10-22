@@ -55,7 +55,6 @@ export const CharacterSheet = ({
           <HealthPoints
             healthPoints={entityPlaying.characteristic.healthPoints}
             baseHealthPoints={entityPlaying.characteristic.baseHealthPoints}
-            size="medium"
           />
           <ManaPoints
             manaPoints={entityPlaying.characteristic.manaPoints}

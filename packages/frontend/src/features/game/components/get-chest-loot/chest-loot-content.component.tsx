@@ -1,9 +1,9 @@
+import { Icon } from "@/components/icon/Icon";
 import { Button } from "@/components/ui/button";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { GameItem } from "@dnd/shared";
-import { Icon } from "@features/ui/icon/Icon";
-import { classNames } from "@utils/class-names.util";
+import { cn } from "@lib/utils";
 import { useTranslation } from "react-i18next";
 
 type Props = {
@@ -25,9 +25,7 @@ export const ChestLootContent = ({ item, onRefuseLoot }: Props) => {
       </div>
 
       <div className="flex flex-col items-center gap-8 px-12 pb-8">
-        <div
-          className={classNames("border-2 rounded", slotTypeColor[item.type])}
-        >
+        <div className={cn("border-2 rounded", slotTypeColor[item.type])}>
           <Icon
             icon="openChest"
             className="absolute z-0 fill-slate-500 h-32 w-28"

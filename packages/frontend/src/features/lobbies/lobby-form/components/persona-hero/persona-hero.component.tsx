@@ -1,3 +1,4 @@
+import { Icon } from "@/components/icon/Icon";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserAvatar } from "@/components/ui/user-avatar/user-avatar";
@@ -7,7 +8,6 @@ import thief from "@assets/classes/thief.webp";
 import warrior from "@assets/classes/warrior.webp";
 import { type User } from "@auth0/auth0-react";
 import { HeroClassType, capitalize } from "@dnd/shared";
-import { Icon } from "@features/ui/icon/Icon";
 import { useTranslation } from "react-i18next";
 import { useUser } from "../player-list/use-user";
 import { useGetHeroDetails } from "./use-get-hero-details";

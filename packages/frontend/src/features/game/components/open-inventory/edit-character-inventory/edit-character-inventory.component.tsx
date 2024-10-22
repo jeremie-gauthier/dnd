@@ -1,5 +1,6 @@
+import { Icon } from "@/components/icon/Icon";
+import { Button } from "@/components/ui/button";
 import { DndContext, DragEndEvent, useDroppable } from "@dnd-kit/core";
-import { Icon } from "@features/ui/icon/Icon";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -137,17 +138,21 @@ const InnerEditCharacterInventory = ({ isOpen, close }: Props) => {
           >
             <DialogTitle
               as="h3"
-              className="relative text-base/7 font-medium text-white text-center t bg-slate-600 bg-opacity-[95%] rounded-t-md"
+              className="relative text-base/7 font-medium text-white text-center bg-slate-600 bg-opacity-[95%] rounded-t-md"
             >
               {t("inventory_title", { ns: "inventory" })}
 
-              <button
+              <Button
+                variant="ghost"
                 type="button"
-                className="absolute right-1 top-0"
+                className="absolute right-0 top-0 p-0 size-6 group"
                 onClick={close}
               >
-                <Icon icon="x" className="stroke-white h-6 w-6" />
-              </button>
+                <Icon
+                  icon="x"
+                  className="stroke-white size-6 group-hover:stroke-slate-900"
+                />
+              </Button>
             </DialogTitle>
 
             <CharacterSheet

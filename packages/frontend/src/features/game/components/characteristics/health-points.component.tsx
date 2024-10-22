@@ -1,28 +1,11 @@
-import { classNames } from "@utils/class-names.util";
-
 type Props = {
   healthPoints: number;
   baseHealthPoints: number;
-  size?: "small" | "medium" | "large";
 };
 
-export const HealthPoints = ({
-  healthPoints,
-  baseHealthPoints,
-  size = "medium",
-}: Props) => {
+export const HealthPoints = ({ healthPoints, baseHealthPoints }: Props) => {
   const healthPointsMissingPercentage = Math.round(
     ((baseHealthPoints - healthPoints) / baseHealthPoints) * 100,
-  );
-  const svgSize = classNames(
-    size === "small" ? "h-12 w-12" : "",
-    size === "medium" ? "h-20 w-20" : "",
-    size === "large" ? "h-32 w-32" : "",
-  );
-  const fontSize = classNames(
-    size === "small" ? "text-xs" : "",
-    size === "medium" ? "text-lg" : "",
-    size === "large" ? "text-2xl" : "",
   );
 
   return (
@@ -30,7 +13,7 @@ export const HealthPoints = ({
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512"
-        className={classNames("stroke-red-800 stroke-[1rem]", svgSize)}
+        className="stroke-red-800 stroke-[1rem] size-20"
         focusable={false}
         style={{ flexShrink: 0 }}
         fill="currentColor"
@@ -59,8 +42,8 @@ export const HealthPoints = ({
         </g>
       </svg>
 
-      <span className={classNames("absolute font-bold", fontSize)}>
-        {healthPoints} / {baseHealthPoints}
+      <span className="absolute font-bold text-lg">
+        {healthPoints} / {baseHealthPoints}
       </span>
     </div>
   );

@@ -1,7 +1,7 @@
+import { Icon } from "@/components/icon/Icon";
 import { UserAvatar } from "@/components/ui/user-avatar/user-avatar";
 import { UserAvatarSkeleton } from "@/components/ui/user-avatar/user-avatar-skeleton";
-import { Icon } from "@features/ui/icon/Icon";
-import clsx from "clsx";
+import { cn } from "@lib/utils";
 import { useUser } from "./use-user";
 
 type Props = {
@@ -19,7 +19,7 @@ export const PlayerItem = ({ player }: Props) => {
   return (
     <li key={player.userId} className="flex flex-row items-center gap-4">
       <div
-        className={clsx("size-2 rounded-full", {
+        className={cn("size-2 rounded-full", {
           "bg-green-500": player.isReady,
           "bg-red-500": !player.isReady,
         })}

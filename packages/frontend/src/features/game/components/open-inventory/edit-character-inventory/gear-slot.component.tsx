@@ -1,5 +1,5 @@
+import { Icon } from "@/components/icon/Icon";
 import { GameItem } from "@dnd/shared";
-import { Icon } from "@features/ui/icon/Icon";
 import { InventoryItem } from "./common/inventory-item.component";
 import { InventorySlot } from "./common/inventory-slot.component";
 

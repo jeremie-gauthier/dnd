@@ -1,5 +1,5 @@
+import { Icon } from "@/components/icon/Icon";
 import { Button } from "@/components/ui/button";
-import { Icon } from "@features/ui/icon/Icon";
 import { useState } from "react";
 import { EditCharacterInventory } from "./edit-character-inventory/edit-character-inventory.component";
 
