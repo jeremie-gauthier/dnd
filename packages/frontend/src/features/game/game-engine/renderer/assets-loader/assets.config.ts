@@ -11,7 +11,6 @@ import goblin_icon from "@assets/monsters/goblin_icon.png";
 import chest_close from "@assets/tiles/chests/chest_close.png";
 import chest_open from "@assets/tiles/chests/chest_open.png";
 import door_close from "@assets/tiles/doors/door_close.png";
-import door_open from "@assets/tiles/doors/door_open.png";
 import floor_dark from "@assets/tiles/floors/floor_dark.png";
 import floor_dark_not_in_sight from "@assets/tiles/floors/floor_dark_not_in_sight.png";
 import floor_light from "@assets/tiles/floors/floor_light.png";
@@ -25,7 +24,6 @@ export const assetCollection = {
   floor_light,
   floor_dark,
   wall,
-  door_open,
   door_close,
   pillar,
   warrior_icon,
@@ -55,7 +53,6 @@ export const floorAssetCollection = {
 export const entitiesAssetsCollection = {
   wall,
   pillar,
-  door_open,
   door_close,
   warrior_icon,
   sorcerer_icon,
