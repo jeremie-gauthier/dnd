@@ -5,6 +5,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { GameItem } from "@dnd/shared";
 import { cn } from "@lib/utils";
 import { useTranslation } from "react-i18next";
+import { slotTypeColor } from "../utils";
 
 type Props = {
   item: GameItem;
@@ -54,12 +55,4 @@ export const ChestLootContent = ({ item, onRefuseLoot }: Props) => {
       </div>
     </div>
   );
-};
-
-const slotTypeColor: Record<Props["item"]["type"], string> = {
-  Spell: "border-blue-500",
-  Weapon: "border-red-500",
-  Artifact: "border-amber-400",
-  ChestTrap: "border-red-700",
-  Potion: "border-emerald-500",
 };

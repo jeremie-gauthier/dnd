@@ -2,6 +2,7 @@ import { useDroppable } from "@dnd-kit/core";
 import { GameItem } from "@dnd/shared";
 import { cn } from "@lib/utils";
 import { PropsWithChildren, useEffect } from "react";
+import { slotTypeColor } from "../../utils";
 import { useGetChestLootContext } from "../get-chest-loot.context";
 
 type Props = PropsWithChildren<{
@@ -69,13 +70,4 @@ export const InventorySlot = ({
       {children}
     </div>
   );
-};
-
-const slotTypeColor: Record<Props["type"], string> = {
-  Spell: "border-blue-500",
-  Weapon: "border-red-500",
-  backpackAnyItem: "border-slate-500",
-  Artifact: "border-amber-400",
-  ChestTrap: "border-red-700",
-  Potion: "border-emerald-500",
 };

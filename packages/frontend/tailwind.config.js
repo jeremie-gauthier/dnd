@@ -3,7 +3,11 @@ export default {
   darkMode: ["class"],
   content: {
     relative: true,
-    files: ["./src/**/*.{jsx,tsx}", "./index.html"],
+    files: [
+      "./src/**/*.{jsx,tsx}",
+      "./src/features/game/components/utils.ts",
+      "./index.html",
+    ],
   },
   theme: {
     extend: {
