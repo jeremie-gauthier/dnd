@@ -33,7 +33,11 @@ export const InventoryItem = ({ item, storageSpace }: Props) => {
           {...listeners}
           {...attributes}
         >
-          <img src={item.imgUrl} alt={item.name} className="rounded" />
+          <img
+            src={item.imgUrl}
+            alt={item.name}
+            className="rounded hover:contrast-125"
+          />
         </TooltipTrigger>
 
         <TooltipContent
