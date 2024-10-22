@@ -1,1 +1,1 @@
-export * from "./player-state";
+export * from "./use-player-state";
