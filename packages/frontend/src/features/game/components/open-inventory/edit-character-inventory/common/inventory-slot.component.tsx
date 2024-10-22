@@ -46,7 +46,11 @@ export const InventorySlot = ({
           : null,
       );
     } else {
-      setTooltipType(isDraggingCompatibleItem ? "confirm_move" : null);
+      setTooltipType(
+        isDraggingCompatibleItem && !isDraggingItemFromSameStorageSpace
+          ? "confirm_move"
+          : null,
+      );
     }
   }, [
     isDraggingCompatibleItem,
