@@ -23,7 +23,6 @@ export function MenuRouteComponent() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // TODO: useGameInitializationDone hook ?
     const gameInitializationDoneHandler = async ({
       game,
     }: {
@@ -39,7 +38,6 @@ export function MenuRouteComponent() {
       gameInitializationDoneHandler,
     );
 
-    // TODO: useLobbyChangesHandler hook ?
     const handleLobbyChanges = ({ lobby }: { lobby: LobbyView }) => {
       queryClient.setQueryData(GET_LOBBY_QUERY_KEY(lobby.id), () => lobby);
     };

@@ -24,7 +24,6 @@ export const LobbyItem = ({ lobby, socket }: Props) => {
 
     await socket.emitWithAck(ClientLobbyEvent.RequestJoinLobby, { lobbyId });
 
-    // TODO: if OK => navigate the user to the lobby page
     return navigate({
       to: "/lobby/$lobbyId",
       params: { lobbyId },
