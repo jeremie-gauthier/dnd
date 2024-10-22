@@ -11,6 +11,7 @@ export class GetHeroDetailsUseCase implements UseCase {
     heroId,
   }: GetHeroDetailsInput): Promise<GetHeroDetailsOutput> {
     const hero = await this.repository.getHero({ heroId });
-    return hero;
+    const heroUI = await this.repository.getHeroUI({ name: hero.name });
+    return { ...hero, ...heroUI };
   }
 }

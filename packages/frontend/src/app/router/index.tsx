@@ -17,7 +17,7 @@ const getRouter = ({
   createRouter({
     routeTree,
     defaultPendingComponent: () => (
-      <div className="p-2 text-2xl">Route is loading</div>
+      <div className="p-2 text-2xl">defaultPendingComponent</div>
     ),
     defaultErrorComponent: ({ error }) => <ErrorComponent error={error} />,
     context: {

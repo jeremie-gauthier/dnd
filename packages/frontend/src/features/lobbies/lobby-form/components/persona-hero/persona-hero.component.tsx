@@ -2,12 +2,8 @@ import { Icon } from "@/components/icon/Icon";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserAvatar } from "@/components/ui/user-avatar/user-avatar";
-import cleric from "@assets/classes/cleric.webp";
-import sorcerer from "@assets/classes/sorcerer.webp";
-import thief from "@assets/classes/thief.webp";
-import warrior from "@assets/classes/warrior.webp";
 import { type User } from "@auth0/auth0-react";
-import { HeroClassType, capitalize } from "@dnd/shared";
+import { capitalize } from "@dnd/shared";
 import { useTranslation } from "react-i18next";
 import { useUser } from "../player-list/use-user";
 import { useGetHeroDetails } from "./use-get-hero-details";
@@ -41,7 +37,7 @@ export const PersonaHero = ({
       {heroDetails ? (
         <>
           <img
-            src={CLASS_TO_IMG[heroDetails.class]}
+            src={heroDetails.imgUrl}
             alt=""
             width={200}
             className="h-64 rounded-md"
@@ -130,10 +126,3 @@ export const PersonaHero = ({
     </div>
   );
 };
-
-const CLASS_TO_IMG: Readonly<Record<HeroClassType, string>> = {
-  CLERIC: cleric,
-  WARRIOR: warrior,
-  SORCERER: sorcerer,
-  THIEF: thief,
-} as const;

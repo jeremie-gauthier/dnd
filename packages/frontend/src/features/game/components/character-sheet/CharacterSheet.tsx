@@ -1,8 +1,4 @@
-import cleric from "@assets/classes/cleric.webp";
-import sorcerer from "@assets/classes/sorcerer.webp";
-import thief from "@assets/classes/thief.webp";
-import warrior from "@assets/classes/warrior.webp";
-import { GameItem, HeroClassType, PlayableEntity } from "@dnd/shared";
+import { GameItem, PlayableEntity } from "@dnd/shared";
 import { useTranslation } from "react-i18next";
 import { useGameContext } from "../../context/use-game-context";
 import { ActionPoints } from "../characteristics/action-points.component";
@@ -44,7 +40,7 @@ export const CharacterSheet = ({
     <>
       {entityPlaying.faction === "hero" ? (
         <img
-          src={CLASS_TO_IMG[entityPlaying.class]}
+          src={entityPlaying.imgUrl}
           alt=""
           className="absolute top-3 left-4 h-20 shadow-xl"
         />
@@ -100,10 +96,3 @@ export const CharacterSheet = ({
     </>
   );
 };
-
-const CLASS_TO_IMG: Readonly<Record<HeroClassType, string>> = {
-  CLERIC: cleric,
-  WARRIOR: warrior,
-  SORCERER: sorcerer,
-  THIEF: thief,
-} as const;

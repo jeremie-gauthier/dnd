@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/ui/user-avatar/user-avatar";
-import gameMasterImg from "@assets/classes/game_master.webp";
 import { type User } from "@auth0/auth0-react";
 import { useTranslation } from "react-i18next";
 import { useUser } from "./player-list/use-user";
@@ -32,7 +31,7 @@ export const PersonaGameMaster = ({
     <div className="flex flex-col p-2 rounded-md shadow-lg shadow-slate-300 justify-between max-w-fit">
       <div>
         <img
-          src={gameMasterImg}
+          src="https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/game_master.webp"
           alt=""
           width={200}
           className="h-64 rounded-md"
