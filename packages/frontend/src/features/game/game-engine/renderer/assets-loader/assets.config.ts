@@ -17,8 +17,6 @@ import floor_dark_not_in_sight from "@assets/tiles/floors/floor_dark_not_in_sigh
 import floor_light from "@assets/tiles/floors/floor_light.png";
 import floor_light_not_in_sight from "@assets/tiles/floors/floor_light_not_in_sight.png";
 import pillar from "@assets/tiles/pillar/pillar.png";
-import ref_blue from "@assets/tiles/references/blue.png";
-import ref_red from "@assets/tiles/references/red.png";
 import trap_active from "@assets/tiles/traps/trap_active.png";
 import trap_inactive from "@assets/tiles/traps/trap_inactive.png";
 import wall from "@assets/tiles/wall/wall.png";
@@ -39,8 +37,6 @@ export const assetCollection = {
   move_layer,
   player_turn_layer,
   unknown_icon,
-  ref_blue,
-  ref_red,
   trap_active,
   trap_inactive,
   chest_close,
@@ -54,8 +50,6 @@ export const floorAssetCollection = {
   floor_dark,
   floor_light_not_in_sight,
   floor_dark_not_in_sight,
-  ref_blue,
-  ref_red,
 } as const;
 
 export const entitiesAssetsCollection = {
