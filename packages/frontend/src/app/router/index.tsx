@@ -1,5 +1,6 @@
 import { Auth0ContextInterface, useAuth0 } from "@auth0/auth0-react";
 import { getSocket } from "@config/socket";
+import { NotFound } from "@features/not-found/not-found.component";
 import { queryClient } from "@lib/react-query";
 import {
   ErrorComponent,
@@ -16,6 +17,7 @@ const getRouter = ({
 }) =>
   createRouter({
     routeTree,
+    defaultNotFoundComponent: NotFound,
     defaultPendingComponent: () => (
       <div className="p-2 text-2xl">defaultPendingComponent</div>
     ),
