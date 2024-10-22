@@ -16,11 +16,11 @@ import { Route as rootRoute } from './../pages/__root'
 import { Route as LoginImport } from './../pages/login'
 import { Route as WsImport } from './../pages/_ws'
 import { Route as WsLobbiesImport } from './../pages/_ws.lobbies'
-import { Route as WsLobbyLobbyIdImport } from './../pages/_ws.lobby.$lobbyId'
 
 // Create Virtual Routes
 
 const WsCreateLobbyLazyImport = createFileRoute('/_ws/create-lobby')()
+const WsLobbyLobbyIdLazyImport = createFileRoute('/_ws/lobby/$lobbyId')()
 const WsGameGameIdLazyImport = createFileRoute('/_ws/game/$gameId')()
 
 // Create/Update Routes
@@ -47,17 +47,19 @@ const WsLobbiesRoute = WsLobbiesImport.update({
   getParentRoute: () => WsRoute,
 } as any)
 
+const WsLobbyLobbyIdLazyRoute = WsLobbyLobbyIdLazyImport.update({
+  path: '/lobby/$lobbyId',
+  getParentRoute: () => WsRoute,
+} as any).lazy(() =>
+  import('./../pages/_ws.lobby.$lobbyId.lazy').then((d) => d.Route),
+)
+
 const WsGameGameIdLazyRoute = WsGameGameIdLazyImport.update({
   path: '/game/$gameId',
   getParentRoute: () => WsRoute,
 } as any).lazy(() =>
   import('./../pages/_ws.game.$gameId.lazy').then((d) => d.Route),
 )
-
-const WsLobbyLobbyIdRoute = WsLobbyLobbyIdImport.update({
-  path: '/lobby/$lobbyId',
-  getParentRoute: () => WsRoute,
-} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -91,18 +93,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WsCreateLobbyLazyImport
       parentRoute: typeof WsImport
     }
-    '/_ws/lobby/$lobbyId': {
-      id: '/_ws/lobby/$lobbyId'
-      path: '/lobby/$lobbyId'
-      fullPath: '/lobby/$lobbyId'
-      preLoaderRoute: typeof WsLobbyLobbyIdImport
-      parentRoute: typeof WsImport
-    }
     '/_ws/game/$gameId': {
       id: '/_ws/game/$gameId'
       path: '/game/$gameId'
       fullPath: '/game/$gameId'
       preLoaderRoute: typeof WsGameGameIdLazyImport
+      parentRoute: typeof WsImport
+    }
+    '/_ws/lobby/$lobbyId': {
+      id: '/_ws/lobby/$lobbyId'
+      path: '/lobby/$lobbyId'
+      fullPath: '/lobby/$lobbyId'
+      preLoaderRoute: typeof WsLobbyLobbyIdLazyImport
       parentRoute: typeof WsImport
     }
   }
@@ -113,15 +115,15 @@ declare module '@tanstack/react-router' {
 interface WsRouteChildren {
   WsLobbiesRoute: typeof WsLobbiesRoute
   WsCreateLobbyLazyRoute: typeof WsCreateLobbyLazyRoute
-  WsLobbyLobbyIdRoute: typeof WsLobbyLobbyIdRoute
   WsGameGameIdLazyRoute: typeof WsGameGameIdLazyRoute
+  WsLobbyLobbyIdLazyRoute: typeof WsLobbyLobbyIdLazyRoute
 }
 
 const WsRouteChildren: WsRouteChildren = {
   WsLobbiesRoute: WsLobbiesRoute,
   WsCreateLobbyLazyRoute: WsCreateLobbyLazyRoute,
-  WsLobbyLobbyIdRoute: WsLobbyLobbyIdRoute,
   WsGameGameIdLazyRoute: WsGameGameIdLazyRoute,
+  WsLobbyLobbyIdLazyRoute: WsLobbyLobbyIdLazyRoute,
 }
 
 const WsRouteWithChildren = WsRoute._addFileChildren(WsRouteChildren)
@@ -131,8 +133,8 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/lobbies': typeof WsLobbiesRoute
   '/create-lobby': typeof WsCreateLobbyLazyRoute
-  '/lobby/$lobbyId': typeof WsLobbyLobbyIdRoute
   '/game/$gameId': typeof WsGameGameIdLazyRoute
+  '/lobby/$lobbyId': typeof WsLobbyLobbyIdLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -140,8 +142,8 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/lobbies': typeof WsLobbiesRoute
   '/create-lobby': typeof WsCreateLobbyLazyRoute
-  '/lobby/$lobbyId': typeof WsLobbyLobbyIdRoute
   '/game/$gameId': typeof WsGameGameIdLazyRoute
+  '/lobby/$lobbyId': typeof WsLobbyLobbyIdLazyRoute
 }
 
 export interface FileRoutesById {
@@ -150,8 +152,8 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_ws/lobbies': typeof WsLobbiesRoute
   '/_ws/create-lobby': typeof WsCreateLobbyLazyRoute
-  '/_ws/lobby/$lobbyId': typeof WsLobbyLobbyIdRoute
   '/_ws/game/$gameId': typeof WsGameGameIdLazyRoute
+  '/_ws/lobby/$lobbyId': typeof WsLobbyLobbyIdLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -161,24 +163,24 @@ export interface FileRouteTypes {
     | '/login'
     | '/lobbies'
     | '/create-lobby'
-    | '/lobby/$lobbyId'
     | '/game/$gameId'
+    | '/lobby/$lobbyId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | ''
     | '/login'
     | '/lobbies'
     | '/create-lobby'
-    | '/lobby/$lobbyId'
     | '/game/$gameId'
+    | '/lobby/$lobbyId'
   id:
     | '__root__'
     | '/_ws'
     | '/login'
     | '/_ws/lobbies'
     | '/_ws/create-lobby'
-    | '/_ws/lobby/$lobbyId'
     | '/_ws/game/$gameId'
+    | '/_ws/lobby/$lobbyId'
   fileRoutesById: FileRoutesById
 }
 
@@ -213,8 +215,8 @@ export const routeTree = rootRoute
       "children": [
         "/_ws/lobbies",
         "/_ws/create-lobby",
-        "/_ws/lobby/$lobbyId",
-        "/_ws/game/$gameId"
+        "/_ws/game/$gameId",
+        "/_ws/lobby/$lobbyId"
       ]
     },
     "/login": {
@@ -228,12 +230,12 @@ export const routeTree = rootRoute
       "filePath": "_ws.create-lobby.lazy.tsx",
       "parent": "/_ws"
     },
-    "/_ws/lobby/$lobbyId": {
-      "filePath": "_ws.lobby.$lobbyId.tsx",
-      "parent": "/_ws"
-    },
     "/_ws/game/$gameId": {
       "filePath": "_ws.game.$gameId.lazy.tsx",
+      "parent": "/_ws"
+    },
+    "/_ws/lobby/$lobbyId": {
+      "filePath": "_ws.lobby.$lobbyId.lazy.tsx",
       "parent": "/_ws"
     }
   }
