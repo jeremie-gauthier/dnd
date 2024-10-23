@@ -19,7 +19,9 @@ const getRouter = ({
     routeTree,
     defaultNotFoundComponent: NotFound,
     defaultPendingComponent: () => (
-      <div className="p-2 text-2xl">defaultPendingComponent</div>
+      <div className="flex justify-center items-center w-screen h-screen">
+        <div className="border-8 border-slate-400 border-t-slate-800 rounded-full size-12 duration-300 animate-spin" />
+      </div>
     ),
     defaultErrorComponent: ({ error }) => <ErrorComponent error={error} />,
     context: {
