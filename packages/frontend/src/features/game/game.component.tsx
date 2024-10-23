@@ -20,7 +20,7 @@ export const Game = () => {
 
   return (
     <>
-      <div className="flex flex-col w-full gap-2 bg-support-gray-900">
+      <div className="flex flex-col w-full gap-2 bg-neutral-800 min-h-screen">
         <p className="flex justify-start text-xs italic text-white">
           Game ID: {game.id}
         </p>
@@ -33,7 +33,7 @@ export const Game = () => {
             <BoardGame />
           </div>
 
-          <div className="flex flex-row justify-between">
+          <div className="flex flex-row justify-between max-w-[1920px] w-full mx-auto">
             <ActionsLog />
 
             {isPlaying && entityPlaying ? (
@@ -67,7 +67,7 @@ export const Game = () => {
 
             <div className="flex flex-col items-end justify-end gap-4">
               <EndTurnButton />
-              <div className="flex flex-row max-w-lg overflow-x-scroll scrollbar-thin scrollbar-thumb-primary-600 scrollbar-track-primary-900">
+              <div className="flex flex-row max-w-lg overflow-x-scroll scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-900">
                 <Timeline game={game} />
               </div>
             </div>

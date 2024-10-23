@@ -1,10 +1,4 @@
-import {
-  ChildTilePath,
-  Coord,
-  GameBoardTile,
-  TilePath,
-  getNeighbourCoords,
-} from "@dnd/shared";
+import { ChildTilePath, Coord, GameBoardTile, TilePath } from "@dnd/shared";
 
 function hasAncestor(tilePath: TilePath): tilePath is ChildTilePath {
   return tilePath.range > 0;
@@ -40,30 +34,4 @@ export function getAllCoordsFromTilePaths(tilePaths: TilePath[]): Coord[] {
   }
 
   return uniqCoords;
-}
-
-export function trimConsecutiveNonAccessibleCoordsTail({
-  tilePathCoords,
-}: { tilePathCoords: Coord[] }) {
-  const tilePathCoordsReversed = [...tilePathCoords].reverse();
-
-  let accessibleCoordIdxStart = 0;
-  for (let i = 0; i < tilePathCoordsReversed.length; i += 1) {
-    const tilePathCoord = tilePathCoordsReversed[i];
-    const nextTilePathCoord = tilePathCoordsReversed[i + 1];
-    if (!nextTilePathCoord) break;
-
-    const tilePathCoordNeighbours = getNeighbourCoords({
-      coord: tilePathCoord,
-    });
-    const isConsecutiveWithNextCoord = tilePathCoordNeighbours.some(
-      ({ row, column }) =>
-        row === tilePathCoord.row && column === tilePathCoord.column,
-    );
-    if (isConsecutiveWithNextCoord) break;
-
-    accessibleCoordIdxStart = i;
-  }
-
-  return tilePathCoordsReversed.slice(accessibleCoordIdxStart).reverse();
 }

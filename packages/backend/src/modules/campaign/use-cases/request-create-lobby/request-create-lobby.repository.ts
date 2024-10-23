@@ -21,13 +21,9 @@ export class RequestCreateLobbyRepository {
     const campaigns = await this.campaignRepository.findOneOrFail({
       select: {
         id: true,
-        title: true,
         stages: {
           id: true,
           order: true,
-          title: true,
-          intro: true,
-          outro: true,
         },
       },
       where: {

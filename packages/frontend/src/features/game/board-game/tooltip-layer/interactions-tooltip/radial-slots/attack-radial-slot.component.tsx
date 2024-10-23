@@ -39,7 +39,7 @@ export const AttackRadialSlot = ({ interaction }: Props) => {
         y={interaction.y - HALF_INTERACTION_IMG_SIZE}
         focusable={false}
         style={{ flexShrink: 0 }}
-        className="fill-white group-hover:fill-primary-600 overflow-hidden"
+        className="fill-white group-hover:fill-slate-700 overflow-hidden"
       >
         <image
           xlinkHref={attackItem.imgUrl}

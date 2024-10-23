@@ -1,4 +1,24 @@
 INSERT INTO
+  hero_ui (name, img_url)
+VALUES
+  (
+    'Regdar',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/heroes/Regdar.webp'
+  ),
+  (
+    'Lidda',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/heroes/Lidda.webp'
+  ),
+  (
+    'Mialyë',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/heroes/Mialyë.webp'
+  ),
+  (
+    'Jozan',
+    'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/heroes/Jozan.webp'
+  );
+
+INSERT INTO
   hero_template (
     name,
     TYPE,

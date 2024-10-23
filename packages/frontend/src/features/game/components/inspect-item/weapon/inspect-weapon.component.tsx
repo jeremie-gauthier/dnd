@@ -25,7 +25,7 @@ export const InspectWeapon = ({ weapon }: Props) => {
 
         return (
           <Fragment key={attack.id}>
-            {idx > 0 ? <hr className="border-primary-600" /> : null}
+            {idx > 0 ? <hr className="border-slate-500" /> : null}
 
             <div>
               <p>

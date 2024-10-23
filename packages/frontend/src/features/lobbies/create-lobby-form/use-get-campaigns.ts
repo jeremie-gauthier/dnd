@@ -22,7 +22,7 @@ export const useGetCampaigns = () => {
     queryKey: ["campaigns"],
     queryFn: () =>
       fetcherWithAuth<GetCampaignsResponse>(
-        "http://localhost:3000/campaign/private/get-campaigns",
+        "/campaign/private/get-campaigns",
         getAccessTokenSilently,
       ),
   });

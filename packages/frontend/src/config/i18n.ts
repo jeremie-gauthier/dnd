@@ -17,7 +17,7 @@ i18next
           }
 
           const namespace = url.split("/")[3].replace(".json", "");
-          const requestUrl = `http://localhost:3000/translation/public/get-translation/${locale}/${namespace}`;
+          const requestUrl = `${import.meta.env.VITE_API_URL}/translation/public/get-translation/${locale}/${namespace}`;
           const response = await fetch(requestUrl, { method: "GET" });
           const data: GetTranslationOutput = await response.json();
           return callback(undefined, {

@@ -1,5 +1,5 @@
-import { Button } from "@features/ui/button/button";
-import { Icon } from "@features/ui/icon/Icon";
+import { Icon } from "@/components/icon/Icon";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { EditCharacterInventory } from "./edit-character-inventory/edit-character-inventory.component";
 
@@ -16,10 +16,14 @@ export const OpenInventoryButton = () => {
 
   return (
     <>
-      <Button variant="darkPrimary" onClick={open}>
+      <Button
+        variant="secondary"
+        onClick={open}
+        className="size-14 p-0 [&_svg]:size-10"
+      >
         <Icon
           icon="battleGear"
-          className="fill-primary-600 group-hover:fill-primary-200 h-10 w-10"
+          className="fill-slate-500 group-hover:fill-slate-200"
         />
       </Button>
 

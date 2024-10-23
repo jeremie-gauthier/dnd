@@ -1,8 +1,4 @@
-import cleric from "@assets/classes/cleric.webp";
-import sorcerer from "@assets/classes/sorcerer.webp";
-import thief from "@assets/classes/thief.webp";
-import warrior from "@assets/classes/warrior.webp";
-import { GameItem, HeroClassType, PlayableEntity } from "@dnd/shared";
+import { GameItem, PlayableEntity } from "@dnd/shared";
 import { useTranslation } from "react-i18next";
 import { useGameContext } from "../../context/use-game-context";
 import { ActionPoints } from "../characteristics/action-points.component";
@@ -44,18 +40,17 @@ export const CharacterSheet = ({
     <>
       {entityPlaying.faction === "hero" ? (
         <img
-          src={CLASS_TO_IMG[entityPlaying.class]}
+          src={entityPlaying.imgUrl}
           alt=""
           className="absolute top-3 left-4 h-20 shadow-xl"
         />
       ) : null}
 
       <div className="flex flex-row rounded-xl">
-        <div className="flex flex-col pt-20 px-1 pb-4 bg-primary-600 rounded-bl-md gap-4">
+        <div className="flex flex-col pt-20 px-1 pb-4 bg-slate-500 rounded-bl-md gap-4">
           <HealthPoints
             healthPoints={entityPlaying.characteristic.healthPoints}
             baseHealthPoints={entityPlaying.characteristic.baseHealthPoints}
-            size="medium"
           />
           <ManaPoints
             manaPoints={entityPlaying.characteristic.manaPoints}
@@ -70,8 +65,8 @@ export const CharacterSheet = ({
           />
         </div>
 
-        <div className="flex flex-col bg-primary-900 rounded-br-md">
-          <div className="flex flex-row bg-primary-600 pl-4 py-2">
+        <div className="flex flex-col bg-slate-800 rounded-br-md">
+          <div className="flex flex-row bg-slate-500 pl-4 py-2">
             <CharacterIdentity character={entityPlaying} />
           </div>
           <div className="flex flex-col p-4 gap-8">
@@ -101,10 +96,3 @@ export const CharacterSheet = ({
     </>
   );
 };
-
-const CLASS_TO_IMG: Readonly<Record<HeroClassType, string>> = {
-  CLERIC: cleric,
-  WARRIOR: warrior,
-  SORCERER: sorcerer,
-  THIEF: thief,
-} as const;

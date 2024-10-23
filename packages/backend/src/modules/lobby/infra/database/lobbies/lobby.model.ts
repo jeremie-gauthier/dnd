@@ -8,13 +8,9 @@ export type LobbyPersistence = {
     nbPlayersMax: number;
     campaign: {
       id: string;
-      title: string;
       nbStages: number;
       stage: {
         id: string;
-        title: string;
-        intro: string;
-        outro: string;
         order: number;
       };
     };

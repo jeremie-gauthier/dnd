@@ -1,6 +1,6 @@
+import { Icon } from "@/components/icon/Icon";
 import { GameItem } from "@dnd/shared";
 import { useGameContext } from "@features/game/context/use-game-context";
-import { Icon } from "@features/ui/icon/Icon";
 import { useTranslation } from "react-i18next";
 
 type Props = {

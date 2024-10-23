@@ -60,6 +60,7 @@ export type PlayableHeroEntity = BasePlayableEntity & {
   faction: "hero";
   class: HeroClassType;
   level: number;
+  imgUrl: string;
 };
 
 export type PlayableEntity = PlayableEnemyEntity | PlayableHeroEntity;

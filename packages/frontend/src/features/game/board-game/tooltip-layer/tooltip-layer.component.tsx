@@ -17,7 +17,6 @@ export const TooltipLayer = forwardRef<SVGSVGElement, Props>(
     return (
       // biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
       <svg height={height} width={width} ref={ref} {...rest}>
-        {/* <title>Tooltip Layer</title> */}
         {moveForbiddenTooltip && (
           <MoveForbiddenTooltip {...moveForbiddenTooltip} />
         )}

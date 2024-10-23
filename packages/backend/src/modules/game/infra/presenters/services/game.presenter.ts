@@ -2,11 +2,15 @@ import { Map as GameMap, GameView } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { Game as GameDomain } from "src/modules/game/domain/game/game.aggregate";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
+import { PostgresHeroUIRepository } from "../../database/hero-ui/hero-ui.repository";
 import { ItemPresenter } from "./item.presenter";
 
 @Injectable()
 export class GamePresenter {
-  constructor(private readonly itemPresenter: ItemPresenter) {}
+  constructor(
+    private readonly itemPresenter: ItemPresenter,
+    private readonly heroUIRepository: PostgresHeroUIRepository,
+  ) {}
 
   public async toView(
     domain: ReturnType<GameDomain["toPlain"]>,
@@ -27,6 +31,14 @@ export class GamePresenter {
                 inventory: await this.getInventory({
                   inventory: playableEntity.inventory,
                 }),
+                imgUrl:
+                  playableEntity.faction === "hero"
+                    ? (
+                        await this.heroUIRepository.getOneOrThrow({
+                          name: playableEntity.name,
+                        })
+                      ).imgUrl
+                    : undefined,
               },
             ];
           }),

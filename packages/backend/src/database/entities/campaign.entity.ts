@@ -4,7 +4,7 @@ import {
   JoinTable,
   ManyToMany,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   type Relation,
 } from "typeorm";
 import {
@@ -17,7 +17,7 @@ import { HeroTemplate } from "./hero-template.entity";
 
 @Entity()
 export class Campaign {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryColumn()
   readonly id: string;
 
   @OneToMany(
@@ -35,9 +35,6 @@ export class Campaign {
     { cascade: true },
   )
   readonly stages: Relation<CampaignStage[]>;
-
-  @Column({ unique: true })
-  readonly title: string;
 
   @Column({ type: "enum", enum: CampaignStatusValues })
   readonly status: CampaignStatusType;

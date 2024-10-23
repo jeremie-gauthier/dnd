@@ -1,10 +1,11 @@
+import { Icon } from "@/components/icon/Icon";
+import { Button } from "@/components/ui/button";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { GameItem } from "@dnd/shared";
-import { Button } from "@features/ui/button/button";
-import { Icon } from "@features/ui/icon/Icon";
-import { classNames } from "@utils/class-names.util";
+import { cn } from "@lib/utils";
 import { useTranslation } from "react-i18next";
+import { slotTypeColor } from "../utils";
 
 type Props = {
   item: GameItem;
@@ -19,18 +20,16 @@ export const ChestLootContent = ({ item, onRefuseLoot }: Props) => {
   });
 
   return (
-    <div className="flex flex-col items-center bg-primary-900 gap-8 rounded-b-md">
-      <div className="flex flex-row bg-primary-600 w-full py-4 text-white font-semibold text-xl justify-center">
+    <div className="flex flex-col items-center bg-slate-800 gap-8 rounded-b-md">
+      <div className="flex flex-row bg-slate-500 w-full py-4 text-white font-semibold text-xl justify-center">
         <h4>{t("chest_loot_title", { ns: "inventory" })}</h4>
       </div>
 
       <div className="flex flex-col items-center gap-8 px-12 pb-8">
-        <div
-          className={classNames("border-2 rounded", slotTypeColor[item.type])}
-        >
+        <div className={cn("border-2 rounded", slotTypeColor[item.type])}>
           <Icon
             icon="openChest"
-            className="absolute z-0 fill-primary-600 h-32 w-28"
+            className="absolute z-0 fill-slate-500 h-32 w-28"
           />
           <div
             ref={setNodeRef}
@@ -50,18 +49,10 @@ export const ChestLootContent = ({ item, onRefuseLoot }: Props) => {
           </div>
         </div>
 
-        <Button variant="darkOutlined" onClick={onRefuseLoot}>
+        <Button variant="secondary" onClick={onRefuseLoot}>
           {t("refuse_loot", { ns: "inventory" })}
         </Button>
       </div>
     </div>
   );
-};
-
-const slotTypeColor: Record<Props["item"]["type"], string> = {
-  Spell: "border-blue-500",
-  Weapon: "border-red-500",
-  Artifact: "border-amber-400",
-  ChestTrap: "border-red-700",
-  Potion: "border-emerald-500",
 };

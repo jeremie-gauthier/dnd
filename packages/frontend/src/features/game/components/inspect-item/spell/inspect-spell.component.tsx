@@ -28,7 +28,7 @@ export const InspectSpell = ({ spell }: Props) => {
 
         return (
           <Fragment key={attack.id}>
-            <hr className="border-primary-600" />
+            <hr className="border-slate-500" />
 
             <div>
               <p>

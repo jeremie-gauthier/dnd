@@ -9,10 +9,12 @@ export const fetcherWithAuth = async <Data>(
 ): Promise<Data> => {
   const token = await tokenGetter();
 
-  const response = await fetch(url, {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}${url}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+      "Content-Type": "application/json",
     },
     ...params,
   });

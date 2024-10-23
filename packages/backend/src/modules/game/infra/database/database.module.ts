@@ -3,6 +3,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { Artifact } from "src/database/entities/artifact.entity";
 import { ChestTrap } from "src/database/entities/chest-trap.entity";
 import { Dice } from "src/database/entities/dice.entity";
+import { HeroUI } from "src/database/entities/hero-ui.entity";
 import { ItemUI } from "src/database/entities/item-ui.entity";
 import { Item } from "src/database/entities/item.entity";
 import { Potion } from "src/database/entities/potion.entity";
@@ -18,6 +19,7 @@ import { DiceMapper } from "./dice/dice.mapper";
 import { PostgresDiceRepository } from "./dice/dice.repository";
 import { RedisGameRepository } from "./game/game.repository";
 import { GameMapper } from "./game/mapper/game.mapper";
+import { PostgresHeroUIRepository } from "./hero-ui/hero-ui.repository";
 import { ItemDevMapper } from "./item-dev/item-dev.mapper";
 import { PostgresItemDevRepository } from "./item-dev/item-dev.repository";
 import { PostgresItemUIRepository } from "./item-ui/item-ui.repository";
@@ -28,6 +30,7 @@ import { PostgresItemRepository } from "./item/item.repository";
   imports: [
     RedisModule,
     TypeOrmModule.forFeature([
+      HeroUI,
       Dice,
       Item,
       ItemUI,
@@ -63,6 +66,7 @@ import { PostgresItemRepository } from "./item/item.repository";
     },
     ItemMapper,
     ItemDevMapper,
+    PostgresHeroUIRepository,
   ],
   exports: [
     {
@@ -85,6 +89,7 @@ import { PostgresItemRepository } from "./item/item.repository";
       provide: ITEM_DEV_REPOSITORY,
       useClass: PostgresItemDevRepository,
     },
+    PostgresHeroUIRepository,
   ],
 })
 export class DatabaseModule {}

@@ -211,6 +211,18 @@ export const useMove = ({
           pathToTile: tilePathCoordsToMoveOn,
         });
       }
+
+      const assetSize = 64;
+      const isometricCoord = translate2DToIsometricCoord(coord2D, {
+        assetSize,
+        // Beware of the offset, it may shift everything being computed here.
+        // We really want to have the tiles next to the borders of the canvas.
+        map: {
+          height: game.map.height * assetSize,
+          width: game.map.width * assetSize,
+        },
+      });
+      gameEventManager.emitMoveAuthorized({ isometricCoord });
     };
 
     gameEventManager.addEventListener(

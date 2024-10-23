@@ -22,7 +22,7 @@ export const useConnection = () => {
 
   return async (body: UserConnectionInput): Promise<void> => {
     const token = await tokenGetter();
-    await fetch("http://localhost:3000/user/private/connection", {
+    await fetch(`${import.meta.env.VITE_API_URL}/user/private/connection`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

@@ -3,7 +3,6 @@ import type { EntityDrawerParams } from "./entity-drawer-params.interface";
 
 type RequiredAssets = {
   readonly door_close: string;
-  readonly door_open: string;
 };
 
 export function drawDoor({
@@ -14,14 +13,10 @@ export function drawDoor({
   if (subject.entity.type !== "interactive-entity") return;
 
   const isClosed = subject.entity.isBlocking;
-  // TODO: tmp for better visualization during testing
   if (!isClosed) return;
-  const doorAsset = isClosed
-    ? config.assets.door_close
-    : config.assets.door_open;
 
   context.drawImage(
-    doorAsset,
+    config.assets.door_close,
     subject.coordIsometric.column,
     subject.coordIsometric.row -
       getElevationOffset({

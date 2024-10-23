@@ -22,7 +22,7 @@ export const OpenChestRadialSlot = ({ interaction }: Props) => {
       y={interaction.y - HALF_INTERACTION_ICON_SIZE}
       focusable={false}
       style={{ flexShrink: 0 }}
-      className="fill-white group-hover:fill-primary-600"
+      className="fill-white group-hover:fill-slate-700"
     >
       <title>Open Chest</title>
       <g>

@@ -1,5 +1,5 @@
 import { GameView } from "@dnd/shared";
-import { classNames } from "@utils/class-names.util";
+import { cn } from "@lib/utils";
 
 type Props = {
   game: GameView;
@@ -17,14 +17,14 @@ export const Timeline = ({ game }: Props) => {
         return (
           <li
             key={playableEntity.id}
-            className={classNames(
-              "border rounded-lg px-2 border-primary-200 min-w-fit",
+            className={cn(
+              "border rounded-lg px-2 border-slate-600 min-w-fit",
               playableEntity.currentPhase === "action"
-                ? "bg-primary-200 text-primary-900"
+                ? "bg-slate-600 text-slate-900"
                 : "bg-transparent",
               playableEntity.characteristic.healthPoints === 0
                 ? "grayscale text-gray-500"
-                : "text-primary-100",
+                : "text-slate-100",
             )}
           >
             {playableEntity.name}

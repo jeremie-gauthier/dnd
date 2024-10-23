@@ -1,6 +1,7 @@
 import { useDroppable } from "@dnd-kit/core";
 import { GameItem } from "@dnd/shared";
-import { classNames } from "@utils/class-names.util";
+import { slotTypeColor } from "@features/game/components/utils";
+import { cn } from "@lib/utils";
 import { PropsWithChildren, useEffect } from "react";
 import { useEditCharacterInventoryContext } from "../edit-character-inventory.context";
 
@@ -46,7 +47,11 @@ export const InventorySlot = ({
           : null,
       );
     } else {
-      setTooltipType(isDraggingCompatibleItem ? "confirm_move" : null);
+      setTooltipType(
+        isDraggingCompatibleItem && !isDraggingItemFromSameStorageSpace
+          ? "confirm_move"
+          : null,
+      );
     }
   }, [
     isDraggingCompatibleItem,
@@ -59,7 +64,7 @@ export const InventorySlot = ({
   return (
     <div
       ref={setNodeRef}
-      className={classNames(
+      className={cn(
         "relative h-32 w-28 border-2 rounded flex flex-col items-center justify-center group",
         isOver &&
           isDraggingCompatibleItem &&
@@ -77,13 +82,4 @@ export const InventorySlot = ({
       {children}
     </div>
   );
-};
-
-const slotTypeColor: Record<Props["type"], string> = {
-  Spell: "border-blue-500",
-  Weapon: "border-red-500",
-  backpackAnyItem: "border-primary-600",
-  Artifact: "border-amber-400",
-  ChestTrap: "border-red-700",
-  Potion: "border-emerald-500",
 };

@@ -1,5 +1,6 @@
 import { Auth0ContextInterface, useAuth0 } from "@auth0/auth0-react";
 import { getSocket } from "@config/socket";
+import { NotFound } from "@features/not-found/not-found.component";
 import { queryClient } from "@lib/react-query";
 import {
   ErrorComponent,
@@ -16,8 +17,11 @@ const getRouter = ({
 }) =>
   createRouter({
     routeTree,
+    defaultNotFoundComponent: NotFound,
     defaultPendingComponent: () => (
-      <div className="p-2 text-2xl">Route is loading</div>
+      <div className="flex justify-center items-center w-screen h-screen">
+        <div className="border-8 border-slate-400 border-t-slate-800 rounded-full size-12 duration-300 animate-spin" />
+      </div>
     ),
     defaultErrorComponent: ({ error }) => <ErrorComponent error={error} />,
     context: {

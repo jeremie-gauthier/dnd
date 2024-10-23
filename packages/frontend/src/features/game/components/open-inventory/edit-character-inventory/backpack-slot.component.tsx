@@ -1,5 +1,5 @@
+import { Icon } from "@/components/icon/Icon";
 import { GameItem } from "@dnd/shared";
-import { Icon } from "@features/ui/icon/Icon";
 import { InventoryItem } from "./common/inventory-item.component";
 import { InventorySlot } from "./common/inventory-slot.component";
 
@@ -21,7 +21,7 @@ export const BackpackSlot = ({ item, type, idx }: Props) => {
       {item ? (
         <InventoryItem item={item} storageSpace="backpack" />
       ) : (
-        <Icon icon="knapsack" className="fill-primary-600 h-28 w-28" />
+        <Icon icon="knapsack" className="fill-slate-500 h-28 w-28" />
       )}
     </InventorySlot>
   );

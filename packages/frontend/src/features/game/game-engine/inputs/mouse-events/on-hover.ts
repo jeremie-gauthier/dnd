@@ -5,7 +5,7 @@ import {
 } from "../../utils/coords-conversion.util";
 import { getCursorCoordinates } from "./get-cursor-coordinates";
 
-export type HandleCanvasClickParams = {
+type Params = {
   layer: SVGSVGElement;
   ev: MouseEvent;
   layerConfig: CanvasConfig;
@@ -17,7 +17,7 @@ export const handleHover = ({
   layer,
   layerConfig,
   gameEventManager,
-}: HandleCanvasClickParams) => {
+}: Params) => {
   const coord = getCursorCoordinates(ev, layer);
   const coord2D = translateIsometricTo2DCoord(
     { row: coord.y, column: coord.x },

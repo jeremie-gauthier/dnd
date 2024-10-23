@@ -30,7 +30,7 @@ export function GameRouteComponent() {
       {gameConditionsStatus === "ongoing" ? (
         <Game />
       ) : (
-        <GameEnded gameConditionsStatus={gameConditionsStatus} />
+        <GameEnded gameConditionsStatus={"victory"} />
       )}
     </GameContextProvider>
   );

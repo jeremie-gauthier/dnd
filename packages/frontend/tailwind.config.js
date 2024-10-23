@@ -4,27 +4,14 @@ export default {
   content: {
     relative: true,
     files: [
-      "./src/router/**/*.{jsx,tsx}",
-      "./src/features/**/*.{jsx,tsx}",
+      "./src/**/*.{jsx,tsx}",
+      "./src/features/game/components/utils.ts",
       "./index.html",
     ],
   },
   theme: {
     extend: {
       colors: {
-        primary: {
-          100: "#bfc4f2",
-          200: "#8d93c4",
-          300: "#7b80ad",
-          600: "#3B3D58",
-          900: "#1B1D31",
-        },
-        support: {
-          gray: {
-            600: "#252525",
-            900: "#202020",
-          },
-        },
         dice: {
           yellow: "#FFF700",
           orange: "#FF6E00",

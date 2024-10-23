@@ -1,5 +1,5 @@
+import { Button } from "@/components/ui/button";
 import { useGameContext } from "@features/game/context/use-game-context";
-import { Button } from "@features/ui/button/button";
 import { useTranslation } from "react-i18next";
 
 export const EndTurnButton = () => {
@@ -15,13 +15,8 @@ export const EndTurnButton = () => {
     return null;
   }
 
-  const hasActionPointsLeft = entityPlaying.characteristic.actionPoints > 0;
-
   return (
-    <Button
-      variant={hasActionPointsLeft ? "darkOutlined" : "darkPrimary"}
-      onClick={handleClick}
-    >
+    <Button variant="outline" onClick={handleClick}>
       <span className="text-xl">{t("endTurn")}</span>
     </Button>
   );
