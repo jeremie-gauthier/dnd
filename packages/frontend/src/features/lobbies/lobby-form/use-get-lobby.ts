@@ -15,7 +15,7 @@ export const useGetLobby = (lobbyId: string) => {
     queryKey: GET_LOBBY_QUERY_KEY(lobbyId),
     queryFn: () =>
       fetcherWithAuth<GetLobbyResponse>(
-        `http://localhost:3000/lobby/private/get-lobby/${lobbyId}`,
+        `/lobby/private/get-lobby/${lobbyId}`,
         getAccessTokenSilently,
       ),
   });

@@ -10,7 +10,7 @@ export const useGetHeroDetails = ({ heroId }: { heroId: string }) => {
     queryKey: ["hero", heroId],
     queryFn: () =>
       fetcherWithAuth<GetHeroDetailsOutput>(
-        `http://localhost:3000/campaign/private/get-hero-details/${heroId}`,
+        `/campaign/private/get-hero-details/${heroId}`,
         getAccessTokenSilently,
       ),
     enabled: !!heroId,

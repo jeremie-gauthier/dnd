@@ -15,7 +15,7 @@ export const useGetPlayerGameState = (gameId: GameView["id"]) => {
     queryKey: GET_PLAYER_GAME_STATE_QUERY_KEY(gameId),
     queryFn: () =>
       fetcherWithAuth<GetUserGameStateOutput>(
-        `http://localhost:3000/game/private/get-user-game-state/${gameId}`,
+        `/game/private/get-user-game-state/${gameId}`,
         getAccessTokenSilently,
       ),
     enabled: gameId !== undefined,

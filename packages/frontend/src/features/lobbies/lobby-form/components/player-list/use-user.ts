@@ -10,7 +10,7 @@ export const useUser = (userId?: string) => {
     queryKey: ["user", userId],
     queryFn: () =>
       fetcherWithAuth<GetUserOutput>(
-        `http://localhost:3000/user/private/get-user/${userId}`,
+        `/user/private/get-user/${userId}`,
         getAccessTokenSilently,
       ),
     enabled: !!userId,
