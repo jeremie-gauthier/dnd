@@ -7,7 +7,7 @@ export const getSocket = ({
 }: {
   getAccessTokenSilently: Auth0ContextInterface["getAccessTokenSilently"];
 }) => {
-  const socket = io("ws://localhost:3000", {
+  const socket = io(import.meta.env.VITE_API_URL_WS, {
     autoConnect: false,
     async auth(cb) {
       try {
