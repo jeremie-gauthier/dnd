@@ -15,7 +15,7 @@ export const AppProvider = ({ children }: Props) => {
       cacheLocation="localstorage"
       authorizationParams={{
         redirect_uri: import.meta.env.VITE_AUTH0_LOGIN_REDIRECT_URI,
-        audience: `${import.meta.env.VITE_API_URL}/`,
+        audience: import.meta.env.VITE_AUTH0_AUDIENCE,
         scope: "profile email read:current_user offline_access",
       }}
     >
