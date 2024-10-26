@@ -1,0 +1,60 @@
+name: dnd-production
+
+services:
+  dnd-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: dnd-app-prod
+    ports:
+      - 30000:3000
+    env_file:
+      - .env.production
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres-dnd-prod
+    restart: always
+    environment:
+      - POSTGRES_DB=dnd
+      - POSTGRES_USER_FILE=/run/secrets/db_root_user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_root_password
+    secrets:
+      - db_root_user
+      - db_root_password
+    ports:
+      - 30001:5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer:latest
+    container_name: adminer-dnd-prod
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    restart: always
+    ports:
+      - 30002:8080
+
+  redis:
+    image: redis/redis-stack:latest
+    container_name: redis-dnd-prod
+    restart: always
+    ports:
+      - 30003:6379
+
+  redis-insight:
+    image: redislabs/redisinsight
+    container_name: redis-insight-dnd-prod
+    ports:
+      - 30004:8001
+
+volumes:
+  postgres-docker:
+  db_data:
+
+secrets:
+  db_root_password:
+    file: ./db_root_password
+  db_root_user:
+    file: ./db_root_user

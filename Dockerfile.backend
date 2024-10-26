@@ -1,0 +1,27 @@
+FROM node:20-alpine AS build
+
+RUN npm install -g @nestjs/cli
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+COPY packages/shared/package*.json ./packages/shared/
+COPY packages/backend/package*.json ./packages/backend/
+RUN npm ci -w=@dnd/backend
+
+COPY packages/shared ./packages/shared
+COPY packages/backend ./packages/backend
+
+RUN npm run build -w=@dnd/backend
+
+
+
+FROM node:20-alpine As production
+
+# Copy the bundled code from the build stage to the production image
+COPY --from=build /usr/src/app /usr/src/app
+
+WORKDIR /usr/src/app
+
+# Start the server using the production build
+CMD [ "npm", "run", "start:prod", "-w=@dnd/backend" ]

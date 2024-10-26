@@ -41,3 +41,5 @@ coverage/
 # Docker volumes
 db_data/
 *-snapshot.sql
+
+db_root*
