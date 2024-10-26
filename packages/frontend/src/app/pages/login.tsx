@@ -1,6 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { LoginButton } from "@features/users/login/login-button.component";
-import { useConnection } from "@features/users/login/use-connection";
 import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import * as React from "react";
 import { z } from "zod";
@@ -22,16 +21,11 @@ function LoginComponent() {
   const router = useRouter();
   const search = Route.useSearch();
   const { isAuthenticated, user } = useAuth0();
-  const connection = useConnection();
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   React.useLayoutEffect(() => {
     if (isAuthenticated && user) {
       router.invalidate();
-      connection({
-        avatarUrl: user.picture ?? "",
-        username: user.name ?? "",
-      });
 
       if (search.redirect) {
         router.history.push(search.redirect);
