@@ -8,12 +8,15 @@ import type { AuthToken } from "./auth-token.interface";
 @Injectable()
 export class JwtService {
   private readonly client: jwksClient.JwksClient;
+  private readonly issuer: string;
+  private readonly audience: string;
 
   constructor(readonly configService: ConfigService<EnvSchema>) {
-    const auth0Issuer = configService.getOrThrow<string>("AUTH0_ISSUER");
+    this.issuer = configService.getOrThrow<string>("AUTH0_ISSUER");
+    this.audience = configService.getOrThrow<string>("AUTH0_AUDIENCE");
 
     this.client = jwksClient({
-      jwksUri: `${auth0Issuer}.well-known/jwks.json`,
+      jwksUri: `${this.issuer}.well-known/jwks.json`,
       cache: true,
       rateLimit: true,
       jwksRequestsPerMinute: 5,
@@ -25,6 +28,7 @@ export class JwtService {
       jwt.verify(
         token,
         this.getKey.bind(this),
+        { audience: this.audience, issuer: this.issuer },
         (err: jwt.VerifyErrors, decodedToken: AuthToken) => {
           if (err) {
             reject(err);
