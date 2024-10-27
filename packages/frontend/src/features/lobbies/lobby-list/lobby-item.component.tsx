@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/ui/user-avatar/user-avatar";
-import { useAuth0 } from "@auth0/auth0-react";
+import { UserAvatarSkeleton } from "@/components/ui/user-avatar/user-avatar-skeleton";
 import { ClientLobbyEvent } from "@dnd/shared";
 import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import type { ClientSocket } from "../../../types/socket.type";
+import { useUser } from "../hooks/use-user";
 import type { GetLobbiesResponse } from "./use-get-lobbies";
 
 type Props = {
@@ -15,7 +16,7 @@ type Props = {
 export const LobbyItem = ({ lobby, socket }: Props) => {
   const { t } = useTranslation(["campaigns", "lobbies"]);
   const navigate = useNavigate();
-  const { user } = useAuth0();
+  const { data: lobbyHost } = useUser(lobby.host.userId);
 
   const handleClickOnJoinLobby = async (
     lobbyId: GetLobbiesResponse[number]["id"],
@@ -55,10 +56,14 @@ export const LobbyItem = ({ lobby, socket }: Props) => {
 
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row-reverse items-center justify-end gap-x-2">
-          <UserAvatar
-            userName={user?.name ?? user?.nickname ?? ""}
-            userPictureUrl={user?.picture}
-          />
+          {lobbyHost ? (
+            <UserAvatar
+              userName={lobbyHost.username}
+              userPictureUrl={lobbyHost.avatarUrl}
+            />
+          ) : (
+            <UserAvatarSkeleton />
+          )}
         </div>
         <p className="text-sm font-semibold">
           {lobby.nbPlayers} / {lobby.config.nbPlayersMax}

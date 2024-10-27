@@ -27,7 +27,7 @@ export const Game = () => {
 
         <div className="relative flex flex-col p-4 gap-4">
           <div className="flex justify-center">
-            {consumables && consumables.length > 0 && (
+            {isPlaying && consumables && consumables.length > 0 && (
               <ConsumableList items={consumables} />
             )}
             <BoardGame />
@@ -66,7 +66,7 @@ export const Game = () => {
             ) : null}
 
             <div className="flex flex-col items-end justify-end gap-4">
-              <EndTurnButton />
+              {isPlaying && <EndTurnButton />}
               <div className="flex flex-row max-w-lg overflow-x-scroll scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-900">
                 <Timeline game={game} />
               </div>

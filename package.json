@@ -20,7 +20,9 @@
     "publish:shared": "npm run --silent publish -w @dnd/shared",
     "new-uc": "node ./scripts/new-uc && npm run publish:shared",
     "new-listener": "node ./scripts/new-listener",
-    "new-emitter": "node ./scripts/new-emitter"
+    "new-emitter": "node ./scripts/new-emitter",
+    "deploy:front": "./scripts/deploy-front.sh",
+    "deploy:back": "./scripts/deploy-back.sh"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.2",

@@ -43,3 +43,5 @@ db_data/
 *-snapshot.sql
 
 db_root*
+scripts/deploy-front.sh
+scripts/deploy-back.sh
