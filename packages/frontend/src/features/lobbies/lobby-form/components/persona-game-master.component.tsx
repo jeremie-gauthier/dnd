@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/ui/user-avatar/user-avatar";
 import { type User } from "@auth0/auth0-react";
+import { useUser } from "@features/lobbies/hooks/use-user";
 import { useTranslation } from "react-i18next";
-import { useUser } from "./player-list/use-user";
 
 type Props = {
   currentUser: User;

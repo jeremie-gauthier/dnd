@@ -4,8 +4,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { UserAvatar } from "@/components/ui/user-avatar/user-avatar";
 import { type User } from "@auth0/auth0-react";
 import { capitalize } from "@dnd/shared";
+import { useUser } from "@features/lobbies/hooks/use-user";
 import { useTranslation } from "react-i18next";
-import { useUser } from "../player-list/use-user";
 import { useGetHeroDetails } from "./use-get-hero-details";
 
 type Props = {

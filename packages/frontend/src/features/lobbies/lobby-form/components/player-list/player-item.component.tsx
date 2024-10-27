@@ -1,8 +1,8 @@
 import { Icon } from "@/components/icon/Icon";
 import { UserAvatar } from "@/components/ui/user-avatar/user-avatar";
 import { UserAvatarSkeleton } from "@/components/ui/user-avatar/user-avatar-skeleton";
+import { useUser } from "@features/lobbies/hooks/use-user";
 import { cn } from "@lib/utils";
-import { useUser } from "./use-user";
 
 type Props = {
   player: {
