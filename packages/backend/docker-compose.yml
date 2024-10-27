@@ -1,5 +1,3 @@
-version: '3.8'
-
 name: dnd
 
 services:
@@ -36,10 +34,10 @@ services:
     ports:
       - 8001:8001
 
-  event-catalog:
-    build: ../../event-catalog
-    ports:
-      - 3001:3000
+  # event-catalog:
+  #   build: ../../event-catalog
+  #   ports:
+  #     - 3001:3000
 
 volumes:
   db_data:
