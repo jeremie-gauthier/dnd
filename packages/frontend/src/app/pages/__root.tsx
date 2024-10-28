@@ -20,8 +20,12 @@ function RootComponent() {
         <Outlet />
       </div>
 
-      <ReactQueryDevtools buttonPosition="top-right" />
-      <TanStackRouterDevtools position="bottom-right" />
+      {import.meta.env.VITE_AUTH0_ENV === "development" && (
+        <>
+          <ReactQueryDevtools buttonPosition="top-right" />
+          <TanStackRouterDevtools position="bottom-right" />
+        </>
+      )}
     </>
   );
 }
