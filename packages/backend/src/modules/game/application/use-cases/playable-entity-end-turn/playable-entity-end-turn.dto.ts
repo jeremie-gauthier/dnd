@@ -4,10 +4,10 @@ import {
 } from "@dnd/shared";
 import { createZodDto } from "nestjs-zod";
 
-export class EndPlayerTurnInputDto extends createZodDto(
+export class PlayableEntityEndTurnInputDto extends createZodDto(
   endPlayerTurnInputSchema,
 ) {}
 
-export class EndPlayerTurnOutputDto extends createZodDto(
+export class PlayableEntityEndTurnOutputDto extends createZodDto(
   endPlayerTurnOutputSchema,
 ) {}

@@ -13,6 +13,8 @@ import { PlayableEntityDeleteItemInputDto } from "src/modules/game/application/u
 import { PlayableEntityDeleteItemUseCase } from "src/modules/game/application/use-cases/playable-entity-delete-item/playable-entity-delete-item.uc";
 import { PlayableEntityDrinkPotionInputDto } from "src/modules/game/application/use-cases/playable-entity-drink-potion/playable-entity-drink-potion.dto";
 import { PlayableEntityDrinkPotionUseCase } from "src/modules/game/application/use-cases/playable-entity-drink-potion/playable-entity-drink-potion.uc";
+import { PlayableEntityEndTurnInputDto } from "src/modules/game/application/use-cases/playable-entity-end-turn/playable-entity-end-turn.dto";
+import { PlayableEntityEndTurnUseCase } from "src/modules/game/application/use-cases/playable-entity-end-turn/playable-entity-end-turn.uc";
 import { PlayableEntityLootItemInputDto } from "src/modules/game/application/use-cases/playable-entity-loot-item/playable-entity-loot-item.dto";
 import { PlayableEntityLootItemUseCase } from "src/modules/game/application/use-cases/playable-entity-loot-item/playable-entity-loot-item.uc";
 import {
@@ -29,8 +31,6 @@ import { ChestTrap } from "src/modules/game/domain/item/chest-trap/chest-trap.ab
 import { Potion } from "src/modules/game/domain/item/potion/potion.abstract";
 import { Spell } from "src/modules/game/domain/item/spell/spell.entity";
 import { Weapon } from "src/modules/game/domain/item/weapon/weapon.entity";
-import { EndPlayerTurnInputDto } from "../../../application/use-cases/end-player-turn/end-player-turn.dto";
-import { EndPlayerTurnUseCase } from "../../../application/use-cases/end-player-turn/end-player-turn.uc";
 import { PlayableEntityAttackInputDto } from "../../../application/use-cases/playable-entity-attack/playable-entity-attack.dto";
 import { PlayableEntityAttackUseCase } from "../../../application/use-cases/playable-entity-attack/playable-entity-attack.uc";
 import { PlayableEntityMoveInputDto } from "../../../application/use-cases/playable-entity-move/playable-entity-move.dto";
@@ -47,7 +47,7 @@ import { ItemPresenter } from "../services/item.presenter";
 export class GameSubscriberGateway {
   constructor(
     private readonly itemPresenter: ItemPresenter,
-    private readonly endPlayerTurnUseCase: EndPlayerTurnUseCase,
+    private readonly playableEntityEndTurnUseCase: PlayableEntityEndTurnUseCase,
     private readonly playableEntityMoveUseCase: PlayableEntityMoveUseCase,
     private readonly openDoorUseCase: PlayableEntityOpenDoorUseCase,
     private readonly playableEntityAttackUseCase: PlayableEntityAttackUseCase,
@@ -60,11 +60,11 @@ export class GameSubscriberGateway {
 
   @SubscribeMessage(ClientGameEvent.PlayableEntityTurnEnds)
   public async endPlayerTurn(
-    @MessageBody() endPlayerTurnInputDto: EndPlayerTurnInputDto,
+    @MessageBody() playableEntityEndTurnInputDto: PlayableEntityEndTurnInputDto,
     @ConnectedSocket() client: ServerSocket,
   ): Promise<void> {
-    await this.endPlayerTurnUseCase.execute({
-      ...endPlayerTurnInputDto,
+    await this.playableEntityEndTurnUseCase.execute({
+      ...playableEntityEndTurnInputDto,
       userId: client.data.userId,
     });
   }

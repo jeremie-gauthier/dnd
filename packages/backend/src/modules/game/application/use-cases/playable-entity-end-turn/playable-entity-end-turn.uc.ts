@@ -12,7 +12,7 @@ import {
 import { DomainEventsDispatcherService } from "../../services/domain-events-dispatcher.service";
 
 @Injectable()
-export class EndPlayerTurnUseCase implements UseCase {
+export class PlayableEntityEndTurnUseCase implements UseCase {
   constructor(
     @Inject(GAME_REPOSITORY)
     private readonly gameRepository: GameRepository,
