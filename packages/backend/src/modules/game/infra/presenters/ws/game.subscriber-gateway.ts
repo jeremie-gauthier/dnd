@@ -20,6 +20,8 @@ import {
   PlayableEntityOpenChestOutputDto,
 } from "src/modules/game/application/use-cases/playable-entity-open-chest/playable-entity-open-chest.dto";
 import { PlayableEntityOpenChestUseCase } from "src/modules/game/application/use-cases/playable-entity-open-chest/playable-entity-open-chest.uc";
+import { PlayableEntityOpenDoorInputDto } from "src/modules/game/application/use-cases/playable-entity-open-door/playable-entity-open-door.dto";
+import { PlayableEntityOpenDoorUseCase } from "src/modules/game/application/use-cases/playable-entity-open-door/playable-entity-open-door.uc";
 import { PlayableEntitySwapItemsInputDto } from "src/modules/game/application/use-cases/playable-entity-swap-items/playable-entity-swap-items.dto";
 import { PlayableEntitySwapItemsUseCase } from "src/modules/game/application/use-cases/playable-entity-swap-items/playable-entity-swap-items.uc";
 import { Artifact } from "src/modules/game/domain/item/artifact/artifact.abstract";
@@ -29,8 +31,6 @@ import { Spell } from "src/modules/game/domain/item/spell/spell.entity";
 import { Weapon } from "src/modules/game/domain/item/weapon/weapon.entity";
 import { EndPlayerTurnInputDto } from "../../../application/use-cases/end-player-turn/end-player-turn.dto";
 import { EndPlayerTurnUseCase } from "../../../application/use-cases/end-player-turn/end-player-turn.uc";
-import { OpenDoorInputDto } from "../../../application/use-cases/open-door/open-door.dto";
-import { OpenDoorUseCase } from "../../../application/use-cases/open-door/open-door.uc";
 import { PlayableEntityAttackInputDto } from "../../../application/use-cases/playable-entity-attack/playable-entity-attack.dto";
 import { PlayableEntityAttackUseCase } from "../../../application/use-cases/playable-entity-attack/playable-entity-attack.uc";
 import { PlayableEntityMoveInputDto } from "../../../application/use-cases/playable-entity-move/playable-entity-move.dto";
@@ -49,7 +49,7 @@ export class GameSubscriberGateway {
     private readonly itemPresenter: ItemPresenter,
     private readonly endPlayerTurnUseCase: EndPlayerTurnUseCase,
     private readonly playableEntityMoveUseCase: PlayableEntityMoveUseCase,
-    private readonly openDoorUseCase: OpenDoorUseCase,
+    private readonly openDoorUseCase: PlayableEntityOpenDoorUseCase,
     private readonly playableEntityAttackUseCase: PlayableEntityAttackUseCase,
     private readonly playableEntityDeleteItemUseCase: PlayableEntityDeleteItemUseCase,
     private readonly playableEntitySwapItemsUseCase: PlayableEntitySwapItemsUseCase,
@@ -82,12 +82,13 @@ export class GameSubscriberGateway {
 
   @SubscribeMessage(ClientGameEvent.PlayableEntityOpenDoor)
   public async openDoor(
-    @MessageBody() openDoorInputDto: OpenDoorInputDto,
+    @MessageBody()
+    playableEntityOpenDoorInputDto: PlayableEntityOpenDoorInputDto,
     @ConnectedSocket() client: ServerSocket,
   ): Promise<void> {
     await this.openDoorUseCase.execute({
       userId: client.data.userId,
-      ...openDoorInputDto,
+      ...playableEntityOpenDoorInputDto,
     });
   }
 
