@@ -45,13 +45,14 @@ export class Trap extends TileInteractiveEntity<Data> {
       }),
     );
 
-    if (playableEntity.conditions.hasTrapProtection()) {
-      playableEntity.conditions.applyAllNextTrapOrChestTrap({
-        playableEntityAffected: playableEntity,
-      });
-      playableEntity.conditions.clearExhausted({
-        playableEntityAffected: playableEntity,
-      });
+    if (
+      playableEntity.conditions.some((condition) =>
+        condition.isTrapProtection(),
+      )
+    ) {
+      for (const condition of playableEntity.conditions) {
+        condition.onBeforeTrapOrChestTrapTriggered();
+      }
     } else {
       playableEntity.takeDirectDamage({ amount: 1 });
       playableEntity.addDomainEvents(playableEntity.collectDomainEvents());

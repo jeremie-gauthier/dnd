@@ -1,6 +1,6 @@
 import { Attack } from "../attack/attack.entity";
 import { Item } from "../item/item.abstract";
-import { Stopped } from "../playable-entities/playable-entity/conditions/condition/stopped.condition";
+import { Stopped } from "../playable-entities/playable-entity/conditions/stopped.condition";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
 import { Perk } from "./perk.abstract";
 
@@ -18,9 +18,9 @@ export class Frozen extends Perk {
     defender: Playable;
   }): void {
     if (!defender.isUndead()) {
-      defender.conditions.add({
-        condition: new Stopped({ remainingTurns: 1 }),
-      });
+      defender.addCondition(
+        new Stopped({ remainingTurns: 1, playableEntityAffected: defender }),
+      );
     }
   }
 }

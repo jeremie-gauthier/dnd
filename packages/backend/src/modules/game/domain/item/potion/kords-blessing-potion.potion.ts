@@ -1,5 +1,5 @@
 import { Game } from "../../game/game.aggregate";
-import { DoubleWeaponDamage } from "../../playable-entities/playable-entity/conditions/condition/double-weapon-damage.condition";
+import { DoubleWeaponDamage } from "../../playable-entities/playable-entity/conditions/double-weapon-damage.condition";
 import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
 import { Potion } from "./potion.abstract";
 
@@ -14,8 +14,11 @@ export class KordsBlessingPotion extends Potion {
     playableEntity: Hero;
     game: Game;
   }): void {
-    playableEntity.conditions.add({
-      condition: new DoubleWeaponDamage({ remainingTurns: 1 }),
-    });
+    playableEntity.addCondition(
+      new DoubleWeaponDamage({
+        remainingTurns: 1,
+        playableEntityAffected: playableEntity,
+      }),
+    );
   }
 }

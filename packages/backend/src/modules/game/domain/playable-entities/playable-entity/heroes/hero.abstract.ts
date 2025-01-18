@@ -15,7 +15,7 @@ import { Weapon } from "../../../item/weapon/weapon.entity";
 import { Trap } from "../../../tile/tile-entity/interactive/trap.entity";
 import { Tile } from "../../../tile/tile.entity";
 import { ActionHistory } from "../actions-history.interface";
-import { Conditions } from "../conditions/conditions.aggregate";
+import { Condition } from "../conditions/condition.base";
 import { Initiative } from "../initiative/initiative.vo";
 import { Playable } from "../playable-entity.abstract";
 import { PlayerStatus } from "../player-status/player-status.vo";
@@ -55,7 +55,7 @@ type Data = {
 
   inventory: Inventory;
   actionsDoneThisTurn: Array<ActionHistory>;
-  conditions: Conditions;
+  conditions: Array<Condition>;
 };
 
 export abstract class Hero extends Playable<Data> {
@@ -106,7 +106,7 @@ export abstract class Hero extends Playable<Data> {
         ]),
       }),
     ),
-    conditions: z.instanceof(Conditions),
+    conditions: z.array(z.instanceof(Condition)),
   });
 
   constructor(rawData: Omit<Data, "faction">) {
@@ -168,13 +168,8 @@ export abstract class Hero extends Playable<Data> {
     weapon,
   }: { weapon: Weapon; attackId: Attack["id"] }) {
     const result = weapon.use({ attackId });
-    if (this.conditions.hasDoubleWeaponDamage()) {
-      result.sumResult *= 2;
-
-      this.conditions.applyAllNextOutgoingWeaponAttack({
-        playableEntityAffected: this,
-      });
-      this.conditions.clearExhausted({ playableEntityAffected: this });
+    for (const condition of this.conditions) {
+      condition.onBeforeOutgoingWeaponAttack(result);
     }
     return result;
   }
@@ -234,7 +229,7 @@ export abstract class Hero extends Playable<Data> {
       },
       inventory: this._data.inventory.toPlain(),
       actionsDoneThisTurn: this._data.actionsDoneThisTurn,
-      conditions: this._data.conditions.toPlain(),
+      conditions: this._data.conditions.map((condition) => condition.toPlain()),
     };
   }
 }

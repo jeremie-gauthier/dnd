@@ -357,17 +357,13 @@ export class Game extends AggregateRoot<Data> {
       itemUsed: attackItem,
     });
 
-    defender.conditions.applyAllNextIncomingAttackConditions({
-      playableEntityAffected: defender,
-    });
+    for (const condition of defender.conditions) {
+      condition.onBeforeIncomingAttack();
+    }
 
     defender.takeDamage({ amount: attackResult.attackResult.sumResult });
     this.addDomainEvents(defender.collectDomainEvents());
     this.addDomainEvents(attacker.collectDomainEvents());
-
-    defender.conditions.clearExhausted({
-      playableEntityAffected: defender,
-    });
   }
 
   private mustHaveTargetInRange({
@@ -453,16 +449,14 @@ export class Game extends AggregateRoot<Data> {
       });
     }
 
-    const isHeroProtectedAgainstTraps =
-      playingEntity.conditions.hasTrapProtection();
+    const isHeroProtectedAgainstTraps = playingEntity.conditions.some(
+      (condition) => condition.isTrapProtection(),
+    );
 
     if (isHeroProtectedAgainstTraps) {
-      playingEntity.conditions.applyAllNextTrapOrChestTrap({
-        playableEntityAffected: playingEntity,
-      });
-      playingEntity.conditions.clearExhausted({
-        playableEntityAffected: playingEntity,
-      });
+      for (const condition of playingEntity.conditions) {
+        condition.onBeforeTrapOrChestTrapTriggered();
+      }
     } else {
       chestTrap.use({
         entityThatOpenedTheChest: playingEntity as Hero,

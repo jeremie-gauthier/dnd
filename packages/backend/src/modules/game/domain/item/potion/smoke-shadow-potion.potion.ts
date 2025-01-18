@@ -1,5 +1,5 @@
 import { Game } from "../../game/game.aggregate";
-import { DoubleMovementPoints } from "../../playable-entities/playable-entity/conditions/condition/double-movement-points.condition";
+import { DoubleMovementPoints } from "../../playable-entities/playable-entity/conditions/double-movement-points.condition";
 import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
 import { Potion } from "./potion.abstract";
 
@@ -25,13 +25,12 @@ export class SmokeShadowPotion extends Potion {
       );
 
     for (const hero of heroesInTheRoom) {
-      const doubleMovementPointsCondition = new DoubleMovementPoints({
-        remainingTurns: 2,
-      });
-      doubleMovementPointsCondition.apply({
-        playableEntityAffected: hero,
-      });
-      hero.conditions.add({ condition: doubleMovementPointsCondition });
+      hero.addCondition(
+        new DoubleMovementPoints({
+          remainingTurns: 2,
+          playableEntityAffected: hero,
+        }),
+      );
     }
   }
 }

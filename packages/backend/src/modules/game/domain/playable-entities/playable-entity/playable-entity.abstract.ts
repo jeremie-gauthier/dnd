@@ -16,7 +16,7 @@ import { Weapon } from "../../item/weapon/weapon.entity";
 import { Trap } from "../../tile/tile-entity/interactive/trap.entity";
 import { Tile } from "../../tile/tile.entity";
 import { ActionHistory } from "./actions-history.interface";
-import { Conditions } from "./conditions/conditions.aggregate";
+import { Condition } from "./conditions/condition.base";
 import { Hero } from "./heroes/hero.abstract";
 import { Initiative } from "./initiative/initiative.vo";
 import { Monster } from "./monster.entity";
@@ -56,7 +56,7 @@ type Data = {
 
   inventory: Inventory;
   actionsDoneThisTurn: Array<ActionHistory>;
-  conditions: Conditions;
+  conditions: Array<Condition>;
 };
 
 export abstract class Playable<
@@ -131,6 +131,16 @@ export abstract class Playable<
 
   public get conditions() {
     return this._data.conditions;
+  }
+
+  public addCondition(condition: Condition) {
+    this._data.conditions.push(condition);
+  }
+
+  public removeCondition(conditionToRemove: Condition) {
+    this._data.conditions = this._data.conditions.filter(
+      (condition) => !condition.equals(conditionToRemove),
+    );
   }
 
   public isHero(): this is Hero {
@@ -209,7 +219,9 @@ export abstract class Playable<
   }
 
   public endTurn() {
-    this.conditions.applyAllEndTurnConditions({ playableEntityAffected: this });
+    for (const condition of this.conditions) {
+      condition.onEndOfTurn();
+    }
     this._data.status = this._data.status.advanceTo("IDLE");
     this.addDomainEvent(
       new PlayableEntityTurnEndedDomainEvent({
@@ -223,9 +235,10 @@ export abstract class Playable<
     this._data.characteristic.actionPoints =
       this._data.characteristic.baseActionPoints;
     this._data.actionsDoneThisTurn = [];
-    this.conditions.applyAllStartTurnConditions({
-      playableEntityAffected: this,
-    });
+    for (const condition of this.conditions) {
+      condition.onStartOfTurn();
+    }
+
     this.addDomainEvent(
       new PlayableEntityTurnStartedDomainEvent({
         playableEntity: this.toPlain(),
@@ -316,6 +329,7 @@ export abstract class Playable<
     attackId: Attack["id"];
     attackItem: Weapon | Spell;
   }) {
+    // TODO: creer une class abstraite AttackItem pour Weapon et Spell
     if (attackItem.isSpell()) {
       const manaCost = attackItem.getManaCost({ playableEntity: this });
       this.mustHaveEnoughManaPoints({ required: manaCost });

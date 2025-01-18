@@ -5,7 +5,6 @@ import { z } from "zod";
 import { Coord } from "../../coord/coord.vo";
 import { GameMaster } from "../../game-master/game-master.entity";
 import { Inventory } from "../../inventory/inventory.entity";
-import { Conditions } from "../../playable-entities/playable-entity/conditions/conditions.aggregate";
 import { Initiative } from "../../playable-entities/playable-entity/initiative/initiative.vo";
 import { Monster } from "../../playable-entities/playable-entity/monster.entity";
 import { PlayerStatus } from "../../playable-entities/playable-entity/player-status/player-status.vo";
@@ -100,7 +99,7 @@ export class MonsterTemplate extends Entity<Data> {
       name: `${this._data.race}-${randomId.slice(0, 4)}`,
       status: new PlayerStatus("IDLE"),
       actionsDoneThisTurn: [],
-      conditions: new Conditions({ values: [] }),
+      conditions: [],
     });
   }
 }
