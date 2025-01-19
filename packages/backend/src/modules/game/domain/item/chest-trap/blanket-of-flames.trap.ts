@@ -7,7 +7,7 @@ export class BlanketOfFlames extends ChestTrap {
     super({ level: 3, name: "blanket_of_flames_1" });
   }
 
-  public use(_: {
+  public override use(_: {
     entityThatOpenedTheChest: Hero;
     game: Game;
   }): void {

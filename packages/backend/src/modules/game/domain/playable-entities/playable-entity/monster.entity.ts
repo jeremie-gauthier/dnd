@@ -12,7 +12,7 @@ import { Spell } from "../../item/spell/spell.entity";
 import { Weapon } from "../../item/weapon/weapon.entity";
 import { Tile } from "../../tile/tile.entity";
 import { ActionHistory } from "./actions-history.interface";
-import { Condition } from "./conditions/condition.base";
+import { Condition } from "./conditions/condition.entity";
 import { Initiative } from "./initiative/initiative.vo";
 import { Playable } from "./playable-entity.abstract";
 import { PlayableEntityError } from "./playable-entity.error";

@@ -7,7 +7,7 @@ export class YonddallaAmulet extends Artifact {
     super({ level: 1, name: "yonddalla_amulet_1", hasSavingThrow: false });
   }
 
-  public use(_: {
+  public override use(_: {
     playableEntity: Playable;
     board: Board;
   }): void {

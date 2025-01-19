@@ -7,7 +7,7 @@ export class BrutalBetrayal extends ChestTrap {
     super({ level: 2, name: "brutal_betrayal_1" });
   }
 
-  public use(_: {
+  public override use(_: {
     entityThatOpenedTheChest: Hero;
     game: Game;
   }): void {

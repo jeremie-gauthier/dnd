@@ -7,7 +7,7 @@ export class RingOfShadows extends Artifact {
     super({ level: 1, name: "ring_of_shadows_1", hasSavingThrow: true });
   }
 
-  public use(_: {
+  public override use(_: {
     playableEntity: Playable;
     board: Board;
   }): void {

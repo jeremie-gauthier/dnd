@@ -16,7 +16,7 @@ import { Weapon } from "../../item/weapon/weapon.entity";
 import { Trap } from "../../tile/tile-entity/interactive/trap.entity";
 import { Tile } from "../../tile/tile.entity";
 import { ActionHistory } from "./actions-history.interface";
-import { Condition } from "./conditions/condition.base";
+import { Condition } from "./conditions/condition.entity";
 import { Hero } from "./heroes/hero.abstract";
 import { Initiative } from "./initiative/initiative.vo";
 import { Monster } from "./monster.entity";
@@ -304,7 +304,7 @@ export abstract class Playable<
     }
   }
 
-  protected mustHaveEnoughManaPoints({ required }: { required: number }) {
+  public mustHaveEnoughManaPoints({ required }: { required: number }) {
     if (required > this._data.characteristic.manaPoints) {
       throw new PlayableEntityError({
         name: "NOT_ENOUGH_MANA_POINTS",
@@ -318,41 +318,6 @@ export abstract class Playable<
       throw new PlayableEntityError({
         name: "FORBIDDEN_ACTION",
         message: `Playable entity ${this.id} is not looting anything`,
-      });
-    }
-  }
-
-  public getAttackResult({
-    attackId,
-    attackItem,
-  }: {
-    attackId: Attack["id"];
-    attackItem: Weapon | Spell;
-  }) {
-    // TODO: creer une class abstraite AttackItem pour Weapon et Spell
-    if (attackItem.isSpell()) {
-      const manaCost = attackItem.getManaCost({ playableEntity: this });
-      this.mustHaveEnoughManaPoints({ required: manaCost });
-      return {
-        type: attackItem.type,
-        attackResult: this.getSpellAttackResult({
-          attackId,
-          spell: attackItem,
-        }),
-        manaCost,
-      };
-    } else if (attackItem.isWeapon()) {
-      return {
-        type: attackItem.type,
-        attackResult: this.getWeaponAttackResult({
-          attackId,
-          weapon: attackItem,
-        }),
-      };
-    } else {
-      throw new PlayableEntityError({
-        name: "CANNOT_ATTACK_WITH_A_NON_ATTACK_ITEM",
-        message: `Cannot attack with such item (${attackItem})`,
       });
     }
   }

@@ -8,7 +8,7 @@ export class SmokeShadowPotion extends Potion {
     super({ level: 1, name: "smoke_shadow_potion_1" });
   }
 
-  public use({
+  public override use({
     playableEntity,
     game,
   }: {

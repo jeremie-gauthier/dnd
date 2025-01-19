@@ -7,7 +7,7 @@ export class OrbOfLucidVision extends Artifact {
     super({ level: 0, name: "orb_of_lucid_vision_1", hasSavingThrow: false });
   }
 
-  public use(_: {
+  public override use(_: {
     playableEntity: Playable;
     board: Board;
   }): void {

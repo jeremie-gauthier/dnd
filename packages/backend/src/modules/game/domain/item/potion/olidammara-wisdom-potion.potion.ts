@@ -8,7 +8,7 @@ export class OlidammaraWisdomPotion extends Potion {
     super({ level: 1, name: "olidammara_wisdom_potion_1" });
   }
 
-  public use({
+  public override use({
     playableEntity,
   }: {
     playableEntity: Hero;

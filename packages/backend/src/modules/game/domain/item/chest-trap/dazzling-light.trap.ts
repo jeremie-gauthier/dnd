@@ -7,7 +7,7 @@ export class DazzlingLight extends ChestTrap {
     super({ level: 1, name: "dazzling_light_1" });
   }
 
-  public use({
+  public override use({
     entityThatOpenedTheChest,
   }: {
     entityThatOpenedTheChest: Hero;

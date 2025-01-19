@@ -8,7 +8,7 @@ export class KordsBlessingPotion extends Potion {
     super({ level: 1, name: "kords_blessing_potion_1" });
   }
 
-  public use({
+  public override use({
     playableEntity,
   }: {
     playableEntity: Hero;

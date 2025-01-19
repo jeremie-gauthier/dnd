@@ -1,8 +1,9 @@
 import { ItemManaCostJson } from "@dnd/shared";
 import { z } from "zod";
 import { Attack } from "../../attack/attack.entity";
+import { Board } from "../../board/board.entity";
 import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
-import { Item } from "../item.abstract";
+import { AttackItem } from "../attack-item.abstract";
 import { SpellError } from "./spell.error";
 
 type Data = {
@@ -13,44 +14,64 @@ type Data = {
   readonly manaCost: ItemManaCostJson;
 };
 
-export class Spell extends Item<Data> {
-  private static schema = z.object({
-    type: z.literal("Spell").optional().default("Spell"),
-    name: z.string(),
-    level: z.number().min(0).max(3),
-    attacks: z.array(z.instanceof(Attack)),
-    manaCost: z.object({
-      CLERIC: z.number().min(0).optional(),
-      SORCERER: z.number().min(0).optional(),
+export class Spell extends AttackItem<Data> {
+  private static schema = AttackItem.attackItemBaseSchema.merge(
+    z.object({
+      type: z.literal("Spell").optional().default("Spell"),
+      manaCost: z.object({
+        CLERIC: z.number().min(0).optional(),
+        SORCERER: z.number().min(0).optional(),
+      }),
     }),
-  });
+  );
 
   constructor(rawData: Omit<Data, "type">) {
     const data = Spell.schema.parse(rawData);
     super(data);
   }
 
-  get type() {
-    return this._data.type;
-  }
-
-  public hasAttack({ attackId }: { attackId: Attack["id"] }) {
-    return this._data.attacks.some((attack) => attack.id === attackId);
-  }
-
-  public use({
+  public override mustValidateAttack({
+    attacker,
+    defender,
     attackId,
-  }: { attackId: Attack["id"] }): ReturnType<Attack["roll"]> {
+    board,
+  }: {
+    attacker: Playable;
+    defender: Playable;
+    attackId: Attack["id"];
+    board: Board;
+  }): void {
     const attack = this.getAttackOrThrow({ attackId });
-    return attack.roll();
+    this.mustHaveTargetInRange({
+      attacker,
+      range: attack.range,
+      targetCoord: defender.coord,
+      board,
+    });
+
+    const manaCost = this.getManaCost({ playableEntity: attacker });
+    attacker.mustHaveEnoughManaPoints({ required: manaCost });
   }
 
-  public getAttackOrThrow({ attackId }: { attackId: Attack["id"] }) {
-    const attack = this._data.attacks.find(({ id }) => id === attackId);
-    if (!attack) {
-      throw new Error("Attack does not exists on this Spell");
-    }
-    return attack;
+  public override getAttackResult({
+    attacker,
+    attackId,
+  }: { attacker: Playable; attackId: Attack["id"] }): {
+    type: AttackItem["type"];
+    attackResult: ReturnType<Attack["roll"]>;
+  } {
+    const attackResult = attacker.getSpellAttackResult({
+      attackId,
+      spell: this,
+    });
+
+    const manaCost = this.getManaCost({ playableEntity: attacker });
+    attacker.consumeMana({ amount: manaCost });
+
+    return {
+      type: this.type,
+      attackResult,
+    };
   }
 
   public getManaCost({ playableEntity }: { playableEntity: Playable }): number {

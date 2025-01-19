@@ -11,7 +11,6 @@ type Data = {
   tiles: Array<Tile>;
 };
 
-// TODO: pourrait etre un aggregate plutot qu'une entity
 export class Board extends Entity<Data> {
   private static schema = z
     .object({

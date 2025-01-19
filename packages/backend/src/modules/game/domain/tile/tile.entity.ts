@@ -14,7 +14,6 @@ type Data = {
   isStartingTile?: true;
 };
 
-// TODO: pourrait etre un aggregate plutot qu'une entity
 export class Tile extends Entity<Data> {
   private static schema = z.object({
     coord: z.instanceof(Coord),

@@ -1,4 +1,5 @@
-import { Entity, PlainData } from "src/modules/shared/domain/entity";
+import { Entity } from "src/modules/shared/domain/entity";
+import { z } from "zod";
 import { ChestTrap } from "./chest-trap/chest-trap.abstract";
 import { ItemError } from "./item.error";
 import { Potion } from "./potion/potion.abstract";
@@ -15,8 +16,13 @@ type Data = {
 export abstract class Item<
   ChildData extends Data = Data,
 > extends Entity<ChildData> {
+  protected static baseSchema = z.object({
+    type: z.enum(["Weapon", "Spell", "ChestTrap", "Potion", "Artifact"]),
+    name: z.string(),
+    level: z.number().min(0).max(3),
+  });
+
   public abstract use(_: unknown): void;
-  public abstract toPlain(): PlainData<ChildData>;
 
   constructor(rawData: ChildData) {
     super(rawData, rawData.name);

@@ -7,7 +7,7 @@ export class LightHealingPotion extends Potion {
     super({ level: 1, name: "light_healing_potion_1" });
   }
 
-  public use({
+  public override use({
     playableEntity,
   }: {
     playableEntity: Hero;

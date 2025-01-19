@@ -7,7 +7,7 @@ export class BoccobsCloak extends Artifact {
     super({ level: 0, name: "boccobs_cloak_1", hasSavingThrow: true });
   }
 
-  public use(_: {
+  public override use(_: {
     playableEntity: Playable;
     board: Board;
   }): void {

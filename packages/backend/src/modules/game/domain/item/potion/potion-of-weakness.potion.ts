@@ -8,7 +8,7 @@ export class PotionOfWeakness extends Potion {
     super({ level: 1, name: "potion_of_weakness_1" });
   }
 
-  public use({
+  public override use({
     game,
   }: {
     playableEntity: Hero;

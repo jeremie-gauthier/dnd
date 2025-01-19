@@ -7,7 +7,7 @@ export class SmotheringMist extends ChestTrap {
     super({ level: 1, name: "smothering_mist_1" });
   }
 
-  public use({
+  public override use({
     entityThatOpenedTheChest,
     game,
   }: {

@@ -10,11 +10,11 @@ type Data = {
 };
 
 export abstract class Potion extends Item<Data> {
-  private static schema = z.object({
-    type: z.literal("Potion").optional().default("Potion"),
-    name: z.string(),
-    level: z.number().min(0).max(3),
-  });
+  private static schema = Item.baseSchema.merge(
+    z.object({
+      type: z.literal("Potion").optional().default("Potion"),
+    }),
+  );
 
   constructor(rawData: Omit<Data, "type">) {
     const data = Potion.schema.parse(rawData);

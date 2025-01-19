@@ -8,7 +8,7 @@ export class InitiativePotion extends Potion {
     super({ level: 1, name: "initiative_potion_1" });
   }
 
-  public use({
+  public override use({
     playableEntity,
     game,
   }: {
