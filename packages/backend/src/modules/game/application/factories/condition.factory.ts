@@ -1,5 +1,5 @@
 import { BrokenArmor } from "../../domain/playable-entities/playable-entity/conditions/broken-armor.condition";
-import { Condition } from "../../domain/playable-entities/playable-entity/conditions/condition.base";
+import { Condition } from "../../domain/playable-entities/playable-entity/conditions/condition.entity";
 import { DoubleMovementPoints } from "../../domain/playable-entities/playable-entity/conditions/double-movement-points.condition";
 import { DoubleWeaponDamage } from "../../domain/playable-entities/playable-entity/conditions/double-weapon-damage.condition";
 import { Stopped } from "../../domain/playable-entities/playable-entity/conditions/stopped.condition";

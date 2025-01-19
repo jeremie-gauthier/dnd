@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { Playable } from "../playable-entity.abstract";
-import { Condition } from "./condition.base";
+import { Condition } from "./condition.entity";
 
 type Data = {
   readonly name: "stopped";
