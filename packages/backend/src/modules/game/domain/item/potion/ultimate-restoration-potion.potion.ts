@@ -9,7 +9,7 @@ export class UltimateRestorationPotion extends Potion {
     super({ level: 1, name: "ultimate_restoration_potion_1" });
   }
 
-  public use({
+  public override use({
     playableEntity,
     game,
   }: {

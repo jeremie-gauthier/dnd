@@ -7,7 +7,7 @@ export class BarkSkinCloak extends Artifact {
     super({ level: 1, name: "bark_skin_cloak_1", hasSavingThrow: true });
   }
 
-  public use(_: {
+  public override use(_: {
     playableEntity: Playable;
     board: Board;
   }): void {

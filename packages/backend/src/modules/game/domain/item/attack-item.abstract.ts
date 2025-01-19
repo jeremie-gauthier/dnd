@@ -49,7 +49,7 @@ export abstract class AttackItem<
     return this._data.attacks.some((attack) => attack.id === attackId);
   }
 
-  public use({
+  public override use({
     attackId,
   }: { attackId: Attack["id"] }): ReturnType<Attack["roll"]> {
     const attack = this.getAttackOrThrow({ attackId });

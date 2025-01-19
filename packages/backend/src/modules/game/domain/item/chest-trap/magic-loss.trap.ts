@@ -7,7 +7,7 @@ export class MagicLoss extends ChestTrap {
     super({ level: 3, name: "magic_loss_1" });
   }
 
-  public use(_: {
+  public override use(_: {
     entityThatOpenedTheChest: Hero;
     game: Game;
   }): void {

@@ -10,7 +10,7 @@ export class CallFromTheGrave extends ChestTrap {
     super({ level: 1, name: "call_from_the_grave_1" });
   }
 
-  public use({
+  public override use({
     entityThatOpenedTheChest,
     game,
   }: {

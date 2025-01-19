@@ -10,7 +10,7 @@ export class VoicesOfTheDamned extends ChestTrap {
     super({ level: 1, name: "voices_of_the_damned_1" });
   }
 
-  public use({
+  public override use({
     entityThatOpenedTheChest,
     game,
   }: {

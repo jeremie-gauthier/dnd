@@ -7,7 +7,7 @@ export class SummonersHorn extends Artifact {
     super({ level: 1, name: "summoners_horn_1", hasSavingThrow: true });
   }
 
-  public use(_: {
+  public override use(_: {
     playableEntity: Playable;
     board: Board;
   }): void {

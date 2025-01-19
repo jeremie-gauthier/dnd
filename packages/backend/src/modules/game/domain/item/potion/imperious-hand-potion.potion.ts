@@ -9,7 +9,7 @@ export class ImperiousHandPotion extends Potion {
     super({ level: 1, name: "imperious_hand_potion_1" });
   }
 
-  public use({
+  public override use({
     game,
   }: {
     playableEntity: Hero;

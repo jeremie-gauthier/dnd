@@ -25,11 +25,7 @@ export class Weapon extends AttackItem<Data> {
     super(data);
   }
 
-  get type() {
-    return this._data.type;
-  }
-
-  public mustValidateAttack({
+  public override mustValidateAttack({
     attacker,
     defender,
     attackId,
@@ -49,7 +45,7 @@ export class Weapon extends AttackItem<Data> {
     });
   }
 
-  public getAttackResult({
+  public override getAttackResult({
     attacker,
     attackId,
   }: { attacker: Playable; attackId: Attack["id"] }): {

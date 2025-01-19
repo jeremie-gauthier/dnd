@@ -7,7 +7,7 @@ export class PartialRestorationPotion extends Potion {
     super({ level: 1, name: "partial_restoration_potion_1" });
   }
 
-  public use({
+  public override use({
     playableEntity,
   }: {
     playableEntity: Hero;
