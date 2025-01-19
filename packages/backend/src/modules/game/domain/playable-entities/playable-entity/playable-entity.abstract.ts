@@ -80,6 +80,8 @@ export abstract class Playable<
   };
   public abstract act(_: { action: ActionHistory["name"] }): void;
 
+  public abstract getSpellManaCost(_: { spell: Spell }): number;
+
   constructor(rawData: ChildData) {
     super(rawData, rawData.id);
   }

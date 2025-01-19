@@ -4,7 +4,6 @@ import { Attack } from "../../attack/attack.entity";
 import { Board } from "../../board/board.entity";
 import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
 import { AttackItem } from "../attack-item.abstract";
-import { SpellError } from "./spell.error";
 
 type Data = {
   readonly type: "Spell";
@@ -30,6 +29,10 @@ export class Spell extends AttackItem<Data> {
     super(data);
   }
 
+  public get manaCost() {
+    return this._data.manaCost;
+  }
+
   public override mustValidateAttack({
     attacker,
     defender,
@@ -49,7 +52,7 @@ export class Spell extends AttackItem<Data> {
       board,
     });
 
-    const manaCost = this.getManaCost({ playableEntity: attacker });
+    const manaCost = attacker.getSpellManaCost({ spell: this });
     attacker.mustHaveEnoughManaPoints({ required: manaCost });
   }
 
@@ -65,33 +68,13 @@ export class Spell extends AttackItem<Data> {
       spell: this,
     });
 
-    const manaCost = this.getManaCost({ playableEntity: attacker });
+    const manaCost = attacker.getSpellManaCost({ spell: this });
     attacker.consumeMana({ amount: manaCost });
 
     return {
       type: this.type,
       attackResult,
     };
-  }
-
-  public getManaCost({ playableEntity }: { playableEntity: Playable }): number {
-    if (playableEntity.isHero()) {
-      const manaCost = this._data.manaCost[playableEntity.class];
-      if (!manaCost) {
-        throw new SpellError({
-          name: "CANNOT_CAST_SPELL",
-          message: `A ${playableEntity.class} cannot cast spell ${this.id}`,
-        });
-      }
-      return manaCost;
-    } else if (playableEntity.isMonster()) {
-      return 0;
-    } else {
-      throw new SpellError({
-        name: "CANNOT_CAST_SPELL",
-        message: `Playable entity ${playableEntity.id} cannot cast spell ${this.id}`,
-      });
-    }
   }
 
   public override toPlain() {

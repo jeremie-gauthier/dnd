@@ -18,6 +18,7 @@ import { ActionHistory } from "../actions-history.interface";
 import { Condition } from "../conditions/condition.entity";
 import { Initiative } from "../initiative/initiative.vo";
 import { Playable } from "../playable-entity.abstract";
+import { PlayableEntityError } from "../playable-entity.error";
 import { PlayerStatus } from "../player-status/player-status.vo";
 
 type Data = {
@@ -116,6 +117,17 @@ export abstract class Hero extends Playable<Data> {
 
   public get class() {
     return this._data.class;
+  }
+
+  public override getSpellManaCost({ spell }: { spell: Spell }): number {
+    const manaCost = spell.manaCost[this.class];
+    if (manaCost === undefined) {
+      throw new PlayableEntityError({
+        name: "CANNOT_CAST_SPELL",
+        message: `A ${this.class} cannot cast spell ${this.id}`,
+      });
+    }
+    return manaCost;
   }
 
   public override getMovePath({ path }: { path: Array<Tile> }) {

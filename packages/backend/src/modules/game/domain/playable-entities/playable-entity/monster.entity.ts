@@ -92,6 +92,10 @@ export class Monster extends Playable<Data> {
     super(data);
   }
 
+  public override getSpellManaCost(_: { spell: Spell }): number {
+    return 0;
+  }
+
   public override getMovePath({ path }: { path: Array<Tile> }) {
     const validatedPath: Tile[] = [];
 
