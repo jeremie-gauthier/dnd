@@ -1,4 +1,4 @@
-import { Entity, PlainData } from "src/modules/shared/domain/entity";
+import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { ChestTrap } from "./chest-trap/chest-trap.abstract";
 import { ItemError } from "./item.error";
@@ -23,7 +23,6 @@ export abstract class Item<
   });
 
   public abstract use(_: unknown): void;
-  public abstract toPlain(): PlainData<ChildData>;
 
   constructor(rawData: ChildData) {
     super(rawData, rawData.name);
