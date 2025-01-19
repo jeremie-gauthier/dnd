@@ -65,7 +65,6 @@ export class VoicesOfTheDamned extends ChestTrap {
     while (queue.length > 0) {
       const currentCoordPath = queue.shift()!;
 
-      console.log(currentCoordPath, queue.length);
       let currentTile: Tile;
       try {
         currentTile = board.getTileOrThrow({
