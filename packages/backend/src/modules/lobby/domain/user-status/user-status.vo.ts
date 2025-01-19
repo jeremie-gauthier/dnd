@@ -6,7 +6,7 @@ export class UserStatus extends ValueObject<boolean> {
     return this._data;
   }
 
-  public toPlain(): boolean {
+  public override toPlain(): boolean {
     return this._data;
   }
 

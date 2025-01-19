@@ -118,7 +118,7 @@ export abstract class Hero extends Playable<Data> {
     return this._data.class;
   }
 
-  public getMovePath({ path }: { path: Array<Tile> }) {
+  public override getMovePath({ path }: { path: Array<Tile> }) {
     const validatedPath: Tile[] = [];
     let trapTriggered: Trap | undefined = undefined;
 
@@ -155,7 +155,7 @@ export abstract class Hero extends Playable<Data> {
     return { validatedPath, movementPointsUsed, trapTriggered };
   }
 
-  public getSpellAttackResult({
+  public override getSpellAttackResult({
     attackId,
     spell,
   }: { spell: Spell; attackId: Attack["id"] }) {
@@ -163,18 +163,9 @@ export abstract class Hero extends Playable<Data> {
     return result;
   }
 
-  public getWeaponAttackResult({
-    attackId,
-    weapon,
-  }: { weapon: Weapon; attackId: Attack["id"] }) {
-    const result = weapon.use({ attackId });
-    for (const condition of this.conditions) {
-      condition.onBeforeOutgoingWeaponAttack(result);
-    }
-    return result;
-  }
-
-  public getDamagesTakenResult({ rawDamages }: { rawDamages: number }): {
+  public override getDamagesTakenResult({
+    rawDamages,
+  }: { rawDamages: number }): {
     damageTaken: number;
   } {
     const damageTaken = Math.max(
@@ -184,12 +175,23 @@ export abstract class Hero extends Playable<Data> {
     return { damageTaken };
   }
 
-  public act({ action }: { action: ActionHistory["name"] }): void {
+  public override act({ action }: { action: ActionHistory["name"] }): void {
     this.mustBeAlive();
     this.mustHaveActionPoints();
 
     this._data.actionsDoneThisTurn.push({ name: action });
     this._data.characteristic.actionPoints -= 1;
+  }
+
+  public override getWeaponAttackResult({
+    attackId,
+    weapon,
+  }: { weapon: Weapon; attackId: Attack["id"] }) {
+    const result = weapon.use({ attackId });
+    for (const condition of this.conditions) {
+      condition.onBeforeOutgoingWeaponAttack(result);
+    }
+    return result;
   }
 
   public revive({
@@ -201,7 +203,7 @@ export abstract class Hero extends Playable<Data> {
     this.regenMana({ amount: amountManaPoints });
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       id: this._data.id,
       faction: this._data.faction,

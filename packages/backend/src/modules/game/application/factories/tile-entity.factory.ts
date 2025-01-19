@@ -1,6 +1,6 @@
 import { GameBoardDeserialized } from "src/modules/shared/interfaces/game-board-deserialized.interface";
 import { Playable } from "../../domain/playable-entities/playable-entity/playable-entity.abstract";
-import { TileNonInteractiveEntity } from "../../domain/tile/tile-entity/non-interactive/non-interactive.abstract";
+import { TileNonInteractiveEntity } from "../../domain/tile/tile-entity/non-interactive/non-interactive.entity";
 import { TilePlayableEntity } from "../../domain/tile/tile-entity/playable/playable.entity";
 import { TileEntity } from "../../domain/tile/tile-entity/tile-entity.abstract";
 import { TileInteractiveEntityFactory } from "./tile-interactive-entity.factory";

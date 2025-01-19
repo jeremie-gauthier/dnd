@@ -5,7 +5,7 @@ import { PlayableEntityError } from "../playable-entity.error";
 import { Hero } from "./hero.abstract";
 
 export class Regdar extends Hero {
-  public getSpellAttackResult(_: {
+  public override getSpellAttackResult(_: {
     spell: Spell;
     attackId: Attack["id"];
   }): ReturnType<Attack["roll"]> {
@@ -15,7 +15,7 @@ export class Regdar extends Hero {
     });
   }
 
-  public getWeaponAttackResult({
+  public override getWeaponAttackResult({
     attackId,
     weapon,
   }: { weapon: Weapon; attackId: Attack["id"] }) {

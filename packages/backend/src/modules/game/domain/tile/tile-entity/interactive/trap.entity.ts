@@ -31,7 +31,9 @@ export class Trap extends TileInteractiveEntity<Data> {
     return this._data.canInteract;
   }
 
-  public onInteraction({ playableEntity }: { playableEntity: Playable }): void {
+  public override onInteraction({
+    playableEntity,
+  }: { playableEntity: Playable }): void {
     this.mustBeInteractive();
 
     this._data.isBlocking = false;
@@ -59,7 +61,7 @@ export class Trap extends TileInteractiveEntity<Data> {
     }
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       canInteract: this._data.canInteract,
       isBlocking: this._data.isBlocking,

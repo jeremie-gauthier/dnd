@@ -21,7 +21,7 @@ export class TileNonInteractiveEntity extends TileEntity<Data> {
     super(data);
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       type: this._data.type,
       kind: this._data.kind,

@@ -8,7 +8,7 @@ export class RerollOneDice extends Perk {
     super({ name: "reroll_one_dice", trigger: "once_per_attack" });
   }
 
-  public apply(_: {
+  public override apply(_: {
     dicesResults: ReturnType<Attack["roll"]>;
     itemUsed: Item;
     attacker: Playable;

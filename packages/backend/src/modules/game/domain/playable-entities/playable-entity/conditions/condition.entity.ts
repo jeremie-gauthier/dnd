@@ -51,7 +51,7 @@ export class Condition
     return this.name === "trapProtection";
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       name: this._data.name,
       remainingTurns: this._data.remainingTurns,

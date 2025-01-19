@@ -19,7 +19,7 @@ export class LobbiesMapper extends Mapper<LobbyPersistence, LobbyDomain> {
     super();
   }
 
-  public toDomain(persistence: LobbyPersistence): LobbyDomain {
+  public override toDomain(persistence: LobbyPersistence): LobbyDomain {
     return new LobbyDomain(this.env, {
       config: persistence.config,
       playableCharacters: persistence.playableCharacters.map(

@@ -8,7 +8,7 @@ export class GreaterHealing extends Perk {
     super({ name: "greater_healing", trigger: "special_dice" });
   }
 
-  public apply({
+  public override apply({
     dicesResults,
   }: {
     dicesResults: ReturnType<Attack["roll"]>;

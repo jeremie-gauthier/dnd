@@ -25,7 +25,7 @@ export class LobbyStatus extends ValueObject<Data> {
     return this._data;
   }
 
-  public toPlain() {
+  public override toPlain() {
     return this._data;
   }
 

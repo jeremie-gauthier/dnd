@@ -66,7 +66,7 @@ export class PlayableEntities extends Entity<Data> {
     return this._data.values.filter((value) => value.isMonster());
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       values: this._data.values.map((playableEntity) =>
         playableEntity.toPlain(),

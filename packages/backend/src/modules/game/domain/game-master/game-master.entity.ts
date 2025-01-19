@@ -15,7 +15,7 @@ export class GameMaster extends Entity<Data> {
     super(data, data.userId);
   }
 
-  public toPlain(): PlainData<Data> {
+  public override toPlain(): PlainData<Data> {
     return {
       userId: this._data.userId,
     };

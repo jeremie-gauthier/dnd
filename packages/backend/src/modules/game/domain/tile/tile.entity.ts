@@ -34,7 +34,7 @@ export class Tile extends Entity<Data> {
     return this._data.entities;
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       coord: this._data.coord.toPlain(),
       entities: this._data.entities.map((gameEntity) => gameEntity.toPlain()),

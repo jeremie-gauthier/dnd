@@ -9,7 +9,7 @@ export class Frozen extends Perk {
     super({ name: "frozen", trigger: "special_dice" });
   }
 
-  public apply({
+  public override apply({
     defender,
   }: {
     dicesResults: ReturnType<Attack["roll"]>;

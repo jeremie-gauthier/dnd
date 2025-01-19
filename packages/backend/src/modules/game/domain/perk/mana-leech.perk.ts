@@ -8,7 +8,7 @@ export class ManaLeech extends Perk {
     super({ name: "mana_leech", trigger: "special_dice" });
   }
 
-  public apply({
+  public override apply({
     attacker,
   }: {
     dicesResults: ReturnType<Attack["roll"]>;

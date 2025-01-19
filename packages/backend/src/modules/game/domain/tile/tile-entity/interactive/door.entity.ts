@@ -27,14 +27,14 @@ export class Door extends TileInteractiveEntity<Data> {
     return this._data.canInteract;
   }
 
-  public onInteraction(): void {
+  public override onInteraction(): void {
     this.mustBeInteractive();
 
     this._data.isBlocking = false;
     this._data.canInteract = false;
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       canInteract: this._data.canInteract,
       isBlocking: this._data.isBlocking,

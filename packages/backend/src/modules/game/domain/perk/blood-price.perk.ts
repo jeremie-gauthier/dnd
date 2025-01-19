@@ -8,7 +8,7 @@ export class BloodPrice extends Perk {
     super({ name: "blood_price", trigger: "special_dice" });
   }
 
-  public apply({
+  public override apply({
     attacker,
   }: {
     dicesResults: ReturnType<Attack["roll"]>;

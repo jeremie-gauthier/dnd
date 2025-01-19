@@ -83,7 +83,7 @@ export class Weapon extends AttackItem<Data> {
     return regularAttack;
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       type: this._data.type,
       name: this._data.name,

@@ -9,7 +9,7 @@ export class IgnoreArmorClass extends Perk {
     super({ name: "ignore_armor_class", trigger: "special_dice" });
   }
 
-  public apply({
+  public override apply({
     defender,
   }: {
     dicesResults: ReturnType<Attack["roll"]>;

@@ -2,7 +2,7 @@ import { Tile } from "../../../tile/tile.entity";
 import { Hero } from "./hero.abstract";
 
 export class Lidda extends Hero {
-  public getMovePath({ path }: { path: Array<Tile> }) {
+  public override getMovePath({ path }: { path: Array<Tile> }) {
     const validatedPath: Tile[] = [];
     let trapTriggered = undefined;
 

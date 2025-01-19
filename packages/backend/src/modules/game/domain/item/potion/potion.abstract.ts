@@ -26,7 +26,7 @@ export abstract class Potion extends Item<Data> {
     game: Game;
   }): void;
 
-  public toPlain() {
+  public override toPlain() {
     return {
       type: this._data.type,
       name: this._data.name,

@@ -97,7 +97,7 @@ export class Coord extends ValueObject<Data> {
     return new Coord(coord);
   }
 
-  public toPlain() {
+  public override toPlain() {
     return { row: this._data.row, column: this._data.column };
   }
 

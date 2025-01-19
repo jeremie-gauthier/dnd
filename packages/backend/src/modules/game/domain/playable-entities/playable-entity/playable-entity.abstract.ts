@@ -3,7 +3,7 @@ import {
   PlayableEntityType,
   PlayableEntityTypeType,
 } from "@dnd/shared";
-import { Entity, PlainData } from "src/modules/shared/domain/entity";
+import { Entity } from "src/modules/shared/domain/entity";
 import { Attack } from "../../attack/attack.entity";
 import { Coord } from "../../coord/coord.vo";
 import { EntityDiedDomainEvent } from "../../domain-events/dtos/entity-died.dto";
@@ -79,7 +79,6 @@ export abstract class Playable<
     damageTaken: number;
   };
   public abstract act(_: { action: ActionHistory["name"] }): void;
-  public abstract toPlain(): PlainData<ChildData>;
 
   constructor(rawData: ChildData) {
     super(rawData, rawData.id);

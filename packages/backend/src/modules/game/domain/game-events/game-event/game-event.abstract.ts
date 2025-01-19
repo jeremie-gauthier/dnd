@@ -1,4 +1,4 @@
-import { Entity, PlainData } from "src/modules/shared/domain/entity";
+import { Entity } from "src/modules/shared/domain/entity";
 import { DoorOpeningEvent } from "./on-door-opening/door-opening-event.abstract";
 
 type Data = {
@@ -10,8 +10,6 @@ type Data = {
 export abstract class GameEvent<
   ChildData extends Data = Data,
 > extends Entity<ChildData> {
-  public abstract toPlain(): PlainData<ChildData>;
-
   public get name() {
     return this._data.name;
   }

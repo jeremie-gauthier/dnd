@@ -17,7 +17,7 @@ export class Host extends Entity<Data> {
     super(data, data.userId);
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       userId: this._data.userId,
     };

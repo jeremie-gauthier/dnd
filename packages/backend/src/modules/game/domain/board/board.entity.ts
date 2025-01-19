@@ -35,7 +35,7 @@ export class Board extends Entity<Data> {
     return this._data.height;
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       width: this._data.width,
       height: this._data.height,

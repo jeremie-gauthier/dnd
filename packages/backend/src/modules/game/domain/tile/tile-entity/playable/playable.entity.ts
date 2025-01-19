@@ -25,7 +25,7 @@ export class TilePlayableEntity extends TileEntity<Data> {
     return this._data.faction === "hero";
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       id: this._data.id,
       type: this._data.type,

@@ -92,7 +92,7 @@ export class Monster extends Playable<Data> {
     super(data);
   }
 
-  public getMovePath({ path }: { path: Array<Tile> }) {
+  public override getMovePath({ path }: { path: Array<Tile> }) {
     const validatedPath: Tile[] = [];
 
     let previousCoord = this._data.coord;
@@ -124,7 +124,7 @@ export class Monster extends Playable<Data> {
     return { validatedPath, movementPointsUsed, trapTriggered: undefined };
   }
 
-  public getSpellAttackResult({
+  public override getSpellAttackResult({
     attackId,
     spell,
   }: { spell: Spell; attackId: Attack["id"] }) {
@@ -132,7 +132,7 @@ export class Monster extends Playable<Data> {
     return result;
   }
 
-  public getWeaponAttackResult({
+  public override getWeaponAttackResult({
     attackId,
     weapon,
   }: { weapon: Weapon; attackId: Attack["id"] }) {
@@ -140,7 +140,9 @@ export class Monster extends Playable<Data> {
     return result;
   }
 
-  public getDamagesTakenResult({ rawDamages }: { rawDamages: number }): {
+  public override getDamagesTakenResult({
+    rawDamages,
+  }: { rawDamages: number }): {
     damageTaken: number;
   } {
     const damageTaken = Math.max(
@@ -170,7 +172,7 @@ export class Monster extends Playable<Data> {
     }
   }
 
-  public act({ action }: { action: ActionHistory["name"] }): void {
+  public override act({ action }: { action: ActionHistory["name"] }): void {
     this.mustBeAlive();
     this.mustHaveActionPoints();
     this.mustBeAValidAction({ action });
@@ -183,7 +185,7 @@ export class Monster extends Playable<Data> {
     this._data.characteristic.actionPoints -= 1;
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       id: this._data.id,
       faction: this._data.faction,

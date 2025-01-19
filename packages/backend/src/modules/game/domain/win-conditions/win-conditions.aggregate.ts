@@ -18,7 +18,7 @@ export class WinConditions extends Entity<Data> {
     super(data);
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       values: this._data.values.map((winCondition) => winCondition.toPlain()),
     };

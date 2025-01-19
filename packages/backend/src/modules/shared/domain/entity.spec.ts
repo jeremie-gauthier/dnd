@@ -3,7 +3,7 @@ import { Entity, PlainData } from "./entity";
 
 describe("Entity", () => {
   class FakeEntity extends Entity<Record<string, any>> {
-    public toPlain(): PlainData<Record<string, any>> {
+    public override toPlain(): PlainData<Record<string, any>> {
       throw new Error("Method not implemented.");
     }
   }

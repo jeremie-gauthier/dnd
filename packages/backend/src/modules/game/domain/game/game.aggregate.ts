@@ -92,7 +92,7 @@ export class Game extends AggregateRoot<Data> {
     return this._data.monstersKilled.pop();
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       id: this._data.id,
       host: this._data.host,

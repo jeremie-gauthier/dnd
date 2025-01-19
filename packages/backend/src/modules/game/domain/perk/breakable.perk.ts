@@ -8,7 +8,7 @@ export class Breakable extends Perk {
     super({ name: "breakable", trigger: "special_dice" });
   }
 
-  public apply({
+  public override apply({
     attacker,
     itemUsed,
   }: {

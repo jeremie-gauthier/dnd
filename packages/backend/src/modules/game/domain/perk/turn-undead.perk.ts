@@ -9,7 +9,7 @@ export class TurnUndead extends Perk {
     super({ name: "turn_undead", trigger: "special_dice" });
   }
 
-  public apply({
+  public override apply({
     defender,
   }: {
     dicesResults: ReturnType<Attack["roll"]>;

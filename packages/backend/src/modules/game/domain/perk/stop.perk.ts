@@ -9,7 +9,7 @@ export class Stop extends Perk {
     super({ name: "stop", trigger: "special_dice" });
   }
 
-  public apply({
+  public override apply({
     defender,
   }: {
     dicesResults: ReturnType<Attack["roll"]>;

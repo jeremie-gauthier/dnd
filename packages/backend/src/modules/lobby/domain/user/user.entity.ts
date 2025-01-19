@@ -22,7 +22,7 @@ export class User extends Entity<Data> {
     return this._data.status;
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       userId: this._data.userId,
       status: this._data.status.toPlain(),

@@ -29,7 +29,7 @@ export class PlayableCharacter extends Entity<Data> {
     return this._data.pickedBy;
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       id: this._data.id,
       type: this._data.type,

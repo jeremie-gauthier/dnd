@@ -20,18 +20,18 @@ export class DefeatAllMonsters extends WinCondition<Data> {
     super(data);
   }
 
-  public toPlain(): PlainData<Data> {
+  public override toPlain(): PlainData<Data> {
     return {
       name: "defeat_all_monsters",
       nbMonstersRemaining: this._data.nbMonstersRemaining,
     };
   }
 
-  public get isAccomplished(): boolean {
+  public override get isAccomplished(): boolean {
     return this._data.nbMonstersRemaining <= 0;
   }
 
-  public updateProgression({
+  public override updateProgression({
     eventName,
   }: { eventName: WinConditionEvent }): void {
     if (this.isAccomplished) {

@@ -19,7 +19,7 @@ export class OnDoorOpeningSpawnMonsters extends DoorOpeningEvent<Data> {
     return this._data.startingTiles;
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       action: this._data.action,
       doorCoord: this._data.doorCoord.toPlain(),

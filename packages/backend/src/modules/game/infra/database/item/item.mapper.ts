@@ -22,7 +22,7 @@ export class ItemMapper extends Mapper<ItemPersistence, ItemDomain> {
     super();
   }
 
-  public toDomain(
+  public override toDomain(
     persistence:
       | WeaponPersistence
       | SpellPersistence

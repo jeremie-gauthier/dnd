@@ -42,7 +42,7 @@ export class Dice extends ValueObject<Data> {
     return result;
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       name: this._data.name,
       values: this._data.values,

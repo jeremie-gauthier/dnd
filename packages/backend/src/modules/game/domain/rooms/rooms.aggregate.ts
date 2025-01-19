@@ -29,7 +29,7 @@ export class Rooms extends Entity<Data> {
     return room;
   }
 
-  public toPlain(): PlainData<Data> {
+  public override toPlain(): PlainData<Data> {
     return {
       values: this._data.values.map((room) => room.toPlain()),
     };

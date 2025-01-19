@@ -213,7 +213,7 @@ export class Inventory extends Entity<Data> {
     }
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       playableId: this._data.playableId,
       storageCapacity: {

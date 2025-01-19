@@ -29,7 +29,7 @@ import { GamePersistence } from "../model/game.model";
 import { PlayableEntityFactory } from "./playable-entity.factory";
 
 export class GameMapper extends Mapper<GamePersistence, GameDomain> {
-  public toDomain(persistence: GamePersistence): GameDomain {
+  public override toDomain(persistence: GamePersistence): GameDomain {
     return new GameDomain({
       id: persistence.id,
       host: persistence.host,

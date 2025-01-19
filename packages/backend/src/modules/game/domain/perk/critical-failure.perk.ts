@@ -8,7 +8,7 @@ export class CriticalFailure extends Perk {
     super({ name: "critical_failure", trigger: "special_dice" });
   }
 
-  public apply({
+  public override apply({
     dicesResults,
   }: {
     dicesResults: ReturnType<Attack["roll"]>;

@@ -69,7 +69,7 @@ export class Attack extends Entity<Data> {
     }
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       id: this._data.id,
       range: this._data.range,

@@ -28,7 +28,7 @@ export abstract class Perk extends ValueObject<Data> {
     );
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       name: this._data.name,
       trigger: this._data.trigger,

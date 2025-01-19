@@ -14,7 +14,7 @@ export class DiceMapper extends Mapper<DicePersistence, DiceDomain> {
     super();
   }
 
-  public toDomain(persistence: DicePersistence): DiceDomain {
+  public override toDomain(persistence: DicePersistence): DiceDomain {
     return new DiceDomain({
       name: persistence.name,
       values: persistence.values,

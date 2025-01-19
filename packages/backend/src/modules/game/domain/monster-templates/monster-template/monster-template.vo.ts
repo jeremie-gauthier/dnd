@@ -63,7 +63,7 @@ export class MonsterTemplate extends Entity<Data> {
     );
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       type: this._data.type,
       race: this._data.race,

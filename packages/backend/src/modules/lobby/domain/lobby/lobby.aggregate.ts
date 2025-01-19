@@ -39,7 +39,7 @@ export class Lobby extends AggregateRoot<Data> {
     super(data, data.id);
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       config: this._data.config,
       host: this._data.host.toPlain(),

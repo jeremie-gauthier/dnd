@@ -45,7 +45,7 @@ export class BoundingBox extends Entity<Data> {
     );
   }
 
-  public toPlain(): PlainData<Data> {
+  public override toPlain(): PlainData<Data> {
     return {
       topLeft: this._data.topLeft.toPlain(),
       bottomRight: this._data.bottomRight.toPlain(),

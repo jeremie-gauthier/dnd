@@ -31,7 +31,7 @@ export class PlayerStatus extends ValueObject<Data> {
     return this._data === other._data;
   }
 
-  public toPlain() {
+  public override toPlain() {
     return this._data;
   }
 

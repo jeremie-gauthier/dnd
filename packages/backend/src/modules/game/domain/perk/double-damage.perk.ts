@@ -9,7 +9,7 @@ export class DoubleDamage extends Perk {
     super({ name: "double_damage", trigger: "special_dice" });
   }
 
-  public apply({
+  public override apply({
     dicesResults,
   }: {
     dicesResults: ReturnType<Attack["roll"]>;

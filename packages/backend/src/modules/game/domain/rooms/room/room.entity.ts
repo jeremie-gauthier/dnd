@@ -33,7 +33,7 @@ export class Room extends Entity<Data> {
     );
   }
 
-  public toPlain(): PlainData<Data> {
+  public override toPlain(): PlainData<Data> {
     return {
       id: this._data.id,
       hasBeenVisited: this._data.hasBeenVisited,

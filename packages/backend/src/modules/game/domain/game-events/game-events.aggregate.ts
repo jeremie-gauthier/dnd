@@ -15,7 +15,7 @@ export class GameEvents extends Entity<Data> {
     );
   }
 
-  public toPlain(): PlainData<Data> {
+  public override toPlain(): PlainData<Data> {
     return {
       values: this._data.values.map((gameEvent) => gameEvent.toPlain()),
     };

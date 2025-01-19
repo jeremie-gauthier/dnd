@@ -94,7 +94,7 @@ export class Spell extends AttackItem<Data> {
     }
   }
 
-  public toPlain() {
+  public override toPlain() {
     return {
       type: this._data.type,
       name: this._data.name,

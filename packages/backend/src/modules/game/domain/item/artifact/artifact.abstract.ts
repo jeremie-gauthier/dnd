@@ -28,7 +28,7 @@ export abstract class Artifact extends Item<Data> {
     board: Board;
   }): void;
 
-  public toPlain() {
+  public override toPlain() {
     return {
       type: this._data.type,
       name: this._data.name,
