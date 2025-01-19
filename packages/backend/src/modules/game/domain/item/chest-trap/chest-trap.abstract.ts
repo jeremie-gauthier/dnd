@@ -17,19 +17,20 @@ type Data = {
 };
 
 export abstract class ChestTrap extends Item<Data> {
-  private static schema = z.object({
-    type: z.literal("ChestTrap").optional().default("ChestTrap"),
-    name: z.enum([
-      "dazzling_light_1",
-      "call_from_the_grave_1",
-      "brutal_betrayal_1",
-      "blanket_of_flames_1",
-      "magic_loss_1",
-      "smothering_mist_1",
-      "voices_of_the_damned_1",
-    ]),
-    level: z.number().min(0).max(3),
-  });
+  private static schema = Item.baseSchema.merge(
+    z.object({
+      type: z.literal("ChestTrap").optional().default("ChestTrap"),
+      name: z.enum([
+        "dazzling_light_1",
+        "call_from_the_grave_1",
+        "brutal_betrayal_1",
+        "blanket_of_flames_1",
+        "magic_loss_1",
+        "smothering_mist_1",
+        "voices_of_the_damned_1",
+      ]),
+    }),
+  );
 
   constructor(rawData: Omit<Data, "type">) {
     const data = ChestTrap.schema.parse(rawData);

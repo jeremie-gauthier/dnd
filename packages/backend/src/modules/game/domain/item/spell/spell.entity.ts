@@ -14,16 +14,16 @@ type Data = {
 };
 
 export class Spell extends Item<Data> {
-  private static schema = z.object({
-    type: z.literal("Spell").optional().default("Spell"),
-    name: z.string(),
-    level: z.number().min(0).max(3),
-    attacks: z.array(z.instanceof(Attack)),
-    manaCost: z.object({
-      CLERIC: z.number().min(0).optional(),
-      SORCERER: z.number().min(0).optional(),
+  private static schema = Item.baseSchema.merge(
+    z.object({
+      type: z.literal("Spell").optional().default("Spell"),
+      attacks: z.array(z.instanceof(Attack)),
+      manaCost: z.object({
+        CLERIC: z.number().min(0).optional(),
+        SORCERER: z.number().min(0).optional(),
+      }),
     }),
-  });
+  );
 
   constructor(rawData: Omit<Data, "type">) {
     const data = Spell.schema.parse(rawData);

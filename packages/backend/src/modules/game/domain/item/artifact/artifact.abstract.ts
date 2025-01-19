@@ -11,12 +11,12 @@ type Data = {
 };
 
 export abstract class Artifact extends Item<Data> {
-  private static schema = z.object({
-    type: z.literal("Artifact").optional().default("Artifact"),
-    name: z.string(),
-    level: z.number().min(0).max(3),
-    hasSavingThrow: z.boolean(),
-  });
+  private static schema = Item.baseSchema.merge(
+    z.object({
+      type: z.literal("Artifact").optional().default("Artifact"),
+      hasSavingThrow: z.boolean(),
+    }),
+  );
 
   constructor(rawData: Omit<Data, "type">) {
     const data = Artifact.schema.parse(rawData);

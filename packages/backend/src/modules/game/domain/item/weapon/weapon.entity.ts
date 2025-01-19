@@ -12,12 +12,12 @@ type Data = {
 };
 
 export class Weapon extends Item<Data> {
-  private static schema = z.object({
-    type: z.literal("Weapon").optional().default("Weapon"),
-    name: z.string(),
-    level: z.number().min(0).max(3),
-    attacks: z.array(z.instanceof(Attack)),
-  });
+  private static schema = Item.baseSchema.merge(
+    z.object({
+      type: z.literal("Weapon").optional().default("Weapon"),
+      attacks: z.array(z.instanceof(Attack)),
+    }),
+  );
 
   constructor(rawData: Omit<Data, "type">) {
     const data = Weapon.schema.parse(rawData);
