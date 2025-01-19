@@ -1,7 +1,9 @@
 import { AttackRange, AttackType } from "@dnd/shared";
 import { z } from "zod";
 import { Attack } from "../../attack/attack.entity";
-import { Item } from "../item.abstract";
+import { Board } from "../../board/board.entity";
+import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
+import { AttackItem } from "../attack-item.abstract";
 import { WeaponError } from "./weapon.error";
 
 type Data = {
@@ -11,11 +13,10 @@ type Data = {
   readonly attacks: Array<Attack>;
 };
 
-export class Weapon extends Item<Data> {
-  private static schema = Item.baseSchema.merge(
+export class Weapon extends AttackItem<Data> {
+  private static schema = AttackItem.attackItemBaseSchema.merge(
     z.object({
       type: z.literal("Weapon").optional().default("Weapon"),
-      attacks: z.array(z.instanceof(Attack)),
     }),
   );
 
@@ -28,15 +29,40 @@ export class Weapon extends Item<Data> {
     return this._data.type;
   }
 
-  public hasAttack({ attackId }: { attackId: Attack["id"] }) {
-    return this._data.attacks.some((attack) => attack.id === attackId);
+  public mustValidateAttack({
+    attacker,
+    defender,
+    attackId,
+    board,
+  }: {
+    attacker: Playable;
+    defender: Playable;
+    attackId: Attack["id"];
+    board: Board;
+  }): void {
+    const attack = this.getAttackOrThrow({ attackId });
+    this.mustHaveTargetInRange({
+      attacker,
+      range: attack.range,
+      targetCoord: defender.coord,
+      board,
+    });
   }
 
-  public use({
+  public getAttackResult({
+    attacker,
     attackId,
-  }: { attackId: Attack["id"] }): ReturnType<Attack["roll"]> {
-    const attack = this.getAttackOrThrow({ attackId });
-    return attack.roll();
+  }: { attacker: Playable; attackId: Attack["id"] }): {
+    type: AttackItem["type"];
+    attackResult: ReturnType<Attack["roll"]>;
+  } {
+    return {
+      type: this.type,
+      attackResult: attacker.getWeaponAttackResult({
+        attackId,
+        weapon: this,
+      }),
+    };
   }
 
   public canAttackInMelee() {
@@ -59,17 +85,6 @@ export class Weapon extends Item<Data> {
       });
     }
     return regularAttack;
-  }
-
-  public getAttackOrThrow({ attackId }: { attackId: Attack["id"] }) {
-    const attack = this._data.attacks.find(({ id }) => id === attackId);
-    if (!attack) {
-      throw new WeaponError({
-        name: "ATTACK_NOT_FOUND",
-        message: "Attack does not exists on this Weapon",
-      });
-    }
-    return attack;
   }
 
   public toPlain() {

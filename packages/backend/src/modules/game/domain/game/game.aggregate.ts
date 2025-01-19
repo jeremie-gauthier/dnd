@@ -1,15 +1,12 @@
 import {
-  AttackRangeType,
   PlayableEntityAttackInput,
   PlayableEntityRace,
   PlayableEntityRaceType,
-  canAttackTarget,
   zip,
 } from "@dnd/shared";
 import { AggregateRoot } from "src/modules/shared/domain/aggregate-root";
 import { z } from "zod";
 import { Attack } from "../attack/attack.entity";
-import { AttackError } from "../attack/attack.error";
 import { Board } from "../board/board.entity";
 import { Coord } from "../coord/coord.vo";
 import { ChestTrapTriggeredDomainEvent } from "../domain-events/dtos/chest-trap-triggered.dto";
@@ -22,11 +19,10 @@ import { GameEvents } from "../game-events/game-events.aggregate";
 import { GameMaster } from "../game-master/game-master.entity";
 import { GameStatus } from "../game-status/game-status.vo";
 import { StorageSpace } from "../inventory/inventory.entity";
+import { AttackItem } from "../item/attack-item.abstract";
 import { ChestTrap } from "../item/chest-trap/chest-trap.abstract";
 import { Item } from "../item/item.abstract";
 import { Potion } from "../item/potion/potion.abstract";
-import { Spell } from "../item/spell/spell.entity";
-import { Weapon } from "../item/weapon/weapon.entity";
 import { MonsterTemplates } from "../monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "../playable-entities/playable-entities.aggregate";
 import { Hero } from "../playable-entities/playable-entity/heroes/hero.abstract";
@@ -320,21 +316,19 @@ export class Game extends AggregateRoot<Data> {
     attackId,
   }: {
     attacker: Playable;
-    attackItem: Spell | Weapon;
+    attackItem: AttackItem;
     attackId: Attack["id"];
     defender: Playable;
   }) {
     const attack = attackItem.getAttackOrThrow({ attackId });
-    this.mustHaveTargetInRange({
+    attackItem.mustValidateAttack({
       attacker,
-      range: attack.range,
-      targetCoord: defender.coord,
-    });
-
-    const attackResult = attacker.getAttackResult({
+      defender,
       attackId,
-      attackItem,
+      board: this.board,
     });
+    const attackResult = attackItem.getAttackResult({ attacker, attackId });
+
     this.addDomainEvent(
       new PlayableEntityAttackedDomainEvent({
         attacker: attacker.toPlain(),
@@ -345,10 +339,6 @@ export class Game extends AggregateRoot<Data> {
         attackItemUsed: attackItem.toPlain(),
       }),
     );
-
-    if (attackResult.type === "Spell") {
-      attacker.consumeMana({ amount: attackResult.manaCost });
-    }
 
     attack.applyPerksToDicesResults({
       attacker,
@@ -364,33 +354,6 @@ export class Game extends AggregateRoot<Data> {
     defender.takeDamage({ amount: attackResult.attackResult.sumResult });
     this.addDomainEvents(defender.collectDomainEvents());
     this.addDomainEvents(attacker.collectDomainEvents());
-  }
-
-  private mustHaveTargetInRange({
-    attacker,
-    range,
-    targetCoord,
-  }: {
-    attacker: Playable;
-    range: AttackRangeType;
-    targetCoord: Coord;
-  }) {
-    const plainBoard = this._data.board.toPlain();
-
-    if (
-      !canAttackTarget({
-        ally: attacker.faction,
-        gameBoard: plainBoard as any,
-        attackerCoord: attacker.coord.toPlain(),
-        range,
-        targetCoord,
-      })
-    ) {
-      throw new AttackError({
-        name: "TARGET_OUT_OF_RANGE",
-        message: "Target is out of range",
-      });
-    }
   }
 
   public playerLootItem({
