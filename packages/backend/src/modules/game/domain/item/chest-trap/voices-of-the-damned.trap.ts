@@ -24,31 +24,36 @@ export class VoicesOfTheDamned extends ChestTrap {
       return;
     }
 
-    const grid = game.board.to2DArray();
     const pathToNearestTileAdjacentToAnotherAliveHero = pathfinder({
-      grid,
       startCoord: entityThatOpenedTheChest.coord,
-      hasReachGoal(node, _coord) {
+      hasReachGoal(currentCoord) {
+        const coord = new Coord(currentCoord);
         return otherHeroes.some((otherHero) =>
-          node.coord.isAdjacentTo(otherHero.coord),
+          coord.isAdjacentTo(otherHero.coord),
         );
       },
-      heuristic(node, _coord) {
+      heuristic(currentCoord) {
+        const coord = new Coord(currentCoord);
         const manhattanDistances = otherHeroes.map((otherHero) =>
-          node.coord.getManhattanDistanceTo(otherHero.coord),
+          coord.getManhattanDistanceTo(otherHero.coord),
         );
         manhattanDistances.sort();
         const shortestDistance = manhattanDistances[0]!;
         return shortestDistance;
       },
-      options: {
-        canVisitNode(node) {
-          return !node.entities
-            .filter(
-              (tileEntity) => !(tileEntity.isPlayable() && tileEntity.isHero()),
-            )
-            .some((tileEntity) => tileEntity.isBlocking);
-        },
+      getIdentifier(coord) {
+        return new Coord(coord).toIndex(game.board);
+      },
+      getNeighbours(coord) {
+        return new Coord(coord).getNeighbours().filter((neighbourCoord) => {
+          try {
+            return game.board
+              .getTileOrThrow({ coord: neighbourCoord })
+              .entities.every((tileEntity) => !tileEntity.isBlocking);
+          } catch {
+            return false;
+          }
+        });
       },
     });
 

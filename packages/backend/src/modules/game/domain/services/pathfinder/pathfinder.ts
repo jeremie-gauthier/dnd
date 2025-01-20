@@ -1,6 +1,5 @@
 import { BinaryHeap } from "./binary-heap";
 import type { Coord } from "./interfaces/coord.interface";
-import { Node } from "./node";
 
 function reconstructPath<TData>(arrivalNode: Node<TData>) {
   const path: Array<Coord> = [];
@@ -15,83 +14,99 @@ function reconstructPath<TData>(arrivalNode: Node<TData>) {
 }
 
 /**
- *The type of function used to tell whether the goal node has been reached or not.
- *	@param node The node to evaluate.
+ *  The type of function used to tell whether the goal node has been reached or not.
  *	@param coord The coord of the node being evaluated.
- *	@template TData Represents a grid's Cell type.
  */
-type GoalPredicate<TData> = (node: TData, coord: Coord) => boolean;
+type GoalPredicate = (coord: Coord) => boolean;
+
+/**
+ *	The callback used to get neighbours of a node.
+ *	@param coord The coord of the node being evaluated.
+ */
+type GetNeighbours = (coord: Coord) => Array<Coord>;
+
+/**
+ *	The callback used to get the unique identifier of a node.
+ *	@param coord The coord of the node being evaluated.
+ */
+type GetIdentifier = (coord: Coord) => string | number;
 
 /**
  *	The A* heuristic.
- *	@param node The node to evaluate.
  *	@param coord The coord of the node being evaluated.
- *	@template TData Represents a grid's Cell type.
  */
-type Heuristic<TData> = (node: TData, coord: Coord) => number;
+type Heuristic = (coord: Coord) => number;
 
 /**
- * The optional options object.
- * @template TData Represents a grid's Cell type.
+ *	The callback used to get the unique identifier of a node.
+ *	@template TData Represents a grid's Cell type.
  */
-type Options<TData> = {
-  /**
-   * The optional predicate to tell whether a cell is visitable by the algorithm or not.
-   * @param node The node to evaluate.
-   * @template TData Represents a grid's Cell type.
-   */
-  canVisitNode?: (node: TData) => boolean;
+type Node<TData> = {
+  id: ReturnType<GetIdentifier>;
+  coord: Coord;
+  cost: number;
+  heuristic: number;
+  parent?: Node<TData>;
 };
 
 /**
- * A pathfinder algorithm implemented with A*.
- * @param grid The grid to work on represented as a 2D-array.
- * @param startCoord The starting coordinate for the algorithm.
- * @param hasReachGoal The predicate that tells whether the goal node has been reached or not.
- * @param heuristic The A* heuristic.
- * @param options Options to customize the A* algorithm.
+ * A pathfinder algorithm implemented using A*.
+ * @param {object} params - The parameters for the A* algorithm.
+ * @param {Coord} params.startCoord The starting coordinate for the algorithm.
+ * @param {GoalPredicate} params.hasReachGoal The predicate that tells whether the goal node has been reached or not.
+ * @param {GetNeighbours} params.getNeighbours The callback used to get neighbours of a node.
+ * @param {GetIdentifier} params.getIdentifier The callback used to get the unique identifier of a node.
+ * @param {Heuristic} params.heuristic The A* heuristic.
  * @template TData Represents a grid's Cell type.
  * @link https://en.wikipedia.org/wiki/A*_search_algorithm
  */
 export function pathfinder<TData>({
-  grid,
   startCoord,
   hasReachGoal,
+  getNeighbours,
+  getIdentifier,
   heuristic,
-  options,
 }: {
-  grid: Array<Array<TData>>;
   startCoord: Coord;
-  hasReachGoal: GoalPredicate<TData>;
-  heuristic: Heuristic<TData>;
-  options?: Options<TData>;
+  hasReachGoal: GoalPredicate;
+  getNeighbours: GetNeighbours;
+  getIdentifier: GetIdentifier;
+  heuristic: Heuristic;
 }) {
   const openSet = new BinaryHeap<Node<TData>>(
     (a, b) => a.heuristic - b.heuristic,
   );
-  const startNode = new Node(startCoord, grid, 0, 0);
+  const startNode: Node<TData> = {
+    id: getIdentifier(startCoord),
+    coord: startCoord,
+    cost: 0,
+    heuristic: 0,
+  };
   openSet.insert(startNode);
 
-  const closedSet = new Set<Node["id"]>([startNode.id]);
+  const closedSet = new Set<Node<TData>["id"]>([startNode.id]);
 
   let current = openSet.extract();
   while (current) {
-    if (hasReachGoal(current.data, current.coord)) {
+    if (hasReachGoal(current.coord)) {
       const path = reconstructPath(current);
       return path;
     }
 
-    const neighbourNodes = current.getNeighbourNodes();
-    for (const neighbourNode of neighbourNodes) {
+    const neighbourCost = current.cost + 1;
+    const neighbourCoords = getNeighbours(current.coord);
+    for (const neighbourCoord of neighbourCoords) {
+      const neighbourNodeId = getIdentifier(neighbourCoord);
       // neighbour node has already been visited
-      if (closedSet.has(neighbourNode.id)) continue;
+      if (closedSet.has(neighbourNodeId)) continue;
 
-      if (options?.canVisitNode && !options.canVisitNode(neighbourNode.data)) {
-        continue;
-      }
-
-      neighbourNode.heuristic =
-        neighbourNode.cost + heuristic(neighbourNode.data, neighbourNode.coord);
+      const neighbourNode: Node<TData> = {
+        id: neighbourNodeId,
+        coord: neighbourCoord,
+        cost: neighbourCost,
+        heuristic: neighbourCost + heuristic(neighbourCoord),
+        parent: current,
+      };
 
       const neighbourNodeInOpenSet = openSet.search(neighbourNode.id);
       // neighbour node is not planed to be visited yet
