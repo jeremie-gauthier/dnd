@@ -64,6 +64,12 @@ export class Coord extends ValueObject<Data> {
       .filter((coord) => coord !== null);
   }
 
+  public getManhattanDistanceTo(other: Coord): number {
+    return (
+      Math.abs(this.row - other.row) + Math.abs(this.column - other.column)
+    );
+  }
+
   public toIndex(
     metadata: Readonly<Pick<GameView["map"], "width" | "height">>,
   ): number {

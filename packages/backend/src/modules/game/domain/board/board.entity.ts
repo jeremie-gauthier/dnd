@@ -1,4 +1,5 @@
 import { Entity } from "src/modules/shared/domain/entity";
+import { chunk } from "src/modules/shared/utils/array/chunk";
 import { z } from "zod";
 import { Coord } from "../coord/coord.vo";
 import { TileEntity } from "../tile/tile-entity/tile-entity.abstract";
@@ -41,6 +42,10 @@ export class Board extends Entity<Data> {
       height: this._data.height,
       tiles: this._data.tiles.map((tile) => tile.toPlain()),
     };
+  }
+
+  public to2DArray() {
+    return chunk(this._data.tiles, this.width);
   }
 
   public removeEntityAtCoord({

@@ -1,8 +1,7 @@
-import { Board } from "../../board/board.entity";
 import { Coord } from "../../coord/coord.vo";
 import { Game } from "../../game/game.aggregate";
 import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
-import { Tile } from "../../tile/tile.entity";
+import { pathfinder } from "../../services/pathfinder/pathfinder";
 import { ChestTrap } from "./chest-trap.abstract";
 
 export class VoicesOfTheDamned extends ChestTrap {
@@ -20,125 +19,59 @@ export class VoicesOfTheDamned extends ChestTrap {
     const otherHeroes = game.playableEntities.getOtherAlivedHeroes({
       hero: entityThatOpenedTheChest,
     });
-    const otherHeroesAccessible = this.getOtherHeroesSortedByClosestDistance({
+    if (otherHeroes.length === 0) {
+      this.selfInflictDamage({ entityThatOpenedTheChest });
+      return;
+    }
+
+    const grid = game.board.to2DArray();
+    const pathToNearestTileAdjacentToAnotherAliveHero = pathfinder({
+      grid,
       startCoord: entityThatOpenedTheChest.coord,
-      otherHeroes,
-      board: game.board,
+      hasReachGoal(node, _coord) {
+        return otherHeroes.some((otherHero) =>
+          node.coord.isAdjacentTo(otherHero.coord),
+        );
+      },
+      heuristic(node, _coord) {
+        const manhattanDistances = otherHeroes.map((otherHero) =>
+          node.coord.getManhattanDistanceTo(otherHero.coord),
+        );
+        manhattanDistances.sort();
+        const shortestDistance = manhattanDistances[0]!;
+        return shortestDistance;
+      },
+      options: {
+        canVisitNode(node) {
+          return !node.entities
+            .filter(
+              (tileEntity) => !(tileEntity.isPlayable() && tileEntity.isHero()),
+            )
+            .some((tileEntity) => tileEntity.isBlocking);
+        },
+      },
     });
-    const firstFreeTile = this.getFirstFreeTileAroundOtherHeroes({
-      otherHeroes: otherHeroesAccessible,
+
+    const tileAdjacentToAnotherAliveHero =
+      pathToNearestTileAdjacentToAnotherAliveHero?.at(-1);
+    if (!tileAdjacentToAnotherAliveHero) {
+      this.selfInflictDamage({ entityThatOpenedTheChest });
+      return;
+    }
+
+    const destinationCoord = new Coord(tileAdjacentToAnotherAliveHero);
+    game.movePlayableEntity({
+      playableEntityId: entityThatOpenedTheChest.id,
+      destinationCoord,
+    });
+    const otherHero = otherHeroes.find((otherHero) =>
+      otherHero.coord.isAdjacentTo(destinationCoord),
+    )!;
+    this.inflictDamageToOtherHero({
+      entityThatOpenedTheChest,
+      otherHero,
       game,
     });
-
-    if (firstFreeTile) {
-      const { otherHero, freeCoord } = firstFreeTile;
-      game.movePlayableEntity({
-        playableEntityId: entityThatOpenedTheChest.id,
-        destinationCoord: freeCoord,
-      });
-      this.inflictDamageToOtherHero({
-        entityThatOpenedTheChest,
-        otherHero,
-        game,
-      });
-    } else {
-      this.selfInflictDamage({ entityThatOpenedTheChest });
-    }
-  }
-
-  private getOtherHeroesSortedByClosestDistance({
-    startCoord,
-    otherHeroes,
-    board,
-  }: { startCoord: Coord; otherHeroes: Hero[]; board: Board }) {
-    const metadata = { width: board.width, height: board.height };
-    const queue = [{ coord: startCoord, range: 0 }];
-
-    const explored = new Set([startCoord.toIndex(metadata)]);
-
-    const endCoordsStatuses = otherHeroes.map((otherHero) => ({
-      otherHero,
-      isVisited: false,
-      range: Number.NaN,
-    }));
-
-    while (queue.length > 0) {
-      const currentCoordPath = queue.shift()!;
-
-      let currentTile: Tile;
-      try {
-        currentTile = board.getTileOrThrow({
-          coord: currentCoordPath.coord,
-        });
-      } catch {
-        continue;
-      }
-
-      if (currentTile.isBlockedByNonInteractiveEntity()) {
-        continue;
-      }
-
-      const neighbourCoords = currentCoordPath.coord.getNeighbours();
-      for (const neighbourCoord of neighbourCoords) {
-        let neighbourCoordIdx: number;
-
-        try {
-          neighbourCoordIdx = neighbourCoord.toIndex(metadata);
-        } catch (error) {
-          continue;
-        }
-
-        if (explored.has(neighbourCoordIdx)) {
-          continue;
-        }
-
-        const endCoordFound = endCoordsStatuses.find((endCoordStatus) =>
-          endCoordStatus.otherHero.coord.equals(neighbourCoord),
-        );
-        if (endCoordFound) {
-          endCoordFound.range = currentCoordPath.range + 1;
-          endCoordFound.isVisited = true;
-
-          if (endCoordsStatuses.every(({ isVisited }) => isVisited)) {
-            endCoordsStatuses.sort((a, b) => a.range - b.range);
-            return endCoordsStatuses.map(({ otherHero }) => otherHero);
-          }
-        }
-
-        queue.push({
-          coord: neighbourCoord,
-          range: currentCoordPath.range + 1,
-        });
-        explored.add(neighbourCoordIdx);
-      }
-    }
-
-    const filteredEndCoordsStatuses = endCoordsStatuses.filter(
-      ({ isVisited }) => isVisited,
-    );
-    filteredEndCoordsStatuses.sort((a, b) => a.range - b.range);
-    return filteredEndCoordsStatuses.map(({ otherHero }) => otherHero);
-  }
-
-  private getFirstFreeTileAroundOtherHeroes({
-    otherHeroes,
-    game,
-  }: { otherHeroes: Hero[]; game: Game }) {
-    for (const otherHero of otherHeroes) {
-      const neighbourCoords = otherHero.coord.getNeighbours();
-      const freeCoord = neighbourCoords.find((coord) => {
-        try {
-          game.board.mustBeAnAccessibleTile({ coord });
-          return true;
-        } catch (error) {
-          return false;
-        }
-      });
-
-      if (freeCoord) {
-        return { otherHero, freeCoord };
-      }
-    }
   }
 
   private inflictDamageToOtherHero({
