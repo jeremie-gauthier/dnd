@@ -18,7 +18,7 @@ export class Initiative extends ValueObject<Data> {
     return this._data;
   }
 
-  public equals(other: Initiative): boolean {
+  public override equals(other: Initiative): boolean {
     return this._data === other._data;
   }
 

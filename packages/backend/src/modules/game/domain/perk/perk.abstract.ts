@@ -21,7 +21,7 @@ export abstract class Perk extends ValueObject<Data> {
     return this._data.trigger === PerkTrigger.SPECIAL_DICE;
   }
 
-  public equals(other: Perk): boolean {
+  public override equals(other: Perk): boolean {
     return (
       this._data.name === other._data.name &&
       this._data.trigger === other._data.trigger

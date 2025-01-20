@@ -29,7 +29,7 @@ export class LobbyStatus extends ValueObject<Data> {
     return this._data;
   }
 
-  public equals(other: LobbyStatus): boolean {
+  public override equals(other: LobbyStatus): boolean {
     return this._data === other._data;
   }
 

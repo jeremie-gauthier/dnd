@@ -9,7 +9,7 @@ type Data = {
 };
 
 export class Dice extends ValueObject<Data> {
-  public equals(other: Dice): boolean {
+  public override equals(other: Dice): boolean {
     if (this._data.name !== other._data.name) {
       return false;
     }

@@ -21,7 +21,7 @@ export class GameStatus extends ValueObject<Data> {
     return this._data;
   }
 
-  public equals(other: GameStatus): boolean {
+  public override equals(other: GameStatus): boolean {
     return this.current === other.current;
   }
 

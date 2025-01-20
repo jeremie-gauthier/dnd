@@ -45,7 +45,7 @@ export class MonsterTemplate extends Entity<Data> {
     return this._data.race;
   }
 
-  public equals(other: MonsterTemplate): boolean {
+  public override equals(other: MonsterTemplate): boolean {
     return (
       this._data.type === other._data.type &&
       this._data.race === other._data.race &&

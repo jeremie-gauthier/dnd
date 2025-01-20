@@ -37,7 +37,7 @@ export class Coord extends ValueObject<Data> {
     return this._data.column;
   }
 
-  public equals(other: Coord): boolean {
+  public override equals(other: Coord): boolean {
     return this.row === other.row && this.column === other.column;
   }
 

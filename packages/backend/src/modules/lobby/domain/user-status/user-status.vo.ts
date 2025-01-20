@@ -10,7 +10,7 @@ export class UserStatus extends ValueObject<boolean> {
     return this._data;
   }
 
-  public equals(other: UserStatus): boolean {
+  public override equals(other: UserStatus): boolean {
     return this.isReady === other.isReady;
   }
 
