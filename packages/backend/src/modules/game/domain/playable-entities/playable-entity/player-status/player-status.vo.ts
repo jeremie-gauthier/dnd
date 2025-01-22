@@ -4,7 +4,7 @@ import { PlayerStatusError } from "./player-status.error";
 type Data = "PREPARATION" | "IDLE" | "ACTION";
 
 export class PlayerStatus extends ValueObject<Data> {
-  private static STATE_MACHINE: Readonly<
+  private static readonly STATE_MACHINE: Readonly<
     Record<
       Data,
       {

@@ -34,14 +34,12 @@ export class ItemMapper extends Mapper<ItemPersistence, ItemDomain> {
       ...persistence,
       attacks:
         persistence.type === "Weapon" || persistence.type === "Spell"
-          ? (persistence as WeaponPersistence | SpellPersistence).attacks?.map(
-              (attack) => ({
-                ...attack,
-                dices: attack.attackDices.map(
-                  (attackDice: AttackDice) => attackDice.dice,
-                ),
-              }),
-            )
+          ? persistence.attacks?.map((attack) => ({
+              ...attack,
+              dices: attack.attackDices.map(
+                (attackDice: AttackDice) => attackDice.dice,
+              ),
+            }))
           : undefined,
     } as GameItem);
   }

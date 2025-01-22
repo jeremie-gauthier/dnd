@@ -1,0 +1,6 @@
+projectKey=dnd
+serverUrl=http://localhost:9000
+serverVersion=25.1.0.102122
+dashboardUrl=http://localhost:9000/dashboard?id=dnd
+ceTaskId=cd7b2658-2b6e-41ee-b2ce-70d1b0243828
+ceTaskUrl=http://localhost:9000/api/ce/task?id=cd7b2658-2b6e-41ee-b2ce-70d1b0243828

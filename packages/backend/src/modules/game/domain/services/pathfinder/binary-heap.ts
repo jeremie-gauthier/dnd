@@ -14,7 +14,7 @@ type Comparator<TData> = (a: TData, b: TData) => number;
 export class BinaryHeap<TData extends { id: string | number }> {
   private readonly data: Array<TData> = [];
   private size = 0;
-  private existingNodes = new Map<TData["id"], number>();
+  private readonly existingNodes = new Map<TData["id"], number>();
 
   /**
    * Construct a binary heap object.

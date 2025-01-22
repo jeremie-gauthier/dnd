@@ -14,7 +14,7 @@ export class RedisGameRepository
   implements OnApplicationBootstrap, GameRepository
 {
   public readonly client;
-  public static KEY = "games";
+  public static readonly KEY = "games";
 
   constructor(
     private readonly mapper: GameMapper,

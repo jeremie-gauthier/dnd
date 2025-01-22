@@ -7,7 +7,7 @@ import { User } from "../../../domain/user/user.entity";
 @Injectable()
 export class RedisUsersRepository implements UsersRepository {
   public readonly client;
-  public static KEY = "users";
+  public static readonly KEY = "users";
 
   constructor(redisService: RedisService) {
     this.client = redisService.client;

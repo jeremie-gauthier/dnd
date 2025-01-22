@@ -4,7 +4,7 @@ import { LobbyStatusError } from "./lobby-status.error";
 type Data = "OPENED" | "GAME_INITIALIZING" | "GAME_STARTED";
 
 export class LobbyStatus extends ValueObject<Data> {
-  private static STATE_MACHINE: Readonly<
+  private static readonly STATE_MACHINE: Readonly<
     Record<Data, { advanceTo: Data[]; rollbackFrom: Data[] }>
   > = {
     OPENED: {
