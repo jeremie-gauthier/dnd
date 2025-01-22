@@ -11,7 +11,7 @@ type Data = {
 };
 
 export abstract class Artifact extends Item<Data> {
-  private static schema = Item.baseSchema.merge(
+  private static readonly schema = Item.baseSchema.merge(
     z.object({
       type: z.literal("Artifact").optional().default("Artifact"),
       hasSavingThrow: z.boolean(),

@@ -14,7 +14,7 @@ type Data = {
 };
 
 export class Spell extends AttackItem<Data> {
-  private static schema = AttackItem.attackItemBaseSchema.merge(
+  private static readonly schema = AttackItem.attackItemBaseSchema.merge(
     z.object({
       type: z.literal("Spell").optional().default("Spell"),
       manaCost: z.object({

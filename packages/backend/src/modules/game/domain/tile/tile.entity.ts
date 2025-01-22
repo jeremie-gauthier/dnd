@@ -15,7 +15,7 @@ type Data = {
 };
 
 export class Tile extends Entity<Data> {
-  private static schema = z.object({
+  private static readonly schema = z.object({
     coord: z.instanceof(Coord),
     entities: z.array(z.instanceof(TileEntity)),
     isStartingTile: z.literal(true).optional(),

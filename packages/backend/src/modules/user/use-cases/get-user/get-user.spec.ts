@@ -1,14 +1,6 @@
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test } from "@nestjs/testing";
-import {
-  MockInstance,
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GetUserRepository } from "./get-user.repository";
 import { GetUserUseCase } from "./get-user.uc";
 
@@ -16,11 +8,6 @@ describe("GetUserUseCase", () => {
   let useCase: GetUserUseCase;
   let repository: GetUserRepository;
   let eventEmitter2: EventEmitter2;
-
-  let eventEmitterMock: MockInstance<
-    [event: any, ...values: any[]],
-    Promise<any[]>
-  >;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -37,8 +24,6 @@ describe("GetUserUseCase", () => {
     useCase = module.get(GetUserUseCase);
     repository = module.get(GetUserRepository);
     eventEmitter2 = module.get(EventEmitter2);
-
-    eventEmitterMock = vi.spyOn(eventEmitter2, "emitAsync");
   });
 
   afterEach(() => {

@@ -10,7 +10,7 @@ type Data = {
 };
 
 export class Door extends TileInteractiveEntity<Data> {
-  private static schema = z.object({
+  private static readonly schema = z.object({
     type: z.literal("interactive-entity").default("interactive-entity"),
     kind: z.literal("door").default("door"),
     isBlocking: z.boolean(),

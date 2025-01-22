@@ -23,13 +23,13 @@ import { CoordService } from "../coord/coord.service";
 
 @Injectable()
 export class MapSerializerService {
-  private static NON_PLAYABLE_NON_INTERACTIVE_TILE_ENTITY = [
+  private static readonly NON_PLAYABLE_NON_INTERACTIVE_TILE_ENTITY = [
     "wall",
     "pillar",
     "tree",
     "off-map",
   ];
-  private static NON_PLAYABLE_INTERACTIVE_TILE_ENTITY = [
+  private static readonly NON_PLAYABLE_INTERACTIVE_TILE_ENTITY = [
     "door",
     "trap",
     "chest",
@@ -37,8 +37,7 @@ export class MapSerializerService {
 
   constructor(private readonly coordService: CoordService) {}
 
-  public serialize(map: GameView["map"]): string {
-    void map;
+  public serialize(_map: GameView["map"]): string {
     throw new Error("Not implemented");
   }
 

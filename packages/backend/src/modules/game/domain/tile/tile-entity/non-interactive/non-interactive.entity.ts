@@ -9,7 +9,7 @@ type Data = {
 };
 
 export class TileNonInteractiveEntity extends TileEntity<Data> {
-  private static schema = z.object({
+  private static readonly schema = z.object({
     type: z.literal("non-interactive-entity").default("non-interactive-entity"),
     kind: z.enum(["off-map", "pillar", "tree", "wall"]),
     isBlocking: z.boolean(),

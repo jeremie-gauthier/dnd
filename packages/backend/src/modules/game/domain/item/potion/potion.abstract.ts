@@ -10,7 +10,7 @@ type Data = {
 };
 
 export abstract class Potion extends Item<Data> {
-  private static schema = Item.baseSchema.merge(
+  private static readonly schema = Item.baseSchema.merge(
     z.object({
       type: z.literal("Potion").optional().default("Potion"),
     }),

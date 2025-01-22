@@ -16,7 +16,7 @@ type Data = {
 export abstract class Item<
   ChildData extends Data = Data,
 > extends Entity<ChildData> {
-  protected static baseSchema = z.object({
+  protected static readonly baseSchema = z.object({
     type: z.enum(["Weapon", "Spell", "ChestTrap", "Potion", "Artifact"]),
     name: z.string(),
     level: z.number().min(0).max(3),

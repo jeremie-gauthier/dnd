@@ -6,7 +6,7 @@ type Data = {
 };
 
 export class GameMaster extends Entity<Data> {
-  private static schema = z.object({
+  private static readonly schema = z.object({
     userId: z.string(),
   });
 

@@ -2,6 +2,7 @@ import { PlayableEntityRaceType } from "@dnd/shared";
 import { Coord } from "../../coord/coord.vo";
 import { Game } from "../../game/game.aggregate";
 import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
+import { randomIndex } from "../../services/random/random-index";
 import { ChestTrap } from "./chest-trap.abstract";
 import { ChestTrapError } from "./chest-trap.error";
 
@@ -52,7 +53,7 @@ export class CallFromTheGrave extends ChestTrap {
       }
     });
 
-    const randIndex = Math.trunc(Math.random() * accessibleRoomCoords.length);
+    const randIndex = randomIndex(accessibleRoomCoords.length);
     const coord = accessibleRoomCoords[randIndex];
     if (!coord) {
       throw new ChestTrapError({

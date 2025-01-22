@@ -4,7 +4,7 @@ import { GameStatusError } from "./game-status.error";
 type Data = "PREPARE_FOR_BATTLE" | "BATTLE_ONGOING";
 
 export class GameStatus extends ValueObject<Data> {
-  private static STATE_MACHINE: Readonly<
+  private static readonly STATE_MACHINE: Readonly<
     Record<Data, { advanceTo: Array<Data>; rollbackFrom: Array<Data> }>
   > = {
     PREPARE_FOR_BATTLE: {

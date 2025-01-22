@@ -19,7 +19,7 @@ export class Condition
   extends Entity<Data>
   implements ConditionLifecycleObserver
 {
-  protected static baseSchema = z.object({
+  protected static readonly baseSchema = z.object({
     playableEntityAffected: z.instanceof(Playable),
     remainingTurns: z.number().min(0),
   });

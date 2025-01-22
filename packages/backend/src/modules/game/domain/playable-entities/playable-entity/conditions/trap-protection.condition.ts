@@ -9,7 +9,7 @@ type Data = {
 };
 
 export class TrapProtection extends Condition {
-  private static schema = Condition.baseSchema.merge(
+  private static readonly schema = Condition.baseSchema.merge(
     z.object({
       name: z.literal("trapProtection").optional().default("trapProtection"),
     }),

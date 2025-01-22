@@ -21,7 +21,7 @@ type Data = Pick<LobbyView, "config"> & {
 };
 
 export class Lobby extends AggregateRoot<Data> {
-  private static schema = lobbySchema.merge(
+  private static readonly schema = lobbySchema.merge(
     z.object({
       id: z.string().uuid(),
       players: z.array(z.instanceof(User)),

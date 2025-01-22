@@ -1,6 +1,8 @@
 import { Coord } from "../../coord/coord.vo";
 import { Game } from "../../game/game.aggregate";
 import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
+import { randomIndex } from "../../services/random/random-index";
+import { shuffleArray } from "../../services/random/shuffle-array";
 import { Potion } from "./potion.abstract";
 import { PotionError } from "./potion.error";
 
@@ -15,9 +17,8 @@ export class ImperiousHandPotion extends Potion {
     playableEntity: Hero;
     game: Game;
   }): void {
-    const monsters = game.playableEntities
-      .getMonsters()
-      .sort(() => Math.random() - Math.random());
+    const monsters = game.playableEntities.getMonsters();
+    shuffleArray(monsters);
 
     if (monsters.length === 0) {
       throw new PotionError({
@@ -59,7 +60,7 @@ export class ImperiousHandPotion extends Potion {
       }
     });
 
-    const randIndex = Math.trunc(Math.random() * accessibleRoomCoords.length);
+    const randIndex = randomIndex(accessibleRoomCoords.length);
     const coord = accessibleRoomCoords[randIndex];
     if (!coord) {
       throw new PotionError({

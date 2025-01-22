@@ -17,7 +17,7 @@ type Data = {
 };
 
 export abstract class ChestTrap extends Item<Data> {
-  private static schema = Item.baseSchema.merge(
+  private static readonly schema = Item.baseSchema.merge(
     z.object({
       type: z.literal("ChestTrap").optional().default("ChestTrap"),
       name: z.enum([

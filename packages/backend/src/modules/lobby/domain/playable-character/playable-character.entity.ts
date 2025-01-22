@@ -10,7 +10,7 @@ type Data = {
 };
 
 export class PlayableCharacter extends Entity<Data> {
-  private static schema = z.object({
+  private static readonly schema = z.object({
     id: z.string().uuid(),
     type: z.enum(["hero", "game_master"]),
     pickedBy: z.string().optional(),

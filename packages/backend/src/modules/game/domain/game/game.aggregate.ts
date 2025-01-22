@@ -51,7 +51,7 @@ type Data = {
 };
 
 export class Game extends AggregateRoot<Data> {
-  private static schema = z.object({
+  private static readonly schema = z.object({
     id: z.string().uuid(),
     host: z.object({ userId: z.string() }),
     status: z.instanceof(GameStatus),

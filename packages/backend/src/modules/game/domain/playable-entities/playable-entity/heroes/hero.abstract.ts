@@ -60,7 +60,7 @@ type Data = {
 };
 
 export abstract class Hero extends Playable<Data> {
-  private static schema = z.object({
+  private static readonly schema = z.object({
     id: z.string().uuid(),
     faction: z.literal("hero").default("hero"),
     name: z.string(),

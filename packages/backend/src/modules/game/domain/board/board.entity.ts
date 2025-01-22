@@ -12,7 +12,7 @@ type Data = {
 };
 
 export class Board extends Entity<Data> {
-  private static schema = z
+  private static readonly schema = z
     .object({
       width: z.number().min(1),
       height: z.number().min(1),

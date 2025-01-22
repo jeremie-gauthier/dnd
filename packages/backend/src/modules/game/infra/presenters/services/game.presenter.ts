@@ -46,7 +46,7 @@ export class GamePresenter {
       ),
       map: domain.board as GameMap,
       timeline: domain.playableEntities.values
-        .sort((a, b) => b.initiative - a.initiative)
+        .toSorted((a, b) => b.initiative - a.initiative)
         .map(({ id }) => id),
     };
   }

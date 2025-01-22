@@ -8,7 +8,7 @@ type Data = {
 };
 
 export class BoundingBox extends Entity<Data> {
-  private static schema = z.object({
+  private static readonly schema = z.object({
     topLeft: z.instanceof(Coord),
     bottomRight: z.instanceof(Coord),
   });

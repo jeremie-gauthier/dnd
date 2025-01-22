@@ -10,7 +10,7 @@ type Data = {
 };
 
 export class Chest extends TileInteractiveEntity<Data> {
-  private static schema = z.object({
+  private static readonly schema = z.object({
     type: z.literal("interactive-entity").default("interactive-entity"),
     kind: z.literal("chest").default("chest"),
     isBlocking: z.boolean(),

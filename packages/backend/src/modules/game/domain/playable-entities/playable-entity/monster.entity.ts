@@ -55,7 +55,7 @@ type Data = {
 };
 
 export class Monster extends Playable<Data> {
-  private static schema = z.object({
+  private static readonly schema = z.object({
     id: z.string(),
     faction: z.literal("monster").default("monster"),
     type: z.enum([PlayableEntityType.GOBELINOID, PlayableEntityType.UNDEAD]),

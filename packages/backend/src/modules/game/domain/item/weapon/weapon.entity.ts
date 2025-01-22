@@ -14,7 +14,7 @@ type Data = {
 };
 
 export class Weapon extends AttackItem<Data> {
-  private static schema = AttackItem.attackItemBaseSchema.merge(
+  private static readonly schema = AttackItem.attackItemBaseSchema.merge(
     z.object({
       type: z.literal("Weapon").optional().default("Weapon"),
     }),

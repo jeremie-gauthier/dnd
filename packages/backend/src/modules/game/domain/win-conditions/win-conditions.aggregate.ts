@@ -9,7 +9,7 @@ type Data = {
 };
 
 export class WinConditions extends Entity<Data> {
-  private static schema = z.object({
+  private static readonly schema = z.object({
     values: z.array(z.instanceof(WinCondition)).min(1),
   });
 

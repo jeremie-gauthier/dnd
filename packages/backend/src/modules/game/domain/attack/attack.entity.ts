@@ -13,7 +13,7 @@ type Data = {
 };
 
 export class Attack extends Entity<Data> {
-  private static schema = z.object({
+  private static readonly schema = z.object({
     id: z.string().uuid(),
     range: z.enum(["melee", "long", "versatile"]),
     type: z.enum(["regular", "super"]),

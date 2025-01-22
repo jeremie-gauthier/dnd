@@ -13,7 +13,7 @@ type Data = {
 };
 
 export class Trap extends TileInteractiveEntity<Data> {
-  private static schema = z.object({
+  private static readonly schema = z.object({
     type: z.literal("interactive-entity").default("interactive-entity"),
     kind: z.literal("trap").default("trap"),
     name: z.literal("pit").default("pit"),

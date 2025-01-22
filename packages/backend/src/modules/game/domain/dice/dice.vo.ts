@@ -1,4 +1,5 @@
 import { ValueObject } from "src/modules/shared/domain/value-object";
+import { randomIndex } from "../services/random/random-index";
 import { DiceError } from "./dice.error";
 
 type D6 = [number, number, number, number, number, number];
@@ -31,7 +32,7 @@ export class Dice extends ValueObject<Data> {
   }
 
   public roll(): number {
-    const randIndex = Math.trunc(Math.random() * this._data.values.length);
+    const randIndex = randomIndex(this._data.values.length);
     const result = this._data.values[randIndex];
     if (result === undefined) {
       throw new DiceError({

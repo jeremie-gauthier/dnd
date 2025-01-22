@@ -9,7 +9,7 @@ type Data = {
 };
 
 export class Weakness extends Condition {
-  private static schema = Condition.baseSchema.merge(
+  private static readonly schema = Condition.baseSchema.merge(
     z.object({
       name: z.literal("weakness").optional().default("weakness"),
     }),

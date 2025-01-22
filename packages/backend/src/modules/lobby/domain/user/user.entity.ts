@@ -8,7 +8,7 @@ type Data = {
 };
 
 export class User extends Entity<Data> {
-  private static schema = z.object({
+  private static readonly schema = z.object({
     userId: z.string(),
     status: z.instanceof(UserStatus),
   });

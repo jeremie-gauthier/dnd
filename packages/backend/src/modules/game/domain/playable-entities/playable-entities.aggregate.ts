@@ -3,6 +3,8 @@ import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { InitiativesRerolledDomainEvent } from "../domain-events/dtos/initiatives-rerolled.dto";
 import { Room } from "../rooms/room/room.entity";
+import { randomIndex } from "../services/random/random-index";
+import { shuffleArray } from "../services/random/shuffle-array";
 import { Hero } from "./playable-entity/heroes/hero.abstract";
 import { Monster } from "./playable-entity/monster.entity";
 import { Playable } from "./playable-entity/playable-entity.abstract";
@@ -13,7 +15,7 @@ type Data = {
 };
 
 export class PlayableEntities extends Entity<Data> {
-  private static schema = z.object({
+  private static readonly schema = z.object({
     values: z.array(z.instanceof(Playable)).min(4),
   });
 
@@ -108,9 +110,10 @@ export class PlayableEntities extends Entity<Data> {
   }
 
   public rollInitiatives() {
-    const initiatives = Array.from({ length: this._data.values.length })
-      .map((_, idx) => idx + 1)
-      .sort(() => Math.random() - Math.random());
+    const initiatives = Array.from({ length: this._data.values.length }).map(
+      (_, idx) => idx + 1,
+    );
+    shuffleArray(initiatives);
 
     this.addDomainEvent(new InitiativesRerolledDomainEvent());
 
@@ -156,7 +159,7 @@ export class PlayableEntities extends Entity<Data> {
 
   public getRandomMonsterOrThrow(): Monster {
     const monsters = this.getMonsters();
-    const randIndex = Math.trunc(Math.random() * monsters.length);
+    const randIndex = randomIndex(monsters.length);
     const randomMonster = monsters[randIndex];
 
     if (!randomMonster) {

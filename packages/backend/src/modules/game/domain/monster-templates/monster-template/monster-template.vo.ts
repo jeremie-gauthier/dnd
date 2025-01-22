@@ -23,7 +23,7 @@ type Data = {
 };
 
 export class MonsterTemplate extends Entity<Data> {
-  private static schema = z.object({
+  private static readonly schema = z.object({
     type: z.enum(["gobelinoid", "undead"]),
     race: z.enum(["goblin", "bugbear"]),
     characteristic: z.object({

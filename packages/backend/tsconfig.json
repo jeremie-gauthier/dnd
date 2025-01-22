@@ -19,6 +19,7 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
-    "typeRoots": ["./index.d.ts"]
+    "typeRoots": ["./index.d.ts"],
+    "lib": ["ESNext"]
   }
 }
