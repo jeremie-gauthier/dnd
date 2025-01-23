@@ -35,7 +35,7 @@ export class PlayableEntities extends Entity<Data> {
   private toSortedValuesAsRelativeTimeline({
     values,
   }: { values: Data["values"] }): Data["values"] {
-    const sortedValues = [...values].sort((a, b) =>
+    const sortedValues = [...values].toSorted((a, b) =>
       b.initiative.compare(a.initiative),
     );
 

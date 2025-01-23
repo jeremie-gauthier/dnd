@@ -34,11 +34,10 @@ export class VoicesOfTheDamned extends ChestTrap {
       },
       heuristic(currentCoord) {
         const coord = new Coord(currentCoord);
-        const manhattanDistances = otherHeroes.map((otherHero) =>
-          coord.getManhattanDistanceTo(otherHero.coord),
-        );
-        manhattanDistances.sort((a, b) => a - b);
-        const shortestDistance = manhattanDistances[0]!;
+        const shortestDistance = otherHeroes
+          .map((otherHero) => coord.getManhattanDistanceTo(otherHero.coord))
+          .toSorted((a, b) => a - b)
+          .at(0)!;
         return shortestDistance;
       },
       getIdentifier(coord) {
