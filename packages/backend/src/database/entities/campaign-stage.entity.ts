@@ -1,4 +1,5 @@
 import { MapCompiledJson } from "@dnd/shared";
+import { ApiProperty } from "@nestjs/swagger";
 import {
   Column,
   Entity,
@@ -9,6 +10,7 @@ import {
   type Relation,
 } from "typeorm";
 import {
+  CampaignStageStatus,
   type CampaignStageStatusType,
   CampaignStageStatusValues,
 } from "../enums/campaign-stage-status.enum";
@@ -45,5 +47,6 @@ export class CampaignStage {
   readonly maxLevelLoot: number;
 
   @Column({ type: "enum", enum: CampaignStageStatusValues })
+  @ApiProperty({ enum: CampaignStageStatus, enumName: "CampaignStageStatus" })
   status: CampaignStageStatusType;
 }

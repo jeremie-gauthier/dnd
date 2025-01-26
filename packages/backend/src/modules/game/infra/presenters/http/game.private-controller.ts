@@ -1,13 +1,18 @@
-import { GameView, GetUserGameStateOutput } from "@dnd/shared";
 import { Controller, Get, Param, UseGuards } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import type { Request } from "express";
 import { AuthUser } from "src/decorators/auth-user.decorator";
 import { AuthGuard } from "src/guards/auth.guard";
+import {
+  GetUserGameStateInputParamsDto,
+  GetUserGameStateOutputDto,
+} from "src/modules/game/application/use-cases/get-user-game-state/get-user-game-state.dto";
 import { GetUserGameStateUseCase } from "src/modules/game/application/use-cases/get-user-game-state/get-user-game-state.uc";
 import { GamePresenter } from "../services/game.presenter";
 
 @UseGuards(AuthGuard)
 @Controller("game/private")
+@ApiTags("Game")
 export class GamePrivateController {
   constructor(
     private readonly presenter: GamePresenter,
@@ -15,10 +20,10 @@ export class GamePrivateController {
   ) {}
 
   @Get("get-user-game-state/:gameId")
-  public async getLobbies(
+  public async getUserGameState(
     @AuthUser() user: Request["user"],
-    @Param("gameId") gameId: GameView["id"],
-  ): Promise<GetUserGameStateOutput> {
+    @Param() { gameId }: GetUserGameStateInputParamsDto,
+  ): Promise<GetUserGameStateOutputDto> {
     const { game, playerCurrentlyPlaying, yourStatus } =
       await this.getUserGameStateUseCase.execute({
         userId: user.id,

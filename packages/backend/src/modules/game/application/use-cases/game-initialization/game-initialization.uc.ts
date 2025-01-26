@@ -71,6 +71,7 @@ export class GameInitializationUseCase implements UseCase {
       tiles: payload.map.tiles.map(
         (tile) =>
           new Tile({
+            ...tile,
             coord: new Coord(tile.coord),
             entities: tile.entities.map((tileEntity) =>
               TileEntityFactory.create({
@@ -83,7 +84,6 @@ export class GameInitializationUseCase implements UseCase {
                     : undefined,
               }),
             ),
-            isStartingTile: tile.isStartingTile,
           }),
       ),
     });

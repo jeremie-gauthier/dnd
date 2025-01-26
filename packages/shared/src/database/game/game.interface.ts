@@ -93,7 +93,7 @@ export type TileEntity =
 export type Tile = {
   coord: Coord;
   entities: TileEntity[];
-  isStartingTile?: true;
+  isStartingTile: boolean;
 };
 
 export type Map = {
@@ -102,12 +102,12 @@ export type Map = {
   tiles: Tile[];
 };
 
-export type GameStatus = "prepare_for_battle" | "battle_ongoing";
+export type GameStatus = "PREPARE_FOR_BATTLE" | "BATTLE_ONGOING";
 
 export type GameView<TGameStatus extends GameStatus = GameStatus> = {
   id: string;
   status: TGameStatus;
-  map: Map;
+  board: Map;
   gameMaster: {
     userId: string;
   };

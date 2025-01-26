@@ -1,10 +1,6 @@
-import {
-  GameView,
-  coordToIndex,
-  getNeighbourCoords,
-  indexToCoord,
-} from "@dnd/shared";
+import { coordToIndex, getNeighbourCoords, indexToCoord } from "@dnd/shared";
 import { ValueObject } from "src/modules/shared/domain/value-object";
+import { GameView } from "../../infra/database/entities/game-view.entity";
 import { CoordError } from "./coord.error";
 
 type Data = {
@@ -71,7 +67,7 @@ export class Coord extends ValueObject<Data> {
   }
 
   public toIndex(
-    metadata: Readonly<Pick<GameView["map"], "width" | "height">>,
+    metadata: Readonly<Pick<GameView["board"], "width" | "height">>,
   ): number {
     const index = coordToIndex({
       coord: { row: this.row, column: this.column },
@@ -90,7 +86,7 @@ export class Coord extends ValueObject<Data> {
 
   public static fromIndex(
     index: number,
-    metadata: Readonly<Pick<GameView["map"], "width" | "height">>,
+    metadata: Readonly<Pick<GameView["board"], "width" | "height">>,
   ): Coord {
     if (index >= metadata.height * metadata.width) {
       throw new CoordError({

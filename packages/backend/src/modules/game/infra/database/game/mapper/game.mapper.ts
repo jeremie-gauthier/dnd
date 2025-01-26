@@ -42,6 +42,7 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
             new Tile({
               ...tile,
               coord: new Coord(tile.coord),
+              isStartingTile: false,
               entities: tile.entities.map((tileEntity) =>
                 TileEntityFactory.create({
                   tileEntity,

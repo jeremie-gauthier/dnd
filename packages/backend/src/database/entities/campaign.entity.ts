@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import {
   Column,
   Entity,
@@ -8,6 +9,7 @@ import {
   type Relation,
 } from "typeorm";
 import {
+  CampaignStatus,
   type CampaignStatusType,
   CampaignStatusValues,
 } from "../enums/campaign-status.enum";
@@ -23,9 +25,7 @@ export class Campaign {
   @OneToMany(
     () => CampaignProgression,
     (campaignProgression) => campaignProgression.campaign,
-    {
-      cascade: true,
-    },
+    { cascade: true },
   )
   readonly progressions: Relation<CampaignProgression[]>;
 
@@ -37,6 +37,7 @@ export class Campaign {
   readonly stages: Relation<CampaignStage[]>;
 
   @Column({ type: "enum", enum: CampaignStatusValues })
+  @ApiProperty({ enum: CampaignStatus, enumName: "CampaignStatus" })
   readonly status: CampaignStatusType;
 
   @ManyToMany(

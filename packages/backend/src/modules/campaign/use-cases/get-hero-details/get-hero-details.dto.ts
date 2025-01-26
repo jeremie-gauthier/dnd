@@ -1,13 +1,14 @@
-import {
-  getHeroDetailsInputSchema,
-  getHeroDetailsOutputSchema,
-} from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { IntersectionType, PickType } from "@nestjs/swagger";
+import { IsUUID } from "class-validator";
+import { HeroUI } from "src/database/entities/hero-ui.entity";
+import { Hero } from "src/database/entities/hero.entity";
 
-export class GetHeroDetailsInputDto extends createZodDto(
-  getHeroDetailsInputSchema,
-) {}
+export class GetHeroDetailsInputDto {
+  @IsUUID()
+  readonly heroId: Hero["id"];
+}
 
-export class GetHeroDetailsOutputDto extends createZodDto(
-  getHeroDetailsOutputSchema,
+export class GetHeroDetailsOutputDto extends IntersectionType(
+  PickType(Hero, ["id", "class", "name", "characteristic"] as const),
+  PickType(HeroUI, ["imgUrl"] as const),
 ) {}

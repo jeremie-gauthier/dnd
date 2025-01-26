@@ -1,6 +1,10 @@
-import { getLobbiesInputSchema, getLobbiesOutputSchema } from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { PickType } from "@nestjs/swagger";
+import { Lobby } from "src/modules/lobby/infra/database/entities/lobby.entity";
 
-export class GetLobbiesInputDto extends createZodDto(getLobbiesInputSchema) {}
-
-export class GetLobbiesOutputDto extends createZodDto(getLobbiesOutputSchema) {}
+export class GetLobbiesOutputDto extends PickType(Lobby, [
+  "id",
+  "host",
+  "config",
+]) {
+  readonly nbPlayers: number;
+}

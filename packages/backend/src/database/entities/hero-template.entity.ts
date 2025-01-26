@@ -1,7 +1,7 @@
 import { InventoryJson } from "@dnd/shared";
 import { Column, Entity, Index, ManyToMany, type Relation } from "typeorm";
 import { Campaign } from "./campaign.entity";
-import { PlayableEntity } from "./playable-entity";
+import { PlayableEntity } from "./playable-entity.entity";
 
 @Entity()
 @Index(["name", "class", "level"], { unique: true })

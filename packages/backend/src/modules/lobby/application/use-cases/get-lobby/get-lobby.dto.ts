@@ -1,6 +1,12 @@
-import { getLobbyInputSchema, getLobbyOutputSchema } from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { Type } from "class-transformer";
+import { IsInt, IsPositive } from "class-validator";
+import { Lobby } from "src/modules/lobby/infra/database/entities/lobby.entity";
 
-export class GetLobbyInputDto extends createZodDto(getLobbyInputSchema) {}
+export class GetLobbyInputParamsDto {
+  @Type(() => Number)
+  @IsInt()
+  @IsPositive()
+  readonly lobbyId: Lobby["id"];
+}
 
-export class GetLobbyOutputDto extends createZodDto(getLobbyOutputSchema) {}
+export class GetLobbyOutputDto extends Lobby {}

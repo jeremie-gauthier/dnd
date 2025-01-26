@@ -1,17 +1,20 @@
+import { InventoryJson } from "@dnd/shared";
+import { ApiProperty } from "@nestjs/swagger";
+import { Column, Entity, PrimaryColumn } from "typeorm";
+import { PlayableEntityRaceType } from "../enums/playable-entity-race.enum";
 import {
-  InventoryJson,
-  PlayableEntityRaceType,
+  PlayableEntityType,
   PlayableEntityTypeType,
   PlayableEntityTypeValues,
-} from "@dnd/shared";
-import { Column, Entity, PrimaryColumn } from "typeorm";
-import { Characteristic } from "./characteristic";
+} from "../enums/playable-entity-type.enum";
+import { Characteristic } from "./characteristic.entity";
 
 @Entity()
 export class MonsterTemplate {
   @PrimaryColumn()
   readonly race: PlayableEntityRaceType;
 
+  @ApiProperty({ enum: PlayableEntityType, enumName: "PlayableEntityType" })
   @Column({ type: "enum", enum: PlayableEntityTypeValues, nullable: false })
   readonly type: PlayableEntityTypeType;
 

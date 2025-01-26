@@ -1,13 +1,19 @@
-import {
-  getUserGameStateInputSchema,
-  getUserGameStateOutputSchema,
-} from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { IsNotEmpty, IsString } from "class-validator";
+import { PlayableEntity } from "src/modules/game/infra/database/game/model/playable-entity/playable.type";
+import { GameView } from "../../dtos/game-view.dto";
+export class GetUserGameStateInputParamsDto {
+  @IsString()
+  @IsNotEmpty()
+  readonly gameId: string;
+}
 
-export class GetUserGameStateInputDto extends createZodDto(
-  getUserGameStateInputSchema,
-) {}
+class PlayerCurrentlyPlayingDto {
+  readonly userId: string;
+  readonly entityId: PlayableEntity["id"];
+}
 
-export class GetUserGameStateOutputDto extends createZodDto(
-  getUserGameStateOutputSchema,
-) {}
+export class GetUserGameStateOutputDto {
+  readonly game: GameView;
+  readonly yourStatus: "preparation" | "idle" | "action";
+  readonly playerCurrentlyPlaying: PlayerCurrentlyPlayingDto;
+}

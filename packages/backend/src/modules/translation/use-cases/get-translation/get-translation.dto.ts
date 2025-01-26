@@ -1,13 +1,14 @@
-import {
-  getTranslationInputSchema,
-  getTranslationOutputSchema,
-} from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { IsNotEmpty, IsString } from "class-validator";
+import { Translation } from "src/database/entities/translation.entity";
 
-export class GetTranslationInputDto extends createZodDto(
-  getTranslationInputSchema,
-) {}
+export class GetTranslationInputParamsDto {
+  @IsString()
+  @IsNotEmpty()
+  readonly locale: string;
 
-export class GetTranslationOutputDto extends createZodDto(
-  getTranslationOutputSchema,
-) {}
+  @IsString()
+  @IsNotEmpty()
+  readonly namespace: string;
+}
+
+export class GetTranslationOutputDto extends Translation {}

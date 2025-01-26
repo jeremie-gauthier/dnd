@@ -11,14 +11,14 @@ import { TileError } from "./tile-entity/tile.error";
 type Data = {
   coord: Coord;
   entities: Array<TileEntity>;
-  isStartingTile?: true;
+  isStartingTile: boolean;
 };
 
 export class Tile extends Entity<Data> {
   private static readonly schema = z.object({
     coord: z.instanceof(Coord),
     entities: z.array(z.instanceof(TileEntity)),
-    isStartingTile: z.literal(true).optional(),
+    isStartingTile: z.boolean(),
   });
 
   constructor(rawData: Data) {

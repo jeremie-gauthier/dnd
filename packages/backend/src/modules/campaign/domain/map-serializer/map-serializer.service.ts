@@ -37,7 +37,7 @@ export class MapSerializerService {
 
   constructor(private readonly coordService: CoordService) {}
 
-  public serialize(_map: GameView["map"]): string {
+  public serialize(_map: GameView["board"]): string {
     throw new Error("Not implemented");
   }
 
@@ -343,6 +343,7 @@ export class MapSerializerService {
         metadata: { width, height },
       }),
       entities: [],
+      isStartingTile: false,
     }));
   }
 
