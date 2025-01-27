@@ -1,13 +1,14 @@
+import {
+  TileEntityType,
+  TileEntityTypeType,
+} from "src/database/enums/tile-entity-type.enum";
 import { Entity } from "src/modules/shared/domain/entity";
 import { TileInteractiveEntity } from "./interactive/interactive.abstract";
 import { TileNonInteractiveEntity } from "./non-interactive/non-interactive.entity";
 import { TilePlayableEntity } from "./playable/playable.entity";
 
 type Data = {
-  readonly type:
-    | "playable-entity"
-    | "interactive-entity"
-    | "non-interactive-entity";
+  readonly type: TileEntityTypeType;
   isBlocking: boolean;
   [x: string]: any;
 };
@@ -28,14 +29,14 @@ export abstract class TileEntity<
   }
 
   public isInteractive(): this is TileInteractiveEntity {
-    return this._data.type === "interactive-entity";
+    return this._data.type === TileEntityType.INTERACTIVE_ENTITY;
   }
 
   public isPlayable(): this is TilePlayableEntity {
-    return this._data.type === "playable-entity";
+    return this._data.type === TileEntityType.PLAYABLE_ENTITY;
   }
 
   public isNonInteractive(): this is TileNonInteractiveEntity {
-    return this._data.type === "non-interactive-entity";
+    return this._data.type === TileEntityType.NON_INTERACTIVE_ENTITY;
   }
 }

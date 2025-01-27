@@ -1,13 +1,13 @@
-import {
-  playableEntityAttackInputSchema,
-  playableEntityAttackOutputSchema,
-} from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { IsNotEmpty, IsString, IsUUID } from "class-validator";
 
-export class PlayableEntityAttackInputDto extends createZodDto(
-  playableEntityAttackInputSchema,
-) {}
+export class PlayableEntityAttackInputDto {
+  @IsUUID()
+  readonly gameId: string;
 
-export class PlayableEntityAttackOutputDto extends createZodDto(
-  playableEntityAttackOutputSchema,
-) {}
+  @IsUUID()
+  readonly attackId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  readonly targetPlayableEntityId: string;
+}

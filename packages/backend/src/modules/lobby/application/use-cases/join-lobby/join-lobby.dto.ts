@@ -1,6 +1,10 @@
-import { joinLobbyInputSchema, joinLobbyOutputSchema } from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { IsUUID } from "class-validator";
 
-export class JoinLobbyInputDto extends createZodDto(joinLobbyInputSchema) {}
+export class JoinLobbyInputDto {
+  @IsUUID()
+  readonly lobbyId: string;
+}
 
-export class JoinLobbyOutputDto extends createZodDto(joinLobbyOutputSchema) {}
+export class JoinLobbyOutputDto {
+  readonly lobbyId: string;
+}

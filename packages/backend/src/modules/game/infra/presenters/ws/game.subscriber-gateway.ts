@@ -1,12 +1,11 @@
 import { ClientGameEvent } from "@dnd/shared";
-import { UseFilters, UsePipes } from "@nestjs/common";
+import { UseFilters } from "@nestjs/common";
 import {
   ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
 } from "@nestjs/websockets";
-import { ZodValidationPipe } from "nestjs-zod";
 import { WsExceptionFilter } from "src/errors/ws-exception-filter";
 import type { ServerSocket } from "src/interfaces/socket.interface";
 import { PlayableEntityDeleteItemInputDto } from "src/modules/game/application/use-cases/playable-entity-delete-item/playable-entity-delete-item.dto";
@@ -37,7 +36,6 @@ import { PlayableEntityMoveInputDto } from "../../../application/use-cases/playa
 import { PlayableEntityMoveUseCase } from "../../../application/use-cases/playable-entity-move/playable-entity-move.uc";
 import { ItemPresenter } from "../services/item.presenter";
 
-@UsePipes(ZodValidationPipe)
 @UseFilters(WsExceptionFilter)
 @WebSocketGateway({
   cors: {

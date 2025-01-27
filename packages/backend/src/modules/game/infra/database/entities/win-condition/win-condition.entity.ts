@@ -1,3 +1,10 @@
+import { ApiProperty } from "@nestjs/swagger";
+import {
+  WinConditionName,
+  WinConditionNameType,
+} from "../../enums/win-condition-name.enum";
+
 export abstract class WinCondition {
-  abstract name: "defeat_all_monsters";
+  @ApiProperty({ enum: WinConditionName, enumName: "WinConditionName" })
+  abstract name: WinConditionNameType;
 }

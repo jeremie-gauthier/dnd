@@ -66,7 +66,7 @@ export type PlayableHeroEntity = BasePlayableEntity & {
 export type PlayableEntity = PlayableEnemyEntity | PlayableHeroEntity;
 
 export type TilePlayableEntity = {
-  type: "playable-entity";
+  type: "PLAYABLE_ENTITY";
   id: PlayableEntity["id"];
   faction: "hero" | "monster";
   isBlocking: boolean;
@@ -78,7 +78,7 @@ export type TileNonPlayableInteractiveEntity =
   | ChestEntity;
 
 export type TileNonPlayableNonInteractiveEntity = {
-  type: "non-interactive-entity";
+  type: "NON_INTERACTIVE_ENTITY";
   kind: "wall" | "pillar" | "tree" | "off-map";
   isVisible: true;
   isBlocking: true;

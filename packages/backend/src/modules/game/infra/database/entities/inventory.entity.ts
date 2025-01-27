@@ -1,14 +1,14 @@
 import { Item } from "./item/item.entity";
 
-export type StuffStorageCapacityJson = {
+export class StuffStorageCapacity {
   nbArtifactSlots: number;
   nbSpellSlots: number;
   nbWeaponSlots: number;
   nbBackpackSlots: number;
-};
+}
 
 export class Inventory {
-  storageCapacity: StuffStorageCapacityJson;
+  storageCapacity: StuffStorageCapacity;
   gear: Array<Item>;
   backpack: Array<Item>;
 }

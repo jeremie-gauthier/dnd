@@ -1,13 +1,10 @@
-import {
-  playableEntityDeleteItemInputSchema,
-  playableEntityDeleteItemOutputSchema,
-} from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { IsNotEmpty, IsString, IsUUID } from "class-validator";
 
-export class PlayableEntityDeleteItemInputDto extends createZodDto(
-  playableEntityDeleteItemInputSchema,
-) {}
+export class PlayableEntityDeleteItemInputDto {
+  @IsUUID()
+  readonly gameId: string;
 
-export class PlayableEntityDeleteItemOutputDto extends createZodDto(
-  playableEntityDeleteItemOutputSchema,
-) {}
+  @IsString()
+  @IsNotEmpty()
+  readonly itemId: string;
+}

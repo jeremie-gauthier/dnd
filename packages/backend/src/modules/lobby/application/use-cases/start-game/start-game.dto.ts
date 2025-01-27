@@ -1,6 +1,6 @@
-import { startGameInputSchema, startGameOutputSchema } from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { IsUUID } from "class-validator";
 
-export class StartGameInputDto extends createZodDto(startGameInputSchema) {}
-
-export class StartGameOutputDto extends createZodDto(startGameOutputSchema) {}
+export class StartGameInputDto {
+  @IsUUID()
+  readonly lobbyId: string;
+}

@@ -1,4 +1,4 @@
-import { GameItem, sum } from "@dnd/shared";
+import { sum } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { ITEM_UI_REPOSITORY } from "src/modules/game/application/repositories/item-ui-repository.interface";
 import { Dice } from "src/modules/game/domain/dice/dice.vo";
@@ -7,6 +7,8 @@ import { ChestTrap } from "src/modules/game/domain/item/chest-trap/chest-trap.ab
 import { Potion } from "src/modules/game/domain/item/potion/potion.abstract";
 import { Spell } from "src/modules/game/domain/item/spell/spell.entity";
 import { Weapon } from "src/modules/game/domain/item/weapon/weapon.entity";
+import { AttackItem } from "../../database/entities/item/attack-item/attack-item.entity";
+import { Item } from "../../database/entities/item/item.entity";
 import { PostgresItemUIRepository } from "../../database/item-ui/item-ui.repository";
 
 @Injectable()
@@ -22,7 +24,7 @@ export class ItemPresenter {
     item: ReturnType<
       (Weapon | Spell | ChestTrap | Potion | Artifact)["toPlain"]
     >;
-  }): Promise<GameItem> {
+  }): Promise<Item> {
     const itemUI = await this.itemUIRepository.getOneOrThrow({
       name: item.name,
     });
@@ -32,7 +34,7 @@ export class ItemPresenter {
         ...attack,
         dices: attack.dices.map((dice) => this.getDice({ dice })),
       }));
-      return { ...item, ...itemUI, attacks };
+      return { ...item, ...itemUI, attacks } as AttackItem;
     }
 
     return { ...item, ...itemUI };
@@ -40,10 +42,9 @@ export class ItemPresenter {
 
   private getDice({
     dice,
-  }: { dice: ReturnType<Dice["toPlain"]> }): Extract<
-    GameItem,
-    { type: "Spell" | "Weapon" }
-  >["attacks"][number]["dices"][number] {
+  }: {
+    dice: ReturnType<Dice["toPlain"]>;
+  }): AttackItem["attacks"][number]["dices"][number] {
     return {
       ...dice,
       maxValue: Math.max(...dice.values),

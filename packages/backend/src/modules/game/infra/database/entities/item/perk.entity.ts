@@ -1,3 +1,5 @@
+import { PerkNameType } from "src/database/enums/perk-name.enum";
+
 export class Perk {
-  name: string;
+  readonly name: PerkNameType;
 }

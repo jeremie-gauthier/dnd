@@ -1,3 +1,5 @@
+import { StorageSpace } from "src/database/enums/storage-space.enum";
+import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
 import { GameEventFactory } from "src/modules/game/application/factories/game-event.factory";
 import { ItemFactory } from "src/modules/game/application/factories/item.factory";
 import { GameItem } from "src/modules/game/application/factories/item.interface";
@@ -24,15 +26,16 @@ import { WinConditions } from "src/modules/game/domain/win-conditions/win-condit
 import { Mapper } from "src/modules/shared/infra/mapper";
 import { GameRoomsDeserialized } from "src/modules/shared/interfaces/game-rooms-deserialized.interface";
 import { GameWinConditionsDeserialized } from "src/modules/shared/interfaces/game-win-conditions-deserialized.interface";
-import { GameEvent } from "../model/game-event.type";
-import { GamePersistence } from "../model/game.model";
+import { GameEvent } from "../../entities/game-event/game-event.entity";
+import { Game as GamePersistence } from "../../entities/game.entity";
+import { TilePlayableEntity } from "../../entities/tile-entity/tile-playable-entity/tile-playable-entity.entity";
 import { PlayableEntityFactory } from "./playable-entity.factory";
 
 export class GameMapper extends Mapper<GamePersistence, GameDomain> {
   public override toDomain(persistence: GamePersistence): GameDomain {
     return new GameDomain({
       id: persistence.id,
-      host: persistence.host,
+      host: persistence.gameMaster,
       status: new GameStatus(persistence.status),
       board: new Board({
         height: persistence.board.height,
@@ -47,9 +50,13 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
                 TileEntityFactory.create({
                   tileEntity,
                   playableEntityRef:
-                    tileEntity.type === "playable-entity"
+                    tileEntity.type === TileEntityType.PLAYABLE_ENTITY
                       ? PlayableEntityFactory.create(
-                          persistence.playableEntities[tileEntity.id]!,
+                          persistence.playableEntities.find(
+                            (playableEntity) =>
+                              playableEntity.id ===
+                              (tileEntity as TilePlayableEntity).id,
+                          )!,
                         )
                       : undefined,
                 }),
@@ -71,10 +78,10 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
               inventory: new Inventory({
                 ...enemyTemplate.inventory,
                 playableId: enemyTemplate.race,
-                backpack: enemyTemplate.inventory.backpack.map((item) =>
-                  ItemFactory.create(item as unknown as GameItem),
+                [StorageSpace.BACKPACK]: enemyTemplate.inventory.backpack.map(
+                  (item) => ItemFactory.create(item as unknown as GameItem),
                 ),
-                gear: enemyTemplate.inventory.gear.map((item) =>
+                [StorageSpace.GEAR]: enemyTemplate.inventory.gear.map((item) =>
                   ItemFactory.create(item as unknown as GameItem),
                 ),
               }),
@@ -115,24 +122,19 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
   public toPersistence(domain: GameDomain): GamePersistence {
     const plain = domain.toPlain();
 
-    return {
+    return Object.assign(new GamePersistence(), {
       id: plain.id,
       host: plain.host,
       status: plain.status,
-      playableEntities: Object.fromEntries(
-        plain.playableEntities.values.map((playableEntity) => {
-          return [
-            playableEntity.id,
-            playableEntity.faction === "hero"
-              ? this.getHero({
-                  hero: playableEntity as ReturnType<Hero["toPlain"]>,
-                })
-              : this.getMonster({
-                  monster: playableEntity as ReturnType<Monster["toPlain"]>,
-                }),
-          ];
-        }),
-      ),
+      playableEntities: plain.playableEntities.values.map((playableEntity) => {
+        return playableEntity.faction === "hero"
+          ? this.getHero({
+              hero: playableEntity as ReturnType<Hero["toPlain"]>,
+            })
+          : this.getMonster({
+              monster: playableEntity as ReturnType<Monster["toPlain"]>,
+            });
+      }),
       board: plain.board as GamePersistence["board"],
       gameMaster: plain.gameMaster,
       enemyTemplates: plain.monsterTemplates.values,
@@ -143,7 +145,7 @@ export class GameMapper extends Mapper<GamePersistence, GameDomain> {
       itemsLooted: plain.itemsLooted,
       rooms: plain.rooms.values as GameRoomsDeserialized,
       monstersKilled: plain.monstersKilled,
-    };
+    });
   }
 
   private getHero({ hero }: { hero: ReturnType<Hero["toPlain"]> }) {

@@ -1,6 +1,6 @@
 export const StorageSpace = {
-  GEAR: "GEAR",
-  BACKPACK: "BACKPACK",
+  GEAR: "gear",
+  BACKPACK: "backpack",
 } as const;
 
 export const StorageSpaceValues = Object.values(StorageSpace);

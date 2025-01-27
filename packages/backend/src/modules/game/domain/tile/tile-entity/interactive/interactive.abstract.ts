@@ -6,7 +6,7 @@ import { TileInteractiveEntityError } from "./interactive.error";
 import { Trap } from "./trap.entity";
 
 type Data = {
-  readonly type: "interactive-entity";
+  readonly type: "INTERACTIVE_ENTITY";
   readonly kind: "chest" | "door" | "trap";
   isBlocking: boolean;
   isVisible: boolean;

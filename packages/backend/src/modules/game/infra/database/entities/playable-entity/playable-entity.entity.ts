@@ -1,5 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
+  PlayableEntityFaction,
+  PlayableEntityFactionType,
+} from "src/database/enums/playable-entity-faction.enum";
+import {
   PlayableEntityRace,
   PlayableEntityRaceType,
 } from "src/database/enums/playable-entity-race.enum";
@@ -7,6 +11,8 @@ import {
   PlayableEntityType,
   PlayableEntityTypeType,
 } from "src/database/enums/playable-entity-type.enum";
+import { CurrentPhase, CurrentPhaseType } from "../../enums/current-phase.enum";
+import { ActionHistory } from "../action-history.entity";
 import { Coord } from "../coord.entity";
 import { Inventory } from "../inventory.entity";
 import { PlayableEntityCondition } from "../playable-entity-condition.entity";
@@ -14,7 +20,11 @@ import { PlayableEntityCondition } from "../playable-entity-condition.entity";
 export abstract class PlayableEntity {
   id: string;
 
-  abstract faction: "hero" | "monster";
+  @ApiProperty({
+    enum: PlayableEntityFaction,
+    enumName: "PlayableEntityFaction",
+  })
+  abstract faction: PlayableEntityFactionType;
 
   @ApiProperty({ enum: PlayableEntityType, enumName: "PlayableEntityType" })
   type: PlayableEntityTypeType;
@@ -22,7 +32,8 @@ export abstract class PlayableEntity {
   @ApiProperty({ enum: PlayableEntityRace, enumName: "PlayableEntityRace" })
   race: PlayableEntityRaceType;
 
-  currentPhase: "preparation" | "idle" | "action";
+  @ApiProperty({ enum: CurrentPhase, enumName: "CurrentPhase" })
+  currentPhase: CurrentPhaseType;
   playedByUserId: string;
 
   name: string;
@@ -48,14 +59,6 @@ export abstract class PlayableEntity {
     actionPoints: number;
   };
   inventory: Inventory;
-  actionsDoneThisTurn: Array<{
-    name:
-      | "attack"
-      | "move"
-      | "open_door"
-      | "delete_item"
-      | "swap_items"
-      | "open_chest";
-  }>;
+  actionsDoneThisTurn: Array<ActionHistory>;
   conditions: Array<PlayableEntityCondition>;
 }

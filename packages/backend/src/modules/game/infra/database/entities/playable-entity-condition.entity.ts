@@ -1,12 +1,8 @@
-type ConditionName =
-  | "stopped"
-  | "weakness"
-  | "brokenArmor"
-  | "doubleMovementPoints"
-  | "trapProtection"
-  | "doubleWeaponDamage";
+import { ApiProperty } from "@nestjs/swagger";
+import { ConditionName, ConditionNameType } from "../enums/condition-name.enum";
 
 export class PlayableEntityCondition {
-  name: ConditionName;
+  @ApiProperty({ enum: ConditionName, enumName: "ConditionName" })
+  name: ConditionNameType;
   remainingTurns: number;
 }

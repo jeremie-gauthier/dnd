@@ -6,7 +6,7 @@ import { Stopped } from "../../domain/playable-entities/playable-entity/conditio
 import { TrapProtection } from "../../domain/playable-entities/playable-entity/conditions/trap-protection.condition";
 import { Weakness } from "../../domain/playable-entities/playable-entity/conditions/weakness.condition";
 import { Playable } from "../../domain/playable-entities/playable-entity/playable-entity.abstract";
-import { PlayableEntityCondition } from "../../infra/database/game/model/playable-entity/condition.type";
+import { PlayableEntityCondition } from "../../infra/database/entities/playable-entity-condition.entity";
 
 export class ConditionFactory {
   private constructor() {}

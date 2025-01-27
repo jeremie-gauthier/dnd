@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
 import { Game } from "../../domain/game/game.aggregate";
 import { TileEntity } from "../../domain/tile/tile-entity/tile-entity.abstract";
 
@@ -48,9 +49,9 @@ export class GameStateService {
     entity,
   }: { entity: ReturnType<TileEntity["toPlain"]> }): boolean {
     return (
-      entity.type === "playable-entity" ||
-      ((entity.type === "non-interactive-entity" ||
-        entity.type === "interactive-entity") &&
+      entity.type === TileEntityType.PLAYABLE_ENTITY ||
+      ((entity.type === TileEntityType.NON_INTERACTIVE_ENTITY ||
+        entity.type === TileEntityType.INTERACTIVE_ENTITY) &&
         entity.isVisible)
     );
   }

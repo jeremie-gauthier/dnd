@@ -1,6 +1,9 @@
+import { ApiProperty } from "@nestjs/swagger";
+import { GameStatus, GameStatusType } from "../enums/game-status.enum";
 import { Board } from "./board.entity";
 import { GameEvent } from "./game-event/game-event.entity";
 import { GameMaster } from "./game-master.entity";
+import { Host } from "./host.entity";
 import { Item } from "./item/item.entity";
 import { MonsterTemplate } from "./monster-template.entity";
 import { PlayableEntity } from "./playable-entity/playable-entity.entity";
@@ -9,10 +12,12 @@ import { WinCondition } from "./win-condition/win-condition.entity";
 
 export class Game {
   readonly id: string;
-  readonly status: "PREPARE_FOR_BATTLE" | "BATTLE_ONGOING";
+  readonly host: Host;
+  @ApiProperty({ enum: GameStatus, enumName: "GameStatus" })
+  readonly status: GameStatusType;
   readonly board: Board;
   readonly gameMaster: GameMaster;
-  readonly playableEntities: Record<PlayableEntity["id"], PlayableEntity>;
+  readonly playableEntities: Array<PlayableEntity>;
   readonly events: Array<GameEvent>;
   readonly enemyTemplates: Array<MonsterTemplate>;
   readonly winConditions: Array<WinCondition>;

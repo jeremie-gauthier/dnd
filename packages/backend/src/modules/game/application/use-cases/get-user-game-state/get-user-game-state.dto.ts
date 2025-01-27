@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString } from "class-validator";
-import { PlayableEntity } from "src/modules/game/infra/database/game/model/playable-entity/playable.type";
+import { PlayableEntity } from "src/modules/game/infra/database/entities/playable-entity/playable-entity.entity";
 import { GameView } from "../../dtos/game-view.dto";
 export class GetUserGameStateInputParamsDto {
   @IsString()

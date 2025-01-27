@@ -1,13 +1,28 @@
 import {
-  playableEntityLootItemInputSchema,
-  playableEntityLootItemOutputSchema,
-} from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from "class-validator";
+import {
+  StorageSpace,
+  StorageSpaceType,
+} from "src/database/enums/storage-space.enum";
 
-export class PlayableEntityLootItemInputDto extends createZodDto(
-  playableEntityLootItemInputSchema,
-) {}
+export class PlayableEntityLootItemInputDto {
+  @IsUUID()
+  readonly gameId: string;
 
-export class PlayableEntityLootItemOutputDto extends createZodDto(
-  playableEntityLootItemOutputSchema,
-) {}
+  @IsString()
+  @IsNotEmpty()
+  readonly itemId: string;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  readonly replacedItemId?: string;
+
+  @IsEnum(StorageSpace)
+  readonly storageSpace: StorageSpaceType;
+}

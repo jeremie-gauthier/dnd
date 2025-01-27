@@ -1,6 +1,6 @@
 import { coordToIndex, getNeighbourCoords, indexToCoord } from "@dnd/shared";
 import { ValueObject } from "src/modules/shared/domain/value-object";
-import { GameView } from "../../infra/database/entities/game-view.entity";
+import { GameView } from "../../application/dtos/game-view.dto";
 import { CoordError } from "./coord.error";
 
 type Data = {

@@ -1,5 +1,5 @@
 type BaseInteractiveEntity = {
-  type: "interactive-entity";
+  type: "INTERACTIVE_ENTITY";
   isVisible: boolean;
   isBlocking: boolean;
   canInteract: boolean;

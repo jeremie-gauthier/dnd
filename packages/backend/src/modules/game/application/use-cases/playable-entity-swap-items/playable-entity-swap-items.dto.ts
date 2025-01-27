@@ -1,13 +1,16 @@
-import {
-  playableEntitySwapItemsInputSchema,
-  playableEntitySwapItemsOutputSchema,
-} from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { IsNotEmpty, IsOptional, IsString, IsUUID } from "class-validator";
 
-export class PlayableEntitySwapItemsInputDto extends createZodDto(
-  playableEntitySwapItemsInputSchema,
-) {}
+export class PlayableEntitySwapItemsInputDto {
+  @IsUUID()
+  readonly gameId: string;
 
-export class PlayableEntitySwapItemsOutputDto extends createZodDto(
-  playableEntitySwapItemsOutputSchema,
-) {}
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  readonly gearItemId?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  readonly backpackItemId?: string;
+}

@@ -11,11 +11,11 @@ import { Dice } from "../dice.entity";
 import { Perk } from "../perk.entity";
 
 export class Attack {
-  id: string;
+  readonly id: string;
   @ApiProperty({ enum: AttackRange, enumName: "AttackRange" })
-  range: AttackRangeType;
+  readonly range: AttackRangeType;
   @ApiProperty({ enum: AttackType, enumName: "AttackType" })
-  type: AttackTypeType;
+  readonly type: AttackTypeType;
   dices: Array<Dice>;
   perks: Array<Perk>;
 }

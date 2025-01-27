@@ -1,13 +1,10 @@
-import {
-  playableEntityDrinkPotionInputSchema,
-  playableEntityDrinkPotionOutputSchema,
-} from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { IsNotEmpty, IsString, IsUUID } from "class-validator";
 
-export class PlayableEntityDrinkPotionInputDto extends createZodDto(
-  playableEntityDrinkPotionInputSchema,
-) {}
+export class PlayableEntityDrinkPotionInputDto {
+  @IsUUID()
+  readonly gameId: string;
 
-export class PlayableEntityDrinkPotionOutputDto extends createZodDto(
-  playableEntityDrinkPotionOutputSchema,
-) {}
+  @IsString()
+  @IsNotEmpty()
+  readonly itemId: string;
+}

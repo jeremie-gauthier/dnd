@@ -1,7 +1,11 @@
+import { ApiProperty } from "@nestjs/swagger";
+import {
+  TileEntityType,
+  TileEntityTypeType,
+} from "src/database/enums/tile-entity-type.enum";
+
 export abstract class TileEntity {
-  abstract type:
-    | "non-interactive-entity"
-    | "playable-entity"
-    | "interactive-entity";
+  @ApiProperty({ enum: TileEntityType, enumName: "TileEntityType" })
+  abstract readonly type: TileEntityTypeType;
   abstract isBlocking: boolean;
 }

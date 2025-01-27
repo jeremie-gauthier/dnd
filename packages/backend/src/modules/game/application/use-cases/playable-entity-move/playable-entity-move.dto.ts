@@ -1,13 +1,21 @@
-import {
-  playableEntityMoveInputSchema,
-  playableEntityMoveOutputSchema,
-} from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { Type } from "class-transformer";
+import { IsArray, IsInt, IsPositive, IsUUID } from "class-validator";
 
-export class PlayableEntityMoveInputDto extends createZodDto(
-  playableEntityMoveInputSchema,
-) {}
+class CoordDto {
+  @IsInt()
+  @IsPositive()
+  readonly row: number;
 
-export class PlayableEntityMoveOutputDto extends createZodDto(
-  playableEntityMoveOutputSchema,
-) {}
+  @IsInt()
+  @IsPositive()
+  readonly column: number;
+}
+
+export class PlayableEntityMoveInputDto {
+  @IsUUID()
+  readonly gameId: string;
+
+  @IsArray()
+  @Type(() => CoordDto)
+  readonly pathToTile: Array<CoordDto>;
+}

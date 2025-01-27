@@ -4,6 +4,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import { MonsterTemplate as MonsterTemplatePersistence } from "src/database/entities/enemy-template.entity";
+import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { GameInitializationDonePayload as CampaignGameInitializationDonePayload } from "src/modules/campaign/events/game-initialization-done.payload";
 import { Board } from "src/modules/game/domain/board/board.entity";
@@ -23,6 +24,7 @@ import { Room } from "src/modules/game/domain/rooms/room/room.entity";
 import { Rooms } from "src/modules/game/domain/rooms/rooms.aggregate";
 import { Tile } from "src/modules/game/domain/tile/tile.entity";
 import { WinConditions } from "src/modules/game/domain/win-conditions/win-conditions.aggregate";
+import { GameStatus as EGameStatus } from "src/modules/game/infra/database/enums/game-status.enum";
 import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { GameInitializationDonePayload } from "src/modules/shared/events/game/game-initialization-done.payload";
@@ -77,7 +79,7 @@ export class GameInitializationUseCase implements UseCase {
               TileEntityFactory.create({
                 tileEntity,
                 playableEntityRef:
-                  tileEntity.type === "playable-entity"
+                  tileEntity.type === TileEntityType.PLAYABLE_ENTITY
                     ? playableEntities.getOneOrThrow({
                         playableEntityId: tileEntity.id,
                       })
@@ -90,7 +92,7 @@ export class GameInitializationUseCase implements UseCase {
     const game = new Game({
       id: payload.lobby.id,
       host: payload.lobby.host,
-      status: new GameStatus("BATTLE_ONGOING"),
+      status: new GameStatus(EGameStatus.BATTLE_ONGOING),
       board,
       gameMaster: new GameMaster({
         userId: payload.lobby.playableCharacters.find(
@@ -293,10 +295,10 @@ export class GameInitializationUseCase implements UseCase {
     enemyInventory: InventoryJson;
   }): Promise<Inventory> {
     const backpackItemNames = enemyInventory.items
-      .filter((item) => item.storageSpace === "BACKPACK")
+      .filter((item) => item.storageSpace === StorageSpace.BACKPACK)
       .map(({ itemName }) => itemName);
     const gearItemNames = enemyInventory.items
-      .filter((item) => item.storageSpace === "GEAR")
+      .filter((item) => item.storageSpace === StorageSpace.GEAR)
       .map(({ itemName }) => itemName);
 
     const [backpackItems, gearItems] = await Promise.all([

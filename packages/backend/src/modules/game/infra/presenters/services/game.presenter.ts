@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
+import { StorageSpace } from "src/database/enums/storage-space.enum";
+import { GameView } from "src/modules/game/application/dtos/game-view.dto";
 import { Game as GameDomain } from "src/modules/game/domain/game/game.aggregate";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
-import { GameView } from "../../database/entities/game-view.entity";
 import { PostgresHeroUIRepository } from "../../database/hero-ui/hero-ui.repository";
 import { ItemPresenter } from "./item.presenter";
 
@@ -51,13 +52,17 @@ export class GamePresenter {
     inventory,
   }: {
     inventory: ReturnType<Inventory["toPlain"]>;
-  }): Promise<GameView["playableEntities"][string]["inventory"]> {
+  }): Promise<GameView["playableEntities"][number]["inventory"]> {
     const [backpack, gear] = await Promise.all([
       Promise.all(
-        inventory.backpack.map((item) => this.itemPresenter.toView({ item })),
+        inventory[StorageSpace.BACKPACK].map((item) =>
+          this.itemPresenter.toView({ item }),
+        ),
       ),
       Promise.all(
-        inventory.gear.map((item) => this.itemPresenter.toView({ item })),
+        inventory[StorageSpace.GEAR].map((item) =>
+          this.itemPresenter.toView({ item }),
+        ),
       ),
     ]);
 

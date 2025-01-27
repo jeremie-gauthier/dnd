@@ -2,16 +2,22 @@ import { config as dotenvConfig } from "dotenv";
 dotenvConfig({ path: ".env" });
 
 import "multer";
+import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { patchNestJsSwagger } from "nestjs-zod";
 import { AppModule } from "./app.module";
-
-patchNestJsSwagger();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
 
   const configService = app.get(ConfigService);
   const PORT = configService.getOrThrow<string>("PORT");

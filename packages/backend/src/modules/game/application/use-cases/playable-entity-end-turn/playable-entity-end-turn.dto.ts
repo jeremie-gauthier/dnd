@@ -1,13 +1,6 @@
-import {
-  endPlayerTurnInputSchema,
-  endPlayerTurnOutputSchema,
-} from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { IsUUID } from "class-validator";
 
-export class PlayableEntityEndTurnInputDto extends createZodDto(
-  endPlayerTurnInputSchema,
-) {}
-
-export class PlayableEntityEndTurnOutputDto extends createZodDto(
-  endPlayerTurnOutputSchema,
-) {}
+export class PlayableEntityEndTurnInputDto {
+  @IsUUID()
+  readonly gameId: string;
+}
