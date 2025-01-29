@@ -1,4 +1,5 @@
-import { GameView, isInRange } from "@dnd/shared";
+import { Board } from "@/openapi/dnd-api";
+import { isInRange } from "@dnd/shared";
 import { GameEventManager } from "../../events";
 import {
   type CanvasConfig,
@@ -11,8 +12,8 @@ type Params = {
   ev: MouseEvent;
   layerConfig: CanvasConfig;
   mapMetadata: {
-    height: GameView["map"]["height"];
-    width: GameView["map"]["width"];
+    height: Board["height"];
+    width: Board["width"];
   };
   gameEventManager: GameEventManager;
 };

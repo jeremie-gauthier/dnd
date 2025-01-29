@@ -1,9 +1,9 @@
-import { GameItem } from "@dnd/shared";
+import { PotionResponseDto } from "@/openapi/dnd-api";
 import { useGameContext } from "@features/game/context/use-game-context";
 import { ConsumableItem } from "./consumable-item.component";
 
 type Props = {
-  items: Array<Extract<GameItem, { type: "Potion" }>>;
+  items: Array<PotionResponseDto>;
 };
 
 export const ConsumableList = ({ items }: Props) => {

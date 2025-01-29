@@ -1,4 +1,5 @@
-import { GameItem, sum } from "@dnd/shared";
+import { WeaponResponseDto } from "@/openapi/dnd-api";
+import { sum } from "@dnd/shared";
 import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Dice } from "../../dice/dice.component";
@@ -6,7 +7,7 @@ import { Perk } from "../../perk/perk.component";
 import { getAttackTypeOrder } from "../utils/get-attack-type-order.util";
 
 type Props = {
-  weapon: Extract<GameItem, { type: "Weapon" }>;
+  weapon: WeaponResponseDto;
 };
 
 export const InspectWeapon = ({ weapon }: Props) => {

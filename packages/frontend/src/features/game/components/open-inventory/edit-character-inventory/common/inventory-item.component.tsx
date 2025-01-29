@@ -6,11 +6,14 @@ import {
 } from "@/components/ui/tooltip";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { GameItem } from "@dnd/shared";
 import { InspectItem } from "@features/game/components/inspect-item/inspect-item.component";
+import {
+  BackpackItem,
+  GearItem,
+} from "@features/game/interfaces/dnd-api/item.interface";
 
 type Props = {
-  item: GameItem;
+  item: GearItem | BackpackItem;
   storageSpace: "gear" | "backpack";
 };
 

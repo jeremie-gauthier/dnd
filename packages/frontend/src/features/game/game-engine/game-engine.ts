@@ -1,4 +1,5 @@
-import { type GameView, type PlayerGamePhase } from "@dnd/shared";
+import { GameResponseDto } from "@/openapi/dnd-api";
+import { type PlayerGamePhase } from "@dnd/shared";
 import { RefObject, useEffect } from "react";
 import { useGameActions } from "../context/use-game-actions";
 import { useInteraction } from "./actions/interactions/use-interaction";
@@ -22,7 +23,7 @@ export const useGameEngine = ({
   entitiesCanvasRef: RefObject<HTMLCanvasElement>;
   tooltipsLayerRef: RefObject<SVGSVGElement>;
   gameActions: ReturnType<typeof useGameActions>;
-  gameEntity: GameView;
+  gameEntity: GameResponseDto;
   gamePhase: PlayerGamePhase;
 }) => {
   const entityPlaying = Object.values(gameEntity.playableEntities).find(
@@ -61,13 +62,13 @@ export const useGameEngine = ({
     canvasConfig: {
       assetSize,
       map: {
-        height: gameEntity.map.height * assetSize,
-        width: gameEntity.map.width * assetSize,
+        height: gameEntity.board.height * assetSize,
+        width: gameEntity.board.width * assetSize,
       },
     },
     mapMetadata: {
-      height: gameEntity.map.height,
-      width: gameEntity.map.width,
+      height: gameEntity.board.height,
+      width: gameEntity.board.width,
     },
     gameEventManager,
   });
@@ -95,8 +96,8 @@ export const useGameEngine = ({
   useEffect(() => {
     if (!render) return;
 
-    render(gameEntity.map, gameEntity.playableEntities, gamePhase);
-  }, [gameEntity.map, gameEntity.playableEntities, gamePhase, render]);
+    render(gameEntity.board, gameEntity.playableEntities, gamePhase);
+  }, [gameEntity.board, gameEntity.playableEntities, gamePhase, render]);
 
   useEffect(() => {
     if (!tooltipsLayerRef.current || !render) return;
@@ -125,14 +126,14 @@ export const useGameEngine = ({
     clearPreviewLayer();
     if (entityPlaying) {
       renderPlayableEntityTurnHighlight({
-        map: gameEntity.map,
+        map: gameEntity.board,
         playingEntityCoord: entityPlaying.coord,
       });
     }
   }, [
     playerState.currentAction,
     clearPreviewLayer,
-    gameEntity.map,
+    gameEntity.board,
     entityPlaying,
     renderPlayableEntityTurnHighlight,
   ]);

@@ -1,12 +1,9 @@
-import { Coord, GameItem, Tile } from "@dnd/shared";
+import { AttackResponseDto, CoordResponseDto, Tile } from "@/openapi/dnd-api";
 
 export type Interaction =
   | {
       name: "attack";
-      attack: Extract<
-        GameItem,
-        { type: "Weapon" | "Spell" }
-      >["attacks"][number];
+      attack: AttackResponseDto;
       onInteract: () => void;
     }
   | {
@@ -22,7 +19,7 @@ export class InteractionsAuthorizedEvent extends Event {
   public static readonly EventName = "InteractionsAuthorized";
 
   constructor(
-    public readonly isometricCoord: Coord,
+    public readonly isometricCoord: CoordResponseDto,
     public readonly tile: Tile,
     public readonly interactions: Array<Interaction>,
   ) {

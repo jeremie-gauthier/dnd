@@ -1,5 +1,6 @@
+import { PickType } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from "class-validator";
-import { Translation } from "src/database/entities/translation.entity";
+import { TranslationResponseDto } from "src/dtos/response/translation.dto";
 
 export class GetTranslationInputParamsDto {
   @IsString()
@@ -11,4 +12,8 @@ export class GetTranslationInputParamsDto {
   readonly namespace: string;
 }
 
-export class GetTranslationOutputDto extends Translation {}
+export class GetTranslationOutputDto extends PickType(TranslationResponseDto, [
+  "locale",
+  "namespace",
+  "translations",
+]) {}

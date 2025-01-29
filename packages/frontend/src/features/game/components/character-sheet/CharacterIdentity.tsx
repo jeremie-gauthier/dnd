@@ -1,4 +1,4 @@
-import { PlayableEntity } from "@dnd/shared";
+import { PlayableEntity } from "@features/game/interfaces/dnd-api/playable-entity.interface";
 import { useTranslation } from "react-i18next";
 
 type Props = {

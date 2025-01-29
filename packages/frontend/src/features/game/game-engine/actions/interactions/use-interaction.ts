@@ -1,5 +1,6 @@
-import { GameView, PlayableEntity } from "@dnd/shared";
+import { GameResponseDto } from "@/openapi/dnd-api";
 import { useGameActions } from "@features/game/context/use-game-actions";
+import { PlayableEntity } from "@features/game/interfaces/dnd-api/playable-entity.interface";
 import { GameEventManager } from "../../events";
 import { useMapRenderer } from "../../renderer";
 import { usePlayerState } from "../../state-machine";
@@ -9,7 +10,7 @@ import { useOpenDoorInteraction } from "./use-open-door-interaction";
 
 type Params = {
   entityPlaying?: PlayableEntity;
-  game: GameView;
+  game: GameResponseDto;
   gameActions: ReturnType<typeof useGameActions>;
   gameEventManager: GameEventManager;
   isPlaying: boolean;

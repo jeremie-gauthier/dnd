@@ -12,7 +12,8 @@
     "check": "biome check src/",
     "check:fix": "biome check src/ --write",
     "preview": "vite preview",
-    "format": "biome format src/ --write"
+    "format": "biome format src/ --write",
+    "gen:api-client": "orval --config ./orval.config.cjs"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
@@ -53,6 +54,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react-swc": "^3.7.0",
     "concurrently": "^9.0.1",
+    "orval": "^7.4.1",
     "tailwind-scrollbar": "^3.1.0",
     "tailwindcss": "^3.4.12",
     "typescript": "^5.6.2",

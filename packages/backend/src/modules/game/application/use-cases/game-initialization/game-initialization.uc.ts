@@ -14,6 +14,9 @@ import { GameMaster } from "src/modules/game/domain/game-master/game-master.enti
 import { GameStatus } from "src/modules/game/domain/game-status/game-status.vo";
 import { Game } from "src/modules/game/domain/game/game.aggregate";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
+import { Artifact } from "src/modules/game/domain/item/artifact/artifact.abstract";
+import { Spell } from "src/modules/game/domain/item/spell/spell.entity";
+import { Weapon } from "src/modules/game/domain/item/weapon/weapon.entity";
 import { MonsterTemplate as MonsterTemplateDomain } from "src/modules/game/domain/monster-templates/monster-template/monster-template.vo";
 import { MonsterTemplates } from "src/modules/game/domain/monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "src/modules/game/domain/playable-entities/playable-entities.aggregate";
@@ -31,7 +34,12 @@ import { GameInitializationDonePayload } from "src/modules/shared/events/game/ga
 import { GameEventFactory } from "../../factories/game-event.factory";
 import { HeroFactory } from "../../factories/hero.factory";
 import { ItemFactory } from "../../factories/item.factory";
-import { GameItem } from "../../factories/item.interface";
+import {
+  ArtifactItem,
+  GameItem,
+  SpellItem,
+  WeaponItem,
+} from "../../factories/item.interface";
 import { TileEntityFactory } from "../../factories/tile-entity.factory";
 import { WinConditionFactory } from "../../factories/win-condition.factory";
 import {
@@ -253,8 +261,14 @@ export class GameInitializationUseCase implements UseCase {
             storageCapacity: hero.inventory.storageCapacity,
             gear: hero.inventory.stuff
               .filter((stuff) => stuff.storageSpace === StorageSpace.GEAR)
-              .map((stuff) =>
-                ItemFactory.create(stuff.item as unknown as GameItem),
+              .map(
+                (stuff) =>
+                  ItemFactory.create(
+                    stuff.item as unknown as
+                      | ArtifactItem
+                      | WeaponItem
+                      | SpellItem,
+                  ) as Artifact | Weapon | Spell,
               ),
             backpack: hero.inventory.stuff
               .filter((stuff) => stuff.storageSpace === StorageSpace.BACKPACK)
@@ -308,8 +322,11 @@ export class GameInitializationUseCase implements UseCase {
         ),
       ),
       Promise.all(
-        gearItemNames.map((name) =>
-          this.itemRepository.getOneOrThrow({ name }),
+        gearItemNames.map(
+          (name) =>
+            this.itemRepository.getOneOrThrow({ name }) as Promise<
+              Artifact | Weapon | Spell
+            >,
         ),
       ),
     ]);

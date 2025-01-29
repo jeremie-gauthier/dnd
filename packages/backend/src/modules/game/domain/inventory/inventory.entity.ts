@@ -5,7 +5,9 @@ import {
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { Attack } from "../attack/attack.entity";
+import { Artifact } from "../item/artifact/artifact.abstract";
 import { Item } from "../item/item.abstract";
+import { Potion } from "../item/potion/potion.abstract";
 import { Spell } from "../item/spell/spell.entity";
 import { Weapon } from "../item/weapon/weapon.entity";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
@@ -256,10 +258,10 @@ export class Inventory extends Entity<Data> {
         nbBackpackSlots: this._data.storageCapacity.nbBackpackSlots,
       },
       [StorageSpace.GEAR]: this._data[StorageSpace.GEAR].map(
-        (item: Weapon | Spell) => item.toPlain(),
+        (item: Weapon | Spell | Artifact) => item.toPlain(),
       ),
       [StorageSpace.BACKPACK]: this._data[StorageSpace.BACKPACK].map(
-        (item: Weapon | Spell) => item.toPlain(),
+        (item: Weapon | Spell | Artifact | Potion) => item.toPlain(),
       ),
     };
   }

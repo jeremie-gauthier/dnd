@@ -1,4 +1,5 @@
-import { GameItem, sum } from "@dnd/shared";
+import { SpellResponseDto } from "@/openapi/dnd-api";
+import { sum } from "@dnd/shared";
 import { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Dice } from "../../dice/dice.component";
@@ -7,7 +8,7 @@ import { getAttackTypeOrder } from "../utils/get-attack-type-order.util";
 import { ManaCost } from "./mana-cost.component";
 
 type Props = {
-  spell: Extract<GameItem, { type: "Spell" }>;
+  spell: SpellResponseDto;
 };
 
 export const InspectSpell = ({ spell }: Props) => {

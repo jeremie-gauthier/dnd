@@ -1,16 +1,12 @@
 import {
-  GameView,
-  PlayerGamePhase,
-  ServerGameEvent,
-  ServerToClientEvents,
-} from "@dnd/shared";
+  PlayerStatus,
+  useGamePrivateControllerGetUserGameState,
+} from "@/openapi/dnd-api";
+import { GameView, ServerGameEvent, ServerToClientEvents } from "@dnd/shared";
 import { QueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { ClientSocket } from "../../../types/socket.type";
-import {
-  GET_PLAYER_GAME_STATE_QUERY_KEY,
-  useGetPlayerGameState,
-} from "./get-player-game-state";
+import { GET_PLAYER_GAME_STATE_QUERY_KEY } from "./get-player-game-state";
 
 export const useGame = ({
   gameId,
@@ -21,7 +17,9 @@ export const useGame = ({
   gameId: GameView["id"];
   queryClient: QueryClient;
 }) => {
-  const { data: playerGameState, isLoading } = useGetPlayerGameState(gameId);
+  const { data: playerGameState, isLoading } =
+    useGamePrivateControllerGetUserGameState(gameId);
+
   const [gameConditionsStatus, setGameConditionsStatus] = useState<
     | Parameters<
         ServerToClientEvents["server.game.ended"]
@@ -56,7 +54,7 @@ export const useGame = ({
     ? {
         game: undefined,
         isLoading,
-        phase: "idle" as PlayerGamePhase,
+        phase: PlayerStatus.idle,
         gameConditionsStatus,
       }
     : {

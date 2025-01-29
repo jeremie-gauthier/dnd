@@ -3,6 +3,7 @@ import { ApiTags } from "@nestjs/swagger";
 import type { Request } from "express";
 import { AuthUser } from "src/decorators/auth-user.decorator";
 import { AuthGuard } from "src/guards/auth.guard";
+import { Serialize } from "src/middlewares/serialize.interceptor";
 import { GetCampaignOutputDto } from "../../use-cases/get-campaigns/get-campaigns.dto";
 import { GetCampaignsUseCase } from "../../use-cases/get-campaigns/get-campaigns.uc";
 import {
@@ -38,6 +39,7 @@ export class CampaignPrivateController {
   }
 
   @Get("get-campaigns")
+  @Serialize(GetCampaignOutputDto)
   public async getCampaigns(
     @AuthUser() user: Request["user"],
   ): Promise<Array<GetCampaignOutputDto>> {

@@ -1,3 +1,5 @@
+import { PerkName } from "src/database/enums/perk-name.enum";
+import { PerkTrigger } from "src/database/enums/perk-trigger.enum";
 import { Attack } from "../attack/attack.entity";
 import { Item } from "../item/item.abstract";
 import { Stopped } from "../playable-entities/playable-entity/conditions/stopped.condition";
@@ -6,7 +8,7 @@ import { Perk } from "./perk.abstract";
 
 export class TurnUndead extends Perk {
   constructor() {
-    super({ name: "turn_undead", trigger: "special_dice" });
+    super({ name: PerkName.TURN_UNDEAD, trigger: PerkTrigger.SPECIAL_DICE });
   }
 
   public override apply({

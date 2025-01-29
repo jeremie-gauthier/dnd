@@ -6,8 +6,8 @@ import { useCanvasSize } from "./use-canvas-size";
 export const BoardGame = () => {
   const { assetSize, canvasRef, game } = useGameContext();
   const { width, height } = useCanvasSize({
-    mapWidth: game.map.width,
-    mapHeight: game.map.height,
+    mapWidth: game.board.width,
+    mapHeight: game.board.height,
     assetSize,
   });
 

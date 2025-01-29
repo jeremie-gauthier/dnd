@@ -6,12 +6,10 @@ import {
   HeroClassValues,
 } from "../enums/hero-class.enum";
 import {
-  PlayableEntityRace,
   PlayableEntityRaceType,
   PlayableEntityRaceValues,
 } from "../enums/playable-entity-race.enum";
 import {
-  PlayableEntityType,
   PlayableEntityTypeType,
   PlayableEntityTypeValues,
 } from "../enums/playable-entity-type.enum";
@@ -22,11 +20,9 @@ export class PlayableEntity {
   readonly id: string;
 
   @Column({ type: "enum", enum: PlayableEntityTypeValues, nullable: false })
-  @ApiProperty({ enum: PlayableEntityType, enumName: "PlayableEntityType" })
   readonly type: PlayableEntityTypeType;
 
   @Column({ type: "enum", enum: PlayableEntityRaceValues, nullable: false })
-  @ApiProperty({ enum: PlayableEntityRace, enumName: "PlayableEntityRace" })
   readonly race: PlayableEntityRaceType;
 
   @Column({ nullable: false })

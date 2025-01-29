@@ -1,13 +1,13 @@
 import { Navbar } from "@/components/navbar/navbar.component";
 import { Button } from "@/components/ui/button";
+import { GetLobbiesOutputDto } from "@/openapi/dnd-api";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import type { ClientSocket } from "../../../types/socket.type";
 import { LobbyItem } from "./lobby-item.component";
-import type { GetLobbiesResponse } from "./use-get-lobbies";
 
 type Props = {
-  lobbies: GetLobbiesResponse;
+  lobbies: GetLobbiesOutputDto;
   socket: ClientSocket;
 };
 
@@ -32,7 +32,7 @@ export const LobbyList = ({ socket, lobbies }: Props) => {
         </Link>
 
         <ul className="m-auto max-w-md space-y-4">
-          {lobbies.map((lobby) => (
+          {lobbies.data.map((lobby) => (
             <LobbyItem key={lobby.id} lobby={lobby} socket={socket} />
           ))}
         </ul>

@@ -2,13 +2,13 @@ import { Icon } from "@/components/icon/Icon";
 import { Button } from "@/components/ui/button";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { GameItem } from "@dnd/shared";
+import { Item } from "@features/game/interfaces/dnd-api/item.interface";
 import { cn } from "@lib/utils";
 import { useTranslation } from "react-i18next";
 import { slotTypeColor } from "../utils";
 
 type Props = {
-  item: GameItem;
+  item: Item;
   onRefuseLoot: () => void;
 };
 

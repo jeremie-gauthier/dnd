@@ -1,5 +1,5 @@
+import { GameResponseDto, ItemType, TileEntityType } from "@/openapi/dnd-api";
 import {
-  GameView,
   PlayableEntity,
   TilePlayableEntity,
   coordToIndex,
@@ -17,7 +17,7 @@ import { translate2DToIsometricCoord } from "../../utils/coords-conversion.util"
 
 type Params = {
   entityPlaying?: PlayableEntity;
-  game: GameView;
+  game: GameResponseDto;
   gameActions: ReturnType<typeof useGameActions>;
   gameEventManager: GameEventManager;
   isIdle: boolean;
@@ -48,9 +48,9 @@ export const useAttackInteraction = ({
         return;
       }
 
-      const metadata = { width: game.map.width, height: game.map.height };
+      const metadata = { width: game.board.width, height: game.board.height };
       const tileIdx = coordToIndex({ coord: coord2D, metadata });
-      const tilePressed = game.map.tiles[tileIdx];
+      const tilePressed = game.board.tiles[tileIdx];
       if (!tilePressed) {
         return;
       }
@@ -58,7 +58,7 @@ export const useAttackInteraction = ({
       const tilePlayableEntityTargeted = tilePressed.entities.find(
         (entity): entity is TilePlayableEntity =>
           entity.isBlocking &&
-          entity.type === "playable-entity" &&
+          entity.type === TileEntityType.PLAYABLE_ENTITY &&
           entity.id !== entityPlaying.id,
       );
       if (!tilePlayableEntityTargeted) {
@@ -71,13 +71,16 @@ export const useAttackInteraction = ({
         // Beware of the offset, it may shift everything being computed here.
         // We really want to have the tiles next to the borders of the canvas.
         map: {
-          height: game.map.height * assetSize,
-          width: game.map.width * assetSize,
+          height: game.board.height * assetSize,
+          width: game.board.width * assetSize,
         },
       });
 
       const attacks = entityPlaying.inventory.gear
-        .filter((stuff) => stuff.type === "Weapon" || stuff.type === "Spell")
+        .filter(
+          (stuff) =>
+            stuff.type === ItemType.Weapon || stuff.type === ItemType.Spell,
+        )
         .flatMap((attackItem) => attackItem.attacks);
 
       const isAdjacent = getNeighbourCoords({
@@ -119,7 +122,7 @@ export const useAttackInteraction = ({
 
         const lineOfSight = getLineOfSight({
           ally: entityPlaying.faction,
-          gameBoard: game.map,
+          gameBoard: game.board,
           originCoord: entityPlaying.coord,
           range: "long",
         });
@@ -151,7 +154,7 @@ export const useAttackInteraction = ({
       }
 
       playerState.toggleTo("attack");
-      renderAttackPreview({ map: game.map, coords: [coord2D] });
+      renderAttackPreview({ map: game.board, coords: [coord2D] });
     };
     gameEventManager.addEventListener(
       TilePressedEvent.EventName,

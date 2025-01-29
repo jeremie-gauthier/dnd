@@ -1,5 +1,6 @@
 import { Controller, Get, Param } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
+import { Serialize } from "src/middlewares/serialize.interceptor";
 import {
   GetTranslationInputParamsDto,
   GetTranslationOutputDto,
@@ -12,6 +13,7 @@ export class TranslationPublicController {
   constructor(private readonly getTranslationUseCase: GetTranslationUseCase) {}
 
   @Get("get-translation/:locale/:namespace")
+  @Serialize(GetTranslationOutputDto)
   public async getTranslation(
     @Param() { locale, namespace }: GetTranslationInputParamsDto,
   ): Promise<GetTranslationOutputDto> {

@@ -1,4 +1,13 @@
-import { Coord, GameItem, GameView, PlayableEntity, Tile } from "@dnd/shared";
+import {
+  AttackResponseDto,
+  CoordResponseDto,
+  GameResponseDto,
+  SpellResponseDto,
+  Tile,
+  WeaponResponseDto,
+} from "@/openapi/dnd-api";
+import { Item } from "@features/game/interfaces/dnd-api/item.interface";
+import { PlayableEntity } from "@features/game/interfaces/dnd-api/playable-entity.interface";
 import {
   Interaction,
   InteractionsAuthorizedEvent,
@@ -14,7 +23,7 @@ import { TileReleasedEvent } from "./tile-released.event";
 
 export class GameEventManager extends EventTarget {
   private static instance?: GameEventManager;
-  private lastIsometricCoordHovered?: Coord;
+  private lastIsometricCoordHovered?: CoordResponseDto;
 
   private constructor() {
     super();
@@ -28,7 +37,7 @@ export class GameEventManager extends EventTarget {
     return GameEventManager.instance;
   }
 
-  private isNewCoord(coord: Coord): boolean {
+  private isNewCoord(coord: CoordResponseDto): boolean {
     if (!this.lastIsometricCoordHovered) {
       return true;
     }
@@ -39,24 +48,33 @@ export class GameEventManager extends EventTarget {
     );
   }
 
-  public emitTileHovered(mouseCoord: { x: number; y: number }, coord2D: Coord) {
+  public emitTileHovered(
+    mouseCoord: { x: number; y: number },
+    coord2D: CoordResponseDto,
+  ) {
     if (this.isNewCoord(coord2D)) {
       this.lastIsometricCoordHovered = coord2D;
       this.dispatchEvent(new TileHoveredEvent(mouseCoord, coord2D));
     }
   }
 
-  public emitTileClicked(mouseCoord: { x: number; y: number }, coord2D: Coord) {
+  public emitTileClicked(
+    mouseCoord: { x: number; y: number },
+    coord2D: CoordResponseDto,
+  ) {
     this.dispatchEvent(new TileClickedEvent(mouseCoord, coord2D));
   }
 
-  public emitTilePressed(mouseCoord: { x: number; y: number }, coord2D: Coord) {
+  public emitTilePressed(
+    mouseCoord: { x: number; y: number },
+    coord2D: CoordResponseDto,
+  ) {
     this.dispatchEvent(new TilePressedEvent(mouseCoord, coord2D));
   }
 
   public emitTileReleased(
     mouseCoord: { x: number; y: number },
-    coord2D: Coord,
+    coord2D: CoordResponseDto,
   ) {
     this.dispatchEvent(new TileReleasedEvent(mouseCoord, coord2D));
   }
@@ -67,10 +85,10 @@ export class GameEventManager extends EventTarget {
     item,
     attack,
   }: {
-    game: GameView;
+    game: GameResponseDto;
     entityPlaying: PlayableEntity;
-    item: GameItem;
-    attack: Extract<GameItem, { type: "Weapon" | "Spell" }>["attacks"][number];
+    item: WeaponResponseDto | SpellResponseDto;
+    attack: AttackResponseDto;
   }) {
     this.dispatchEvent(
       new PreparingAttackEvent(game, entityPlaying, item, attack),
@@ -81,8 +99,8 @@ export class GameEventManager extends EventTarget {
     coordHovered,
     isometricCoord,
   }: {
-    coordHovered: Coord;
-    isometricCoord: Coord;
+    coordHovered: CoordResponseDto;
+    isometricCoord: CoordResponseDto;
   }) {
     this.dispatchEvent(new MoveForbiddenEvent(coordHovered, isometricCoord));
   }
@@ -90,7 +108,7 @@ export class GameEventManager extends EventTarget {
   public emitMoveAuthorized({
     isometricCoord,
   }: {
-    isometricCoord: Coord;
+    isometricCoord: CoordResponseDto;
   }) {
     this.dispatchEvent(new MoveAuthorizedEvent(isometricCoord));
   }
@@ -100,7 +118,7 @@ export class GameEventManager extends EventTarget {
     tile,
     interactions,
   }: {
-    isometricCoord: Coord;
+    isometricCoord: CoordResponseDto;
     tile: Tile;
     interactions: Array<Interaction>;
   }) {
@@ -112,7 +130,7 @@ export class GameEventManager extends EventTarget {
   public emitItemFound({
     itemFound,
   }: {
-    itemFound: GameItem;
+    itemFound: Item;
   }) {
     this.dispatchEvent(new ItemFoundEvent(itemFound));
   }

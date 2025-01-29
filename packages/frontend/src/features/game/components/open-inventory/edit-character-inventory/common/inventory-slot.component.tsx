@@ -1,14 +1,17 @@
 import { useDroppable } from "@dnd-kit/core";
-import { GameItem } from "@dnd/shared";
 import { slotTypeColor } from "@features/game/components/utils";
+import {
+  BackpackItem,
+  GearItem,
+} from "@features/game/interfaces/dnd-api/item.interface";
 import { cn } from "@lib/utils";
 import { PropsWithChildren, useEffect } from "react";
 import { useEditCharacterInventoryContext } from "../edit-character-inventory.context";
 
 type Props = PropsWithChildren<{
-  type: GameItem["type"] | "backpackAnyItem";
+  type: BackpackItem["type"] | "backpackAnyItem";
   droppableId: string;
-  hostedItem?: GameItem;
+  hostedItem?: GearItem | BackpackItem;
   storageSpace: "gear" | "backpack";
 }>;
 

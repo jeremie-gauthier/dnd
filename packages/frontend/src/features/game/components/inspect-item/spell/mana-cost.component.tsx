@@ -1,10 +1,10 @@
 import { Icon } from "@/components/icon/Icon";
-import { GameItem } from "@dnd/shared";
+import { SpellResponseDto } from "@/openapi/dnd-api";
 import { useGameContext } from "@features/game/context/use-game-context";
 import { useTranslation } from "react-i18next";
 
 type Props = {
-  manaCost: Extract<GameItem, { type: "Spell" }>["manaCost"];
+  manaCost: SpellResponseDto["manaCost"];
 };
 
 export const ManaCost = ({ manaCost }: Props) => {

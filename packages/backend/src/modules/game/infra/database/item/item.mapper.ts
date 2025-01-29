@@ -7,6 +7,7 @@ import { Item as ItemPersistence } from "src/database/entities/item.entity";
 import { Potion as PotionPersistence } from "src/database/entities/potion.entity";
 import { Spell as SpellPersistence } from "src/database/entities/spell.entity";
 import { Weapon as WeaponPersistence } from "src/database/entities/weapon.entity";
+import { ItemType } from "src/database/enums/item-type.enum";
 import { ItemFactory } from "src/modules/game/application/factories/item.factory";
 import { GameItem } from "src/modules/game/application/factories/item.interface";
 import { Item as ItemDomain } from "src/modules/game/domain/item/item.abstract";
@@ -33,7 +34,8 @@ export class ItemMapper extends Mapper<ItemPersistence, ItemDomain> {
     return ItemFactory.create({
       ...persistence,
       attacks:
-        persistence.type === "Weapon" || persistence.type === "Spell"
+        persistence.type === ItemType.WEAPON ||
+        persistence.type === ItemType.SPELL
           ? persistence.attacks?.map((attack) => ({
               ...attack,
               dices: attack.attackDices.map(

@@ -1,3 +1,5 @@
+import { PerkName } from "src/database/enums/perk-name.enum";
+import { PerkTrigger } from "src/database/enums/perk-trigger.enum";
 import { Attack } from "../attack/attack.entity";
 import { Item } from "../item/item.abstract";
 import { BrokenArmor } from "../playable-entities/playable-entity/conditions/broken-armor.condition";
@@ -6,7 +8,10 @@ import { Perk } from "./perk.abstract";
 
 export class IgnoreArmorClass extends Perk {
   constructor() {
-    super({ name: "ignore_armor_class", trigger: "special_dice" });
+    super({
+      name: PerkName.IGNORE_ARMOR_CLASS,
+      trigger: PerkTrigger.SPECIAL_DICE,
+    });
   }
 
   public override apply({

@@ -3,7 +3,7 @@ import { ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "src/guards/auth.guard";
 import type { GetLobbiesOutputDto } from "../../../application/use-cases/get-lobbies/get-lobbies.dto";
 import { GetLobbiesUseCase } from "../../../application/use-cases/get-lobbies/get-lobbies.uc";
-import type {
+import {
   GetLobbyInputParamsDto,
   GetLobbyOutputDto,
 } from "../../../application/use-cases/get-lobby/get-lobby.dto";
@@ -19,7 +19,7 @@ export class LobbyPrivateController {
   ) {}
 
   @Get("get-lobbies")
-  public async getLobbies(): Promise<Array<GetLobbiesOutputDto>> {
+  public async getLobbies(): Promise<GetLobbiesOutputDto> {
     return await this.getLobbiesUseCase.execute();
   }
 

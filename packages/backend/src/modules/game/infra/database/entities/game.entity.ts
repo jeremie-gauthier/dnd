@@ -1,5 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { GameStatus, GameStatusType } from "../enums/game-status.enum";
+import { GameStatusType } from "../enums/game-status.enum";
 import { Board } from "./board.entity";
 import { GameEvent } from "./game-event/game-event.entity";
 import { GameMaster } from "./game-master.entity";
@@ -13,7 +12,6 @@ import { WinCondition } from "./win-condition/win-condition.entity";
 export class Game {
   readonly id: string;
   readonly host: Host;
-  @ApiProperty({ enum: GameStatus, enumName: "GameStatus" })
   readonly status: GameStatusType;
   readonly board: Board;
   readonly gameMaster: GameMaster;

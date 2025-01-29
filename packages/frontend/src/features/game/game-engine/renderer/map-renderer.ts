@@ -1,4 +1,5 @@
-import type { GameView, PlayableEntity, PlayerGamePhase } from "@dnd/shared";
+import { Board, PlayerStatus } from "@/openapi/dnd-api";
+import { PlayableEntity } from "@features/game/interfaces/dnd-api/playable-entity.interface";
 import { RefObject } from "react";
 import { GameEventManager } from "../events";
 import { useAssetsLoader } from "./assets-loader/assets-loader";
@@ -45,9 +46,9 @@ export const useMapRenderer = ({
   });
 
   const render = (
-    map: GameView["map"],
-    playableEntities: GameView["playableEntities"],
-    _: PlayerGamePhase,
+    map: Board,
+    playableEntities: PlayableEntity[],
+    _: PlayerStatus,
   ) => {
     renderFloorLayer({ map, entityPlaying });
     renderEntitiesLayer({ map, playableEntities });

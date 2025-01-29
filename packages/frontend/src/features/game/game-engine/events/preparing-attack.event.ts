@@ -1,16 +1,19 @@
-import { GameItem, GameView, PlayableEntity } from "@dnd/shared";
+import {
+  AttackResponseDto,
+  GameResponseDto,
+  SpellResponseDto,
+  WeaponResponseDto,
+} from "@/openapi/dnd-api";
+import { PlayableEntity } from "@features/game/interfaces/dnd-api/playable-entity.interface";
 
 export class PreparingAttackEvent extends Event {
   public static readonly EventName = "PreparingAttack";
 
   constructor(
-    public readonly game: GameView,
+    public readonly game: GameResponseDto,
     public readonly entityPlaying: PlayableEntity,
-    public readonly item: GameItem,
-    public readonly attack: Extract<
-      GameItem,
-      { type: "Weapon" | "Spell" }
-    >["attacks"][number],
+    public readonly item: WeaponResponseDto | SpellResponseDto,
+    public readonly attack: AttackResponseDto,
   ) {
     super(PreparingAttackEvent.EventName);
   }

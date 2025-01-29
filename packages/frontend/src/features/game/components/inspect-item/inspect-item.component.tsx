@@ -1,4 +1,4 @@
-import { GameItem } from "@dnd/shared";
+import { Item } from "@features/game/interfaces/dnd-api/item.interface";
 import { useTranslation } from "react-i18next";
 import { InspectArtifact } from "./artifact/inspect-artifact.component";
 import { InspectPotion } from "./potion/inspect-potion.component";
@@ -6,7 +6,7 @@ import { InspectSpell } from "./spell/inspect-spell.component";
 import { InspectWeapon } from "./weapon/inspect-weapon.component";
 
 type Props = {
-  item: GameItem;
+  item: Item;
 };
 
 export const InspectItem = ({ item }: Props) => {

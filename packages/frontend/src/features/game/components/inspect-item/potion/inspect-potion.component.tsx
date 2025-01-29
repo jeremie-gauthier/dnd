@@ -1,8 +1,8 @@
-import { GameItem } from "@dnd/shared";
+import { PotionResponseDto } from "@/openapi/dnd-api";
 import { useTranslation } from "react-i18next";
 
 type Props = {
-  potion: Extract<GameItem, { type: "Potion" }>;
+  potion: PotionResponseDto;
 };
 
 export const InspectPotion = ({ potion }: Props) => {

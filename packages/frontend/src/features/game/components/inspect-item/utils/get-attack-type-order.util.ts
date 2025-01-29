@@ -1,9 +1,7 @@
-import { GameItem } from "@dnd/shared";
+import { AttackResponseDto, AttackType } from "@/openapi/dnd-api";
 
-export const getAttackTypeOrder = (
-  attack: Extract<GameItem, { type: "Weapon" | "Spell" }>["attacks"][number],
-) => {
-  if (attack.type === "regular") {
+export const getAttackTypeOrder = (attack: AttackResponseDto) => {
+  if (attack.type === AttackType.regular) {
     return 0;
   }
   return 1;

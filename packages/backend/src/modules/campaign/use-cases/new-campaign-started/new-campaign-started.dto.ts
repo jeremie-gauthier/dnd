@@ -1,13 +1,13 @@
 import { IsNotEmpty, IsString } from "class-validator";
-import { CampaignProgression } from "src/database/entities/campaign-progression.entity";
-import { Campaign } from "src/database/entities/campaign.entity";
+import { CampaignProgressionResponseDto } from "src/dtos/response/campaign-progression.dto";
+import { CampaignResponseDto } from "src/dtos/response/campaign.dto";
 
 export class NewCampaignStartedInputDto {
   @IsString()
   @IsNotEmpty()
-  readonly campaignId: Campaign["id"];
+  readonly campaignId: CampaignResponseDto["id"];
 }
 
 export class NewCampaignStartedOutputDto {
-  readonly campaignProgressionId: CampaignProgression["id"];
+  readonly campaignProgressionId: CampaignProgressionResponseDto["id"];
 }
