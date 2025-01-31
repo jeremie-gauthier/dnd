@@ -3,6 +3,7 @@ import { ApiTags } from "@nestjs/swagger";
 import type { Request } from "express";
 import { AuthUser } from "src/decorators/auth-user.decorator";
 import { AuthGuard } from "src/guards/auth.guard";
+import { Serialize } from "src/middlewares/serialize.interceptor";
 import {
   GetUserGameStateInputParamsDto,
   GetUserGameStateOutputDto,
@@ -20,6 +21,7 @@ export class GamePrivateController {
   ) {}
 
   @Get("get-user-game-state/:gameId")
+  @Serialize(GetUserGameStateInputParamsDto)
   public async getUserGameState(
     @AuthUser() user: Request["user"],
     @Param() { gameId }: GetUserGameStateInputParamsDto,

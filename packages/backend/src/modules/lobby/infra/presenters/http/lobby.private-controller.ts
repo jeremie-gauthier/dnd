@@ -1,7 +1,8 @@
 import { Controller, Get, Param, UseGuards } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "src/guards/auth.guard";
-import type { GetLobbiesOutputDto } from "../../../application/use-cases/get-lobbies/get-lobbies.dto";
+import { Serialize } from "src/middlewares/serialize.interceptor";
+import { GetLobbiesOutputDto } from "../../../application/use-cases/get-lobbies/get-lobbies.dto";
 import { GetLobbiesUseCase } from "../../../application/use-cases/get-lobbies/get-lobbies.uc";
 import {
   GetLobbyInputParamsDto,
@@ -19,11 +20,13 @@ export class LobbyPrivateController {
   ) {}
 
   @Get("get-lobbies")
+  @Serialize(GetLobbiesOutputDto)
   public async getLobbies(): Promise<GetLobbiesOutputDto> {
     return await this.getLobbiesUseCase.execute();
   }
 
   @Get("get-lobby/:lobbyId")
+  @Serialize(GetLobbyOutputDto)
   public async getLobby(
     @Param() { lobbyId }: GetLobbyInputParamsDto,
   ): Promise<GetLobbyOutputDto> {

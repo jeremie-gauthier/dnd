@@ -28,6 +28,7 @@ export class CampaignPrivateController {
   ) {}
 
   @Post("new-campaign-started")
+  @Serialize(NewCampaignStartedOutputDto)
   public async newCampaignStarted(
     @AuthUser() user: Request["user"],
     @Body() newCampaignStartedDto: NewCampaignStartedInputDto,
@@ -47,6 +48,7 @@ export class CampaignPrivateController {
   }
 
   @Get("get-hero-details/:heroId")
+  @Serialize(GetHeroDetailsOutputDto)
   public async getHeroDetails(
     @Param() params: GetHeroDetailsInputDto,
   ): Promise<GetHeroDetailsOutputDto> {
