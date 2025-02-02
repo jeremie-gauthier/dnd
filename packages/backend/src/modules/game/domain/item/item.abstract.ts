@@ -1,4 +1,4 @@
-import { ItemType } from "src/database/enums/item-type.enum";
+import { ItemType, ItemTypeType } from "src/database/enums/item-type.enum";
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { Artifact } from "./artifact/artifact.abstract";
@@ -9,7 +9,7 @@ import { Spell } from "./spell/spell.entity";
 import { Weapon } from "./weapon/weapon.entity";
 
 type Data = {
-  readonly type: "Weapon" | "Spell" | "ChestTrap" | "Potion" | "Artifact";
+  readonly type: ItemTypeType;
   readonly name: string;
   readonly level: number;
   [x: string]: unknown;

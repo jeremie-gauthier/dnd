@@ -1,14 +1,9 @@
 import {
-  ClientLobbyEvent,
-  type LobbyView,
-  ServerLobbyEvent,
-} from "@dnd/shared";
+  GetLobbiesOutputDto,
+  useLobbyPrivateControllerGetLobbies,
+} from "@/openapi/dnd-api";
+import { ClientLobbyEvent, ServerLobbyEvent } from "@dnd/shared";
 import { LobbyList } from "@features/lobbies/lobby-list/lobby-list.component";
-import {
-  GET_LOBBIES_QUERY_KEY,
-  type GetLobbiesResponse,
-  useGetLobbies,
-} from "@features/lobbies/lobby-list/use-get-lobbies";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 
@@ -21,8 +16,12 @@ export const Route = createFileRoute("/_ws/lobbies")({
 });
 
 export function LobbiesRouteComponent() {
-  const { socket, queryClient } = Route.useRouteContext();
-  const { data: lobbies, isLoading } = useGetLobbies();
+  const { socket } = Route.useRouteContext();
+  const {
+    data: lobbies,
+    isLoading,
+    refetch,
+  } = useLobbyPrivateControllerGetLobbies();
 
   useEffect(() => {
     // TODO: send a toast message instead
@@ -30,49 +29,17 @@ export function LobbiesRouteComponent() {
       console.log(payload);
     socket.on(ServerLobbyEvent.Error, errorHandler);
 
-    const handleLobbiesChanges = ({
-      lobby,
-    }: {
-      lobby: { id: string } & Partial<LobbyView>;
-    }) => {
-      queryClient.setQueryData(
-        GET_LOBBIES_QUERY_KEY,
-        (oldLobbies: GetLobbiesResponse) => {
-          const modifiedLobbyIdx = oldLobbies.findIndex(
-            (oldLobby) => oldLobby.id === lobby.id,
-          );
-
-          if (modifiedLobbyIdx >= 0) {
-            return [
-              ...oldLobbies.slice(0, modifiedLobbyIdx),
-              lobby,
-              ...oldLobbies.slice(modifiedLobbyIdx + 1),
-            ];
-          } else {
-            return [...oldLobbies, lobby];
-          }
-        },
-      );
-    };
-    socket.on(ServerLobbyEvent.LobbiesChangesDetected, handleLobbiesChanges);
-
-    const handleLobbyDeleted = ({ lobbyId }: { lobbyId: string }) => {
-      queryClient.setQueryData(
-        GET_LOBBIES_QUERY_KEY,
-        (oldLobbies: GetLobbiesResponse) =>
-          oldLobbies.filter((oldLobby) => oldLobby.id !== lobbyId),
-      );
-    };
-    socket.on(ServerLobbyEvent.LobbiesDeleted, handleLobbyDeleted);
+    socket.on(ServerLobbyEvent.LobbiesChangesDetected, () => refetch());
+    socket.on(ServerLobbyEvent.LobbiesDeleted, () => refetch());
 
     return () => {
       socket.removeAllListeners();
     };
-  }, [socket, queryClient]);
+  }, [socket, refetch]);
 
   const isLobbiesDataReady = (
-    lobby?: GetLobbiesResponse,
-  ): lobby is GetLobbiesResponse => {
+    lobby?: GetLobbiesOutputDto,
+  ): lobby is GetLobbiesOutputDto => {
     return isLoading === false && lobby !== undefined;
   };
 

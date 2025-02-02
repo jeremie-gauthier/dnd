@@ -1,4 +1,3 @@
-import { EndPlayerTurnInput } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
@@ -10,6 +9,7 @@ import {
   GameRepository,
 } from "../../repositories/game-repository.interface";
 import { DomainEventsDispatcherService } from "../../services/domain-events-dispatcher.service";
+import { PlayableEntityEndTurnInputDto } from "./playable-entity-end-turn.dto";
 
 @Injectable()
 export class PlayableEntityEndTurnUseCase implements UseCase {
@@ -23,7 +23,7 @@ export class PlayableEntityEndTurnUseCase implements UseCase {
   public async execute({
     gameId,
     userId,
-  }: EndPlayerTurnInput & { userId: User["id"] }): Promise<void> {
+  }: PlayableEntityEndTurnInputDto & { userId: User["id"] }): Promise<void> {
     const game = await this.gameRepository.getOneOrThrow({ gameId });
 
     game.endPlayerTurn({ userId });

@@ -1,5 +1,5 @@
 import {
-  PlayerStatus,
+  CurrentPhase,
   useGamePrivateControllerGetUserGameState,
 } from "@/openapi/dnd-api";
 import { GameView, ServerGameEvent, ServerToClientEvents } from "@dnd/shared";
@@ -54,7 +54,7 @@ export const useGame = ({
     ? {
         game: undefined,
         isLoading,
-        phase: PlayerStatus.idle,
+        phase: CurrentPhase.idle,
         gameConditionsStatus,
       }
     : {

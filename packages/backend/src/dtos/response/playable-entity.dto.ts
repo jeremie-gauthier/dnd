@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Expose } from "class-transformer";
+import { Expose, Type } from "class-transformer";
 import { HeroClass, HeroClassType } from "src/database/enums/hero-class.enum";
 import {
   PlayableEntityRace,
@@ -9,6 +9,7 @@ import {
   PlayableEntityType,
   PlayableEntityTypeType,
 } from "src/database/enums/playable-entity-type.enum";
+import { CharacteristicResponseDto } from "./characteristic.dto";
 
 export class PlayableEntityResponseDto {
   @Expose()
@@ -26,9 +27,16 @@ export class PlayableEntityResponseDto {
   readonly name: string;
 
   @Expose()
+  readonly imgUrl: string;
+
+  @Expose()
   @ApiProperty({ enum: HeroClass, enumName: "HeroClass" })
   readonly class: HeroClassType;
 
   @Expose()
   readonly level: number;
+
+  @Expose()
+  @Type(() => CharacteristicResponseDto)
+  readonly characteristic: CharacteristicResponseDto;
 }

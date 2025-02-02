@@ -1,4 +1,3 @@
-import { ApiProperty } from "@nestjs/swagger";
 import {
   Column,
   Entity,
@@ -7,7 +6,6 @@ import {
   type Relation,
 } from "typeorm";
 import {
-  UserStatus,
   type UserStatusType,
   UserStatusValues,
 } from "../enums/user-status.enum";
@@ -19,7 +17,6 @@ export class User {
   readonly id: string;
 
   @Column({ type: "enum", enum: UserStatusValues })
-  @ApiProperty({ enum: UserStatus, enumName: "UserStatus" })
   status: UserStatusType;
 
   @OneToMany(

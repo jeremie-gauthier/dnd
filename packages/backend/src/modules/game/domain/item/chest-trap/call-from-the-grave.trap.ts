@@ -1,4 +1,4 @@
-import { PlayableEntityRaceType } from "@dnd/shared";
+import { PlayableEntityRaceType } from "src/database/enums/playable-entity-race.enum";
 import { Coord } from "../../coord/coord.vo";
 import { Game } from "../../game/game.aggregate";
 import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";

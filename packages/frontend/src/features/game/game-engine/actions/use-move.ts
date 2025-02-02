@@ -1,7 +1,7 @@
 import {
   CoordResponseDto,
+  CurrentPhase,
   GameResponseDto,
-  PlayerStatus,
   TileEntityType,
 } from "@/openapi/dnd-api";
 import {
@@ -204,7 +204,7 @@ export const useMove = ({
     const handleMouseUp: EventListener = (e) => {
       const { coord2D } = e as TileReleasedEvent;
 
-      playerState.toggleTo(PlayerStatus.idle);
+      playerState.toggleTo(CurrentPhase.idle);
 
       const tilePathCoordsToMoveOn = tilePathCoords.slice(1);
       const canCommitMove = tilePathCoordsToMoveOn.some(

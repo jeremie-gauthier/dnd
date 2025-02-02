@@ -4,10 +4,10 @@ import { CampaignProgression } from "src/database/entities/campaign-progression.
 import { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import { Campaign } from "src/database/entities/campaign.entity";
-import { MonsterTemplate } from "src/database/entities/enemy-template.entity";
 import { HeroTemplate } from "src/database/entities/hero-template.entity";
 import { HeroUI } from "src/database/entities/hero-ui.entity";
 import { Hero } from "src/database/entities/hero.entity";
+import { MonsterTemplate } from "src/database/entities/monster-template.entity";
 import { CoordService } from "./domain/coord/coord.service";
 import { MapSerializerService } from "./domain/map-serializer/map-serializer.service";
 import { CampaignListeners } from "./infra/controller/campaign.listeners";

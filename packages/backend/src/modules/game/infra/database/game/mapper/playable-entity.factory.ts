@@ -23,11 +23,7 @@ export class PlayableEntityFactory {
           ...(data as HeroEntity),
           coord: new Coord(data.coord),
           initiative: new Initiative(data.initiative),
-          status: new PlayerStatus(
-            data.currentPhase.toUpperCase() as Uppercase<
-              PlayableEntity["currentPhase"]
-            >,
-          ),
+          status: new PlayerStatus(data.currentPhase),
           inventory: new Inventory({
             ...data.inventory,
             playableId: data.id,
@@ -57,11 +53,7 @@ export class PlayableEntityFactory {
           ...data,
           coord: new Coord(data.coord),
           initiative: new Initiative(data.initiative),
-          status: new PlayerStatus(
-            data.currentPhase.toUpperCase() as Uppercase<
-              PlayableEntity["currentPhase"]
-            >,
-          ),
+          status: new PlayerStatus(data.currentPhase),
           inventory: new Inventory({
             ...data.inventory,
             playableId: data.id,

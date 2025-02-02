@@ -6,11 +6,11 @@ import type { Characteristic } from "./characteristic";
  * The DnD API description
  * OpenAPI spec version: 1.0
  */
-import type { HeroClass } from "./heroClass";
+import type { GetHeroDetailsOutputDtoClass } from "./getHeroDetailsOutputDtoClass";
 
 export interface GetHeroDetailsOutputDto {
-  class: HeroClass;
   id: string;
+  class: GetHeroDetailsOutputDtoClass;
   name: string;
   characteristic: Characteristic;
   imgUrl: string;

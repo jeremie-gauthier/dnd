@@ -3,9 +3,9 @@ import { Expose, Type } from "class-transformer";
 import { IsNotEmpty, IsString } from "class-validator";
 import { PlayableEntity } from "src/modules/game/infra/database/entities/playable-entity/playable-entity.entity";
 import {
-  PlayerStatus,
-  PlayerStatusType,
-} from "src/modules/game/infra/database/enums/player-status.enum";
+  CurrentPhase,
+  CurrentPhaseType,
+} from "src/modules/game/infra/database/enums/current-phase.enum";
 import { GameResponseDto } from "../../dtos/response/game.dto";
 
 export class GetUserGameStateInputParamsDto {
@@ -27,8 +27,8 @@ export class GetUserGameStateOutputDto {
   readonly game: GameResponseDto;
 
   @Expose()
-  @ApiProperty({ enum: PlayerStatus, enumName: "PlayerStatus" })
-  readonly yourStatus: PlayerStatusType;
+  @ApiProperty({ enum: CurrentPhase, enumName: "CurrentPhase" })
+  readonly yourStatus: CurrentPhaseType;
 
   @Expose()
   @Type(() => PlayerCurrentlyPlayingDto)

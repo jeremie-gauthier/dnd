@@ -1,4 +1,4 @@
-import { GameResponseDto } from "@/openapi/dnd-api";
+import { CurrentPhase, GameResponseDto } from "@/openapi/dnd-api";
 import { type PlayerGamePhase } from "@dnd/shared";
 import { RefObject, useEffect } from "react";
 import { useGameActions } from "../context/use-game-actions";
@@ -119,7 +119,7 @@ export const useGameEngine = ({
   ]);
 
   useEffect(() => {
-    if (playerState.currentAction !== "idle") {
+    if (playerState.currentAction !== CurrentPhase.idle) {
       return;
     }
 

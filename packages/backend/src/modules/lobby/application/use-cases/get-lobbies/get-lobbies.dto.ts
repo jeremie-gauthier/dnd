@@ -1,14 +1,15 @@
 import { PickType } from "@nestjs/swagger";
-import { Expose } from "class-transformer";
-import { Lobby } from "src/modules/lobby/infra/database/entities/lobby.entity";
+import { Expose, Type } from "class-transformer";
+import { LobbyResponseDto } from "../../dtos/response/lobby.dto";
 
-class LobbyDto extends PickType(Lobby, ["id", "host", "config"]) {
+class LobbyDto extends PickType(LobbyResponseDto, ["id", "host", "config"]) {
   @Expose()
   readonly nbPlayers: number;
 }
 
 export class GetLobbiesOutputDto {
   @Expose()
+  @Type(() => LobbyDto)
   readonly data: Array<LobbyDto>;
 
   @Expose()

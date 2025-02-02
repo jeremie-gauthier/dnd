@@ -1,4 +1,3 @@
-import { OpenDoorInput } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
@@ -11,6 +10,7 @@ import {
   GameRepository,
 } from "../../repositories/game-repository.interface";
 import { DomainEventsDispatcherService } from "../../services/domain-events-dispatcher.service";
+import { PlayableEntityOpenDoorInputDto } from "./playable-entity-open-door.dto";
 
 @Injectable()
 export class PlayableEntityOpenDoorUseCase implements UseCase {
@@ -25,7 +25,7 @@ export class PlayableEntityOpenDoorUseCase implements UseCase {
     userId,
     gameId,
     coordOfTileWithDoor,
-  }: OpenDoorInput & {
+  }: PlayableEntityOpenDoorInputDto & {
     userId: User["id"];
   }): Promise<void> {
     const game = await this.gameRepository.getOneOrThrow({ gameId });

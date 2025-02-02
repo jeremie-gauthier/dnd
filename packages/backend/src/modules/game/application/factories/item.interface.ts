@@ -1,13 +1,12 @@
-import {
-  AttackRangeType,
-  AttackTypeType,
-  ItemManaCostJson,
-  PerkNameType,
-  PerkTriggerType,
-} from "@dnd/shared";
+import { AttackRangeType } from "src/database/enums/attack-range.enum";
+import { AttackTypeType } from "src/database/enums/attack-type.enum";
+import { ItemTypeType } from "src/database/enums/item-type.enum";
+import { PerkNameType } from "src/database/enums/perk-name.enum";
+import { PerkTriggerType } from "src/database/enums/perk-trigger.enum";
+import { ItemManaCostJson } from "../../infra/database/entities/item/attack-item/spell.entity";
 
 type BaseItem = {
-  type: "Weapon" | "Spell" | "ChestTrap" | "Potion" | "Artifact";
+  type: ItemTypeType;
   name: string;
   level: number;
 };

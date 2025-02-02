@@ -1,9 +1,8 @@
+import { zip } from "@dnd/shared";
 import {
-  PlayableEntityAttackInput,
   PlayableEntityRace,
   PlayableEntityRaceType,
-  zip,
-} from "@dnd/shared";
+} from "src/database/enums/playable-entity-race.enum";
 import { StorageSpaceType } from "src/database/enums/storage-space.enum";
 import { AggregateRoot } from "src/modules/shared/domain/aggregate-root";
 import { z } from "zod";
@@ -264,7 +263,7 @@ export class Game extends AggregateRoot<Data> {
     attackId,
     targetPlayableEntityId,
     userId,
-  }: Pick<PlayableEntityAttackInput, "targetPlayableEntityId" | "attackId"> & {
+  }: { attackId: string; targetPlayableEntityId: string } & {
     userId: string;
   }) {
     const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();

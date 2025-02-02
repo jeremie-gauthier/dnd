@@ -7,9 +7,6 @@ module.exports = {
       workspace: "./src/openapi/dnd-api",
       schemas: "./model",
       target: "./services",
-      // baseUrl: {
-      //   getBaseUrlFromSpecification: true,
-      // },
       mode: "tags-split",
       client: "react-query",
       override: {

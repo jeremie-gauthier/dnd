@@ -1,12 +1,14 @@
-import { GameResponseDto, ItemType, TileEntityType } from "@/openapi/dnd-api";
 import {
-  PlayableEntity,
-  TilePlayableEntity,
-  coordToIndex,
-  getLineOfSight,
-  getNeighbourCoords,
-} from "@dnd/shared";
+  AttackRange,
+  CurrentPhase,
+  GameResponseDto,
+  ItemType,
+  TileEntityType,
+  TilePlayableEntityResponseDto,
+} from "@/openapi/dnd-api";
+import { coordToIndex, getLineOfSight, getNeighbourCoords } from "@dnd/shared";
 import { useGameActions } from "@features/game/context/use-game-actions";
+import { PlayableEntity } from "@features/game/interfaces/dnd-api/playable-entity.interface";
 import { useEffect } from "react";
 import { GameEventManager } from "../../events";
 import { TilePressedEvent } from "../../events/tile-pressed.event";
@@ -56,7 +58,7 @@ export const useAttackInteraction = ({
       }
 
       const tilePlayableEntityTargeted = tilePressed.entities.find(
-        (entity): entity is TilePlayableEntity =>
+        (entity): entity is TilePlayableEntityResponseDto =>
           entity.isBlocking &&
           entity.type === TileEntityType.PLAYABLE_ENTITY &&
           entity.id !== entityPlaying.id,
@@ -90,7 +92,9 @@ export const useAttackInteraction = ({
       );
       if (isAdjacent) {
         const meleeAttacks = attacks.filter(
-          (attack) => attack.range === "melee" || attack.range === "versatile",
+          (attack) =>
+            attack.range === AttackRange.melee ||
+            attack.range === AttackRange.versatile,
         );
         if (meleeAttacks.length === 0) {
           return;
@@ -103,7 +107,7 @@ export const useAttackInteraction = ({
             attack: meleeAttack,
             name: "attack",
             onInteract: () => {
-              playerState.toggleTo("idle");
+              playerState.toggleTo(CurrentPhase.idle);
               gameActions.attack({
                 gameId: game.id,
                 attackId: meleeAttack.id,
@@ -114,7 +118,9 @@ export const useAttackInteraction = ({
         });
       } else {
         const rangeAttack = attacks.filter(
-          (attack) => attack.range === "long" || attack.range === "versatile",
+          (attack) =>
+            attack.range === AttackRange.long ||
+            attack.range === AttackRange.versatile,
         );
         if (rangeAttack.length === 0) {
           return;
@@ -124,7 +130,7 @@ export const useAttackInteraction = ({
           ally: entityPlaying.faction,
           gameBoard: game.board,
           originCoord: entityPlaying.coord,
-          range: "long",
+          range: AttackRange.long,
         });
         const isTargetInLineOfSight = lineOfSight.some(
           (tile) =>
@@ -142,7 +148,7 @@ export const useAttackInteraction = ({
             attack: rangeAttack,
             name: "attack",
             onInteract: () => {
-              playerState.toggleTo("idle");
+              playerState.toggleTo(CurrentPhase.idle);
               gameActions.attack({
                 gameId: game.id,
                 attackId: rangeAttack.id,
@@ -182,7 +188,7 @@ export const useAttackInteraction = ({
   useEffect(() => {
     const handleTileReleased = () => {
       if (playerState.currentAction === "attack") {
-        playerState.toggleTo("idle");
+        playerState.toggleTo(CurrentPhase.idle);
         clearPreviewLayer();
       }
     };

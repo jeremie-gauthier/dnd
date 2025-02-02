@@ -1,4 +1,4 @@
-import { PlayerStatus } from "@/openapi/dnd-api";
+import { CurrentPhase } from "@/openapi/dnd-api";
 import { PlayerGamePhase } from "@dnd/shared";
 import { useState } from "react";
 
@@ -7,12 +7,12 @@ type Params = {
 };
 
 export const usePlayerState = ({ playerPhase }: Params) => {
-  const canAct = playerPhase === PlayerStatus.action;
+  const canAct = playerPhase === CurrentPhase.action;
 
-  const [currentAction, setCurrentAction] = useState<PlayerStatus>(
-    PlayerStatus.idle,
-  );
-  const toggleTo = (requestedAction: PlayerStatus) => {
+  const [currentAction, setCurrentAction] = useState<
+    CurrentPhase | "attack" | "move"
+  >(CurrentPhase.idle);
+  const toggleTo = (requestedAction: CurrentPhase | "attack" | "move") => {
     if (canAct) {
       setCurrentAction(requestedAction);
     }

@@ -1,4 +1,4 @@
-import { GameResponseDto, PlayerStatus, Tile } from "@/openapi/dnd-api";
+import { CurrentPhase, GameResponseDto, Tile } from "@/openapi/dnd-api";
 import { GameLog } from "@dnd/shared";
 import { createContext } from "react";
 import { GameEventManager } from "../game-engine/events";
@@ -19,7 +19,7 @@ type GameContextParams = {
   game: GameResponseDto;
   playerState: ReturnType<typeof usePlayerState>;
   gameActions: ReturnType<typeof useGameActions>;
-  phase: PlayerStatus;
+  phase: CurrentPhase;
   neighbourTiles: Tile[] | undefined;
   isPlaying: boolean;
   entityPlaying: PlayableEntity | undefined;
@@ -27,6 +27,6 @@ type GameContextParams = {
 
 export const GameContext = createContext<GameContextParams>({
   game: {},
-  phase: PlayerStatus.idle,
+  phase: CurrentPhase.idle,
   gameActions: {},
 } as GameContextParams);

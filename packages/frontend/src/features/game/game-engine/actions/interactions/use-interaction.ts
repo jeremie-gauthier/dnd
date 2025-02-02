@@ -1,4 +1,4 @@
-import { GameResponseDto } from "@/openapi/dnd-api";
+import { CurrentPhase, GameResponseDto } from "@/openapi/dnd-api";
 import { useGameActions } from "@features/game/context/use-game-actions";
 import { PlayableEntity } from "@features/game/interfaces/dnd-api/playable-entity.interface";
 import { GameEventManager } from "../../events";
@@ -29,7 +29,7 @@ export const useInteraction = ({
   renderAttackPreview,
   clearPreviewLayer,
 }: Params) => {
-  const isIdle = isPlaying && playerState.currentAction === "idle";
+  const isIdle = isPlaying && playerState.currentAction === CurrentPhase.idle;
 
   useOpenDoorInteraction({
     entityPlaying,

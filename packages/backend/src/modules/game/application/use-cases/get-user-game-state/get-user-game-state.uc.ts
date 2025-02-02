@@ -1,6 +1,7 @@
-import { GameView, PlayerGamePhase } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import type { UseCase } from "src/interfaces/use-case.interface";
+import { Game } from "src/modules/game/infra/database/entities/game.entity";
+import { CurrentPhase } from "src/modules/game/infra/database/enums/current-phase.enum";
 import {
   GAME_REPOSITORY,
   GameRepository,
@@ -20,16 +21,18 @@ export class GetUserGameStateUseCase implements UseCase {
     gameId,
   }: {
     userId: string;
-    gameId: GameView["id"];
+    gameId: Game["id"];
   }) {
     const game = await this.gameRepository.getOneOrThrow({ gameId });
     const plainGame = game.toPlain();
 
     const playableEntityTurn = plainGame.playableEntities.values.find(
-      ({ status }) => status === "ACTION",
+      ({ status }) => status === CurrentPhase.ACTION,
     );
     if (!playableEntityTurn) {
-      throw new Error("No playable entity in 'action' phase found");
+      throw new Error(
+        `No playable entity in '${CurrentPhase.ACTION}' phase found`,
+      );
     }
 
     const playerGameState =
@@ -41,8 +44,10 @@ export class GetUserGameStateUseCase implements UseCase {
       userId: playableEntityTurn.playedByUserId,
       entityId: playableEntityTurn.id,
     };
-    const userStatus: PlayerGamePhase =
-      userId === playerCurrentlyPlaying.userId ? "action" : "idle";
+    const userStatus =
+      userId === playerCurrentlyPlaying.userId
+        ? CurrentPhase.ACTION
+        : CurrentPhase.IDLE;
 
     return {
       game: playerGameState,

@@ -1,4 +1,4 @@
-import { Board, PlayerStatus } from "@/openapi/dnd-api";
+import { Board, CurrentPhase } from "@/openapi/dnd-api";
 import { PlayableEntity } from "@features/game/interfaces/dnd-api/playable-entity.interface";
 import { RefObject } from "react";
 import { GameEventManager } from "../events";
@@ -48,7 +48,7 @@ export const useMapRenderer = ({
   const render = (
     map: Board,
     playableEntities: PlayableEntity[],
-    _: PlayerStatus,
+    _: CurrentPhase,
   ) => {
     renderFloorLayer({ map, entityPlaying });
     renderEntitiesLayer({ map, playableEntities });

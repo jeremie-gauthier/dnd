@@ -1,4 +1,5 @@
 import {
+  CurrentPhase,
   GameResponseDto,
   InteractiveEntityKind,
   TileEntityType,
@@ -83,7 +84,7 @@ export const useOpenDoorInteraction = ({
           {
             name: "openDoor",
             onInteract: () => {
-              playerState.toggleTo("idle");
+              playerState.toggleTo(CurrentPhase.idle);
               gameActions.openDoor({
                 gameId: game.id,
                 coordOfTileWithDoor: coord2D,

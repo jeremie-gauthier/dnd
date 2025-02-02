@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { CurrentPhase } from "@/openapi/dnd-api";
 import { useGameContext } from "@features/game/context/use-game-context";
 import { useTranslation } from "react-i18next";
 
@@ -7,7 +8,7 @@ export const EndTurnButton = () => {
   const { game, playerState, entityPlaying, gameActions } = useGameContext();
 
   const handleClick = () => {
-    playerState.toggleTo("idle");
+    playerState.toggleTo(CurrentPhase.idle);
     gameActions.endTurn({ gameId: game.id });
   };
 

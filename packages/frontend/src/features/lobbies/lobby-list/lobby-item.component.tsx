@@ -1,15 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/ui/user-avatar/user-avatar";
 import { UserAvatarSkeleton } from "@/components/ui/user-avatar/user-avatar-skeleton";
+import { LobbyDto } from "@/openapi/dnd-api";
 import { ClientLobbyEvent } from "@dnd/shared";
 import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import type { ClientSocket } from "../../../types/socket.type";
 import { useUser } from "../hooks/use-user";
-import type { GetLobbiesResponse } from "./use-get-lobbies";
 
 type Props = {
-  lobby: GetLobbiesResponse[number];
+  lobby: LobbyDto;
   socket: ClientSocket;
 };
 
@@ -18,9 +18,7 @@ export const LobbyItem = ({ lobby, socket }: Props) => {
   const navigate = useNavigate();
   const { data: lobbyHost } = useUser(lobby.host.userId);
 
-  const handleClickOnJoinLobby = async (
-    lobbyId: GetLobbiesResponse[number]["id"],
-  ) => {
+  const handleClickOnJoinLobby = async (lobbyId: LobbyDto["id"]) => {
     // TODO: API will check player availability in regard of this lobby level
 
     await socket.emitWithAck(ClientLobbyEvent.RequestJoinLobby, { lobbyId });

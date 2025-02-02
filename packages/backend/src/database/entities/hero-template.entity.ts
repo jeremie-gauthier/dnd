@@ -1,6 +1,6 @@
-import { InventoryJson } from "@dnd/shared";
 import { Column, Entity, Index, ManyToMany, type Relation } from "typeorm";
 import { Campaign } from "./campaign.entity";
+import { InventoryTemplate } from "./inventory-template.entity";
 import { PlayableEntity } from "./playable-entity.entity";
 
 @Entity()
@@ -14,5 +14,5 @@ export class HeroTemplate extends PlayableEntity {
   readonly playableInCampaigns: Relation<Campaign[]>;
 
   @Column({ type: "json", nullable: false })
-  readonly inventory: InventoryJson;
+  readonly inventory: InventoryTemplate;
 }

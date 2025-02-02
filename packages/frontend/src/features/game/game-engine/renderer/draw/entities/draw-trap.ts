@@ -1,3 +1,4 @@
+import { TileEntityType } from "@/openapi/dnd-api";
 import type { EntityDrawerParams } from "./entity-drawer-params.interface";
 
 type RequiredAssets = {
@@ -10,7 +11,7 @@ export function drawTrap({
   config,
   subject,
 }: EntityDrawerParams<RequiredAssets>) {
-  if (subject.entity.type !== "interactive-entity") return;
+  if (subject.entity.type !== TileEntityType.INTERACTIVE_ENTITY) return;
 
   const isActive = subject.entity.canInteract;
   const trapAsset = isActive

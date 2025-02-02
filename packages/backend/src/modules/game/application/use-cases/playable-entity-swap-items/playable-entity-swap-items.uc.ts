@@ -1,4 +1,3 @@
-import { PlayableEntitySwapItemsInput } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { UseCase } from "src/interfaces/use-case.interface";
@@ -9,6 +8,7 @@ import {
   GAME_REPOSITORY,
   GameRepository,
 } from "../../repositories/game-repository.interface";
+import { PlayableEntitySwapItemsInputDto } from "./playable-entity-swap-items.dto";
 
 @Injectable()
 export class PlayableEntitySwapItemsUseCase implements UseCase {
@@ -23,7 +23,7 @@ export class PlayableEntitySwapItemsUseCase implements UseCase {
     userId,
     gearItemId,
     backpackItemId,
-  }: PlayableEntitySwapItemsInput & { userId: User["id"] }): Promise<void> {
+  }: PlayableEntitySwapItemsInputDto & { userId: User["id"] }): Promise<void> {
     const game = await this.gameRepository.getOneOrThrow({ gameId });
     game.playerSwapItems({ userId, gearItemId, backpackItemId });
 

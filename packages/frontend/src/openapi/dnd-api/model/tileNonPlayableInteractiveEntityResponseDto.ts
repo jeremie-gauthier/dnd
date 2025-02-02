@@ -6,10 +6,10 @@ import type { InteractiveEntityKind } from "./interactiveEntityKind";
  * The DnD API description
  * OpenAPI spec version: 1.0
  */
-import type { TileEntityType } from "./tileEntityType";
+import type { TileEntityTypeInteractiveEntity } from "./tileEntityTypeInteractiveEntity";
 
 export interface TileNonPlayableInteractiveEntityResponseDto {
-  type: TileEntityType;
+  type: TileEntityTypeInteractiveEntity;
   kind: InteractiveEntityKind;
   isVisible: boolean;
   isBlocking: boolean;

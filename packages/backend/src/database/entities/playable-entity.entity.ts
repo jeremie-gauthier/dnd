@@ -1,10 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
 import { Column, PrimaryGeneratedColumn } from "typeorm";
-import {
-  HeroClass,
-  HeroClassType,
-  HeroClassValues,
-} from "../enums/hero-class.enum";
+import { HeroClassType, HeroClassValues } from "../enums/hero-class.enum";
 import {
   PlayableEntityRaceType,
   PlayableEntityRaceValues,
@@ -29,7 +24,6 @@ export class PlayableEntity {
   readonly name: string;
 
   @Column({ type: "enum", enum: HeroClassValues, nullable: false })
-  @ApiProperty({ enum: HeroClass, enumName: "HeroClass" })
   readonly class: HeroClassType;
 
   @Column({ nullable: false })

@@ -1,4 +1,4 @@
-import { AttackRangeType } from "@dnd/shared";
+import { AttackRangeType } from "src/database/enums/attack-range.enum";
 
 export interface CsvItemRecord {
   item_id: string;

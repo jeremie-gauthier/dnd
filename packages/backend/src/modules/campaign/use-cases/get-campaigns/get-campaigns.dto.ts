@@ -3,7 +3,7 @@ import { Expose, Type } from "class-transformer";
 import { CampaignStageResponseDto } from "src/dtos/response/campaign-stage.dto";
 import { CampaignResponseDto } from "src/dtos/response/campaign.dto";
 
-class StageSchema extends PickType(CampaignStageResponseDto, [
+class StageSchemaDto extends PickType(CampaignStageResponseDto, [
   "id",
   "order",
   "status",
@@ -14,8 +14,8 @@ export class GetCampaignOutputDto extends PickType(CampaignResponseDto, [
   "status",
 ] as const) {
   @Expose()
-  @Type(() => StageSchema)
-  readonly currentStage: StageSchema;
+  @Type(() => StageSchemaDto)
+  readonly currentStage: StageSchemaDto;
 
   @Expose()
   readonly nbStages: number;

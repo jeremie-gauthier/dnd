@@ -1,16 +1,17 @@
-const baseURL = process.env.VITE_API_URL;
+const baseURL = import.meta.env.VITE_API_URL;
 
 export const customInstance = async <T>({
   url,
   method,
   params,
   data,
-  signal,
+  headers,
 }: {
   url: string;
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   params?: any;
   data?: any;
+  headers?: RequestInit["headers"];
   responseType?: string;
   signal?: AbortSignal;
 }): Promise<T> => {
@@ -22,6 +23,7 @@ export const customInstance = async <T>({
 
   const response = await fetch(targetUrl, {
     method,
+    headers,
     ...(data ? { body: JSON.stringify(data) } : {}),
   });
 

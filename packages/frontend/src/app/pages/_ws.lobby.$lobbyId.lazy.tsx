@@ -1,11 +1,10 @@
-import { type User, useAuth0 } from "@auth0/auth0-react";
-import { type GameView, type LobbyView, ServerLobbyEvent } from "@dnd/shared";
-import { LobbyForm } from "@features/lobbies/lobby-form/lobby-form.component";
 import {
-  GET_LOBBY_QUERY_KEY,
-  type GetLobbyResponse,
-  useGetLobby,
-} from "@features/lobbies/lobby-form/use-get-lobby";
+  GetLobbyOutputDto,
+  useLobbyPrivateControllerGetLobby,
+} from "@/openapi/dnd-api";
+import { type User, useAuth0 } from "@auth0/auth0-react";
+import { type GameView, ServerLobbyEvent } from "@dnd/shared";
+import { LobbyForm } from "@features/lobbies/lobby-form/lobby-form.component";
 import { useServerLobbyError } from "@features/lobbies/use-server-lobby-error";
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
@@ -15,10 +14,14 @@ export const Route = createLazyFileRoute("/_ws/lobby/$lobbyId")({
 });
 
 export function MenuRouteComponent() {
-  const { socket, queryClient } = Route.useRouteContext();
+  const { socket } = Route.useRouteContext();
   const { lobbyId } = Route.useParams();
   const { user, isLoading } = useAuth0();
-  const { data: lobby, isLoading: isLobbyLoading } = useGetLobby(lobbyId);
+  const {
+    data: lobby,
+    isLoading: isLobbyLoading,
+    refetch,
+  } = useLobbyPrivateControllerGetLobby(lobbyId);
   useServerLobbyError(socket);
   const navigate = useNavigate();
 
@@ -38,10 +41,7 @@ export function MenuRouteComponent() {
       gameInitializationDoneHandler,
     );
 
-    const handleLobbyChanges = ({ lobby }: { lobby: LobbyView }) => {
-      queryClient.setQueryData(GET_LOBBY_QUERY_KEY(lobby.id), () => lobby);
-    };
-    socket.on(ServerLobbyEvent.LobbyChangesDetected, handleLobbyChanges);
+    socket.on(ServerLobbyEvent.LobbyChangesDetected, () => refetch());
 
     const handleUserLeftLobby = () => {
       navigate({ to: "/lobbies" });
@@ -51,15 +51,15 @@ export function MenuRouteComponent() {
     return () => {
       socket.removeAllListeners();
     };
-  }, [socket, queryClient, navigate]);
+  }, [socket, navigate, refetch]);
 
   const isUserDataReady = (user?: User): user is User => {
     return isLoading === false && user !== undefined;
   };
 
   const isLobbyDataReady = (
-    lobby?: GetLobbyResponse,
-  ): lobby is GetLobbyResponse => {
+    lobby?: GetLobbyOutputDto,
+  ): lobby is GetLobbyOutputDto => {
     return isLobbyLoading === false && lobby !== undefined;
   };
 

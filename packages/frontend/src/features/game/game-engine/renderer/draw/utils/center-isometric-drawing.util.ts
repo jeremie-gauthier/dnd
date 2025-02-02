@@ -1,8 +1,8 @@
-import type { GameView } from "@dnd/shared";
+import { Board } from "@/openapi/dnd-api";
 
 type Params = {
   context: CanvasRenderingContext2D;
-  map: GameView["map"];
+  map: Board;
   assetSize: number;
 };
 

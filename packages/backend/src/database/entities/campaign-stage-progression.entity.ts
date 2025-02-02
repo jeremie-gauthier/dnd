@@ -1,4 +1,3 @@
-import { ApiProperty } from "@nestjs/swagger";
 import {
   Column,
   Entity,
@@ -9,7 +8,6 @@ import {
   RelationId,
 } from "typeorm";
 import {
-  CampaignStageProgressionStatus,
   type CampaignStageProgressionStatusType,
   CampaignStageProgressionStatusValues,
 } from "../enums/campaign-stage-progression-status.enum";
@@ -43,9 +41,5 @@ export class CampaignStageProgression {
   readonly stageId: Relation<CampaignStage["id"]>;
 
   @Column({ type: "enum", enum: CampaignStageProgressionStatusValues })
-  @ApiProperty({
-    enum: CampaignStageProgressionStatus,
-    enumName: "CampaignStageProgressionStatus",
-  })
   status: CampaignStageProgressionStatusType;
 }

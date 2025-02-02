@@ -1,4 +1,4 @@
-import { GameResponseDto, PlayerStatus } from "@/openapi/dnd-api";
+import { CurrentPhase, GameResponseDto } from "@/openapi/dnd-api";
 import { PropsWithChildren, useRef } from "react";
 import { ClientSocket } from "../../../types/socket.type";
 import { useGameEngine } from "../game-engine";
@@ -9,7 +9,7 @@ import { useGetNeighbourTiles } from "./use-get-neighbour-tiles";
 
 type Props = PropsWithChildren<{
   game: GameResponseDto;
-  phase: PlayerStatus;
+  phase: CurrentPhase;
   socket: ClientSocket;
 }>;
 
@@ -36,9 +36,9 @@ export const GameContextProvider = ({
     tooltipsLayerRef,
   });
 
-  const isPlaying = phase === PlayerStatus.action;
+  const isPlaying = phase === CurrentPhase.action;
   const entityPlaying = Object.values(game.playableEntities).find(
-    ({ currentPhase }) => currentPhase === PlayerStatus.action,
+    ({ currentPhase }) => currentPhase === CurrentPhase.action,
   );
 
   const neighbourTiles = useGetNeighbourTiles({

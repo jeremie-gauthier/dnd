@@ -1,4 +1,5 @@
-import { AttackRangeType, canAttackTarget } from "@dnd/shared";
+import { canAttackTarget } from "@dnd/shared";
+import { AttackRangeType } from "src/database/enums/attack-range.enum";
 import { z } from "zod";
 import { Attack } from "../attack/attack.entity";
 import { AttackError } from "../attack/attack.error";

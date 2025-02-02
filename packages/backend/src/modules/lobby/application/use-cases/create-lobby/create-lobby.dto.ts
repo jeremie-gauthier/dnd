@@ -1,6 +1,6 @@
 import { PickType } from "@nestjs/swagger";
 import { IsInt, IsUUID, Max, Min } from "class-validator";
-import { Lobby } from "src/modules/lobby/infra/database/entities/lobby.entity";
+import { LobbyResponseDto } from "../../dtos/response/lobby.dto";
 
 export class CreateLobbyInputDto {
   @IsInt()
@@ -12,7 +12,7 @@ export class CreateLobbyInputDto {
   readonly stageId: string;
 }
 
-export class CreateLobbyOutputDto extends PickType(Lobby, [
+export class CreateLobbyOutputDto extends PickType(LobbyResponseDto, [
   "id",
   "status",
   "host",

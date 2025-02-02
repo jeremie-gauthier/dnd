@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 export const useMoveForbiddenTooltip = () => {
   const { gameEventManager, game, assetSize } = useGameContext();
-  const size = Math.max(game.map.width, game.map.height);
+  const size = Math.max(game.board.width, game.board.height);
   const halfAssetSize = assetSize / 2;
   const translateX = size * halfAssetSize - halfAssetSize;
 

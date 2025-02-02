@@ -1,4 +1,3 @@
-import { StorageSpaceType, StorageSpaceValues } from "@dnd/shared";
 import {
   Column,
   Entity,
@@ -6,6 +5,10 @@ import {
   PrimaryGeneratedColumn,
   Relation,
 } from "typeorm";
+import {
+  StorageSpaceType,
+  StorageSpaceValues,
+} from "../enums/storage-space.enum";
 import { Hero } from "./hero.entity";
 import { Item } from "./item.entity";
 

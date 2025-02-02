@@ -1,4 +1,3 @@
-import { PlayableEntityOpenChestInput } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { User } from "src/database/entities/user.entity";
@@ -16,6 +15,7 @@ import {
   ItemRepository,
 } from "../../repositories/item-repository.interface";
 import { DomainEventsDispatcherService } from "../../services/domain-events-dispatcher.service";
+import { PlayableEntityOpenChestInputDto } from "./playable-entity-open-chest.dto";
 
 @Injectable()
 export class PlayableEntityOpenChestUseCase implements UseCase {
@@ -32,7 +32,7 @@ export class PlayableEntityOpenChestUseCase implements UseCase {
     gameId,
     coordOfTileWithChest,
     userId,
-  }: PlayableEntityOpenChestInput & {
+  }: PlayableEntityOpenChestInputDto & {
     userId: User["id"];
   }): Promise<{ itemFound: ReturnType<Item["toPlain"]> }> {
     const game = await this.gameRepository.getOneOrThrow({ gameId });

@@ -1,6 +1,7 @@
 import { Type } from "class-transformer";
 import { IsInt, IsPositive } from "class-validator";
 import { Lobby } from "src/modules/lobby/infra/database/entities/lobby.entity";
+import { LobbyResponseDto } from "../../dtos/response/lobby.dto";
 
 export class GetLobbyInputParamsDto {
   @Type(() => Number)
@@ -9,4 +10,4 @@ export class GetLobbyInputParamsDto {
   readonly lobbyId: Lobby["id"];
 }
 
-export class GetLobbyOutputDto extends Lobby {}
+export class GetLobbyOutputDto extends LobbyResponseDto {}

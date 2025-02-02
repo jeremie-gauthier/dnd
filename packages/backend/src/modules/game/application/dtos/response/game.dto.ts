@@ -31,10 +31,12 @@ import { WeaponResponseDto } from "./weapon.dto";
 
 @ApiExtraModels(
   TileNonPlayableNonInteractiveEntityResponseDto,
+  TileNonPlayableInteractiveEntityResponseDto,
   TilePlayableEntityResponseDto,
   ChestEntityResponseDto,
   DoorEntityResponseDto,
   TrapEntityResponseDto,
+  TileEntityResponseDto,
 )
 class Tile extends TileResponseDto {
   @Expose()
@@ -105,6 +107,7 @@ class Board extends BoardResponseDto {
   ArtifactResponseDto,
   PotionResponseDto,
   ChestTrapResponseDto,
+  ItemResponseDto,
 )
 class Inventory extends InventoryResponseDto {
   @Expose()

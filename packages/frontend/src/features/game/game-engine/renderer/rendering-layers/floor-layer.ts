@@ -1,4 +1,10 @@
-import { Board, TileEntitiesItem } from "@/openapi/dnd-api";
+import {
+  Board,
+  NonInteractiveEntityKind,
+  Tile,
+  TileEntitiesItem,
+  TileEntityType,
+} from "@/openapi/dnd-api";
 import { getLineOfSight } from "@dnd/shared";
 import { PlayableEntity } from "@features/game/interfaces/dnd-api/playable-entity.interface";
 import { RefObject } from "react";
@@ -100,6 +106,7 @@ export const useFloorLayer = ({ canvasRef }: Params) => {
 const shouldSkipTileRendering = ({ tile }: { tile: Tile }): boolean => {
   return tile.entities.some(
     (entity) =>
-      entity.type === "non-interactive-entity" && entity.kind === "off-map",
+      entity.type === TileEntityType.NON_INTERACTIVE_ENTITY &&
+      entity.kind === NonInteractiveEntityKind.off_map,
   );
 };

@@ -7,8 +7,8 @@
  */
 
 export interface DiceResponseDto {
+  values: number[];
   name: string;
-  values: string[];
   minValue: number;
   maxValue: number;
   meanValue: number;

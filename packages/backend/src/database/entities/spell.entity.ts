@@ -1,5 +1,5 @@
-import { ItemManaCostJson } from "@dnd/shared";
 import { ChildEntity, Column, Index } from "typeorm";
+import { MagicHeroClassType } from "../enums/hero-class.enum";
 import { AttackItem } from "./attack-item.entity";
 
 @ChildEntity()
@@ -9,5 +9,5 @@ export class Spell extends AttackItem {
   readonly type: "Spell";
 
   @Column({ type: "json", update: false })
-  readonly manaCost: ItemManaCostJson;
+  readonly manaCost: Partial<Record<MagicHeroClassType, number>>;
 }
