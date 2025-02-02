@@ -1,13 +1,17 @@
+import {
+  StorageSpace,
+  StorageSpaceType,
+} from "src/database/enums/storage-space.enum";
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { Attack } from "../attack/attack.entity";
+import { Artifact } from "../item/artifact/artifact.abstract";
 import { Item } from "../item/item.abstract";
+import { Potion } from "../item/potion/potion.abstract";
 import { Spell } from "../item/spell/spell.entity";
 import { Weapon } from "../item/weapon/weapon.entity";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
 import { InventoryError } from "./inventory.error";
-
-export type StorageSpace = "gear" | "backpack";
 
 type Data = {
   readonly playableId: Playable["id"];
@@ -17,8 +21,8 @@ type Data = {
     nbWeaponSlots: number;
     nbBackpackSlots: number;
   };
-  gear: Array<Item>;
-  backpack: Array<Item>;
+  [StorageSpace.GEAR]: Array<Item>;
+  [StorageSpace.BACKPACK]: Array<Item>;
 };
 
 export class Inventory extends Entity<Data> {
@@ -30,8 +34,8 @@ export class Inventory extends Entity<Data> {
       nbWeaponSlots: z.number().min(0),
       nbBackpackSlots: z.number().min(0),
     }),
-    gear: z.array(z.instanceof(Item)),
-    backpack: z.array(z.instanceof(Item)),
+    [StorageSpace.GEAR]: z.array(z.instanceof(Item)),
+    [StorageSpace.BACKPACK]: z.array(z.instanceof(Item)),
   });
 
   constructor(rawData: Data) {
@@ -40,18 +44,22 @@ export class Inventory extends Entity<Data> {
   }
 
   public getFirstWeaponInGear() {
-    return this._data.gear.find(
+    return this._data[StorageSpace.GEAR].find(
       (item) => item.isWeapon() && item.canAttackInMelee(),
     ) as Weapon | undefined;
   }
 
   public getItemInInventoryOrThrow({ itemId }: { itemId: Item["id"] }) {
-    const gearItem = this._data.gear.find(({ id }) => id === itemId);
+    const gearItem = this._data[StorageSpace.GEAR].find(
+      ({ id }) => id === itemId,
+    );
     if (gearItem) {
       return gearItem;
     }
 
-    const backpackItem = this._data.backpack.find(({ id }) => id === itemId);
+    const backpackItem = this._data[StorageSpace.BACKPACK].find(
+      ({ id }) => id === itemId,
+    );
     if (backpackItem) {
       return backpackItem;
     }
@@ -63,7 +71,7 @@ export class Inventory extends Entity<Data> {
   }
 
   public getAttackItemInGearOrThrow({ attackId }: { attackId: Attack["id"] }) {
-    const attackItem = this._data.gear.find(
+    const attackItem = this._data[StorageSpace.GEAR].find(
       (item): item is Spell | Weapon =>
         (item.isWeapon() || item.isSpell()) && item.hasAttack({ attackId }),
     );
@@ -79,7 +87,7 @@ export class Inventory extends Entity<Data> {
   public addItemInStorageSpace({
     item,
     storageSpace,
-  }: { item: Item; storageSpace: StorageSpace }) {
+  }: { item: Item; storageSpace: StorageSpaceType }) {
     this.mustHaveSpaceLeftInStorageSpace({ itemType: item.type, storageSpace });
     this._data[storageSpace].push(item);
   }
@@ -87,7 +95,7 @@ export class Inventory extends Entity<Data> {
   private removeItemFromStorageSpace({
     item,
     storageSpace,
-  }: { item: Item; storageSpace: StorageSpace }) {
+  }: { item: Item; storageSpace: StorageSpaceType }) {
     this._data[storageSpace] = this._data[storageSpace].filter(
       (storageItem) => !storageItem.equals(item),
     );
@@ -110,44 +118,70 @@ export class Inventory extends Entity<Data> {
     if (backpackItem) {
       this.mustHaveItemInStorageSpace({
         item: backpackItem,
-        storageSpace: "backpack",
+        storageSpace: StorageSpace.BACKPACK,
       });
     }
     if (gearItem) {
       this.mustHaveItemInStorageSpace({
         item: gearItem,
-        storageSpace: "gear",
+        storageSpace: StorageSpace.GEAR,
       });
     }
 
     if (backpackItem && gearItem) {
-      this.removeItemFromStorageSpace({ item: gearItem, storageSpace: "gear" });
+      this.removeItemFromStorageSpace({
+        item: gearItem,
+        storageSpace: StorageSpace.GEAR,
+      });
       this.removeItemFromStorageSpace({
         item: backpackItem,
-        storageSpace: "backpack",
+        storageSpace: StorageSpace.BACKPACK,
       });
 
-      this.addItemInStorageSpace({ item: gearItem, storageSpace: "backpack" });
-      this.addItemInStorageSpace({ item: backpackItem, storageSpace: "gear" });
+      this.addItemInStorageSpace({
+        item: gearItem,
+        storageSpace: StorageSpace.BACKPACK,
+      });
+      this.addItemInStorageSpace({
+        item: backpackItem,
+        storageSpace: StorageSpace.GEAR,
+      });
     } else if (backpackItem && !gearItem) {
       this.removeItemFromStorageSpace({
         item: backpackItem,
-        storageSpace: "backpack",
+        storageSpace: StorageSpace.BACKPACK,
       });
-      this.addItemInStorageSpace({ item: backpackItem, storageSpace: "gear" });
+      this.addItemInStorageSpace({
+        item: backpackItem,
+        storageSpace: StorageSpace.GEAR,
+      });
     } else if (!backpackItem && gearItem) {
-      this.removeItemFromStorageSpace({ item: gearItem, storageSpace: "gear" });
-      this.addItemInStorageSpace({ item: gearItem, storageSpace: "backpack" });
+      this.removeItemFromStorageSpace({
+        item: gearItem,
+        storageSpace: StorageSpace.GEAR,
+      });
+      this.addItemInStorageSpace({
+        item: gearItem,
+        storageSpace: StorageSpace.BACKPACK,
+      });
     }
   }
 
-  private findItemInInventoryOrThrow({ item }: { item: Item }): StorageSpace {
-    if (this._data.gear.some((gearItem) => gearItem.equals(item))) {
-      return "gear";
+  private findItemInInventoryOrThrow({
+    item,
+  }: { item: Item }): StorageSpaceType {
+    if (
+      this._data[StorageSpace.GEAR].some((gearItem) => gearItem.equals(item))
+    ) {
+      return StorageSpace.GEAR;
     }
 
-    if (this._data.backpack.some((backpackItem) => backpackItem.equals(item))) {
-      return "backpack";
+    if (
+      this._data[StorageSpace.BACKPACK].some((backpackItem) =>
+        backpackItem.equals(item),
+      )
+    ) {
+      return StorageSpace.BACKPACK;
     }
 
     throw new InventoryError({
@@ -159,14 +193,14 @@ export class Inventory extends Entity<Data> {
   public mustHaveItemInStorageSpace({
     item,
     storageSpace,
-  }: { item: Item; storageSpace: StorageSpace }) {
+  }: { item: Item; storageSpace: StorageSpaceType }) {
     const hasItem = this._data[storageSpace].some((storageItem) =>
       storageItem.equals(item),
     );
     if (!hasItem) {
       throw new InventoryError({
         name:
-          storageSpace === "backpack"
+          storageSpace === StorageSpace.BACKPACK
             ? "ITEM_NOT_FOUND_IN_BACKPACK_STUFF"
             : "ITEM_NOT_FOUND_IN_GEAR_STUFF",
         message: `Item not found in ${storageSpace} stuff`,
@@ -176,7 +210,8 @@ export class Inventory extends Entity<Data> {
 
   private hasSpaceLeftInBackpack() {
     return (
-      this._data.backpack.length < this._data.storageCapacity.nbBackpackSlots
+      this._data[StorageSpace.BACKPACK].length <
+      this._data.storageCapacity.nbBackpackSlots
     );
   }
 
@@ -184,13 +219,13 @@ export class Inventory extends Entity<Data> {
     switch (itemType) {
       case "Weapon":
         return (
-          this._data.gear.filter((item) => item.isWeapon()).length <
-          this._data.storageCapacity.nbWeaponSlots
+          this._data[StorageSpace.GEAR].filter((item) => item.isWeapon())
+            .length < this._data.storageCapacity.nbWeaponSlots
         );
       case "Spell":
         return (
-          this._data.gear.filter((item) => item.isSpell()).length <
-          this._data.storageCapacity.nbSpellSlots
+          this._data[StorageSpace.GEAR].filter((item) => item.isSpell())
+            .length < this._data.storageCapacity.nbSpellSlots
         );
       default:
         return false;
@@ -200,9 +235,9 @@ export class Inventory extends Entity<Data> {
   private mustHaveSpaceLeftInStorageSpace({
     itemType,
     storageSpace,
-  }: { itemType: Item["type"]; storageSpace: StorageSpace }) {
+  }: { itemType: Item["type"]; storageSpace: StorageSpaceType }) {
     const hasSpaceLeft =
-      storageSpace === "backpack"
+      storageSpace === StorageSpace.BACKPACK
         ? this.hasSpaceLeftInBackpack()
         : this.hasSpaceLeftInGear({ itemType });
     if (!hasSpaceLeft) {
@@ -222,9 +257,11 @@ export class Inventory extends Entity<Data> {
         nbWeaponSlots: this._data.storageCapacity.nbWeaponSlots,
         nbBackpackSlots: this._data.storageCapacity.nbBackpackSlots,
       },
-      gear: this._data.gear.map((item: Weapon | Spell) => item.toPlain()),
-      backpack: this._data.backpack.map((item: Weapon | Spell) =>
-        item.toPlain(),
+      [StorageSpace.GEAR]: this._data[StorageSpace.GEAR].map(
+        (item: Weapon | Spell | Artifact) => item.toPlain(),
+      ),
+      [StorageSpace.BACKPACK]: this._data[StorageSpace.BACKPACK].map(
+        (item: Weapon | Spell | Artifact | Potion) => item.toPlain(),
       ),
     };
   }

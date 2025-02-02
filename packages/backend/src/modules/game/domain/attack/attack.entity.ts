@@ -1,4 +1,6 @@
-import { AttackRangeType, AttackTypeType, sum } from "@dnd/shared";
+import { sum } from "@dnd/shared";
+import { AttackRangeType } from "src/database/enums/attack-range.enum";
+import { AttackTypeType } from "src/database/enums/attack-type.enum";
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { Dice } from "../dice/dice.vo";

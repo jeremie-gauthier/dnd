@@ -1,12 +1,14 @@
 import {
-  GameView,
-  PlayableEntity,
-  TilePlayableEntity,
-  coordToIndex,
-  getLineOfSight,
-  getNeighbourCoords,
-} from "@dnd/shared";
+  AttackRange,
+  CurrentPhase,
+  GameResponseDto,
+  ItemType,
+  TileEntityType,
+  TilePlayableEntityResponseDto,
+} from "@/openapi/dnd-api";
+import { coordToIndex, getLineOfSight, getNeighbourCoords } from "@dnd/shared";
 import { useGameActions } from "@features/game/context/use-game-actions";
+import { PlayableEntity } from "@features/game/interfaces/dnd-api/playable-entity.interface";
 import { useEffect } from "react";
 import { GameEventManager } from "../../events";
 import { TilePressedEvent } from "../../events/tile-pressed.event";
@@ -17,7 +19,7 @@ import { translate2DToIsometricCoord } from "../../utils/coords-conversion.util"
 
 type Params = {
   entityPlaying?: PlayableEntity;
-  game: GameView;
+  game: GameResponseDto;
   gameActions: ReturnType<typeof useGameActions>;
   gameEventManager: GameEventManager;
   isIdle: boolean;
@@ -48,17 +50,17 @@ export const useAttackInteraction = ({
         return;
       }
 
-      const metadata = { width: game.map.width, height: game.map.height };
+      const metadata = { width: game.board.width, height: game.board.height };
       const tileIdx = coordToIndex({ coord: coord2D, metadata });
-      const tilePressed = game.map.tiles[tileIdx];
+      const tilePressed = game.board.tiles[tileIdx];
       if (!tilePressed) {
         return;
       }
 
       const tilePlayableEntityTargeted = tilePressed.entities.find(
-        (entity): entity is TilePlayableEntity =>
+        (entity): entity is TilePlayableEntityResponseDto =>
           entity.isBlocking &&
-          entity.type === "playable-entity" &&
+          entity.type === TileEntityType.PLAYABLE_ENTITY &&
           entity.id !== entityPlaying.id,
       );
       if (!tilePlayableEntityTargeted) {
@@ -71,13 +73,16 @@ export const useAttackInteraction = ({
         // Beware of the offset, it may shift everything being computed here.
         // We really want to have the tiles next to the borders of the canvas.
         map: {
-          height: game.map.height * assetSize,
-          width: game.map.width * assetSize,
+          height: game.board.height * assetSize,
+          width: game.board.width * assetSize,
         },
       });
 
       const attacks = entityPlaying.inventory.gear
-        .filter((stuff) => stuff.type === "Weapon" || stuff.type === "Spell")
+        .filter(
+          (stuff) =>
+            stuff.type === ItemType.Weapon || stuff.type === ItemType.Spell,
+        )
         .flatMap((attackItem) => attackItem.attacks);
 
       const isAdjacent = getNeighbourCoords({
@@ -87,7 +92,9 @@ export const useAttackInteraction = ({
       );
       if (isAdjacent) {
         const meleeAttacks = attacks.filter(
-          (attack) => attack.range === "melee" || attack.range === "versatile",
+          (attack) =>
+            attack.range === AttackRange.melee ||
+            attack.range === AttackRange.versatile,
         );
         if (meleeAttacks.length === 0) {
           return;
@@ -100,7 +107,7 @@ export const useAttackInteraction = ({
             attack: meleeAttack,
             name: "attack",
             onInteract: () => {
-              playerState.toggleTo("idle");
+              playerState.toggleTo(CurrentPhase.idle);
               gameActions.attack({
                 gameId: game.id,
                 attackId: meleeAttack.id,
@@ -111,7 +118,9 @@ export const useAttackInteraction = ({
         });
       } else {
         const rangeAttack = attacks.filter(
-          (attack) => attack.range === "long" || attack.range === "versatile",
+          (attack) =>
+            attack.range === AttackRange.long ||
+            attack.range === AttackRange.versatile,
         );
         if (rangeAttack.length === 0) {
           return;
@@ -119,9 +128,9 @@ export const useAttackInteraction = ({
 
         const lineOfSight = getLineOfSight({
           ally: entityPlaying.faction,
-          gameBoard: game.map,
+          gameBoard: game.board,
           originCoord: entityPlaying.coord,
-          range: "long",
+          range: AttackRange.long,
         });
         const isTargetInLineOfSight = lineOfSight.some(
           (tile) =>
@@ -139,7 +148,7 @@ export const useAttackInteraction = ({
             attack: rangeAttack,
             name: "attack",
             onInteract: () => {
-              playerState.toggleTo("idle");
+              playerState.toggleTo(CurrentPhase.idle);
               gameActions.attack({
                 gameId: game.id,
                 attackId: rangeAttack.id,
@@ -151,7 +160,7 @@ export const useAttackInteraction = ({
       }
 
       playerState.toggleTo("attack");
-      renderAttackPreview({ map: game.map, coords: [coord2D] });
+      renderAttackPreview({ map: game.board, coords: [coord2D] });
     };
     gameEventManager.addEventListener(
       TilePressedEvent.EventName,
@@ -179,7 +188,7 @@ export const useAttackInteraction = ({
   useEffect(() => {
     const handleTileReleased = () => {
       if (playerState.currentAction === "attack") {
-        playerState.toggleTo("idle");
+        playerState.toggleTo(CurrentPhase.idle);
         clearPreviewLayer();
       }
     };

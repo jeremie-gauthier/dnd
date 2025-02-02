@@ -5,10 +5,8 @@ import {
   RequestMethod,
 } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { APP_INTERCEPTOR, APP_PIPE } from "@nestjs/core";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { ZodSerializerInterceptor, ZodValidationPipe } from "nestjs-zod";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthzModule } from "./authz/authz.module";
@@ -48,17 +46,7 @@ import { RedisModule } from "./redis/redis.module";
     TranslationModule,
   ],
   controllers: [AppController],
-  providers: [
-    {
-      provide: APP_PIPE,
-      useClass: ZodValidationPipe,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: ZodSerializerInterceptor,
-    },
-    AppService,
-  ],
+  providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

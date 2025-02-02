@@ -1,3 +1,4 @@
+import { InteractiveEntityKindType } from "src/database/enums/interactive-entity-kind.enum";
 import { Playable } from "../../../playable-entities/playable-entity/playable-entity.abstract";
 import { TileEntity } from "../tile-entity.abstract";
 import { Chest } from "./chest.entity";
@@ -6,8 +7,8 @@ import { TileInteractiveEntityError } from "./interactive.error";
 import { Trap } from "./trap.entity";
 
 type Data = {
-  readonly type: "interactive-entity";
-  readonly kind: "chest" | "door" | "trap";
+  readonly type: "INTERACTIVE_ENTITY";
+  readonly kind: InteractiveEntityKindType;
   isBlocking: boolean;
   isVisible: boolean;
   canInteract: boolean;

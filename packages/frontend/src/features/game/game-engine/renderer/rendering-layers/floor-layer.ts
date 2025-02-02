@@ -1,10 +1,12 @@
 import {
-  type GameView,
-  type PlayableEntity,
-  type Tile,
-  type TileEntity,
-  getLineOfSight,
-} from "@dnd/shared";
+  Board,
+  NonInteractiveEntityKind,
+  Tile,
+  TileEntitiesItem,
+  TileEntityType,
+} from "@/openapi/dnd-api";
+import { getLineOfSight } from "@dnd/shared";
+import { PlayableEntity } from "@features/game/interfaces/dnd-api/playable-entity.interface";
 import { RefObject } from "react";
 import { translate2DToIsometricCoord } from "../../utils/coords-conversion.util";
 import { useAssetsLoader } from "../assets-loader/assets-loader";
@@ -26,7 +28,7 @@ export const useFloorLayer = ({ canvasRef }: Params) => {
   const render = ({
     map,
     entityPlaying,
-  }: { map: GameView["map"]; entityPlaying?: PlayableEntity }) => {
+  }: { map: Board; entityPlaying?: PlayableEntity }) => {
     if (!canvas || !context || !assets) return;
 
     const lineOfSight = entityPlaying
@@ -79,7 +81,7 @@ export const useFloorLayer = ({ canvasRef }: Params) => {
           subject: {
             coord2D,
             coordIsometric,
-            entity: {} as TileEntity,
+            entity: {} as TileEntitiesItem,
           },
         });
       } else {
@@ -89,7 +91,7 @@ export const useFloorLayer = ({ canvasRef }: Params) => {
           subject: {
             coord2D,
             coordIsometric,
-            entity: {} as TileEntity,
+            entity: {} as TileEntitiesItem,
           },
         });
       }
@@ -104,6 +106,7 @@ export const useFloorLayer = ({ canvasRef }: Params) => {
 const shouldSkipTileRendering = ({ tile }: { tile: Tile }): boolean => {
   return tile.entities.some(
     (entity) =>
-      entity.type === "non-interactive-entity" && entity.kind === "off-map",
+      entity.type === TileEntityType.NON_INTERACTIVE_ENTITY &&
+      entity.kind === NonInteractiveEntityKind.off_map,
   );
 };

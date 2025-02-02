@@ -1,6 +1,6 @@
-import { leaveLobbyInputSchema, leaveLobbyOutputSchema } from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { Expose } from "class-transformer";
 
-export class LeaveLobbyInputDto extends createZodDto(leaveLobbyInputSchema) {}
-
-export class LeaveLobbyOutputDto extends createZodDto(leaveLobbyOutputSchema) {}
+export class LeaveLobbyOutputDto {
+  @Expose()
+  readonly message: "OK";
+}

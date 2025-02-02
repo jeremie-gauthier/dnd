@@ -1,10 +1,4 @@
 import {
-  AttackRangeType,
-  AttackRangeValues,
-  AttackTypeType,
-  AttackTypeValues,
-} from "@dnd/shared";
-import {
   Column,
   Entity,
   JoinTable,
@@ -14,6 +8,8 @@ import {
   PrimaryGeneratedColumn,
   Relation,
 } from "typeorm";
+import { AttackRangeType, AttackRangeValues } from "../enums/attack-range.enum";
+import { AttackTypeType, AttackTypeValues } from "../enums/attack-type.enum";
 import { AttackDice } from "./attack-dice.entity";
 import { AttackItem } from "./attack-item.entity";
 import { Perk } from "./perk.entity";

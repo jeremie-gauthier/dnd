@@ -1,13 +1,6 @@
-import {
-  togglePlayerReadyStateInputSchema,
-  togglePlayerReadyStateOutputSchema,
-} from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { IsUUID } from "class-validator";
 
-export class TogglePlayerReadyStateInputDto extends createZodDto(
-  togglePlayerReadyStateInputSchema,
-) {}
-
-export class TogglePlayerReadyStateOutputDto extends createZodDto(
-  togglePlayerReadyStateOutputSchema,
-) {}
+export class TogglePlayerReadyStateInputDto {
+  @IsUUID()
+  readonly lobbyId: string;
+}

@@ -1,10 +1,8 @@
+import { PerkResponseDto } from "@/openapi/dnd-api";
 import { useTranslation } from "react-i18next";
 
 type Props = {
-  perk: {
-    name: string;
-    trigger: string;
-  };
+  perk: PerkResponseDto;
 };
 
 export const Perk = ({ perk }: Props) => {

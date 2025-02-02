@@ -1,3 +1,4 @@
+import { TileEntityType } from "@/openapi/dnd-api";
 import { getElevationOffset } from "../utils/get-elevation-offset.util";
 import type { EntityDrawerParams } from "./entity-drawer-params.interface";
 
@@ -10,7 +11,7 @@ export function drawDoor({
   config,
   subject,
 }: EntityDrawerParams<RequiredAssets>) {
-  if (subject.entity.type !== "interactive-entity") return;
+  if (subject.entity.type !== TileEntityType.INTERACTIVE_ENTITY) return;
 
   const isClosed = subject.entity.isBlocking;
   if (!isClosed) return;

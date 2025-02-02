@@ -23,7 +23,7 @@ export class NewCampaignStartedUseCase implements UseCase {
   }: {
     userId: User["id"];
     campaignId: Campaign["id"];
-  }): Promise<CampaignProgression> {
+  }) {
     const campaignProgression = await this.startCampaignForUser(
       userId,
       campaignId,
@@ -38,7 +38,9 @@ export class NewCampaignStartedUseCase implements UseCase {
       }),
     );
 
-    return campaignProgression;
+    return {
+      campaignProgressionId: campaignProgression.id,
+    };
   }
 
   private async startCampaignForUser(

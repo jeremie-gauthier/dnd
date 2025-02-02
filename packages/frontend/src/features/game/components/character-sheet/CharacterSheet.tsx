@@ -1,4 +1,9 @@
-import { GameItem, PlayableEntity } from "@dnd/shared";
+import { PlayableEntityFaction } from "@/openapi/dnd-api";
+import {
+  BackpackItem,
+  GearItem,
+} from "@features/game/interfaces/dnd-api/item.interface";
+import { PlayableEntity } from "@features/game/interfaces/dnd-api/playable-entity.interface";
 import { useTranslation } from "react-i18next";
 import { useGameContext } from "../../context/use-game-context";
 import { ActionPoints } from "../characteristics/action-points.component";
@@ -13,13 +18,13 @@ import { GearInventory } from "./GearInventory";
 type Props = {
   character: PlayableEntity;
   renderBackpackSlot: React.FC<{
-    item?: GameItem;
-    type: "Weapon" | "Spell" | "Artifact" | "Potion" | "backpackAnyItem";
+    item?: BackpackItem;
+    type: BackpackItem["type"] | "backpackAnyItem";
     idx: number;
   }>;
   renderGearSlot: React.FC<{
-    item?: GameItem;
-    type: "Weapon" | "Spell" | "Artifact";
+    item?: GearItem;
+    type: GearItem["type"];
     idx: number;
   }>;
 };
@@ -38,7 +43,7 @@ export const CharacterSheet = ({
 
   return (
     <>
-      {entityPlaying.faction === "hero" ? (
+      {entityPlaying.faction === PlayableEntityFaction.hero ? (
         <img
           src={entityPlaying.imgUrl}
           alt=""

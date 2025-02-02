@@ -1,10 +1,20 @@
-import { openDoorInputSchema, openDoorOutputSchema } from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { Type } from "class-transformer";
+import { IsInt, IsPositive, IsUUID } from "class-validator";
 
-export class PlayableEntityOpenDoorInputDto extends createZodDto(
-  openDoorInputSchema,
-) {}
+class CoordDto {
+  @IsInt()
+  @IsPositive()
+  readonly row: number;
 
-export class PlayableEntityOpenDoorOutputDto extends createZodDto(
-  openDoorOutputSchema,
-) {}
+  @IsInt()
+  @IsPositive()
+  readonly column: number;
+}
+
+export class PlayableEntityOpenDoorInputDto {
+  @IsUUID()
+  readonly gameId: string;
+
+  @Type(() => CoordDto)
+  readonly coordOfTileWithDoor: CoordDto;
+}

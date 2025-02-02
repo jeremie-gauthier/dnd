@@ -1,8 +1,9 @@
-import { PlayableEntity } from "src/modules/game/infra/database/game/model/playable-entity/playable.type";
+import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
+import { PlayableEntity } from "src/modules/game/infra/database/entities/playable-entity/playable-entity.entity";
 import { TileEntity } from "../tile-entity.abstract";
 
 type Data = {
-  readonly type: "playable-entity";
+  readonly type: "PLAYABLE_ENTITY";
   readonly id: PlayableEntity["id"];
   readonly isBlocking: boolean;
   readonly faction: "hero" | "monster";
@@ -10,7 +11,7 @@ type Data = {
 
 export class TilePlayableEntity extends TileEntity<Data> {
   constructor(rawData: Omit<Data, "type">) {
-    super({ ...rawData, type: "playable-entity" });
+    super({ ...rawData, type: TileEntityType.PLAYABLE_ENTITY });
   }
 
   public get faction() {

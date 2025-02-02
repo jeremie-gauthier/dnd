@@ -1,7 +1,11 @@
+import {
+  CurrentPhase,
+  CurrentPhaseType,
+} from "src/modules/game/infra/database/enums/current-phase.enum";
 import { ValueObject } from "src/modules/shared/domain/value-object";
 import { PlayerStatusError } from "./player-status.error";
 
-type Data = "PREPARATION" | "IDLE" | "ACTION";
+type Data = CurrentPhaseType;
 
 export class PlayerStatus extends ValueObject<Data> {
   private static readonly STATE_MACHINE: Readonly<
@@ -13,16 +17,16 @@ export class PlayerStatus extends ValueObject<Data> {
       }
     >
   > = {
-    PREPARATION: {
-      advanceTo: ["IDLE"],
-      rollbackFrom: ["IDLE", "PREPARATION"],
+    [CurrentPhase.PREPARATION]: {
+      advanceTo: [CurrentPhase.IDLE],
+      rollbackFrom: [CurrentPhase.IDLE, CurrentPhase.PREPARATION],
     },
-    IDLE: {
-      advanceTo: ["ACTION"],
+    [CurrentPhase.IDLE]: {
+      advanceTo: [CurrentPhase.ACTION],
       rollbackFrom: [],
     },
-    ACTION: {
-      advanceTo: ["IDLE"],
+    [CurrentPhase.ACTION]: {
+      advanceTo: [CurrentPhase.IDLE],
       rollbackFrom: [],
     },
   };

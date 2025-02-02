@@ -1,8 +1,11 @@
-import { GameItem } from "@dnd/shared";
+import {
+  BackpackItem,
+  GearItem,
+} from "@features/game/interfaces/dnd-api/item.interface";
 import { useTranslation } from "react-i18next";
 
 type Props = {
-  item: GameItem;
+  item: GearItem | BackpackItem;
 };
 
 export const InventoryItem = ({ item }: Props) => {

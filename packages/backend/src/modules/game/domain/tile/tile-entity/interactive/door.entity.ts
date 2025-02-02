@@ -1,8 +1,9 @@
+import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
 import { z } from "zod";
 import { TileInteractiveEntity } from "./interactive.abstract";
 
 type Data = {
-  readonly type: "interactive-entity";
+  readonly type: "INTERACTIVE_ENTITY";
   readonly kind: "door";
   isBlocking: boolean;
   isVisible: boolean;
@@ -11,7 +12,9 @@ type Data = {
 
 export class Door extends TileInteractiveEntity<Data> {
   private static readonly schema = z.object({
-    type: z.literal("interactive-entity").default("interactive-entity"),
+    type: z
+      .literal(TileEntityType.INTERACTIVE_ENTITY)
+      .default(TileEntityType.INTERACTIVE_ENTITY),
     kind: z.literal("door").default("door"),
     isBlocking: z.boolean(),
     isVisible: z.boolean(),

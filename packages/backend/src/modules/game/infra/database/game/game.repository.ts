@@ -3,11 +3,12 @@ import {
   NotFoundException,
   OnApplicationBootstrap,
 } from "@nestjs/common";
+import { instanceToPlain } from "class-transformer";
 import { GameRepository } from "src/modules/game/application/repositories/game-repository.interface";
 import { Game } from "src/modules/game/domain/game/game.aggregate";
 import { RedisService } from "src/redis/redis.service";
+import { Game as GamePersistence } from "../entities/game.entity";
 import { GameMapper } from "./mapper/game.mapper";
-import { GamePersistence } from "./model/game.model";
 
 @Injectable()
 export class RedisGameRepository
@@ -38,7 +39,7 @@ export class RedisGameRepository
     await this.client.json.set(
       RedisGameRepository.KEY,
       game.id,
-      this.mapper.toPersistence(game),
+      instanceToPlain(this.mapper.toPersistence(game)),
     );
     return game;
   }
@@ -66,7 +67,7 @@ export class RedisGameRepository
     await this.client.json.set(
       RedisGameRepository.KEY,
       game.id,
-      this.mapper.toPersistence(game),
+      instanceToPlain(this.mapper.toPersistence(game)),
     );
   }
 

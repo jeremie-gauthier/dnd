@@ -6,6 +6,7 @@ import {
   PlayableEntityType,
   PlayableEntityTypeType,
 } from "@dnd/shared";
+import { PlayableEntityFaction } from "src/database/enums/playable-entity-faction.enum";
 import { z } from "zod";
 import { Attack } from "../../../attack/attack.entity";
 import { Coord } from "../../../coord/coord.vo";
@@ -62,7 +63,9 @@ type Data = {
 export abstract class Hero extends Playable<Data> {
   private static readonly schema = z.object({
     id: z.string().uuid(),
-    faction: z.literal("hero").default("hero"),
+    faction: z
+      .literal(PlayableEntityFaction.HERO)
+      .default(PlayableEntityFaction.HERO),
     name: z.string(),
     type: z.enum([PlayableEntityType.HUMANOID]),
     race: z.enum([

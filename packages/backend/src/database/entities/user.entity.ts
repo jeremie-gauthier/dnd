@@ -22,9 +22,7 @@ export class User {
   @OneToMany(
     () => CampaignProgression,
     (campaignProgression) => campaignProgression.user,
-    {
-      cascade: true,
-    },
+    { cascade: true },
   )
   campaignProgressions: Relation<CampaignProgression[]>;
 

@@ -1,13 +1,19 @@
-import {
-  getTranslationInputSchema,
-  getTranslationOutputSchema,
-} from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { PickType } from "@nestjs/swagger";
+import { IsNotEmpty, IsString } from "class-validator";
+import { TranslationResponseDto } from "src/dtos/response/translation.dto";
 
-export class GetTranslationInputDto extends createZodDto(
-  getTranslationInputSchema,
-) {}
+export class GetTranslationInputParamsDto {
+  @IsString()
+  @IsNotEmpty()
+  readonly locale: string;
 
-export class GetTranslationOutputDto extends createZodDto(
-  getTranslationOutputSchema,
-) {}
+  @IsString()
+  @IsNotEmpty()
+  readonly namespace: string;
+}
+
+export class GetTranslationOutputDto extends PickType(TranslationResponseDto, [
+  "locale",
+  "namespace",
+  "translations",
+]) {}

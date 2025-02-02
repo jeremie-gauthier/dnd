@@ -1,6 +1,6 @@
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
-import { GameItem } from "@dnd/shared";
 import { ItemFoundEvent } from "@features/game/game-engine/events/item-found.event";
+import { Item } from "@features/game/interfaces/dnd-api/item.interface";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -17,9 +17,7 @@ import {
 
 export const GetChestLoot = () => {
   const { game, gameActions, gameEventManager } = useGameContext();
-  const [itemFoundInChest, setItemFoundInChest] = useState<GameItem | null>(
-    null,
-  );
+  const [itemFoundInChest, setItemFoundInChest] = useState<Item | null>(null);
 
   useEffect(() => {
     const handleItemFound: EventListener = (e) => {
@@ -90,7 +88,7 @@ export const GetChestLoot = () => {
 
 type Props = {
   close: (clickedTarget?: "button") => void;
-  itemFoundInChest: GameItem | null;
+  itemFoundInChest: Item | null;
 };
 
 const InnerGetChestLoot = ({ close, itemFoundInChest }: Props) => {

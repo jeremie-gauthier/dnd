@@ -1,3 +1,5 @@
+import { PerkName } from "src/database/enums/perk-name.enum";
+import { PerkTrigger } from "src/database/enums/perk-trigger.enum";
 import { Attack } from "../attack/attack.entity";
 import { Item } from "../item/item.abstract";
 import { Stopped } from "../playable-entities/playable-entity/conditions/stopped.condition";
@@ -6,7 +8,7 @@ import { Perk } from "./perk.abstract";
 
 export class Stop extends Perk {
   constructor() {
-    super({ name: "stop", trigger: "special_dice" });
+    super({ name: PerkName.STOP, trigger: PerkTrigger.SPECIAL_DICE });
   }
 
   public override apply({

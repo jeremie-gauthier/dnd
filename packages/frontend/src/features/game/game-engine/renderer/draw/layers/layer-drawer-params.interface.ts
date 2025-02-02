@@ -1,4 +1,4 @@
-import type { Coord, Tile } from "@dnd/shared";
+import { CoordResponseDto, Tile } from "@/openapi/dnd-api";
 import { assetCollection } from "../../assets-loader/assets.config";
 import type { DrawerParams } from "../drawer-params.interface";
 
@@ -8,8 +8,8 @@ export type LayerDrawerParams<
   > = typeof assetCollection,
 > = DrawerParams<AssetCollection> & {
   subject: {
-    coord2D: Coord;
-    coordIsometric: Coord;
+    coord2D: CoordResponseDto;
+    coordIsometric: CoordResponseDto;
     tile: Tile;
   };
 };

@@ -1,13 +1,8 @@
-import {
-  userRegisteredInputSchema,
-  userRegisteredOutputSchema,
-} from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { PickType } from "@nestjs/swagger";
+import { User } from "src/database/entities/user.entity";
 
-export class UserRegisteredInputDto extends createZodDto(
-  userRegisteredInputSchema,
-) {}
-
-export class UserRegisteredOutputDto extends createZodDto(
-  userRegisteredOutputSchema,
-) {}
+export class UserRegisteredInputDto extends PickType(User, [
+  "id",
+  "avatarUrl",
+  "username",
+]) {}

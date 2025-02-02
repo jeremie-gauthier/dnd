@@ -1,13 +1,9 @@
-import {
-  GameLog,
-  GameView,
-  PlayableEntity,
-  PlayerGamePhase,
-  Tile,
-} from "@dnd/shared";
+import { CurrentPhase, GameResponseDto, Tile } from "@/openapi/dnd-api";
+import { GameLog } from "@dnd/shared";
 import { createContext } from "react";
 import { GameEventManager } from "../game-engine/events";
 import { usePlayerState } from "../game-engine/state-machine";
+import { PlayableEntity } from "../interfaces/dnd-api/playable-entity.interface";
 import { useGameActions } from "./use-game-actions";
 
 type GameContextParams = {
@@ -20,10 +16,10 @@ type GameContextParams = {
   };
   assetSize: number;
   gameEventManager: GameEventManager;
-  game: GameView;
+  game: GameResponseDto;
   playerState: ReturnType<typeof usePlayerState>;
   gameActions: ReturnType<typeof useGameActions>;
-  phase: PlayerGamePhase;
+  phase: CurrentPhase;
   neighbourTiles: Tile[] | undefined;
   isPlaying: boolean;
   entityPlaying: PlayableEntity | undefined;
@@ -31,6 +27,6 @@ type GameContextParams = {
 
 export const GameContext = createContext<GameContextParams>({
   game: {},
-  phase: "idle",
+  phase: CurrentPhase.idle,
   gameActions: {},
 } as GameContextParams);

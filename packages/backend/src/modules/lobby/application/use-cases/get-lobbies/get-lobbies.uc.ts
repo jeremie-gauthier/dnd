@@ -1,4 +1,3 @@
-import { GetLobbiesOutput } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import type { UseCase } from "src/interfaces/use-case.interface";
 import {
@@ -13,16 +12,19 @@ export class GetLobbiesUseCase implements UseCase {
     private readonly lobbiesRepository: LobbiesRepository,
   ) {}
 
-  public async execute(): Promise<GetLobbiesOutput> {
+  public async execute() {
     const lobbies = await this.lobbiesRepository.getMany();
 
-    return lobbies.map((lobby) => {
-      const plainLobby = lobby.toPlain();
+    return {
+      data: lobbies.map((lobby) => {
+        const plainLobby = lobby.toPlain();
 
-      return {
-        ...plainLobby,
-        nbPlayers: plainLobby.players.length,
-      };
-    });
+        return {
+          ...plainLobby,
+          nbPlayers: plainLobby.players.length,
+        };
+      }),
+      count: lobbies.length,
+    };
   }
 }

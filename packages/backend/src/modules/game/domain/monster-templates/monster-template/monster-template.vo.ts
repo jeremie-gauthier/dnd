@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { PlayableEntityRaceType, PlayableEntityTypeType } from "@dnd/shared";
+import { CurrentPhase } from "src/modules/game/infra/database/enums/current-phase.enum";
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { Coord } from "../../coord/coord.vo";
@@ -97,7 +98,7 @@ export class MonsterTemplate extends Entity<Data> {
       type: this._data.type,
       race: this._data.race,
       name: `${this._data.race}-${randomId.slice(0, 4)}`,
-      status: new PlayerStatus("IDLE"),
+      status: new PlayerStatus(CurrentPhase.IDLE),
       actionsDoneThisTurn: [],
       conditions: [],
     });

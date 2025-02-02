@@ -1,12 +1,13 @@
-import { GameItem, StuffStorageCapacityJson } from "@dnd/shared";
+import { StuffStorageCapacityResponseDto } from "@/openapi/dnd-api";
+import { BackpackItem } from "@features/game/interfaces/dnd-api/item.interface";
 import React from "react";
 
 type Props = {
-  backpack: GameItem[];
-  storageCapacity: StuffStorageCapacityJson;
+  backpack: BackpackItem[];
+  storageCapacity: StuffStorageCapacityResponseDto;
   renderBackpackSlot: React.FC<{
-    item?: GameItem;
-    type: "Weapon" | "Spell" | "Artifact" | "Potion" | "backpackAnyItem";
+    item?: BackpackItem;
+    type: BackpackItem["type"] | "backpackAnyItem";
     idx: number;
   }>;
 };
@@ -18,7 +19,7 @@ export const BackpackInventory = ({
 }: Props) => {
   const backpackItems = backpack.map((item) => ({
     item,
-    type: item.type as "Weapon" | "Spell" | "Artifact" | "Potion",
+    type: item.type as BackpackItem["type"],
   }));
 
   const backpackInventorySlots = [

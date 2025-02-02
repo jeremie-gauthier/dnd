@@ -1,3 +1,4 @@
+import { StorageSpace } from "src/database/enums/storage-space.enum";
 import { ConditionFactory } from "src/modules/game/application/factories/condition.factory";
 import { HeroFactory } from "src/modules/game/application/factories/hero.factory";
 import { ItemFactory } from "src/modules/game/application/factories/item.factory";
@@ -8,7 +9,8 @@ import { Initiative } from "src/modules/game/domain/playable-entities/playable-e
 import { Monster } from "src/modules/game/domain/playable-entities/playable-entity/monster.entity";
 import { Playable } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.abstract";
 import { PlayerStatus } from "src/modules/game/domain/playable-entities/playable-entity/player-status/player-status.vo";
-import { PlayableEntity } from "../model/playable-entity/playable.type";
+import { HeroEntity } from "../../entities/playable-entity/hero.entity";
+import { PlayableEntity } from "../../entities/playable-entity/playable-entity.entity";
 
 export class PlayableEntityFactory {
   private constructor() {}
@@ -18,21 +20,17 @@ export class PlayableEntityFactory {
       case "hero": {
         const HeroClass = HeroFactory.getHeroClass(data.name);
         const hero = new HeroClass({
-          ...data,
+          ...(data as HeroEntity),
           coord: new Coord(data.coord),
           initiative: new Initiative(data.initiative),
-          status: new PlayerStatus(
-            data.currentPhase.toUpperCase() as Uppercase<
-              PlayableEntity["currentPhase"]
-            >,
-          ),
+          status: new PlayerStatus(data.currentPhase),
           inventory: new Inventory({
             ...data.inventory,
             playableId: data.id,
-            backpack: data.inventory.backpack.map((item) =>
+            [StorageSpace.BACKPACK]: data.inventory.backpack.map((item) =>
               ItemFactory.create(item as unknown as GameItem),
             ),
-            gear: data.inventory.gear.map((item) =>
+            [StorageSpace.GEAR]: data.inventory.gear.map((item) =>
               ItemFactory.create(item as unknown as GameItem),
             ),
           }),
@@ -55,18 +53,14 @@ export class PlayableEntityFactory {
           ...data,
           coord: new Coord(data.coord),
           initiative: new Initiative(data.initiative),
-          status: new PlayerStatus(
-            data.currentPhase.toUpperCase() as Uppercase<
-              PlayableEntity["currentPhase"]
-            >,
-          ),
+          status: new PlayerStatus(data.currentPhase),
           inventory: new Inventory({
             ...data.inventory,
             playableId: data.id,
-            backpack: data.inventory.backpack.map((item) =>
+            [StorageSpace.BACKPACK]: data.inventory.backpack.map((item) =>
               ItemFactory.create(item as any),
             ),
-            gear: data.inventory.gear.map((item) =>
+            [StorageSpace.GEAR]: data.inventory.gear.map((item) =>
               ItemFactory.create(item as any),
             ),
           }),

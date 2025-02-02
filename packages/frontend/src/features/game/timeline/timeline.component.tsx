@@ -1,15 +1,17 @@
-import { GameView } from "@dnd/shared";
+import { GameResponseDto } from "@/openapi/dnd-api";
 import { cn } from "@lib/utils";
 
 type Props = {
-  game: GameView;
+  game: GameResponseDto;
 };
 
 export const Timeline = ({ game }: Props) => {
   return (
     <ul className="flex flex-row gap-2">
       {game.timeline.map((playableEntityId) => {
-        const playableEntity = game.playableEntities[playableEntityId];
+        const playableEntity = game.playableEntities.find(
+          (playableEntity) => playableEntity.id === playableEntityId,
+        );
         if (!playableEntity) {
           return null;
         }

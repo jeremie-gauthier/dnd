@@ -1,13 +1,17 @@
 import {
-  Coord,
-  GameView,
-  PlayableEntity,
+  CoordResponseDto,
+  CurrentPhase,
+  GameResponseDto,
+  TileEntityType,
+} from "@/openapi/dnd-api";
+import {
   TilePath,
   coordToIndex,
   getAllPathsFromTileWithinRange,
   getNeighbourCoords,
 } from "@dnd/shared";
 import { useGameActions } from "@features/game/context/use-game-actions";
+import { PlayableEntity } from "@features/game/interfaces/dnd-api/playable-entity.interface";
 import { useEffect, useState } from "react";
 import { GameEventManager, TileHoveredEvent } from "../events";
 import { TileClickedEvent } from "../events/tile-clicked.event";
@@ -20,7 +24,7 @@ import { getAllCoordsFromTilePaths } from "./move-utils";
 
 type Params = {
   entityPlaying?: PlayableEntity;
-  game: GameView;
+  game: GameResponseDto;
   gameActions: ReturnType<typeof useGameActions>;
   gameEventManager: GameEventManager;
   isPlaying: boolean;
@@ -43,10 +47,10 @@ export const useMove = ({
     entityPlaying &&
     entityPlaying.characteristic.movementPoints > 0 &&
     entityPlaying.characteristic.actionPoints > 0;
-  const [tilePathCoords, setTilePathCoords] = useState<Coord[]>([]);
-  const [availableTilesToMoveOn, setAvailableTilesToMoveOn] = useState<Coord[]>(
-    [],
-  );
+  const [tilePathCoords, setTilePathCoords] = useState<CoordResponseDto[]>([]);
+  const [availableTilesToMoveOn, setAvailableTilesToMoveOn] = useState<
+    CoordResponseDto[]
+  >([]);
   const [tilePaths, setTilePaths] = useState<TilePath[]>([]);
 
   useEffect(() => {
@@ -56,7 +60,7 @@ export const useMove = ({
     const isLiddaMoving = entityPlaying.name.toLowerCase() === "lidda";
     const pathsFromTile = getAllPathsFromTileWithinRange({
       ally: isLiddaMoving ? "ignoring" : entityPlaying.faction,
-      gameBoard: game.map,
+      gameBoard: game.board,
       originCoord,
       maxRange: entityPlaying.characteristic.movementPoints,
     });
@@ -67,7 +71,7 @@ export const useMove = ({
 
     setTilePaths(pathsFromTile);
     setAvailableTilesToMoveOn(moveLimitCoords);
-  }, [game.map, entityPlaying]);
+  }, [game.board, entityPlaying]);
 
   useEffect(() => {
     if (!canMove) return;
@@ -78,14 +82,15 @@ export const useMove = ({
       const { coord2D } = e as TileClickedEvent;
       const idx = coordToIndex({
         coord: coord2D,
-        metadata: { height: game.map.height, width: game.map.width },
+        metadata: { height: game.board.height, width: game.board.width },
       });
-      const tile = game.map.tiles[idx];
+      const tile = game.board.tiles[idx];
       if (!tile) return;
 
       const isTileWithEntityPlaying = tile.entities.some(
         (entity) =>
-          entity.type === "playable-entity" && entity.id === entityPlaying.id,
+          entity.type === TileEntityType.PLAYABLE_ENTITY &&
+          entity.id === entityPlaying.id,
       );
       if (isTileWithEntityPlaying) {
         playerState.toggleTo("move");
@@ -199,7 +204,7 @@ export const useMove = ({
     const handleMouseUp: EventListener = (e) => {
       const { coord2D } = e as TileReleasedEvent;
 
-      playerState.toggleTo("idle");
+      playerState.toggleTo(CurrentPhase.idle);
 
       const tilePathCoordsToMoveOn = tilePathCoords.slice(1);
       const canCommitMove = tilePathCoordsToMoveOn.some(
@@ -218,8 +223,8 @@ export const useMove = ({
         // Beware of the offset, it may shift everything being computed here.
         // We really want to have the tiles next to the borders of the canvas.
         map: {
-          height: game.map.height * assetSize,
-          width: game.map.width * assetSize,
+          height: game.board.height * assetSize,
+          width: game.board.width * assetSize,
         },
       });
       gameEventManager.emitMoveAuthorized({ isometricCoord });
@@ -252,7 +257,7 @@ export const useMove = ({
     const moveSimulationCoords = tilePathCoords.slice(1);
 
     renderMovePreview({
-      map: game.map,
+      map: game.board,
       moveLimitCoords: availableTilesToMoveOn,
       moveSimulationCoords,
     });
@@ -265,9 +270,9 @@ export const useMove = ({
       coordHovered.row === entityPlaying.coord.row;
     const tileIdx = coordToIndex({
       coord: coordHovered,
-      metadata: { width: game.map.width, height: game.map.height },
+      metadata: { width: game.board.width, height: game.board.height },
     });
-    const tile = game.map.tiles[tileIdx];
+    const tile = game.board.tiles[tileIdx];
     if (!tile) return;
 
     const assetSize = 64;
@@ -276,8 +281,8 @@ export const useMove = ({
       // Beware of the offset, it may shift everything being computed here.
       // We really want to have the tiles next to the borders of the canvas.
       map: {
-        height: game.map.height * assetSize,
-        width: game.map.width * assetSize,
+        height: game.board.height * assetSize,
+        width: game.board.width * assetSize,
       },
     });
 
@@ -289,7 +294,7 @@ export const useMove = ({
     }
   }, [
     isMoving,
-    game.map,
+    game.board,
     entityPlaying,
     tilePathCoords,
     availableTilesToMoveOn,

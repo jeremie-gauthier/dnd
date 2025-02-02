@@ -1,4 +1,4 @@
-import { ServerGameEvent } from "@dnd/shared";
+import { GameView, ServerGameEvent } from "@dnd/shared";
 import { OnEvent } from "@nestjs/event-emitter";
 import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import type { WsServer } from "src/interfaces/socket.interface";
@@ -68,7 +68,7 @@ export class GamePublisherGateway {
 
       this.server.to(userId).emit(ServerGameEvent.GameChangesDetected, {
         ...playerGameState,
-        game: gameView,
+        game: gameView as unknown as GameView,
       });
     }
   }

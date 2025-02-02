@@ -1,4 +1,4 @@
-import { PlayableEntityRaceType } from "@dnd/shared";
+import { PlayableEntityRaceType } from "src/database/enums/playable-entity-race.enum";
 import { Coord } from "../../../coord/coord.vo";
 import { DoorOpeningEvent } from "./door-opening-event.abstract";
 

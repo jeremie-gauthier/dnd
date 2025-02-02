@@ -1,4 +1,5 @@
-import { GameView } from "@dnd/shared";
+import { Board } from "@/openapi/dnd-api";
+import { PlayableEntity } from "@features/game/interfaces/dnd-api/playable-entity.interface";
 import { RefObject } from "react";
 import { translate2DToIsometricCoord } from "../../utils/coords-conversion.util";
 import { useAssetsLoader } from "../assets-loader/assets-loader";
@@ -19,8 +20,8 @@ export const useEntitiesLayer = ({ canvasRef }: Params) => {
     map,
     playableEntities,
   }: {
-    map: GameView["map"];
-    playableEntities: GameView["playableEntities"];
+    map: Board;
+    playableEntities: PlayableEntity[];
   }) => {
     if (!canvas || !context || !assets) return;
 

@@ -1,24 +1,23 @@
-import { GameBoardDeserialized } from "src/modules/shared/interfaces/game-board-deserialized.interface";
+import { InteractiveEntityKind } from "src/database/enums/interactive-entity-kind.enum";
 import { Chest } from "../../domain/tile/tile-entity/interactive/chest.entity";
 import { Door } from "../../domain/tile/tile-entity/interactive/door.entity";
-import { TileInteractiveEntity } from "../../domain/tile/tile-entity/interactive/interactive.abstract";
+import { TileInteractiveEntity as TileInteractiveEntityDomain } from "../../domain/tile/tile-entity/interactive/interactive.abstract";
 import { Trap } from "../../domain/tile/tile-entity/interactive/trap.entity";
-
-type RawTileInteractiveEntity = Extract<
-  GameBoardDeserialized["tiles"][number]["entities"][number],
-  { type: "interactive-entity" }
->;
+import { TileNonPlayableInteractiveEntity as TileInteractiveEntityPersistence } from "../../infra/database/entities/tile-entity/tile-non-playable-interactive-entity/tile-non-playable-interactive-entity.entity";
+import { TrapEntity as TrapEntityPersistence } from "../../infra/database/entities/tile-entity/tile-non-playable-interactive-entity/trap-entity.entity";
 
 export class TileInteractiveEntityFactory {
   private constructor() {}
 
-  public static create(data: RawTileInteractiveEntity): TileInteractiveEntity {
+  public static create(
+    data: TileInteractiveEntityPersistence,
+  ): TileInteractiveEntityDomain {
     switch (data.kind) {
-      case "door":
+      case InteractiveEntityKind.DOOR:
         return new Door(data);
-      case "trap":
-        return new Trap(data);
-      case "chest":
+      case InteractiveEntityKind.TRAP:
+        return new Trap(data as TrapEntityPersistence);
+      case InteractiveEntityKind.CHEST:
         return new Chest(data);
     }
   }

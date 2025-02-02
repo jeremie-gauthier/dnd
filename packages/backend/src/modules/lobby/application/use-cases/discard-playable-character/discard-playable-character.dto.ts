@@ -1,13 +1,9 @@
-import {
-  discardPlayableCharacterInputSchema,
-  discardPlayableCharacterOutputSchema,
-} from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { IsUUID } from "class-validator";
 
-export class DiscardPlayableCharacterInputDto extends createZodDto(
-  discardPlayableCharacterInputSchema,
-) {}
+export class DiscardPlayableCharacterInputDto {
+  @IsUUID()
+  readonly lobbyId: string;
 
-export class DiscardPlayableCharacterOutputDto extends createZodDto(
-  discardPlayableCharacterOutputSchema,
-) {}
+  @IsUUID()
+  readonly playableCharacterId: string;
+}

@@ -1,11 +1,11 @@
 import { Icon } from "@/components/icon/Icon";
-import { GameItem } from "@dnd/shared";
+import { GearItem } from "@features/game/interfaces/dnd-api/item.interface";
 import { InventoryItem } from "./common/inventory-item.component";
 import { InventorySlot } from "./common/inventory-slot.component";
 
 type Props = {
-  item?: GameItem;
-  type: "Weapon" | "Spell" | "Artifact";
+  item?: GearItem;
+  type: GearItem["type"];
   idx: number;
 };
 

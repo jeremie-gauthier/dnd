@@ -1,5 +1,7 @@
+import { ItemType, ItemTypeType } from "src/database/enums/item-type.enum";
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
+import { Artifact } from "./artifact/artifact.abstract";
 import { ChestTrap } from "./chest-trap/chest-trap.abstract";
 import { ItemError } from "./item.error";
 import { Potion } from "./potion/potion.abstract";
@@ -7,7 +9,7 @@ import { Spell } from "./spell/spell.entity";
 import { Weapon } from "./weapon/weapon.entity";
 
 type Data = {
-  readonly type: "Weapon" | "Spell" | "ChestTrap" | "Potion" | "Artifact";
+  readonly type: ItemTypeType;
   readonly name: string;
   readonly level: number;
   [x: string]: unknown;
@@ -33,19 +35,23 @@ export abstract class Item<
   }
 
   public isSpell(): this is Spell {
-    return this._data.type === "Spell";
+    return this._data.type === ItemType.SPELL;
   }
 
   public isWeapon(): this is Weapon {
-    return this._data.type === "Weapon";
+    return this._data.type === ItemType.WEAPON;
   }
 
   public isChestTrap(): this is ChestTrap {
-    return this._data.type === "ChestTrap";
+    return this._data.type === ItemType.CHESTTRAP;
   }
 
   public isPotion(): this is Potion {
-    return this._data.type === "Potion";
+    return this._data.type === ItemType.POTION;
+  }
+
+  public isArtifact(): this is Artifact {
+    return this._data.type === ItemType.ARTIFACT;
   }
 
   public toString() {

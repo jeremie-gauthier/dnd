@@ -1,5 +1,10 @@
-import { Map as GameMap, GameView } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
+import { StorageSpace } from "src/database/enums/storage-space.enum";
+import { ArtifactResponseDto } from "src/modules/game/application/dtos/response/artifact.dto";
+import { GameResponseDto } from "src/modules/game/application/dtos/response/game.dto";
+import { PotionResponseDto } from "src/modules/game/application/dtos/response/potion.dto";
+import { SpellResponseDto } from "src/modules/game/application/dtos/response/spell.dto";
+import { WeaponResponseDto } from "src/modules/game/application/dtos/response/weapon.dto";
 import { Game as GameDomain } from "src/modules/game/domain/game/game.aggregate";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
 import { PostgresHeroUIRepository } from "../../database/hero-ui/hero-ui.repository";
@@ -14,12 +19,9 @@ export class GamePresenter {
 
   public async toView(
     domain: ReturnType<GameDomain["toPlain"]>,
-  ): Promise<GameView> {
+  ): Promise<GameResponseDto> {
     return {
       ...domain,
-      status: domain.status.toLowerCase() as Lowercase<
-        (typeof domain)["status"]
-      >,
       playableEntities: Object.fromEntries(
         await Promise.all(
           domain.playableEntities.values.map(async (playableEntity) => {
@@ -44,7 +46,6 @@ export class GamePresenter {
           }),
         ),
       ),
-      map: domain.board as GameMap,
       timeline: domain.playableEntities.values
         .toSorted((a, b) => b.initiative - a.initiative)
         .map(({ id }) => id),
@@ -55,13 +56,26 @@ export class GamePresenter {
     inventory,
   }: {
     inventory: ReturnType<Inventory["toPlain"]>;
-  }): Promise<GameView["playableEntities"][string]["inventory"]> {
+  }): Promise<GameResponseDto["playableEntities"][number]["inventory"]> {
     const [backpack, gear] = await Promise.all([
       Promise.all(
-        inventory.backpack.map((item) => this.itemPresenter.toView({ item })),
+        inventory[StorageSpace.BACKPACK].map(
+          (item) =>
+            this.itemPresenter.toView({ item }) as Promise<
+              | ArtifactResponseDto
+              | WeaponResponseDto
+              | SpellResponseDto
+              | PotionResponseDto
+            >,
+        ),
       ),
       Promise.all(
-        inventory.gear.map((item) => this.itemPresenter.toView({ item })),
+        inventory[StorageSpace.GEAR].map(
+          (item) =>
+            this.itemPresenter.toView({ item }) as Promise<
+              ArtifactResponseDto | WeaponResponseDto | SpellResponseDto
+            >,
+        ),
       ),
     ]);
 

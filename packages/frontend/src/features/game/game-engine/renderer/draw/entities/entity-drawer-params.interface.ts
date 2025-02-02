@@ -1,4 +1,5 @@
-import type { Coord, GameView, TileEntity } from "@dnd/shared";
+import { CoordResponseDto, TileEntitiesItem } from "@/openapi/dnd-api";
+import { PlayableEntity } from "@features/game/interfaces/dnd-api/playable-entity.interface";
 import type { DrawerParams } from "../drawer-params.interface";
 
 export type EntityDrawerParams<
@@ -7,9 +8,9 @@ export type EntityDrawerParams<
   >,
 > = DrawerParams<AssetCollection> & {
   subject: {
-    coord2D: Coord;
-    coordIsometric: Coord;
-    entity: TileEntity;
-    playableEntity?: GameView["playableEntities"][number];
+    coord2D: CoordResponseDto;
+    coordIsometric: CoordResponseDto;
+    entity: TileEntitiesItem;
+    playableEntity?: PlayableEntity;
   };
 };

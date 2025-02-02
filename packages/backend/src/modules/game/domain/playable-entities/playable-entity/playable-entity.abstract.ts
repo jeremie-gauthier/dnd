@@ -1,8 +1,13 @@
 import {
-  PlayableEntityRaceType,
+  PlayableEntityFaction,
+  PlayableEntityFactionType,
+} from "src/database/enums/playable-entity-faction.enum";
+import { PlayableEntityRaceType } from "src/database/enums/playable-entity-race.enum";
+import {
   PlayableEntityType,
   PlayableEntityTypeType,
-} from "@dnd/shared";
+} from "src/database/enums/playable-entity-type.enum";
+import { CurrentPhase } from "src/modules/game/infra/database/enums/current-phase.enum";
 import { Entity } from "src/modules/shared/domain/entity";
 import { Attack } from "../../attack/attack.entity";
 import { Coord } from "../../coord/coord.vo";
@@ -25,7 +30,7 @@ import { PlayerStatus } from "./player-status/player-status.vo";
 
 type Data = {
   readonly id: string;
-  readonly faction: "hero" | "monster";
+  readonly faction: PlayableEntityFactionType;
   readonly type: PlayableEntityTypeType;
   readonly race: PlayableEntityRaceType;
   readonly name: string;
@@ -127,7 +132,7 @@ export abstract class Playable<
   }
 
   public get isPlaying() {
-    return this._data.status.current === "ACTION";
+    return this._data.status.current === CurrentPhase.ACTION;
   }
 
   public get conditions() {
@@ -145,11 +150,11 @@ export abstract class Playable<
   }
 
   public isHero(): this is Hero {
-    return this._data.faction === "hero";
+    return this._data.faction === PlayableEntityFaction.HERO;
   }
 
   public isMonster(): this is Monster {
-    return this._data.faction === "monster";
+    return this._data.faction === PlayableEntityFaction.MONSTER;
   }
 
   public isUndead() {
@@ -223,7 +228,7 @@ export abstract class Playable<
     for (const condition of this.conditions) {
       condition.onEndOfTurn();
     }
-    this._data.status = this._data.status.advanceTo("IDLE");
+    this._data.status = this._data.status.advanceTo(CurrentPhase.IDLE);
     this.addDomainEvent(
       new PlayableEntityTurnEndedDomainEvent({
         playableEntity: this.toPlain(),
@@ -232,7 +237,7 @@ export abstract class Playable<
   }
 
   public startTurn() {
-    this._data.status = this._data.status.advanceTo("ACTION");
+    this._data.status = this._data.status.advanceTo(CurrentPhase.ACTION);
     this._data.characteristic.actionPoints =
       this._data.characteristic.baseActionPoints;
     this._data.actionsDoneThisTurn = [];

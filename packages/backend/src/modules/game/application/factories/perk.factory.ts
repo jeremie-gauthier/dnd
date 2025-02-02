@@ -1,3 +1,4 @@
+import { PerkName, PerkNameType } from "src/database/enums/perk-name.enum";
 import { BloodPrice } from "../../domain/perk/blood-price.perk";
 import { Breakable } from "../../domain/perk/breakable.perk";
 import { CriticalFailure } from "../../domain/perk/critical-failure.perk";
@@ -11,38 +12,35 @@ import { RerollAllDices } from "../../domain/perk/reroll-all-dices.perk";
 import { RerollOneDice } from "../../domain/perk/reroll-one-dice.perk";
 import { Stop } from "../../domain/perk/stop.perk";
 import { TurnUndead } from "../../domain/perk/turn-undead.perk";
-import { AttackItem } from "./item.interface";
 
 export class PerkFactory {
   private constructor() {}
 
-  public static create(
-    perkName: AttackItem["attacks"][number]["perks"][number]["name"],
-  ): Perk {
+  public static create(perkName: PerkNameType): Perk {
     switch (perkName) {
-      case "mana_leech":
+      case PerkName.MANA_LEECH:
         return new ManaLeech();
-      case "breakable":
+      case PerkName.BREAKABLE:
         return new Breakable();
-      case "critical_failure":
+      case PerkName.CRITICAL_FAILURE:
         return new CriticalFailure();
-      case "greater_healing":
+      case PerkName.GREATER_HEALING:
         return new GreaterHealing();
-      case "blood_price":
+      case PerkName.BLOOD_PRICE:
         return new BloodPrice();
-      case "double_damage":
+      case PerkName.DOUBLE_DAMAGE:
         return new DoubleDamage();
-      case "frozen":
+      case PerkName.FROZEN:
         return new Frozen();
-      case "ignore_armor_class":
+      case PerkName.IGNORE_ARMOR_CLASS:
         return new IgnoreArmorClass();
-      case "reroll_all_dices":
+      case PerkName.REROLL_ALL_DICES:
         return new RerollAllDices();
-      case "reroll_one_dice":
+      case PerkName.REROLL_ONE_DICE:
         return new RerollOneDice();
-      case "stop":
+      case PerkName.STOP:
         return new Stop();
-      case "turn_undead":
+      case PerkName.TURN_UNDEAD:
         return new TurnUndead();
       default:
         throw new Error(`No "${perkName}" perk found`);

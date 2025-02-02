@@ -1,9 +1,12 @@
 import { randomUUID } from "node:crypto";
-import { InventoryJson, StorageSpace, zip } from "@dnd/shared";
+import { zip } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import type { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
-import { MonsterTemplate as MonsterTemplatePersistence } from "src/database/entities/enemy-template.entity";
+import { InventoryTemplate } from "src/database/entities/inventory-template.entity";
+import { MonsterTemplate as MonsterTemplatePersistence } from "src/database/entities/monster-template.entity";
+import { StorageSpace } from "src/database/enums/storage-space.enum";
+import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { GameInitializationDonePayload as CampaignGameInitializationDonePayload } from "src/modules/campaign/events/game-initialization-done.payload";
 import { Board } from "src/modules/game/domain/board/board.entity";
@@ -13,6 +16,9 @@ import { GameMaster } from "src/modules/game/domain/game-master/game-master.enti
 import { GameStatus } from "src/modules/game/domain/game-status/game-status.vo";
 import { Game } from "src/modules/game/domain/game/game.aggregate";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
+import { Artifact } from "src/modules/game/domain/item/artifact/artifact.abstract";
+import { Spell } from "src/modules/game/domain/item/spell/spell.entity";
+import { Weapon } from "src/modules/game/domain/item/weapon/weapon.entity";
 import { MonsterTemplate as MonsterTemplateDomain } from "src/modules/game/domain/monster-templates/monster-template/monster-template.vo";
 import { MonsterTemplates } from "src/modules/game/domain/monster-templates/monster-templates.aggregate";
 import { PlayableEntities } from "src/modules/game/domain/playable-entities/playable-entities.aggregate";
@@ -23,13 +29,20 @@ import { Room } from "src/modules/game/domain/rooms/room/room.entity";
 import { Rooms } from "src/modules/game/domain/rooms/rooms.aggregate";
 import { Tile } from "src/modules/game/domain/tile/tile.entity";
 import { WinConditions } from "src/modules/game/domain/win-conditions/win-conditions.aggregate";
+import { CurrentPhase } from "src/modules/game/infra/database/enums/current-phase.enum";
+import { GameStatus as EGameStatus } from "src/modules/game/infra/database/enums/game-status.enum";
 import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
 import { GameEvent } from "src/modules/shared/events/game/game-event.enum";
 import { GameInitializationDonePayload } from "src/modules/shared/events/game/game-initialization-done.payload";
 import { GameEventFactory } from "../../factories/game-event.factory";
 import { HeroFactory } from "../../factories/hero.factory";
 import { ItemFactory } from "../../factories/item.factory";
-import { GameItem } from "../../factories/item.interface";
+import {
+  ArtifactItem,
+  GameItem,
+  SpellItem,
+  WeaponItem,
+} from "../../factories/item.interface";
 import { TileEntityFactory } from "../../factories/tile-entity.factory";
 import { WinConditionFactory } from "../../factories/win-condition.factory";
 import {
@@ -71,26 +84,26 @@ export class GameInitializationUseCase implements UseCase {
       tiles: payload.map.tiles.map(
         (tile) =>
           new Tile({
+            ...tile,
             coord: new Coord(tile.coord),
             entities: tile.entities.map((tileEntity) =>
               TileEntityFactory.create({
                 tileEntity,
                 playableEntityRef:
-                  tileEntity.type === "playable-entity"
+                  tileEntity.type === TileEntityType.PLAYABLE_ENTITY
                     ? playableEntities.getOneOrThrow({
                         playableEntityId: tileEntity.id,
                       })
                     : undefined,
               }),
             ),
-            isStartingTile: tile.isStartingTile,
           }),
       ),
     });
     const game = new Game({
       id: payload.lobby.id,
       host: payload.lobby.host,
-      status: new GameStatus("BATTLE_ONGOING"),
+      status: new GameStatus(EGameStatus.BATTLE_ONGOING),
       board,
       gameMaster: new GameMaster({
         userId: payload.lobby.playableCharacters.find(
@@ -226,7 +239,7 @@ export class GameInitializationUseCase implements UseCase {
           id: hero.id,
           type: hero.type,
           race: hero.race,
-          status: new PlayerStatus("IDLE"),
+          status: new PlayerStatus(CurrentPhase.IDLE),
           playedByUserId: heroPlayersMap[hero.id]!,
           name: hero.name,
           class: hero.class,
@@ -251,8 +264,14 @@ export class GameInitializationUseCase implements UseCase {
             storageCapacity: hero.inventory.storageCapacity,
             gear: hero.inventory.stuff
               .filter((stuff) => stuff.storageSpace === StorageSpace.GEAR)
-              .map((stuff) =>
-                ItemFactory.create(stuff.item as unknown as GameItem),
+              .map(
+                (stuff) =>
+                  ItemFactory.create(
+                    stuff.item as unknown as
+                      | ArtifactItem
+                      | WeaponItem
+                      | SpellItem,
+                  ) as Artifact | Weapon | Spell,
               ),
             backpack: hero.inventory.stuff
               .filter((stuff) => stuff.storageSpace === StorageSpace.BACKPACK)
@@ -290,13 +309,13 @@ export class GameInitializationUseCase implements UseCase {
   private async getPlayableEntityInventoryFromEnemyInventory({
     enemyInventory,
   }: {
-    enemyInventory: InventoryJson;
+    enemyInventory: InventoryTemplate;
   }): Promise<Inventory> {
     const backpackItemNames = enemyInventory.items
-      .filter((item) => item.storageSpace === "BACKPACK")
+      .filter((item) => item.storageSpace === StorageSpace.BACKPACK)
       .map(({ itemName }) => itemName);
     const gearItemNames = enemyInventory.items
-      .filter((item) => item.storageSpace === "GEAR")
+      .filter((item) => item.storageSpace === StorageSpace.GEAR)
       .map(({ itemName }) => itemName);
 
     const [backpackItems, gearItems] = await Promise.all([
@@ -306,8 +325,11 @@ export class GameInitializationUseCase implements UseCase {
         ),
       ),
       Promise.all(
-        gearItemNames.map((name) =>
-          this.itemRepository.getOneOrThrow({ name }),
+        gearItemNames.map(
+          (name) =>
+            this.itemRepository.getOneOrThrow({ name }) as Promise<
+              Artifact | Weapon | Spell
+            >,
         ),
       ),
     ]);

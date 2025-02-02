@@ -1,7 +1,8 @@
-import { PlayableEntityRaceType, unique } from "@dnd/shared";
+import { unique } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { MonsterTemplate } from "src/database/entities/enemy-template.entity";
+import { MonsterTemplate } from "src/database/entities/monster-template.entity";
+import { PlayableEntityRaceType } from "src/database/enums/playable-entity-race.enum";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { HostRequestedGameStartPayload } from "src/modules/shared/events/lobby/host-requested-game-start.payload";
 import { GameEventDeserialized } from "src/modules/shared/interfaces/game-events-deserialized.interface";

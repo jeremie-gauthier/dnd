@@ -1,7 +1,7 @@
-import { GameItem } from "@dnd/shared";
+import { PotionResponseDto } from "@/openapi/dnd-api";
 
 type Props = {
-  item: Extract<GameItem, { type: "Potion" }>;
+  item: PotionResponseDto;
 };
 
 export const ConsumableItem = ({ item }: Props) => {

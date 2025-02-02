@@ -1,3 +1,4 @@
+import { ItemType } from "src/database/enums/item-type.enum";
 import { Attack } from "../../domain/attack/attack.entity";
 import { Dice } from "../../domain/dice/dice.vo";
 import { Item } from "../../domain/item/item.abstract";
@@ -14,7 +15,7 @@ export class ItemFactory {
 
   public static create(data: GameItem): Item {
     switch (data.type) {
-      case "Weapon":
+      case ItemType.WEAPON:
         return new Weapon({
           ...data,
           attacks: data.attacks.map(
@@ -28,13 +29,13 @@ export class ItemFactory {
               }),
           ),
         });
-      case "Spell":
+      case ItemType.SPELL:
         return SpellFactory.create(data);
-      case "ChestTrap":
+      case ItemType.CHESTTRAP:
         return ChestTrapFactory.create(data.name);
-      case "Potion":
+      case ItemType.POTION:
         return PotionFactory.create(data.name);
-      case "Artifact":
+      case ItemType.ARTIFACT:
         return ArtifactFactory.create(data.name);
     }
   }

@@ -23,9 +23,7 @@ export class Campaign {
   @OneToMany(
     () => CampaignProgression,
     (campaignProgression) => campaignProgression.campaign,
-    {
-      cascade: true,
-    },
+    { cascade: true },
   )
   readonly progressions: Relation<CampaignProgression[]>;
 

@@ -14,6 +14,7 @@ import {
   coordToIndex,
 } from "@dnd/shared";
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
 import { GameBoardDeserialized } from "src/modules/shared/interfaces/game-board-deserialized.interface";
 import {
   GameEventDeserialized,
@@ -37,7 +38,7 @@ export class MapSerializerService {
 
   constructor(private readonly coordService: CoordService) {}
 
-  public serialize(_map: GameView["map"]): string {
+  public serialize(_map: GameView["board"]): string {
     throw new Error("Not implemented");
   }
 
@@ -156,15 +157,13 @@ export class MapSerializerService {
   }: Pick<
     Extract<
       TileEntity,
-      {
-        type: "non-interactive-entity" | "interactive-entity";
-      }
+      { type: "NON_INTERACTIVE_ENTITY" | "INTERACTIVE_ENTITY" }
     >,
     "kind"
   >): TileEntity {
     if (this.isNonPlayableNonInteractiveTileEntity(kind)) {
       return {
-        type: "non-interactive-entity",
+        type: TileEntityType.NON_INTERACTIVE_ENTITY,
         kind,
         isVisible: true,
         isBlocking: true,
@@ -172,7 +171,7 @@ export class MapSerializerService {
       };
     } else if (this.isNonPlayableInteractiveTileEntity(kind)) {
       return {
-        type: "interactive-entity",
+        type: TileEntityType.INTERACTIVE_ENTITY,
         ...this.getNonPlayableInteractiveEntityAttributes(kind),
       } as TileNonPlayableInteractiveEntity;
     } else {
@@ -301,7 +300,8 @@ export class MapSerializerService {
     if (
       !tile.entities.some(
         (entity) =>
-          entity.type === "interactive-entity" && entity.kind === "door",
+          entity.type === TileEntityType.INTERACTIVE_ENTITY &&
+          entity.kind === "door",
       )
     ) {
       throw new InternalServerErrorException(
@@ -343,6 +343,7 @@ export class MapSerializerService {
         metadata: { width, height },
       }),
       entities: [],
+      isStartingTile: false,
     }));
   }
 
@@ -356,7 +357,7 @@ export class MapSerializerService {
     metadata: { width: number; height: number };
   }): void {
     const isNonBlockingEntity = (entity: TileEntity) =>
-      entity.type === "playable-entity" ||
+      entity.type === TileEntityType.PLAYABLE_ENTITY ||
       entity.kind === "door" ||
       entity.isBlocking === false;
     const addTileToExploreAt = (coord: Coord): Coord | undefined => {
@@ -424,7 +425,7 @@ export class MapSerializerService {
       if (reachableTiles.has(tileIndex) || tile.entities.length > 0) continue;
 
       tile.entities.push({
-        type: "non-interactive-entity",
+        type: TileEntityType.NON_INTERACTIVE_ENTITY,
         kind: "off-map",
         isVisible: true,
         isBlocking: true,

@@ -1,5 +1,5 @@
 import { ClientLobbyEvent } from "@dnd/shared";
-import { UseFilters, UsePipes } from "@nestjs/common";
+import { UseFilters } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import {
   ConnectedSocket,
@@ -9,11 +9,12 @@ import {
   SubscribeMessage,
   WebSocketGateway,
 } from "@nestjs/websockets";
-import { ZodValidationPipe } from "nestjs-zod";
 import { WsExceptionFilter } from "src/errors/ws-exception-filter";
 import type { ServerSocket } from "src/interfaces/socket.interface";
+import { Serialize } from "src/middlewares/serialize.interceptor";
 import { DiscardPlayableCharacterInputDto } from "src/modules/lobby/application/use-cases/discard-playable-character/discard-playable-character.dto";
 import { DiscardPlayableCharacterUseCase } from "src/modules/lobby/application/use-cases/discard-playable-character/discard-playable-character.uc";
+import { LeaveLobbyOutputDto } from "src/modules/lobby/application/use-cases/leave-lobby/leave-lobby.dto";
 import { PickPlayableCharacterInputDto } from "src/modules/lobby/application/use-cases/pick-playable-character/pick-playable-character.dto";
 import { PickPlayableCharacterUseCase } from "src/modules/lobby/application/use-cases/pick-playable-character/pick-playable-character.uc";
 import { LOBBIES_ROOM } from "src/modules/lobby/shared/constants";
@@ -27,7 +28,6 @@ import {
   JoinLobbyOutputDto,
 } from "../../../application/use-cases/join-lobby/join-lobby.dto";
 import { JoinLobbyUseCase } from "../../../application/use-cases/join-lobby/join-lobby.uc";
-import { LeaveLobbyOutputDto } from "../../../application/use-cases/leave-lobby/leave-lobby.dto";
 import { LeaveLobbyUseCase } from "../../../application/use-cases/leave-lobby/leave-lobby.uc";
 import { ListenLobbiesUpdatesUseCase } from "../../../application/use-cases/listen-lobbies-updates/listen-lobbies-updates.uc";
 import { ListenLobbyUpdatesUseCase } from "../../../application/use-cases/listen-lobby-updates/listen-lobby-updates.uc";
@@ -37,7 +37,6 @@ import { StartGameUseCase } from "../../../application/use-cases/start-game/star
 import type { TogglePlayerReadyStateInputDto } from "../../../application/use-cases/toggle-player-ready-state/toggle-player-ready-state.dto";
 import { TogglePlayerReadyStateUseCase } from "../../../application/use-cases/toggle-player-ready-state/toggle-player-ready-state.uc";
 
-@UsePipes(ZodValidationPipe)
 @UseFilters(WsExceptionFilter)
 @WebSocketGateway({
   cors: {
@@ -61,11 +60,11 @@ export class LobbySubscriberGateway
     private readonly startGameUseCase: StartGameUseCase,
   ) {}
 
-  public async handleConnection(client: ServerSocket) {
+  public async handleConnection(client: ServerSocket): Promise<void> {
     await this.handleWsConnectionUseCase.execute({ client });
   }
 
-  public async handleDisconnect(client: ServerSocket) {
+  public async handleDisconnect(client: ServerSocket): Promise<void> {
     await this.handleWsDisconnectionUseCase.execute({ client });
   }
 
@@ -73,7 +72,7 @@ export class LobbySubscriberGateway
   public async requestLobbyCreation(
     @MessageBody() createLobbyInputDto: CreateLobbyInputDto,
     @ConnectedSocket() client: ServerSocket,
-  ) {
+  ): Promise<void> {
     await this.eventEmitter.emitAsync(
       LobbyEvent.RequestCreateLobby,
       new RequestCreateLobbyPayload({
@@ -85,21 +84,24 @@ export class LobbySubscriberGateway
   }
 
   @SubscribeMessage(ClientLobbyEvent.RequestJoinLobby)
+  @Serialize(JoinLobbyOutputDto)
   public async joinLobby(
     @MessageBody() joinLobbyDto: JoinLobbyInputDto,
     @ConnectedSocket() client: ServerSocket,
-  ) {
+  ): Promise<JoinLobbyOutputDto> {
     await client.leave(LOBBIES_ROOM);
     const lobbyId = await this.joinLobbyUseCase.execute({
       userId: client.data.userId,
       ...joinLobbyDto,
     });
     await client.join(lobbyId);
-    return JoinLobbyOutputDto.schema.parse({ lobbyId });
+    return { lobbyId };
   }
 
   @SubscribeMessage(ClientLobbyEvent.ListenLobbiesChanges)
-  public async listenLobbiesChanges(@ConnectedSocket() client: ServerSocket) {
+  public async listenLobbiesChanges(
+    @ConnectedSocket() client: ServerSocket,
+  ): Promise<{ message: string }> {
     await this.listenLobbiesUpdatesUseCase.execute({ client });
     return { message: "You are now listening on lobbies changes" };
   }
@@ -108,7 +110,7 @@ export class LobbySubscriberGateway
   public async listenLobbyChanges(
     @MessageBody() listenLobbyChangesDto: ListenLobbyChangesInputDto,
     @ConnectedSocket() client: ServerSocket,
-  ) {
+  ): Promise<void> {
     await this.listenLobbyUpdatesUseCase.execute({
       ...listenLobbyChangesDto,
       client,
@@ -116,7 +118,10 @@ export class LobbySubscriberGateway
   }
 
   @SubscribeMessage(ClientLobbyEvent.RequestLeaveLobby)
-  public async leaveLobby(@ConnectedSocket() client: ServerSocket) {
+  @Serialize(LeaveLobbyOutputDto)
+  public async leaveLobby(
+    @ConnectedSocket() client: ServerSocket,
+  ): Promise<LeaveLobbyOutputDto> {
     const lobbyId = await this.leaveLobbyUseCase.execute({
       userId: client.data.userId,
     });
@@ -125,14 +130,14 @@ export class LobbySubscriberGateway
       await client.leave(lobbyId);
     }
 
-    return LeaveLobbyOutputDto.schema.parse({ message: "Ok" });
+    return { message: "OK" };
   }
 
   @SubscribeMessage(ClientLobbyEvent.RequestPickPlayableCharacter)
   public async pickPlayableCharacter(
     @MessageBody() pickPlayableCharacterDto: PickPlayableCharacterInputDto,
     @ConnectedSocket() client: ServerSocket,
-  ) {
+  ): Promise<void> {
     await this.pickPlayableCharacterUseCase.execute({
       userId: client.data.userId,
       ...pickPlayableCharacterDto,
@@ -144,7 +149,7 @@ export class LobbySubscriberGateway
     @MessageBody()
     discardPlayableCharacterDto: DiscardPlayableCharacterInputDto,
     @ConnectedSocket() client: ServerSocket,
-  ) {
+  ): Promise<void> {
     await this.discardPlayableCharacterUseCase.execute({
       userId: client.data.userId,
       ...discardPlayableCharacterDto,
@@ -155,7 +160,7 @@ export class LobbySubscriberGateway
   public async toggleReadyState(
     @MessageBody() toggleReadyStateDto: TogglePlayerReadyStateInputDto,
     @ConnectedSocket() client: ServerSocket,
-  ) {
+  ): Promise<void> {
     await this.togglePlayerReadyStateUseCase.execute({
       userId: client.data.userId,
       ...toggleReadyStateDto,
@@ -166,7 +171,7 @@ export class LobbySubscriberGateway
   public async startLobby(
     @MessageBody() startGameDto: StartGameInputDto,
     @ConnectedSocket() client: ServerSocket,
-  ) {
+  ): Promise<void> {
     await this.startGameUseCase.execute({
       userId: client.data.userId,
       ...startGameDto,

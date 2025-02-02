@@ -1,3 +1,4 @@
+import { TileEntityType } from "@/openapi/dnd-api";
 import {
   HeroClass,
   type PlayableEnemyEntity,
@@ -16,7 +17,7 @@ export function drawPlayableEntityIcon({
   subject,
 }: EntityDrawerParams<RequiredAssets>) {
   if (
-    subject.entity.type !== "playable-entity" ||
+    subject.entity.type !== TileEntityType.PLAYABLE_ENTITY ||
     subject.playableEntity === undefined
   )
     return;

@@ -1,12 +1,18 @@
-import { GameItem, StuffStorageCapacityJson } from "@dnd/shared";
+import {
+  ItemType,
+  SpellResponseDto,
+  StuffStorageCapacityResponseDto,
+  WeaponResponseDto,
+} from "@/openapi/dnd-api";
+import { GearItem } from "@features/game/interfaces/dnd-api/item.interface";
 import { Fragment } from "react";
 
 type Props = {
-  gear: GameItem[];
-  storageCapacity: StuffStorageCapacityJson;
+  gear: GearItem[];
+  storageCapacity: StuffStorageCapacityResponseDto;
   renderGearSlot: React.FC<{
-    item?: GameItem;
-    type: "Weapon" | "Spell" | "Artifact";
+    item?: GearItem;
+    type: GearItem["type"];
     idx: number;
   }>;
 };
@@ -17,27 +23,31 @@ export const GearInventory = ({
   renderGearSlot,
 }: Props) => {
   const gearWeapons = gear
-    .filter((item) => item.type === "Weapon")
-    .map<{ item: GameItem; type: "Weapon" }>((item) => ({
-      item,
-      type: "Weapon",
-    }));
+    .filter((item) => item.type === ItemType.Weapon)
+    .map<{ item: WeaponResponseDto; type: WeaponResponseDto["type"] }>(
+      (item) => ({
+        item,
+        type: ItemType.Weapon,
+      }),
+    );
   const gearSpell = gear
-    .filter((item) => item.type === "Spell")
-    .map<{ item: GameItem; type: "Spell" }>((item) => ({
-      item,
-      type: "Spell",
-    }));
+    .filter((item) => item.type === ItemType.Spell)
+    .map<{ item: SpellResponseDto; type: SpellResponseDto["type"] }>(
+      (item) => ({
+        item,
+        type: ItemType.Spell,
+      }),
+    );
 
   const gearInventorySlots = [
     ...gearWeapons,
-    ...Array.from<{ item: undefined; type: "Weapon" }>({
+    ...Array.from<{ item: undefined; type: WeaponResponseDto["type"] }>({
       length: storageCapacity.nbWeaponSlots - gearWeapons.length,
-    }).fill({ item: undefined, type: "Weapon" }),
+    }).fill({ item: undefined, type: ItemType.Weapon }),
     ...gearSpell,
-    ...Array.from<{ item: undefined; type: "Spell" }>({
+    ...Array.from<{ item: undefined; type: SpellResponseDto["type"] }>({
       length: storageCapacity.nbSpellSlots - gearSpell.length,
-    }).fill({ item: undefined, type: "Spell" }),
+    }).fill({ item: undefined, type: ItemType.Spell }),
   ];
 
   return gearInventorySlots.map(({ item, type }, idx) => (

@@ -7,10 +7,12 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { ApiExcludeController } from "@nestjs/swagger";
 import { Express } from "express";
 import { CreateItemsFromCsvUseCase } from "src/modules/game/application/use-cases/create-items-from-csv/create-items-from-csv.uc";
 
 @Controller("game/dev")
+@ApiExcludeController()
 export class GameDevController {
   constructor(
     private readonly configService: ConfigService,
@@ -19,7 +21,9 @@ export class GameDevController {
 
   @Post("create-items")
   @UseInterceptors(FileInterceptor("file"))
-  public async createItems(@UploadedFile() file: Express.Multer.File) {
+  public async createItems(
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<void> {
     const env = this.configService.get("NODE_ENV");
     if (env !== "development") {
       throw new NotFoundException("Cannot POST /game/dev/create-items");

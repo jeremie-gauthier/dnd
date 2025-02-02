@@ -1,3 +1,4 @@
+import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
 import { z } from "zod";
 import { TrapTriggeredDomainEvent } from "../../../domain-events/dtos/trap-triggered.dto";
 import { Playable } from "../../../playable-entities/playable-entity/playable-entity.abstract";
@@ -5,7 +6,7 @@ import { TileInteractiveEntity } from "./interactive.abstract";
 
 type Data = {
   readonly name: "pit";
-  readonly type: "interactive-entity";
+  readonly type: "INTERACTIVE_ENTITY";
   readonly kind: "trap";
   isBlocking: boolean;
   isVisible: boolean;
@@ -14,7 +15,9 @@ type Data = {
 
 export class Trap extends TileInteractiveEntity<Data> {
   private static readonly schema = z.object({
-    type: z.literal("interactive-entity").default("interactive-entity"),
+    type: z
+      .literal(TileEntityType.INTERACTIVE_ENTITY)
+      .default(TileEntityType.INTERACTIVE_ENTITY),
     kind: z.literal("trap").default("trap"),
     name: z.literal("pit").default("pit"),
     isBlocking: z.boolean(),

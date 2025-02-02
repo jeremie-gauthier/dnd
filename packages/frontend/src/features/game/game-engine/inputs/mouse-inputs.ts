@@ -1,4 +1,4 @@
-import { GameView } from "@dnd/shared";
+import { Board } from "@/openapi/dnd-api";
 import type { RefObject } from "react";
 import { GameEventManager } from "../events";
 import type { CanvasConfig } from "../utils/coords-conversion.util";
@@ -16,8 +16,8 @@ export const useMouseInputs = ({
   layerRef: RefObject<SVGSVGElement>;
   canvasConfig: CanvasConfig;
   mapMetadata: {
-    height: GameView["map"]["height"];
-    width: GameView["map"]["width"];
+    height: Board["height"];
+    width: Board["width"];
   };
   gameEventManager: GameEventManager;
 }) => {

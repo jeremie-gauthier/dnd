@@ -1,4 +1,4 @@
-import type { Coord } from "@dnd/shared";
+import { CoordResponseDto } from "@/openapi/dnd-api";
 
 export type CanvasConfig = {
   assetSize: number;
@@ -9,9 +9,9 @@ export type CanvasConfig = {
 };
 
 export const translate2DToIsometricCoord = (
-  { row, column }: Coord,
+  { row, column }: CoordResponseDto,
   config: CanvasConfig,
-): Coord => {
+): CoordResponseDto => {
   const translatedColumn =
     column * 0.5 * config.assetSize + row * -0.5 * config.assetSize;
   const translatedRow =
@@ -24,9 +24,9 @@ export const translate2DToIsometricCoord = (
 };
 
 export const translateIsometricTo2DCoord = (
-  coord: Coord,
+  coord: CoordResponseDto,
   config: CanvasConfig,
-): Coord => {
+): CoordResponseDto => {
   const size = Math.max(config.map.width, config.map.height);
 
   const translatedCoord = {

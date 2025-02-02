@@ -1,11 +1,11 @@
-import { Coord } from "@dnd/shared";
+import { CoordResponseDto } from "@/openapi/dnd-api";
 
 export class MoveForbiddenEvent extends Event {
   public static readonly EventName = "MoveForbidden";
 
   constructor(
-    public readonly coordHovered: Coord,
-    public readonly isometricCoord: Coord,
+    public readonly coordHovered: CoordResponseDto,
+    public readonly isometricCoord: CoordResponseDto,
   ) {
     super("MoveForbidden");
   }

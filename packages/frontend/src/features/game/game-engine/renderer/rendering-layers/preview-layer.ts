@@ -1,4 +1,5 @@
-import { Coord, GameView, Tile, getLineOfSight } from "@dnd/shared";
+import { Board, CoordResponseDto, Tile } from "@/openapi/dnd-api";
+import { getLineOfSight } from "@dnd/shared";
 import { RefObject, useEffect } from "react";
 import { GameEventManager } from "../../events";
 import { PreparingAttackEvent } from "../../events/preparing-attack.event";
@@ -35,8 +36,8 @@ export const usePreviewLayer = ({ gameEventManager, canvasRef }: Params) => {
       map,
       coords,
     }: {
-      map: GameView["map"];
-      coords: Coord[];
+      map: Board;
+      coords: CoordResponseDto[];
     }) => {
       if (!canvas || !context || !assets) return;
 
@@ -77,9 +78,9 @@ export const usePreviewLayer = ({ gameEventManager, canvasRef }: Params) => {
     moveLimitCoords,
     moveSimulationCoords,
   }: {
-    map: GameView["map"];
-    moveLimitCoords: Coord[];
-    moveSimulationCoords: Coord[];
+    map: Board;
+    moveLimitCoords: CoordResponseDto[];
+    moveSimulationCoords: CoordResponseDto[];
   }) => {
     if (!canvas || !context || !assets) return;
 
@@ -102,7 +103,7 @@ export const usePreviewLayer = ({ gameEventManager, canvasRef }: Params) => {
       });
     }
     context.globalAlpha = 1;
-    const moveSimulationCoordsWithRangeIndexes: [Coord, number][] =
+    const moveSimulationCoordsWithRangeIndexes: [CoordResponseDto, number][] =
       moveSimulationCoords.map((coord, idx) => [coord, idx + 1]);
 
     context.textRendering = "optimizeSpeed";
@@ -132,14 +133,14 @@ export const usePreviewLayer = ({ gameEventManager, canvasRef }: Params) => {
 
       const tilesInSight = getLineOfSight({
         ally: entityPlaying.faction,
-        gameBoard: game.map,
+        gameBoard: game.board,
         originCoord: entityPlaying.coord,
         range: attack.range,
       });
       const coordsInSight = tilesInSight.map(
         (tileInSight) => tileInSight.coord,
       );
-      renderAttackPreview({ map: game.map, coords: coordsInSight });
+      renderAttackPreview({ map: game.board, coords: coordsInSight });
     };
 
     gameEventManager.addEventListener(
@@ -163,8 +164,8 @@ export const usePreviewLayer = ({ gameEventManager, canvasRef }: Params) => {
     map,
     playingEntityCoord,
   }: {
-    map: GameView["map"];
-    playingEntityCoord: Coord;
+    map: Board;
+    playingEntityCoord: CoordResponseDto;
   }) => {
     if (!canvas || !context || !assets) return;
 

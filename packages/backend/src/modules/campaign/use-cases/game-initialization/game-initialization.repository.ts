@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
 import { CampaignStage } from "src/database/entities/campaign-stage.entity";
-import { MonsterTemplate } from "src/database/entities/enemy-template.entity";
+import { MonsterTemplate } from "src/database/entities/monster-template.entity";
 import { User } from "src/database/entities/user.entity";
 import { In, Repository } from "typeorm";
 

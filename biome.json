@@ -36,12 +36,20 @@
   },
   "overrides": [
     {
-      "include": ["shared/src/**"],
+      "include": [
+        "shared/src/**",
+        "src/openapi/**",
+        "src/features/game/game-engine/**",
+        "src/tailwind.css"
+      ],
       "linter": {
         "rules": {
           "performance": {
             "noBarrelFile": "off",
             "noReExportAll": "off"
+          },
+          "suspicious": {
+            "noDuplicateFontNames": "off"
           }
         }
       }

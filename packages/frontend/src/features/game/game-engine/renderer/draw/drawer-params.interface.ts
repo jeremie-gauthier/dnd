@@ -1,4 +1,4 @@
-import type { GameView } from "@dnd/shared";
+import { Board } from "@/openapi/dnd-api";
 import type { AssetsLoaded } from "../assets-loader/assets-loader";
 import type { assetCollection } from "../assets-loader/assets.config";
 
@@ -11,6 +11,6 @@ export type DrawerParams<
   config: {
     assets: AssetsLoaded<AssetCollection>;
     assetSize: number;
-    map: GameView["map"];
+    map: Board;
   };
 };

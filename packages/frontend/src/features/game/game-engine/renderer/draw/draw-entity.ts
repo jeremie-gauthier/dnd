@@ -1,4 +1,5 @@
-import type { GameView } from "@dnd/shared";
+import { TileEntityTypePlayableEntity } from "@/openapi/dnd-api";
+import { PlayableEntity } from "@features/game/interfaces/dnd-api/playable-entity.interface";
 import { entitiesAssetsCollection } from "../assets-loader/assets.config";
 import { drawChest } from "./entities/draw-chest";
 import { drawDoor } from "./entities/draw-door";
@@ -16,7 +17,7 @@ type Params = Pick<
     EntityDrawerParams["subject"],
     "coord2D" | "coordIsometric" | "entity"
   >;
-  playableEntities: GameView["playableEntities"];
+  playableEntities: PlayableEntity[];
 };
 
 type DrawFn = (_: EntityDrawerParams) => void;
@@ -27,8 +28,11 @@ export const drawEntity = ({
   subject,
   playableEntities,
 }: Params) => {
-  if (subject.entity.type === "playable-entity") {
-    const playableEntity = playableEntities[subject.entity.id];
+  if (subject.entity.type === TileEntityTypePlayableEntity.PLAYABLE_ENTITY) {
+    const subjectId = subject.entity.id;
+    const playableEntity = playableEntities.find(
+      (playableEntity) => playableEntity.id === subjectId,
+    );
     drawPlayableEntityIcon({
       context,
       config,

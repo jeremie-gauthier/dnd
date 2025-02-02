@@ -1,6 +1,22 @@
-import { getCampaignsOutputSchema } from "@dnd/shared";
-import { createZodDto } from "nestjs-zod";
+import { PickType } from "@nestjs/swagger";
+import { Expose, Type } from "class-transformer";
+import { CampaignStageResponseDto } from "src/dtos/response/campaign-stage.dto";
+import { CampaignResponseDto } from "src/dtos/response/campaign.dto";
 
-export class NewCampaignStartedOutputDto extends createZodDto(
-  getCampaignsOutputSchema,
-) {}
+class StageSchemaDto extends PickType(CampaignStageResponseDto, [
+  "id",
+  "order",
+  "status",
+] as const) {}
+
+export class GetCampaignOutputDto extends PickType(CampaignResponseDto, [
+  "id",
+  "status",
+] as const) {
+  @Expose()
+  @Type(() => StageSchemaDto)
+  readonly currentStage: StageSchemaDto;
+
+  @Expose()
+  readonly nbStages: number;
+}

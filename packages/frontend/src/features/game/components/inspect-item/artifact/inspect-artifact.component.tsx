@@ -1,8 +1,8 @@
-import { GameItem } from "@dnd/shared";
+import { ArtifactResponseDto } from "@/openapi/dnd-api";
 import { useTranslation } from "react-i18next";
 
 type Props = {
-  artifact: Extract<GameItem, { type: "Artifact" }>;
+  artifact: ArtifactResponseDto;
 };
 
 export const InspectArtifact = ({ artifact }: Props) => {
