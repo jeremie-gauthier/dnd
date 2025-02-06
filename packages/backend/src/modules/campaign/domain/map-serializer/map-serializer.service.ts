@@ -14,7 +14,7 @@ import {
   coordToIndex,
 } from "@dnd/shared";
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
-import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
+import { TileEntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { GameBoardDeserialized } from "src/modules/shared/interfaces/game-board-deserialized.interface";
 import {
   GameEventDeserialized,

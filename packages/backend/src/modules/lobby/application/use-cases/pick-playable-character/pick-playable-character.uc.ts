@@ -1,7 +1,7 @@
 import type { PickPlayableCharacterInput } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
-import type { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/interfaces/use-case.interface";
+import { User } from "src/modules/user/infra/database/entities/user.entity";
 import {
   LOBBIES_REPOSITORY,
   LobbiesRepository,

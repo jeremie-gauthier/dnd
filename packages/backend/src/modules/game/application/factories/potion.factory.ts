@@ -6,15 +6,15 @@ import { OlidammaraWisdomPotion } from "../../domain/item/potion/olidammara-wisd
 import { PartialRestorationPotion } from "../../domain/item/potion/partial-restoration-potion.potion";
 import { PotionOfLaughter } from "../../domain/item/potion/potion-of-laughter.potion";
 import { PotionOfWeakness } from "../../domain/item/potion/potion-of-weakness.potion";
-import { Potion } from "../../domain/item/potion/potion.abstract";
+import { Potion as PotionDomain } from "../../domain/item/potion/potion.abstract";
 import { SmokeShadowPotion } from "../../domain/item/potion/smoke-shadow-potion.potion";
 import { UltimateRestorationPotion } from "../../domain/item/potion/ultimate-restoration-potion.potion";
-import { PotionItem } from "./item.interface";
+import { ItemType } from "../../infra/database/enums/item-type.enum";
 
-export class PotionFactory {
+export class PotionApplicationFactory {
   private constructor() {}
 
-  public static create(potionName: PotionItem["name"]): Potion {
+  public static create(potionName: string): PotionDomain {
     switch (potionName) {
       case "potion_of_weakness_1":
         return new PotionOfWeakness();
@@ -37,7 +37,7 @@ export class PotionFactory {
       case "light_healing_potion_1":
         return new LightHealingPotion();
       default:
-        throw new Error(`No "${potionName}" Potion item found`);
+        throw new Error(`No "${potionName}" ${ItemType.POTION} item found`);
     }
   }
 }

@@ -1,47 +1,115 @@
-import { PlayableEntityFactionType } from "src/database/enums/playable-entity-faction.enum";
-import { PlayableEntityRaceType } from "src/database/enums/playable-entity-race.enum";
-import { PlayableEntityTypeType } from "src/database/enums/playable-entity-type.enum";
-import { CurrentPhaseType } from "../../enums/current-phase.enum";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  Relation,
+  TableInheritance,
+} from "typeorm";
+import {
+  CurrentPhaseType,
+  CurrentPhaseValues,
+} from "../../enums/current-phase.enum";
+import {
+  PlayableEntityFactionType,
+  PlayableEntityFactionValues,
+} from "../../enums/playable-entity-faction.enum";
+import {
+  PlayableEntityRaceType,
+  PlayableEntityRaceValues,
+} from "../../enums/playable-entity-race.enum";
+import {
+  PlayableEntityTypeType,
+  PlayableEntityTypeValues,
+} from "../../enums/playable-entity-type.enum";
 import { ActionHistory } from "../action-history.entity";
 import { Coord } from "../coord.entity";
-import { Inventory } from "../inventory.entity";
+import { Game } from "../game.entity";
 import { PlayableEntityCondition } from "../playable-entity-condition.entity";
+import { Characteristic } from "./characteristic.entity";
+import { Inventory } from "./inventory.entity";
 
-export abstract class PlayableEntity {
-  id: string;
+@Entity()
+@TableInheritance({ column: "faction" })
+export class PlayableEntity {
+  @PrimaryGeneratedColumn("uuid")
+  readonly id: string;
 
-  abstract faction: PlayableEntityFactionType;
+  @ManyToOne(
+    () => Game,
+    (game) => game.playableEntities,
+    { onDelete: "CASCADE", nullable: false },
+  )
+  readonly game: Relation<Game>;
 
-  type: PlayableEntityTypeType;
+  @Column({
+    type: "enum",
+    enum: PlayableEntityFactionValues,
+    enumName: "PlayableEntityFaction",
+    update: false,
+  })
+  readonly faction: PlayableEntityFactionType;
 
-  race: PlayableEntityRaceType;
+  @Column({
+    type: "enum",
+    enum: PlayableEntityTypeValues,
+    enumName: "PlayableEntityType",
+    update: false,
+  })
+  readonly type: PlayableEntityTypeType;
 
+  @Column({
+    type: "enum",
+    enum: PlayableEntityRaceValues,
+    enumName: "PlayableEntityRace",
+    update: false,
+  })
+  readonly race: PlayableEntityRaceType;
+
+  @Column({
+    type: "enum",
+    enum: CurrentPhaseValues,
+    enumName: "CurrentPhase",
+  })
   currentPhase: CurrentPhaseType;
-  playedByUserId: string;
 
-  name: string;
+  @Column()
+  readonly playedByUserId: string;
 
+  @Column({ nullable: false })
+  readonly name: string;
+
+  @Column({ nullable: false })
   initiative: number;
+
+  @Column(() => Coord)
   coord: Coord;
+
+  @Column({ nullable: false })
   isBlocking: boolean;
 
-  characteristic: {
-    baseHealthPoints: number;
-    healthPoints: number;
+  @Column(() => Characteristic)
+  readonly baseCharacteristic: Characteristic;
 
-    baseManaPoints: number;
-    manaPoints: number;
+  @Column(() => Characteristic)
+  characteristic: Characteristic;
 
-    baseArmorClass: number;
-    armorClass: number;
+  @OneToOne(() => Inventory, { cascade: true })
+  inventory: Relation<Inventory>;
 
-    baseMovementPoints: number;
-    movementPoints: number;
+  @OneToMany(
+    () => ActionHistory,
+    (actionHistory) => actionHistory.playableEntity,
+    { cascade: true },
+  )
+  actionsDoneThisTurn: Relation<ActionHistory[]>;
 
-    baseActionPoints: number;
-    actionPoints: number;
-  };
-  inventory: Inventory;
-  actionsDoneThisTurn: Array<ActionHistory>;
-  conditions: Array<PlayableEntityCondition>;
+  @OneToMany(
+    () => PlayableEntityCondition,
+    (playableEntityCondition) => playableEntityCondition.playableEntity,
+    { cascade: true },
+  )
+  conditions: Relation<PlayableEntityCondition[]>;
 }

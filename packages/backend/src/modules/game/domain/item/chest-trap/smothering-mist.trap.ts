@@ -14,7 +14,7 @@ export class SmotheringMist extends ChestTrap {
     entityThatOpenedTheChest: Hero;
     game: Game;
   }): void {
-    const room = game.rooms.getRoomOrThrow({
+    const room = game.board.rooms.getRoomOrThrow({
       coord: entityThatOpenedTheChest.coord,
     });
     const playableEntitiesInRoom =

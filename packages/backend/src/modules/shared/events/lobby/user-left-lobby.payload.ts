@@ -1,6 +1,6 @@
 import type { LobbyView } from "@dnd/shared";
-import type { User } from "src/database/entities/user.entity";
 import type { EventPayload } from "src/interfaces/event-payload.interface";
+import { User } from "src/modules/user/infra/database/entities/user.entity";
 import { LobbyEvent } from "./lobby-event.enum";
 
 export class UserLeftLobbyPayload

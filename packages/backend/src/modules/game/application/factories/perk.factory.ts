@@ -1,4 +1,3 @@
-import { PerkName, PerkNameType } from "src/database/enums/perk-name.enum";
 import { BloodPrice } from "../../domain/perk/blood-price.perk";
 import { Breakable } from "../../domain/perk/breakable.perk";
 import { CriticalFailure } from "../../domain/perk/critical-failure.perk";
@@ -12,8 +11,12 @@ import { RerollAllDices } from "../../domain/perk/reroll-all-dices.perk";
 import { RerollOneDice } from "../../domain/perk/reroll-one-dice.perk";
 import { Stop } from "../../domain/perk/stop.perk";
 import { TurnUndead } from "../../domain/perk/turn-undead.perk";
+import {
+  PerkName,
+  PerkNameType,
+} from "../../infra/database/enums/perk-name.enum";
 
-export class PerkFactory {
+export class PerkApplicationFactory {
   private constructor() {}
 
   public static create(perkName: PerkNameType): Perk {

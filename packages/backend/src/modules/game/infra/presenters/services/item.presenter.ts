@@ -1,6 +1,5 @@
 import { sum } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
-import { ItemType } from "src/database/enums/item-type.enum";
 import { ArtifactResponseDto } from "src/modules/game/application/dtos/response/artifact.dto";
 import { ChestTrapResponseDto } from "src/modules/game/application/dtos/response/chest-trap.dto";
 import { PotionResponseDto } from "src/modules/game/application/dtos/response/potion.dto";
@@ -14,7 +13,8 @@ import { Potion } from "src/modules/game/domain/item/potion/potion.abstract";
 import { Spell } from "src/modules/game/domain/item/spell/spell.entity";
 import { Weapon } from "src/modules/game/domain/item/weapon/weapon.entity";
 import { AttackItem } from "../../database/entities/item/attack-item/attack-item.entity";
-import { PostgresItemUIRepository } from "../../database/item-ui/item-ui.repository";
+import { ItemType } from "../../database/enums/item-type.enum";
+import { PostgresItemUIRepository } from "../../database/repositories/item-ui.repository";
 
 @Injectable()
 export class ItemPresenter {
@@ -57,7 +57,7 @@ export class ItemPresenter {
     dice,
   }: {
     dice: ReturnType<Dice["toPlain"]>;
-  }): AttackItem["attacks"][number]["dices"][number] {
+  }): AttackItem["attacks"][number]["attackDices"][number]["dice"] {
     return {
       ...dice,
       maxValue: Math.max(...dice.values),

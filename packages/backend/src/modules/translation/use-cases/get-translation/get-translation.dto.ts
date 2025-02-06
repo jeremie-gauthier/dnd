@@ -1,6 +1,6 @@
 import { PickType } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from "class-validator";
-import { TranslationResponseDto } from "src/dtos/response/translation.dto";
+import { TranslationResponseDto } from "../../dtos/response/translation.dto";
 
 export class GetTranslationInputParamsDto {
   @IsString()

@@ -1,13 +1,11 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { CampaignProgression } from "src/database/entities/campaign-progression.entity";
-import { CampaignStageProgression } from "src/database/entities/campaign-stage-progression.entity";
-import { CampaignStage } from "src/database/entities/campaign-stage.entity";
-import { Campaign } from "src/database/entities/campaign.entity";
-import { HeroTemplate } from "src/database/entities/hero-template.entity";
-import { HeroUI } from "src/database/entities/hero-ui.entity";
-import { Hero } from "src/database/entities/hero.entity";
-import { MonsterTemplate } from "src/database/entities/monster-template.entity";
+import { CampaignProgression } from "src/modules/campaign/infra/database/entities/campaign-progression.entity";
+import { CampaignStageProgression } from "src/modules/campaign/infra/database/entities/campaign-stage-progression.entity";
+import { CampaignStage } from "src/modules/campaign/infra/database/entities/campaign-stage.entity";
+import { Campaign } from "src/modules/campaign/infra/database/entities/campaign.entity";
+import { GetHeroDetailsRepository } from "../game/application/use-cases/get-hero-details/get-hero-details.repository";
+import { GetHeroDetailsUseCase } from "../game/application/use-cases/get-hero-details/get-hero-details.uc";
 import { CoordService } from "./domain/coord/coord.service";
 import { MapSerializerService } from "./domain/map-serializer/map-serializer.service";
 import { CampaignListeners } from "./infra/controller/campaign.listeners";
@@ -18,8 +16,6 @@ import { GameInitializationRepository } from "./use-cases/game-initialization/ga
 import { GameInitializationUseCase } from "./use-cases/game-initialization/game-initialization.uc";
 import { GetCampaignsRepository } from "./use-cases/get-campaigns/get-campaigns.repository";
 import { GetCampaignsUseCase } from "./use-cases/get-campaigns/get-campaigns.uc";
-import { GetHeroDetailsRepository } from "./use-cases/get-hero-details/get-hero-details.repository";
-import { GetHeroDetailsUseCase } from "./use-cases/get-hero-details/get-hero-details.uc";
 import { InitializeNewUserRepository } from "./use-cases/initialize-new-user/initialize-new-user.repository";
 import { InitializeNewUserUseCase } from "./use-cases/initialize-new-user/initialize-new-user.uc";
 import { NewCampaignStartedRepository } from "./use-cases/new-campaign-started/new-campaign-started.repository";
@@ -30,10 +26,6 @@ import { RequestCreateLobbyUseCase } from "./use-cases/request-create-lobby/requ
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      Hero,
-      HeroUI,
-      HeroTemplate,
-      MonsterTemplate,
       Campaign,
       CampaignStage,
       CampaignProgression,

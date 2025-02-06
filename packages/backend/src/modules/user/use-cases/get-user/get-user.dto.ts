@@ -1,7 +1,7 @@
 import { PickType } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from "class-validator";
-import { User } from "src/database/entities/user.entity";
-import { UserResponseDto } from "src/dtos/response/user.dto";
+import { UserResponseDto } from "../../dtos/response/user.dto";
+import { User } from "../../infra/database/entities/user.entity";
 
 export class GetUserInputParamsDto {
   @IsString()

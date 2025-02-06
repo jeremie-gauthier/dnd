@@ -1,4 +1,4 @@
-import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
+import { TileEntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { z } from "zod";
 import { TrapTriggeredDomainEvent } from "../../../domain-events/dtos/trap-triggered.dto";
 import { Playable } from "../../../playable-entities/playable-entity/playable-entity.abstract";

@@ -1,8 +1,8 @@
 import { sum } from "@dnd/shared";
-import { AttackRangeType } from "src/database/enums/attack-range.enum";
-import { AttackTypeType } from "src/database/enums/attack-type.enum";
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
+import { AttackRangeType } from "../../infra/database/enums/attack-range.enum";
+import { AttackTypeType } from "../../infra/database/enums/attack-type.enum";
 import { Dice } from "../dice/dice.vo";
 import { Perk } from "../perk/perk.abstract";
 

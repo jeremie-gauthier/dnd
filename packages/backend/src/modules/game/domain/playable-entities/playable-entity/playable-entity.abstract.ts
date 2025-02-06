@@ -1,13 +1,13 @@
+import { CurrentPhase } from "src/modules/game/infra/database/enums/current-phase.enum";
 import {
   PlayableEntityFaction,
   PlayableEntityFactionType,
-} from "src/database/enums/playable-entity-faction.enum";
-import { PlayableEntityRaceType } from "src/database/enums/playable-entity-race.enum";
+} from "src/modules/game/infra/database/enums/playable-entity-faction.enum";
+import { PlayableEntityRaceType } from "src/modules/game/infra/database/enums/playable-entity-race.enum";
 import {
   PlayableEntityType,
   PlayableEntityTypeType,
-} from "src/database/enums/playable-entity-type.enum";
-import { CurrentPhase } from "src/modules/game/infra/database/enums/current-phase.enum";
+} from "src/modules/game/infra/database/enums/playable-entity-type.enum";
 import { Entity } from "src/modules/shared/domain/entity";
 import { Attack } from "../../attack/attack.entity";
 import { Coord } from "../../coord/coord.vo";
@@ -42,20 +42,18 @@ type Data = {
   playedByUserId: string;
 
   initiative: Initiative;
+  readonly baseCharacteristic: {
+    readonly healthPoints: number;
+    readonly manaPoints: number;
+    readonly armorClass: number;
+    readonly movementPoints: number;
+    readonly actionPoints: number;
+  };
   characteristic: {
-    baseHealthPoints: number;
     healthPoints: number;
-
-    baseManaPoints: number;
     manaPoints: number;
-
-    baseArmorClass: number;
     armorClass: number;
-
-    baseMovementPoints: number;
     movementPoints: number;
-
-    baseActionPoints: number;
     actionPoints: number;
   };
 
@@ -100,7 +98,7 @@ export abstract class Playable<
   }
 
   get baseMovementPoints() {
-    return this._data.characteristic.baseMovementPoints;
+    return this._data.baseCharacteristic.movementPoints;
   }
 
   get isAlive() {
@@ -239,7 +237,7 @@ export abstract class Playable<
   public startTurn() {
     this._data.status = this._data.status.advanceTo(CurrentPhase.ACTION);
     this._data.characteristic.actionPoints =
-      this._data.characteristic.baseActionPoints;
+      this._data.baseCharacteristic.actionPoints;
     this._data.actionsDoneThisTurn = [];
     for (const condition of this.conditions) {
       condition.onStartOfTurn();
@@ -271,14 +269,14 @@ export abstract class Playable<
   public regenHealthPoints({ amount }: { amount: number }) {
     this._data.characteristic.healthPoints = Math.min(
       this._data.characteristic.healthPoints + amount,
-      this._data.characteristic.baseHealthPoints,
+      this._data.baseCharacteristic.healthPoints,
     );
   }
 
   public regenMana({ amount }: { amount: number }) {
     this._data.characteristic.manaPoints = Math.min(
       this._data.characteristic.manaPoints + amount,
-      this._data.characteristic.baseManaPoints,
+      this._data.baseCharacteristic.manaPoints,
     );
   }
 
@@ -288,7 +286,7 @@ export abstract class Playable<
 
   public resetArmorClass() {
     this._data.characteristic.armorClass =
-      this._data.characteristic.baseArmorClass;
+      this._data.baseCharacteristic.armorClass;
   }
 
   public addMovementPoints({ amount }: { amount: number }) {
@@ -298,7 +296,7 @@ export abstract class Playable<
 
   public resetMovementPoints() {
     this._data.characteristic.movementPoints =
-      this._data.characteristic.baseMovementPoints;
+      this._data.baseCharacteristic.movementPoints;
   }
 
   protected mustHaveActionPoints() {

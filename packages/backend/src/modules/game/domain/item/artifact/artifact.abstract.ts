@@ -1,3 +1,4 @@
+import { ItemType } from "src/modules/game/infra/database/enums/item-type.enum";
 import { z } from "zod";
 import { Board } from "../../board/board.entity";
 import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
@@ -13,7 +14,7 @@ type Data = {
 export abstract class Artifact extends Item<Data> {
   private static readonly schema = Item.baseSchema.merge(
     z.object({
-      type: z.literal("Artifact").optional().default("Artifact"),
+      type: z.literal(ItemType.ARTIFACT).optional().default(ItemType.ARTIFACT),
       hasSavingThrow: z.boolean(),
     }),
   );

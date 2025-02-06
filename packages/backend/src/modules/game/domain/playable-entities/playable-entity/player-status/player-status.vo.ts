@@ -1,8 +1,8 @@
+import { ValueObject } from "src/modules/shared/domain/value-object";
 import {
   CurrentPhase,
   CurrentPhaseType,
-} from "src/modules/game/infra/database/enums/current-phase.enum";
-import { ValueObject } from "src/modules/shared/domain/value-object";
+} from "../../../../infra/database/enums/current-phase.enum";
 import { PlayerStatusError } from "./player-status.error";
 
 type Data = CurrentPhaseType;

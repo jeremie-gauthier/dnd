@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose } from "class-transformer";
-import { InteractiveEntityKind } from "src/database/enums/interactive-entity-kind.enum";
+import { InteractiveEntityKind } from "src/modules/game/infra/database/enums/interactive-entity-kind.enum";
 import { TileNonPlayableInteractiveEntityResponseDto } from "./tile-non-playable-interactive-entity.dto";
 
 export class DoorEntityResponseDto extends TileNonPlayableInteractiveEntityResponseDto {

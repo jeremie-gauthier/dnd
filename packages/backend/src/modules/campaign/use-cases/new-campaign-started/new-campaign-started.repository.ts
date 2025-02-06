@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { CampaignProgression } from "src/database/entities/campaign-progression.entity";
-import { Campaign } from "src/database/entities/campaign.entity";
-import { CampaignStageStatus } from "src/database/enums/campaign-stage-status.enum";
-import { CampaignStatus } from "src/database/enums/campaign-status.enum";
+import { CampaignProgression } from "src/modules/campaign/infra/database/entities/campaign-progression.entity";
+import { Campaign } from "src/modules/campaign/infra/database/entities/campaign.entity";
 import type { DeepPartial, Repository } from "typeorm";
+import { CampaignStageStatus } from "../../infra/database/enums/campaign-stage-status.enum";
+import { CampaignStatus } from "../../infra/database/enums/campaign-status.enum";
 
 @Injectable()
 export class NewCampaignStartedRepository {

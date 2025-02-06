@@ -3,7 +3,7 @@ import { Expose } from "class-transformer";
 import {
   TileEntityType,
   TileEntityTypeType,
-} from "src/database/enums/tile-entity-type.enum";
+} from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 
 export abstract class TileEntityResponseDto {
   @Expose()

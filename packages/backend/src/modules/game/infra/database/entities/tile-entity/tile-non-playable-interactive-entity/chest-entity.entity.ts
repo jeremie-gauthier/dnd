@@ -1,9 +1,8 @@
-import { InteractiveEntityKind } from "src/database/enums/interactive-entity-kind.enum";
+import { Column } from "typeorm";
+import { InteractiveEntityKind } from "../../../enums/interactive-entity-kind.enum";
 import { TileNonPlayableInteractiveEntity } from "./tile-non-playable-interactive-entity.entity";
 
 export class ChestEntity extends TileNonPlayableInteractiveEntity {
+  @Column({ default: InteractiveEntityKind.CHEST, update: false })
   readonly kind = InteractiveEntityKind.CHEST;
-  canInteract: boolean;
-  isBlocking: boolean;
-  isVisible: boolean;
 }

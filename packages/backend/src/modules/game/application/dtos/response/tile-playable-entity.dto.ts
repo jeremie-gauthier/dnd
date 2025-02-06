@@ -3,8 +3,8 @@ import { Expose } from "class-transformer";
 import {
   PlayableEntityFaction,
   PlayableEntityFactionType,
-} from "src/database/enums/playable-entity-faction.enum";
-import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
+} from "src/modules/game/infra/database/enums/playable-entity-faction.enum";
+import { TileEntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { TileEntityResponseDto } from "./tile-entity.dto";
 
 export class TilePlayableEntityResponseDto extends TileEntityResponseDto {

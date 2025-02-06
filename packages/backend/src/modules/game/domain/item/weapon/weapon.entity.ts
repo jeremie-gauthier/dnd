@@ -1,4 +1,5 @@
 import { AttackRange, AttackType } from "@dnd/shared";
+import { ItemType } from "src/modules/game/infra/database/enums/item-type.enum";
 import { z } from "zod";
 import { Attack } from "../../attack/attack.entity";
 import { Board } from "../../board/board.entity";
@@ -16,7 +17,7 @@ type Data = {
 export class Weapon extends AttackItem<Data> {
   private static readonly schema = AttackItem.attackItemBaseSchema.merge(
     z.object({
-      type: z.literal("Weapon").optional().default("Weapon"),
+      type: z.literal(ItemType.WEAPON).optional().default(ItemType.WEAPON),
     }),
   );
 
@@ -77,7 +78,7 @@ export class Weapon extends AttackItem<Data> {
     if (!regularAttack) {
       throw new WeaponError({
         name: "ATTACK_NOT_FOUND",
-        message: `Regular Attack not found on Weapon "${this._data.name}"`,
+        message: `Regular Attack not found on ${ItemType.WEAPON} "${this._data.name}"`,
       });
     }
     return regularAttack;

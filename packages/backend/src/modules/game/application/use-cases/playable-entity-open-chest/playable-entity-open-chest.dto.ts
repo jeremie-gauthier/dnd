@@ -1,6 +1,10 @@
 import { Type } from "class-transformer";
 import { IsInt, IsPositive, IsUUID } from "class-validator";
-import { Item } from "src/modules/game/infra/database/entities/item/item.entity";
+import { ArtifactResponseDto } from "../../dtos/response/artifact.dto";
+import { ChestTrapResponseDto } from "../../dtos/response/chest-trap.dto";
+import { PotionResponseDto } from "../../dtos/response/potion.dto";
+import { SpellResponseDto } from "../../dtos/response/spell.dto";
+import { WeaponResponseDto } from "../../dtos/response/weapon.dto";
 
 class CoordDto {
   @IsInt()
@@ -21,5 +25,10 @@ export class PlayableEntityOpenChestInputDto {
 }
 
 export class PlayableEntityOpenChestOutputDto {
-  readonly itemFound: Item;
+  readonly itemFound:
+    | WeaponResponseDto
+    | SpellResponseDto
+    | ArtifactResponseDto
+    | ChestTrapResponseDto
+    | PotionResponseDto;
 }

@@ -4,13 +4,13 @@ import type { Request } from "express";
 import { AuthUser } from "src/decorators/auth-user.decorator";
 import { AuthGuard } from "src/guards/auth.guard";
 import { Serialize } from "src/middlewares/serialize.interceptor";
-import { GetCampaignOutputDto } from "../../use-cases/get-campaigns/get-campaigns.dto";
-import { GetCampaignsUseCase } from "../../use-cases/get-campaigns/get-campaigns.uc";
 import {
   GetHeroDetailsInputDto,
   GetHeroDetailsOutputDto,
-} from "../../use-cases/get-hero-details/get-hero-details.dto";
-import { GetHeroDetailsUseCase } from "../../use-cases/get-hero-details/get-hero-details.uc";
+} from "../../../game/application/use-cases/get-hero-details/get-hero-details.dto";
+import { GetHeroDetailsUseCase } from "../../../game/application/use-cases/get-hero-details/get-hero-details.uc";
+import { GetCampaignOutputDto } from "../../use-cases/get-campaigns/get-campaigns.dto";
+import { GetCampaignsUseCase } from "../../use-cases/get-campaigns/get-campaigns.uc";
 import {
   NewCampaignStartedInputDto,
   NewCampaignStartedOutputDto,

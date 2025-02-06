@@ -29,5 +29,6 @@
   "[json]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
-  "sql-formatter.uppercase": true
+  "sql-formatter.uppercase": true,
+  "postman.settings.dotenv-detection-notification-visibility": false
 }

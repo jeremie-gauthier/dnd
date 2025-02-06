@@ -1,11 +1,29 @@
-import { InteractiveEntityKindType } from "src/database/enums/interactive-entity-kind.enum";
-import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
+import { Column } from "typeorm";
+import {
+  InteractiveEntityKindType,
+  InteractiveEntityKindValues,
+} from "../../../enums/interactive-entity-kind.enum";
+import { TileEntityType } from "../../../enums/tile-entity-type.enum";
 import { TileEntity } from "../tile-entity.entity";
 
-export abstract class TileNonPlayableInteractiveEntity extends TileEntity {
+export class TileNonPlayableInteractiveEntity extends TileEntity {
+  @Column({ default: TileEntityType.INTERACTIVE_ENTITY, update: false })
   readonly type = TileEntityType.INTERACTIVE_ENTITY;
-  abstract readonly kind: InteractiveEntityKindType;
-  abstract isVisible: boolean;
-  abstract isBlocking: boolean;
-  abstract canInteract: boolean;
+
+  @Column({
+    type: "enum",
+    enum: InteractiveEntityKindValues,
+    enumName: "InteractiveEntityKind",
+    update: false,
+  })
+  readonly kind: InteractiveEntityKindType;
+
+  @Column()
+  isVisible: boolean;
+
+  @Column()
+  isBlocking: boolean;
+
+  @Column()
+  canInteract: boolean;
 }

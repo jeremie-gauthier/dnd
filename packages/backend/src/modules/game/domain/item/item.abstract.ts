@@ -1,6 +1,9 @@
-import { ItemType, ItemTypeType } from "src/database/enums/item-type.enum";
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
+import {
+  ItemType,
+  ItemTypeType,
+} from "../../infra/database/enums/item-type.enum";
 import { Artifact } from "./artifact/artifact.abstract";
 import { ChestTrap } from "./chest-trap/chest-trap.abstract";
 import { ItemError } from "./item.error";
@@ -19,7 +22,13 @@ export abstract class Item<
   ChildData extends Data = Data,
 > extends Entity<ChildData> {
   protected static readonly baseSchema = z.object({
-    type: z.enum(["Weapon", "Spell", "ChestTrap", "Potion", "Artifact"]),
+    type: z.enum([
+      ItemType.WEAPON,
+      ItemType.SPELL,
+      ItemType.CHESTTRAP,
+      ItemType.POTION,
+      ItemType.ARTIFACT,
+    ]),
     name: z.string(),
     level: z.number().min(0).max(3),
   });
@@ -62,7 +71,7 @@ export abstract class Item<
     if (!this.isPotion()) {
       throw new ItemError({
         name: "BAD_ITEM_TYPE",
-        message: `Bad item type: "${this.id}" is not a Potion`,
+        message: `Bad item type: "${this.id}" is not a ${ItemType.POTION}`,
       });
     }
   }

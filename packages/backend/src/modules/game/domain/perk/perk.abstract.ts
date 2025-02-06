@@ -1,5 +1,9 @@
-import { PerkNameType, PerkTrigger, PerkTriggerType } from "@dnd/shared";
 import { ValueObject } from "src/modules/shared/domain/value-object";
+import { PerkNameType } from "../../infra/database/enums/perk-name.enum";
+import {
+  PerkTrigger,
+  PerkTriggerType,
+} from "../../infra/database/enums/perk-trigger.enum";
 import { Attack } from "../attack/attack.entity";
 import { Item } from "../item/item.abstract";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";

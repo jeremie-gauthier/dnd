@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Dice as DicePersistence } from "src/database/entities/dice.entity";
 import { DiceRepository } from "src/modules/game/application/repositories/dice-repository.interface";
 import { Dice as DiceDomain } from "src/modules/game/domain/dice/dice.vo";
 import { Repository } from "typeorm";
+import { Dice as DicePersistence } from "../entities/item/dice.entity";
 import { DiceMapper } from "./dice.mapper";
 
 @Injectable()

@@ -1,21 +1,21 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import {
-  PlayableEntityFaction,
-  PlayableEntityFactionType,
-} from "src/database/enums/playable-entity-faction.enum";
-import {
-  PlayableEntityRace,
-  PlayableEntityRaceType,
-} from "src/database/enums/playable-entity-race.enum";
-import {
-  PlayableEntityType,
-  PlayableEntityTypeType,
-} from "src/database/enums/playable-entity-type.enum";
-import {
   CurrentPhase,
   CurrentPhaseType,
 } from "src/modules/game/infra/database/enums/current-phase.enum";
+import {
+  PlayableEntityFaction,
+  PlayableEntityFactionType,
+} from "src/modules/game/infra/database/enums/playable-entity-faction.enum";
+import {
+  PlayableEntityRace,
+  PlayableEntityRaceType,
+} from "src/modules/game/infra/database/enums/playable-entity-race.enum";
+import {
+  PlayableEntityType,
+  PlayableEntityTypeType,
+} from "src/modules/game/infra/database/enums/playable-entity-type.enum";
 import { CharacteristicResponseDto } from "./characteristic.dto";
 import { CoordResponseDto } from "./coord.dto";
 
@@ -56,6 +56,10 @@ export abstract class PlayableEntityResponseDto {
 
   @Expose()
   readonly isBlocking: boolean;
+
+  @Expose()
+  @Type(() => CharacteristicResponseDto)
+  readonly baseCharacteristic: CharacteristicResponseDto;
 
   @Expose()
   @Type(() => CharacteristicResponseDto)

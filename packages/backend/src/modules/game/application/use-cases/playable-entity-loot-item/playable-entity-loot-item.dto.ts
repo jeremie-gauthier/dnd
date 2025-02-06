@@ -8,7 +8,7 @@ import {
 import {
   StorageSpace,
   StorageSpaceType,
-} from "src/database/enums/storage-space.enum";
+} from "src/modules/game/infra/database/enums/storage-space.enum";
 
 export class PlayableEntityLootItemInputDto {
   @IsUUID()

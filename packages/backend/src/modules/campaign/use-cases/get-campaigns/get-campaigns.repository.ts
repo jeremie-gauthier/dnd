@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { CampaignProgression } from "src/database/entities/campaign-progression.entity";
-import type { User } from "src/database/entities/user.entity";
-import { CampaignProgressionStatus } from "src/database/enums/campaign-progression-status.enum";
+import { CampaignProgression } from "src/modules/campaign/infra/database/entities/campaign-progression.entity";
+import { User } from "src/modules/user/infra/database/entities/user.entity";
 import type { Repository } from "typeorm";
+import { CampaignProgressionStatus } from "../../infra/database/enums/campaign-progression-status.enum";
 
 @Injectable()
 export class GetCampaignsRepository {
@@ -17,9 +17,7 @@ export class GetCampaignsRepository {
   ): Promise<CampaignProgression[]> {
     return this.campaignProgressionRepository.find({
       where: {
-        user: {
-          id: userId,
-        },
+        userId,
         status: CampaignProgressionStatus.AVAILABLE,
       },
       relations: {

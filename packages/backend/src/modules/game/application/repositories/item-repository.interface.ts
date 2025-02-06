@@ -1,14 +1,12 @@
-import { User } from "src/database/entities/user.entity";
-import { Item } from "../../domain/item/item.abstract";
-import { GameItem } from "../factories/item.interface";
+import { Item as ItemDomain } from "../../domain/item/item.abstract";
 
 export interface ItemRepository {
-  getOneOrThrow(data: { name: GameItem["name"] }): Promise<Item>;
+  getOneOrThrow(data: { name: string }): Promise<ItemDomain>;
   getOneRandom(filters: {
-    itemsLooted: Array<GameItem["name"]>;
-    maxLevelLoot: GameItem["level"];
-    hostUserId: User["id"];
-  }): Promise<Item>;
+    itemsLooted: Array<string>;
+    maxLevelLoot: number;
+    hostUserId: string;
+  }): Promise<ItemDomain>;
 }
 
 export const ITEM_REPOSITORY = Symbol("ItemRepository");

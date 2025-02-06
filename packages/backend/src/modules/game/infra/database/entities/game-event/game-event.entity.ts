@@ -1,17 +1,47 @@
-import { ApiProperty } from "@nestjs/swagger";
 import {
-  GameEventAction,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+  Relation,
+  TableInheritance,
+} from "typeorm";
+import {
   GameEventActionType,
+  GameEventActionValues,
 } from "../../enums/game-event-action.enum";
 import {
-  GameEventName,
   GameEventNameType,
+  GameEventNameValues,
 } from "../../enums/game-event-name.enum";
+import { Game } from "../game.entity";
 
-export abstract class GameEvent {
-  @ApiProperty({ enum: GameEventName, enumName: "GameEventName" })
-  abstract readonly name: GameEventNameType;
+@Entity()
+@TableInheritance({ column: "name" })
+export class GameEvent {
+  @PrimaryColumn("uuid")
+  readonly id: string;
 
-  @ApiProperty({ enum: GameEventAction, enumName: "GameEventAction" })
-  abstract readonly action: GameEventActionType;
+  @Column({
+    type: "enum",
+    enum: GameEventNameValues,
+    enumName: "GameEventName",
+    update: false,
+  })
+  readonly name: GameEventNameType;
+
+  @Column({
+    type: "enum",
+    enum: GameEventActionValues,
+    enumName: "GameEventAction",
+    update: false,
+  })
+  readonly action: GameEventActionType;
+
+  @ManyToOne(
+    () => Game,
+    (game) => game.winConditions,
+    { onDelete: "CASCADE" },
+  )
+  readonly game: Relation<Game>;
 }

@@ -1,6 +1,7 @@
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { Coord } from "../coord/coord.vo";
+import { Rooms } from "../rooms/rooms.aggregate";
 import { TileEntity } from "../tile/tile-entity/tile-entity.abstract";
 import { Tile } from "../tile/tile.entity";
 import { BoardError } from "./board.error";
@@ -9,6 +10,7 @@ type Data = {
   width: number;
   height: number;
   tiles: Array<Tile>;
+  rooms: Rooms;
 };
 
 export class Board extends Entity<Data> {
@@ -17,6 +19,7 @@ export class Board extends Entity<Data> {
       width: z.number().min(1),
       height: z.number().min(1),
       tiles: z.array(z.instanceof(Tile)),
+      rooms: z.instanceof(Rooms),
     })
     .refine(({ width, height, tiles }) => {
       return tiles.length === width * height;
@@ -35,11 +38,16 @@ export class Board extends Entity<Data> {
     return this._data.height;
   }
 
+  public get rooms() {
+    return this._data.rooms;
+  }
+
   public override toPlain() {
     return {
       width: this._data.width,
       height: this._data.height,
       tiles: this._data.tiles.map((tile) => tile.toPlain()),
+      rooms: this._data.rooms.toPlain(),
     };
   }
 
@@ -82,5 +90,9 @@ export class Board extends Entity<Data> {
         message: "Destination tile is blocked by an entity",
       });
     }
+  }
+
+  public getStartingTiles() {
+    return this._data.tiles.filter((tile) => tile.isStartingTile);
   }
 }

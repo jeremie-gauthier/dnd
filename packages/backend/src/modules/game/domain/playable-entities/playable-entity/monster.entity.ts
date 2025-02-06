@@ -1,12 +1,12 @@
-import { PlayableEntityFaction } from "src/database/enums/playable-entity-faction.enum";
+import { PlayableEntityFaction } from "src/modules/game/infra/database/enums/playable-entity-faction.enum";
 import {
   PlayableEntityRace,
   PlayableEntityRaceType,
-} from "src/database/enums/playable-entity-race.enum";
+} from "src/modules/game/infra/database/enums/playable-entity-race.enum";
 import {
   PlayableEntityType,
   PlayableEntityTypeType,
-} from "src/database/enums/playable-entity-type.enum";
+} from "src/modules/game/infra/database/enums/playable-entity-type.enum";
 import { z } from "zod";
 import { Attack } from "../../attack/attack.entity";
 import { Coord } from "../../coord/coord.vo";
@@ -35,20 +35,18 @@ type Data = {
   playedByUserId: string;
 
   initiative: Initiative;
+  readonly baseCharacteristic: {
+    readonly healthPoints: number;
+    readonly manaPoints: number;
+    readonly armorClass: number;
+    readonly movementPoints: number;
+    readonly actionPoints: number;
+  };
   characteristic: {
-    baseHealthPoints: number;
     healthPoints: number;
-
-    baseManaPoints: number;
     manaPoints: number;
-
-    baseArmorClass: number;
     armorClass: number;
-
-    baseMovementPoints: number;
     movementPoints: number;
-
-    baseActionPoints: number;
     actionPoints: number;
   };
 
@@ -71,16 +69,20 @@ export class Monster extends Playable<Data> {
     status: z.instanceof(PlayerStatus),
     playedByUserId: z.string(),
     initiative: z.instanceof(Initiative),
+    baseCharacteristic: z
+      .object({
+        healthPoints: z.number().min(1),
+        manaPoints: z.number().min(0),
+        armorClass: z.number().min(0),
+        movementPoints: z.number().min(1),
+        actionPoints: z.number().min(1),
+      })
+      .readonly(),
     characteristic: z.object({
-      baseHealthPoints: z.number().min(1),
       healthPoints: z.number().min(0),
-      baseManaPoints: z.number().min(0),
       manaPoints: z.number().min(0),
-      baseArmorClass: z.number().min(0),
       armorClass: z.number().min(0),
-      baseMovementPoints: z.number().min(1),
       movementPoints: z.number().min(0),
-      baseActionPoints: z.number().min(1),
       actionPoints: z.number().min(0),
     }),
     inventory: z.instanceof(Inventory),
@@ -206,16 +208,18 @@ export class Monster extends Playable<Data> {
       initiative: this._data.initiative.toPlain(),
       playedByUserId: this._data.playedByUserId,
       status: this._data.status.toPlain(),
+      baseCharacteristic: {
+        healthPoints: this._data.baseCharacteristic.healthPoints,
+        manaPoints: this._data.baseCharacteristic.manaPoints,
+        armorClass: this._data.baseCharacteristic.armorClass,
+        movementPoints: this._data.baseCharacteristic.movementPoints,
+        actionPoints: this._data.baseCharacteristic.actionPoints,
+      },
       characteristic: {
-        baseHealthPoints: this._data.characteristic.baseHealthPoints,
         healthPoints: this._data.characteristic.healthPoints,
-        baseManaPoints: this._data.characteristic.baseManaPoints,
         manaPoints: this._data.characteristic.manaPoints,
-        baseArmorClass: this._data.characteristic.baseArmorClass,
         armorClass: this._data.characteristic.armorClass,
-        baseMovementPoints: this._data.characteristic.baseMovementPoints,
         movementPoints: this._data.characteristic.movementPoints,
-        baseActionPoints: this._data.characteristic.baseActionPoints,
         actionPoints: this._data.characteristic.actionPoints,
       },
       inventory: this._data.inventory.toPlain(),

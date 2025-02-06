@@ -1,3 +1,4 @@
+import { ItemType } from "src/modules/game/infra/database/enums/item-type.enum";
 import { z } from "zod";
 import { Game } from "../../game/game.aggregate";
 import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
@@ -19,7 +20,10 @@ type Data = {
 export abstract class ChestTrap extends Item<Data> {
   private static readonly schema = Item.baseSchema.merge(
     z.object({
-      type: z.literal("ChestTrap").optional().default("ChestTrap"),
+      type: z
+        .literal(ItemType.CHESTTRAP)
+        .optional()
+        .default(ItemType.CHESTTRAP),
       name: z.enum([
         "dazzling_light_1",
         "call_from_the_grave_1",

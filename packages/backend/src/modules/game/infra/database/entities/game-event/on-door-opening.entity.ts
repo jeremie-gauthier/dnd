@@ -1,13 +1,37 @@
+import {
+  ChildEntity,
+  Column,
+  JoinColumn,
+  ManyToMany,
+  OneToOne,
+  Relation,
+  RelationId,
+} from "typeorm";
 import { GameEventAction } from "../../enums/game-event-action.enum";
 import { GameEventName } from "../../enums/game-event-name.enum";
 import { Coord } from "../coord.entity";
-import { MonsterTemplate } from "../monster-template.entity";
+import { MonsterTemplate } from "../playable-entity-template/monster-template.entity";
+import { Room } from "../room/room.entity";
 import { GameEvent } from "./game-event.entity";
 
+@ChildEntity()
 export class OnDoorOpening extends GameEvent {
+  @Column({ default: GameEventName.ON_DOOR_OPENING, update: false })
   readonly name = GameEventName.ON_DOOR_OPENING;
+
+  @Column({ default: GameEventAction.SPAWN_MONSTERS, update: false })
   readonly action = GameEventAction.SPAWN_MONSTERS;
+
+  @Column(() => Coord)
   readonly doorCoord: Coord;
-  readonly monsters: Array<MonsterTemplate["race"]>;
-  readonly startingTiles: Array<Coord>;
+
+  @ManyToMany(() => MonsterTemplate)
+  readonly monsters: Relation<MonsterTemplate[]>;
+
+  @OneToOne(() => Room)
+  @JoinColumn()
+  readonly startingRoom: Relation<Room>;
+
+  @RelationId((onDoorOpening: OnDoorOpening) => onDoorOpening.startingRoom)
+  readonly roomId: Relation<Room["id"]>;
 }

@@ -1,5 +1,5 @@
-import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
 import { PlayableEntity } from "src/modules/game/infra/database/entities/playable-entity/playable-entity.entity";
+import { TileEntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { TileEntity } from "../tile-entity.abstract";
 
 type Data = {

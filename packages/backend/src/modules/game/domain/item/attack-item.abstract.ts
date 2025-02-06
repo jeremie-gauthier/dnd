@@ -1,6 +1,7 @@
 import { canAttackTarget } from "@dnd/shared";
-import { AttackRangeType } from "src/database/enums/attack-range.enum";
 import { z } from "zod";
+import { AttackRangeType } from "../../infra/database/enums/attack-range.enum";
+import { ItemType } from "../../infra/database/enums/item-type.enum";
 import { Attack } from "../attack/attack.entity";
 import { AttackError } from "../attack/attack.error";
 import { Board } from "../board/board.entity";
@@ -21,7 +22,7 @@ export abstract class AttackItem<
 > extends Item<ChildData> {
   protected static attackItemBaseSchema = Item.baseSchema.merge(
     z.object({
-      type: z.enum(["Weapon", "Spell"]),
+      type: z.enum([ItemType.WEAPON, ItemType.SPELL]),
       attacks: z.array(z.instanceof(Attack)),
     }),
   );

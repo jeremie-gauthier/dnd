@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Campaign } from "src/database/entities/campaign.entity";
+import { Campaign } from "src/modules/campaign/infra/database/entities/campaign.entity";
 import type { Repository } from "typeorm";
 
 @Injectable()

@@ -1,7 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose } from "class-transformer";
-import { HeroClass, HeroClassType } from "src/database/enums/hero-class.enum";
-import { PlayableEntityFaction } from "src/database/enums/playable-entity-faction.enum";
+import {
+  HeroClass,
+  HeroClassType,
+} from "src/modules/game/infra/database/enums/hero-class.enum";
+import { PlayableEntityFaction } from "src/modules/game/infra/database/enums/playable-entity-faction.enum";
 import { PlayableEntityResponseDto } from "./playable-entity.dto";
 
 export class HeroEntityResponseDto extends PlayableEntityResponseDto {

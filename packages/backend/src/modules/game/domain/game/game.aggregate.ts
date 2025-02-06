@@ -1,11 +1,7 @@
-import { zip } from "@dnd/shared";
-import {
-  PlayableEntityRace,
-  PlayableEntityRaceType,
-} from "src/database/enums/playable-entity-race.enum";
-import { StorageSpaceType } from "src/database/enums/storage-space.enum";
 import { AggregateRoot } from "src/modules/shared/domain/aggregate-root";
 import { z } from "zod";
+import { PlayableEntityRace } from "../../infra/database/enums/playable-entity-race.enum";
+import { StorageSpaceType } from "../../infra/database/enums/storage-space.enum";
 import { Attack } from "../attack/attack.entity";
 import { Board } from "../board/board.entity";
 import { Coord } from "../coord/coord.vo";
@@ -22,11 +18,10 @@ import { AttackItem } from "../item/attack-item.abstract";
 import { ChestTrap } from "../item/chest-trap/chest-trap.abstract";
 import { Item } from "../item/item.abstract";
 import { Potion } from "../item/potion/potion.abstract";
-import { MonsterTemplates } from "../monster-templates/monster-templates.aggregate";
+import { MonsterTemplate } from "../monster-templates/monster-template/monster-template.vo";
 import { PlayableEntities } from "../playable-entities/playable-entities.aggregate";
 import { Hero } from "../playable-entities/playable-entity/heroes/hero.abstract";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
-import { Rooms } from "../rooms/rooms.aggregate";
 import { TilePlayableEntity } from "../tile/tile-entity/playable/playable.entity";
 import { WinConditions } from "../win-conditions/win-conditions.aggregate";
 import { GameError } from "./game.error";
@@ -40,12 +35,10 @@ type Data = {
   board: Board;
   playableEntities: PlayableEntities;
   gameMaster: GameMaster;
-  monsterTemplates: MonsterTemplates;
   events: GameEvents;
   winConditions: WinConditions;
   readonly maxLevelLoot: number;
   itemsLooted: Array<Item["id"]>;
-  rooms: Rooms;
   monstersKilled: Array<string>;
 };
 
@@ -57,12 +50,10 @@ export class Game extends AggregateRoot<Data> {
     board: z.instanceof(Board),
     playableEntities: z.instanceof(PlayableEntities),
     gameMaster: z.instanceof(GameMaster),
-    monsterTemplates: z.instanceof(MonsterTemplates),
     events: z.instanceof(GameEvents),
     winConditions: z.instanceof(WinConditions),
     maxLevelLoot: z.number().min(1),
     itemsLooted: z.array(z.string()),
-    rooms: z.instanceof(Rooms),
     monstersKilled: z.array(z.nativeEnum(PlayableEntityRace)),
   });
 
@@ -73,10 +64,6 @@ export class Game extends AggregateRoot<Data> {
 
   public get playableEntities() {
     return this._data.playableEntities;
-  }
-
-  public get rooms() {
-    return this._data.rooms;
   }
 
   public get winConditions() {
@@ -99,12 +86,10 @@ export class Game extends AggregateRoot<Data> {
       board: this._data.board.toPlain(),
       playableEntities: this._data.playableEntities.toPlain(),
       gameMaster: this._data.gameMaster.toPlain(),
-      monsterTemplates: this._data.monsterTemplates.toPlain(),
       events: this._data.events.toPlain(),
       winConditions: this._data.winConditions.toPlain(),
       maxLevelLoot: this._data.maxLevelLoot,
       itemsLooted: this._data.itemsLooted,
-      rooms: this._data.rooms.toPlain(),
       monstersKilled: this._data.monstersKilled,
     };
   }
@@ -166,11 +151,9 @@ export class Game extends AggregateRoot<Data> {
   }
 
   public spawnMonster({
-    race,
+    monsterTemplate,
     startingCoord,
-  }: { race: PlayableEntityRaceType; startingCoord: Coord }) {
-    const monsterTemplate =
-      this._data.monsterTemplates.getMonsterTemplateOrThrow({ race });
+  }: { monsterTemplate: MonsterTemplate; startingCoord: Coord }) {
     const monster = monsterTemplate.create({
       gameMasterUserId: this._data.gameMaster.id,
     });
@@ -208,15 +191,16 @@ export class Game extends AggregateRoot<Data> {
       doorCoord: coordOfTileWithDoor,
     });
     for (const doorOpeningEvent of doorOpeningEvents) {
-      if (doorOpeningEvent.isSpawnMonsterAction()) {
-        const monsterRaceWithStartingCoord = zip(
-          doorOpeningEvent.monsters,
-          doorOpeningEvent.startingTiles,
-        );
-        for (const [race, startingCoord] of monsterRaceWithStartingCoord) {
-          this.spawnMonster({ race, startingCoord });
-        }
-      }
+      // TODO: recabler ce bout de code
+      // if (doorOpeningEvent.isSpawnMonsterAction()) {
+      //   const monsterRaceWithStartingCoord = zip(
+      //     doorOpeningEvent.monsters,
+      //     doorOpeningEvent.startingTiles,
+      //   );
+      //   for (const [race, startingCoord] of monsterRaceWithStartingCoord) {
+      //     this.spawnMonster({ race, startingCoord });
+      //   }
+      // }
     }
 
     this.rollInitiatives();

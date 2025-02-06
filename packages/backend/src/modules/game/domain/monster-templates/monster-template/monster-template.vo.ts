@@ -78,17 +78,19 @@ export class MonsterTemplate extends Entity<Data> {
 
     return new Monster({
       id: `${this._data.race}:${randomId}`,
+      baseCharacteristic: {
+        actionPoints: this._data.characteristic.baseActionPoints,
+        armorClass: this._data.characteristic.baseArmorClass,
+        healthPoints: this._data.characteristic.baseHealthPoints,
+        manaPoints: this._data.characteristic.baseManaPoints,
+        movementPoints: this._data.characteristic.baseMovementPoints,
+      },
       characteristic: {
         actionPoints: this._data.characteristic.baseActionPoints,
-        baseActionPoints: this._data.characteristic.baseActionPoints,
         armorClass: this._data.characteristic.baseArmorClass,
-        baseArmorClass: this._data.characteristic.baseArmorClass,
         healthPoints: this._data.characteristic.baseHealthPoints,
-        baseHealthPoints: this._data.characteristic.baseHealthPoints,
         manaPoints: this._data.characteristic.baseManaPoints,
-        baseManaPoints: this._data.characteristic.baseManaPoints,
         movementPoints: this._data.characteristic.baseMovementPoints,
-        baseMovementPoints: this._data.characteristic.baseMovementPoints,
       },
       coord: new Coord({ row: Number.NaN, column: Number.NaN }),
       initiative: new Initiative(Number.NaN),

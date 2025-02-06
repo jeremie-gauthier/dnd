@@ -1,7 +1,14 @@
+import { OneToMany, Relation } from "typeorm";
 import { Item } from "../item.entity";
 import { Attack } from "./attack.entity";
 
-export abstract class AttackItem extends Item {
-  abstract readonly type: "Weapon" | "Spell";
-  attacks: Array<Attack>;
+export class AttackItem extends Item {
+  readonly type: "Weapon" | "Spell";
+
+  @OneToMany(
+    () => Attack,
+    (attack) => attack.item,
+    { cascade: true },
+  )
+  readonly attacks: Relation<Attack[]>;
 }

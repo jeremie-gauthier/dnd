@@ -1,10 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose } from "class-transformer";
-import { PerkName, PerkNameType } from "src/database/enums/perk-name.enum";
+import {
+  PerkName,
+  PerkNameType,
+} from "src/modules/game/infra/database/enums/perk-name.enum";
 import {
   PerkTrigger,
   PerkTriggerType,
-} from "src/database/enums/perk-trigger.enum";
+} from "src/modules/game/infra/database/enums/perk-trigger.enum";
 
 export class PerkResponseDto {
   @Expose()

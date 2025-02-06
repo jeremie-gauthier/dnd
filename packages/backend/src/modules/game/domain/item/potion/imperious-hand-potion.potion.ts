@@ -46,7 +46,7 @@ export class ImperiousHandPotion extends Potion {
     monsterCoord,
     game,
   }: { monsterCoord: Coord; game: Game }): Coord {
-    const room = game.rooms.getRoomOrThrow({
+    const room = game.board.rooms.getRoomOrThrow({
       coord: monsterCoord,
     });
 

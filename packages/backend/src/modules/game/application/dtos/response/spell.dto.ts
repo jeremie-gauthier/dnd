@@ -1,8 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Expose } from "class-transformer";
-import { ItemType } from "src/database/enums/item-type.enum";
-import { ItemManaCostJson } from "src/modules/game/infra/database/entities/item/attack-item/spell.entity";
+import { Expose, Type } from "class-transformer";
+import { ItemType } from "src/modules/game/infra/database/enums/item-type.enum";
 import { AttackItemResponseDto } from "./attack-item.dto";
+import { ManaCostResponseDto } from "./mana-cost.dto";
 
 export class SpellResponseDto extends AttackItemResponseDto {
   @Expose()
@@ -10,11 +10,6 @@ export class SpellResponseDto extends AttackItemResponseDto {
   override readonly type = ItemType.SPELL;
 
   @Expose()
-  @ApiProperty({
-    type: "object",
-    additionalProperties: {
-      type: "number",
-    },
-  })
-  readonly manaCost: ItemManaCostJson;
+  @Type(() => ManaCostResponseDto)
+  readonly manaCosts: Array<ManaCostResponseDto>;
 }

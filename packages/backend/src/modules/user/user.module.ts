@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { User } from "src/database/entities/user.entity";
 import { UserPrivateController } from "./infra/controller/user.private-controller";
 import { UserWebhookController } from "./infra/controller/user.webhook-controller";
+import { User } from "./infra/database/entities/user.entity";
 import { GetUserRepository } from "./use-cases/get-user/get-user.repository";
 import { GetUserUseCase } from "./use-cases/get-user/get-user.uc";
 import { UserRegisteredRepository } from "./use-cases/user-registered/user-registered.repository";

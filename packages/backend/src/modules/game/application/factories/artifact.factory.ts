@@ -1,4 +1,4 @@
-import { Artifact } from "../../domain/item/artifact/artifact.abstract";
+import { Artifact as ArtifactDomain } from "../../domain/item/artifact/artifact.abstract";
 import { BarkSkinCloak } from "../../domain/item/artifact/bark-skin-cloak.artifact";
 import { BoccobsCloak } from "../../domain/item/artifact/boccobs-cloak.artifact";
 import { OlidammaraAmulet } from "../../domain/item/artifact/olidammara-amulet.artifact";
@@ -6,12 +6,12 @@ import { OrbOfLucidVision } from "../../domain/item/artifact/orb-of-lucid-vision
 import { RingOfShadows } from "../../domain/item/artifact/ring-of-shadows.artifact";
 import { SummonersHorn } from "../../domain/item/artifact/summoners-horn.artifact";
 import { YonddallaAmulet } from "../../domain/item/artifact/yonddalla-amulet.artifact";
-import { ArtifactItem } from "./item.interface";
+import { ItemType } from "../../infra/database/enums/item-type.enum";
 
-export class ArtifactFactory {
+export class ArtifactApplicationFactory {
   private constructor() {}
 
-  public static create(artifactName: ArtifactItem["name"]): Artifact {
+  public static create(artifactName: string): ArtifactDomain {
     switch (artifactName) {
       case "orb_of_lucid_vision_1":
         return new OrbOfLucidVision();
@@ -28,7 +28,7 @@ export class ArtifactFactory {
       case "olidammara_amulet_1":
         return new OlidammaraAmulet();
       default:
-        throw new Error(`No "${artifactName}" Artifact item found`);
+        throw new Error(`No "${artifactName}" ${ItemType.ARTIFACT} item found`);
     }
   }
 }

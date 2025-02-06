@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { CampaignStage } from "src/database/entities/campaign-stage.entity";
 import { UseCase } from "src/interfaces/use-case.interface";
+import { CampaignStage } from "src/modules/campaign/infra/database/entities/campaign-stage.entity";
 import { RequestCreateLobbyPayload } from "src/modules/shared/events/lobby/request-create-lobby.payload";
 import { CampaignEvent } from "../../events/campaign-event.enum";
 import { RequestCreateLobbyFulfilledPayload } from "../../events/request-create-lobby-fulfilled.payload";
@@ -21,7 +21,9 @@ export class RequestCreateLobbyUseCase implements UseCase {
   }: RequestCreateLobbyPayload): Promise<void> {
     const [campaign, heroes] = await Promise.all([
       this.repository.getCampaign({ stageId }),
-      this.repository.getHeroes({ stageId, userId }),
+      // this.repository.getHeroes({ stageId, userId }),
+      // TODO: implement get heroes
+      [],
     ]);
 
     const selectedStage = this.getStageOrThrow({

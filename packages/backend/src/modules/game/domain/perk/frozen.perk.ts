@@ -1,5 +1,5 @@
-import { PerkName } from "src/database/enums/perk-name.enum";
-import { PerkTrigger } from "src/database/enums/perk-trigger.enum";
+import { PerkName } from "../../infra/database/enums/perk-name.enum";
+import { PerkTrigger } from "../../infra/database/enums/perk-trigger.enum";
 import { Attack } from "../attack/attack.entity";
 import { Item } from "../item/item.abstract";
 import { Stopped } from "../playable-entities/playable-entity/conditions/stopped.condition";

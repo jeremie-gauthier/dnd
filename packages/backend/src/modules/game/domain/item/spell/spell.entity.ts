@@ -1,4 +1,8 @@
-import { ItemManaCostJson } from "@dnd/shared";
+import { ItemType } from "src/modules/game/infra/database/enums/item-type.enum";
+import {
+  SpellCasterHeroClass,
+  SpellCasterHeroClassType,
+} from "src/modules/game/infra/database/enums/spell-caster-hero-class.enum";
 import { z } from "zod";
 import { Attack } from "../../attack/attack.entity";
 import { Board } from "../../board/board.entity";
@@ -10,17 +14,22 @@ type Data = {
   readonly name: string;
   readonly level: number;
   readonly attacks: Array<Attack>;
-  readonly manaCost: ItemManaCostJson;
+  readonly manaCosts: Array<{ class: SpellCasterHeroClassType; cost: number }>;
 };
 
 export class Spell extends AttackItem<Data> {
   private static readonly schema = AttackItem.attackItemBaseSchema.merge(
     z.object({
-      type: z.literal("Spell").optional().default("Spell"),
-      manaCost: z.object({
-        CLERIC: z.number().min(0).optional(),
-        SORCERER: z.number().min(0).optional(),
-      }),
+      type: z.literal(ItemType.SPELL).optional().default(ItemType.SPELL),
+      manaCosts: z.array(
+        z.object({
+          class: z.enum([
+            SpellCasterHeroClass.CLERIC,
+            SpellCasterHeroClass.SORCERER,
+          ]),
+          cost: z.number().min(0),
+        }),
+      ),
     }),
   );
 
@@ -29,8 +38,8 @@ export class Spell extends AttackItem<Data> {
     super(data);
   }
 
-  public get manaCost() {
-    return this._data.manaCost;
+  public get manaCosts() {
+    return this._data.manaCosts;
   }
 
   public override mustValidateAttack({
@@ -83,7 +92,7 @@ export class Spell extends AttackItem<Data> {
       name: this._data.name,
       level: this._data.level,
       attacks: this._data.attacks.map((attack) => attack.toPlain()),
-      manaCost: this._data.manaCost,
+      manaCosts: this._data.manaCosts,
     };
   }
 }

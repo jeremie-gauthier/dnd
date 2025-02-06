@@ -1,4 +1,4 @@
-import { PlayableEntityRaceType } from "src/database/enums/playable-entity-race.enum";
+import { PlayableEntityRaceType } from "src/modules/game/infra/database/enums/playable-entity-race.enum";
 import { Coord } from "../../../coord/coord.vo";
 import { DoorOpeningEvent } from "./door-opening-event.abstract";
 

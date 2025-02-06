@@ -1,7 +1,7 @@
 import { PickType } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
-import { CampaignStageResponseDto } from "src/dtos/response/campaign-stage.dto";
-import { CampaignResponseDto } from "src/dtos/response/campaign.dto";
+import { CampaignStageResponseDto } from "../../dtos/response/campaign-stage.dto";
+import { CampaignResponseDto } from "../../dtos/response/campaign.dto";
 
 class StageSchemaDto extends PickType(CampaignStageResponseDto, [
   "id",

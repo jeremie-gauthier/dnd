@@ -1,13 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import type { CampaignProgression } from "src/database/entities/campaign-progression.entity";
-import type { Campaign } from "src/database/entities/campaign.entity";
-import type { User } from "src/database/entities/user.entity";
-import { CampaignProgressionStatus } from "src/database/enums/campaign-progression-status.enum";
-import { CampaignStageProgressionStatus } from "src/database/enums/campaign-stage-progression-status.enum";
 import type { UseCase } from "src/interfaces/use-case.interface";
 import { CampaignEvent } from "src/modules/campaign/events/campaign-event.enum";
 import { NewCampaignStartedPayload } from "src/modules/campaign/events/new-campaign-started.payload";
+import type { CampaignProgression } from "src/modules/campaign/infra/database/entities/campaign-progression.entity";
+import type { Campaign } from "src/modules/campaign/infra/database/entities/campaign.entity";
+import { User } from "src/modules/user/infra/database/entities/user.entity";
+import { CampaignProgressionStatus } from "../../infra/database/enums/campaign-progression-status.enum";
+import { CampaignStageProgressionStatus } from "../../infra/database/enums/campaign-stage-progression-status.enum";
 import { NewCampaignStartedRepository } from "./new-campaign-started.repository";
 
 @Injectable()
@@ -52,9 +52,7 @@ export class NewCampaignStartedUseCase implements UseCase {
 
     const campaignProgression =
       await this.repository.createCampaignProgressionForUser({
-        user: {
-          id: userId,
-        },
+        userId,
         campaign,
         status: CampaignProgressionStatus.AVAILABLE,
         stageProgressions: [

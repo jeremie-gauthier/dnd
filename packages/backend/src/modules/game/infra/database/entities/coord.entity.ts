@@ -1,4 +1,9 @@
+import { Column } from "typeorm";
+
 export class Coord {
-  row: number;
-  column: number;
+  @Column()
+  readonly row: number;
+
+  @Column()
+  readonly column: number;
 }

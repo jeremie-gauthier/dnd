@@ -1,6 +1,6 @@
-import type { User } from "src/database/entities/user.entity";
 import type { EventPayload } from "src/interfaces/event-payload.interface";
 import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
+import { User } from "src/modules/user/infra/database/entities/user.entity";
 import { LobbyEvent } from "./lobby-event.enum";
 
 export class HostRequestedGameStartPayload

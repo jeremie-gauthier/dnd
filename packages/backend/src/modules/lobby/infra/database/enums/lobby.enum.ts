@@ -1,10 +1,9 @@
-export const LobbyViewStatus = {
+export const LobbyStatus = {
   OPENED: "OPENED",
   GAME_INITIALIZING: "GAME_INITIALIZING",
   GAME_STARTED: "GAME_STARTED",
 } as const;
 
-export const LobbyViewStatusValues = Object.values(LobbyViewStatus);
+export const LobbyStatusValues = Object.values(LobbyStatus);
 
-export type LobbyViewStatusType =
-  (typeof LobbyViewStatus)[keyof typeof LobbyViewStatus];
+export type LobbyStatusType = (typeof LobbyStatus)[keyof typeof LobbyStatus];

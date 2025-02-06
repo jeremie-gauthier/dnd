@@ -1,11 +1,25 @@
-import { HeroClassType } from "src/database/enums/hero-class.enum";
-import { PlayableEntityFaction } from "src/database/enums/playable-entity-faction.enum";
+import { ChildEntity, Column, ManyToOne, Relation } from "typeorm";
+import { HeroClassType, HeroClassValues } from "../../enums/hero-class.enum";
+import { PlayableEntityFaction } from "../../enums/playable-entity-faction.enum";
+import { GameProgression } from "../game-progression.entity";
 import { PlayableEntity } from "./playable-entity.entity";
 
+@ChildEntity()
 export class HeroEntity extends PlayableEntity {
-  readonly faction = PlayableEntityFaction.HERO;
+  @Column({ default: PlayableEntityFaction.HERO, update: false })
+  override readonly faction = PlayableEntityFaction.HERO;
 
-  class: HeroClassType;
+  @Column({
+    type: "enum",
+    enum: HeroClassValues,
+    enumName: "HeroClass",
+    nullable: false,
+  })
+  readonly class: HeroClassType;
 
-  level: number;
+  @Column()
+  readonly level: number;
+
+  @ManyToOne(() => GameProgression, { onDelete: "CASCADE", nullable: false })
+  readonly gameProgression: Relation<GameProgression>;
 }

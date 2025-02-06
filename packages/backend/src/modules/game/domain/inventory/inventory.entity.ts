@@ -1,9 +1,9 @@
+import { Entity } from "src/modules/shared/domain/entity";
+import { z } from "zod";
 import {
   StorageSpace,
   StorageSpaceType,
-} from "src/database/enums/storage-space.enum";
-import { Entity } from "src/modules/shared/domain/entity";
-import { z } from "zod";
+} from "../../infra/database/enums/storage-space.enum";
 import { Attack } from "../attack/attack.entity";
 import { Artifact } from "../item/artifact/artifact.abstract";
 import { Item } from "../item/item.abstract";

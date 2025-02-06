@@ -34,6 +34,10 @@ export class Tile extends Entity<Data> {
     return this._data.entities;
   }
 
+  public get isStartingTile() {
+    return this._data.isStartingTile;
+  }
+
   public override toPlain() {
     return {
       coord: this._data.coord.toPlain(),

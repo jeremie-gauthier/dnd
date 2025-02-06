@@ -1,10 +1,5 @@
 import { randomUUID } from "node:crypto";
-import {
-  AttackRangeType,
-  HeroClassType,
-  ItemManaCostJson,
-  PerkNameType,
-} from "@dnd/shared";
+import { AttackRangeType, PerkNameType } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import { parse } from "csv-parse/sync";
 import { UseCase } from "src/interfaces/use-case.interface";
@@ -16,10 +11,11 @@ import { Item } from "src/modules/game/domain/item/item.abstract";
 import { Potion } from "src/modules/game/domain/item/potion/potion.abstract";
 import { Spell } from "src/modules/game/domain/item/spell/spell.entity";
 import { Weapon } from "src/modules/game/domain/item/weapon/weapon.entity";
-import { ArtifactFactory } from "../../factories/artifact.factory";
-import { ChestTrapFactory } from "../../factories/chest-trap.factory";
-import { PerkFactory } from "../../factories/perk.factory";
-import { PotionFactory } from "../../factories/potion.factory";
+import { SpellCasterHeroClassType } from "src/modules/game/infra/database/enums/spell-caster-hero-class.enum";
+import { ArtifactApplicationFactory } from "../../factories/artifact.factory";
+import { ChestTrapApplicationFactory } from "../../factories/chest-trap.factory";
+import { PerkApplicationFactory } from "../../factories/perk.factory";
+import { PotionApplicationFactory } from "../../factories/potion.factory";
 import {
   DICE_REPOSITORY,
   DiceRepository,
@@ -92,7 +88,7 @@ export class CreateItemsFromCsvUseCase implements UseCase {
     record: CsvItemRecord;
     item: Artifact;
   } {
-    const item = ArtifactFactory.create(record.item_id);
+    const item = ArtifactApplicationFactory.create(record.item_id);
 
     return { record, item };
   }
@@ -101,7 +97,7 @@ export class CreateItemsFromCsvUseCase implements UseCase {
     record: CsvItemRecord;
     item: Potion;
   } {
-    const item = PotionFactory.create(record.item_id);
+    const item = PotionApplicationFactory.create(record.item_id);
 
     return { record, item };
   }
@@ -110,7 +106,7 @@ export class CreateItemsFromCsvUseCase implements UseCase {
     record: CsvItemRecord;
     item: ChestTrap;
   } {
-    const item = ChestTrapFactory.create(record.item_id);
+    const item = ChestTrapApplicationFactory.create(record.item_id);
 
     return { record, item };
   }
@@ -135,7 +131,9 @@ export class CreateItemsFromCsvUseCase implements UseCase {
                 ? record.regular_attack_perks
                     .split(",")
                     .map((regularAttackPerk) =>
-                      PerkFactory.create(regularAttackPerk as PerkNameType),
+                      PerkApplicationFactory.create(
+                        regularAttackPerk as PerkNameType,
+                      ),
                     )
                 : [],
             range: record.range as AttackRangeType,
@@ -156,7 +154,9 @@ export class CreateItemsFromCsvUseCase implements UseCase {
                 ? record.super_attack_perks
                     .split(",")
                     .map((superAttackPerk) =>
-                      PerkFactory.create(superAttackPerk as PerkNameType),
+                      PerkApplicationFactory.create(
+                        superAttackPerk as PerkNameType,
+                      ),
                     )
                 : [],
             range: record.range as AttackRangeType,
@@ -164,26 +164,19 @@ export class CreateItemsFromCsvUseCase implements UseCase {
           })
         : undefined;
 
-    const manaCost = record.mana_cost
+    const manaCosts = record.mana_cost
       .split(",")
       .map((manaByClass) => manaByClass.split(":"))
-      .reduce(
-        (
-          manaCostObj,
-          [heroClass, cost]: [Lowercase<HeroClassType>, string],
-        ) => {
-          manaCostObj[heroClass.toUpperCase() as Uppercase<HeroClassType>] =
-            Number(cost);
-          return manaCostObj;
-        },
-        {} as ItemManaCostJson,
-      );
+      .map(([heroClass, cost]) => ({
+        class: heroClass as SpellCasterHeroClassType,
+        cost: Number(cost),
+      }));
 
     const item = new Spell({
       name: record.item_id,
       level: record.item_level,
       attacks: [regularAttack, superAttack].filter((atk) => atk !== undefined),
-      manaCost,
+      manaCosts,
     });
 
     return { record, item };
@@ -209,7 +202,9 @@ export class CreateItemsFromCsvUseCase implements UseCase {
                 ? record.regular_attack_perks
                     .split(",")
                     .map((regularAttackPerk) =>
-                      PerkFactory.create(regularAttackPerk as PerkNameType),
+                      PerkApplicationFactory.create(
+                        regularAttackPerk as PerkNameType,
+                      ),
                     )
                 : [],
             range: record.range as AttackRangeType,
@@ -233,7 +228,9 @@ export class CreateItemsFromCsvUseCase implements UseCase {
                 ? record.super_attack_perks
                     .split(",")
                     .map((superAttackPerk) =>
-                      PerkFactory.create(superAttackPerk as PerkNameType),
+                      PerkApplicationFactory.create(
+                        superAttackPerk as PerkNameType,
+                      ),
                     )
                 : [],
             range: record.range as AttackRangeType,

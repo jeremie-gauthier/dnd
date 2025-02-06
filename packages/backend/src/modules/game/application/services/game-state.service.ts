@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
 import { Game } from "../../domain/game/game.aggregate";
 import { TileEntity } from "../../domain/tile/tile-entity/tile-entity.abstract";
+import { TileEntityType } from "../../infra/database/enums/tile-entity-type.enum";
 
 @Injectable()
 export class GameStateService {

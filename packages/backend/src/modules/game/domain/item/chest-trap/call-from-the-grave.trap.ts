@@ -1,6 +1,7 @@
-import { PlayableEntityRaceType } from "src/database/enums/playable-entity-race.enum";
 import { Coord } from "../../coord/coord.vo";
 import { Game } from "../../game/game.aggregate";
+import { Inventory } from "../../inventory/inventory.entity";
+import { MonsterTemplate } from "../../monster-templates/monster-template/monster-template.vo";
 import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
 import { randomIndex } from "../../services/random/random-index";
 import { ChestTrap } from "./chest-trap.abstract";
@@ -28,8 +29,30 @@ export class CallFromTheGrave extends ChestTrap {
       game,
     });
     game.spawnMonster({
-      race: lastMonsterKilled as PlayableEntityRaceType,
       startingCoord: startingCoord,
+      // TODO: faire fonctionner ce truc
+      monsterTemplate: new MonsterTemplate({
+        characteristic: {
+          baseActionPoints: 2,
+          baseArmorClass: 1,
+          baseHealthPoints: 6,
+          baseManaPoints: 0,
+          baseMovementPoints: 4,
+        },
+        inventory: new Inventory({
+          backpack: [],
+          gear: [],
+          playableId: "0",
+          storageCapacity: {
+            nbArtifactSlots: 0,
+            nbBackpackSlots: 0,
+            nbSpellSlots: 0,
+            nbWeaponSlots: 0,
+          },
+        }),
+        race: "goblin",
+        type: "gobelinoid",
+      }),
     });
 
     game.winConditions.updateWinConditions({ eventName: "enemy_resurrected" });
@@ -39,7 +62,7 @@ export class CallFromTheGrave extends ChestTrap {
     entityThatOpenedTheChestCoord,
     game,
   }: { entityThatOpenedTheChestCoord: Coord; game: Game }): Coord {
-    const room = game.rooms.getRoomOrThrow({
+    const room = game.board.rooms.getRoomOrThrow({
       coord: entityThatOpenedTheChestCoord,
     });
 

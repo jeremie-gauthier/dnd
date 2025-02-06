@@ -15,7 +15,9 @@ export class SmokeShadowPotion extends Potion {
     playableEntity: Hero;
     game: Game;
   }): void {
-    const room = game.rooms.getRoomOrThrow({ coord: playableEntity.coord });
+    const room = game.board.rooms.getRoomOrThrow({
+      coord: playableEntity.coord,
+    });
     const heroesInTheRoom = game.playableEntities
       .getAllPlayableEntitiesInRoom({
         room,

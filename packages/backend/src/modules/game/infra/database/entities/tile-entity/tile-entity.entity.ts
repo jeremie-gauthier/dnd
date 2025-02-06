@@ -1,6 +1,34 @@
-import { TileEntityTypeType } from "src/database/enums/tile-entity-type.enum";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+  Relation,
+  TableInheritance,
+} from "typeorm";
+import {
+  TileEntityTypeType,
+  TileEntityTypeValues,
+} from "../../enums/tile-entity-type.enum";
+import { Tile } from "../tile.entity";
 
-export abstract class TileEntity {
-  abstract readonly type: TileEntityTypeType;
-  abstract isBlocking: boolean;
+@Entity()
+@TableInheritance({ column: "type" })
+export class TileEntity {
+  @PrimaryColumn("uuid")
+  readonly id: string;
+
+  @Column({
+    type: "enum",
+    enum: TileEntityTypeValues,
+    enumName: "TileEntityType",
+    update: false,
+  })
+  readonly type: TileEntityTypeType;
+
+  @Column()
+  isBlocking: boolean;
+
+  @ManyToOne(() => Tile, { onDelete: "CASCADE", nullable: false })
+  readonly tile: Relation<Tile>;
 }

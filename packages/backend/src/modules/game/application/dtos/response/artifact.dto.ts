@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose } from "class-transformer";
-import { ItemType } from "src/database/enums/item-type.enum";
+import { ItemType } from "src/modules/game/infra/database/enums/item-type.enum";
 import { ItemResponseDto } from "./item.dto";
 
 export class ArtifactResponseDto extends ItemResponseDto {

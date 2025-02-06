@@ -1,12 +1,12 @@
 import { LobbyView } from "@dnd/shared";
-import { Hero } from "src/database/entities/hero.entity";
-import { User } from "src/database/entities/user.entity";
+import { HeroEntity } from "src/modules/game/infra/database/entities/playable-entity/hero.entity";
+import { User } from "src/modules/user/infra/database/entities/user.entity";
 import { Lobby } from "../../domain/lobby/lobby.aggregate";
 
 export interface LobbiesRepository {
   create(data: {
     config: LobbyView["config"];
-    heroes: Array<Hero>;
+    heroes: Array<HeroEntity>;
     hostUserId: User["id"];
   }): Promise<Lobby>;
   getOne(data: { lobbyId: Lobby["id"] }): Promise<Lobby | null>;

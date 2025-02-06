@@ -1,12 +1,12 @@
 import { GameView, LobbyView, ServerLobbyEvent } from "@dnd/shared";
 import { OnEvent } from "@nestjs/event-emitter";
 import { WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
-import { User } from "src/database/entities/user.entity";
 import { WsServer } from "src/interfaces/socket.interface";
 import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
 import { LOBBIES_ROOM } from "src/modules/lobby/shared/constants";
 import { LobbyCreatedPayload } from "src/modules/shared/events/lobby/lobby-created.payload";
 import { LobbyEvent } from "src/modules/shared/events/lobby/lobby-event.enum";
+import { User } from "src/modules/user/infra/database/entities/user.entity";
 
 @WebSocketGateway()
 export class LobbyPublisherGateway {

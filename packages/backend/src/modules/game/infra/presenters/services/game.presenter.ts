@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { StorageSpace } from "src/database/enums/storage-space.enum";
 import { ArtifactResponseDto } from "src/modules/game/application/dtos/response/artifact.dto";
 import { GameResponseDto } from "src/modules/game/application/dtos/response/game.dto";
 import { PotionResponseDto } from "src/modules/game/application/dtos/response/potion.dto";
@@ -7,7 +6,8 @@ import { SpellResponseDto } from "src/modules/game/application/dtos/response/spe
 import { WeaponResponseDto } from "src/modules/game/application/dtos/response/weapon.dto";
 import { Game as GameDomain } from "src/modules/game/domain/game/game.aggregate";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
-import { PostgresHeroUIRepository } from "../../database/hero-ui/hero-ui.repository";
+import { StorageSpace } from "../../database/enums/storage-space.enum";
+import { PostgresHeroUIRepository } from "../../database/repositories/hero-ui.repository";
 import { ItemPresenter } from "./item.presenter";
 
 @Injectable()

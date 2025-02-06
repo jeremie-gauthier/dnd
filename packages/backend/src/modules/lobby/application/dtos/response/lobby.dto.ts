@@ -1,8 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import {
-  LobbyViewStatus,
-  LobbyViewStatusType,
+  LobbyStatus,
+  LobbyStatusType,
 } from "src/modules/lobby/infra/database/enums/lobby.enum";
 import { ConfigResponseDto } from "./config.dto";
 import { HostResponseDto } from "./host.dto";
@@ -18,8 +18,8 @@ export class LobbyResponseDto {
   readonly host: HostResponseDto;
 
   @Expose()
-  @ApiProperty({ enum: LobbyViewStatus, enumName: "LobbyViewStatus" })
-  readonly status: LobbyViewStatusType;
+  @ApiProperty({ enum: LobbyStatus, enumName: "LobbyStatus" })
+  readonly status: LobbyStatusType;
 
   @Expose()
   @Type(() => ConfigResponseDto)

@@ -3,11 +3,11 @@ import { Expose } from "class-transformer";
 import {
   AttackRange,
   AttackRangeType,
-} from "src/database/enums/attack-range.enum";
+} from "src/modules/game/infra/database/enums/attack-range.enum";
 import {
   AttackType,
   AttackTypeType,
-} from "src/database/enums/attack-type.enum";
+} from "src/modules/game/infra/database/enums/attack-type.enum";
 import { DiceResponseDto } from "./dice.dto";
 import { PerkResponseDto } from "./perk.dto";
 

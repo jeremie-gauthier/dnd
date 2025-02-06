@@ -1,9 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { CampaignProgression } from "src/database/entities/campaign-progression.entity";
-import { CampaignStage } from "src/database/entities/campaign-stage.entity";
-import { Campaign } from "src/database/entities/campaign.entity";
-import { Hero } from "src/database/entities/hero.entity";
+import { CampaignStage } from "src/modules/campaign/infra/database/entities/campaign-stage.entity";
+import { Campaign } from "src/modules/campaign/infra/database/entities/campaign.entity";
 import { Repository } from "typeorm";
 
 @Injectable()
@@ -11,8 +9,6 @@ export class RequestCreateLobbyRepository {
   constructor(
     @InjectRepository(Campaign)
     private readonly campaignRepository: Repository<Campaign>,
-    @InjectRepository(Hero)
-    private readonly heroRepository: Repository<Hero>,
   ) {}
 
   public async getCampaign({
@@ -39,35 +35,35 @@ export class RequestCreateLobbyRepository {
     return campaigns;
   }
 
-  public async getHeroes({
-    stageId,
-    userId,
-  }: {
-    stageId: CampaignStage["id"];
-    userId: CampaignProgression["user"]["id"];
-  }) {
-    const heroes = await this.heroRepository.find({
-      where: {
-        campaignProgression: {
-          user: {
-            id: userId,
-          },
-          stageProgressions: {
-            stage: {
-              id: stageId,
-            },
-          },
-        },
-      },
-      relations: {
-        inventory: {
-          stuff: {
-            item: true,
-          },
-        },
-      },
-    });
+  // public async getHeroes({
+  //   stageId,
+  //   userId,
+  // }: {
+  //   stageId: CampaignStage["id"];
+  //   userId: User["id"];
+  // }) {
+  //   const heroes = await this.heroRepository.find({
+  //     where: {
+  //       campaignProgression: {
+  //         user: {
+  //           id: userId,
+  //         },
+  //         stageProgressions: {
+  //           stage: {
+  //             id: stageId,
+  //           },
+  //         },
+  //       },
+  //     },
+  //     relations: {
+  //       inventory: {
+  //         stuff: {
+  //           item: true,
+  //         },
+  //       },
+  //     },
+  //   });
 
-    return heroes;
-  }
+  //   return heroes;
+  // }
 }

@@ -1,13 +1,13 @@
 import { ApiExtraModels, ApiProperty, getSchemaPath } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
-import { InteractiveEntityKind } from "src/database/enums/interactive-entity-kind.enum";
-import { ItemType } from "src/database/enums/item-type.enum";
-import { PlayableEntityFaction } from "src/database/enums/playable-entity-faction.enum";
-import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
 import {
   GameStatus,
   GameStatusType,
 } from "src/modules/game/infra/database/enums/game-status.enum";
+import { InteractiveEntityKind } from "src/modules/game/infra/database/enums/interactive-entity-kind.enum";
+import { ItemType } from "src/modules/game/infra/database/enums/item-type.enum";
+import { PlayableEntityFaction } from "src/modules/game/infra/database/enums/playable-entity-faction.enum";
+import { TileEntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { ArtifactResponseDto } from "./artifact.dto";
 import { BoardResponseDto } from "./board.dto";
 import { ChestEntityResponseDto } from "./chest-entity.dto";

@@ -1,12 +1,12 @@
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { CampaignProgression } from "src/database/entities/campaign-progression.entity";
-import { Campaign } from "src/database/entities/campaign.entity";
 import { User } from "src/database/entities/user.entity";
 import { UserStatus } from "src/database/enums/user-status.enum";
 import { CampaignEvent } from "src/modules/campaign/events/campaign-event.enum";
 import { NewCampaignStartedPayload } from "src/modules/campaign/events/new-campaign-started.payload";
+import { CampaignProgression } from "src/modules/campaign/infra/database/entities/campaign-progression.entity";
+import { Campaign } from "src/modules/campaign/infra/database/entities/campaign.entity";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NewCampaignStartedRepository } from "./new-campaign-started.repository";
 import { NewCampaignStartedUseCase } from "./new-campaign-started.uc";

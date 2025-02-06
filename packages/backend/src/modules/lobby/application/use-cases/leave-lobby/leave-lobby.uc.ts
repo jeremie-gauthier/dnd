@@ -1,11 +1,11 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import type { User } from "src/database/entities/user.entity";
 import type { UseCase } from "src/interfaces/use-case.interface";
 import { Lobby } from "src/modules/lobby/domain/lobby/lobby.aggregate";
 import { LobbyDeletedPayload } from "src/modules/shared/events/lobby/lobby-deleted.payload";
 import { LobbyEvent } from "src/modules/shared/events/lobby/lobby-event.enum";
 import { UserLeftLobbyPayload } from "src/modules/shared/events/lobby/user-left-lobby.payload";
+import { User } from "src/modules/user/infra/database/entities/user.entity";
 import {
   LOBBIES_REPOSITORY,
   LobbiesRepository,

@@ -1,10 +1,10 @@
 import { UserRegisteredInput } from "@dnd/shared";
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { UserStatus } from "src/database/enums/user-status.enum";
 import type { UseCase } from "src/interfaces/use-case.interface";
 import { NewUserCreatedPayload } from "../../events/new-user-created.payload";
 import { UserEvent } from "../../events/user-event.enum";
+import { UserStatus } from "../../infra/database/enums/user-status.enum";
 import { UserRegisteredRepository } from "./user-registered.repository";
 
 @Injectable()

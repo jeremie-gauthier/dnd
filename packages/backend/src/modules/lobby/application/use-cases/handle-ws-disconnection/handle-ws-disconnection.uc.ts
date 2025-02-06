@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { User } from "src/database/entities/user.entity";
 import type { ServerSocket } from "src/interfaces/socket.interface";
 import type { UseCase } from "src/interfaces/use-case.interface";
+import { User } from "src/modules/user/infra/database/entities/user.entity";
 import { LeaveLobbyUseCase } from "../leave-lobby/leave-lobby.uc";
 
 @Injectable()

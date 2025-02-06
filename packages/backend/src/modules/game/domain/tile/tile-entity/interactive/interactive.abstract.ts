@@ -1,4 +1,4 @@
-import { InteractiveEntityKindType } from "src/database/enums/interactive-entity-kind.enum";
+import { InteractiveEntityKindType } from "src/modules/game/infra/database/enums/interactive-entity-kind.enum";
 import { Playable } from "../../../playable-entities/playable-entity/playable-entity.abstract";
 import { TileEntity } from "../tile-entity.abstract";
 import { Chest } from "./chest.entity";

@@ -1,4 +1,4 @@
-import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
+import { TileEntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { z } from "zod";
 import { TileInteractiveEntity } from "./interactive.abstract";
 

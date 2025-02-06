@@ -1,10 +1,14 @@
-import { TileEntityType } from "src/database/enums/tile-entity-type.enum";
+import {
+  NonInteractiveEntityKind,
+  NonInteractiveEntityKindType,
+} from "src/modules/game/infra/database/enums/non-interactive-entity-kind.enum";
+import { TileEntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { z } from "zod";
 import { TileEntity } from "../tile-entity.abstract";
 
 type Data = {
   readonly type: "NON_INTERACTIVE_ENTITY";
-  readonly kind: "off-map" | "pillar" | "tree" | "wall";
+  readonly kind: NonInteractiveEntityKindType;
   readonly isBlocking: boolean;
   readonly isVisible: boolean;
 };
@@ -14,7 +18,12 @@ export class TileNonInteractiveEntity extends TileEntity<Data> {
     type: z
       .literal(TileEntityType.NON_INTERACTIVE_ENTITY)
       .default(TileEntityType.NON_INTERACTIVE_ENTITY),
-    kind: z.enum(["off-map", "pillar", "tree", "wall"]),
+    kind: z.enum([
+      NonInteractiveEntityKind.OFF_MAP,
+      NonInteractiveEntityKind.PILLAR,
+      NonInteractiveEntityKind.TREE,
+      NonInteractiveEntityKind.WALL,
+    ]),
     isBlocking: z.boolean(),
     isVisible: z.boolean(),
   });

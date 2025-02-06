@@ -1,7 +1,7 @@
 import {
   TileEntityType,
   TileEntityTypeType,
-} from "src/database/enums/tile-entity-type.enum";
+} from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { Entity } from "src/modules/shared/domain/entity";
 import { TileInteractiveEntity } from "./interactive/interactive.abstract";
 import { TileNonInteractiveEntity } from "./non-interactive/non-interactive.entity";
