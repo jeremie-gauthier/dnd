@@ -4,10 +4,10 @@ import { DiceRepository } from "src/modules/game/application/repositories/dice-r
 import { Dice as DiceDomain } from "src/modules/game/domain/dice/dice.vo";
 import { Repository } from "typeorm";
 import { Dice as DicePersistence } from "../entities/item/dice.entity";
-import { DiceMapper } from "./dice.mapper";
+import { DiceMapper } from "../mappers/dice.mapper";
 
 @Injectable()
-export class PostgresDiceRepository implements DiceRepository {
+export class DicePostgresRepository implements DiceRepository {
   constructor(
     @InjectRepository(DicePersistence)
     private readonly repository: Repository<DicePersistence>,

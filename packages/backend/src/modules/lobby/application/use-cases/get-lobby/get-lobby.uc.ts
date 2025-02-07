@@ -2,15 +2,15 @@ import { GetLobbyOutput } from "@dnd/shared";
 import { Inject, Injectable } from "@nestjs/common";
 import type { UseCase } from "src/interfaces/use-case.interface";
 import {
-  LOBBIES_REPOSITORY,
-  LobbiesRepository,
+  LOBBY_REPOSITORY,
+  LobbyRepository,
 } from "../../repositories/lobbies-repository.interface";
 
 @Injectable()
 export class GetLobbyUseCase implements UseCase {
   constructor(
-    @Inject(LOBBIES_REPOSITORY)
-    private readonly lobbiesRepository: LobbiesRepository,
+    @Inject(LOBBY_REPOSITORY)
+    private readonly lobbiesRepository: LobbyRepository,
   ) {}
 
   public async execute({

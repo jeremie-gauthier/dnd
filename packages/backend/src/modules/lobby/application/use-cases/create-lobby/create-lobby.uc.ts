@@ -4,22 +4,16 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { UseCase } from "src/interfaces/use-case.interface";
 import { RequestCreateLobbyFulfilledPayload } from "src/modules/campaign/events/request-create-lobby-fulfilled.payload";
 import {
-  LOBBIES_REPOSITORY,
-  LobbiesRepository,
+  LOBBY_REPOSITORY,
+  LobbyRepository,
 } from "../../repositories/lobbies-repository.interface";
-import {
-  USERS_REPOSITORY,
-  UsersRepository,
-} from "../../repositories/users-repository.interface";
 import { LeaveLobbyUseCase } from "../leave-lobby/leave-lobby.uc";
 
 @Injectable()
 export class CreateLobbyUseCase implements UseCase {
   constructor(
-    @Inject(LOBBIES_REPOSITORY)
-    protected readonly lobbiesRepository: LobbiesRepository,
-    @Inject(USERS_REPOSITORY)
-    protected readonly usersRepository: UsersRepository,
+    @Inject(LOBBY_REPOSITORY)
+    protected readonly lobbiesRepository: LobbyRepository,
     protected readonly eventEmitter: EventEmitter2,
     private readonly leaveLobbyUseCase: LeaveLobbyUseCase,
   ) {}
@@ -29,10 +23,6 @@ export class CreateLobbyUseCase implements UseCase {
   ): Promise<LobbyView> {
     await this.leaveLobbyUseCase.execute({ userId: payload.userId });
     const lobby = await this.createLobby(payload);
-    await this.usersRepository.upsert({
-      userId: payload.userId,
-      lobbyId: lobby.id,
-    });
 
     const plainLobby = lobby.toPlain();
     return {
@@ -51,7 +41,6 @@ export class CreateLobbyUseCase implements UseCase {
   private async createLobby({
     campaign,
     config,
-    heroes,
     selectedStage,
     userId,
   }: RequestCreateLobbyFulfilledPayload) {
@@ -64,7 +53,6 @@ export class CreateLobbyUseCase implements UseCase {
           stage: selectedStage,
         },
       },
-      heroes,
       hostUserId: userId,
     });
 

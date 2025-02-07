@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-// import { Dice as DicePersistence } from "src/database/entities/dice.entity";
 import { Dice as DiceDomain } from "src/modules/game/domain/dice/dice.vo";
 import { Mapper } from "src/modules/shared/infra/mapper";
 import { Repository } from "typeorm";

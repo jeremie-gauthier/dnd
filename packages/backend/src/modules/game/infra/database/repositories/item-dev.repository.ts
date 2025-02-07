@@ -7,7 +7,7 @@ import { Item as ItemPersistence } from "../entities/item/item.entity";
 import { ItemDevMapper } from "../mappers//item-dev.mapper";
 
 @Injectable()
-export class PostgresItemDevRepository implements ItemDevRepository {
+export class ItemDevPostgresRepository implements ItemDevRepository {
   constructor(
     @InjectRepository(ItemPersistence)
     private readonly itemRepository: Repository<ItemPersistence>,

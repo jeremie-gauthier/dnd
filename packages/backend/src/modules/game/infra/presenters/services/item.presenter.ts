@@ -14,13 +14,13 @@ import { Spell } from "src/modules/game/domain/item/spell/spell.entity";
 import { Weapon } from "src/modules/game/domain/item/weapon/weapon.entity";
 import { AttackItem } from "../../database/entities/item/attack-item/attack-item.entity";
 import { ItemType } from "../../database/enums/item-type.enum";
-import { PostgresItemUIRepository } from "../../database/repositories/item-ui.repository";
+import { ItemUIPostgresRepository } from "../../database/repositories/item-ui.repository";
 
 @Injectable()
 export class ItemPresenter {
   constructor(
     @Inject(ITEM_UI_REPOSITORY)
-    private readonly itemUIRepository: PostgresItemUIRepository,
+    private readonly itemUIRepository: ItemUIPostgresRepository,
   ) {}
 
   public async toView({

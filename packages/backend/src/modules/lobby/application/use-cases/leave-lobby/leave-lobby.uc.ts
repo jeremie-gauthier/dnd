@@ -7,35 +7,22 @@ import { LobbyEvent } from "src/modules/shared/events/lobby/lobby-event.enum";
 import { UserLeftLobbyPayload } from "src/modules/shared/events/lobby/user-left-lobby.payload";
 import { User } from "src/modules/user/infra/database/entities/user.entity";
 import {
-  LOBBIES_REPOSITORY,
-  LobbiesRepository,
+  LOBBY_REPOSITORY,
+  LobbyRepository,
 } from "../../repositories/lobbies-repository.interface";
-import {
-  USERS_REPOSITORY,
-  UsersRepository,
-} from "../../repositories/users-repository.interface";
 
 @Injectable()
 export class LeaveLobbyUseCase implements UseCase {
   constructor(
-    @Inject(LOBBIES_REPOSITORY)
-    private readonly lobbiesRepository: LobbiesRepository,
-    @Inject(USERS_REPOSITORY)
-    private readonly usersRepository: UsersRepository,
+    @Inject(LOBBY_REPOSITORY)
+    private readonly lobbiesRepository: LobbyRepository,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
   public async execute({
     userId,
   }: { userId: User["id"] }): Promise<string | undefined> {
-    const lobbyId = await this.usersRepository.getOne({ userId });
-    if (!lobbyId) {
-      return;
-    }
-
-    const lobby = await this.lobbiesRepository.getOne({
-      lobbyId: lobbyId,
-    });
+    const lobby = await this.lobbiesRepository.getUserLobby({ userId });
     if (!lobby) {
       return;
     }
@@ -46,7 +33,7 @@ export class LeaveLobbyUseCase implements UseCase {
     }
 
     lobby.leave({ user: userThatLeave });
-    await this.usersRepository.del({ userId });
+    await this.lobbiesRepository.update({ lobby });
 
     const plainLobby = lobby.toPlain();
     this.eventEmitter.emitAsync(
@@ -103,11 +90,6 @@ export class LeaveLobbyUseCase implements UseCase {
     }
 
     await this.lobbiesRepository.del({ lobbyId: lobby.id });
-    await Promise.all(
-      plainLobby.players.map(({ userId }) =>
-        this.usersRepository.del({ userId }),
-      ),
-    );
 
     this.eventEmitter.emitAsync(
       LobbyEvent.LobbyDeleted,

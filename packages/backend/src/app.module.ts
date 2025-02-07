@@ -19,7 +19,6 @@ import { GameModule } from "./modules/game/game.module";
 import { LobbyModule } from "./modules/lobby/lobby.module";
 import { TranslationModule } from "./modules/translation/translation.module";
 import { UserModule } from "./modules/user/user.module";
-import { RedisModule } from "./redis/redis.module";
 
 @Module({
   imports: [
@@ -37,7 +36,6 @@ import { RedisModule } from "./redis/redis.module";
       useClass: DatabaseConfiguration,
     }),
     AuthzModule,
-    RedisModule,
     CampaignModule,
     AnalyticsModule,
     LobbyModule,

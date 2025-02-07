@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { HeroTemplateUI as HeroTemplateUIPersistence } from "../entities/playable-entity-template/hero-template-ui.entity";
 
 @Injectable()
-export class PostgresHeroUIRepository {
+export class HeroUIPostgresRepository {
   constructor(
     @InjectRepository(HeroTemplateUIPersistence)
     private readonly heroUIRepository: Repository<HeroTemplateUIPersistence>,

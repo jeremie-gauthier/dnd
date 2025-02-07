@@ -5,7 +5,7 @@ import { Repository } from "typeorm";
 import { ItemUI as ItemUIPersistence } from "../entities/item/item-ui.entity";
 
 @Injectable()
-export class PostgresItemUIRepository implements ItemUIRepository {
+export class ItemUIPostgresRepository implements ItemUIRepository {
   constructor(
     @InjectRepository(ItemUIPersistence)
     private readonly itemUIRepository: Repository<ItemUIPersistence>,

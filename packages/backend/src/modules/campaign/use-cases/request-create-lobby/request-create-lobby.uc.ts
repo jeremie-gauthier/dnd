@@ -19,12 +19,7 @@ export class RequestCreateLobbyUseCase implements UseCase {
     stageId,
     userId,
   }: RequestCreateLobbyPayload): Promise<void> {
-    const [campaign, heroes] = await Promise.all([
-      this.repository.getCampaign({ stageId }),
-      // this.repository.getHeroes({ stageId, userId }),
-      // TODO: implement get heroes
-      [],
-    ]);
+    const campaign = await this.repository.getCampaign({ stageId });
 
     const selectedStage = this.getStageOrThrow({
       stages: campaign.stages,
@@ -36,7 +31,6 @@ export class RequestCreateLobbyUseCase implements UseCase {
       new RequestCreateLobbyFulfilledPayload({
         campaign,
         config,
-        heroes,
         selectedStage,
         userId,
       }),

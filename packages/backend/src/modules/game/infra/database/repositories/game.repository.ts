@@ -7,11 +7,11 @@ import { Game as GamePersistence } from "../entities/game.entity";
 import { GameMapper } from "../mappers/game.mapper";
 
 @Injectable()
-export class PostgresGameRepository implements GameRepository {
+export class GamePostgresRepository implements GameRepository {
   constructor(
-    private readonly mapper: GameMapper,
     @InjectRepository(GamePersistence)
     private readonly repository: Repository<GamePersistence>,
+    private readonly mapper: GameMapper,
   ) {}
 
   public async create({ game }: { game: GameDomain }): Promise<GameDomain> {

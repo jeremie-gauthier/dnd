@@ -1,18 +1,25 @@
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
+import {
+  PlayableCharacterType,
+  PlayableCharacterTypeType,
+} from "../../infra/database/enums/playable-character-type.enum";
 import { User } from "../user/user.entity";
 import { PlayableCharacterError } from "./playable-character.error";
 
 type Data = {
   id: string;
-  type: "hero" | "game_master";
+  type: PlayableCharacterTypeType;
   pickedBy?: User["id"];
 };
 
 export class PlayableCharacter extends Entity<Data> {
   private static readonly schema = z.object({
     id: z.string().uuid(),
-    type: z.enum(["hero", "game_master"]),
+    type: z.enum([
+      PlayableCharacterType.HERO,
+      PlayableCharacterType.GAME_MASTER,
+    ]),
     pickedBy: z.string().optional(),
   });
 

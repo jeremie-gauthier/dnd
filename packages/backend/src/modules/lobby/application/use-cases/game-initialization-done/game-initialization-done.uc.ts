@@ -5,16 +5,16 @@ import type { GameInitializationDonePayload } from "src/modules/shared/events/ga
 import { GameReadyPayload } from "src/modules/shared/events/lobby/game-ready.payload";
 import { LobbyEvent } from "src/modules/shared/events/lobby/lobby-event.enum";
 import {
-  LOBBIES_REPOSITORY,
-  LobbiesRepository,
+  LOBBY_REPOSITORY,
+  LobbyRepository,
 } from "../../repositories/lobbies-repository.interface";
 
 @Injectable()
 export class GameInitializationDoneUseCase implements UseCase {
   constructor(
     private readonly emitter: EventEmitter2,
-    @Inject(LOBBIES_REPOSITORY)
-    private readonly lobbiesRepository: LobbiesRepository,
+    @Inject(LOBBY_REPOSITORY)
+    private readonly lobbiesRepository: LobbyRepository,
   ) {}
 
   public async execute(payload: GameInitializationDonePayload) {

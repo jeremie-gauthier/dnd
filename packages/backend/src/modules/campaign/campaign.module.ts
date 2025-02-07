@@ -4,8 +4,6 @@ import { CampaignProgression } from "src/modules/campaign/infra/database/entitie
 import { CampaignStageProgression } from "src/modules/campaign/infra/database/entities/campaign-stage-progression.entity";
 import { CampaignStage } from "src/modules/campaign/infra/database/entities/campaign-stage.entity";
 import { Campaign } from "src/modules/campaign/infra/database/entities/campaign.entity";
-import { GetHeroDetailsRepository } from "../game/application/use-cases/get-hero-details/get-hero-details.repository";
-import { GetHeroDetailsUseCase } from "../game/application/use-cases/get-hero-details/get-hero-details.uc";
 import { CoordService } from "./domain/coord/coord.service";
 import { MapSerializerService } from "./domain/map-serializer/map-serializer.service";
 import { CampaignListeners } from "./infra/controller/campaign.listeners";
@@ -49,8 +47,6 @@ import { RequestCreateLobbyUseCase } from "./use-cases/request-create-lobby/requ
     GameInitializationRepository,
     CoordService,
     MapSerializerService,
-    GetHeroDetailsUseCase,
-    GetHeroDetailsRepository,
   ],
 })
 export class CampaignModule {}

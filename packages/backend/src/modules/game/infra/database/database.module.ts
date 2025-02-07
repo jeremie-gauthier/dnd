@@ -1,13 +1,16 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { RedisModule } from "src/redis/redis.module";
 import { DICE_REPOSITORY } from "../../application/repositories/dice-repository.interface";
+import { GAME_PROGRESSION_REPOSITORY } from "../../application/repositories/game-progression-repository.interface";
 import { GAME_REPOSITORY } from "../../application/repositories/game-repository.interface";
+import { GAME_TEMPLATE_REPOSITORY } from "../../application/repositories/game-template-repository.interface";
+import { HERO_REPOSITORY } from "../../application/repositories/hero-repository.interface";
 import { ITEM_DEV_REPOSITORY } from "../../application/repositories/item-dev-repository.interface";
 import { ITEM_REPOSITORY } from "../../application/repositories/item-repository.interface";
 import { ITEM_UI_REPOSITORY } from "../../application/repositories/item-ui-repository.interface";
-import { DiceMapper } from "./dice/dice.mapper";
-import { PostgresDiceRepository } from "./dice/dice.repository";
+import { GameProgression } from "./entities/game-progression.entity";
+import { GameTemplate } from "./entities/game-template.entity";
+import { Game } from "./entities/game.entity";
 import { Artifact } from "./entities/item/artifact.entity";
 import { Spell } from "./entities/item/attack-item/spell/spell.entity";
 import { Weapon } from "./entities/item/attack-item/weapon.entity";
@@ -17,19 +20,32 @@ import { ItemUI } from "./entities/item/item-ui.entity";
 import { Item } from "./entities/item/item.entity";
 import { Potion } from "./entities/item/potion.entity";
 import { HeroTemplateUI } from "./entities/playable-entity-template/hero-template-ui.entity";
+import { HeroTemplate } from "./entities/playable-entity-template/hero-template.entity";
+import { HeroEntity } from "./entities/playable-entity/hero.entity";
+import { BoardMapper } from "./mappers/board.mapper";
+import { DiceMapper } from "./mappers/dice.mapper";
 import { GameMapper } from "./mappers/game.mapper";
+import { HeroTemplateMapper } from "./mappers/hero-template.mapper";
+import { HeroMapper } from "./mappers/hero.mapper";
 import { ItemDevMapper } from "./mappers/item-dev.mapper";
 import { ItemMapper } from "./mappers/item.mapper";
-import { PostgresGameRepository } from "./repositories/game.postgres-repository";
-import { PostgresHeroUIRepository } from "./repositories/hero-ui.repository";
-import { PostgresItemDevRepository } from "./repositories/item-dev.repository";
-import { PostgresItemUIRepository } from "./repositories/item-ui.repository";
-import { PostgresItemRepository } from "./repositories/item.repository";
+import { DicePostgresRepository } from "./repositories/dice.repository";
+import { GameProgressionPostgresRepository } from "./repositories/game-progression.repository";
+import { GameTemplatePostgresRepository } from "./repositories/game-template.repository";
+import { GamePostgresRepository } from "./repositories/game.repository";
+import { HeroUIPostgresRepository } from "./repositories/hero-ui.repository";
+import { HeroPostgresRepository } from "./repositories/hero.repository";
+import { ItemDevPostgresRepository } from "./repositories/item-dev.repository";
+import { ItemUIPostgresRepository } from "./repositories/item-ui.repository";
+import { ItemPostgresRepository } from "./repositories/item.repository";
 
 @Module({
   imports: [
-    RedisModule,
     TypeOrmModule.forFeature([
+      Game,
+      GameTemplate,
+      GameProgression,
+      HeroTemplate,
       HeroTemplateUI,
       Dice,
       Item,
@@ -39,57 +55,87 @@ import { PostgresItemRepository } from "./repositories/item.repository";
       ChestTrap,
       Potion,
       Artifact,
+      HeroEntity,
     ]),
   ],
   providers: [
     {
       provide: GAME_REPOSITORY,
-      useClass: PostgresGameRepository,
+      useClass: GamePostgresRepository,
     },
     GameMapper,
     {
       provide: DICE_REPOSITORY,
-      useClass: PostgresDiceRepository,
+      useClass: DicePostgresRepository,
     },
     DiceMapper,
     {
       provide: ITEM_REPOSITORY,
-      useClass: PostgresItemRepository,
+      useClass: ItemPostgresRepository,
     },
+    ItemMapper,
     {
       provide: ITEM_UI_REPOSITORY,
-      useClass: PostgresItemUIRepository,
+      useClass: ItemUIPostgresRepository,
     },
     {
       provide: ITEM_DEV_REPOSITORY,
-      useClass: PostgresItemDevRepository,
+      useClass: ItemDevPostgresRepository,
     },
-    ItemMapper,
     ItemDevMapper,
-    PostgresHeroUIRepository,
+    {
+      provide: GAME_PROGRESSION_REPOSITORY,
+      useClass: GameProgressionPostgresRepository,
+    },
+    {
+      provide: HERO_REPOSITORY,
+      useClass: HeroPostgresRepository,
+    },
+    HeroUIPostgresRepository,
+    HeroTemplateMapper,
+    {
+      provide: GAME_TEMPLATE_REPOSITORY,
+      useClass: GameTemplatePostgresRepository,
+    },
+    BoardMapper,
+    HeroMapper,
   ],
   exports: [
     {
       provide: GAME_REPOSITORY,
-      useClass: PostgresGameRepository,
+      useClass: GamePostgresRepository,
     },
     {
       provide: DICE_REPOSITORY,
-      useClass: PostgresDiceRepository,
+      useClass: DicePostgresRepository,
     },
     {
       provide: ITEM_REPOSITORY,
-      useClass: PostgresItemRepository,
+      useClass: ItemPostgresRepository,
     },
     {
       provide: ITEM_UI_REPOSITORY,
-      useClass: PostgresItemUIRepository,
+      useClass: ItemUIPostgresRepository,
     },
     {
       provide: ITEM_DEV_REPOSITORY,
-      useClass: PostgresItemDevRepository,
+      useClass: ItemDevPostgresRepository,
     },
-    PostgresHeroUIRepository,
+    {
+      provide: GAME_PROGRESSION_REPOSITORY,
+      useClass: GameProgressionPostgresRepository,
+    },
+    {
+      provide: HERO_REPOSITORY,
+      useClass: HeroPostgresRepository,
+    },
+    HeroUIPostgresRepository,
+    {
+      provide: GAME_TEMPLATE_REPOSITORY,
+      useClass: GameTemplatePostgresRepository,
+    },
+    BoardMapper,
+    HeroMapper,
   ],
 })
 export class DatabaseModule {}

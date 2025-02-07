@@ -2,6 +2,7 @@ import { DefeatAllMonsters } from "src/modules/game/domain/win-conditions/win-co
 import { WinCondition } from "src/modules/game/domain/win-conditions/win-condition/win-condition.abstract";
 import { DefeatAllMonsters as DefeatAllMonstersPersistence } from "src/modules/game/infra/database/entities/win-condition/defeat-all-monster.entity";
 import { WinCondition as WinConditionPersistence } from "src/modules/game/infra/database/entities/win-condition/win-condition.entity";
+import { WinConditionName } from "../../enums/win-condition-name.enum";
 
 export class WinConditionFactory {
   private constructor() {}
@@ -10,7 +11,7 @@ export class WinConditionFactory {
     winConditionData: WinConditionPersistence,
   ): WinCondition {
     switch (winConditionData.name) {
-      case "defeat_all_monsters":
+      case WinConditionName.DEFEAT_ALL_MONSTERS:
         return new DefeatAllMonsters(
           winConditionData as DefeatAllMonstersPersistence,
         );

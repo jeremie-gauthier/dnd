@@ -1,20 +1,20 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { UseCase } from "src/interfaces/use-case.interface";
 import {
-  GetHeroDetailsInputDto,
-  GetHeroDetailsOutputDto,
-} from "./get-hero-details.dto";
-import { GetHeroDetailsRepository } from "./get-hero-details.repository";
+  HERO_REPOSITORY,
+  HeroRepository,
+} from "../../repositories/hero-repository.interface";
+import { GetHeroDetailsInputDto } from "./get-hero-details.dto";
 
 @Injectable()
 export class GetHeroDetailsUseCase implements UseCase {
-  constructor(private readonly repository: GetHeroDetailsRepository) {}
+  constructor(
+    @Inject(HERO_REPOSITORY)
+    private readonly heroRepository: HeroRepository,
+  ) {}
 
-  public async execute({
-    heroId,
-  }: GetHeroDetailsInputDto): Promise<GetHeroDetailsOutputDto> {
-    const hero = await this.repository.getHero({ heroId });
-    const heroUI = await this.repository.getHeroUI({ name: hero.name });
-    return { ...hero, ...heroUI };
+  public async execute({ heroId }: GetHeroDetailsInputDto) {
+    const hero = await this.heroRepository.getOneOrThrow({ heroId });
+    return hero.toPlain();
   }
 }

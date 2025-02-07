@@ -31,8 +31,8 @@ export class PlayableCharacter {
   })
   readonly type: PlayableCharacterTypeType;
 
-  @ManyToOne(() => Player)
-  pickedBy: Relation<Player>;
+  @ManyToOne(() => Player, { nullable: true })
+  pickedBy: Relation<Player> | null;
 
   @ManyToOne(
     () => Lobby,

@@ -1,33 +1,25 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { RedisModule } from "src/redis/redis.module";
-import { LOBBIES_REPOSITORY } from "../../application/repositories/lobbies-repository.interface";
-import { USERS_REPOSITORY } from "../../application/repositories/users-repository.interface";
-import { LobbiesMapper } from "./lobbies/lobbies.mapper";
-import { RedisLobbiesRepository } from "./lobbies/lobbies.repository";
-import { RedisUsersRepository } from "./users/users.repository";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { LOBBY_REPOSITORY } from "../../application/repositories/lobbies-repository.interface";
+import { Lobby } from "./entities/lobby.entity";
+import { PlayableCharacter } from "./entities/playable-character.entity";
+import { LobbyMapper } from "./mappers/lobby.mapper";
+import { LobbiesPostgresRepository } from "./repositories/lobby.repository";
 
 @Module({
-  imports: [RedisModule, ConfigModule],
+  imports: [ConfigModule, TypeOrmModule.forFeature([Lobby, PlayableCharacter])],
   providers: [
     {
-      provide: LOBBIES_REPOSITORY,
-      useClass: RedisLobbiesRepository,
+      provide: LOBBY_REPOSITORY,
+      useClass: LobbiesPostgresRepository,
     },
-    {
-      provide: USERS_REPOSITORY,
-      useClass: RedisUsersRepository,
-    },
-    LobbiesMapper,
+    LobbyMapper,
   ],
   exports: [
     {
-      provide: LOBBIES_REPOSITORY,
-      useClass: RedisLobbiesRepository,
-    },
-    {
-      provide: USERS_REPOSITORY,
-      useClass: RedisUsersRepository,
+      provide: LOBBY_REPOSITORY,
+      useClass: LobbiesPostgresRepository,
     },
   ],
 })

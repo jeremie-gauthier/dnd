@@ -7,14 +7,14 @@ import { WeaponResponseDto } from "src/modules/game/application/dtos/response/we
 import { Game as GameDomain } from "src/modules/game/domain/game/game.aggregate";
 import { Inventory } from "src/modules/game/domain/inventory/inventory.entity";
 import { StorageSpace } from "../../database/enums/storage-space.enum";
-import { PostgresHeroUIRepository } from "../../database/repositories/hero-ui.repository";
+import { HeroUIPostgresRepository } from "../../database/repositories/hero-ui.repository";
 import { ItemPresenter } from "./item.presenter";
 
 @Injectable()
 export class GamePresenter {
   constructor(
     private readonly itemPresenter: ItemPresenter,
-    private readonly heroUIRepository: PostgresHeroUIRepository,
+    private readonly heroUIRepository: HeroUIPostgresRepository,
   ) {}
 
   public async toView(

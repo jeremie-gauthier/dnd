@@ -6,16 +6,16 @@ import type { UseCase } from "src/interfaces/use-case.interface";
 import { LobbyUpdatedPayload } from "src/modules/shared/events/lobby/lobby-changed.payload";
 import { LobbyEvent } from "src/modules/shared/events/lobby/lobby-event.enum";
 import {
-  LOBBIES_REPOSITORY,
-  LobbiesRepository,
+  LOBBY_REPOSITORY,
+  LobbyRepository,
 } from "../../repositories/lobbies-repository.interface";
 
 @Injectable()
 export class ListenLobbyUpdatesUseCase implements UseCase {
   constructor(
     private readonly eventEmitter: EventEmitter2,
-    @Inject(LOBBIES_REPOSITORY)
-    private readonly lobbiesRepository: LobbiesRepository,
+    @Inject(LOBBY_REPOSITORY)
+    private readonly lobbiesRepository: LobbyRepository,
   ) {}
 
   public async execute({

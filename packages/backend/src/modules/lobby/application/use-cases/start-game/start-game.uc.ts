@@ -6,16 +6,16 @@ import { HostRequestedGameStartPayload } from "src/modules/shared/events/lobby/h
 import { LobbyEvent } from "src/modules/shared/events/lobby/lobby-event.enum";
 import { User } from "src/modules/user/infra/database/entities/user.entity";
 import {
-  LOBBIES_REPOSITORY,
-  LobbiesRepository,
+  LOBBY_REPOSITORY,
+  LobbyRepository,
 } from "../../repositories/lobbies-repository.interface";
 
 @Injectable()
 export class StartGameUseCase implements UseCase {
   constructor(
     private readonly eventEmitter: EventEmitter2,
-    @Inject(LOBBIES_REPOSITORY)
-    private readonly lobbiesRepository: LobbiesRepository,
+    @Inject(LOBBY_REPOSITORY)
+    private readonly lobbiesRepository: LobbyRepository,
   ) {}
 
   public async execute({

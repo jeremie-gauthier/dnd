@@ -9,7 +9,7 @@ import { HeroTemplateMapper } from "../mappers/hero-template.mapper";
 import { HeroMapper } from "../mappers/hero.mapper";
 
 @Injectable()
-export class PostgresGameProgressionRepository
+export class GameProgressionPostgresRepository
   implements GameProgressionRepository
 {
   constructor(

@@ -14,7 +14,7 @@ import { ItemType } from "../enums/item-type.enum";
 import { ItemMapper } from "../mappers/item.mapper";
 
 @Injectable()
-export class PostgresItemRepository implements ItemRepository {
+export class ItemPostgresRepository implements ItemRepository {
   constructor(
     @InjectRepository(ItemPersistence)
     private readonly itemRepository: Repository<ItemPersistence>,
