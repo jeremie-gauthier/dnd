@@ -26,8 +26,6 @@ async function bootstrap() {
     console.error("UnhandledRejection thrown. Reason:", reason);
   });
 
-  app.enableShutdownHooks();
-
   app.enableCors();
 
   const config = new DocumentBuilder()

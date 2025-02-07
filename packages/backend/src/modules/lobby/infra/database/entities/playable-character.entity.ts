@@ -15,7 +15,7 @@ import { Lobby } from "./lobby.entity";
 import { Player } from "./player.entity";
 
 @Entity()
-@Unique(["name", "lobbyId"])
+@Unique(["name", "lobby"])
 export class PlayableCharacter {
   @PrimaryColumn("uuid")
   readonly id: string;
@@ -42,5 +42,5 @@ export class PlayableCharacter {
   readonly lobby: Relation<Lobby>;
 
   @RelationId((playableCharacter: PlayableCharacter) => playableCharacter.lobby)
-  readonly lobbyId: Relation<Lobby["id"]>;
+  readonly lobbyId: string;
 }
