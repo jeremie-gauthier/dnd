@@ -5,9 +5,10 @@ import {
 } from "src/modules/game/infra/database/enums/playable-entity-faction.enum";
 import { PlayableEntityRaceType } from "src/modules/game/infra/database/enums/playable-entity-race.enum";
 import {
-  PlayableEntityType,
-  PlayableEntityTypeType,
+  PlayableEntityArchetype,
+  PlayableEntityArchetypeType,
 } from "src/modules/game/infra/database/enums/playable-entity-type.enum";
+import { EntityTypeType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { Entity } from "src/modules/shared/domain/entity";
 import { Attack } from "../../attack/attack.entity";
 import { Coord } from "../../coord/coord.vo";
@@ -31,7 +32,8 @@ import { PlayerStatus } from "./player-status/player-status.vo";
 type Data = {
   readonly id: string;
   readonly faction: PlayableEntityFactionType;
-  readonly type: PlayableEntityTypeType;
+  readonly archetype: PlayableEntityArchetypeType;
+  readonly type: EntityTypeType;
   readonly race: PlayableEntityRaceType;
   readonly name: string;
 
@@ -156,7 +158,7 @@ export abstract class Playable<
   }
 
   public isUndead() {
-    return this._data.type === PlayableEntityType.UNDEAD;
+    return this._data.archetype === PlayableEntityArchetype.UNDEAD;
   }
 
   public mustBeAlive() {

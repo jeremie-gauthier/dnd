@@ -3,19 +3,14 @@ import {
   ConditionNameType,
   ConditionNameValues,
 } from "../enums/condition-name.enum";
-import { PlayableEntity } from "./playable-entity/playable-entity.entity";
+import { PlayableEntity } from "./game-entity/playable-entity/playable-entity.entity";
 
 @Entity()
 export class PlayableEntityCondition {
   @PrimaryColumn("uuid")
   readonly id: string;
 
-  @Column({
-    type: "enum",
-    enum: ConditionNameValues,
-    enumName: "ConditionName",
-    update: false,
-  })
+  @Column({ type: "enum", enum: ConditionNameValues, update: false })
   readonly name: ConditionNameType;
 
   @Column()

@@ -2,6 +2,7 @@ import {
   ChildEntity,
   Column,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   OneToOne,
   Relation,
@@ -10,13 +11,12 @@ import {
 import { GameEventAction } from "../../enums/game-event-action.enum";
 import { GameEventName } from "../../enums/game-event-name.enum";
 import { Coord } from "../coord.entity";
-import { MonsterTemplate } from "../playable-entity-template/monster-template.entity";
+import { MonsterTemplate } from "../game-entity/playable-entity/template/monster-template.entity";
 import { Room } from "../room/room.entity";
 import { GameEvent } from "./game-event.entity";
 
-@ChildEntity()
+@ChildEntity(GameEventName.ON_DOOR_OPENING)
 export class OnDoorOpening extends GameEvent {
-  @Column({ default: GameEventName.ON_DOOR_OPENING, update: false })
   readonly name = GameEventName.ON_DOOR_OPENING;
 
   @Column({ default: GameEventAction.SPAWN_MONSTERS, update: false })
@@ -26,6 +26,7 @@ export class OnDoorOpening extends GameEvent {
   readonly doorCoord: Coord;
 
   @ManyToMany(() => MonsterTemplate)
+  @JoinTable()
   readonly monsters: Relation<MonsterTemplate[]>;
 
   @OneToOne(() => Room)

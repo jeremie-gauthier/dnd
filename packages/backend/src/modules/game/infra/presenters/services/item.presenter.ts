@@ -6,13 +6,13 @@ import { PotionResponseDto } from "src/modules/game/application/dtos/response/po
 import { SpellResponseDto } from "src/modules/game/application/dtos/response/spell.dto";
 import { WeaponResponseDto } from "src/modules/game/application/dtos/response/weapon.dto";
 import { ITEM_UI_REPOSITORY } from "src/modules/game/application/repositories/item-ui-repository.interface";
-import { Dice } from "src/modules/game/domain/dice/dice.vo";
-import { Artifact } from "src/modules/game/domain/item/artifact/artifact.abstract";
-import { ChestTrap } from "src/modules/game/domain/item/chest-trap/chest-trap.abstract";
-import { Potion } from "src/modules/game/domain/item/potion/potion.abstract";
-import { Spell } from "src/modules/game/domain/item/spell/spell.entity";
-import { Weapon } from "src/modules/game/domain/item/weapon/weapon.entity";
-import { AttackItem } from "../../database/entities/item/attack-item/attack-item.entity";
+import { Dice as DiceDomain } from "src/modules/game/domain/dice/dice.vo";
+import { Artifact as ArtifactDomain } from "src/modules/game/domain/item/artifact/artifact.abstract";
+import { ChestTrap as ChestTrapDomain } from "src/modules/game/domain/item/chest-trap/chest-trap.abstract";
+import { Potion as PotionDomain } from "src/modules/game/domain/item/potion/potion.abstract";
+import { Spell as SpellDomain } from "src/modules/game/domain/item/spell/spell.entity";
+import { Weapon as WeaponDomain } from "src/modules/game/domain/item/weapon/weapon.entity";
+import { Dice as DicePersistence } from "../../database/entities/item/dice/dice.entity";
 import { ItemType } from "../../database/enums/item-type.enum";
 import { ItemUIPostgresRepository } from "../../database/repositories/item-ui.repository";
 
@@ -27,7 +27,13 @@ export class ItemPresenter {
     item,
   }: {
     item: ReturnType<
-      (Weapon | Spell | ChestTrap | Potion | Artifact)["toPlain"]
+      (
+        | WeaponDomain
+        | SpellDomain
+        | ChestTrapDomain
+        | PotionDomain
+        | ArtifactDomain
+      )["toPlain"]
     >;
   }): Promise<
     | WeaponResponseDto
@@ -56,8 +62,8 @@ export class ItemPresenter {
   private getDice({
     dice,
   }: {
-    dice: ReturnType<Dice["toPlain"]>;
-  }): AttackItem["attacks"][number]["attackDices"][number]["dice"] {
+    dice: ReturnType<DiceDomain["toPlain"]>;
+  }): DicePersistence {
     return {
       ...dice,
       maxValue: Math.max(...dice.values),

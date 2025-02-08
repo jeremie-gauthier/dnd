@@ -6,7 +6,7 @@ export class User {
   @PrimaryColumn()
   readonly id: string;
 
-  @Column({ type: "enum", enum: UserStatusValues, enumName: "UserStatus" })
+  @Column({ type: "enum", enum: UserStatusValues })
   status: UserStatusType;
 
   @Column()

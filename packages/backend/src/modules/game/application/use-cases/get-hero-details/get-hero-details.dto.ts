@@ -1,6 +1,6 @@
 import { PickType } from "@nestjs/swagger";
 import { IsUUID } from "class-validator";
-import { HeroEntity } from "src/modules/game/infra/database/entities/playable-entity/hero.entity";
+import { HeroEntity } from "src/modules/game/infra/database/entities/game-entity/playable-entity/hero.entity";
 import { HeroEntityResponseDto } from "../../dtos/response/hero-entity.dto";
 
 export class GetHeroDetailsInputDto {

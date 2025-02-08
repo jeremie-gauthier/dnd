@@ -13,11 +13,7 @@ export class Lobby {
   @Column(() => Host)
   readonly host: Relation<Host>;
 
-  @Column({
-    type: "enum",
-    enum: LobbyStatusValues,
-    enumName: "LobbyStatus",
-  })
+  @Column({ type: "enum", enum: LobbyStatusValues })
   status: LobbyStatusType;
 
   @Column(() => Config)

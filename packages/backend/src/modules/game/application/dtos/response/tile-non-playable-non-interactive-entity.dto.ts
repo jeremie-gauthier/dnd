@@ -4,16 +4,16 @@ import {
   NonInteractiveEntityKind,
   NonInteractiveEntityKindType,
 } from "src/modules/game/infra/database/enums/non-interactive-entity-kind.enum";
-import { TileEntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
+import { EntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { TileEntityResponseDto } from "./tile-entity.dto";
 
 export class TileNonPlayableNonInteractiveEntityResponseDto extends TileEntityResponseDto {
   @Expose()
   @ApiProperty({
-    enum: [TileEntityType.NON_INTERACTIVE_ENTITY],
+    enum: [EntityType.NON_INTERACTIVE_ENTITY],
     enumName: "TileEntityType_NonInteractiveEntity",
   })
-  override readonly type = TileEntityType.NON_INTERACTIVE_ENTITY;
+  override readonly type = EntityType.NON_INTERACTIVE_ENTITY;
 
   @Expose()
   @ApiProperty({

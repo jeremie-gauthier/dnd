@@ -23,12 +23,7 @@ export class PlayableCharacter {
   @Column()
   readonly name: string;
 
-  @Column({
-    type: "enum",
-    enum: PlayableCharacterTypeValues,
-    enumName: "PlayableCharacterType",
-    update: false,
-  })
+  @Column({ type: "enum", enum: PlayableCharacterTypeValues, update: false })
   readonly type: PlayableCharacterTypeType;
 
   @ManyToOne(() => Player, { nullable: true })

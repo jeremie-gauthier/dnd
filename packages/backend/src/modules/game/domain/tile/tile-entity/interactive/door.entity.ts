@@ -1,4 +1,4 @@
-import { TileEntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
+import { EntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { z } from "zod";
 import { TileInteractiveEntity } from "./interactive.abstract";
 
@@ -13,8 +13,8 @@ type Data = {
 export class Door extends TileInteractiveEntity<Data> {
   private static readonly schema = z.object({
     type: z
-      .literal(TileEntityType.INTERACTIVE_ENTITY)
-      .default(TileEntityType.INTERACTIVE_ENTITY),
+      .literal(EntityType.INTERACTIVE_ENTITY)
+      .default(EntityType.INTERACTIVE_ENTITY),
     kind: z.literal("door").default("door"),
     isBlocking: z.boolean(),
     isVisible: z.boolean(),

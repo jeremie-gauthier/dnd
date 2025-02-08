@@ -13,8 +13,8 @@ import {
   PlayableEntityRaceType,
 } from "src/modules/game/infra/database/enums/playable-entity-race.enum";
 import {
-  PlayableEntityType,
-  PlayableEntityTypeType,
+  PlayableEntityArchetype,
+  PlayableEntityArchetypeType,
 } from "src/modules/game/infra/database/enums/playable-entity-type.enum";
 import { CharacteristicResponseDto } from "./characteristic.dto";
 import { CoordResponseDto } from "./coord.dto";
@@ -31,8 +31,11 @@ export abstract class PlayableEntityResponseDto {
   abstract readonly faction: PlayableEntityFactionType;
 
   @Expose()
-  @ApiProperty({ enum: PlayableEntityType, enumName: "PlayableEntityType" })
-  readonly type: PlayableEntityTypeType;
+  @ApiProperty({
+    enum: PlayableEntityArchetype,
+    enumName: "PlayableEntityType",
+  })
+  readonly type: PlayableEntityArchetypeType;
 
   @Expose()
   @ApiProperty({ enum: PlayableEntityRace, enumName: "PlayableEntityRace" })

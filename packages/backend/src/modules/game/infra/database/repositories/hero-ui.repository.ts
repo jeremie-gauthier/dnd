@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { HeroTemplateUI as HeroTemplateUIPersistence } from "../entities/playable-entity-template/hero-template-ui.entity";
+import { HeroTemplateUI as HeroTemplateUIPersistence } from "../entities/game-entity/playable-entity/template/hero-template-ui.entity";
 
 @Injectable()
 export class HeroUIPostgresRepository {

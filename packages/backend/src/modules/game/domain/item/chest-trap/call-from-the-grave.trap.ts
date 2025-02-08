@@ -1,3 +1,5 @@
+import { PlayableEntityRace } from "src/modules/game/infra/database/enums/playable-entity-race.enum";
+import { PlayableEntityArchetype } from "src/modules/game/infra/database/enums/playable-entity-type.enum";
 import { Coord } from "../../coord/coord.vo";
 import { Game } from "../../game/game.aggregate";
 import { Inventory } from "../../inventory/inventory.entity";
@@ -50,8 +52,8 @@ export class CallFromTheGrave extends ChestTrap {
             nbWeaponSlots: 0,
           },
         }),
-        race: "goblin",
-        type: "gobelinoid",
+        race: PlayableEntityRace.GOBLIN,
+        archetype: PlayableEntityArchetype.GOBELINOID,
       }),
     });
 

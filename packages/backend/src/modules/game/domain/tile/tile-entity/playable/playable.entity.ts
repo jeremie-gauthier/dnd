@@ -1,5 +1,5 @@
-import { PlayableEntity } from "src/modules/game/infra/database/entities/playable-entity/playable-entity.entity";
-import { TileEntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
+import { PlayableEntity } from "src/modules/game/infra/database/entities/game-entity/playable-entity/playable-entity.entity";
+import { EntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { TileEntity } from "../tile-entity.abstract";
 
 type Data = {
@@ -11,7 +11,7 @@ type Data = {
 
 export class TilePlayableEntity extends TileEntity<Data> {
   constructor(rawData: Omit<Data, "type">) {
-    super({ ...rawData, type: TileEntityType.PLAYABLE_ENTITY });
+    super({ ...rawData, type: EntityType.PLAYABLE_ENTITY });
   }
 
   public get faction() {

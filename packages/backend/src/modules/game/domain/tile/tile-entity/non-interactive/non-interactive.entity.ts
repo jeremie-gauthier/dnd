@@ -2,7 +2,7 @@ import {
   NonInteractiveEntityKind,
   NonInteractiveEntityKindType,
 } from "src/modules/game/infra/database/enums/non-interactive-entity-kind.enum";
-import { TileEntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
+import { EntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { z } from "zod";
 import { TileEntity } from "../tile-entity.abstract";
 
@@ -16,8 +16,8 @@ type Data = {
 export class TileNonInteractiveEntity extends TileEntity<Data> {
   private static readonly schema = z.object({
     type: z
-      .literal(TileEntityType.NON_INTERACTIVE_ENTITY)
-      .default(TileEntityType.NON_INTERACTIVE_ENTITY),
+      .literal(EntityType.NON_INTERACTIVE_ENTITY)
+      .default(EntityType.NON_INTERACTIVE_ENTITY),
     kind: z.enum([
       NonInteractiveEntityKind.OFF_MAP,
       NonInteractiveEntityKind.PILLAR,

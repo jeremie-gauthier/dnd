@@ -1,14 +1,27 @@
-import { ChildEntity, Column, JoinTable, ManyToMany, Relation } from "typeorm";
+import {
+  ChildEntity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  Relation,
+} from "typeorm";
 import { ItemType } from "../../../../enums/item-type.enum";
-import { AttackItem } from "../attack-item.entity";
+import { Item } from "../../item.entity";
+import { SpellAttack } from "../attack/spell-attack.entity";
 import { ManaCost } from "./mana-cost.entity";
 
-@ChildEntity()
-export class Spell extends AttackItem {
-  @Column({ default: ItemType.SPELL, update: false })
+@ChildEntity(ItemType.SPELL)
+export class Spell extends Item {
   override readonly type = ItemType.SPELL;
 
   @ManyToMany(() => ManaCost, { cascade: true })
   @JoinTable()
   readonly manaCosts: Relation<ManaCost[]>;
+
+  @OneToMany(
+    () => SpellAttack,
+    (attack) => attack.attackItem,
+    { cascade: true },
+  )
+  readonly attacks: Relation<SpellAttack[]>;
 }

@@ -1,9 +1,16 @@
-import { ChildEntity, Column } from "typeorm";
+import { ChildEntity, OneToMany, Relation } from "typeorm";
 import { ItemType } from "../../../enums/item-type.enum";
-import { AttackItem } from "./attack-item.entity";
+import { Item } from "../item.entity";
+import { WeaponAttack } from "./attack/weapon-attack.entity";
 
-@ChildEntity()
-export class Weapon extends AttackItem {
-  @Column({ default: ItemType.WEAPON, update: false })
+@ChildEntity(ItemType.WEAPON)
+export class Weapon extends Item {
   override readonly type = ItemType.WEAPON;
+
+  @OneToMany(
+    () => WeaponAttack,
+    (attack) => attack.attackItem,
+    { cascade: true },
+  )
+  readonly attacks: Relation<WeaponAttack[]>;
 }

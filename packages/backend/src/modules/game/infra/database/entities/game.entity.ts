@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   OneToMany,
   OneToOne,
@@ -9,14 +10,11 @@ import {
   Relation,
 } from "typeorm";
 import { GameStatusType, GameStatusValues } from "../enums/game-status.enum";
-import { PlayableEntityPersistence } from "../interfaces/playable-entity-persistence.interface";
 import { Board } from "./board.entity";
-import { GameEvent } from "./game-event/game-event.entity";
+import { CurrentGameEvent } from "./game-event/current-game-event.entity";
 import { GameMaster } from "./game-master.entity";
 import { Host } from "./host.entity";
 import { Item } from "./item/item.entity";
-import { MonsterKilled } from "./monster-killed.entity";
-import { PlayableEntity } from "./playable-entity/playable-entity.entity";
 import { WinCondition } from "./win-condition/win-condition.entity";
 
 @Entity()
@@ -27,11 +25,7 @@ export class Game {
   @Column(() => Host)
   readonly host: Host;
 
-  @Column({
-    type: "enum",
-    enum: GameStatusValues,
-    enumName: "GameStatus",
-  })
+  @Column({ type: "enum", enum: GameStatusValues })
   status: GameStatusType;
 
   @OneToOne(() => Board, { cascade: true })
@@ -42,18 +36,11 @@ export class Game {
   readonly gameMaster: Relation<GameMaster>;
 
   @OneToMany(
-    () => PlayableEntity,
-    (playableEntity) => playableEntity.game,
+    () => CurrentGameEvent,
+    (currentGameEvent) => currentGameEvent.game,
     { cascade: true },
   )
-  readonly playableEntities: Relation<PlayableEntityPersistence[]>;
-
-  @OneToMany(
-    () => GameEvent,
-    (gameEvent) => gameEvent.game,
-    { cascade: true },
-  )
-  readonly events: Relation<GameEvent[]>;
+  readonly events: Relation<CurrentGameEvent[]>;
 
   @OneToMany(
     () => WinCondition,
@@ -63,15 +50,9 @@ export class Game {
   readonly winConditions: Relation<WinCondition[]>;
 
   @Column({ update: false })
-  readonly maxLevelLoot: Item["level"];
+  readonly maxLevelLoot: number;
 
   @ManyToMany(() => Item)
+  @JoinTable()
   readonly itemsLooted: Relation<Item[]>;
-
-  @OneToMany(
-    () => MonsterKilled,
-    (monsterKilled) => monsterKilled.game,
-    { cascade: true },
-  )
-  readonly monstersKilled: Relation<MonsterKilled[]>;
 }

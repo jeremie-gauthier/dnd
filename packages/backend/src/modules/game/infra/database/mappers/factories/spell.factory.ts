@@ -25,7 +25,7 @@ export class SpellFactory {
             (attack) =>
               new Attack({
                 ...attack,
-                dices: attack.attackDices.map(({ dice }) => new Dice(dice)),
+                dices: attack.diceThrows.map(({ dice }) => new Dice(dice)),
                 perks: attack.perks.map((perk) => PerkFactory.create(perk)),
               }),
           ),

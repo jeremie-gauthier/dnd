@@ -3,8 +3,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { GameProgressionRepository } from "src/modules/game/application/repositories/game-progression-repository.interface";
 import { Hero } from "src/modules/game/domain/playable-entities/playable-entity/heroes/hero.abstract";
 import { Repository } from "typeorm";
+import { HeroTemplate } from "../entities/game-entity/playable-entity/template/hero-template.entity";
 import { GameProgression } from "../entities/game-progression.entity";
-import { HeroTemplate } from "../entities/playable-entity-template/hero-template.entity";
 import { HeroTemplateMapper } from "../mappers/hero-template.mapper";
 import { HeroMapper } from "../mappers/hero.mapper";
 
@@ -33,7 +33,7 @@ export class GameProgressionPostgresRepository
       relations: {
         heroes: {
           inventory: {
-            stuff: {
+            inventoryItems: {
               // TODO: retrouver la technique pour avoir tous les objets ici
               // TODO: passer en raw sql si c'est trop chiant
               item: true,
@@ -56,7 +56,7 @@ export class GameProgressionPostgresRepository
       },
       relations: {
         inventory: {
-          stuff: {
+          inventoryItems: {
             // TODO: fetch item and their attacks
             item: true,
           },

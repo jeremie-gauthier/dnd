@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { PlayableEntityRaceType, PlayableEntityTypeType } from "@dnd/shared";
 import { CurrentPhase } from "src/modules/game/infra/database/enums/current-phase.enum";
+import { EntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { Entity } from "src/modules/shared/domain/entity";
 import { z } from "zod";
 import { Coord } from "../../coord/coord.vo";
@@ -11,7 +12,7 @@ import { Monster } from "../../playable-entities/playable-entity/monster.entity"
 import { PlayerStatus } from "../../playable-entities/playable-entity/player-status/player-status.vo";
 
 type Data = {
-  readonly type: PlayableEntityTypeType;
+  readonly archetype: PlayableEntityTypeType;
   readonly race: PlayableEntityRaceType;
   readonly characteristic: {
     readonly baseHealthPoints: number;
@@ -25,7 +26,7 @@ type Data = {
 
 export class MonsterTemplate extends Entity<Data> {
   private static readonly schema = z.object({
-    type: z.enum(["gobelinoid", "undead"]),
+    archetype: z.enum(["gobelinoid", "undead"]),
     race: z.enum(["goblin", "bugbear"]),
     characteristic: z.object({
       baseHealthPoints: z.number(),
@@ -48,7 +49,7 @@ export class MonsterTemplate extends Entity<Data> {
 
   public override equals(other: MonsterTemplate): boolean {
     return (
-      this._data.type === other._data.type &&
+      this._data.archetype === other._data.archetype &&
       this._data.race === other._data.race &&
       this._data.inventory.equals(other._data.inventory) &&
       this._data.characteristic.baseHealthPoints ===
@@ -66,7 +67,7 @@ export class MonsterTemplate extends Entity<Data> {
 
   public override toPlain() {
     return {
-      type: this._data.type,
+      archetype: this._data.archetype,
       race: this._data.race,
       characteristic: this._data.characteristic,
       inventory: this._data.inventory.toPlain(),
@@ -97,8 +98,9 @@ export class MonsterTemplate extends Entity<Data> {
       inventory: this._data.inventory,
       playedByUserId: gameMasterUserId,
       isBlocking: true,
-      type: this._data.type,
+      archetype: this._data.archetype,
       race: this._data.race,
+      type: EntityType.PLAYABLE_ENTITY,
       name: `${this._data.race}-${randomId.slice(0, 4)}`,
       status: new PlayerStatus(CurrentPhase.IDLE),
       actionsDoneThisTurn: [],

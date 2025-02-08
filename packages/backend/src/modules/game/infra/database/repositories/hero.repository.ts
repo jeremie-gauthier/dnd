@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { HeroRepository } from "src/modules/game/application/repositories/hero-repository.interface";
 import { Hero as HeroDomain } from "src/modules/game/domain/playable-entities/playable-entity/heroes/hero.abstract";
 import { Repository } from "typeorm";
-import { HeroEntity as HeroEntityPersistence } from "../entities/playable-entity/hero.entity";
+import { HeroEntity as HeroEntityPersistence } from "../entities/game-entity/playable-entity/hero.entity";
 import { HeroMapper } from "../mappers/hero.mapper";
 
 @Injectable()

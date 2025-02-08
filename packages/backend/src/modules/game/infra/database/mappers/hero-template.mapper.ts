@@ -6,9 +6,10 @@ import { Hero as HeroDomain } from "src/modules/game/domain/playable-entities/pl
 import { Initiative } from "src/modules/game/domain/playable-entities/playable-entity/initiative/initiative.vo";
 import { PlayerStatus } from "src/modules/game/domain/playable-entities/playable-entity/player-status/player-status.vo";
 import { Mapper } from "src/modules/shared/infra/mapper";
-import { HeroTemplate as HeroTemplatePersistence } from "../entities/playable-entity-template/hero-template.entity";
+import { HeroTemplate as HeroTemplatePersistence } from "../entities/game-entity/playable-entity/template/hero-template.entity";
 import { CurrentPhase } from "../enums/current-phase.enum";
 import { StorageSpace } from "../enums/storage-space.enum";
+import { EntityType } from "../enums/tile-entity-type.enum";
 import { ItemPersistence } from "../interfaces/item-persistence.interface";
 import { HeroFactory } from "./factories/hero.factory";
 import { ItemFactory } from "./factories/item.factory";
@@ -23,7 +24,7 @@ export class HeroTemplateMapper extends Mapper<
     const heroId = randomUUID();
     return new HeroCls({
       actionsDoneThisTurn: [],
-      baseCharacteristic: persistence.baseCharacteristic,
+      baseCharacteristic: persistence.characteristic,
       characteristic: persistence.characteristic,
       class: persistence.class,
       conditions: [],
@@ -33,22 +34,23 @@ export class HeroTemplateMapper extends Mapper<
       inventory: new Inventory({
         playableId: heroId,
         storageCapacity: persistence.inventory.storageCapacity,
-        backpack: persistence.inventory.stuff
-          .filter((stuff) => stuff.storageSpace === StorageSpace.BACKPACK)
+        backpack: persistence.inventory.inventoryItems
+          .filter(({ storageSpace }) => storageSpace === StorageSpace.BACKPACK)
           // TODO: THIS IS FAKE FOR NOW
-          .map((stuff) => ItemFactory.create(stuff.item as ItemPersistence)),
-        gear: persistence.inventory.stuff
-          .filter((stuff) => stuff.storageSpace === StorageSpace.GEAR)
+          .map(({ item }) => ItemFactory.create(item)),
+        gear: persistence.inventory.inventoryItems
+          .filter(({ storageSpace }) => storageSpace === StorageSpace.GEAR)
           // TODO: THIS IS FAKE FOR NOW
-          .map((stuff) => ItemFactory.create(stuff.item as ItemPersistence)),
+          .map(({ item }) => ItemFactory.create(item as ItemPersistence)),
       }),
-      isBlocking: persistence.isBlocking,
+      isBlocking: true,
       level: persistence.level,
       name: persistence.name,
       playedByUserId: "",
       race: persistence.race,
       status: new PlayerStatus(CurrentPhase.IDLE),
-      type: persistence.type,
+      archetype: persistence.archetype,
+      type: EntityType.PLAYABLE_ENTITY,
     });
   }
 

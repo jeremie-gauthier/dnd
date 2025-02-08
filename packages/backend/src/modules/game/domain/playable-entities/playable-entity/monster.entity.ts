@@ -4,9 +4,13 @@ import {
   PlayableEntityRaceType,
 } from "src/modules/game/infra/database/enums/playable-entity-race.enum";
 import {
-  PlayableEntityType,
-  PlayableEntityTypeType,
+  PlayableEntityArchetype,
+  PlayableEntityArchetypeType,
 } from "src/modules/game/infra/database/enums/playable-entity-type.enum";
+import {
+  EntityType,
+  EntityTypeType,
+} from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { z } from "zod";
 import { Attack } from "../../attack/attack.entity";
 import { Coord } from "../../coord/coord.vo";
@@ -23,7 +27,8 @@ import { PlayerStatus } from "./player-status/player-status.vo";
 
 type Data = {
   readonly id: string;
-  readonly type: PlayableEntityTypeType;
+  readonly archetype: PlayableEntityArchetypeType;
+  readonly type: EntityTypeType;
   readonly race: PlayableEntityRaceType;
   readonly faction: "monster";
   readonly name: string;
@@ -58,10 +63,17 @@ type Data = {
 export class Monster extends Playable<Data> {
   private static readonly schema = z.object({
     id: z.string(),
+    type: z
+      .literal(EntityType.PLAYABLE_ENTITY)
+      .optional()
+      .default(EntityType.PLAYABLE_ENTITY),
     faction: z
       .literal(PlayableEntityFaction.MONSTER)
       .default(PlayableEntityFaction.MONSTER),
-    type: z.enum([PlayableEntityType.GOBELINOID, PlayableEntityType.UNDEAD]),
+    archetype: z.enum([
+      PlayableEntityArchetype.GOBELINOID,
+      PlayableEntityArchetype.UNDEAD,
+    ]),
     race: z.enum([PlayableEntityRace.GOBLIN, PlayableEntityRace.BUGBEAR]),
     name: z.string(),
     coord: z.instanceof(Coord),
@@ -201,6 +213,7 @@ export class Monster extends Playable<Data> {
       id: this._data.id,
       faction: this._data.faction,
       type: this._data.type,
+      archetype: this._data.archetype,
       race: this._data.race,
       name: this._data.name,
       coord: this._data.coord.toPlain(),

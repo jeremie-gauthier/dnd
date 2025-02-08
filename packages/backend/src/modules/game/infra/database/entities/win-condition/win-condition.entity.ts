@@ -25,11 +25,6 @@ export class WinCondition {
   )
   readonly game: Relation<Game>;
 
-  @Column({
-    type: "enum",
-    enum: WinConditionNameValues,
-    enumName: "WinConditionName",
-    update: false,
-  })
+  @Column({ type: "enum", enum: WinConditionNameValues, update: false })
   readonly name: WinConditionNameType;
 }

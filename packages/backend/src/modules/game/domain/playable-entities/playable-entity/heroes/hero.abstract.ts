@@ -1,12 +1,20 @@
 import {
   HeroClass,
   HeroClassType,
+} from "src/modules/game/infra/database/enums/hero-class.enum";
+import { PlayableEntityFaction } from "src/modules/game/infra/database/enums/playable-entity-faction.enum";
+import {
   PlayableEntityRace,
   PlayableEntityRaceType,
-  PlayableEntityType,
-  PlayableEntityTypeType,
-} from "@dnd/shared";
-import { PlayableEntityFaction } from "src/modules/game/infra/database/enums/playable-entity-faction.enum";
+} from "src/modules/game/infra/database/enums/playable-entity-race.enum";
+import {
+  PlayableEntityArchetype,
+  PlayableEntityArchetypeType,
+} from "src/modules/game/infra/database/enums/playable-entity-type.enum";
+import {
+  EntityType,
+  EntityTypeType,
+} from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { z } from "zod";
 import { Attack } from "../../../attack/attack.entity";
 import { Coord } from "../../../coord/coord.vo";
@@ -26,7 +34,8 @@ type Data = {
   readonly id: string;
   readonly faction: "hero";
   readonly name: string;
-  readonly type: PlayableEntityTypeType;
+  readonly archetype: PlayableEntityArchetypeType;
+  readonly type: EntityTypeType;
   readonly race: PlayableEntityRaceType;
   readonly class: HeroClassType;
   readonly level: number;
@@ -65,7 +74,11 @@ export abstract class Hero extends Playable<Data> {
       .literal(PlayableEntityFaction.HERO)
       .default(PlayableEntityFaction.HERO),
     name: z.string(),
-    type: z.enum([PlayableEntityType.HUMANOID]),
+    archetype: z.enum([PlayableEntityArchetype.HUMANOID]),
+    type: z
+      .literal(EntityType.PLAYABLE_ENTITY)
+      .optional()
+      .default(EntityType.PLAYABLE_ENTITY),
     race: z.enum([
       PlayableEntityRace.HUMAN,
       PlayableEntityRace.ELF,
@@ -227,6 +240,7 @@ export abstract class Hero extends Playable<Data> {
       id: this._data.id,
       faction: this._data.faction,
       name: this._data.name,
+      archetype: this._data.archetype,
       type: this._data.type,
       race: this._data.race,
       class: this._data.class,

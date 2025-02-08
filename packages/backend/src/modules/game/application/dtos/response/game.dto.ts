@@ -7,7 +7,7 @@ import {
 import { InteractiveEntityKind } from "src/modules/game/infra/database/enums/interactive-entity-kind.enum";
 import { ItemType } from "src/modules/game/infra/database/enums/item-type.enum";
 import { PlayableEntityFaction } from "src/modules/game/infra/database/enums/playable-entity-faction.enum";
-import { TileEntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
+import { EntityType } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 import { ArtifactResponseDto } from "./artifact.dto";
 import { BoardResponseDto } from "./board.dto";
 import { ChestEntityResponseDto } from "./chest-entity.dto";
@@ -47,15 +47,15 @@ class Tile extends TileResponseDto {
       subTypes: [
         {
           value: TileNonPlayableNonInteractiveEntityResponseDto,
-          name: TileEntityType.NON_INTERACTIVE_ENTITY,
+          name: EntityType.NON_INTERACTIVE_ENTITY,
         },
         {
           value: TilePlayableEntityResponseDto,
-          name: TileEntityType.PLAYABLE_ENTITY,
+          name: EntityType.PLAYABLE_ENTITY,
         },
         {
           value: TileNonPlayableInteractiveEntityResponseDto,
-          name: TileEntityType.INTERACTIVE_ENTITY,
+          name: EntityType.INTERACTIVE_ENTITY,
         },
       ],
     },
@@ -85,9 +85,9 @@ class Tile extends TileResponseDto {
       discriminator: {
         propertyName: "type",
         mapping: {
-          [TileEntityType.NON_INTERACTIVE_ENTITY]:
+          [EntityType.NON_INTERACTIVE_ENTITY]:
             "TileNonPlayableNonInteractiveEntityResponseDto",
-          [TileEntityType.PLAYABLE_ENTITY]: "TilePlayableEntityResponseDto",
+          [EntityType.PLAYABLE_ENTITY]: "TilePlayableEntityResponseDto",
         },
       },
     },

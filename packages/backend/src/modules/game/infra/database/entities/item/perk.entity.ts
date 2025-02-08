@@ -10,6 +10,6 @@ export class Perk {
   @PrimaryColumn({ unique: true })
   readonly name: PerkNameType;
 
-  @Column({ type: "enum", enum: PerkTriggerValues, enumName: "PerkTrigger" })
+  @Column({ type: "enum", enum: PerkTriggerValues })
   readonly trigger: PerkTriggerType;
 }

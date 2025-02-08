@@ -1,11 +1,10 @@
-import { Column, Entity, ManyToOne, OneToMany, Relation } from "typeorm";
-import { Board } from "../board.entity";
+import { Column, Entity, OneToMany, PrimaryColumn, Relation } from "typeorm";
 import { Tile } from "../tile.entity";
 import { BoundingBox } from "./bounding-box.entity";
 
 @Entity()
 export class Room {
-  @Column()
+  @PrimaryColumn("uuid")
   readonly id: string;
 
   @Column()
@@ -24,11 +23,4 @@ export class Room {
     { cascade: true },
   )
   readonly tiles: Relation<Tile[]>;
-
-  @ManyToOne(
-    () => Board,
-    (board) => board.rooms,
-    { onDelete: "CASCADE", nullable: false },
-  )
-  readonly board: Relation<Board>;
 }

@@ -31,10 +31,6 @@ export class Campaign {
   )
   readonly stages: Relation<CampaignStage[]>;
 
-  @Column({
-    type: "enum",
-    enum: CampaignStatusValues,
-    enumName: "CampaignStatus",
-  })
+  @Column({ type: "enum", enum: CampaignStatusValues })
   status: CampaignStatusType;
 }

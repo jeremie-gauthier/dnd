@@ -1,9 +1,20 @@
-import { Column, Entity, OneToMany, Relation } from "typeorm";
-import { Room } from "./room/room.entity";
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+  Relation,
+} from "typeorm";
+import { GameTemplate } from "./game-template.entity";
+import { Game } from "./game.entity";
 import { Tile } from "./tile.entity";
 
 @Entity()
 export class Board {
+  @PrimaryColumn("uuid")
+  readonly id: string;
+
   @Column()
   readonly width: number;
 
@@ -17,10 +28,9 @@ export class Board {
   )
   readonly tiles: Relation<Tile[]>;
 
-  @OneToMany(
-    () => Room,
-    (room) => room.board,
-    { cascade: true },
-  )
-  readonly rooms: Relation<Room[]>;
+  @OneToOne(() => Game)
+  readonly game: Relation<Game>;
+
+  @OneToOne(() => GameTemplate)
+  readonly gameTemplate: Relation<GameTemplate>;
 }

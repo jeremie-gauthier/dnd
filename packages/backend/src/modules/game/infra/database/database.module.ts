@@ -8,6 +8,10 @@ import { HERO_REPOSITORY } from "../../application/repositories/hero-repository.
 import { ITEM_DEV_REPOSITORY } from "../../application/repositories/item-dev-repository.interface";
 import { ITEM_REPOSITORY } from "../../application/repositories/item-repository.interface";
 import { ITEM_UI_REPOSITORY } from "../../application/repositories/item-ui-repository.interface";
+import { HeroEntity } from "./entities/game-entity/playable-entity/hero.entity";
+import { PlayableEntity } from "./entities/game-entity/playable-entity/playable-entity.entity";
+import { HeroTemplateUI } from "./entities/game-entity/playable-entity/template/hero-template-ui.entity";
+import { HeroTemplate } from "./entities/game-entity/playable-entity/template/hero-template.entity";
 import { GameProgression } from "./entities/game-progression.entity";
 import { GameTemplate } from "./entities/game-template.entity";
 import { Game } from "./entities/game.entity";
@@ -15,13 +19,12 @@ import { Artifact } from "./entities/item/artifact.entity";
 import { Spell } from "./entities/item/attack-item/spell/spell.entity";
 import { Weapon } from "./entities/item/attack-item/weapon.entity";
 import { ChestTrap } from "./entities/item/chest-trap.entity";
-import { Dice } from "./entities/item/dice.entity";
+import { Dice } from "./entities/item/dice/dice.entity";
 import { ItemUI } from "./entities/item/item-ui.entity";
 import { Item } from "./entities/item/item.entity";
 import { Potion } from "./entities/item/potion.entity";
-import { HeroTemplateUI } from "./entities/playable-entity-template/hero-template-ui.entity";
-import { HeroTemplate } from "./entities/playable-entity-template/hero-template.entity";
-import { HeroEntity } from "./entities/playable-entity/hero.entity";
+import { MonsterKilled } from "./entities/monster-killed.entity";
+import { Room } from "./entities/room/room.entity";
 import { BoardMapper } from "./mappers/board.mapper";
 import { DiceMapper } from "./mappers/dice.mapper";
 import { GameMapper } from "./mappers/game.mapper";
@@ -56,6 +59,9 @@ import { ItemPostgresRepository } from "./repositories/item.repository";
       Potion,
       Artifact,
       HeroEntity,
+      Room,
+      PlayableEntity,
+      MonsterKilled,
     ]),
   ],
   providers: [

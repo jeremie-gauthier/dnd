@@ -1,10 +1,12 @@
-export const PlayableEntityType = {
+export const PlayableEntityArchetype = {
   HUMANOID: "humanoid",
   GOBELINOID: "gobelinoid",
   UNDEAD: "undead",
 } as const;
 
-export const PlayableEntityTypeValues = Object.values(PlayableEntityType);
+export const PlayableEntityArchetypeValues = Object.values(
+  PlayableEntityArchetype,
+);
 
-export type PlayableEntityTypeType =
-  (typeof PlayableEntityType)[keyof typeof PlayableEntityType];
+export type PlayableEntityArchetypeType =
+  (typeof PlayableEntityArchetype)[keyof typeof PlayableEntityArchetype];

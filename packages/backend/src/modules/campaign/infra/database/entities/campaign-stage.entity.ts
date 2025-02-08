@@ -40,10 +40,6 @@ export class CampaignStage {
   @Column()
   readonly maxLevelLoot: number;
 
-  @Column({
-    type: "enum",
-    enum: CampaignStageStatusValues,
-    enumName: "CampaignStageStatus",
-  })
+  @Column({ type: "enum", enum: CampaignStageStatusValues })
   status: CampaignStageStatusType;
 }

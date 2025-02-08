@@ -8,10 +8,10 @@ export class BoundingBox {
   readonly id: string;
 
   @Column(() => Coord)
-  readonly topLeft: Coord;
+  readonly topLeft: Relation<Coord>;
 
   @Column(() => Coord)
-  readonly bottomRight: Coord;
+  readonly bottomRight: Relation<Coord>;
 
   @ManyToOne(() => Room, { onDelete: "CASCADE", nullable: false })
   readonly room: Relation<Room>;

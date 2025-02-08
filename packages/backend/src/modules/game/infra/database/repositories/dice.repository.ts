@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { DiceRepository } from "src/modules/game/application/repositories/dice-repository.interface";
 import { Dice as DiceDomain } from "src/modules/game/domain/dice/dice.vo";
 import { Repository } from "typeorm";
-import { Dice as DicePersistence } from "../entities/item/dice.entity";
+import { Dice as DicePersistence } from "../entities/item/dice/dice.entity";
 import { DiceMapper } from "../mappers/dice.mapper";
 
 @Injectable()

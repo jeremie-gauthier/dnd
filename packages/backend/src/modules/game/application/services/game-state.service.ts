@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Game } from "../../domain/game/game.aggregate";
 import { TileEntity } from "../../domain/tile/tile-entity/tile-entity.abstract";
-import { TileEntityType } from "../../infra/database/enums/tile-entity-type.enum";
+import { EntityType } from "../../infra/database/enums/tile-entity-type.enum";
 
 @Injectable()
 export class GameStateService {
@@ -49,9 +49,9 @@ export class GameStateService {
     entity,
   }: { entity: ReturnType<TileEntity["toPlain"]> }): boolean {
     return (
-      entity.type === TileEntityType.PLAYABLE_ENTITY ||
-      ((entity.type === TileEntityType.NON_INTERACTIVE_ENTITY ||
-        entity.type === TileEntityType.INTERACTIVE_ENTITY) &&
+      entity.type === EntityType.PLAYABLE_ENTITY ||
+      ((entity.type === EntityType.NON_INTERACTIVE_ENTITY ||
+        entity.type === EntityType.INTERACTIVE_ENTITY) &&
         entity.isVisible)
     );
   }

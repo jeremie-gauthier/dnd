@@ -6,6 +6,7 @@ import { GameEvents } from "src/modules/game/domain/game-events/game-events.aggr
 import { WinConditions } from "src/modules/game/domain/win-conditions/win-conditions.aggregate";
 import { Repository } from "typeorm";
 import { GameTemplate } from "../entities/game-template.entity";
+import { Room } from "../entities/room/room.entity";
 import { BoardMapper } from "../mappers/board.mapper";
 import { GameEventFactory } from "../mappers/factories/game-event.factory";
 import { WinConditionFactory } from "../mappers/factories/win-condition.factory";
@@ -15,6 +16,8 @@ export class GameTemplatePostgresRepository implements GameTemplateRepository {
   constructor(
     @InjectRepository(GameTemplate)
     private readonly gameTemplateRepository: Repository<GameTemplate>,
+    @InjectRepository(Room)
+    private readonly roomRepository: Repository<Room>,
     private readonly boardMapper: BoardMapper,
   ) {}
 
@@ -23,23 +26,39 @@ export class GameTemplatePostgresRepository implements GameTemplateRepository {
     events: GameEvents;
     winConditions: WinConditions;
   }> {
-    const gameTemplate = await this.gameTemplateRepository.findOneOrFail({
-      where: {
-        campaignId,
-      },
-      relations: {
-        board: {
-          rooms: true,
-          tiles: {
-            entities: true,
-          },
+    const [gameTemplate, rooms] = await Promise.all([
+      this.gameTemplateRepository.findOneOrFail({
+        where: {
+          campaignId,
         },
-        events: true,
-        winConditions: true,
-      },
-    });
+        relations: {
+          board: {
+            tiles: {
+              interactiveEntities: true,
+              nonInteractiveEntities: true,
+            },
+          },
+          events: true,
+          winConditions: true,
+        },
+      }),
+      this.roomRepository
+        .createQueryBuilder("room")
+        .where({
+          tiles: {
+            board: {
+              gameTemplate: { campaignId },
+            },
+          },
+        })
+        .groupBy("room.id")
+        .getMany(),
+    ]);
 
-    const boardDomain = this.boardMapper.toDomain(gameTemplate.board);
+    const boardDomain = this.boardMapper.toDomain({
+      ...gameTemplate.board,
+      rooms,
+    });
     const eventsDomain = new GameEvents({
       values: gameTemplate.events.map((event) =>
         GameEventFactory.create(event),

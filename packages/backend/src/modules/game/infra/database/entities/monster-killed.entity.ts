@@ -1,7 +1,12 @@
-import { Entity, ManyToOne, PrimaryColumn, Relation } from "typeorm";
-import { Game } from "./game.entity";
-import { MonsterTemplate } from "./playable-entity-template/monster-template.entity";
-import { HeroEntity } from "./playable-entity/hero.entity";
+import {
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+  Relation,
+} from "typeorm";
+import { HeroEntity } from "./game-entity/playable-entity/hero.entity";
+import { MonsterTemplate } from "./game-entity/playable-entity/template/monster-template.entity";
 import { Room } from "./room/room.entity";
 
 @Entity()
@@ -18,6 +23,6 @@ export class MonsterKilled {
   @ManyToOne(() => Room)
   readonly room: Relation<Room>;
 
-  @ManyToOne(() => Game)
-  readonly game: Relation<Game>;
+  @CreateDateColumn()
+  readonly createdDate: Date;
 }

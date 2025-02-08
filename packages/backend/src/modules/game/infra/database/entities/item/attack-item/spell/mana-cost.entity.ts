@@ -1,19 +1,22 @@
-import { Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn, Unique } from "typeorm";
 import {
   SpellCasterHeroClassType,
   SpellCasterHeroClassValues,
 } from "../../../../enums/spell-caster-hero-class.enum";
 
 @Entity()
+@Unique(["class", "cost"])
 export class ManaCost {
-  @PrimaryColumn({
+  @PrimaryColumn()
+  readonly id: string;
+
+  @Column({
     type: "enum",
     enum: SpellCasterHeroClassValues,
-    enumName: "SpellCasterHeroClass",
     update: false,
   })
   readonly class: SpellCasterHeroClassType;
 
-  @PrimaryColumn({ update: false })
+  @Column({ update: false })
   readonly cost: number;
 }

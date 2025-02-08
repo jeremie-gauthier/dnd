@@ -2,15 +2,15 @@ import { Chest } from "src/modules/game/domain/tile/tile-entity/interactive/ches
 import { Door } from "src/modules/game/domain/tile/tile-entity/interactive/door.entity";
 import { TileInteractiveEntity as TileInteractiveEntityDomain } from "src/modules/game/domain/tile/tile-entity/interactive/interactive.abstract";
 import { Trap } from "src/modules/game/domain/tile/tile-entity/interactive/trap.entity";
-import { TileNonPlayableInteractiveEntity as TileInteractiveEntityPersistence } from "src/modules/game/infra/database/entities/tile-entity/tile-non-playable-interactive-entity/tile-non-playable-interactive-entity.entity";
-import { TrapEntity as TrapEntityPersistence } from "src/modules/game/infra/database/entities/tile-entity/tile-non-playable-interactive-entity/trap-entity.entity";
 import { InteractiveEntityKind } from "src/modules/game/infra/database/enums/interactive-entity-kind.enum";
+import { InteractiveEntity as InteractiveEntityPersistence } from "../../entities/game-entity/interactive-entity/interactive-entity.entity";
+import { TrapEntity as TrapEntityPersistence } from "../../entities/game-entity/interactive-entity/trap-entity.entity";
 
 export class TileInteractiveEntityFactory {
   private constructor() {}
 
   public static create(
-    data: TileInteractiveEntityPersistence,
+    data: InteractiveEntityPersistence,
   ): TileInteractiveEntityDomain {
     switch (data.kind) {
       case InteractiveEntityKind.DOOR:

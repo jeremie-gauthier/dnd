@@ -5,10 +5,11 @@ import { Initiative } from "src/modules/game/domain/playable-entities/playable-e
 import { Monster as MonsterDomain } from "src/modules/game/domain/playable-entities/playable-entity/monster.entity";
 import { Playable as PlayableDomain } from "src/modules/game/domain/playable-entities/playable-entity/playable-entity.abstract";
 import { PlayerStatus } from "src/modules/game/domain/playable-entities/playable-entity/player-status/player-status.vo";
-import { HeroEntity } from "../../entities/playable-entity/hero.entity";
-import { MonsterEntity } from "../../entities/playable-entity/monster.entity";
+import { HeroEntity } from "../../entities/game-entity/playable-entity/hero.entity";
+import { MonsterEntity } from "../../entities/game-entity/playable-entity/monster.entity";
 import { PlayableEntityFaction } from "../../enums/playable-entity-faction.enum";
 import { StorageSpace } from "../../enums/storage-space.enum";
+import { EntityType } from "../../enums/tile-entity-type.enum";
 import { PlayableEntityPersistence } from "../../interfaces/playable-entity-persistence.interface";
 import { ConditionFactory } from "./condition.factory";
 import { HeroFactory } from "./hero.factory";
@@ -30,17 +31,18 @@ export class PlayableEntityFactory {
     const HeroClass = HeroFactory.getHeroClass(data.name);
     const hero = new HeroClass({
       ...(data as HeroEntity),
+      type: EntityType.PLAYABLE_ENTITY,
       coord: new Coord(data.coord),
       initiative: new Initiative(data.initiative),
       status: new PlayerStatus(data.currentPhase),
       inventory: new Inventory({
         ...data.inventory,
         playableId: data.id,
-        [StorageSpace.BACKPACK]: data.inventory.stuff
+        [StorageSpace.BACKPACK]: data.inventory.inventoryItems
           .filter((item) => item.storageSpace === StorageSpace.BACKPACK)
           // TODO: THIS IS FAKE FOR NOW
           .map(({ item }) => ItemFactory.create(item)),
-        [StorageSpace.GEAR]: data.inventory.stuff
+        [StorageSpace.GEAR]: data.inventory.inventoryItems
           .filter((item) => item.storageSpace === StorageSpace.GEAR)
           // TODO: THIS IS FAKE FOR NOW
           .map(({ item }) => ItemFactory.create(item)),
@@ -63,17 +65,18 @@ export class PlayableEntityFactory {
   private static createMonster(data: MonsterEntity): MonsterDomain {
     const monster = new MonsterDomain({
       ...data,
+      type: EntityType.PLAYABLE_ENTITY,
       coord: new Coord(data.coord),
       initiative: new Initiative(data.initiative),
       status: new PlayerStatus(data.currentPhase),
       inventory: new Inventory({
         ...data.inventory,
         playableId: data.id,
-        [StorageSpace.BACKPACK]: data.inventory.stuff
+        [StorageSpace.BACKPACK]: data.inventory.inventoryItems
           .filter((item) => item.storageSpace === StorageSpace.BACKPACK)
           // TODO: THIS IS FAKE FOR NOW
           .map(({ item }) => ItemFactory.create(item)),
-        [StorageSpace.GEAR]: data.inventory.stuff
+        [StorageSpace.GEAR]: data.inventory.inventoryItems
           .filter((item) => item.storageSpace === StorageSpace.BACKPACK)
           // TODO: THIS IS FAKE FOR NOW
           .map(({ item }) => ItemFactory.create(item)),

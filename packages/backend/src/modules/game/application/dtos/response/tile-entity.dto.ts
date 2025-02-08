@@ -1,14 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose } from "class-transformer";
 import {
-  TileEntityType,
-  TileEntityTypeType,
+  EntityType,
+  EntityTypeType,
 } from "src/modules/game/infra/database/enums/tile-entity-type.enum";
 
 export abstract class TileEntityResponseDto {
   @Expose()
-  @ApiProperty({ enum: TileEntityType, enumName: "TileEntityType" })
-  abstract readonly type: TileEntityTypeType;
+  @ApiProperty({ enum: EntityType, enumName: "TileEntityType" })
+  abstract readonly type: EntityTypeType;
 
   @Expose()
   readonly isBlocking: boolean;

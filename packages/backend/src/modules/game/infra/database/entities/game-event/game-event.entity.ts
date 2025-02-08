@@ -14,6 +14,7 @@ import {
   GameEventNameType,
   GameEventNameValues,
 } from "../../enums/game-event-name.enum";
+import { GameTemplate } from "../game-template.entity";
 import { Game } from "../game.entity";
 
 @Entity()
@@ -22,26 +23,16 @@ export class GameEvent {
   @PrimaryColumn("uuid")
   readonly id: string;
 
-  @Column({
-    type: "enum",
-    enum: GameEventNameValues,
-    enumName: "GameEventName",
-    update: false,
-  })
+  @Column({ type: "enum", enum: GameEventNameValues, update: false })
   readonly name: GameEventNameType;
 
-  @Column({
-    type: "enum",
-    enum: GameEventActionValues,
-    enumName: "GameEventAction",
-    update: false,
-  })
+  @Column({ type: "enum", enum: GameEventActionValues, update: false })
   readonly action: GameEventActionType;
 
   @ManyToOne(
     () => Game,
-    (game) => game.winConditions,
+    (game) => game.events,
     { onDelete: "CASCADE" },
   )
-  readonly game: Relation<Game>;
+  readonly game: Relation<GameTemplate>;
 }
