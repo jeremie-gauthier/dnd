@@ -1,7 +1,9 @@
 INSERT INTO
+  inventory ()
+INSERT INTO
   monster_template (
     race,
-    TYPE,
+    archetype,
     characteristic_base_action_points,
     characteristic_base_movement_points,
     characteristic_base_armor_class,

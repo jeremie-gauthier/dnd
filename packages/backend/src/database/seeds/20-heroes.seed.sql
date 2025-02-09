@@ -172,7 +172,7 @@ VALUES
     2,
     5,
     2,
-    5,
+    7,
     7,
     '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 1, "nbWeaponSlots": 1, "nbBackpackSlots": 2}, "items": []}'
   ),
@@ -185,7 +185,7 @@ VALUES
     2,
     5,
     2,
-    5,
+    9,
     9,
     '{"storageCapacity": {"nbArtifactSlots": 1, "nbSpellSlots": 1, "nbWeaponSlots": 1, "nbBackpackSlots": 2}, "items": []}'
   );
