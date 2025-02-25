@@ -82,11 +82,10 @@ export function pathfinder<TData>({
     cost: 0,
     heuristic: 0,
   };
-  openSet.insert(startNode);
 
   const closedSet = new Set<Node<TData>["id"]>([startNode.id]);
 
-  let current = openSet.extract();
+  let current: Node<TData> | undefined = startNode;
   while (current) {
     if (hasReachGoal(current.coord)) {
       const path = reconstructPath(current);
