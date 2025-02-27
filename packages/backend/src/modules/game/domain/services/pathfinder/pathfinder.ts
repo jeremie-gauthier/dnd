@@ -1,10 +1,10 @@
 import { BinaryHeap } from "./binary-heap";
 import type { Coord } from "./interfaces/coord.interface";
 
-function reconstructPath<TData>(arrivalNode: Node<TData>) {
+function reconstructPath(arrivalNode: Node) {
   const path: Array<Coord> = [];
 
-  let current: Node<TData> | undefined = arrivalNode;
+  let current: Node | undefined = arrivalNode;
   while (current) {
     path.push(current.coord);
     current = current.parent;
@@ -39,14 +39,13 @@ type Heuristic = (coord: Coord) => number;
 
 /**
  *	The callback used to get the unique identifier of a node.
- *	@template TData Represents a grid's Cell type.
  */
-type Node<TData> = {
+type Node = {
   id: ReturnType<GetIdentifier>;
   coord: Coord;
   cost: number;
   heuristic: number;
-  parent?: Node<TData>;
+  parent?: Node;
 };
 
 /**
@@ -60,7 +59,7 @@ type Node<TData> = {
  * @template TData Represents a grid's Cell type.
  * @link https://en.wikipedia.org/wiki/A*_search_algorithm
  */
-export function pathfinder<TData>({
+export function pathfinder({
   startCoord,
   hasReachGoal,
   getNeighbours,
@@ -73,19 +72,17 @@ export function pathfinder<TData>({
   getIdentifier: GetIdentifier;
   heuristic: Heuristic;
 }) {
-  const openSet = new BinaryHeap<Node<TData>>(
-    (a, b) => a.heuristic - b.heuristic,
-  );
-  const startNode: Node<TData> = {
+  const openSet = new BinaryHeap<Node>((a, b) => a.heuristic - b.heuristic);
+  const startNode: Node = {
     id: getIdentifier(startCoord),
     coord: startCoord,
     cost: 0,
     heuristic: 0,
   };
 
-  const closedSet = new Set<Node<TData>["id"]>([startNode.id]);
+  const closedSet = new Set<Node["id"]>([startNode.id]);
 
-  let current: Node<TData> | undefined = startNode;
+  let current: Node | undefined = startNode;
   while (current) {
     if (hasReachGoal(current.coord)) {
       const path = reconstructPath(current);
@@ -99,7 +96,7 @@ export function pathfinder<TData>({
       // neighbour node has already been visited
       if (closedSet.has(neighbourNodeId)) continue;
 
-      const neighbourNode: Node<TData> = {
+      const neighbourNode: Node = {
         id: neighbourNodeId,
         coord: neighbourCoord,
         cost: neighbourCost,
