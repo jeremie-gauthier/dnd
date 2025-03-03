@@ -1,10 +1,16 @@
-import { Column, Entity, OneToMany, PrimaryColumn, Relation } from "typeorm";
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Relation,
+} from "typeorm";
 import { Tile } from "../tile.entity";
 import { BoundingBox } from "./bounding-box.entity";
 
 @Entity()
 export class Room {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   @Column()

@@ -6,7 +6,7 @@ import {
   ManyToMany,
   OneToMany,
   OneToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   Relation,
 } from "typeorm";
 import { GameStatusType, GameStatusValues } from "../enums/game-status.enum";
@@ -19,7 +19,7 @@ import { WinCondition } from "./win-condition/win-condition.entity";
 
 @Entity()
 export class Game {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   @Column(() => Host)

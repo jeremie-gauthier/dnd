@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   ManyToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   Relation,
   RelationId,
   Unique,
@@ -17,7 +17,7 @@ import { Player } from "./player.entity";
 @Entity()
 @Unique(["name", "lobby"])
 export class PlayableCharacter {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   @Column()

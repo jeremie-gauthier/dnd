@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   ManyToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   Relation,
   TableInheritance,
 } from "typeorm";
@@ -20,7 +20,7 @@ import { Game } from "../game.entity";
 @Entity()
 @TableInheritance({ column: "name" })
 export class GameEvent {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   @Column({ type: "enum", enum: GameEventNameValues, update: false })

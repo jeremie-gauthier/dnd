@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryColumn, Relation } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Relation,
+} from "typeorm";
 import {
   NonInteractiveEntityKindType,
   NonInteractiveEntityKindValues,
@@ -8,7 +14,7 @@ import { Tile } from "../../tile.entity";
 
 @Entity()
 export class NonInteractiveEntity {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   readonly type = EntityType.NON_INTERACTIVE_ENTITY;

@@ -2,11 +2,11 @@ import { Coord } from "../../coord/coord.vo";
 import { Game } from "../../game/game.aggregate";
 import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
 import { pathfinder } from "../../services/pathfinder/pathfinder";
-import { ChestTrap } from "./chest-trap.abstract";
+import { ChestTrap, ChestTrapData } from "./chest-trap.abstract";
 
 export class VoicesOfTheDamned extends ChestTrap {
-  constructor() {
-    super({ level: 1, name: "voices_of_the_damned_1" });
+  constructor(rawData: Omit<ChestTrapData, "name" | "type">) {
+    super({ ...rawData, name: "voices_of_the_damned_1" });
   }
 
   public override use({

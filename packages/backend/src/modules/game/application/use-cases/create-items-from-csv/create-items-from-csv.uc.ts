@@ -14,6 +14,7 @@ import { Weapon } from "src/modules/game/domain/item/weapon/weapon.entity";
 import { SpellCasterHeroClassType } from "src/modules/game/infra/database/enums/spell-caster-hero-class.enum";
 import { ArtifactApplicationFactory } from "../../factories/artifact.factory";
 import { ChestTrapApplicationFactory } from "../../factories/chest-trap.factory";
+import { ItemPerkApplicationFactory } from "../../factories/item-perk.factory";
 import { PerkApplicationFactory } from "../../factories/perk.factory";
 import { PotionApplicationFactory } from "../../factories/potion.factory";
 import {
@@ -69,44 +70,111 @@ export class CreateItemsFromCsvUseCase implements UseCase {
     item: Item;
   } {
     switch (record.item_type) {
-      case "artifact":
-        return this.createArtifactFromCsvRecord({ record });
-      case "potion":
-        return this.createPotionFromCsvRecord({ record });
-      case "spell":
+      case "Artifact":
+        return this.createArtifactFromCsvRecord({ record, dices });
+      case "Potion":
+        return this.createPotionFromCsvRecord({ record, dices });
+      case "Spell":
         return this.createSpellFromCsvRecord({ record, dices });
-      case "trap":
-        return this.createChestTrapFromCsvRecord({ record });
-      case "weapon":
+      case "ChestTrap":
+        return this.createChestTrapFromCsvRecord({ record, dices });
+      case "Weapon":
         return this.createWeaponFromCsvRecord({ record, dices });
       default:
         throw new Error(`"${record.item_type}" is not a supported item type`);
     }
   }
 
-  private createArtifactFromCsvRecord({ record }: { record: CsvItemRecord }): {
+  private createArtifactFromCsvRecord({
+    record,
+    dices,
+  }: { record: CsvItemRecord; dices: Array<Dice> }): {
     record: CsvItemRecord;
     item: Artifact;
   } {
-    const item = ArtifactApplicationFactory.create(record.item_id);
+    const itemPerks = record.item_perk
+      ? [
+          ItemPerkApplicationFactory.create({
+            id: randomUUID(),
+            // should contains a single perk name, if many exists, it will throw and it's ok for now
+            perk: PerkApplicationFactory.create(
+              record.item_perk as PerkNameType,
+            ),
+            dices: this.createDicesFromCsvColumn({
+              encodedDices: record.item_perk_dices,
+              dices,
+            }),
+          }),
+        ]
+      : [];
+    const item = ArtifactApplicationFactory.create({
+      name: record.item_id,
+      itemPerks,
+      level: record.item_level,
+    });
 
     return { record, item };
   }
 
-  private createPotionFromCsvRecord({ record }: { record: CsvItemRecord }): {
+  private createPotionFromCsvRecord({
+    record,
+    dices,
+  }: { record: CsvItemRecord; dices: Array<Dice> }): {
     record: CsvItemRecord;
     item: Potion;
   } {
-    const item = PotionApplicationFactory.create(record.item_id);
+    const itemPerks = record.item_perk
+      ? [
+          ItemPerkApplicationFactory.create({
+            id: randomUUID(),
+            // should contains a single perk name, if many exists, it will throw and it's ok for now
+            perk: PerkApplicationFactory.create(
+              record.item_perk as PerkNameType,
+            ),
+            dices: this.createDicesFromCsvColumn({
+              encodedDices: record.item_perk_dices,
+              dices,
+            }),
+          }),
+        ]
+      : [];
+    const item = PotionApplicationFactory.create({
+      name: record.item_id,
+      itemPerks,
+      level: record.item_level,
+    });
 
     return { record, item };
   }
 
-  private createChestTrapFromCsvRecord({ record }: { record: CsvItemRecord }): {
+  private createChestTrapFromCsvRecord({
+    record,
+    dices,
+  }: { record: CsvItemRecord; dices: Array<Dice> }): {
     record: CsvItemRecord;
     item: ChestTrap;
   } {
-    const item = ChestTrapApplicationFactory.create(record.item_id);
+    const itemPerks = record.item_perk
+      ? [
+          ItemPerkApplicationFactory.create({
+            id: randomUUID(),
+            // should contains a single perk name, if many exists, it will throw and it's ok for now
+            perk: PerkApplicationFactory.create(
+              record.item_perk as PerkNameType,
+            ),
+            dices: this.createDicesFromCsvColumn({
+              encodedDices: record.item_perk_dices,
+              dices,
+            }),
+          }),
+        ]
+      : [];
+
+    const item = ChestTrapApplicationFactory.create({
+      name: record.item_id,
+      itemPerks,
+      level: record.item_level,
+    });
 
     return { record, item };
   }
@@ -164,19 +232,35 @@ export class CreateItemsFromCsvUseCase implements UseCase {
           })
         : undefined;
 
-    const manaCosts = record.mana_cost
-      .split(",")
-      .map((manaByClass) => manaByClass.split(":"))
-      .map(([heroClass, cost]) => ({
+    const manaCosts = Object.entries(JSON.parse(record.mana_cost)).map(
+      ([heroClass, cost]) => ({
         class: heroClass as SpellCasterHeroClassType,
         cost: Number(cost),
-      }));
+      }),
+    );
+
+    const itemPerks = record.item_perk
+      ? [
+          ItemPerkApplicationFactory.create({
+            id: randomUUID(),
+            // should contains a single perk name, if many exists, it will throw and it's ok for now
+            perk: PerkApplicationFactory.create(
+              record.item_perk as PerkNameType,
+            ),
+            dices: this.createDicesFromCsvColumn({
+              encodedDices: record.item_perk_dices,
+              dices,
+            }),
+          }),
+        ]
+      : [];
 
     const item = new Spell({
       name: record.item_id,
       level: record.item_level,
       attacks: [regularAttack, superAttack].filter((atk) => atk !== undefined),
       manaCosts,
+      itemPerks,
     });
 
     return { record, item };
@@ -238,10 +322,27 @@ export class CreateItemsFromCsvUseCase implements UseCase {
           })
         : undefined;
 
+    const itemPerks = record.item_perk
+      ? [
+          ItemPerkApplicationFactory.create({
+            id: randomUUID(),
+            // should contains a single perk name, if many exists, it will throw and it's ok for now
+            perk: PerkApplicationFactory.create(
+              record.item_perk as PerkNameType,
+            ),
+            dices: this.createDicesFromCsvColumn({
+              encodedDices: record.item_perk_dices,
+              dices,
+            }),
+          }),
+        ]
+      : [];
+
     const item = new Weapon({
       name: record.item_id,
       level: record.item_level,
       attacks: superAttack ? [regularAttack, superAttack] : [regularAttack],
+      itemPerks,
     });
 
     return { record, item };

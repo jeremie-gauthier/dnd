@@ -1,7 +1,7 @@
-import { Entity, PrimaryColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class CampaignStageEligibility {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly campaignStageId: string;
 }

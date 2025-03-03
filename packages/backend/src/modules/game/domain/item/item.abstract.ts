@@ -6,6 +6,7 @@ import {
 } from "../../infra/database/enums/item-type.enum";
 import { Artifact } from "./artifact/artifact.abstract";
 import { ChestTrap } from "./chest-trap/chest-trap.abstract";
+import { ItemPerk } from "./item-perk";
 import { ItemError } from "./item.error";
 import { Potion } from "./potion/potion.abstract";
 import { Spell } from "./spell/spell.entity";
@@ -15,6 +16,7 @@ type Data = {
   readonly type: ItemTypeType;
   readonly name: string;
   readonly level: number;
+  readonly itemPerks: Array<ItemPerk>;
   [x: string]: unknown;
 };
 
@@ -31,6 +33,7 @@ export abstract class Item<
     ]),
     name: z.string(),
     level: z.number().min(0).max(3),
+    itemPerks: z.array(z.instanceof(ItemPerk)),
   });
 
   public abstract use(_: unknown): void;

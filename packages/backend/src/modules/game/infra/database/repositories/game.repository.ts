@@ -86,7 +86,7 @@ export class GamePostgresRepository implements GameRepository {
                 },
                 manaCosts: true,
                 itemPerks: {
-                  perks: true,
+                  perk: true,
                   diceThrows: {
                     dice: true,
                   },

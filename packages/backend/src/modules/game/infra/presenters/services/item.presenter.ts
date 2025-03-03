@@ -46,17 +46,25 @@ export class ItemPresenter {
       name: item.name,
     });
 
+    const itemPerks = item.itemPerks.map((itemPerk) => ({
+      dices: itemPerk.dices.map((dice) => this.getDice({ dice })),
+      perk: itemPerk.perk,
+    }));
+
     if (item.type === ItemType.WEAPON || item.type === ItemType.SPELL) {
       const attacks = item.attacks?.map((attack) => ({
         ...attack,
         dices: attack.dices.map((dice) => this.getDice({ dice })),
       }));
-      return { ...item, ...itemUI, attacks } as
-        | WeaponResponseDto
-        | SpellResponseDto;
+      return {
+        ...item,
+        ...itemUI,
+        attacks,
+        itemPerks,
+      } as WeaponResponseDto | SpellResponseDto;
     }
 
-    return { ...item, ...itemUI };
+    return { ...item, ...itemUI, itemPerks };
   }
 
   private getDice({

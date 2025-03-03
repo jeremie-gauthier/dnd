@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   ManyToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   Relation,
   TableInheritance,
 } from "typeorm";
@@ -16,7 +16,7 @@ import { Tile } from "../../tile.entity";
 @Entity()
 @TableInheritance({ column: "kind" })
 export class InteractiveEntity {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   readonly type = EntityType.INTERACTIVE_ENTITY;

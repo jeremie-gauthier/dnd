@@ -6,12 +6,12 @@ import { Inventory } from "../../inventory/inventory.entity";
 import { MonsterTemplate } from "../../monster-templates/monster-template/monster-template.vo";
 import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
 import { randomIndex } from "../../services/random/random-index";
-import { ChestTrap } from "./chest-trap.abstract";
+import { ChestTrap, ChestTrapData } from "./chest-trap.abstract";
 import { ChestTrapError } from "./chest-trap.error";
 
 export class CallFromTheGrave extends ChestTrap {
-  constructor() {
-    super({ level: 1, name: "call_from_the_grave_1" });
+  constructor(rawData: Omit<ChestTrapData, "name" | "type">) {
+    super({ ...rawData, name: "call_from_the_grave_1" });
   }
 
   public override use({

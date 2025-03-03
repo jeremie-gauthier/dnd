@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Expose } from "class-transformer";
+import { Expose, Type } from "class-transformer";
 import {
   AttackRange,
   AttackRangeType,
@@ -24,8 +24,10 @@ export class AttackResponseDto {
   readonly type: AttackTypeType;
 
   @Expose()
+  @Type(() => DiceResponseDto)
   readonly dices: Array<DiceResponseDto>;
 
   @Expose()
+  @Type(() => PerkResponseDto)
   readonly perks: Array<PerkResponseDto>;
 }

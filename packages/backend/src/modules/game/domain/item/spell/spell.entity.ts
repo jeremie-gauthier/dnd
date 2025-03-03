@@ -8,6 +8,7 @@ import { Attack } from "../../attack/attack.entity";
 import { Board } from "../../board/board.entity";
 import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
 import { AttackItem } from "../attack-item.abstract";
+import { ItemPerk } from "../item-perk";
 
 type Data = {
   readonly type: "Spell";
@@ -15,6 +16,7 @@ type Data = {
   readonly level: number;
   readonly attacks: Array<Attack>;
   readonly manaCosts: Array<{ class: SpellCasterHeroClassType; cost: number }>;
+  readonly itemPerks: Array<ItemPerk>;
 };
 
 export class Spell extends AttackItem<Data> {
@@ -93,6 +95,7 @@ export class Spell extends AttackItem<Data> {
       level: this._data.level,
       attacks: this._data.attacks.map((attack) => attack.toPlain()),
       manaCosts: this._data.manaCosts,
+      itemPerks: this._data.itemPerks.map((itemPerk) => itemPerk.toPlain()),
     };
   }
 }

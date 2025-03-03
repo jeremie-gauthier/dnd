@@ -16,7 +16,7 @@ export class HeroUIPostgresRepository {
     return this.heroUIRepository.findOneOrFail({
       select: { imgUrl: true },
       where: {
-        heroTemplate: {
+        playableEntityTemplate: {
           name,
         },
       },

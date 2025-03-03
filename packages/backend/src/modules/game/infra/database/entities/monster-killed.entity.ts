@@ -2,7 +2,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   Relation,
 } from "typeorm";
 import { HeroEntity } from "./game-entity/playable-entity/hero.entity";
@@ -11,7 +11,7 @@ import { Room } from "./room/room.entity";
 
 @Entity()
 export class MonsterKilled {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   @ManyToOne(() => MonsterTemplate)

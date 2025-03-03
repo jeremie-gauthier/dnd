@@ -2,9 +2,10 @@ import { ItemType } from "src/modules/game/infra/database/enums/item-type.enum";
 import { z } from "zod";
 import { Game } from "../../game/game.aggregate";
 import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
+import { ItemPerk } from "../item-perk";
 import { Item } from "../item.abstract";
 
-type Data = {
+export type ChestTrapData = {
   readonly type: "ChestTrap";
   readonly name:
     | "dazzling_light_1"
@@ -15,9 +16,10 @@ type Data = {
     | "smothering_mist_1"
     | "voices_of_the_damned_1";
   readonly level: number;
+  readonly itemPerks: Array<ItemPerk>;
 };
 
-export abstract class ChestTrap extends Item<Data> {
+export abstract class ChestTrap extends Item<ChestTrapData> {
   private static readonly schema = Item.baseSchema.merge(
     z.object({
       type: z
@@ -36,7 +38,7 @@ export abstract class ChestTrap extends Item<Data> {
     }),
   );
 
-  constructor(rawData: Omit<Data, "type">) {
+  constructor(rawData: Omit<ChestTrapData, "type">) {
     const data = ChestTrap.schema.parse(rawData);
     super(data);
   }
@@ -51,6 +53,7 @@ export abstract class ChestTrap extends Item<Data> {
       type: this._data.type,
       name: this._data.name,
       level: this._data.level,
+      itemPerks: this._data.itemPerks.map((itemPerk) => itemPerk.toPlain()),
     };
   }
 }

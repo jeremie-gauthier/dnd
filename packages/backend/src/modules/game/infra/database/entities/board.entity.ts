@@ -3,7 +3,7 @@ import {
   Entity,
   OneToMany,
   OneToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   Relation,
 } from "typeorm";
 import { GameTemplate } from "./game-template.entity";
@@ -12,7 +12,7 @@ import { Tile } from "./tile.entity";
 
 @Entity()
 export class Board {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   @Column()

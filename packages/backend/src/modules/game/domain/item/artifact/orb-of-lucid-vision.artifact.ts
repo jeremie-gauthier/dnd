@@ -1,10 +1,10 @@
 import { Board } from "../../board/board.entity";
 import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
-import { Artifact } from "./artifact.abstract";
+import { Artifact, ArtifactData } from "./artifact.abstract";
 
 export class OrbOfLucidVision extends Artifact {
-  constructor() {
-    super({ level: 0, name: "orb_of_lucid_vision_1", hasSavingThrow: false });
+  constructor(rawData: Omit<ArtifactData, "name" | "type">) {
+    super({ ...rawData, name: "orb_of_lucid_vision_1" });
   }
 
   public override use(_: {

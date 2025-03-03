@@ -15,7 +15,7 @@ export class WeaponAttack extends Attack<Weapon> {
   @OneToMany(
     () => WeaponAttackDiceThrow,
     (diceThrow) => diceThrow.cause,
-    { cascade: true },
+    { onDelete: "CASCADE" },
   )
   readonly diceThrows: Relation<WeaponAttackDiceThrow[]>;
 }

@@ -1,9 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Expose } from "class-transformer";
+import { Expose, Type } from "class-transformer";
 import {
   ItemType,
   ItemTypeType,
 } from "src/modules/game/infra/database/enums/item-type.enum";
+import { ItemPerkResponseDto } from "./item-perk.dto";
 
 export abstract class ItemResponseDto {
   @Expose()
@@ -18,4 +19,8 @@ export abstract class ItemResponseDto {
 
   @Expose()
   readonly imgUrl: string;
+
+  @Expose()
+  @Type(() => ItemPerkResponseDto)
+  readonly itemPerks: Array<ItemPerkResponseDto>;
 }

@@ -7,6 +7,7 @@ import { AttackError } from "../attack/attack.error";
 import { Board } from "../board/board.entity";
 import { Coord } from "../coord/coord.vo";
 import { Playable } from "../playable-entities/playable-entity/playable-entity.abstract";
+import { ItemPerk } from "./item-perk";
 import { Item } from "./item.abstract";
 import { ItemError } from "./item.error";
 
@@ -15,6 +16,7 @@ type Data = {
   readonly name: string;
   readonly level: number;
   readonly attacks: Array<Attack>;
+  readonly itemPerks: Array<ItemPerk>;
 };
 
 export abstract class AttackItem<

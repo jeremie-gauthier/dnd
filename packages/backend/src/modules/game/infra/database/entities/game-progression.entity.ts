@@ -4,7 +4,7 @@ import {
   JoinTable,
   ManyToMany,
   OneToMany,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   Relation,
   Unique,
 } from "typeorm";
@@ -14,7 +14,7 @@ import { Item } from "./item/item.entity";
 @Entity()
 @Unique(["userId", "campaignId"])
 export class GameProgression {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   @Column()

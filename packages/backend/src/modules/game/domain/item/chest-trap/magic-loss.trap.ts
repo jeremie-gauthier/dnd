@@ -1,10 +1,10 @@
 import { Game } from "../../game/game.aggregate";
 import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
-import { ChestTrap } from "./chest-trap.abstract";
+import { ChestTrap, ChestTrapData } from "./chest-trap.abstract";
 
 export class MagicLoss extends ChestTrap {
-  constructor() {
-    super({ level: 3, name: "magic_loss_1" });
+  constructor(rawData: Omit<ChestTrapData, "name" | "type">) {
+    super({ ...rawData, name: "magic_loss_1" });
   }
 
   public override use(_: {

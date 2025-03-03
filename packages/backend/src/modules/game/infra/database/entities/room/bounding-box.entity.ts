@@ -1,10 +1,16 @@
-import { Column, Entity, ManyToOne, PrimaryColumn, Relation } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Relation,
+} from "typeorm";
 import { Coord } from "../coord.entity";
 import { Room } from "./room.entity";
 
 @Entity()
 export class BoundingBox {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   @Column(() => Coord)

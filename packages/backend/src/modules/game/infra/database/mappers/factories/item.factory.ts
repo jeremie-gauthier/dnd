@@ -6,6 +6,7 @@ import { ItemType } from "src/modules/game/infra/database/enums/item-type.enum";
 import { ItemPersistence } from "../../interfaces/item-persistence.interface";
 import { ArtifactFactory } from "./artifact.factory";
 import { ChestTrapFactory } from "./chest-trap.factory";
+import { ItemPerkFactory } from "./item-perk.factory";
 import { PerkFactory } from "./perk.factory";
 import { PotionFactory } from "./potion.factory";
 import { SpellFactory } from "./spell.factory";
@@ -25,6 +26,9 @@ export class ItemFactory {
                 dices: attack.diceThrows.map(({ dice }) => new Dice(dice)),
                 perks: attack.perks.map((perk) => PerkFactory.create(perk)),
               }),
+          ),
+          itemPerks: data.itemPerks.map((itemPerkPersistence) =>
+            ItemPerkFactory.create(itemPerkPersistence),
           ),
         });
       case ItemType.SPELL:

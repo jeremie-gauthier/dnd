@@ -3,7 +3,7 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   Relation,
   RelationId,
   Unique,
@@ -18,7 +18,7 @@ import { Room } from "./room/room.entity";
 @Entity()
 @Unique(["coord.column", "coord.row", "board"])
 export class Tile {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   @Column(() => Coord)

@@ -5,19 +5,24 @@ import { InvisibleServant } from "src/modules/game/domain/item/spell/invisible-s
 import { Spell as SpellDomain } from "src/modules/game/domain/item/spell/spell.entity";
 import { UltimateRestoration } from "src/modules/game/domain/item/spell/ultimate-restoration.spell";
 import { Spell as SpellPersistence } from "src/modules/game/infra/database/entities/item/attack-item/spell/spell.entity";
+import { ItemPerkFactory } from "./item-perk.factory";
 import { PerkFactory } from "./perk.factory";
 
 export class SpellFactory {
   private constructor() {}
 
   public static create(data: SpellPersistence): SpellDomain {
+    const itemPerks = data.itemPerks.map((itemPerkPersistence) =>
+      ItemPerkFactory.create(itemPerkPersistence),
+    );
+
     switch (data.name) {
       case "energy_shield_1":
-        return new EnergyShield({ ...data, attacks: [] });
+        return new EnergyShield({ ...data, attacks: [], itemPerks });
       case "ultimate_restauration_1":
-        return new UltimateRestoration({ ...data, attacks: [] });
+        return new UltimateRestoration({ ...data, attacks: [], itemPerks });
       case "invisible_servant_1":
-        return new InvisibleServant({ ...data, attacks: [] });
+        return new InvisibleServant({ ...data, attacks: [], itemPerks });
       default:
         return new SpellDomain({
           ...data,
@@ -29,6 +34,7 @@ export class SpellFactory {
                 perks: attack.perks.map((perk) => PerkFactory.create(perk)),
               }),
           ),
+          itemPerks,
         });
     }
   }

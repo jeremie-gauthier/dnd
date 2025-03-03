@@ -1,6 +1,4 @@
 INSERT INTO
-  inventory ()
-INSERT INTO
   monster_template (
     race,
     archetype,

@@ -6,29 +6,37 @@ import { OrbOfLucidVision } from "../../domain/item/artifact/orb-of-lucid-vision
 import { RingOfShadows } from "../../domain/item/artifact/ring-of-shadows.artifact";
 import { SummonersHorn } from "../../domain/item/artifact/summoners-horn.artifact";
 import { YonddallaAmulet } from "../../domain/item/artifact/yonddalla-amulet.artifact";
+import { ItemPerk } from "../../domain/item/item-perk";
 import { ItemType } from "../../infra/database/enums/item-type.enum";
 
 export class ArtifactApplicationFactory {
   private constructor() {}
 
-  public static create(artifactName: string): ArtifactDomain {
-    switch (artifactName) {
+  public static create({
+    name,
+    ...rest
+  }: {
+    name: string;
+    level: number;
+    itemPerks: Array<ItemPerk>;
+  }): ArtifactDomain {
+    switch (name) {
       case "orb_of_lucid_vision_1":
-        return new OrbOfLucidVision();
+        return new OrbOfLucidVision(rest);
       case "boccobs_cloak_1":
-        return new BoccobsCloak();
+        return new BoccobsCloak(rest);
       case "yonddalla_amulet_1":
-        return new YonddallaAmulet();
+        return new YonddallaAmulet(rest);
       case "ring_of_shadows_1":
-        return new RingOfShadows();
+        return new RingOfShadows(rest);
       case "summoners_horn_1":
-        return new SummonersHorn();
+        return new SummonersHorn(rest);
       case "bark_skin_cloak_1":
-        return new BarkSkinCloak();
+        return new BarkSkinCloak(rest);
       case "olidammara_amulet_1":
-        return new OlidammaraAmulet();
+        return new OlidammaraAmulet(rest);
       default:
-        throw new Error(`No "${artifactName}" ${ItemType.ARTIFACT} item found`);
+        throw new Error(`No "${name}" ${ItemType.ARTIFACT} item found`);
     }
   }
 }

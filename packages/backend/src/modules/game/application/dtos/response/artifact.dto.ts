@@ -7,7 +7,4 @@ export class ArtifactResponseDto extends ItemResponseDto {
   @Expose()
   @ApiProperty({ enum: [ItemType.ARTIFACT], enumName: "ItemType_Artifact" })
   override readonly type = ItemType.ARTIFACT;
-
-  @Expose()
-  readonly hasSavingThrow: boolean;
 }

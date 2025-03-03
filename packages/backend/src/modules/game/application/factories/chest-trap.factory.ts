@@ -6,31 +6,37 @@ import { DazzlingLight } from "../../domain/item/chest-trap/dazzling-light.trap"
 import { MagicLoss } from "../../domain/item/chest-trap/magic-loss.trap";
 import { SmotheringMist } from "../../domain/item/chest-trap/smothering-mist.trap";
 import { VoicesOfTheDamned } from "../../domain/item/chest-trap/voices-of-the-damned.trap";
+import { ItemPerk } from "../../domain/item/item-perk";
 import { ItemType } from "../../infra/database/enums/item-type.enum";
 
 export class ChestTrapApplicationFactory {
   private constructor() {}
 
-  public static create(chestTrapName: string): ChestTrapDomain {
-    switch (chestTrapName) {
+  public static create({
+    name,
+    ...rest
+  }: {
+    name: string;
+    level: number;
+    itemPerks: Array<ItemPerk>;
+  }): ChestTrapDomain {
+    switch (name) {
       case "blanket_of_flames_1":
-        return new BlanketOfFlames();
+        return new BlanketOfFlames(rest);
       case "magic_loss_1":
-        return new MagicLoss();
+        return new MagicLoss(rest);
       case "brutal_betrayal_1":
-        return new BrutalBetrayal();
+        return new BrutalBetrayal(rest);
       case "smothering_mist_1":
-        return new SmotheringMist();
+        return new SmotheringMist(rest);
       case "dazzling_light_1":
-        return new DazzlingLight();
+        return new DazzlingLight(rest);
       case "voices_of_the_damned_1":
-        return new VoicesOfTheDamned();
+        return new VoicesOfTheDamned(rest);
       case "call_from_the_grave_1":
-        return new CallFromTheGrave();
+        return new CallFromTheGrave(rest);
       default:
-        throw new Error(
-          `No "${chestTrapName}" ${ItemType.CHESTTRAP} item found`,
-        );
+        throw new Error(`No "${name}" ${ItemType.CHESTTRAP} item found`);
     }
   }
 }

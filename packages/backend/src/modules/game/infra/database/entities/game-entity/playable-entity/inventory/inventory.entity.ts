@@ -1,10 +1,16 @@
-import { Column, Entity, OneToMany, PrimaryColumn, Relation } from "typeorm";
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Relation,
+} from "typeorm";
 import { InventoryItem } from "./inventory-item.entity";
 import { StorageCapacity } from "./storage-capacity.entity";
 
 @Entity()
 export class Inventory {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   @OneToMany(

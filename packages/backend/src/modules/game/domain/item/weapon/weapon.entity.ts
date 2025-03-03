@@ -5,6 +5,7 @@ import { Attack } from "../../attack/attack.entity";
 import { Board } from "../../board/board.entity";
 import { Playable } from "../../playable-entities/playable-entity/playable-entity.abstract";
 import { AttackItem } from "../attack-item.abstract";
+import { ItemPerk } from "../item-perk";
 import { WeaponError } from "./weapon.error";
 
 type Data = {
@@ -12,6 +13,7 @@ type Data = {
   readonly name: string;
   readonly level: number;
   readonly attacks: Array<Attack>;
+  readonly itemPerks: Array<ItemPerk>;
 };
 
 export class Weapon extends AttackItem<Data> {
@@ -90,6 +92,7 @@ export class Weapon extends AttackItem<Data> {
       name: this._data.name,
       level: this._data.level,
       attacks: this._data.attacks.map((attack) => attack.toPlain()),
+      itemPerks: this._data.itemPerks.map((itemPerk) => itemPerk.toPlain()),
     };
   }
 }

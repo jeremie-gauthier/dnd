@@ -1,3 +1,4 @@
+import { ItemPerk } from "../../domain/item/item-perk";
 import { ImperiousHandPotion } from "../../domain/item/potion/imperious-hand-potion.potion";
 import { InitiativePotion } from "../../domain/item/potion/initiative-potion.potion";
 import { KordsBlessingPotion } from "../../domain/item/potion/kords-blessing-potion.potion";
@@ -14,30 +15,37 @@ import { ItemType } from "../../infra/database/enums/item-type.enum";
 export class PotionApplicationFactory {
   private constructor() {}
 
-  public static create(potionName: string): PotionDomain {
-    switch (potionName) {
+  public static create({
+    name,
+    ...rest
+  }: {
+    name: string;
+    level: number;
+    itemPerks: Array<ItemPerk>;
+  }): PotionDomain {
+    switch (name) {
       case "potion_of_weakness_1":
-        return new PotionOfWeakness();
+        return new PotionOfWeakness(rest);
       case "smoke_shadow_potion_1":
-        return new SmokeShadowPotion();
+        return new SmokeShadowPotion(rest);
       case "kords_blessing_potion_1":
-        return new KordsBlessingPotion();
+        return new KordsBlessingPotion(rest);
       case "imperious_hand_potion_1":
-        return new ImperiousHandPotion();
+        return new ImperiousHandPotion(rest);
       case "potion_of_laughter_1":
-        return new PotionOfLaughter();
+        return new PotionOfLaughter(rest);
       case "olidammara_wisdom_potion_1":
-        return new OlidammaraWisdomPotion();
+        return new OlidammaraWisdomPotion(rest);
       case "partial_restoration_potion_1":
-        return new PartialRestorationPotion();
+        return new PartialRestorationPotion(rest);
       case "initiative_potion_1":
-        return new InitiativePotion();
+        return new InitiativePotion(rest);
       case "ultimate_restoration_potion_1":
-        return new UltimateRestorationPotion();
+        return new UltimateRestorationPotion(rest);
       case "light_healing_potion_1":
-        return new LightHealingPotion();
+        return new LightHealingPotion(rest);
       default:
-        throw new Error(`No "${potionName}" ${ItemType.POTION} item found`);
+        throw new Error(`No "${name}" ${ItemType.POTION} item found`);
     }
   }
 }

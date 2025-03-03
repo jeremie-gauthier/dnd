@@ -1,4 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryColumn, Relation } from "typeorm";
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Relation,
+} from "typeorm";
 import { LobbyStatusType, LobbyStatusValues } from "../enums/lobby.enum";
 import { Config } from "./config.entity";
 import { Host } from "./host.entity";
@@ -7,7 +13,7 @@ import { Player } from "./player.entity";
 
 @Entity()
 export class Lobby {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   @Column(() => Host)

@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryColumn, Relation } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Relation,
+} from "typeorm";
 import {
   ConditionNameType,
   ConditionNameValues,
@@ -7,7 +13,7 @@ import { PlayableEntity } from "./game-entity/playable-entity/playable-entity.en
 
 @Entity()
 export class PlayableEntityCondition {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   @Column({ type: "enum", enum: ConditionNameValues, update: false })

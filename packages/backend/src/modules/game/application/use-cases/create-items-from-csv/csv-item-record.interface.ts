@@ -4,8 +4,10 @@ export interface CsvItemRecord {
   item_id: string;
   item_name_translation: string;
   item_level: 0 | 1 | 2 | 3;
-  item_type: "potion" | "artifact" | "spell" | "trap" | "weapon";
+  item_type: "Potion" | "Artifact" | "Spell" | "ChestTrap" | "Weapon";
   range: "" | AttackRangeType;
+  item_perk: string;
+  item_perk_dices: string;
   regular_attack_dices: string;
   regular_attack_perks: string;
   super_attack_dices: string;

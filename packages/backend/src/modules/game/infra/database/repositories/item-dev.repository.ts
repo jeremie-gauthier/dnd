@@ -25,6 +25,17 @@ export class ItemDevPostgresRepository implements ItemDevRepository {
         isLootableInChest: record.is_lootable_in_chest === 1,
       }),
     );
+
+    // ? saving items alone before their relations (workaround for a TypeORM insertion issue)
+    await this.itemRepository.save(
+      itemsPersistence.map((itemPersistence) => ({
+        ...itemPersistence,
+        attacks: [],
+        itemPerks: [],
+        manaCosts: [],
+      })),
+    );
+
     await this.itemRepository.save(itemsPersistence);
   }
 }

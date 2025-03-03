@@ -1,4 +1,4 @@
-import { Column, OneToOne, PrimaryColumn, Relation } from "typeorm";
+import { Column, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
 import {
   PlayableEntityRaceType,
   PlayableEntityRaceValues,
@@ -11,7 +11,7 @@ import { Characteristic } from "../characteristic.entity";
 import { Inventory } from "../inventory/inventory.entity";
 
 export abstract class PlayableEntityTemplate {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   @Column({ type: "enum", enum: PlayableEntityRaceValues, update: false })

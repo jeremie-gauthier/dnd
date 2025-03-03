@@ -1,10 +1,16 @@
-import { Column, Entity, ManyToOne, PrimaryColumn, Relation } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Relation,
+} from "typeorm";
 import { Game } from "../game.entity";
 import { GameEvent } from "./game-event.entity";
 
 @Entity()
 export class CurrentGameEvent {
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   @ManyToOne(() => Game, { nullable: false })

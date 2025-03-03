@@ -3,12 +3,12 @@ import { Game } from "../../game/game.aggregate";
 import { Hero } from "../../playable-entities/playable-entity/heroes/hero.abstract";
 import { randomIndex } from "../../services/random/random-index";
 import { shuffleArray } from "../../services/random/shuffle-array";
-import { Potion } from "./potion.abstract";
+import { Potion, PotionData } from "./potion.abstract";
 import { PotionError } from "./potion.error";
 
 export class ImperiousHandPotion extends Potion {
-  constructor() {
-    super({ level: 1, name: "imperious_hand_potion_1" });
+  constructor(rawData: Omit<PotionData, "name" | "type">) {
+    super({ ...rawData, name: "imperious_hand_potion_1" });
   }
 
   public override use({
