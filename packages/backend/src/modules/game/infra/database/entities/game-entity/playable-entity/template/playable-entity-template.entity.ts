@@ -1,4 +1,10 @@
-import { Column, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
+import {
+  Column,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  Relation,
+} from "typeorm";
 import {
   PlayableEntityRaceType,
   PlayableEntityRaceValues,
@@ -23,6 +29,7 @@ export abstract class PlayableEntityTemplate {
   @Column(() => Characteristic)
   readonly characteristic: Characteristic;
 
-  @OneToOne(() => Inventory, { cascade: true })
+  @OneToOne(() => Inventory, { cascade: true, nullable: false })
+  @JoinColumn()
   readonly inventory: Relation<Inventory>;
 }

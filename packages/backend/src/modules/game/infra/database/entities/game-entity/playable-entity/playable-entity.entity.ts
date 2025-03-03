@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -80,7 +81,8 @@ export class PlayableEntity {
   @Column(() => Characteristic)
   characteristic: Characteristic;
 
-  @OneToOne(() => Inventory, { cascade: true })
+  @OneToOne(() => Inventory, { nullable: false, cascade: true })
+  @JoinColumn()
   inventory: Relation<Inventory>;
 
   @OneToMany(
