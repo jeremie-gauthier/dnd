@@ -9,8 +9,8 @@ import { TileEntity } from "../tile-entity.abstract";
 type Data = {
   readonly type: "NON_INTERACTIVE_ENTITY";
   readonly kind: NonInteractiveEntityKindType;
-  readonly isBlocking: boolean;
-  readonly isVisible: boolean;
+  readonly isBlocking: true;
+  readonly isVisible: true;
 };
 
 export class TileNonInteractiveEntity extends TileEntity<Data> {
@@ -24,11 +24,11 @@ export class TileNonInteractiveEntity extends TileEntity<Data> {
       NonInteractiveEntityKind.TREE,
       NonInteractiveEntityKind.WALL,
     ]),
-    isBlocking: z.boolean(),
-    isVisible: z.boolean(),
+    isBlocking: z.literal(true).optional().default(true),
+    isVisible: z.literal(true).optional().default(true),
   });
 
-  constructor(rawData: Omit<Data, "type">) {
+  constructor(rawData: Omit<Data, "type" | "isBlocking" | "isVisible">) {
     const data = TileNonInteractiveEntity.schema.parse(rawData);
     super(data);
   }

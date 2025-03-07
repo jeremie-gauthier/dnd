@@ -40,6 +40,7 @@ export class Tile extends Entity<Data> {
 
   public override toPlain() {
     return {
+      id: this.id,
       coord: this._data.coord.toPlain(),
       entities: this._data.entities.map((gameEntity) => gameEntity.toPlain()),
       isStartingTile: this._data.isStartingTile,

@@ -10,9 +10,11 @@ type Data = {
 
 export class DefeatAllMonsters extends WinCondition<Data> {
   private static readonly schema = z.object({
-    name: z.literal("defeat_all_monsters").default("defeat_all_monsters"),
+    name: z
+      .literal("defeat_all_monsters")
+      .optional()
+      .default("defeat_all_monsters"),
     nbMonstersRemaining: z.number().min(0),
-    isAccomplished: z.boolean().default(false),
   });
 
   constructor(rawData: Omit<Data, "name">) {

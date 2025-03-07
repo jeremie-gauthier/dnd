@@ -18,8 +18,12 @@ export class Rooms extends Entity<Data> {
     super(data);
   }
 
+  public getRoom({ coord }: { coord: Coord }) {
+    return this._data.values.find((room) => room.contains({ coord }));
+  }
+
   public getRoomOrThrow({ coord }: { coord: Coord }) {
-    const room = this._data.values.find((room) => room.contains({ coord }));
+    const room = this.getRoom({ coord });
     if (!room) {
       throw new RoomError({
         name: "ROOM_NOT_FOUND",

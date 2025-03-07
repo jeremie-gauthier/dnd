@@ -1,4 +1,4 @@
-import { Entity, PlainData } from "src/modules/shared/domain/entity";
+import { Entity } from "src/modules/shared/domain/entity";
 import { Coord } from "../coord/coord.vo";
 import { GameEvent } from "./game-event/game-event.abstract";
 import { DoorOpeningEvent } from "./game-event/on-door-opening/door-opening-event.abstract";
@@ -15,7 +15,7 @@ export class GameEvents extends Entity<Data> {
     );
   }
 
-  public override toPlain(): PlainData<Data> {
+  public override toPlain() {
     return {
       values: this._data.values.map((gameEvent) => gameEvent.toPlain()),
     };

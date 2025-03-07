@@ -4,7 +4,6 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   Relation,
-  TableInheritance,
 } from "typeorm";
 import {
   GameEventActionType,
@@ -18,7 +17,6 @@ import { GameTemplate } from "../game-template.entity";
 import { Game } from "../game.entity";
 
 @Entity()
-@TableInheritance({ column: "name" })
 export class GameEvent {
   @PrimaryGeneratedColumn("uuid")
   readonly id: string;
@@ -34,5 +32,30 @@ export class GameEvent {
     (game) => game.events,
     { onDelete: "CASCADE" },
   )
-  readonly game: Relation<GameTemplate>;
+  readonly gameTemplate: Relation<GameTemplate>;
+
+  @Column({ type: "json", update: false })
+  readonly data: Record<string, unknown>;
 }
+
+// ChildEntity(GameEventName.ON_DOOR_OPENING)
+// export class OnDoorOpening extends GameEvent {
+//   readonly name = GameEventName.ON_DOOR_OPENING;
+
+//   @Column({ default: GameEventAction.SPAWN_MONSTERS, update: false })
+//   readonly action = GameEventAction.SPAWN_MONSTERS;
+
+//   @Column(() => Coord)
+//   readonly doorCoord: Coord;
+
+//   @ManyToMany(() => MonsterTemplate)
+//   @JoinTable()
+//   readonly monsters: Relation<MonsterTemplate[]>;
+
+//   @OneToOne(() => Room)
+//   @JoinColumn()
+//   readonly startingRoom: Relation<Room>;
+
+//   @RelationId((onDoorOpening: OnDoorOpening) => onDoorOpening.startingRoom)
+//   readonly roomId: Relation<Room["id"]>;
+// }

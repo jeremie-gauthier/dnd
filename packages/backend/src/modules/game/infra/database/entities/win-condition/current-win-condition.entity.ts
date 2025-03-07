@@ -9,23 +9,23 @@ import {
   WinConditionNameType,
   WinConditionNameValues,
 } from "../../enums/win-condition-name.enum";
-import { GameTemplate } from "../game-template.entity";
+import { Game } from "../game.entity";
 
 @Entity()
-export class WinCondition {
+export class CurrentWinCondition {
   @PrimaryGeneratedColumn("uuid")
   readonly id: string;
 
   @ManyToOne(
-    () => GameTemplate,
-    (gameTemplate) => gameTemplate.winConditions,
+    () => Game,
+    (game) => game.winConditions,
     { onDelete: "CASCADE" },
   )
-  readonly gameTemplate: Relation<GameTemplate>;
+  readonly game: Relation<Game>;
 
   @Column({ type: "enum", enum: WinConditionNameValues, update: false })
   readonly name: WinConditionNameType;
 
-  @Column({ type: "json", update: false })
+  @Column({ type: "json" })
   readonly data: Record<string, unknown>;
 }

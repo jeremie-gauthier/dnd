@@ -3,11 +3,13 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { DICE_REPOSITORY } from "../../application/repositories/dice-repository.interface";
 import { GAME_PROGRESSION_REPOSITORY } from "../../application/repositories/game-progression-repository.interface";
 import { GAME_REPOSITORY } from "../../application/repositories/game-repository.interface";
+import { GAME_TEMPLATE_DEV_REPOSITORY } from "../../application/repositories/game-template-dev-repository.interface";
 import { GAME_TEMPLATE_REPOSITORY } from "../../application/repositories/game-template-repository.interface";
 import { HERO_REPOSITORY } from "../../application/repositories/hero-repository.interface";
 import { ITEM_DEV_REPOSITORY } from "../../application/repositories/item-dev-repository.interface";
 import { ITEM_REPOSITORY } from "../../application/repositories/item-repository.interface";
 import { ITEM_UI_REPOSITORY } from "../../application/repositories/item-ui-repository.interface";
+import { Board } from "./entities/board.entity";
 import { HeroEntity } from "./entities/game-entity/playable-entity/hero.entity";
 import { PlayableEntity } from "./entities/game-entity/playable-entity/playable-entity.entity";
 import { HeroTemplateUI } from "./entities/game-entity/playable-entity/template/hero-template-ui.entity";
@@ -34,6 +36,7 @@ import { ItemDevMapper } from "./mappers/item-dev.mapper";
 import { ItemMapper } from "./mappers/item.mapper";
 import { DicePostgresRepository } from "./repositories/dice.repository";
 import { GameProgressionPostgresRepository } from "./repositories/game-progression.repository";
+import { GameTemplateDevPostgresRepository } from "./repositories/game-template-dev.repository";
 import { GameTemplatePostgresRepository } from "./repositories/game-template.repository";
 import { GamePostgresRepository } from "./repositories/game.repository";
 import { HeroUIPostgresRepository } from "./repositories/hero-ui.repository";
@@ -62,6 +65,7 @@ import { ItemPostgresRepository } from "./repositories/item.repository";
       Room,
       PlayableEntity,
       MonsterKilled,
+      Board,
     ]),
   ],
   providers: [
@@ -103,6 +107,10 @@ import { ItemPostgresRepository } from "./repositories/item.repository";
       provide: GAME_TEMPLATE_REPOSITORY,
       useClass: GameTemplatePostgresRepository,
     },
+    {
+      provide: GAME_TEMPLATE_DEV_REPOSITORY,
+      useClass: GameTemplateDevPostgresRepository,
+    },
     BoardMapper,
     HeroMapper,
   ],
@@ -139,6 +147,10 @@ import { ItemPostgresRepository } from "./repositories/item.repository";
     {
       provide: GAME_TEMPLATE_REPOSITORY,
       useClass: GameTemplatePostgresRepository,
+    },
+    {
+      provide: GAME_TEMPLATE_DEV_REPOSITORY,
+      useClass: GameTemplateDevPostgresRepository,
     },
     BoardMapper,
     HeroMapper,

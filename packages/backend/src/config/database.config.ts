@@ -26,7 +26,6 @@ import { MonsterTemplateUI } from "../modules/game/infra/database/entities/game-
 import { MonsterTemplate } from "../modules/game/infra/database/entities/game-entity/playable-entity/template/monster-template.entity";
 import { CurrentGameEvent } from "../modules/game/infra/database/entities/game-event/current-game-event.entity";
 import { GameEvent } from "../modules/game/infra/database/entities/game-event/game-event.entity";
-import { OnDoorOpening } from "../modules/game/infra/database/entities/game-event/on-door-opening.entity";
 import { GameMaster } from "../modules/game/infra/database/entities/game-master.entity";
 import { GameProgression } from "../modules/game/infra/database/entities/game-progression.entity";
 import { GameTemplate } from "../modules/game/infra/database/entities/game-template.entity";
@@ -53,7 +52,7 @@ import { PlayableEntityCondition } from "../modules/game/infra/database/entities
 import { BoundingBox } from "../modules/game/infra/database/entities/room/bounding-box.entity";
 import { Room } from "../modules/game/infra/database/entities/room/room.entity";
 import { Tile } from "../modules/game/infra/database/entities/tile.entity";
-import { DefeatAllMonsters } from "../modules/game/infra/database/entities/win-condition/defeat-all-monster.entity";
+import { CurrentWinCondition } from "../modules/game/infra/database/entities/win-condition/current-win-condition.entity";
 import { WinCondition } from "../modules/game/infra/database/entities/win-condition/win-condition.entity";
 import { Config } from "../modules/lobby/infra/database/entities/config.entity";
 import { Host as LobbyHost } from "../modules/lobby/infra/database/entities/host.entity";
@@ -94,7 +93,6 @@ export class DatabaseConfiguration implements TypeOrmOptionsFactory {
         // game
         GameEvent,
         CurrentGameEvent,
-        OnDoorOpening,
         GameHost,
         Dice,
         SpellAttack,
@@ -133,7 +131,7 @@ export class DatabaseConfiguration implements TypeOrmOptionsFactory {
         TrapEntity,
         NonInteractiveEntity,
         WinCondition,
-        DefeatAllMonsters,
+        CurrentWinCondition,
         ActionHistory,
         Board,
         GameProgression,

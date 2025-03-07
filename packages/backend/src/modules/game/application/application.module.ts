@@ -4,6 +4,7 @@ import { GameListeners } from "./game.listeners";
 import { DomainEventMapperService } from "./services/domain-event-mapper.service";
 import { DomainEventsDispatcherService } from "./services/domain-events-dispatcher.service";
 import { GameStateService } from "./services/game-state.service";
+import { CreateGameTemplateFromJsonUseCase } from "./use-cases/create-game-template-from-json/create-game-template-from-json.uc";
 import { CreateItemsFromCsvUseCase } from "./use-cases/create-items-from-csv/create-items-from-csv.uc";
 import { DeleteGameUseCase } from "./use-cases/delete-game/delete-game.uc";
 import { GameInitializationUseCase } from "./use-cases/game-initialization/game-initialization.uc";
@@ -40,6 +41,7 @@ import { PlayableEntitySwapItemsUseCase } from "./use-cases/playable-entity-swap
     DomainEventMapperService,
     DomainEventsDispatcherService,
     GetHeroDetailsUseCase,
+    CreateGameTemplateFromJsonUseCase,
   ],
   exports: [
     GameListeners,
@@ -57,6 +59,7 @@ import { PlayableEntitySwapItemsUseCase } from "./use-cases/playable-entity-swap
     CreateItemsFromCsvUseCase,
     PlayableEntityDrinkPotionUseCase,
     GetHeroDetailsUseCase,
+    CreateGameTemplateFromJsonUseCase,
   ],
 })
 export class ApplicationModule {}

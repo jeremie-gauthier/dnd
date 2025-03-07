@@ -21,14 +21,14 @@ export class GameTemplate {
 
   @OneToMany(
     () => GameEvent,
-    (gameEvent) => gameEvent.game,
+    (gameEvent) => gameEvent.gameTemplate,
     { cascade: true },
   )
   readonly events: Relation<GameEvent[]>;
 
   @OneToMany(
     () => WinCondition,
-    (winCondition) => winCondition.game,
+    (winCondition) => winCondition.gameTemplate,
     { cascade: true },
   )
   readonly winConditions: Relation<WinCondition[]>;

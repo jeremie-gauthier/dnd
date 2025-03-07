@@ -5,15 +5,16 @@ import { OnDoorOpeningSpawnMonsters } from "./spawn-monsters.entity";
 type Data = {
   readonly name: "on_door_opening";
   readonly action: "spawn_monsters";
-  readonly doorCoord: Coord;
-  [key: string]: any;
+  readonly data: {
+    readonly doorCoord: Coord;
+  };
 };
 
 export abstract class DoorOpeningEvent<
   ChildData extends Data = Data,
 > extends GameEvent<ChildData> {
   public get doorCoord() {
-    return this._data.doorCoord;
+    return this._data.data.doorCoord;
   }
 
   public isSpawnMonsterAction(): this is OnDoorOpeningSpawnMonsters {

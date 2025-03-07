@@ -5,7 +5,7 @@ import { Game as GameDomain } from "src/modules/game/domain/game/game.aggregate"
 import { Repository, TypeORMError } from "typeorm";
 import { PlayableEntity as PlayableEntityPersistence } from "../entities/game-entity/playable-entity/playable-entity.entity";
 import { Game as GamePersistence } from "../entities/game.entity";
-import { MonsterKilled } from "../entities/monster-killed.entity";
+import { MonsterKilled as MonsterKilledPersistence } from "../entities/monster-killed.entity";
 import { Room as RoomPersistence } from "../entities/room/room.entity";
 import { PlayableEntityPersistence as IPlayableEntityPersistence } from "../interfaces/playable-entity-persistence.interface";
 import { GameMapper } from "../mappers/game.mapper";
@@ -19,8 +19,8 @@ export class GamePostgresRepository implements GameRepository {
     private readonly roomRepository: Repository<RoomPersistence>,
     @InjectRepository(PlayableEntityPersistence)
     private readonly playableEntityRepository: Repository<PlayableEntityPersistence>,
-    @InjectRepository(MonsterKilled)
-    private readonly monsterKilledRepository: Repository<MonsterKilled>,
+    @InjectRepository(MonsterKilledPersistence)
+    private readonly monsterKilledRepository: Repository<MonsterKilledPersistence>,
     private readonly mapper: GameMapper,
   ) {}
 

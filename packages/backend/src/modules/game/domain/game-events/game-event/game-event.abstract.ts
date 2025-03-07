@@ -3,8 +3,8 @@ import { DoorOpeningEvent } from "./on-door-opening/door-opening-event.abstract"
 
 type Data = {
   readonly name: "on_door_opening";
-  readonly action: string;
-  [key: string]: any;
+  readonly action: "spawn_monsters";
+  readonly data: Record<string, unknown>;
 };
 
 export abstract class GameEvent<

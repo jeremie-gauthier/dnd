@@ -24,13 +24,4 @@ export class NonInteractiveEntity {
 
   @Column({ type: "enum", enum: NonInteractiveEntityKindValues, update: false })
   readonly kind: NonInteractiveEntityKindType;
-
-  @Column()
-  isVisible: true;
-
-  @Column()
-  isBlocking: true;
-
-  @Column()
-  canInteract: false;
 }

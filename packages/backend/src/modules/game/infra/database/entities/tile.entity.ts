@@ -54,9 +54,9 @@ export class Tile {
   @ManyToOne(
     () => Room,
     (room) => room.tiles,
-    { nullable: false },
+    { nullable: true },
   )
-  readonly room: Relation<Room>;
+  readonly room: Relation<Room> | null;
 
   @RelationId((tile: Tile) => tile.room)
   readonly roomId: Relation<Room["id"]>;

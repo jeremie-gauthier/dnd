@@ -11,7 +11,7 @@ type Data = {
 
 export class Room extends Entity<Data> {
   private static readonly schema = z.object({
-    id: z.string(),
+    id: z.string().uuid(),
     hasBeenVisited: z.boolean(),
     boundingBoxes: z.array(z.instanceof(BoundingBox)).min(1),
   });

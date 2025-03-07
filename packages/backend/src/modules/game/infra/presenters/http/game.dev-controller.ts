@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   NotFoundException,
   Post,
@@ -9,6 +10,8 @@ import { ConfigService } from "@nestjs/config";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiExcludeController } from "@nestjs/swagger";
 import { Express } from "express";
+import { GameTemplateJson } from "src/modules/game/application/use-cases/create-game-template-from-json/create-game-template-from-json.interface";
+import { CreateGameTemplateFromJsonUseCase } from "src/modules/game/application/use-cases/create-game-template-from-json/create-game-template-from-json.uc";
 import { CreateItemsFromCsvUseCase } from "src/modules/game/application/use-cases/create-items-from-csv/create-items-from-csv.uc";
 
 @Controller("game/dev")
@@ -17,6 +20,7 @@ export class GameDevController {
   constructor(
     private readonly configService: ConfigService,
     private readonly createItemsFromCsvUseCase: CreateItemsFromCsvUseCase,
+    private readonly createGameTemplateFromJsonUseCase: CreateGameTemplateFromJsonUseCase,
   ) {}
 
   @Post("create-items")
@@ -30,5 +34,17 @@ export class GameDevController {
     }
 
     await this.createItemsFromCsvUseCase.execute({ file });
+  }
+
+  @Post("create-game-template")
+  public async createGameTemplate(
+    @Body() gameTemplate: GameTemplateJson,
+  ): Promise<void> {
+    const env = this.configService.get("NODE_ENV");
+    if (env !== "development") {
+      throw new NotFoundException("Cannot POST /game/dev/create-game-template");
+    }
+
+    await this.createGameTemplateFromJsonUseCase.execute({ gameTemplate });
   }
 }

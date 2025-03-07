@@ -15,7 +15,7 @@ import { CurrentGameEvent } from "./game-event/current-game-event.entity";
 import { GameMaster } from "./game-master.entity";
 import { Host } from "./host.entity";
 import { Item } from "./item/item.entity";
-import { WinCondition } from "./win-condition/win-condition.entity";
+import { CurrentWinCondition } from "./win-condition/current-win-condition.entity";
 
 @Entity()
 export class Game {
@@ -43,11 +43,11 @@ export class Game {
   readonly events: Relation<CurrentGameEvent[]>;
 
   @OneToMany(
-    () => WinCondition,
-    (winCondition) => winCondition.game,
+    () => CurrentWinCondition,
+    (currentWinCondition) => currentWinCondition.game,
     { cascade: true },
   )
-  readonly winConditions: Relation<WinCondition[]>;
+  readonly winConditions: Relation<CurrentWinCondition[]>;
 
   @Column({ update: false })
   readonly maxLevelLoot: number;

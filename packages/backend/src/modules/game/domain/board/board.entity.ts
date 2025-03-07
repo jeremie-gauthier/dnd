@@ -44,6 +44,7 @@ export class Board extends Entity<Data> {
 
   public override toPlain() {
     return {
+      id: this.id,
       width: this._data.width,
       height: this._data.height,
       tiles: this._data.tiles.map((tile) => tile.toPlain()),
