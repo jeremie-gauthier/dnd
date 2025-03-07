@@ -129,11 +129,11 @@ INSERT INTO
     race,
     class,
     LEVEL,
-    characteristic_base_action_points,
-    characteristic_base_movement_points,
-    characteristic_base_armor_class,
-    characteristic_base_mana_points,
-    characteristic_base_health_points,
+    characteristic_action_points,
+    characteristic_movement_points,
+    characteristic_armor_class,
+    characteristic_mana_points,
+    characteristic_health_points,
     inventory_id
   )
 VALUES
@@ -311,17 +311,14 @@ INSERT INTO
 VALUES
   (
     '66c94aa7-751d-476c-9f59-31e7493076ba',
-    'Regdar',
     'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/heroes/Regdar.webp'
   ),
   (
     '32534f81-cca0-4ce3-b818-4d9d54e95472',
-    'Regdar',
     'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/heroes/Regdar.webp'
   ),
   (
     '9ffedab2-faa8-465a-a2c1-65d62f0c2a9b',
-    'Regdar',
     'https://jergauth-dnd-assets.s3.eu-west-3.amazonaws.com/heroes/Regdar.webp'
   ),
   (

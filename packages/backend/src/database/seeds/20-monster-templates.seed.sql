@@ -38,14 +38,13 @@ VALUES
 
 INSERT INTO
   monster_template (
-    id,
     race,
     archetype,
-    characteristic_base_action_points,
-    characteristic_base_movement_points,
-    characteristic_base_armor_class,
-    characteristic_base_mana_points,
-    characteristic_base_health_points,
+    characteristic_action_points,
+    characteristic_movement_points,
+    characteristic_armor_class,
+    characteristic_mana_points,
+    characteristic_health_points,
     inventory_id
   )
 VALUES
