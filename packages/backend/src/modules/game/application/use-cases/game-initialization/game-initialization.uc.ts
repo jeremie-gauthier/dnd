@@ -82,10 +82,10 @@ export class GameInitializationUseCase implements UseCase {
       playableEntityId,
       startingTile,
     ] of playableEntitiesWithStartingPosition) {
-      game.movePlayableEntity({
-        playableEntityId,
-        destinationCoord: startingTile.coord,
-      });
+      // game.movePlayableEntity({
+      //   playableEntityId,
+      //   destinationCoord: startingTile.coord,
+      // });
     }
 
     // 4. Roll initiatives

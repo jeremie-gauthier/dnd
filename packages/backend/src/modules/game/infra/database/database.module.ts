@@ -9,6 +9,7 @@ import { HERO_REPOSITORY } from "../../application/repositories/hero-repository.
 import { ITEM_DEV_REPOSITORY } from "../../application/repositories/item-dev-repository.interface";
 import { ITEM_REPOSITORY } from "../../application/repositories/item-repository.interface";
 import { ITEM_UI_REPOSITORY } from "../../application/repositories/item-ui-repository.interface";
+import { MOVE_MANAGER_REPOSITORY } from "../../application/repositories/move-manager-repository.interface";
 import { Board } from "./entities/board.entity";
 import { HeroEntity } from "./entities/game-entity/playable-entity/hero.entity";
 import { PlayableEntity } from "./entities/game-entity/playable-entity/playable-entity.entity";
@@ -34,6 +35,7 @@ import { HeroTemplateMapper } from "./mappers/hero-template.mapper";
 import { HeroMapper } from "./mappers/hero.mapper";
 import { ItemDevMapper } from "./mappers/item-dev.mapper";
 import { ItemMapper } from "./mappers/item.mapper";
+import { MoveAggregateMapper } from "./mappers/move-aggregate.mapper";
 import { DicePostgresRepository } from "./repositories/dice.repository";
 import { GameProgressionPostgresRepository } from "./repositories/game-progression.repository";
 import { GameTemplateDevPostgresRepository } from "./repositories/game-template-dev.repository";
@@ -44,6 +46,7 @@ import { HeroPostgresRepository } from "./repositories/hero.repository";
 import { ItemDevPostgresRepository } from "./repositories/item-dev.repository";
 import { ItemUIPostgresRepository } from "./repositories/item-ui.repository";
 import { ItemPostgresRepository } from "./repositories/item.repository";
+import { MoveManagerPostgresRepository } from "./repositories/move-manager.repository";
 
 @Module({
   imports: [
@@ -111,6 +114,11 @@ import { ItemPostgresRepository } from "./repositories/item.repository";
       provide: GAME_TEMPLATE_DEV_REPOSITORY,
       useClass: GameTemplateDevPostgresRepository,
     },
+    {
+      provide: MOVE_MANAGER_REPOSITORY,
+      useClass: MoveManagerPostgresRepository,
+    },
+    MoveAggregateMapper,
     BoardMapper,
     HeroMapper,
   ],
@@ -152,8 +160,10 @@ import { ItemPostgresRepository } from "./repositories/item.repository";
       provide: GAME_TEMPLATE_DEV_REPOSITORY,
       useClass: GameTemplateDevPostgresRepository,
     },
-    BoardMapper,
-    HeroMapper,
+    {
+      provide: MOVE_MANAGER_REPOSITORY,
+      useClass: MoveManagerPostgresRepository,
+    },
   ],
 })
 export class DatabaseModule {}

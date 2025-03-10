@@ -9,7 +9,6 @@ import { ChestTrapTriggeredDomainEvent } from "../domain-events/dtos/chest-trap-
 import { MonsterSpawnedDomainEvent } from "../domain-events/dtos/monster-spawned.dto";
 import { PlayableEntityAttackedDomainEvent } from "../domain-events/dtos/playable-entity-attacked.dto";
 import { PlayableEntityDrankPotionDomainEvent } from "../domain-events/dtos/playable-entity-drank-potion.dto";
-import { PlayableEntityMovedDomainEvent } from "../domain-events/dtos/playable-entity-moved.dto";
 import { PlayableEntityOpenedChestDomainEvent } from "../domain-events/dtos/playable-entity-opened-chest.dto";
 import { GameEvents } from "../game-events/game-events.aggregate";
 import { GameMaster } from "../game-master/game-master.entity";
@@ -119,31 +118,31 @@ export class Game extends AggregateRoot<Data> {
     }
   }
 
-  public movePlayableEntity({
-    playableEntityId,
-    destinationCoord,
-  }: { playableEntityId: Playable["id"]; destinationCoord: Coord }) {
-    this._data.board.mustBeAnAccessibleTile({ coord: destinationCoord });
+  // public movePlayableEntity({
+  //   playableEntityId,
+  //   destinationCoord,
+  // }: { playableEntityId: Playable["id"]; destinationCoord: Coord }) {
+  //   this._data.board.mustBeAnAccessibleTile({ coord: destinationCoord });
 
-    const playableEntity = this._data.playableEntities.getOneOrThrow({
-      playableEntityId,
-    });
+  //   const playableEntity = this._data.playableEntities.getOneOrThrow({
+  //     playableEntityId,
+  //   });
 
-    const tileEntity = new TilePlayableEntity({
-      id: playableEntity.id,
-      isBlocking: true,
-      faction: playableEntity.faction,
-    });
-    if (!playableEntity.coord.isUndefined()) {
-      this._data.board.removeEntityAtCoord({
-        tileEntity,
-        coord: playableEntity.coord,
-      });
-    }
+  //   const tileEntity = new TilePlayableEntity({
+  //     id: playableEntity.id,
+  //     isBlocking: true,
+  //     faction: playableEntity.faction,
+  //   });
+  //   if (!playableEntity.coord.isUndefined()) {
+  //     this._data.board.removeEntityAtCoord({
+  //       tileEntity,
+  //       coord: playableEntity.coord,
+  //     });
+  //   }
 
-    this._data.board.addEntityAtCoord({ tileEntity, coord: destinationCoord });
-    playableEntity.setCoord(destinationCoord);
-  }
+  //   this._data.board.addEntityAtCoord({ tileEntity, coord: destinationCoord });
+  //   playableEntity.setCoord(destinationCoord);
+  // }
 
   public rollInitiatives() {
     this._data.playableEntities.rollInitiatives();
@@ -160,10 +159,11 @@ export class Game extends AggregateRoot<Data> {
     this._data.playableEntities.addPlayableEntity({
       playableEntity: monster,
     });
-    this.movePlayableEntity({
-      destinationCoord: startingCoord,
-      playableEntityId: monster.id,
-    });
+    // TODO: add this one back. no need to ping move aggregate.
+    // this.movePlayableEntity({
+    //   destinationCoord: startingCoord,
+    //   playableEntityId: monster.id,
+    // });
 
     this.addDomainEvent(
       new MonsterSpawnedDomainEvent({ monster: monster.toPlain() }),
@@ -206,42 +206,42 @@ export class Game extends AggregateRoot<Data> {
     this.rollInitiatives();
   }
 
-  public playerMove({
-    userId,
-    pathToTile,
-  }: { pathToTile: Array<Coord>; userId: string }) {
-    const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
-    playingEntity.mustBePlayedBy({ userId });
-    playingEntity.act({ action: "move" });
+  // public playerMove({
+  //   userId,
+  //   pathToTile,
+  // }: { pathToTile: Array<Coord>; userId: string }) {
+  //   const playingEntity = this._data.playableEntities.getPlayingEntityOrThrow();
+  //   playingEntity.mustBePlayedBy({ userId });
+  //   playingEntity.act({ action: "move" });
 
-    const path = pathToTile.map((coord) =>
-      this._data.board.getTileOrThrow({ coord }),
-    );
-    const { validatedPath, trapTriggered } = playingEntity.getMovePath({
-      path,
-    });
-    const destinationTile = validatedPath.at(-1);
-    if (destinationTile) {
-      this.movePlayableEntity({
-        playableEntityId: playingEntity.id,
-        destinationCoord: destinationTile.coord,
-      });
-      this.addDomainEvent(
-        new PlayableEntityMovedDomainEvent({
-          playableEntity: playingEntity.toPlain(),
-        }),
-      );
-    }
+  //   const path = pathToTile.map((coord) =>
+  //     this._data.board.getTileOrThrow({ coord }),
+  //   );
+  //   const { validatedPath, trapTriggered } = playingEntity.getMovePath({
+  //     path,
+  //   });
+  //   const destinationTile = validatedPath.at(-1);
+  //   if (destinationTile) {
+  //     this.movePlayableEntity({
+  //       playableEntityId: playingEntity.id,
+  //       destinationCoord: destinationTile.coord,
+  //     });
+  //     this.addDomainEvent(
+  //       new PlayableEntityMovedDomainEvent({
+  //         playableEntity: playingEntity.toPlain(),
+  //       }),
+  //     );
+  //   }
 
-    if (trapTriggered) {
-      trapTriggered.onInteraction({ playableEntity: playingEntity });
-      this.addDomainEvents(trapTriggered.collectDomainEvents());
+  //   if (trapTriggered) {
+  //     trapTriggered.onInteraction({ playableEntity: playingEntity });
+  //     this.addDomainEvents(trapTriggered.collectDomainEvents());
 
-      if (playingEntity.isDead) {
-        this.endPlayerTurn({ userId });
-      }
-    }
-  }
+  //     if (playingEntity.isDead) {
+  //       this.endPlayerTurn({ userId });
+  //     }
+  //   }
+  // }
 
   public playerAttack({
     attackId,

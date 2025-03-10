@@ -65,10 +65,10 @@ export class VoicesOfTheDamned extends ChestTrap {
 
     const destinationCoord = new Coord(tileAdjacentToAnotherAliveHero);
     if (!entityThatOpenedTheChest.coord.equals(destinationCoord)) {
-      game.movePlayableEntity({
-        playableEntityId: entityThatOpenedTheChest.id,
-        destinationCoord,
-      });
+      // game.movePlayableEntity({
+      //   playableEntityId: entityThatOpenedTheChest.id,
+      //   destinationCoord,
+      // });
     }
     const otherHero = otherHeroes.find((otherHero) =>
       otherHero.coord.isAdjacentTo(destinationCoord),

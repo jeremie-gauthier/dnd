@@ -33,10 +33,10 @@ export class ImperiousHandPotion extends Potion {
           monsterCoord: monster.coord,
           game,
         });
-        game.movePlayableEntity({
-          playableEntityId: monster.id,
-          destinationCoord: randomAccessibleRoomCoord,
-        });
+        // game.movePlayableEntity({
+        //   playableEntityId: monster.id,
+        //   destinationCoord: randomAccessibleRoomCoord,
+        // });
         return;
       } catch {}
     }
