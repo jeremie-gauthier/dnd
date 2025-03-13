@@ -120,46 +120,29 @@ export class Inventory extends Entity<Data> {
         item: backpackItem,
         storageSpace: StorageSpace.BACKPACK,
       });
+      this.removeItemFromStorageSpace({
+        item: backpackItem,
+        storageSpace: StorageSpace.BACKPACK,
+      });
     }
     if (gearItem) {
       this.mustHaveItemInStorageSpace({
         item: gearItem,
         storageSpace: StorageSpace.GEAR,
       });
+      this.removeItemFromStorageSpace({
+        item: gearItem,
+        storageSpace: StorageSpace.GEAR,
+      });
     }
 
-    if (backpackItem && gearItem) {
-      this.removeItemFromStorageSpace({
-        item: gearItem,
-        storageSpace: StorageSpace.GEAR,
-      });
-      this.removeItemFromStorageSpace({
-        item: backpackItem,
-        storageSpace: StorageSpace.BACKPACK,
-      });
-
-      this.addItemInStorageSpace({
-        item: gearItem,
-        storageSpace: StorageSpace.BACKPACK,
-      });
+    if (backpackItem) {
       this.addItemInStorageSpace({
         item: backpackItem,
         storageSpace: StorageSpace.GEAR,
       });
-    } else if (backpackItem && !gearItem) {
-      this.removeItemFromStorageSpace({
-        item: backpackItem,
-        storageSpace: StorageSpace.BACKPACK,
-      });
-      this.addItemInStorageSpace({
-        item: backpackItem,
-        storageSpace: StorageSpace.GEAR,
-      });
-    } else if (!backpackItem && gearItem) {
-      this.removeItemFromStorageSpace({
-        item: gearItem,
-        storageSpace: StorageSpace.GEAR,
-      });
+    }
+    if (gearItem) {
       this.addItemInStorageSpace({
         item: gearItem,
         storageSpace: StorageSpace.BACKPACK,
