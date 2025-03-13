@@ -23,7 +23,7 @@ type Data = {
   status: PlayerStatus;
   coord: Coord;
   isBlocking: boolean;
-  playedByUserId: string;
+  readonly playedByUserId: string;
   readonly baseCharacteristic: {
     readonly actionPoints: number;
     readonly healthPoints: number;
@@ -60,8 +60,8 @@ export class Playable extends Entity<Data> {
       })
       .readonly(),
     characteristic: z.object({
-      healthPoints: z.number().min(1),
-      actionPoints: z.number().min(1),
+      healthPoints: z.number().min(0),
+      actionPoints: z.number().min(0),
       movementPoints: z.number().min(0),
     }),
     actionsDoneThisTurn: z.array(
@@ -141,7 +141,7 @@ export class Playable extends Entity<Data> {
     this._data.characteristic.actionPoints -= 1;
   }
 
-  public mustBeAlive() {
+  private mustBeAlive() {
     if (this.isDead) {
       throw new PlayableEntityError({
         name: "NOT_ALIVE",
@@ -160,7 +160,7 @@ export class Playable extends Entity<Data> {
     }
   }
 
-  protected mustHaveActionPoints() {
+  private mustHaveActionPoints() {
     if (this._data.characteristic.actionPoints < 1) {
       throw new PlayableEntityError({
         name: "NOT_ENOUGH_ACTION_POINTS",

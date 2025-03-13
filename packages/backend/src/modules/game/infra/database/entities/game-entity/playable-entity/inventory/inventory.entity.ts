@@ -2,9 +2,11 @@ import {
   Column,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   Relation,
 } from "typeorm";
+import { PlayableEntity } from "../playable-entity.entity";
 import { InventoryItem } from "./inventory-item.entity";
 import { StorageCapacity } from "./storage-capacity.entity";
 
@@ -22,4 +24,7 @@ export class Inventory {
 
   @Column(() => StorageCapacity)
   readonly storageCapacity: Relation<StorageCapacity>;
+
+  @OneToOne(() => PlayableEntity, { nullable: false })
+  readonly playableEntity: Relation<PlayableEntity>;
 }

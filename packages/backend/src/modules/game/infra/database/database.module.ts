@@ -6,12 +6,14 @@ import { GAME_REPOSITORY } from "../../application/repositories/game-repository.
 import { GAME_TEMPLATE_DEV_REPOSITORY } from "../../application/repositories/game-template-dev-repository.interface";
 import { GAME_TEMPLATE_REPOSITORY } from "../../application/repositories/game-template-repository.interface";
 import { HERO_REPOSITORY } from "../../application/repositories/hero-repository.interface";
+import { INVENTORY_MANAGER_REPOSITORY } from "../../application/repositories/inventory-manager-repository.interface";
 import { ITEM_DEV_REPOSITORY } from "../../application/repositories/item-dev-repository.interface";
 import { ITEM_REPOSITORY } from "../../application/repositories/item-repository.interface";
 import { ITEM_UI_REPOSITORY } from "../../application/repositories/item-ui-repository.interface";
 import { MOVE_MANAGER_REPOSITORY } from "../../application/repositories/move-manager-repository.interface";
 import { Board } from "./entities/board.entity";
 import { HeroEntity } from "./entities/game-entity/playable-entity/hero.entity";
+import { Inventory } from "./entities/game-entity/playable-entity/inventory/inventory.entity";
 import { PlayableEntity } from "./entities/game-entity/playable-entity/playable-entity.entity";
 import { HeroTemplateUI } from "./entities/game-entity/playable-entity/template/hero-template-ui.entity";
 import { HeroTemplate } from "./entities/game-entity/playable-entity/template/hero-template.entity";
@@ -33,6 +35,7 @@ import { DiceMapper } from "./mappers/dice.mapper";
 import { GameMapper } from "./mappers/game.mapper";
 import { HeroTemplateMapper } from "./mappers/hero-template.mapper";
 import { HeroMapper } from "./mappers/hero.mapper";
+import { InventoryAggregateMapper } from "./mappers/inventory-aggregate.mapper";
 import { ItemDevMapper } from "./mappers/item-dev.mapper";
 import { ItemMapper } from "./mappers/item.mapper";
 import { MoveAggregateMapper } from "./mappers/move-aggregate.mapper";
@@ -43,6 +46,7 @@ import { GameTemplatePostgresRepository } from "./repositories/game-template.rep
 import { GamePostgresRepository } from "./repositories/game.repository";
 import { HeroUIPostgresRepository } from "./repositories/hero-ui.repository";
 import { HeroPostgresRepository } from "./repositories/hero.repository";
+import { InventoryManagerPostgresRepository } from "./repositories/inventory-manager.repository";
 import { ItemDevPostgresRepository } from "./repositories/item-dev.repository";
 import { ItemUIPostgresRepository } from "./repositories/item-ui.repository";
 import { ItemPostgresRepository } from "./repositories/item.repository";
@@ -69,6 +73,7 @@ import { MoveManagerPostgresRepository } from "./repositories/move-manager.repos
       PlayableEntity,
       MonsterKilled,
       Board,
+      Inventory,
     ]),
   ],
   providers: [
@@ -118,6 +123,11 @@ import { MoveManagerPostgresRepository } from "./repositories/move-manager.repos
       provide: MOVE_MANAGER_REPOSITORY,
       useClass: MoveManagerPostgresRepository,
     },
+    {
+      provide: INVENTORY_MANAGER_REPOSITORY,
+      useClass: InventoryManagerPostgresRepository,
+    },
+    InventoryAggregateMapper,
     MoveAggregateMapper,
     BoardMapper,
     HeroMapper,
@@ -163,6 +173,10 @@ import { MoveManagerPostgresRepository } from "./repositories/move-manager.repos
     {
       provide: MOVE_MANAGER_REPOSITORY,
       useClass: MoveManagerPostgresRepository,
+    },
+    {
+      provide: INVENTORY_MANAGER_REPOSITORY,
+      useClass: InventoryManagerPostgresRepository,
     },
   ],
 })

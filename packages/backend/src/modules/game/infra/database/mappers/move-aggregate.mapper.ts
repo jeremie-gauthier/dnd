@@ -1,10 +1,7 @@
 import { Injectable, NotImplementedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Board as BoardDomain } from "src/modules/game/domain/_move/board/board.entity";
-import {
-  Move,
-  Move as MoveDomain,
-} from "src/modules/game/domain/_move/move.aggregate";
+import { Move as MoveDomain } from "src/modules/game/domain/_move/move.aggregate";
 import { HeroMoveBehaviour } from "src/modules/game/domain/_move/playable/move-behaviours/hero-move.behaviour";
 import { LiddaMoveBehaviour } from "src/modules/game/domain/_move/playable/move-behaviours/lidda-move.behaviour";
 import { MonsterMoveBehaviour } from "src/modules/game/domain/_move/playable/move-behaviours/monster-move.behaviour";
@@ -36,7 +33,7 @@ export class MoveAggregateMapper extends Mapper<GamePersistence, MoveDomain> {
       (tile) => tile.playableEntities,
     );
 
-    return new Move({
+    return new MoveDomain({
       gameId: persistence.id,
       board: new BoardDomain({
         height: persistence.board.height,
