@@ -19,13 +19,15 @@ import { PlayableEntityTurnStartedDomainEvent } from "../../domain-events/dtos/p
 import { Inventory } from "../../inventory/inventory.entity";
 import { Spell } from "../../item/spell/spell.entity";
 import { Weapon } from "../../item/weapon/weapon.entity";
-import { Trap } from "../../tile/tile-entity/interactive/trap.entity";
-import { Tile } from "../../tile/tile.entity";
 import { ActionHistory } from "./actions-history.interface";
 import { Condition } from "./conditions/condition.entity";
 import { Hero } from "./heroes/hero.abstract";
 import { Initiative } from "./initiative/initiative.vo";
 import { Monster } from "./monster.entity";
+import {
+  MoveBehaviour,
+  MoveBehaviourConstructor,
+} from "./move-behaviours/move-behaviour.interface";
 import { PlayableEntityError } from "./playable-entity.error";
 import { PlayerStatus } from "./player-status/player-status.vo";
 
@@ -64,14 +66,7 @@ type Data = {
   conditions: Array<Condition>;
 };
 
-export abstract class Playable<
-  ChildData extends Data = Data,
-> extends Entity<ChildData> {
-  public abstract getMovePath(_: { path: Array<Tile> }): {
-    validatedPath: Tile[];
-    movementPointsUsed: number;
-    trapTriggered: Trap | undefined;
-  };
+export abstract class Playable extends Entity<Data> {
   public abstract getWeaponAttackResult(_: {
     weapon: Weapon;
     attackId: Attack["id"];
@@ -87,8 +82,16 @@ export abstract class Playable<
 
   public abstract getSpellManaCost(_: { spell: Spell }): number;
 
-  constructor(rawData: ChildData) {
+  public moveBehaviour: MoveBehaviour;
+
+  constructor(rawData: Data, MoveBehaviourCls: MoveBehaviourConstructor) {
     super(rawData, rawData.id);
+
+    this.moveBehaviour = new MoveBehaviourCls(this);
+  }
+
+  get characteristic() {
+    return this._data.characteristic;
   }
 
   get race() {

@@ -173,3 +173,24 @@ export class Playable extends Entity<Data> {
     throw new Error("Method not implemented.");
   }
 }
+
+class Parent {
+  constructor(Child) {
+    this.child = new Child(this);
+    this.adjective = "Beautiful";
+  }
+
+  changeAdjective(str) {
+    this.adjective = str;
+  }
+}
+
+class Child {
+  constructor(parent) {
+    this.parent = parent;
+  }
+
+  sayHiDad() {
+    console.log(`Hi, Dad you are ${this.parent.adjective}`);
+  }
+}
